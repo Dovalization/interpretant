@@ -16,7 +16,7 @@ uv sync
 
 # Download a corpus source
 uv run interpretant corpus download acl
-uv run interpretant corpus download pubmed   # large; see corpus section below
+uv run interpretant corpus download pubmed   # ~27 MB/file; 100 files ≈ 2.7 GB, ~30 min
 
 # Preprocess into decade-sliced text files
 uv run interpretant corpus preprocess --config-name acl --start 1970 --end 2020
@@ -43,12 +43,6 @@ make app-demo
 
 ## How it works
 
-1. **Corpus** — raw text from PubMed, ACL Anthology, arXiv, and optionally books is preprocessed into decade-sliced token files.
-2. **Embeddings** — a Word2Vec or FastText model is trained per decade on the merged corpus, producing one vector space per ten-year window.
-3. **Alignment** — each decade's space is rotated onto a shared reference decade via orthogonal Procrustes, making vectors directly comparable across time.
-4. **Drift** — for each tracked word: cosine distance between decade vectors, nearest-neighbour shift (Jaccard distance on the top-25 neighbours), and frequency-corrected drift to suppress noise from rare terms.
-5. **Dashboard** — trajectories, drift timelines, and nearest-neighbour evolution visualised interactively in Streamlit.
-
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280', 'edgeLabelBackground': '#ffffff'}}}%%
 flowchart TD
@@ -58,27 +52,27 @@ flowchart TD
     classDef drift   fill:#ffe4e6,stroke:#f43f5e,color:#881337
     classDef app     fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
 
-    subgraph corpus["Corpus"]
+    subgraph corpus["Corpus — decade-sliced token files"]
         direction LR
         C1[PubMed] ~~~ C2[ACL Anthology] ~~~ C3[arXiv] ~~~ C4[Books]
     end
 
-    subgraph embed["Embeddings"]
+    subgraph embed["Embeddings — one vector space per decade"]
         direction LR
         E1[Word2Vec] ~~~ E2[FastText]
     end
 
-    subgraph align["Alignment"]
+    subgraph align["Alignment — rotated onto a shared reference space"]
         direction LR
-        A1[Procrustes rotation onto reference decade]
+        A1[Orthogonal Procrustes]
     end
 
-    subgraph drift["Drift"]
+    subgraph drift["Drift — per-word change metrics"]
         direction LR
         D1[Cosine distance] ~~~ D2[Neighbourhood shift] ~~~ D3[Frequency correction]
     end
 
-    subgraph app["App"]
+    subgraph app["App — trajectories · drift · neighbour evolution"]
         direction LR
         P1[Streamlit dashboard]
     end
@@ -108,7 +102,7 @@ The current corpus draws from three sources:
 
 **Books** (optional): PDF-extracted text from canonical works in philosophy of mind, AI, design, and cultural theory. Ingested via Docling with fallback to PyMuPDF. Treated as a separate corpus layer that can be included or excluded from training.
 
-The fields are chosen because they share vocabulary under different interpretive frameworks. Philosophy, cognitive science, AI, and design all use words like *representation*, *emergence*, *complexity*, *embodiment*, and *intelligence* — but the communities are distinct enough that the semantic distance between their uses is measurable.
+The fields are chosen because they share vocabulary under different interpretive frameworks — philosophy, cognitive science, AI, and design all use words like *representation*, *emergence*, and *intelligence* — but their communities are distinct enough that the distance between their uses is measurable. The interesting question isn't how *consciousness* drifted in isolation; it's whether it drifted the same way in biomedical literature and in philosophy of mind, and what any divergence reveals about the communities. That comparison is where the method becomes an instrument for intellectual history rather than text statistics.
 
 ---
 
@@ -129,17 +123,15 @@ The fields are chosen because they share vocabulary under different interpretive
 | `pytest` | Tests (synthetic fixtures, no real NLP in test suite) |
 | `mypy` (strict) | Type checking |
 
-**On alignment:** The current implementation uses Procrustes rotation — each decade's embedding space is independently trained and post-hoc aligned to a reference decade via an orthogonal transformation. This is standard and produces reasonable results but accumulates alignment error across many decades. The planned replacement is TWEC (Training With a Compass), which shares a compass embedding across all time slices during training and requires no post-hoc alignment. TWEC requires a custom gensim fork and is currently stubbed.
-
-**On embeddings:** Word2Vec and FastText are both implemented and selectable at training time. FastText's subword model produces meaningful vectors for rare and hyphenated technical terms that Word2Vec would skip or represent poorly — relevant for a corpus that includes philosophy and humanities, where terminology is often low-frequency.
-
 ---
 
 ## Theoretical background
 
-The distributional hypothesis underlying Word2Vec — "a word is known by the company it keeps" (Firth, 1957) — is a computational operationalization of Wittgenstein's claim that meaning is use. A word vector encodes not what a word *is* but how it *behaves* in relation to other words across a corpus. In Peircean terms, it is a snapshot of the **dynamic interpretant**: the aggregate effect a sign produces in a specific community over a specific period.
+The distributional hypothesis underlying Word2Vec — "a word is known by the company it keeps" (Firth, 1957) — is a computational operationalization of Wittgenstein's claim that meaning is use. A word vector encodes not what a word *is* but how it *behaves* in relation to other words across a corpus. In Peircean terms, it is a snapshot of the **dynamic interpretant**: the actual effect a sign produces on a community over a specific period, as opposed to the immediate interpretant (what the sign is meant to convey) or the final interpretant (the ideal effect given full understanding). Corpus statistics capture the aggregate of actual interpretive events — which is precisely the dynamic variety.
 
 This means the vectors are social facts, not semantic facts. They capture what a community did with a sign — which words it appeared near, which arguments it enabled, which conceptual neighbours it acquired. The drift score between two decades is a measurement of how much the collective interpretant moved, not necessarily how much the underlying phenomenon changed or how much the referent shifted. These are different questions.
+
+*Interpretant drift* is the more precise description of what the pipeline measures, and the difference from the standard NLP term *semantic drift* is not just terminological. Semantic drift treats meaning as a property of words: the word drifted. Interpretant drift treats meaning as a property of a community's relationship to signs: the community changed what it did with the sign, and the vector displacement encodes that change. "Consciousness" didn't drift. Philosophers stopped reading Husserl and started reading Crick. The word is the trace; the community is the event. Both descriptions correspond to the same computation — cosine distance between decade vectors — but one names a measurement and the other names a historical event in the life of a community of inquirers. The stronger claim is also why the interpretant of *intelligence* in philosophy and the interpretant of *intelligence* in computer science are not two measurements of the same thing; they are two different things, and separating fields in the corpus is theoretically motivated, not just methodologically conservative.
 
 Unlimited semiosis — Peirce's observation that the interpretant of a sign is itself a sign, which produces a further interpretant, indefinitely — is visible in the data as the expansion and contraction of semantic neighborhoods. A term absorbs new associations, sheds old ones, gets borrowed by adjacent fields who use it in their own sign relations. The process doesn't converge. The pipeline makes individual moments in that process legible and comparable.
 
