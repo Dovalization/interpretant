@@ -36,7 +36,7 @@ The pipeline has five sequential stages. Commands must be run in this order; the
 corpus preprocess → embed train → align run → drift compute → app
 ```
 
-1. **`corpus preprocess --config-name <acl|pubmed|arxiv>`** — reads raw files from `data/raw/<source>/`, writes decade-sliced text files to `data/processed/<source>/texts/<source>_<decade>.txt`. One doc per line, whitespace-tokenised. PubMed uses `ProcessPoolExecutor` for parallelism; ACL uses `ThreadPoolExecutor`.
+1. **`corpus preprocess --config-name <acl|pubmed|arxiv|books>`** — reads raw files from `data/raw/<source>/`, writes decade-sliced text files to `data/processed/<source>/texts/<source>_<decade>.txt`. One doc per line, whitespace-tokenised. PubMed uses `ProcessPoolExecutor` for parallelism; ACL uses `ThreadPoolExecutor`. Books are ingested first via `corpus books ingest` (Docling + PyMuPDF fallback).
 
 2. **`embed train`** — reads all `data/processed/<corpus>/texts/<corpus>_<decade>.txt` files for each decade, merges them (or trains separately with `--separate`), trains a gensim Word2Vec or FastText model per decade, saves to `models/raw/<config-name>/<decade>.model`.
 
@@ -52,7 +52,7 @@ corpus preprocess → embed train → align run → drift compute → app
 
 - **`__main__.py`** — the entire CLI; Click groups `corpus`, `embed`, `align`, `drift`, `pdf`, and command `app`. All pipeline logic lives here; the library modules provide pure functions/classes only.
 
-- **`corpus/`** — all corpus sources implement `CorpusSource` (ABC in `base.py`). The key method is `iter_decade_slices(start, end, step, min_tokens, workers) -> Iterator[tuple[int, list[str]]]`. Sources: `pubmed.py` (XML.gz streaming with `iterparse`), `acl.py` (BibTeX), `arxiv.py` (JSONL), `books.py` (pre-extracted text files + manifest), `s2orc.py` (stub). `preprocessing.py` has shared text-cleaning helpers. `pdf_extractor.py` wraps Docling with PyMuPDF fallback.
+- **`corpus/`** — all corpus sources implement `CorpusSource` (ABC in `base.py`). The key method is `iter_decade_slices(start, end, step, min_tokens, workers) -> Iterator[tuple[int, list[str]]]`. Sources: `pubmed.py` (XML.gz streaming with `iterparse`), `acl.py` (BibTeX), `arxiv.py` (JSONL), `books.py` (first-class corpus layer — canonical philosophy, AI, design, and cultural theory texts; pre-extracted text files + manifest), `s2orc.py` (stub). `preprocessing.py` has shared text-cleaning helpers. `pdf_extractor.py` wraps Docling with PyMuPDF fallback.
 
 - **`embedding/`** — `EmbeddingTrainer` ABC with `Word2VecTrainer` and `FastTextTrainer`. Each `train(sentences, decade)` then `save(output_dir, decade) -> Path`.
 

@@ -1,6 +1,6 @@
 # interpretant
 
-`interpretant` tracks how the meaning of scientific and philosophical concepts shifts across decades of academic literature. Given a word like _consciousness_ or _intelligence_, it produces a trajectory through semantic space from the 1960s to the 2020s — showing which concepts surrounded it in each decade, how far it moved, and when the movement was sharpest. The corpus spans biomedical literature (PubMed), computational linguistics (ACL Anthology), and preprint science (arXiv), with optional support for book-length texts extracted from PDF.
+`interpretant` tracks how the meaning of scientific and philosophical concepts shifts across decades of academic literature. Given a word like _consciousness_ or _intelligence_, it produces a trajectory through semantic space from the 1970s to the 2020s — showing which concepts surrounded it in each decade, how far it moved, and when the movement was sharpest. The corpus spans biomedical literature (PubMed), computational linguistics (ACL Anthology), preprint science (arXiv), and canonical book-length texts in philosophy of mind, AI, design, and cultural theory — extracted from PDF and treated as a first-class corpus layer alongside the paper sources.
 
 The name comes from Peirce. In Peirce's theory of signs, the _interpretant_ is neither the word nor the thing it points to — it's the meaning the sign produces in a community of minds. Not the interpreter, but the effect: the further sign, the mental response, the understanding that arises when a community encounters a representation. Peirce's key insight was that the interpretant is not fixed. It shifts as communities change, as contexts evolve, as new fields absorb old vocabularies and bend them toward new purposes. The word "intelligence" in a 1965 philosophy paper and a 2005 machine learning paper share a signifier and possibly a referent, but they carry different interpretants — different networks of association, implication, and use that have accumulated around the same sign in different communities over forty years.
 
@@ -12,13 +12,13 @@ This project measures that drift. `interpretant` trains word embeddings per deca
 
 Concepts migrate. "Network" meant something different to a neurologist in 1975 than to a computational biologist in 2005 or a social scientist in 2015. "Intelligence" has been borrowed, bent, and contested across philosophy, psychology, and computer science for sixty years. The word stays the same; the community using it changes what it does with the word.
 
-Historians and philosophers of science have documented this carefully — but almost always through close reading of individual texts. The question this project asks is whether conceptual migration is _measurable at scale_: not what a handful of canonical papers say about _consciousness_, but what 7 million biomedical abstracts and 90,000 NLP papers collectively did with it, decade by decade.
+Historians and philosophers of science have documented this carefully — but almost always through close reading of individual texts. The question this project asks is whether conceptual migration is _measurable at scale_: not what a handful of canonical papers say about _consciousness_, but what 7 million biomedical abstracts, 120,000 NLP papers, and decades of canonical texts in philosophy and design collectively did with it, decade by decade.
 
 **Why word embeddings?** The distributional hypothesis — a word is known by the company it keeps — provides a bridge between corpus statistics and meaning. Training separate models per decade produces snapshots: the neighborhood of _intelligence_ in 1970s philosophy papers, then 1980s cognitive science, then 2000s machine learning. Each snapshot is a social fact about how a community used a sign during that period.
 
-**Why alignment?** Decade models have no shared coordinate system — the "intelligence" direction in 1970 and 1990 are unrelated rotations of the same underlying space. Procrustes alignment finds the optimal rotation mapping each decade onto a shared reference, making cross-decade distances meaningful.
+**Why alignment?** Decade models are trained independently from scratch and have no shared coordinate system — the direction encoding "intelligence" in 1970 and in 1990 are arbitrary and incomparable by default. Procrustes alignment finds the optimal orthogonal rotation mapping each decade onto a shared reference, making cross-decade distances meaningful.
 
-**Why Peirce?** Standard NLP treats drift as a property of words. But the computation measures what communities _did_ with words. Peirce's dynamic interpretant — the actual effect a sign produces on a community over time — is a more precise description of what a word vector encodes. The distinction matters: when _consciousness_ in PubMed and _consciousness_ in philosophy show diverging trajectories, that's not the word changing — it's two communities developing different interpretants for the same sign.
+**Why Peirce?** The standard framing of semantic drift is descriptive and atheoretical: the word moved. It doesn't specify what's actually changing — the word, the community, or the relationship between them. Peirce's dynamic interpretant — the actual effect a sign produces on a community over time — is a more precise description of what a word vector encodes. The distinction matters: when _consciousness_ in PubMed and _consciousness_ in philosophy show diverging trajectories, that's not the word changing — it's two communities developing different interpretants for the same sign.
 
 ---
 
@@ -28,16 +28,20 @@ Historians and philosophers of science have documented this carefully — but al
 # Install dependencies
 uv sync
 
-# Download a corpus source
+# Download paper corpus sources
 uv run interpretant corpus download acl
 uv run interpretant corpus download pubmed   # ~27 MB/file; 100 files ≈ 2.7 GB, ~30 min
 
-# Preprocess into decade-sliced text files — one .txt per decade per corpus
+# Ingest book-length texts (place PDFs in data/inbox/pdfs/ first)
+uv run interpretant corpus books ingest
+
+# Preprocess all sources into decade-sliced text files — one .txt per decade per corpus
 uv run interpretant corpus preprocess --config-name acl --start 1970 --end 2020
 uv run interpretant corpus preprocess --config-name pubmed --start 1970 --end 2020 --workers 8
+uv run interpretant corpus preprocess --config-name books --start 1960 --end 2020
 
 # Train one Word2Vec model per decade from the merged corpus
-uv run interpretant embed train --corpus acl --corpus pubmed --start 1970 --end 2020
+uv run interpretant embed train --corpus acl --corpus pubmed --corpus books --start 1970 --end 2020
 
 # Rotate all decade models into a shared vector space, then compute drift
 uv run interpretant align run
@@ -75,7 +79,7 @@ All stages are wired into a DVC pipeline (`dvc.yaml`) for reproducible reruns.
 
 Philosophy, cognitive science, AI, and biomedicine all use words like _representation_, _emergence_, and _intelligence_ — but their communities are distinct enough that the distance between their uses is measurable. The interesting question isn't how _consciousness_ drifted in isolation; it's whether it drifted the same way in biomedical literature and in philosophy of mind, and what any divergence reveals about the communities. That comparison is where the method becomes an instrument for intellectual history rather than text statistics.
 
-The corpus draws from three sources chosen to make that comparison possible:
+The corpus draws from four sources chosen to make that comparison possible:
 
 **PubMed** (~7M articles after English-language and date filtering from the NCBI baseline): biomedical literature from the 1970s to 2020s. Structured abstract labels stripped. The largest source by volume and the one most likely to show clean decade-level shifts as subfields emerged and matured.
 
@@ -83,7 +87,7 @@ The corpus draws from three sources chosen to make that comparison possible:
 
 **arXiv** (Kaggle snapshot, ~78K papers filtered): preprints in quantitative and computational fields from 1991 onward. Earlier and less curated than the others; useful for tracking interdisciplinary vocabulary diffusion.
 
-**Books** (optional): PDF-extracted text from canonical works in philosophy of mind, AI, design, and cultural theory. Ingested via Docling with fallback to PyMuPDF. Treated as a separate corpus layer that can be included or excluded from training.
+**Books**: PDF-extracted text from canonical works in philosophy of mind, AI, design, and cultural theory — the primary source for humanistic and philosophical vocabulary that the paper corpora don't cover. Ingested via Docling with fallback to PyMuPDF. The books layer covers thinkers including Ryle, Wittgenstein, Merleau-Ponty, Dennett, Chalmers, Damasio, Varela, Minsky, Dreyfus, Norman, Flusser, McLuhan, Barthes, Baudrillard, and Fisher, among others — spanning from the 1940s to the 2000s. This is what makes cross-field comparison between scientific and humanistic discourse possible.
 
 ---
 
@@ -108,13 +112,13 @@ The corpus draws from three sources chosen to make that comparison possible:
 
 ## Theoretical background
 
-The distributional hypothesis underlying Word2Vec — "You shall know a word by the company it keeps" (Firth, 1957) — is a computational operationalization of Wittgenstein's claim that meaning is use. A word vector encodes not what a word _is_ but how it _behaves_ in relation to other words across a corpus. In Peircean terms, it is a snapshot of the **dynamic interpretant**: the actual effect a sign produces on a community over a specific period, as opposed to the immediate interpretant (what the sign is meant to convey) or the final interpretant (the ideal effect given full understanding). Corpus statistics capture the aggregate of actual interpretive events — which is precisely the dynamic variety.
+The distributional hypothesis underlying Word2Vec — "You shall know a word by the company it keeps" (Firth, 1957) — converges with Wittgenstein's claim that meaning is use. A word vector encodes not what a word _is_ but how it _behaves_ in relation to other words across a corpus. In Peircean terms, it encodes the aggregate of **dynamic interpretants** — actual interpretive effects produced across a community over a specific period — as opposed to the immediate interpretant (the sign's potential meaning: what it is conventionally fitted to convey) or the final interpretant (the ideal effect given full understanding). Corpus statistics capture the aggregate of actual interpretive events — which is precisely the dynamic variety.
 
 This means the vectors are social facts, not semantic facts. They capture what a community did with a sign — which words it appeared near, which arguments it enabled, which conceptual neighbours it acquired. The drift score between two decades is a measurement of how much the collective interpretant moved, not necessarily how much the underlying phenomenon changed or how much the referent shifted. These are different questions.
 
-_Interpretant drift_ is the more precise description of what the pipeline measures, and the difference from the standard NLP term _semantic drift_ is not just terminological. Semantic drift treats meaning as a property of words: the word drifted. Interpretant drift treats meaning as a property of a community's relationship to signs: the community changed what it did with the sign, and the vector displacement encodes that change. "Consciousness" didn't drift. Philosophers stopped reading Husserl and started reading Crick. The word is the trace; the community is the event. Both descriptions correspond to the same computation — cosine distance between decade vectors — but one names a measurement and the other names a historical event in the life of a community of inquirers. The stronger claim is also why the interpretant of _intelligence_ in philosophy and the interpretant of _intelligence_ in computer science are not two measurements of the same thing; they are two different things, and separating fields in the corpus is theoretically motivated, not just methodologically conservative.
+_Interpretant drift_ is the more precise description of what the pipeline measures, and the difference from the standard NLP term _semantic drift_ is not just terminological. The standard framing of semantic drift is descriptive and atheoretical: the word moved. It doesn't specify what's actually changing — the word, the community, or the relationship between them. Interpretant drift treats meaning as a property of a community's relationship to signs: the community changed what it did with the sign, and the vector displacement encodes that change. "Consciousness" didn't drift. Philosophers stopped reading Husserl and started reading Crick. The word is the trace; the community is the event. Both descriptions correspond to the same computation — cosine distance between decade vectors — but one names a measurement and the other names a historical event in the life of a community of inquirers. The stronger claim is also why the interpretant of _intelligence_ in philosophy and the interpretant of _intelligence_ in computer science are not two measurements of the same thing; they are two different things, and separating fields in the corpus is theoretically motivated, not just methodologically conservative.
 
-Unlimited semiosis — Peirce's observation that the interpretant of a sign is itself a sign, which produces a further interpretant, indefinitely — is visible in the data as the expansion and contraction of semantic neighborhoods. A term absorbs new associations, sheds old ones, gets borrowed by adjacent fields who use it in their own sign relations. The process doesn't converge. The pipeline makes individual moments in that process legible and comparable.
+Unlimited semiosis — Peirce's observation that the interpretant of a sign is itself a sign, which produces a further interpretant, indefinitely — offers a theoretical frame for what the pipeline makes legible: a term absorbs new associations, sheds old ones, gets borrowed by adjacent fields who use it in their own sign relations. Each decade vector is a moment in a process that has no principled end.
 
 ---
 
@@ -139,7 +143,7 @@ Unlimited semiosis — Peirce's observation that the interpretant of a sign is i
 - [ ] Test dashboard on real data; implement drift heatmap panel
 - [ ] Implement TWEC alignment (requires custom gensim fork)
 - [ ] Implement changepoint detection (PELT or BOCPD) for decade-level breakpoints
-- [ ] Books corpus: ingest canonical texts per field and decade
+- [ ] Books corpus: complete ingestion of all planned titles across fields and decades
 - [ ] Replace illustrative findings with real ones
 - [ ] Add corpus selector to dashboard (per-source vs merged drift)
 
