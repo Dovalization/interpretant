@@ -44,13 +44,13 @@ make app-demo
 ## How it works
 
 ```mermaid
-%%{init: {'theme': 'base', 'htmlLabels': false, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
+%%{init: {'theme': 'base', 'htmlLabels': false, 'flowchart': {'markdownAutoWrap': false, 'rankSpacing': 50}, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
 flowchart TD
-    classDef corpus fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
-    classDef embed  fill:#dcfce7,stroke:#22c55e,color:#14532d
-    classDef align  fill:#fef9c3,stroke:#eab308,color:#713f12
-    classDef drift  fill:#ffe4e6,stroke:#f43f5e,color:#881337
-    classDef app    fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
+    classDef corpus fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f,padding:20px,font-size:15px
+    classDef embed  fill:#dcfce7,stroke:#22c55e,color:#14532d,padding:20px,font-size:15px
+    classDef align  fill:#fef9c3,stroke:#eab308,color:#713f12,padding:20px,font-size:15px
+    classDef drift  fill:#ffe4e6,stroke:#f43f5e,color:#881337,padding:20px,font-size:15px
+    classDef app    fill:#ede9fe,stroke:#8b5cf6,color:#3b0764,padding:20px,font-size:15px
 
     C["`**Corpus**
     *decade-sliced token files*
