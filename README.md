@@ -44,7 +44,7 @@ make app-demo
 ## How it works
 
 ```mermaid
-%%{init: {'theme': 'base', 'htmlLabels': false, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
+%%{init: {'theme': 'base', 'htmlLabels': false, 'markdownAutoWrap': false, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
 flowchart TD
     classDef corpus fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     classDef embed  fill:#dcfce7,stroke:#22c55e,color:#14532d
@@ -54,22 +54,22 @@ flowchart TD
 
     C["`**Corpus**
     *decade-sliced token files*
-    PubMed, ACL, arXiv, Books`"]:::corpus
+    PubMed · ACL Anthology · arXiv · Books`"]:::corpus
 
     E["`**Embeddings**
     *one vector space per decade*
     Word2Vec · FastText`"]:::embed
 
     A["`**Alignment**
-    *aligned to reference space*
+    *rotated onto a shared reference space*
     Orthogonal Procrustes`"]:::align
 
     D["`**Drift**
     *per-word change metrics*
-    cosine, neighbourhood, frequency`"]:::drift
+    cosine distance · neighbourhood shift · frequency correction`"]:::drift
 
     P["`**App**
-    *interactive dashboard*
+    *trajectories · drift · neighbour evolution*
     Streamlit`"]:::app
 
     C --> E --> A --> D --> P
