@@ -43,7 +43,11 @@ make app-demo
 
 ## How it works
 
-The pipeline has five stages. First, raw text is acquired from corpus sources — journal papers from PubMed, ACL Anthology, and arXiv — and preprocessed into decade-sliced token files. Second, a Word2Vec or FastText model is trained per decade on the merged corpus, producing one vector space per ten-year window. Third, the decade spaces are aligned via orthogonal Procrustes rotation onto a shared reference decade, so that vectors across time are comparable. Fourth, drift metrics are computed for each tracked word: cosine distance between decade vectors, nearest-neighbour shift (Jaccard distance on the top-25 neighbours), and frequency-corrected drift to suppress noise from rare terms. Fifth, the dashboard visualises trajectories, drift timelines, and nearest-neighbour evolution interactively.
+1. **Corpus** — raw text from PubMed, ACL Anthology, arXiv, and optionally books is preprocessed into decade-sliced token files.
+2. **Embeddings** — a Word2Vec or FastText model is trained per decade on the merged corpus, producing one vector space per ten-year window.
+3. **Alignment** — each decade's space is rotated onto a shared reference decade via orthogonal Procrustes, making vectors directly comparable across time.
+4. **Drift** — for each tracked word: cosine distance between decade vectors, nearest-neighbour shift (Jaccard distance on the top-25 neighbours), and frequency-corrected drift to suppress noise from rare terms.
+5. **Dashboard** — trajectories, drift timelines, and nearest-neighbour evolution visualised interactively in Streamlit.
 
 ```mermaid
 flowchart TD
