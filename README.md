@@ -112,7 +112,13 @@ The corpus draws from four sources chosen to make that comparison possible:
 
 ## Theoretical background
 
-The distributional hypothesis underlying Word2Vec — "You shall know a word by the company it keeps" (Firth, 1957) — converges with Wittgenstein's observation that, for a large class of cases, meaning is use. A word vector encodes not what a word _is_ but how it _behaves_ in relation to other words across a corpus. Peirce distinguishes three registers of the interpretant: the **immediate** (what a sign is interpretable as, prior to any specific context), the **dynamic** (the actual effect it produces on a mind at a given moment), and the **final** (the ideal effect that would be reached at the convergent end of unlimited inquiry). A decade-trained word vector corresponds to none of these directly — but corpus statistics across a community and a period capture the aggregate of dynamic interpretant events, and that aggregate is what the pipeline measures.
+The distributional hypothesis underlying Word2Vec — "You shall know a word by the company it keeps" (Firth, 1957) — converges with Wittgenstein's observation that, for a large class of cases, meaning is use. A word vector encodes not what a word _is_ but how it _behaves_ in relation to other words across a corpus. Peirce distinguishes three registers of the interpretant:
+
+1. **Immediate** — what a sign is interpretable as, prior to any specific context
+2. **Dynamic** — the actual effect it produces on a mind at a given moment
+3. **Final** — the ideal effect that would be reached at the convergent end of unlimited inquiry
+
+A decade-trained word vector corresponds to none of these directly — but corpus statistics across a community and a period capture the aggregate of dynamic interpretant events, and that aggregate is what the pipeline measures.
 
 This means the vectors are social facts, not semantic facts. They capture what a community did with a sign — which words it appeared near, which arguments it enabled, which conceptual neighbours it acquired. The drift score between two decades is a measurement of how much the collective interpretant moved, not necessarily how much the underlying phenomenon changed or how much the referent shifted. These are different questions.
 
