@@ -50,7 +50,7 @@ make app-demo
 5. **Dashboard** — trajectories, drift timelines, and nearest-neighbour evolution visualised interactively in Streamlit.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280', 'edgeLabelBackground': '#ffffff'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280', 'edgeLabelBackground': '#ffffff'}, 'flowchart': {'padding': 20, 'nodeSpacing': 40, 'rankSpacing': 50}}}%%
 flowchart TD
     classDef corpus  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f,padding:8px
     classDef embed   fill:#dcfce7,stroke:#22c55e,color:#14532d,padding:8px
