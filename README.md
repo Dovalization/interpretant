@@ -52,11 +52,11 @@ flowchart TD
     classDef drift  fill:#ffe4e6,stroke:#f43f5e,color:#881337
     classDef app    fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
 
-    C["<b>Corpus</b><br/><i>decade-sliced&nbsp;token&nbsp;files</i><br/>PubMed&nbsp;·&nbsp;ACL&nbsp;Anthology&nbsp;·&nbsp;arXiv&nbsp;·&nbsp;Books"]:::corpus
-    E["<b>Embeddings</b><br/><i>one&nbsp;vector&nbsp;space&nbsp;per&nbsp;decade</i><br/>Word2Vec&nbsp;·&nbsp;FastText"]:::embed
-    A["<b>Alignment</b><br/><i>rotated&nbsp;onto&nbsp;a&nbsp;shared&nbsp;reference&nbsp;space</i><br/>Orthogonal&nbsp;Procrustes"]:::align
-    D["<b>Drift</b><br/><i>per-word&nbsp;change&nbsp;metrics</i><br/>cosine&nbsp;distance&nbsp;·&nbsp;neighbourhood&nbsp;shift&nbsp;·&nbsp;frequency&nbsp;correction"]:::drift
-    P["<b>App</b><br/><i>trajectories&nbsp;·&nbsp;drift&nbsp;·&nbsp;neighbour&nbsp;evolution</i><br/>Streamlit"]:::app
+    C["<b><font size=5>Corpus</font></b><br/><i>decade-sliced&nbsp;token&nbsp;files</i><br/><font size=2>PubMed&nbsp;·&nbsp;ACL&nbsp;Anthology&nbsp;·&nbsp;arXiv&nbsp;·&nbsp;Books</font>"]:::corpus
+    E["<b><font size=5>Embeddings</font></b><br/><i>one&nbsp;vector&nbsp;space&nbsp;per&nbsp;decade</i><br/><font size=2>Word2Vec&nbsp;·&nbsp;FastText</font>"]:::embed
+    A["<b><font size=5>Alignment</font></b><br/><i>rotated&nbsp;onto&nbsp;a&nbsp;shared&nbsp;reference&nbsp;space</i><br/><font size=2>Orthogonal&nbsp;Procrustes</font>"]:::align
+    D["<b><font size=5>Drift</font></b><br/><i>per-word&nbsp;change&nbsp;metrics</i><br/><font size=2>cosine&nbsp;distance&nbsp;·&nbsp;neighbourhood&nbsp;shift&nbsp;·&nbsp;frequency&nbsp;correction</font>"]:::drift
+    P["<b><font size=5>App</font></b><br/><i>trajectories&nbsp;·&nbsp;drift&nbsp;·&nbsp;neighbour&nbsp;evolution</i><br/><font size=2>Streamlit</font>"]:::app
 
     C --> E --> A --> D --> P
 ```
