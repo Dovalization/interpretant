@@ -53,12 +53,12 @@ make app-demo
 flowchart TD
     subgraph corpus["Corpus"]
         direction LR
-        C1[PubMed] & C2[ACL Anthology] & C3[arXiv] & C4[Books]
+        C1[PubMed] ~~~ C2[ACL Anthology] ~~~ C3[arXiv] ~~~ C4[Books]
     end
 
     subgraph embed["Embeddings"]
         direction LR
-        E1[Word2Vec] & E2[FastText]
+        E1[Word2Vec] ~~~ E2[FastText]
     end
 
     subgraph align["Alignment"]
@@ -68,7 +68,7 @@ flowchart TD
 
     subgraph drift["Drift"]
         direction LR
-        D1[Cosine distance] & D2[Neighbourhood shift] & D3[Frequency correction]
+        D1[Cosine distance] ~~~ D2[Neighbourhood shift] ~~~ D3[Frequency correction]
     end
 
     subgraph app["App"]
