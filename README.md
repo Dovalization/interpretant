@@ -46,17 +46,13 @@ make app-demo
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
 flowchart TD
-    classDef corpus fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
-    classDef embed  fill:#dcfce7,stroke:#22c55e,color:#14532d
-    classDef align  fill:#fef9c3,stroke:#eab308,color:#713f12
-    classDef drift  fill:#ffe4e6,stroke:#f43f5e,color:#881337
-    classDef app    fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
+    classDef stage fill:#f1f5f9,stroke:#94a3b8,color:#1e293b
 
-    C["<b>Corpus</b><br/><i>preprocess&nbsp;text&nbsp;into&nbsp;decade&nbsp;token&nbsp;files</i><br/>PubMed&nbsp;·&nbsp;ACL&nbsp;Anthology&nbsp;·&nbsp;arXiv&nbsp;·&nbsp;Books"]:::corpus
-    E["<b>Embeddings</b><br/><i>train&nbsp;one&nbsp;vector&nbsp;space&nbsp;per&nbsp;decade</i><br/>Word2Vec&nbsp;·&nbsp;FastText"]:::embed
-    A["<b>Alignment</b><br/><i>rotate&nbsp;all&nbsp;spaces&nbsp;onto&nbsp;a&nbsp;shared&nbsp;reference</i><br/>Orthogonal&nbsp;Procrustes"]:::align
-    D["<b>Drift</b><br/><i>measure&nbsp;per-word&nbsp;change&nbsp;across&nbsp;decades</i><br/>cosine&nbsp;distance&nbsp;·&nbsp;neighbourhood&nbsp;shift&nbsp;·&nbsp;frequency&nbsp;correction"]:::drift
-    P["<b>App</b><br/><i>explore&nbsp;trajectories&nbsp;interactively</i><br/>Streamlit"]:::app
+    C["<b>Corpus</b><br/><i>preprocess&nbsp;text&nbsp;into&nbsp;decade&nbsp;token&nbsp;files</i><br/>PubMed&nbsp;·&nbsp;ACL&nbsp;Anthology&nbsp;·&nbsp;arXiv&nbsp;·&nbsp;Books"]:::stage
+    E["<b>Embeddings</b><br/><i>train&nbsp;one&nbsp;vector&nbsp;space&nbsp;per&nbsp;decade</i><br/>Word2Vec&nbsp;·&nbsp;FastText"]:::stage
+    A["<b>Alignment</b><br/><i>rotate&nbsp;all&nbsp;spaces&nbsp;onto&nbsp;a&nbsp;shared&nbsp;reference</i><br/>Orthogonal&nbsp;Procrustes"]:::stage
+    D["<b>Drift</b><br/><i>measure&nbsp;per-word&nbsp;change&nbsp;across&nbsp;decades</i><br/>cosine&nbsp;distance&nbsp;·&nbsp;neighbourhood&nbsp;shift&nbsp;·&nbsp;frequency&nbsp;correction"]:::stage
+    P["<b>App</b><br/><i>explore&nbsp;trajectories&nbsp;interactively</i><br/>Streamlit"]:::stage
 
     C --> E --> A --> D --> P
 ```
