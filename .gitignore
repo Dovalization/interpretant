@@ -32,6 +32,9 @@ models/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/external/.gitkeep
+!data/external/books/
+!data/external/books/**
+data/external/books/**/*.txt
 !models/.gitkeep
 
 # DVC

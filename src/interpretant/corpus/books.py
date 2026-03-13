@@ -146,17 +146,54 @@ class BooksSource(CorpusSource):
         manifest_path = self.books_dir / "manifest.json"
         if not manifest_path.exists():
             return []
-        return json.loads(manifest_path.read_text(encoding="utf-8"))  # type: ignore[return-value]
+        raw: list[dict[str, object]] = json.loads(manifest_path.read_text(encoding="utf-8"))
+        return raw
+
+    def validate(self) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+        """Return (present, missing) based on whether each manifest file exists on disk."""
+        present: list[dict[str, object]] = []
+        missing: list[dict[str, object]] = []
+        for entry in self.manifest():
+            filename = str(entry.get("filename", ""))
+            decade_label = str(entry.get("decade", ""))
+            path = self.books_dir / decade_label / filename
+            (present if path.exists() else missing).append(entry)
+        return present, missing
 
     def stats(self) -> dict[str, object]:
-        """Return a summary dict: total books, books per decade, manifest count."""
-        decade_dirs = self._decade_dirs()
-        per_decade = {
-            _decade_label(d): len(self._txt_files(path))
-            for d, path in sorted(decade_dirs.items())
-        }
+        """Return a summary dict with per-decade book/word counts and per-field breakdown."""
+        manifest_entries = self.manifest()
+        present, missing = self.validate()
+
+        # Per-decade: count present files and their word counts
+        per_decade: dict[str, dict[str, int]] = {}
+        for entry in present:
+            label = str(entry.get("decade", ""))
+            filename = str(entry.get("filename", ""))
+            path = self.books_dir / label / filename
+            try:
+                text = path.read_text(encoding="utf-8", errors="replace")
+                word_count = len(text.split())
+            except OSError:
+                word_count = 0
+            if label not in per_decade:
+                per_decade[label] = {"books": 0, "words": 0}
+            per_decade[label]["books"] += 1
+            per_decade[label]["words"] += word_count
+
+        # Per-field: count all manifest entries (present + missing)
+        per_field: dict[str, int] = {}
+        for entry in manifest_entries:
+            fields = entry.get("fields", [])
+            if isinstance(fields, list):
+                for field in fields:
+                    field_str = str(field)
+                    per_field[field_str] = per_field.get(field_str, 0) + 1
+
         return {
-            "total_books": sum(per_decade.values()),
+            "total_books": len(present),
             "per_decade": per_decade,
-            "manifest_entries": len(self.manifest()),
+            "per_field": per_field,
+            "manifest_entries": len(manifest_entries),
+            "missing": len(missing),
         }

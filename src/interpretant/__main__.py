@@ -249,6 +249,29 @@ def corpus_books_ingest(
     console.print("[green]Done.[/green]")
 
 
+@corpus_books.command("validate")
+@click.option("--books-dir", type=click.Path(path_type=Path), default=Path("data/external/books"), show_default=True)  # noqa: E501
+def corpus_books_validate(books_dir: Path) -> None:
+    """Check all manifest entries are present on disk."""
+    from interpretant.corpus.books import BooksSource
+
+    source = BooksSource(books_dir=books_dir)
+    present, missing = source.validate()
+
+    table = Table(title="Books manifest validation", show_lines=True)
+    table.add_column("Status", style="green")
+    table.add_column("Author")
+    table.add_column("Title")
+    table.add_column("Decade", style="cyan")
+    table.add_column("File")
+    for entry in present:
+        table.add_row("✓", str(entry["author"]), str(entry["title"]), str(entry["decade"]), str(entry["filename"]))  # noqa: E501
+    for entry in missing:
+        table.add_row("[red]✗[/red]", str(entry["author"]), str(entry["title"]), str(entry["decade"]), str(entry["filename"]))  # noqa: E501
+    console.print(table)
+    console.print(f"[green]{len(present)} present[/green]  [red]{len(missing)} missing[/red]")
+
+
 @corpus_books.command("stats")
 @click.option("--books-dir", type=click.Path(path_type=Path), default=Path("data/external/books"), show_default=True)  # noqa: E501
 def corpus_books_stats(books_dir: Path) -> None:
@@ -258,14 +281,30 @@ def corpus_books_stats(books_dir: Path) -> None:
     source = BooksSource(books_dir=books_dir)
     stats = source.stats()
 
-    table = Table(title="Books corpus stats", show_lines=True)
-    table.add_column("Decade", style="cyan")
-    table.add_column("Books", justify="right")
-    for decade_label, count in stats["per_decade"].items():  # type: ignore[union-attr]
-        table.add_row(decade_label, str(count))
-    table.add_row("[bold]Total[/bold]", f"[bold]{stats['total_books']}[/bold]")
-    console.print(table)
-    console.print(f"Manifest entries: {stats['manifest_entries']}")
+    decade_table = Table(title="Books per decade (present files)", show_lines=True)
+    decade_table.add_column("Decade", style="cyan")
+    decade_table.add_column("Books (present/total)", justify="right")
+    decade_table.add_column("Words", justify="right")
+    manifest_entries = stats["manifest_entries"]
+    total_present = stats["total_books"]
+    per_decade: dict[str, dict[str, int]] = stats["per_decade"]  # type: ignore[assignment]
+    for label, counts in sorted(per_decade.items()):
+        decade_table.add_row(label, str(counts["books"]), f"{counts['words']:,}")
+    decade_table.add_row(
+        "[bold]Total[/bold]",
+        f"[bold]{total_present}/{manifest_entries}[/bold]",
+        "",
+    )
+    console.print(decade_table)
+
+    field_table = Table(title="Books per field (all manifest entries)", show_lines=True)
+    field_table.add_column("Field", style="magenta")
+    field_table.add_column("Books", justify="right")
+    per_field: dict[str, int] = stats["per_field"]  # type: ignore[assignment]
+    for field, count in sorted(per_field.items()):
+        field_table.add_row(field, str(count))
+    console.print(field_table)
+    console.print(f"Manifest entries: {manifest_entries}  Missing: {stats['missing']}")
 
 
 # ---------------------------------------------------------------------------
