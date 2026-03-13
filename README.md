@@ -44,7 +44,7 @@ make app-demo
 ## How it works
 
 ```mermaid
-%%{init: {'theme': 'base', 'htmlLabels': false, 'markdownAutoWrap': false, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
 flowchart TD
     classDef corpus fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     classDef embed  fill:#dcfce7,stroke:#22c55e,color:#14532d
@@ -52,25 +52,11 @@ flowchart TD
     classDef drift  fill:#ffe4e6,stroke:#f43f5e,color:#881337
     classDef app    fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
 
-    C["`**Corpus**
-    *decade-sliced token files*
-    PubMed · ACL Anthology · arXiv · Books`"]:::corpus
-
-    E["`**Embeddings**
-    *one vector space per decade*
-    Word2Vec · FastText`"]:::embed
-
-    A["`**Alignment**
-    *rotated onto a shared reference space*
-    Orthogonal Procrustes`"]:::align
-
-    D["`**Drift**
-    *per-word change metrics*
-    cosine distance · neighbourhood shift · frequency correction`"]:::drift
-
-    P["`**App**
-    *trajectories · drift · neighbour evolution*
-    Streamlit`"]:::app
+    C["<b>Corpus</b><br/><i>decade-sliced token files</i><br/>PubMed · ACL Anthology · arXiv · Books"]:::corpus
+    E["<b>Embeddings</b><br/><i>one vector space per decade</i><br/>Word2Vec · FastText"]:::embed
+    A["<b>Alignment</b><br/><i>rotated onto a shared reference space</i><br/>Orthogonal Procrustes"]:::align
+    D["<b>Drift</b><br/><i>per-word change metrics</i><br/>cosine distance · neighbourhood shift · frequency correction"]:::drift
+    P["<b>App</b><br/><i>trajectories · drift · neighbour evolution</i><br/>Streamlit"]:::app
 
     C --> E --> A --> D --> P
 ```
