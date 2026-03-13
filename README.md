@@ -52,27 +52,27 @@ flowchart TD
     classDef drift   fill:#ffe4e6,stroke:#f43f5e,color:#881337
     classDef app     fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
 
-    subgraph corpus["Corpus — decade-sliced token files"]
+    subgraph corpus["Corpus"]
         direction LR
         C1[PubMed] ~~~ C2[ACL Anthology] ~~~ C3[arXiv] ~~~ C4[Books]
     end
 
-    subgraph embed["Embeddings — one vector space per decade"]
+    subgraph embed["Embeddings"]
         direction LR
         E1[Word2Vec] ~~~ E2[FastText]
     end
 
-    subgraph align["Alignment — rotated onto a shared reference space"]
+    subgraph align["Alignment"]
         direction LR
         A1[Orthogonal Procrustes]
     end
 
-    subgraph drift["Drift — per-word change metrics"]
+    subgraph drift["Drift"]
         direction LR
         D1[Cosine distance] ~~~ D2[Neighbourhood shift] ~~~ D3[Frequency correction]
     end
 
-    subgraph app["App — trajectories · drift · neighbour evolution"]
+    subgraph app["App"]
         direction LR
         P1[Streamlit dashboard]
     end
