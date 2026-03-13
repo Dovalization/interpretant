@@ -48,27 +48,27 @@ The pipeline has five stages. First, raw text is acquired from corpus sources â€
 ```mermaid
 flowchart TD
     subgraph corpus["Corpus"]
-        C1[PubMed]
-        C2[ACL Anthology]
-        C3[arXiv]
-        C4[Books]
+        direction LR
+        C1[PubMed] --- C2[ACL Anthology] --- C3[arXiv] --- C4[Books]
     end
 
     subgraph embed["Embeddings"]
-        E1[Word2Vec / FastText<br/>per decade]
+        direction LR
+        E1[Word2Vec] --- E2[FastText]
     end
 
     subgraph align["Alignment"]
-        A1[Procrustes rotation<br/>onto reference decade]
+        direction LR
+        A1[Procrustes rotation onto reference decade]
     end
 
     subgraph drift["Drift"]
-        D1[Cosine distance]
-        D2[Neighbourhood shift]
-        D3[Frequency correction]
+        direction LR
+        D1[Cosine distance] --- D2[Neighbourhood shift] --- D3[Frequency correction]
     end
 
     subgraph app["App"]
+        direction LR
         P1[Streamlit dashboard]
     end
 
