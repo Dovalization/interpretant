@@ -46,7 +46,7 @@ make app-demo
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
 flowchart TD
-    classDef stage fill:#f1f5f9,stroke:#94a3b8,color:#1e293b
+    classDef stage fill:#f1f5f9,stroke:#94a3b8,color:#1e293b,rx:8
 
     C["<b>Corpus</b><br/><i>preprocess&nbsp;text&nbsp;into&nbsp;decade&nbsp;token&nbsp;files</i><br/>PubMed&nbsp;·&nbsp;ACL&nbsp;Anthology&nbsp;·&nbsp;arXiv&nbsp;·&nbsp;Books"]:::stage
     E["<b>Embeddings</b><br/><i>train&nbsp;one&nbsp;vector&nbsp;space&nbsp;per&nbsp;decade</i><br/>Word2Vec&nbsp;·&nbsp;FastText"]:::stage
