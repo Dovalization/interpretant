@@ -44,7 +44,7 @@ make app-demo
 ## How it works
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280', 'edgeLabelBackground': '#ffffff'}}}%%
+%%{init: {'theme': 'base', 'htmlLabels': false, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280', 'edgeLabelBackground': '#ffffff'}}}%%
 flowchart TD
     classDef corpus  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     classDef embed   fill:#dcfce7,stroke:#22c55e,color:#14532d
@@ -52,27 +52,32 @@ flowchart TD
     classDef drift   fill:#ffe4e6,stroke:#f43f5e,color:#881337
     classDef app     fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
 
-    subgraph corpus["Corpus"]
+    subgraph corpus["`**Corpus**
+    decade-sliced token files`"]
         direction LR
         C1[PubMed] ~~~ C2[ACL Anthology] ~~~ C3[arXiv] ~~~ C4[Books]
     end
 
-    subgraph embed["Embeddings"]
+    subgraph embed["`**Embeddings**
+    one vector space per decade`"]
         direction LR
         E1[Word2Vec] ~~~ E2[FastText]
     end
 
-    subgraph align["Alignment"]
+    subgraph align["`**Alignment**
+    rotated onto a shared reference space`"]
         direction LR
         A1[Orthogonal Procrustes]
     end
 
-    subgraph drift["Drift"]
+    subgraph drift["`**Drift**
+    per-word change metrics`"]
         direction LR
         D1[Cosine distance] ~~~ D2[Neighbourhood shift] ~~~ D3[Frequency correction]
     end
 
-    subgraph app["App"]
+    subgraph app["`**App**
+    trajectories · drift · neighbour evolution`"]
         direction LR
         P1[Streamlit dashboard]
     end
