@@ -1,0 +1,13 @@
+# @package _global_.corpus
+name: arxiv
+raw_dir: ${data_dir}/raw/arxiv
+processed_dir: ${data_dir}/processed/arxiv
+categories:
+  - cs.CL
+  - cs.LG
+  - cs.AI
+  - physics.hist-ph
+  - q-bio
+  - nlin
+min_year: 1991
+max_year: 2020

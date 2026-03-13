@@ -1,0 +1,7 @@
+# @package _global_.corpus
+name: acl
+raw_dir: ${data_dir}/raw/acl
+processed_dir: ${data_dir}/processed/acl
+bib_filename: anthology+abstracts.bib.gz
+min_year: 1965
+max_year: 2023

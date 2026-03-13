@@ -1,0 +1,12 @@
+# @package _global_.corpus
+name: s2orc
+raw_dir: ${data_dir}/raw/s2orc
+processed_dir: ${data_dir}/processed/s2orc
+fields_of_study:
+  - Computer Science
+  - Philosophy
+  - Physics
+min_year: 1960
+max_year: 2020
+languages:
+  - en

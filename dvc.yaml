@@ -1,0 +1,32 @@
+stages:
+  preprocess:
+    cmd: uv run interpretant corpus preprocess --config-name s2orc
+    deps:
+      - data/raw/
+      - src/interpretant/corpus/
+    outs:
+      - data/processed/texts/
+
+  embed:
+    cmd: uv run interpretant embed train --config-name word2vec
+    deps:
+      - data/processed/texts/
+      - src/interpretant/embedding/
+    outs:
+      - models/raw/
+
+  align:
+    cmd: uv run interpretant align run --config-name procrustes
+    deps:
+      - models/raw/
+      - src/interpretant/alignment/
+    outs:
+      - models/aligned/
+
+  drift:
+    cmd: uv run interpretant drift compute --output data/processed/drift.parquet
+    deps:
+      - models/aligned/
+      - src/interpretant/drift/
+    outs:
+      - data/processed/drift.parquet

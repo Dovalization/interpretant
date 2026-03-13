@@ -1,0 +1,6 @@
+source: pdf
+inbox_dir: data/inbox/pdfs
+processed_dir: data/inbox/processed
+default_backend: docling
+output_base_dir: data/external/books
+auto_add_to_manifest: false

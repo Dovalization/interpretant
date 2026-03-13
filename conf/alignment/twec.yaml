@@ -1,0 +1,6 @@
+# @package _global_.alignment
+name: twec
+compass_epochs: 10
+iters: 1
+size: ${embedding.vector_size}
+model_dir: ${models_dir}/aligned/${corpus.name}/twec

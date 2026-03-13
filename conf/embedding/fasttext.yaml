@@ -1,0 +1,12 @@
+# @package _global_.embedding
+name: fasttext
+vector_size: 300
+window: 10
+min_count: ${vocab.min_count}
+workers: 4
+epochs: 5
+sg: 1
+min_n: 3
+max_n: 6
+seed: ${seed}
+model_dir: ${models_dir}/raw/${corpus.name}/fasttext

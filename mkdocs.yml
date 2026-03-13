@@ -1,0 +1,32 @@
+site_name: interpretant
+site_description: Diachronic semantic drift tracker for academic corpora
+site_url: https://interpretant.readthedocs.io
+repo_url: https://github.com/yourorg/interpretant
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: deep purple
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Corpus: corpus.md
+  - Methods: methods.md
+  - Visualization: visualization.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - toc:
+      permalink: true

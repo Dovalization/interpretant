@@ -1,0 +1,4 @@
+# @package _global_.alignment
+name: procrustes
+reference_decade: 2010
+model_dir: ${models_dir}/aligned/${corpus.name}/procrustes

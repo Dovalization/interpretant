@@ -1,0 +1,7 @@
+# @package _global_.corpus
+name: pubmed
+raw_dir: ${data_dir}/raw/pubmed
+processed_dir: ${data_dir}/processed/pubmed
+min_year: 1960
+max_year: 2023
+language_filter: [eng]
