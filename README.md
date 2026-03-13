@@ -50,7 +50,14 @@ make app-demo
 5. **Dashboard** — trajectories, drift timelines, and nearest-neighbour evolution visualised interactively in Streamlit.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
 flowchart TD
+    classDef corpus  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    classDef embed   fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef align   fill:#fef9c3,stroke:#eab308,color:#713f12
+    classDef drift   fill:#ffe4e6,stroke:#f43f5e,color:#881337
+    classDef app     fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
+
     subgraph corpus["Corpus"]
         direction LR
         C1[PubMed] ~~~ C2[ACL Anthology] ~~~ C3[arXiv] ~~~ C4[Books]
@@ -77,6 +84,12 @@ flowchart TD
     end
 
     corpus --> embed --> align --> drift --> app
+
+    class C1,C2,C3,C4 corpus
+    class E1,E2 embed
+    class A1 align
+    class D1,D2,D3 drift
+    class P1 app
 ```
 
 All stages are wired into a DVC pipeline (`dvc.yaml`) for reproducible reruns.
