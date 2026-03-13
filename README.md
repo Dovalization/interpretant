@@ -44,51 +44,35 @@ make app-demo
 ## How it works
 
 ```mermaid
-%%{init: {'theme': 'base', 'htmlLabels': false, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280', 'edgeLabelBackground': '#ffffff'}}}%%
+%%{init: {'theme': 'base', 'htmlLabels': false, 'themeVariables': {'fontSize': '14px', 'lineColor': '#6b7280'}}}%%
 flowchart TD
-    classDef corpus  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
-    classDef embed   fill:#dcfce7,stroke:#22c55e,color:#14532d
-    classDef align   fill:#fef9c3,stroke:#eab308,color:#713f12
-    classDef drift   fill:#ffe4e6,stroke:#f43f5e,color:#881337
-    classDef app     fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
+    classDef corpus fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    classDef embed  fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef align  fill:#fef9c3,stroke:#eab308,color:#713f12
+    classDef drift  fill:#ffe4e6,stroke:#f43f5e,color:#881337
+    classDef app    fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
 
-    subgraph corpus["`**Corpus**
-    decade-sliced token files`"]
-        direction LR
-        C1[PubMed] ~~~ C2[ACL Anthology] ~~~ C3[arXiv] ~~~ C4[Books]
-    end
+    C["`**Corpus**
+    *decade-sliced token files*
+    PubMed · ACL Anthology · arXiv · Books`"]:::corpus
 
-    subgraph embed["`**Embeddings**
-    one vector space per decade`"]
-        direction LR
-        E1[Word2Vec] ~~~ E2[FastText]
-    end
+    E["`**Embeddings**
+    *one vector space per decade*
+    Word2Vec · FastText`"]:::embed
 
-    subgraph align["`**Alignment**
-    rotated onto a shared reference space`"]
-        direction LR
-        A1[Orthogonal Procrustes]
-    end
+    A["`**Alignment**
+    *rotated onto a shared reference space*
+    Orthogonal Procrustes`"]:::align
 
-    subgraph drift["`**Drift**
-    per-word change metrics`"]
-        direction LR
-        D1[Cosine distance] ~~~ D2[Neighbourhood shift] ~~~ D3[Frequency correction]
-    end
+    D["`**Drift**
+    *per-word change metrics*
+    cosine distance · neighbourhood shift · frequency correction`"]:::drift
 
-    subgraph app["`**App**
-    trajectories · drift · neighbour evolution`"]
-        direction LR
-        P1[Streamlit dashboard]
-    end
+    P["`**App**
+    *trajectories · drift · neighbour evolution*
+    Streamlit`"]:::app
 
-    corpus --> embed --> align --> drift --> app
-
-    class C1,C2,C3,C4 corpus
-    class E1,E2 embed
-    class A1 align
-    class D1,D2,D3 drift
-    class P1 app
+    C --> E --> A --> D --> P
 ```
 
 All stages are wired into a DVC pipeline (`dvc.yaml`) for reproducible reruns.
