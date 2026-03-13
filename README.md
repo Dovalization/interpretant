@@ -52,11 +52,11 @@ flowchart TD
     classDef drift  fill:#ffe4e6,stroke:#f43f5e,color:#881337
     classDef app    fill:#ede9fe,stroke:#8b5cf6,color:#3b0764
 
-    C["<b>Corpus</b><br/><i>decade-sliced token files</i><br/>PubMed · ACL Anthology · arXiv · Books"]:::corpus
-    E["<b>Embeddings</b><br/><i>one vector space per decade</i><br/>Word2Vec · FastText"]:::embed
-    A["<b>Alignment</b><br/><i>rotated onto a shared reference space</i><br/>Orthogonal Procrustes"]:::align
-    D["<b>Drift</b><br/><i>per-word change metrics</i><br/>cosine distance · neighbourhood shift · frequency correction"]:::drift
-    P["<b>App</b><br/><i>trajectories · drift · neighbour evolution</i><br/>Streamlit"]:::app
+    C["<b>Corpus</b><br/><i>decade-sliced&nbsp;token&nbsp;files</i><br/>PubMed&nbsp;·&nbsp;ACL&nbsp;Anthology&nbsp;·&nbsp;arXiv&nbsp;·&nbsp;Books"]:::corpus
+    E["<b>Embeddings</b><br/><i>one&nbsp;vector&nbsp;space&nbsp;per&nbsp;decade</i><br/>Word2Vec&nbsp;·&nbsp;FastText"]:::embed
+    A["<b>Alignment</b><br/><i>rotated&nbsp;onto&nbsp;a&nbsp;shared&nbsp;reference&nbsp;space</i><br/>Orthogonal&nbsp;Procrustes"]:::align
+    D["<b>Drift</b><br/><i>per-word&nbsp;change&nbsp;metrics</i><br/>cosine&nbsp;distance&nbsp;·&nbsp;neighbourhood&nbsp;shift&nbsp;·&nbsp;frequency&nbsp;correction"]:::drift
+    P["<b>App</b><br/><i>trajectories&nbsp;·&nbsp;drift&nbsp;·&nbsp;neighbour&nbsp;evolution</i><br/>Streamlit"]:::app
 
     C --> E --> A --> D --> P
 ```
