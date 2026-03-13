@@ -45,12 +45,34 @@ make app-demo
 
 The pipeline has five stages. First, raw text is acquired from corpus sources — journal papers from PubMed, ACL Anthology, and arXiv — and preprocessed into decade-sliced token files. Second, a Word2Vec or FastText model is trained per decade on the merged corpus, producing one vector space per ten-year window. Third, the decade spaces are aligned via orthogonal Procrustes rotation onto a shared reference decade, so that vectors across time are comparable. Fourth, drift metrics are computed for each tracked word: cosine distance between decade vectors, nearest-neighbour shift (Jaccard distance on the top-25 neighbours), and frequency-corrected drift to suppress noise from rare terms. Fifth, the dashboard visualises trajectories, drift timelines, and nearest-neighbour evolution interactively.
 
-```
-corpus/          →   embeddings/      →   alignment/       →   drift/        →   app/
-PubMed              Word2Vec per          Procrustes            cosine            Streamlit
-ACL Anthology       decade                rotation              NN shift          dashboard
-arXiv               training              onto reference        frequency
-Books               FastText option       decade                correction
+```mermaid
+flowchart LR
+    subgraph corpus["Corpus"]
+        C1[PubMed]
+        C2[ACL Anthology]
+        C3[arXiv]
+        C4[Books]
+    end
+
+    subgraph embed["Embeddings"]
+        E1[Word2Vec / FastText\nper decade]
+    end
+
+    subgraph align["Alignment"]
+        A1[Procrustes rotation\nonto reference decade]
+    end
+
+    subgraph drift["Drift"]
+        D1[Cosine distance]
+        D2[Neighbourhood shift]
+        D3[Frequency correction]
+    end
+
+    subgraph app["App"]
+        P1[Streamlit dashboard]
+    end
+
+    corpus --> embed --> align --> drift --> app
 ```
 
 All stages are wired into a DVC pipeline (`dvc.yaml`) for reproducible reruns.
