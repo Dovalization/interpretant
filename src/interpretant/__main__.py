@@ -908,8 +908,9 @@ def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None
     from interpretant.alignment.procrustes import ProcrustesAligner
     from interpretant.drift.metrics import (
         average_pairwise_distance,
+        batch_neighborhood_shift,
+        build_decade_index,
         cosine_distance,
-        neighborhood_shift,
     )
 
     console.print("[bold]Computing drift metrics[/bold]")
@@ -938,26 +939,39 @@ def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None
     console.print(f"  words          : {len(target_words):,}")
     console.print(f"  decades        : {decades}")
 
-    # Full shared-vocab context vectors used for neighbourhood computation.
-    # Neighbourhood shift must search the complete vocabulary, not just target_words,
-    # otherwise top-k neighbours are drawn from a pool too small to be meaningful.
-    context_by_decade: dict[int, dict[str, object]] = {
-        decade: {word: aligner.get_vector(word, decade) for word in shared_vocab}
-        for decade in decades
+    console.print("  Building decade indices …")
+    # Pre-build normalised matrices per decade for vectorised neighbourhood shift.
+    decade_index: dict[int, tuple[list[str], object]] = {
+        decade: build_decade_index(
+            {word: aligner.get_vector(word, decade) for word in shared_vocab}
+        )
+        for decade in tqdm(decades, desc="  indexing", unit="decade", leave=False)
     }
+
     # Full trajectory per target word for avg_pairwise_distance
     trajectories: dict[str, list[object]] = {
-        word: [context_by_decade[d][word] for d in decades] for word in target_words
+        word: [aligner.get_vector(word, decade) for decade in decades] for word in target_words
     }
 
     rows = []
-    for word in tqdm(target_words, desc="Computing drift", unit=" words"):
-        for i in range(1, len(decades)):
-            t0, t1 = decades[i - 1], decades[i]
-            v0 = context_by_decade[t0][word]
-            v1 = context_by_decade[t1][word]
-            cd = cosine_distance(v0, v1)  # type: ignore[arg-type]
-            ns = neighborhood_shift(word, context_by_decade[t0], context_by_decade[t1])  # type: ignore[arg-type]
+    for i in tqdm(range(1, len(decades)), desc="Computing drift", unit="transition"):
+        t0, t1 = decades[i - 1], decades[i]
+        words_t0, matrix_t0 = decade_index[t0]  # type: ignore[misc]
+        words_t1, matrix_t1 = decade_index[t1]  # type: ignore[misc]
+
+        ns_scores = batch_neighborhood_shift(
+            target_words,
+            words_t0,
+            matrix_t0,
+            words_t1,
+            matrix_t1,  # type: ignore[arg-type]
+        )
+
+        for word in target_words:
+            v0 = aligner.get_vector(word, t0)
+            v1 = aligner.get_vector(word, t1)
+            cd = cosine_distance(v0, v1)
+            ns = ns_scores.get(word, 0.0)
             apd = average_pairwise_distance(trajectories[word])  # type: ignore[arg-type]
             rows.append(
                 {

@@ -68,6 +68,79 @@ def neighborhood_shift(
     return 1.0 - len(neighbors_t1 & neighbors_t2) / len(union)
 
 
+def build_decade_index(
+    vectors: dict[str, np.ndarray],
+) -> tuple[list[str], np.ndarray]:
+    """Build a normalised matrix and word list from a vector dict.
+
+    Args:
+        vectors: Mapping of word → vector.
+
+    Returns:
+        Tuple of (word_list, normalised_matrix) where matrix[i] is the unit
+        vector for word_list[i]. Words with zero norm are left as zero vectors.
+    """
+    words = list(vectors.keys())
+    matrix = np.array([vectors[w] for w in words], dtype=np.float32)
+    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+    norms = np.where(norms == 0, 1.0, norms)
+    return words, (matrix / norms)
+
+
+def batch_neighborhood_shift(
+    target_words: list[str],
+    words_t1: list[str],
+    matrix_t1: np.ndarray,
+    words_t2: list[str],
+    matrix_t2: np.ndarray,
+    k: int = 25,
+) -> dict[str, float]:
+    """Vectorised neighbourhood shift for many words at once.
+
+    Computes the full pairwise cosine similarity matrix for each time point via
+    a single matrix multiply, then extracts top-k neighbours per word using
+    argsort. Much faster than calling neighbourhood_shift word-by-word when the
+    vocabulary is large.
+
+    Args:
+        target_words: Words to compute shift for (must be in both word lists).
+        words_t1: Ordered vocabulary at time 1.
+        matrix_t1: Normalised matrix (len(words_t1) × dim) at time 1.
+        words_t2: Ordered vocabulary at time 2.
+        matrix_t2: Normalised matrix (len(words_t2) × dim) at time 2.
+        k: Number of nearest neighbours to compare.
+
+    Returns:
+        Dict mapping each target word to its Jaccard distance in [0, 1].
+    """
+    idx_t1 = {w: i for i, w in enumerate(words_t1)}
+    idx_t2 = {w: i for i, w in enumerate(words_t2)}
+
+    # Full similarity matrices: shape (n_vocab × n_vocab)
+    sim_t1 = matrix_t1 @ matrix_t1.T  # type: ignore[operator]
+    sim_t2 = matrix_t2 @ matrix_t2.T  # type: ignore[operator]
+
+    results: dict[str, float] = {}
+    for word in target_words:
+        i1 = idx_t1.get(word)
+        i2 = idx_t2.get(word)
+        if i1 is None or i2 is None:
+            continue
+
+        row1 = sim_t1[i1].copy()
+        row1[i1] = -2.0  # exclude self
+        top1 = set(np.argpartition(row1, -k)[-k:].tolist())
+
+        row2 = sim_t2[i2].copy()
+        row2[i2] = -2.0
+        top2 = set(np.argpartition(row2, -k)[-k:].tolist())
+
+        union = top1 | top2
+        results[word] = 1.0 - len(top1 & top2) / len(union) if union else 0.0
+
+    return results
+
+
 def frequency_corrected_drift(
     raw_drift: float,
     freq_t1: float,
