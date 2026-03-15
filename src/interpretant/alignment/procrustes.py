@@ -48,8 +48,7 @@ class ProcrustesAligner(Aligner):
             raise ValueError("model_paths must contain at least one entry.")
 
         raw: dict[int, KeyedVectors] = {
-            decade: Word2Vec.load(str(path)).wv
-            for decade, path in model_paths.items()
+            decade: Word2Vec.load(str(path)).wv for decade, path in model_paths.items()
         }
 
         self._shared_vocab = self._compute_shared_vocab(raw)

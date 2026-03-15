@@ -137,7 +137,7 @@ class ACLAnthologySource(CorpusSource):
         decades = set(range(start, end, step))
         buffers: dict[int, list[str]] = {}
         skipped = 0
-        _CHUNK = 500
+        chunk = 500
 
         entries = list(self._iter_entries())
 
@@ -180,7 +180,7 @@ class ACLAnthologySource(CorpusSource):
                 buffers[decade] = []
             buffers[decade].append(text)
 
-            if len(buffers[decade]) >= _CHUNK:
+            if len(buffers[decade]) >= chunk:
                 yield decade, buffers[decade]
                 buffers[decade] = []
 
@@ -190,6 +190,7 @@ class ACLAnthologySource(CorpusSource):
 
         if skipped:
             import warnings
+
             warnings.warn(
                 f"Skipped {skipped} ACL entries "
                 "(missing/unparseable year, out of range, or below min_tokens).",

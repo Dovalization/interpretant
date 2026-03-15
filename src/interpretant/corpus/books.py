@@ -137,9 +137,7 @@ class BooksSource(CorpusSource):
 
     def document_count(self) -> int:
         """Return total number of book text files across all decades."""
-        return sum(
-            len(self._txt_files(d)) for d in self._decade_dirs().values()
-        )
+        return sum(len(self._txt_files(d)) for d in self._decade_dirs().values())
 
     def manifest(self) -> list[dict[str, object]]:
         """Load and return entries from manifest.json, or [] if absent."""

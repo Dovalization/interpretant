@@ -13,14 +13,28 @@ a Compass". https://arxiv.org/abs/1906.02376
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
-import numpy as np
 from gensim.models import KeyedVectors, Word2Vec
 from gensim.models.callbacks import CallbackAny2Vec
 
 logger = logging.getLogger(__name__)
+
+
+class _EpochProgressCallback(CallbackAny2Vec):
+    """Calls bar.update(1) after every training epoch.
+
+    Designed to work with any object that has an ``update(int)`` method,
+    so callers can pass a tqdm bar without creating a hard tqdm dependency here.
+    """
+
+    def __init__(self, bar: Any) -> None:
+        self._bar = bar
+
+    def on_epoch_end(self, model: Word2Vec) -> None:
+        self._bar.update(1)
 
 
 class _FileSentences:
@@ -31,18 +45,40 @@ class _FileSentences:
     gensim calls ``__iter__`` once for vocabulary building and once per training
     epoch, so the class must support multiple iterations without consuming the
     underlying data.
+
+    Args:
+        paths: Text files to read from.
+        max_docs: If set, stride-sample at most this many lines per file using
+            a uniform stride (every Nth line), so the sample covers the full
+            temporal range of the file rather than just the first N lines.
     """
 
-    def __init__(self, paths: list[Path]) -> None:
+    def __init__(self, paths: list[Path], max_docs: int | None = None) -> None:
         self._paths = paths
+        self._max_docs = max_docs
+        # Pre-compute stride per file: one line-count pass at construction time.
+        # stride=1 means take every line; stride=k means take every k-th line.
+        self._strides: dict[Path, int] = {}
+        if max_docs is not None:
+            for path in paths:
+                with path.open(encoding="utf-8") as fh:
+                    total = sum(1 for _ in fh)
+                self._strides[path] = max(1, total // max_docs)
 
-    def __iter__(self):  # type: ignore[override]
+    def __iter__(self) -> Iterator[list[str]]:
         for path in self._paths:
+            stride = self._strides.get(path, 1)
+            count = 0
             with path.open(encoding="utf-8") as fh:
-                for line in fh:
+                for i, line in enumerate(fh):
+                    if i % stride != 0:
+                        continue
                     tokens = line.split()
                     if tokens:
                         yield tokens
+                        count += 1
+                        if self._max_docs is not None and count >= self._max_docs:
+                            break
 
 
 class _FreezeContextCallback(CallbackAny2Vec):
@@ -65,7 +101,7 @@ class _FreezeContextCallback(CallbackAny2Vec):
         # Snapshot of compass syn1neg at construction time.
         self._compass_syn1neg = compass.syn1neg.copy()
 
-    def on_epoch_end(self, model: Word2Vec) -> None:  # type: ignore[override]
+    def on_epoch_end(self, model: Word2Vec) -> None:
         for d_idx, c_idx in self._pairs:
             model.syn1neg[d_idx] = self._compass_syn1neg[c_idx]
 
@@ -112,7 +148,12 @@ class TWECTrainer:
     # Compass
     # ------------------------------------------------------------------
 
-    def train_compass(self, corpus_paths: list[Path]) -> None:
+    def train_compass(
+        self,
+        corpus_paths: list[Path],
+        max_docs: int | None = None,
+        extra_callbacks: list[Any] | None = None,
+    ) -> None:
         """Train the compass on all decades' text, streaming from disk.
 
         The compass establishes the universal coordinate system. It must be
@@ -122,8 +163,11 @@ class TWECTrainer:
             corpus_paths: Paths to preprocessed text files (one doc per line).
                 All files are read in order on each pass; gensim makes multiple
                 passes for vocabulary building and per-epoch training.
+            max_docs: If set, cap the number of lines read per file per pass.
+            extra_callbacks: Additional ``CallbackAny2Vec`` instances (e.g. a
+                tqdm progress bar callback) to pass to gensim's train loop.
         """
-        sentences = _FileSentences(corpus_paths)
+        sentences = _FileSentences(corpus_paths, max_docs=max_docs)
         logger.info("Training compass on %d file(s)", len(corpus_paths))
         self._compass = Word2Vec(
             sentences=sentences,
@@ -135,6 +179,7 @@ class TWECTrainer:
             sg=self.sg,
             negative=self.negative,
             seed=self.seed,
+            callbacks=extra_callbacks or [],
         )
 
     def save_compass(self, output_dir: Path) -> Path:
@@ -155,13 +200,20 @@ class TWECTrainer:
     # ------------------------------------------------------------------
 
     def train_decade(
-        self, decade_paths: list[Path], decade: int
+        self,
+        decade_paths: list[Path],
+        decade: int,
+        max_docs: int | None = None,
+        extra_callbacks: list[Any] | None = None,
     ) -> KeyedVectors:
         """Train a decade model with compass context vectors frozen.
 
         Args:
             decade_paths: Paths to preprocessed text files for this decade.
             decade: The decade label (used only for logging).
+            max_docs: If set, cap the number of lines read per file per pass.
+            extra_callbacks: Additional ``CallbackAny2Vec`` instances passed to
+                gensim's train loop alongside the freeze-context callback.
 
         Returns:
             KeyedVectors with target vectors trained on this decade's text
@@ -171,7 +223,7 @@ class TWECTrainer:
             raise RuntimeError("No compass available. Call train_compass() first.")
 
         compass = self._compass
-        sentences = _FileSentences(decade_paths)
+        sentences = _FileSentences(decade_paths, max_docs=max_docs)
 
         # Build the decade model's vocabulary from the decade sentences.
         # min_count=1 so all words that appear at least once are included;
@@ -192,20 +244,21 @@ class TWECTrainer:
         # Words absent from the compass start from gensim's random init.
         self._init_from_compass(model, compass)
 
-        # Train with frozen context callback.
-        callback = _FreezeContextCallback(compass, model)
+        # Train with frozen context callback (plus any caller-supplied callbacks).
+        freeze_cb = _FreezeContextCallback(compass, model)
+        all_callbacks: list[Any] = [freeze_cb] + (extra_callbacks or [])
         model.train(
             sentences,
             total_examples=model.corpus_count,
             epochs=model.epochs,
-            callbacks=[callback],
+            callbacks=all_callbacks,
         )
 
         logger.info(
             "Decade %d: vocab=%d  shared_with_compass=%d",
             decade,
             len(model.wv),
-            len(callback._pairs),
+            len(freeze_cb._pairs),
         )
 
         return model.wv

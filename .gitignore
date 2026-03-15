@@ -24,6 +24,10 @@ htmlcov/
 outputs/
 multirun/
 
+# Logs
+logs/*.log
+!logs/.gitkeep
+
 # Data & models (tracked by DVC)
 data/raw/*
 data/processed/*

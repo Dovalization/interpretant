@@ -36,7 +36,9 @@ def corpus() -> None:
 @click.argument("source", type=click.Choice(["acl", "pubmed"]))
 @click.option("--output-dir", type=click.Path(path_type=Path), help="Override raw corpus dir.")
 @click.option("--files", default=100, show_default=True, help="(pubmed) XML files to download.")  # noqa: E501
-@click.option("--skip", default=0, show_default=True, help="(pubmed) Skip first N files in listing.")  # noqa: E501
+@click.option(
+    "--skip", default=0, show_default=True, help="(pubmed) Skip first N files in listing."
+)  # noqa: E501
 def corpus_download(source: str, output_dir: Path | None, files: int, skip: int) -> None:
     """Download raw corpus data. SOURCE: acl|pubmed"""
     import urllib.request
@@ -52,12 +54,18 @@ def corpus_download(source: str, output_dir: Path | None, files: int, skip: int)
             return
 
         console.print(f"Downloading ACL Anthology to {dest_file} …")
-        with tqdm(unit="B", unit_scale=True, unit_divisor=1024,  # noqa: E501
-                  desc="anthology+abstracts.bib.gz") as bar:
+        with tqdm(
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1024,  # noqa: E501
+            desc="anthology+abstracts.bib.gz",
+        ) as bar:
+
             def _reporthook(count: int, block_size: int, total_size: int) -> None:
                 if bar.total is None and total_size > 0:
                     bar.total = total_size
                 bar.update(block_size)
+
             urllib.request.urlretrieve(url, dest_file, reporthook=_reporthook)  # noqa: S310
 
         console.print(f"[green]Saved to {dest_file}[/green]")
@@ -97,16 +105,37 @@ def corpus_download(source: str, output_dir: Path | None, files: int, skip: int)
 
 
 @corpus.command("preprocess")
-@click.option("--config-name", default="arxiv", show_default=True, help="Corpus config (arxiv|s2orc).")  # noqa: E501
+@click.option(
+    "--config-name", default="arxiv", show_default=True, help="Corpus config (arxiv|s2orc)."
+)  # noqa: E501
 @click.option("--input-dir", type=click.Path(path_type=Path), help="Override raw corpus dir.")
-@click.option("--output-dir", type=click.Path(path_type=Path), help="Override processed output dir.")  # noqa: E501
+@click.option(
+    "--output-dir", type=click.Path(path_type=Path), help="Override processed output dir."
+)  # noqa: E501
 @click.option("--snapshot-file", default="arxiv-metadata-oai-snapshot.json", show_default=True)
 @click.option("--start", default=1990, show_default=True, help="First decade (inclusive).")
 @click.option("--end", default=2020, show_default=True, help="Last decade (exclusive).")
-@click.option("--min-tokens", default=0, show_default=True, help="Skip docs with fewer tokens (0 = no filter).")  # noqa: E501
-@click.option("--max-docs", default=0, show_default=True, help="Cap per-decade docs via random sample (0 = no cap).")  # noqa: E501
-@click.option("--seed", default=42, show_default=True, help="Random seed for --max-docs reproducibility.")  # noqa: E501
-@click.option("--workers", default=1, show_default=True, help="Parallel worker processes (PubMed) or threads (ACL). 1 = sequential.")  # noqa: E501
+@click.option(
+    "--min-tokens",
+    default=0,
+    show_default=True,
+    help="Skip docs with fewer tokens (0 = no filter).",
+)  # noqa: E501
+@click.option(
+    "--max-docs",
+    default=0,
+    show_default=True,
+    help="Cap per-decade docs via random sample (0 = no cap).",
+)  # noqa: E501
+@click.option(
+    "--seed", default=42, show_default=True, help="Random seed for --max-docs reproducibility."
+)  # noqa: E501
+@click.option(
+    "--workers",
+    default=1,
+    show_default=True,
+    help="Parallel worker processes (PubMed) or threads (ACL). 1 = sequential.",
+)  # noqa: E501
 def corpus_preprocess(  # noqa: PLR0913
     config_name: str,
     input_dir: Path | None,
@@ -137,7 +166,7 @@ def corpus_preprocess(  # noqa: PLR0913
     console.print(f"[bold]Preprocessing corpus[/bold] (config: {config_name})")
     console.print(f"  raw dir      : {raw_dir}")
     console.print(f"  output dir   : {texts_dir}")
-    console.print(f"  decades      : {start}–{end-1}")
+    console.print(f"  decades      : {start}–{end - 1}")
     if min_tokens:
         console.print(f"  min tokens   : {min_tokens}")
     if max_docs:
@@ -195,10 +224,9 @@ def corpus_preprocess(  # noqa: PLR0913
 
     rng = random.Random(seed)
     out_files = {
-        decade: texts_dir / f"{config_name}_{decade}.txt"
-        for decade in range(start, end, 10)
+        decade: texts_dir / f"{config_name}_{decade}.txt" for decade in range(start, end, 10)
     }
-    counts: dict[int, int] = {decade: 0 for decade in out_files}
+    counts: dict[int, int] = dict.fromkeys(out_files, 0)
 
     if max_docs:
         # Accumulate first so we can sample uniformly across the full decade.
@@ -239,8 +267,15 @@ def corpus_books() -> None:
 
 
 @corpus_books.command("ingest")
-@click.option("--books-dir", type=click.Path(path_type=Path), default=Path("data/external/books"), show_default=True)  # noqa: E501
-@click.option("--output-dir", type=click.Path(path_type=Path), help="Override processed output dir.")  # noqa: E501
+@click.option(
+    "--books-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/external/books"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--output-dir", type=click.Path(path_type=Path), help="Override processed output dir."
+)  # noqa: E501
 @click.option("--start", default=1820, show_default=True, help="First decade (inclusive).")
 @click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
 def corpus_books_ingest(
@@ -276,7 +311,12 @@ def corpus_books_ingest(
 
 
 @corpus_books.command("validate")
-@click.option("--books-dir", type=click.Path(path_type=Path), default=Path("data/external/books"), show_default=True)  # noqa: E501
+@click.option(
+    "--books-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/external/books"),
+    show_default=True,
+)  # noqa: E501
 def corpus_books_validate(books_dir: Path) -> None:
     """Check all manifest entries are present on disk."""
     from interpretant.corpus.books import BooksSource
@@ -291,15 +331,32 @@ def corpus_books_validate(books_dir: Path) -> None:
     table.add_column("Decade", style="cyan")
     table.add_column("File")
     for entry in present:
-        table.add_row("✓", str(entry["author"]), str(entry["title"]), str(entry["decade"]), str(entry["filename"]))  # noqa: E501
+        table.add_row(
+            "✓",
+            str(entry["author"]),
+            str(entry["title"]),
+            str(entry["decade"]),
+            str(entry["filename"]),
+        )  # noqa: E501
     for entry in missing:
-        table.add_row("[red]✗[/red]", str(entry["author"]), str(entry["title"]), str(entry["decade"]), str(entry["filename"]))  # noqa: E501
+        table.add_row(
+            "[red]✗[/red]",
+            str(entry["author"]),
+            str(entry["title"]),
+            str(entry["decade"]),
+            str(entry["filename"]),
+        )  # noqa: E501
     console.print(table)
     console.print(f"[green]{len(present)} present[/green]  [red]{len(missing)} missing[/red]")
 
 
 @corpus_books.command("stats")
-@click.option("--books-dir", type=click.Path(path_type=Path), default=Path("data/external/books"), show_default=True)  # noqa: E501
+@click.option(
+    "--books-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/external/books"),
+    show_default=True,
+)  # noqa: E501
 def corpus_books_stats(books_dir: Path) -> None:
     """Show book counts per decade and manifest status."""
     from interpretant.corpus.books import BooksSource
@@ -344,10 +401,32 @@ def embed() -> None:
 
 
 @embed.command("train")
-@click.option("--config-name", default="word2vec", show_default=True, help="Embedding config (word2vec|fasttext).")  # noqa: E501
-@click.option("--corpus", "corpora", multiple=True, default=["arxiv", "acl", "pubmed"], show_default=True, help="Corpus sources to merge (repeatable). Also accepts 'books'.")  # noqa: E501
-@click.option("--input-dir", type=click.Path(path_type=Path), default=Path("data/processed"), show_default=True, help="Root of processed text dirs.")  # noqa: E501
-@click.option("--output-dir", type=click.Path(path_type=Path), help="Model output dir (default: models/raw/<config-name>).")  # noqa: E501
+@click.option(
+    "--config-name",
+    default="word2vec",
+    show_default=True,
+    help="Embedding config (word2vec|fasttext).",
+)  # noqa: E501
+@click.option(
+    "--corpus",
+    "corpora",
+    multiple=True,
+    default=["arxiv", "acl", "pubmed"],
+    show_default=True,
+    help="Corpus sources to merge (repeatable). Also accepts 'books'.",
+)  # noqa: E501
+@click.option(
+    "--input-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed"),
+    show_default=True,
+    help="Root of processed text dirs.",
+)  # noqa: E501
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    help="Model output dir (default: models/raw/<config-name>).",
+)  # noqa: E501
 @click.option("--start", default=1970, show_default=True, help="First decade to train (inclusive).")
 @click.option("--end", default=2020, show_default=True, help="Last decade (exclusive).")
 @click.option("--vector-size", default=300, show_default=True, help="Embedding dimensionality.")
@@ -355,7 +434,12 @@ def embed() -> None:
 @click.option("--min-count", default=10, show_default=True, help="Minimum word frequency.")
 @click.option("--workers", default=4, show_default=True, help="Parallel training workers.")
 @click.option("--epochs", default=5, show_default=True, help="Training epochs per decade.")
-@click.option("--separate", is_flag=True, default=False, help="Train one model per corpus per decade instead of merging.")  # noqa: E501
+@click.option(
+    "--separate",
+    is_flag=True,
+    default=False,
+    help="Train one model per corpus per decade instead of merging.",
+)  # noqa: E501
 def embed_train(  # noqa: PLR0913
     config_name: str,
     corpora: tuple[str, ...],
@@ -373,12 +457,16 @@ def embed_train(  # noqa: PLR0913
     """Train decade-sliced word embedding models from preprocessed text."""
     if config_name == "word2vec":
         from interpretant.embedding.word2vec import Word2VecTrainer
+
         trainer_cls = Word2VecTrainer
     elif config_name == "fasttext":
         from interpretant.embedding.fasttext import FastTextTrainer
+
         trainer_cls = FastTextTrainer  # type: ignore[assignment]
     else:
-        raise click.ClickException(f"Unknown config: {config_name!r}. Use 'word2vec' or 'fasttext'.")  # noqa: E501
+        raise click.ClickException(
+            f"Unknown config: {config_name!r}. Use 'word2vec' or 'fasttext'."
+        )  # noqa: E501
 
     models_dir = output_dir or Path("models") / "raw" / config_name
     models_dir.mkdir(parents=True, exist_ok=True)
@@ -387,7 +475,9 @@ def embed_train(  # noqa: PLR0913
     console.print(f"  corpora  : {', '.join(corpora)}")
     console.print(f"  decades  : {start}–{end - 1} (step 10)")
     console.print(f"  output   : {models_dir}")
-    console.print(f"  dims     : {vector_size}  window: {window}  min_count: {min_count}  epochs: {epochs}")  # noqa: E501
+    console.print(
+        f"  dims     : {vector_size}  window: {window}  min_count: {min_count}  epochs: {epochs}"
+    )  # noqa: E501
     if separate:
         console.print("  mode     : separate (one model per corpus per decade)")
 
@@ -462,7 +552,9 @@ def embed_train(  # noqa: PLR0913
                 decade_files.append(candidate)
 
         if not decade_files:
-            console.print(f"[yellow]Skipping {decade}[/yellow] — no text files found in {input_dir}")  # noqa: E501
+            console.print(
+                f"[yellow]Skipping {decade}[/yellow] — no text files found in {input_dir}"
+            )  # noqa: E501
             continue
 
         # Load and tokenise all documents for this decade
@@ -474,7 +566,9 @@ def embed_train(  # noqa: PLR0913
                     sentences_merged.append(tokens)
 
         total_tokens = sum(len(s) for s in sentences_merged)
-        console.print(f"  {decade}: {len(sentences_merged):,} docs, {total_tokens:,} tokens — training …")  # noqa: E501
+        console.print(
+            f"  {decade}: {len(sentences_merged):,} docs, {total_tokens:,} tokens — training …"
+        )  # noqa: E501
 
         trainer = trainer_cls(
             vector_size=vector_size,
@@ -510,16 +604,43 @@ def twec() -> None:
 
 
 @twec.command("train")
-@click.option("--corpus", "corpora", multiple=True, default=["books", "arxiv", "acl", "pubmed"], show_default=True, help="Corpus sources (repeatable).")  # noqa: E501
-@click.option("--input-dir", type=click.Path(path_type=Path), default=Path("data/processed"), show_default=True, help="Root of processed text dirs.")  # noqa: E501
-@click.option("--output-dir", type=click.Path(path_type=Path), default=Path("models/twec"), show_default=True, help="Output dir for .kv files and compass.")  # noqa: E501
+@click.option(
+    "--corpus",
+    "corpora",
+    multiple=True,
+    default=["books", "arxiv", "acl", "pubmed"],
+    show_default=True,
+    help="Corpus sources (repeatable).",
+)  # noqa: E501
+@click.option(
+    "--input-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed"),
+    show_default=True,
+    help="Root of processed text dirs.",
+)  # noqa: E501
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/twec"),
+    show_default=True,
+    help="Output dir for .kv files and compass.",
+)  # noqa: E501
 @click.option("--start", default=1820, show_default=True, help="First decade to train (inclusive).")
 @click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
 @click.option("--vector-size", default=300, show_default=True, help="Embedding dimensionality.")
 @click.option("--window", default=10, show_default=True, help="Context window size.")
-@click.option("--min-count", default=5, show_default=True, help="Minimum word frequency (applied to compass).")  # noqa: E501
+@click.option(
+    "--min-count", default=5, show_default=True, help="Minimum word frequency (applied to compass)."
+)  # noqa: E501
 @click.option("--workers", default=4, show_default=True, help="Parallel training workers.")
-@click.option("--epochs", default=10, show_default=True, help="Training epochs.")
+@click.option("--epochs", default=5, show_default=True, help="Training epochs.")
+@click.option(
+    "--max-docs-per-decade",
+    default=20_000,
+    show_default=True,
+    help="Cap docs streamed per decade file (0 = no cap). Reduces PubMed training time.",
+)  # noqa: E501
 def twec_train(  # noqa: PLR0913
     corpora: tuple[str, ...],
     input_dir: Path,
@@ -531,13 +652,46 @@ def twec_train(  # noqa: PLR0913
     min_count: int,
     workers: int,
     epochs: int,
+    max_docs_per_decade: int,
 ) -> None:
     """Train TWEC embeddings: compass on all decades, then per-decade models.
 
     Outputs one .kv file per decade directly usable by 'drift compute'
     without a separate alignment step.
     """
-    from interpretant.embedding.twec import TWECTrainer
+    import logging  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+
+    from interpretant.embedding.twec import TWECTrainer, _EpochProgressCallback  # noqa: PLC0415
+
+    # Suppress the harmless gensim Apple Silicon finalizer spam.
+    # our_dot_float is a Cython symbol missing from the pre-built wheel;
+    # Python emits "Exception ignored" for it but it doesn't affect training.
+    _prev_unraisable_hook = sys.unraisablehook
+
+    def _unraisable_hook(args: sys.UnraisableHookArgs) -> None:
+        # Check object, exc_type name, and exc_value string to be thorough.
+        haystack = " ".join(
+            [
+                str(getattr(args, "object", "") or ""),
+                getattr(getattr(args, "exc_type", None), "__name__", ""),
+                str(getattr(args, "exc_value", "") or ""),
+            ]
+        )
+        if "our_dot_float" in haystack:
+            return
+        _prev_unraisable_hook(args)
+
+    sys.unraisablehook = _unraisable_hook
+
+    # Enable gensim progress logging so mid-epoch word/sec updates appear in the log.
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(name)s %(message)s",
+        datefmt="%H:%M:%S",
+        force=True,
+    )
+    logging.getLogger("gensim").setLevel(logging.INFO)
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -545,7 +699,11 @@ def twec_train(  # noqa: PLR0913
     console.print(f"  corpora  : {', '.join(corpora)}")
     console.print(f"  decades  : {start}–{end - 1} (step 10)")
     console.print(f"  output   : {output_dir}")
-    console.print(f"  dims     : {vector_size}  window: {window}  min_count: {min_count}  epochs: {epochs}")  # noqa: E501
+    console.print(
+        f"  dims     : {vector_size}  window: {window}  min_count: {min_count}  epochs: {epochs}"
+    )  # noqa: E501
+    if max_docs_per_decade:
+        console.print(f"  max docs : {max_docs_per_decade:,} per file")
 
     trainer = TWECTrainer(
         vector_size=vector_size,
@@ -578,9 +736,16 @@ def twec_train(  # noqa: PLR0913
         f"(streaming — no data loaded yet)"
     )
 
+    _max_docs = max_docs_per_decade if max_docs_per_decade else None
+
     # --- Phase 2: train compass (streams all files from disk) ---
     console.print("\n[bold]Phase 2:[/bold] Training compass …")
-    trainer.train_compass(all_paths)
+    with tqdm(total=epochs, desc="  compass", unit="epoch", leave=True) as bar:
+        trainer.train_compass(
+            all_paths,
+            max_docs=_max_docs,
+            extra_callbacks=[_EpochProgressCallback(bar)],
+        )
     compass_path = trainer.save_compass(output_dir)
     console.print(f"  compass vocab : [cyan]{trainer.compass_vocab_size:,}[/cyan] words")
     console.print(f"  saved         : {compass_path}")
@@ -594,11 +759,17 @@ def twec_train(  # noqa: PLR0913
     table.add_column("Shared w/ compass", justify="right")
     table.add_column("Output")
 
-    for decade in sorted(decade_paths):
+    decade_list = sorted(decade_paths)
+    for decade in tqdm(decade_list, desc="  decades", unit="decade", leave=True):
         paths = decade_paths[decade]
-        console.print(f"  {decade}: {len(paths)} file(s) — training …")
 
-        kv = trainer.train_decade(paths, decade)
+        with tqdm(total=epochs, desc=f"    {decade}", unit="epoch", leave=False) as bar:
+            kv = trainer.train_decade(
+                paths,
+                decade,
+                max_docs=_max_docs,
+                extra_callbacks=[_EpochProgressCallback(bar)],
+            )
         path = trainer.save_decade_kv(kv, output_dir, decade)
 
         shared = sum(1 for w in kv.key_to_index if w in trainer.compass.wv.key_to_index)
@@ -628,10 +799,33 @@ def align() -> None:
 
 
 @align.command("run")
-@click.option("--config-name", default="procrustes", show_default=True, type=click.Choice(["procrustes"]), help="Alignment method.")  # noqa: E501
-@click.option("--model-dir", type=click.Path(path_type=Path), default=Path("models/raw/word2vec"), show_default=True, help="Raw gensim models dir.")  # noqa: E501
-@click.option("--output-dir", type=click.Path(path_type=Path), default=Path("models/aligned"), show_default=True, help="Aligned KeyedVectors output dir.")  # noqa: E501
-@click.option("--reference-decade", default=2010, show_default=True, help="Decade all others are rotated onto.")  # noqa: E501
+@click.option(
+    "--config-name",
+    default="procrustes",
+    show_default=True,
+    type=click.Choice(["procrustes"]),
+    help="Alignment method.",
+)  # noqa: E501
+@click.option(
+    "--model-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/raw/word2vec"),
+    show_default=True,
+    help="Raw gensim models dir.",
+)  # noqa: E501
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/aligned"),
+    show_default=True,
+    help="Aligned KeyedVectors output dir.",
+)  # noqa: E501
+@click.option(
+    "--reference-decade",
+    default=2010,
+    show_default=True,
+    help="Decade all others are rotated onto.",
+)  # noqa: E501
 def align_run(
     config_name: str,
     model_dir: Path,
@@ -680,7 +874,13 @@ def drift() -> None:
 
 
 @drift.command("compute")
-@click.option("--model-dir", type=click.Path(path_type=Path), default=Path("models/aligned"), show_default=True, help="Aligned KeyedVectors dir.")  # noqa: E501
+@click.option(
+    "--model-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/aligned"),
+    show_default=True,
+    help="Aligned KeyedVectors dir.",
+)  # noqa: E501
 @click.option(
     "--output",
     type=click.Path(path_type=Path),
@@ -722,8 +922,7 @@ def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None
     }
     # Full trajectory per word for avg_pairwise_distance
     trajectories: dict[str, list[object]] = {
-        word: [vectors_by_decade[d][word] for d in decades]
-        for word in target_words
+        word: [vectors_by_decade[d][word] for d in decades] for word in target_words
     }
 
     rows = []
@@ -735,13 +934,15 @@ def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None
             cd = cosine_distance(v0, v1)  # type: ignore[arg-type]
             ns = neighborhood_shift(word, vectors_by_decade[t0], vectors_by_decade[t1])  # type: ignore[arg-type]
             apd = average_pairwise_distance(trajectories[word])  # type: ignore[arg-type]
-            rows.append({
-                "word": word,
-                "decade": t1,
-                "cosine_drift": cd,
-                "neighborhood_shift": ns,
-                "avg_pairwise_distance": apd,
-            })
+            rows.append(
+                {
+                    "word": word,
+                    "decade": t1,
+                    "cosine_drift": cd,
+                    "neighborhood_shift": ns,
+                    "avg_pairwise_distance": apd,
+                }
+            )
 
     df = pd.DataFrame(rows)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -764,13 +965,20 @@ def pdf() -> None:
 @pdf.command("extract")
 @click.argument("pdf_path", type=click.Path(exists=True, path_type=Path))
 @click.option("--output", type=click.Path(path_type=Path), help="Output .txt path.")
-@click.option("--backend", default="docling", show_default=True, type=click.Choice(["docling", "pymupdf", "auto"]))  # noqa: E501
+@click.option(
+    "--backend",
+    default="docling",
+    show_default=True,
+    type=click.Choice(["docling", "pymupdf", "auto"]),
+)  # noqa: E501
 @click.option("--author", default="", help="Author metadata for manifest.")
 @click.option("--title", default="", help="Title metadata for manifest.")
 @click.option("--year", default=0, type=int, help="Publication year.")
 @click.option("--decade", default="", help="Decade bucket (e.g. 1960s).")
 @click.option("--fields", multiple=True, help="Subject fields (repeatable).")
-@click.option("--add-to-manifest", is_flag=True, default=False, help="Append entry to manifest.json.")  # noqa: E501
+@click.option(
+    "--add-to-manifest", is_flag=True, default=False, help="Append entry to manifest.json."
+)  # noqa: E501
 def pdf_extract(  # noqa: PLR0913
     pdf_path: Path,
     output: Path | None,
@@ -789,7 +997,9 @@ def pdf_extract(  # noqa: PLR0913
         console.print("[yellow]Note:[/yellow] First run downloads Docling ML models (~500MB).")
 
     extractor = PDFExtractor(backend=backend)
-    console.print(f"Extracting [bold]{pdf_path.name}[/bold] using [cyan]{extractor.backend_name}[/cyan] …")  # noqa: E501
+    console.print(
+        f"Extracting [bold]{pdf_path.name}[/bold] using [cyan]{extractor.backend_name}[/cyan] …"
+    )  # noqa: E501
     text = extractor.extract(pdf_path)
 
     dest = output or Path("data/inbox") / f"{pdf_path.stem}.txt"
@@ -810,25 +1020,30 @@ def pdf_extract(  # noqa: PLR0913
     console.print(table)
 
     if qc["recommendation"] == "try_docling" and backend == "pymupdf":
-        console.print("[yellow]Warning:[/yellow] Output may have layout artifacts. Re-run with --backend docling.")  # noqa: E501
+        console.print(
+            "[yellow]Warning:[/yellow] Output may have layout artifacts. Re-run with --backend docling."  # noqa: E501
+        )
 
     if add_to_manifest:
         import json
+
         manifest_path = Path("data/external/books/manifest.json")
         manifest_path.parent.mkdir(parents=True, exist_ok=True)
         entries: list[dict[str, object]] = []
         if manifest_path.exists():
             entries = json.loads(manifest_path.read_text())
-        entries.append({
-            "file": str(dest),
-            "author": author,
-            "title": title,
-            "year": year,
-            "decade": decade,
-            "fields": list(fields),
-            "status": "available",
-            "source": "pdf_extraction",
-        })
+        entries.append(
+            {
+                "file": str(dest),
+                "author": author,
+                "title": title,
+                "year": year,
+                "decade": decade,
+                "fields": list(fields),
+                "status": "available",
+                "source": "pdf_extraction",
+            }
+        )
         manifest_path.write_text(json.dumps(entries, indent=2))
         console.print(f"[green]Added to manifest:[/green] {manifest_path}")
 
@@ -839,10 +1054,22 @@ def pdf_extract(  # noqa: PLR0913
 
 
 @pdf.command("batch")
-@click.option("--backend", default="docling", show_default=True, type=click.Choice(["docling", "pymupdf", "auto"]))  # noqa: E501
-@click.option("--output-dir", type=click.Path(path_type=Path), default=Path("data/external/books"), show_default=True)  # noqa: E501
+@click.option(
+    "--backend",
+    default="docling",
+    show_default=True,
+    type=click.Choice(["docling", "pymupdf", "auto"]),
+)  # noqa: E501
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/external/books"),
+    show_default=True,
+)  # noqa: E501
 @click.option("--decade", required=True, help="Decade bucket for all PDFs (e.g. 1960s).")
-@click.option("--inbox", type=click.Path(path_type=Path), default=Path("data/inbox/pdfs"), show_default=True)  # noqa: E501
+@click.option(
+    "--inbox", type=click.Path(path_type=Path), default=Path("data/inbox/pdfs"), show_default=True
+)  # noqa: E501
 def pdf_batch(backend: str, output_dir: Path, decade: str, inbox: Path) -> None:
     """Extract all PDFs in the inbox folder."""
     from interpretant.corpus.pdf_extractor import PDFExtractor
@@ -887,8 +1114,15 @@ def pdf_batch(backend: str, output_dir: Path, decade: str, inbox: Path) -> None:
 
 
 @pdf.command("status")
-@click.option("--inbox", type=click.Path(path_type=Path), default=Path("data/inbox/pdfs"), show_default=True)  # noqa: E501
-@click.option("--processed", type=click.Path(path_type=Path), default=Path("data/inbox/processed"), show_default=True)  # noqa: E501
+@click.option(
+    "--inbox", type=click.Path(path_type=Path), default=Path("data/inbox/pdfs"), show_default=True
+)  # noqa: E501
+@click.option(
+    "--processed",
+    type=click.Path(path_type=Path),
+    default=Path("data/inbox/processed"),
+    show_default=True,
+)  # noqa: E501
 def pdf_status(inbox: Path, processed: Path) -> None:
     """Show what's in the inbox and processed folders."""
     for label, folder in [("Inbox (pending)", inbox), ("Processed", processed)]:

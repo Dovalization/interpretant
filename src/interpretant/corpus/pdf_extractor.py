@@ -50,14 +50,14 @@ class DoclingBackend(PDFBackend):
 
     # Patterns to strip markdown formatting from Docling's export
     _MD_PATTERNS = [
-        (re.compile(r"^#{1,6}\s+", re.MULTILINE), ""),   # headings
-        (re.compile(r"\*{1,2}(.+?)\*{1,2}"), r"\1"),     # bold/italic
+        (re.compile(r"^#{1,6}\s+", re.MULTILINE), ""),  # headings
+        (re.compile(r"\*{1,2}(.+?)\*{1,2}"), r"\1"),  # bold/italic
         (re.compile(r"^[-*_]{3,}\s*$", re.MULTILINE), ""),  # dividers
-        (re.compile(r"^\|.*\|$", re.MULTILINE), ""),      # table rows
-        (re.compile(r"^[-|: ]+$", re.MULTILINE), ""),     # table separators
-        (re.compile(r"`{1,3}[^`]*`{1,3}"), ""),           # code spans/blocks
-        (re.compile(r"!\[.*?\]\(.*?\)"), ""),              # images
-        (re.compile(r"\[(.+?)\]\(.*?\)"), r"\1"),          # links → text
+        (re.compile(r"^\|.*\|$", re.MULTILINE), ""),  # table rows
+        (re.compile(r"^[-|: ]+$", re.MULTILINE), ""),  # table separators
+        (re.compile(r"`{1,3}[^`]*`{1,3}"), ""),  # code spans/blocks
+        (re.compile(r"!\[.*?\]\(.*?\)"), ""),  # images
+        (re.compile(r"\[(.+?)\]\(.*?\)"), r"\1"),  # links → text
     ]
 
     def extract(self, pdf_path: Path) -> str:
@@ -73,6 +73,7 @@ class DoclingBackend(PDFBackend):
         """Check if docling is importable."""
         try:
             import docling  # noqa: F401
+
             return True
         except ImportError:
             return False
@@ -105,6 +106,7 @@ class PyMuPDFBackend(PDFBackend):
     def is_available(self) -> bool:
         try:
             import fitz  # type: ignore[import-untyped]  # noqa: F401
+
             return True
         except ImportError:
             return False
@@ -132,24 +134,18 @@ class PDFExtractor:
 
         if name == "docling":
             if not docling.is_available():
-                raise RuntimeError(
-                    "Docling is not installed. Run: uv add docling"
-                )
+                raise RuntimeError("Docling is not installed. Run: uv add docling")
             return docling
         if name == "pymupdf":
             if not pymupdf.is_available():
-                raise RuntimeError(
-                    "PyMuPDF is not installed. Run: uv add pymupdf"
-                )
+                raise RuntimeError("PyMuPDF is not installed. Run: uv add pymupdf")
             return pymupdf
         if name == "auto":
             if docling.is_available():
                 return docling
             if pymupdf.is_available():
                 return pymupdf
-            raise RuntimeError(
-                "No PDF backend available. Install docling or pymupdf."
-            )
+            raise RuntimeError("No PDF backend available. Install docling or pymupdf.")
         raise ValueError(f"Unknown backend: {name!r}. Use 'docling', 'pymupdf', or 'auto'.")
 
     @property

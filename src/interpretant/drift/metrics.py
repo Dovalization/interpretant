@@ -24,15 +24,12 @@ def cosine_distance(vector_a: np.ndarray, vector_b: np.ndarray) -> float:
     return 1.0 - similarity
 
 
-def _top_k_neighbors(
-    word: str, vectors: dict[str, np.ndarray], k: int
-) -> list[str]:
+def _top_k_neighbors(word: str, vectors: dict[str, np.ndarray], k: int) -> list[str]:
     """Return the k nearest neighbours of word, ranked by cosine similarity."""
     target = vectors[word]
     scores = {
         candidate: float(
-            np.dot(target, vector)
-            / (np.linalg.norm(target) * np.linalg.norm(vector) + 1e-10)
+            np.dot(target, vector) / (np.linalg.norm(target) * np.linalg.norm(vector) + 1e-10)
         )
         for candidate, vector in vectors.items()
         if candidate != word

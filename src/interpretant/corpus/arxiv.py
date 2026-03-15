@@ -135,7 +135,7 @@ class ArxivSource(CorpusSource):
         decades = set(range(start, end, step))
         buffers: dict[int, list[str]] = {}
         skipped = 0
-        _CHUNK = 1000
+        chunk = 1000
 
         with snapshot.open(encoding="utf-8") as file_handle:
             for line in tqdm(file_handle, desc="Reading arXiv snapshot", unit=" records"):
@@ -171,7 +171,7 @@ class ArxivSource(CorpusSource):
                     buffers[decade] = []
                 buffers[decade].append(text)
 
-                if len(buffers[decade]) >= _CHUNK:
+                if len(buffers[decade]) >= chunk:
                     yield decade, buffers[decade]
                     buffers[decade] = []
 

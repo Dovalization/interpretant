@@ -93,7 +93,7 @@ def _process_xml_file(
                 if label:
                     prefix = f"{label}:"
                     if raw.upper().startswith(prefix.upper()):
-                        raw = raw[len(prefix):].lstrip()
+                        raw = raw[len(prefix) :].lstrip()
                 raw = _SECTION_LABEL_RE.sub("", raw)
                 abstract_parts.append(raw)
 
@@ -190,7 +190,7 @@ class PubMedSource(CorpusSource):
             if label:
                 prefix = f"{label}:"
                 if raw.upper().startswith(prefix.upper()):
-                    raw = raw[len(prefix):].lstrip()
+                    raw = raw[len(prefix) :].lstrip()
             raw = _SECTION_LABEL_RE.sub("", raw)
             abstract_parts.append(raw)
 
@@ -247,7 +247,7 @@ class PubMedSource(CorpusSource):
             import warnings
             from concurrent.futures import ProcessPoolExecutor, as_completed
 
-            _FILE_TIMEOUT = 300  # seconds per file before treating as hung
+            file_timeout = 300  # seconds per file before treating as hung
 
             with tempfile.TemporaryDirectory(prefix="pubmed_preprocess_") as tmp_dir:
                 tmp_base = Path(tmp_dir)
@@ -272,7 +272,7 @@ class PubMedSource(CorpusSource):
                         unit=" files",
                     ):
                         try:
-                            tmp_path, n_skipped = future.result(timeout=_FILE_TIMEOUT)
+                            tmp_path, n_skipped = future.result(timeout=file_timeout)
                         except Exception as exc:
                             warnings.warn(
                                 f"PubMed worker failed ({type(exc).__name__}: {exc}); "
@@ -334,6 +334,7 @@ class PubMedSource(CorpusSource):
 
         if skipped:
             import warnings
+
             warnings.warn(
                 f"Skipped {skipped} PubMed articles "
                 "(missing/out-of-range year, language filter, or below min_tokens).",

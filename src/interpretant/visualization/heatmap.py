@@ -20,6 +20,4 @@ def build_heatmap_figure(
     Raises:
         NotImplementedError: Stub — not yet implemented.
     """
-    raise NotImplementedError(
-        "build_heatmap_figure is not yet implemented."
-    )
+    raise NotImplementedError("build_heatmap_figure is not yet implemented.")
