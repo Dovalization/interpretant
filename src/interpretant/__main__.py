@@ -641,6 +641,12 @@ def twec() -> None:
     show_default=True,
     help="Cap docs streamed per decade file (0 = no cap). Reduces PubMed training time.",
 )  # noqa: E501
+@click.option(
+    "--load-compass",
+    type=click.Path(path_type=Path),
+    default=None,
+    help="Path to a saved compass.model to skip compass training (e.g. models/twec/compass.model).",
+)  # noqa: E501
 def twec_train(  # noqa: PLR0913
     corpora: tuple[str, ...],
     input_dir: Path,
@@ -653,6 +659,7 @@ def twec_train(  # noqa: PLR0913
     workers: int,
     epochs: int,
     max_docs_per_decade: int,
+    load_compass: Path | None,
 ) -> None:
     """Train TWEC embeddings: compass on all decades, then per-decade models.
 
@@ -738,17 +745,22 @@ def twec_train(  # noqa: PLR0913
 
     _max_docs = max_docs_per_decade if max_docs_per_decade else None
 
-    # --- Phase 2: train compass (streams all files from disk) ---
-    console.print("\n[bold]Phase 2:[/bold] Training compass …")
-    with tqdm(total=epochs, desc="  compass", unit="epoch", leave=True) as bar:
-        trainer.train_compass(
-            all_paths,
-            max_docs=_max_docs,
-            extra_callbacks=[_EpochProgressCallback(bar)],
-        )
-    compass_path = trainer.save_compass(output_dir)
-    console.print(f"  compass vocab : [cyan]{trainer.compass_vocab_size:,}[/cyan] words")
-    console.print(f"  saved         : {compass_path}")
+    # --- Phase 2: train or load compass ---
+    if load_compass is not None:
+        console.print(f"\n[bold]Phase 2:[/bold] Loading compass from {load_compass} …")
+        trainer.load_compass(load_compass)
+        console.print(f"  compass vocab : [cyan]{trainer.compass_vocab_size:,}[/cyan] words")
+    else:
+        console.print("\n[bold]Phase 2:[/bold] Training compass …")
+        with tqdm(total=epochs, desc="  compass", unit="epoch", leave=True) as bar:
+            trainer.train_compass(
+                all_paths,
+                max_docs=_max_docs,
+                extra_callbacks=[_EpochProgressCallback(bar)],
+            )
+        compass_path = trainer.save_compass(output_dir)
+        console.print(f"  compass vocab : [cyan]{trainer.compass_vocab_size:,}[/cyan] words")
+        console.print(f"  saved         : {compass_path}")
 
     # --- Phase 3: train each decade model (streams per-decade files) ---
     console.print("\n[bold]Phase 3:[/bold] Training decade models …")
@@ -911,28 +923,41 @@ def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None
     if not decades:
         raise click.ClickException(f"No aligned models found in {model_dir}")
 
-    target_words = list(words) if words else aligner.shared_vocabulary()
+    shared_vocab = aligner.shared_vocabulary()
+    # When specific words are requested, keep only those present in every decade.
+    # Words absent from any decade (e.g. "affordance" pre-1960s) are skipped with a warning.
+    if words:
+        missing = [w for w in words if w not in shared_vocab]
+        if missing:
+            console.print(  # noqa: E501
+                f"[yellow]Warning: {len(missing)} word(s) absent from ≥1 decade and will be skipped: {', '.join(missing)}[/yellow]"  # noqa: E501
+            )
+        target_words = [w for w in words if w in shared_vocab]
+    else:
+        target_words = shared_vocab
     console.print(f"  words          : {len(target_words):,}")
     console.print(f"  decades        : {decades}")
 
-    # Build {decade: {word: vector}} lookup
-    vectors_by_decade: dict[int, dict[str, object]] = {
-        decade: {word: aligner.get_vector(word, decade) for word in target_words}
+    # Full shared-vocab context vectors used for neighbourhood computation.
+    # Neighbourhood shift must search the complete vocabulary, not just target_words,
+    # otherwise top-k neighbours are drawn from a pool too small to be meaningful.
+    context_by_decade: dict[int, dict[str, object]] = {
+        decade: {word: aligner.get_vector(word, decade) for word in shared_vocab}
         for decade in decades
     }
-    # Full trajectory per word for avg_pairwise_distance
+    # Full trajectory per target word for avg_pairwise_distance
     trajectories: dict[str, list[object]] = {
-        word: [vectors_by_decade[d][word] for d in decades] for word in target_words
+        word: [context_by_decade[d][word] for d in decades] for word in target_words
     }
 
     rows = []
     for word in tqdm(target_words, desc="Computing drift", unit=" words"):
         for i in range(1, len(decades)):
             t0, t1 = decades[i - 1], decades[i]
-            v0 = vectors_by_decade[t0][word]
-            v1 = vectors_by_decade[t1][word]
+            v0 = context_by_decade[t0][word]
+            v1 = context_by_decade[t1][word]
             cd = cosine_distance(v0, v1)  # type: ignore[arg-type]
-            ns = neighborhood_shift(word, vectors_by_decade[t0], vectors_by_decade[t1])  # type: ignore[arg-type]
+            ns = neighborhood_shift(word, context_by_decade[t0], context_by_decade[t1])  # type: ignore[arg-type]
             apd = average_pairwise_distance(trajectories[word])  # type: ignore[arg-type]
             rows.append(
                 {
