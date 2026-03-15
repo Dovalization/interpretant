@@ -10,9 +10,10 @@ def preprocess_text(text: str) -> str:
     Steps applied in order:
     1. Unicode NFKC normalisation
     2. Lowercase
-    3. Strip LaTeX-style math spans (``$...$`` and ``$$...$$``)
-    4. Collapse punctuation runs to a single space
-    5. Collapse whitespace
+    3. NFKD transliteration to ASCII (café→cafe, übermensch→ubermensch, différance→differance)
+    4. Strip LaTeX-style math spans (``$...$`` and ``$$...$$``)
+    5. Collapse punctuation runs to a single space
+    6. Collapse whitespace
 
     Args:
         text: Raw document string.
@@ -22,6 +23,13 @@ def preprocess_text(text: str) -> str:
     """
     text = unicodedata.normalize("NFKC", text)
     text = text.lower()
+    # Rejoin PDF line-break artifacts: "var¬ \niables" → "variables".
+    # U+00AC (NOT SIGN) is used by some PDF extractors as a soft-hyphen substitute.
+    text = re.sub(r"\u00ac\s*", "", text)
+    # Transliterate accented characters to ASCII base (café→cafe, übermensch→ubermensch,
+    # différance→differance) so diacritics don't corrupt tokens when punctuation is stripped.
+    text = unicodedata.normalize("NFKD", text)
+    text = text.encode("ascii", errors="ignore").decode("ascii")
     # Remove display math
     text = re.sub(r"\$\$.*?\$\$", " ", text, flags=re.DOTALL)
     # Remove inline math

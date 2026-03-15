@@ -28,13 +28,29 @@ multirun/
 data/raw/*
 data/processed/*
 data/external/*
+data/inbox/
 models/*
+# Source book files (copyrighted, not committed)
+data/*.pdf
+data/*.epub
+data/*.djvu
+data/*.mobi
+data/*.azw3
+data/*.txt
+data/*.html
+data/*.htm
+data/words_of_interest.txt
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/external/.gitkeep
 !data/external/books/
 !data/external/books/**
 data/external/books/**/*.txt
+data/external/books/**/*.pdf
+data/external/books/**/*.epub
+data/external/books/**/*.djvu
+data/external/books/**/*.mobi
+data/external/books/**/*.azw3
 !models/.gitkeep
 
 # DVC

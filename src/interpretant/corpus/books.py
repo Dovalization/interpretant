@@ -52,7 +52,7 @@ class BooksSource(CorpusSource):
     def __init__(
         self,
         books_dir: Path,
-        min_year: int = 1900,
+        min_year: int = 1820,
         max_year: int = 2030,
     ) -> None:
         self.raw_dir = books_dir

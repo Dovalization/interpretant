@@ -194,14 +194,40 @@ def corpus_preprocess(  # noqa: PLR0913
     table.add_column("Output file")
 
     rng = random.Random(seed)
-    for decade, docs in source.iter_decade_slices(
-        start=start, end=end, step=10, min_tokens=min_tokens, workers=workers
-    ):
-        if max_docs and len(docs) > max_docs:
-            docs = rng.sample(docs, max_docs)
-        out_file = texts_dir / f"{config_name}_{decade}.txt"
-        out_file.write_text("\n".join(docs), encoding="utf-8")
-        table.add_row(str(decade), str(len(docs)), str(out_file))
+    out_files = {
+        decade: texts_dir / f"{config_name}_{decade}.txt"
+        for decade in range(start, end, 10)
+    }
+    counts: dict[int, int] = {decade: 0 for decade in out_files}
+
+    if max_docs:
+        # Accumulate first so we can sample uniformly across the full decade.
+        all_buckets: dict[int, list[str]] = {decade: [] for decade in out_files}
+        for decade, docs in source.iter_decade_slices(
+            start=start, end=end, step=10, min_tokens=min_tokens, workers=workers
+        ):
+            if decade in all_buckets:
+                all_buckets[decade].extend(docs)
+        for decade, all_docs in sorted(all_buckets.items()):
+            sampled = rng.sample(all_docs, min(max_docs, len(all_docs)))
+            out_files[decade].write_text("\n".join(sampled), encoding="utf-8")
+            counts[decade] = len(sampled)
+    else:
+        # Streaming: truncate output files upfront, then append as results arrive.
+        # Keeps memory usage bounded to one file's worth of docs at a time.
+        for out_file in out_files.values():
+            out_file.write_text("", encoding="utf-8")
+        for decade, docs in source.iter_decade_slices(
+            start=start, end=end, step=10, min_tokens=min_tokens, workers=workers
+        ):
+            if decade not in out_files or not docs:
+                continue
+            with out_files[decade].open("a", encoding="utf-8") as fh:
+                fh.write("\n".join(docs) + "\n")
+            counts[decade] += len(docs)
+
+    for decade in sorted(out_files):
+        table.add_row(str(decade), str(counts[decade]), str(out_files[decade]))
 
     console.print(table)
     console.print("[green]Done.[/green]")
@@ -215,7 +241,7 @@ def corpus_books() -> None:
 @corpus_books.command("ingest")
 @click.option("--books-dir", type=click.Path(path_type=Path), default=Path("data/external/books"), show_default=True)  # noqa: E501
 @click.option("--output-dir", type=click.Path(path_type=Path), help="Override processed output dir.")  # noqa: E501
-@click.option("--start", default=1900, show_default=True, help="First decade (inclusive).")
+@click.option("--start", default=1820, show_default=True, help="First decade (inclusive).")
 @click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
 def corpus_books_ingest(
     books_dir: Path,
@@ -471,6 +497,124 @@ def embed_train(  # noqa: PLR0913
 
     console.print(table)
     console.print("[green]Done.[/green]")
+
+
+# ---------------------------------------------------------------------------
+# twec
+# ---------------------------------------------------------------------------
+
+
+@cli.group()
+def twec() -> None:
+    """Temporal Word Embeddings with a Compass (TWEC) commands."""
+
+
+@twec.command("train")
+@click.option("--corpus", "corpora", multiple=True, default=["books", "arxiv", "acl", "pubmed"], show_default=True, help="Corpus sources (repeatable).")  # noqa: E501
+@click.option("--input-dir", type=click.Path(path_type=Path), default=Path("data/processed"), show_default=True, help="Root of processed text dirs.")  # noqa: E501
+@click.option("--output-dir", type=click.Path(path_type=Path), default=Path("models/twec"), show_default=True, help="Output dir for .kv files and compass.")  # noqa: E501
+@click.option("--start", default=1820, show_default=True, help="First decade to train (inclusive).")
+@click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
+@click.option("--vector-size", default=300, show_default=True, help="Embedding dimensionality.")
+@click.option("--window", default=10, show_default=True, help="Context window size.")
+@click.option("--min-count", default=5, show_default=True, help="Minimum word frequency (applied to compass).")  # noqa: E501
+@click.option("--workers", default=4, show_default=True, help="Parallel training workers.")
+@click.option("--epochs", default=10, show_default=True, help="Training epochs.")
+def twec_train(  # noqa: PLR0913
+    corpora: tuple[str, ...],
+    input_dir: Path,
+    output_dir: Path,
+    start: int,
+    end: int,
+    vector_size: int,
+    window: int,
+    min_count: int,
+    workers: int,
+    epochs: int,
+) -> None:
+    """Train TWEC embeddings: compass on all decades, then per-decade models.
+
+    Outputs one .kv file per decade directly usable by 'drift compute'
+    without a separate alignment step.
+    """
+    from interpretant.embedding.twec import TWECTrainer
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    console.print("[bold]Training TWEC embeddings[/bold]")
+    console.print(f"  corpora  : {', '.join(corpora)}")
+    console.print(f"  decades  : {start}–{end - 1} (step 10)")
+    console.print(f"  output   : {output_dir}")
+    console.print(f"  dims     : {vector_size}  window: {window}  min_count: {min_count}  epochs: {epochs}")  # noqa: E501
+
+    trainer = TWECTrainer(
+        vector_size=vector_size,
+        window=window,
+        min_count=min_count,
+        workers=workers,
+        epochs=epochs,
+    )
+
+    # --- Phase 1: collect file paths per decade (no data loaded into RAM) ---
+    console.print("\n[bold]Phase 1:[/bold] Scanning corpus files …")
+    all_paths: list[Path] = []
+    decade_paths: dict[int, list[Path]] = {}
+
+    for decade in range(start, end, 10):
+        decade_paths[decade] = []
+        for corpus_name in corpora:
+            candidate = input_dir / corpus_name / "texts" / f"{corpus_name}_{decade}.txt"
+            if not candidate.exists():
+                continue
+            decade_paths[decade].append(candidate)
+            all_paths.append(candidate)
+
+    # Drop empty decades
+    decade_paths = {d: paths for d, paths in decade_paths.items() if paths}
+
+    total_files = sum(len(p) for p in decade_paths.values())
+    console.print(
+        f"  {total_files} file(s) across {len(decade_paths)} decades "
+        f"(streaming — no data loaded yet)"
+    )
+
+    # --- Phase 2: train compass (streams all files from disk) ---
+    console.print("\n[bold]Phase 2:[/bold] Training compass …")
+    trainer.train_compass(all_paths)
+    compass_path = trainer.save_compass(output_dir)
+    console.print(f"  compass vocab : [cyan]{trainer.compass_vocab_size:,}[/cyan] words")
+    console.print(f"  saved         : {compass_path}")
+
+    # --- Phase 3: train each decade model (streams per-decade files) ---
+    console.print("\n[bold]Phase 3:[/bold] Training decade models …")
+    table = Table(title="TWEC decade results", show_lines=True)
+    table.add_column("Decade", style="cyan")
+    table.add_column("Files", justify="right")
+    table.add_column("Vocab", justify="right")
+    table.add_column("Shared w/ compass", justify="right")
+    table.add_column("Output")
+
+    for decade in sorted(decade_paths):
+        paths = decade_paths[decade]
+        console.print(f"  {decade}: {len(paths)} file(s) — training …")
+
+        kv = trainer.train_decade(paths, decade)
+        path = trainer.save_decade_kv(kv, output_dir, decade)
+
+        shared = sum(1 for w in kv.key_to_index if w in trainer.compass.wv.key_to_index)
+        table.add_row(
+            str(decade),
+            str(len(paths)),
+            f"{len(kv):,}",
+            f"{shared:,}",
+            str(path),
+        )
+
+    console.print(table)
+    console.print(
+        "\n[green]Done.[/green] Run drift compute with: "
+        f"[cyan]uv run interpretant drift compute --model-dir {output_dir}[/cyan]"
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -134,9 +134,10 @@ class ACLAnthologySource(CorpusSource):
         contribute title-only text, which is better than nothing for early decades
         where abstracts were not consistently recorded.
         """
-        decades = list(range(start, end, step))
-        buckets: dict[int, list[str]] = {decade: [] for decade in decades}
+        decades = set(range(start, end, step))
+        buffers: dict[int, list[str]] = {}
         skipped = 0
+        _CHUNK = 500
 
         entries = list(self._iter_entries())
 
@@ -166,7 +167,7 @@ class ACLAnthologySource(CorpusSource):
                 continue
 
             decade = (year // step) * step
-            if decade not in buckets:
+            if decade not in decades:
                 continue
 
             if not text:
@@ -174,7 +175,18 @@ class ACLAnthologySource(CorpusSource):
             if min_tokens > 0 and not is_long_enough(text, min_tokens):
                 skipped += 1
                 continue
-            buckets[decade].append(text)
+
+            if decade not in buffers:
+                buffers[decade] = []
+            buffers[decade].append(text)
+
+            if len(buffers[decade]) >= _CHUNK:
+                yield decade, buffers[decade]
+                buffers[decade] = []
+
+        for decade in sorted(buffers):
+            if buffers[decade]:
+                yield decade, buffers[decade]
 
         if skipped:
             import warnings
@@ -183,9 +195,6 @@ class ACLAnthologySource(CorpusSource):
                 "(missing/unparseable year, out of range, or below min_tokens).",
                 stacklevel=2,
             )
-
-        for decade in sorted(buckets):
-            yield decade, buckets[decade]
 
     def document_count(self) -> int:
         """Return total number of entries in the bib file (O(N) parse)."""

@@ -22,13 +22,18 @@ _SECTION_LABEL_RE = re.compile(r"^[A-Z][A-Z\s/]{2,}:\s*")
 
 def _process_xml_file(
     xml_path: Path,
+    tmp_path: Path,
     min_year: int,
     max_year: int,
     language_filter: frozenset[str],
     min_tokens: int,
     step: int,
-) -> tuple[dict[int, list[str]], int]:
-    """Process one XML.gz file; return (decade_buckets, skipped_count).
+) -> tuple[Path, int]:
+    """Process one XML.gz file; write results to tmp_path, return (tmp_path, skipped).
+
+    Results are written as TSV lines ``decade\\ttext`` directly to disk so that
+    no large data structure is ever transferred back through the IPC pipe —
+    eliminating the pipe-overflow deadlock on large files.
 
     Module-level so it is picklable by ProcessPoolExecutor.
     """
@@ -39,11 +44,10 @@ def _process_xml_file(
     from interpretant.corpus.preprocessing import is_long_enough as _is_long_enough
     from interpretant.corpus.preprocessing import preprocess_text as _preprocess_text
 
-    buckets: dict[int, list[str]] = {}
     skipped = 0
 
     opener = _gzip.open if xml_path.suffix == ".gz" else open
-    with opener(xml_path, "rb") as fh:
+    with opener(xml_path, "rb") as fh, tmp_path.open("w", encoding="utf-8") as out:
         for _event, elem in ET.iterparse(fh, events=("end",)):
             if elem.tag != "PubmedArticle":
                 continue
@@ -103,12 +107,11 @@ def _process_xml_file(
                 elem.clear()
                 continue
 
-            if decade not in buckets:
-                buckets[decade] = []
-            buckets[decade].append(text)
+            # Write directly to disk — no IPC transfer of large data.
+            out.write(f"{decade}\t{text}\n")
             elem.clear()
 
-    return buckets, skipped
+    return tmp_path, skipped
 
 
 class PubMedSource(CorpusSource):
@@ -227,43 +230,78 @@ class PubMedSource(CorpusSource):
     ) -> Iterator[tuple[int, list[str]]]:
         """Yield (decade_start, documents) for each decade in [start, end).
 
-        Streams all XML files, accumulating documents into decade buckets.
+        Results are yielded incrementally — per XML file (workers=1) or per
+        completed worker future (workers>1) — so callers can write to disk
+        without accumulating the full corpus in memory.
+
+        The same decade may appear in multiple yields; callers should append
+        rather than overwrite output.
         """
-        decades = list(range(start, end, step))
-        buckets: dict[int, list[str]] = {decade: [] for decade in decades}
+        decades = set(range(start, end, step))
         skipped = 0
 
         xml_files = self._xml_files()
 
         if workers > 1:
+            import tempfile
+            import warnings
             from concurrent.futures import ProcessPoolExecutor, as_completed
 
-            with ProcessPoolExecutor(max_workers=workers) as pool:
-                futures = [
-                    pool.submit(
-                        _process_xml_file,
-                        path,
-                        self.min_year,
-                        self.max_year,
-                        self.language_filter,
-                        min_tokens,
-                        step,
-                    )
-                    for path in xml_files
-                ]
-                for future in tqdm(
-                    as_completed(futures),
-                    total=len(futures),
-                    desc="Reading PubMed files",
-                    unit=" files",
-                ):
-                    partial_buckets, n_skipped = future.result()
-                    skipped += n_skipped
-                    for decade, docs in partial_buckets.items():
-                        if decade in buckets:
-                            buckets[decade].extend(docs)
+            _FILE_TIMEOUT = 300  # seconds per file before treating as hung
+
+            with tempfile.TemporaryDirectory(prefix="pubmed_preprocess_") as tmp_dir:
+                tmp_base = Path(tmp_dir)
+                with ProcessPoolExecutor(max_workers=workers) as pool:
+                    futures = {
+                        pool.submit(
+                            _process_xml_file,
+                            path,
+                            tmp_base / f"{path.stem}.tsv",
+                            self.min_year,
+                            self.max_year,
+                            self.language_filter,
+                            min_tokens,
+                            step,
+                        ): path
+                        for path in xml_files
+                    }
+                    for future in tqdm(
+                        as_completed(futures),
+                        total=len(futures),
+                        desc="Reading PubMed files",
+                        unit=" files",
+                    ):
+                        try:
+                            tmp_path, n_skipped = future.result(timeout=_FILE_TIMEOUT)
+                        except Exception as exc:
+                            warnings.warn(
+                                f"PubMed worker failed ({type(exc).__name__}: {exc}); "
+                                f"skipping {futures[future].name}.",
+                                stacklevel=2,
+                            )
+                            continue
+                        skipped += n_skipped
+                        # Stream results from the worker's temp file — no large IPC transfer.
+                        file_buckets: dict[int, list[str]] = {}
+                        with tmp_path.open(encoding="utf-8") as fh:
+                            for line in fh:
+                                decade_str, _, text = line.partition("\t")
+                                try:
+                                    decade = int(decade_str)
+                                except ValueError:
+                                    continue
+                                if decade not in decades:
+                                    continue
+                                if decade not in file_buckets:
+                                    file_buckets[decade] = []
+                                file_buckets[decade].append(text.rstrip("\n"))
+                        tmp_path.unlink(missing_ok=True)
+                        for decade, docs in sorted(file_buckets.items()):
+                            if docs:
+                                yield decade, docs
         else:
             for xml_path in tqdm(xml_files, desc="Reading PubMed files", unit=" files"):
+                file_buckets: dict[int, list[str]] = {}
                 for article in self._iter_articles(xml_path):
                     year = self._parse_year(article)
                     if year is None or year < self.min_year or year > self.max_year:
@@ -276,7 +314,7 @@ class PubMedSource(CorpusSource):
                         continue
 
                     decade = (year // step) * step
-                    if decade not in buckets:
+                    if decade not in decades:
                         continue
 
                     text = self._article_to_text(article)
@@ -285,7 +323,14 @@ class PubMedSource(CorpusSource):
                     if min_tokens > 0 and not is_long_enough(text, min_tokens):
                         skipped += 1
                         continue
-                    buckets[decade].append(text)
+
+                    if decade not in file_buckets:
+                        file_buckets[decade] = []
+                    file_buckets[decade].append(text)
+
+                for decade, docs in sorted(file_buckets.items()):
+                    if docs:
+                        yield decade, docs
 
         if skipped:
             import warnings
@@ -294,9 +339,6 @@ class PubMedSource(CorpusSource):
                 "(missing/out-of-range year, language filter, or below min_tokens).",
                 stacklevel=2,
             )
-
-        for decade in sorted(buckets):
-            yield decade, buckets[decade]
 
     def document_count(self) -> int:
         """Return total article count across all XML files (full parse, slow)."""
