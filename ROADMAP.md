@@ -2,8 +2,11 @@
 
 ## State (November 2026)
 
-The corpus was rebuilt as a field × decade grid, trained twice, checked with a second method
-and with cross-perplexity, and scored against predictions committed before the evidence. The
+The corpus was rebuilt as a field × decade grid, lemmatised (plurals and British spellings),
+trained twice, checked with a second method and with cross-perplexity, and scored against
+predictions committed before the evidence (four rounds on the embeddings, four on
+cross-perplexity). The unlemmatised artefacts rounds 1–3 were scored on stay under
+`*_unlemmatised` paths. The
 history of the redesign is in [devlog 04](devlogs/04.md) and [`docs/corpus.md`](docs/corpus.md).
 
 ### Corpus
@@ -29,15 +32,16 @@ Target words: `data/words_of_interest.txt` (fixed before retraining). Controls:
 ### Findings
 
 Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
-[`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md) (C, D, F, H).
+[`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md) (C, D, F, H, L8–L10).
 
 - Robust: *embodiment*'s two senses (HCI, philosophy); *intentionality* stable in
-  philosophy; philosophy's model predicting HCI's abstracts better over time, one-sided.
+  philosophy; philosophy's model predicting HCI's abstracts better over time, one-sided;
+  fields converging between the 1980s and the 2010s; the subfield → parent asymmetry.
 - Robust in part: *representation* in AI towards learned representations; HCI's
-  experiential *affordance* in the 2010s.
-- Open: *information* converging between psychology and computer science (TWEC only);
-  philosophy's 2020s *consciousness* (described differently by each method); fields
-  converging between the 1980s and the 2010s; the subfield → parent asymmetry.
+  experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
+  under TWEC in both corpora, described differently by each method).
+- Not robust: *information* converging between psychology and computer science.
+- Open: the cause of the philosophy → HCI effect.
 
 ---
 
@@ -45,12 +49,7 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
 
 Each item that produces results gets its predictions committed first.
 
-1. **Lemmatise the corpus** as a fourth robustness round. The models are not lemmatised, so
-   *structure* and *structures* are separate words: vocabularies are inflated, frequencies
-   split (fewer words clear the 150-occurrence threshold), and neighbour lists are padded with
-   variants. Build a type-level lemma and spelling map once from the vocabulary, apply it at
-   ingest as `TARGET_VARIANTS` is applied today, re-run phrases, TWEC (two seeds), PPMI, drift
-   and cross-perplexity, and score the existing findings against the lemmatised grid.
+1. ~~Lemmatise the corpus~~ Done 2026-11-09 as round 4 (`docs/predictions.md`).
 2. **Library-first orchestration and a `predictions` package.** Move the grid, perplexity and
    TWEC loops out of `__main__.py` into the library with tests on synthetic cells; replace the
    seven `score_*.py` scripts' shared helpers with one module. GitHub Actions running ruff,

@@ -20,7 +20,7 @@ American ones (rules gated on simplemma's lexicon, an exception list and the Ame
 own corpus frequency). Verbs, participles and *-ing* nominalisations stay as they are, because
 a general lemmatiser maps *learning* to *learn* and *embedding* to *embed*. The map is written
 to `data/processed/lemmas.tsv` for review; the hand-kept part is `data/lemma_overrides.tsv`.
-Round 4 of the predictions tests which findings survive this change.
+Round 4 of the predictions tested which findings survive this change: all of the robust ones did; *information*'s convergence did not.
 
 `corpus phrases learn` fits one gensim `Phrases` model (normalised PMI ≥ 0.5, minimum count 20)
 on a balanced sample of 300,000 tokens from every cell, so the large modern cells do not decide

@@ -348,3 +348,38 @@ this round uses them.
 `scripts/score_predictions_round4.py`, committed before the lemmatised corpus exists, scores
 L0–L7 and prints the evidence for each. Results are appended below after the run; the
 predictions above are not edited.
+
+## Round 4 results (2026-11-09, `scripts/score_predictions_round4.py`)
+
+Scored as written on the lemmatised grid (seeds 42 and 43, `data/drift/*.parquet`,
+`data/phrased/audit.json`). 6 passed, 2 falsified; L8–L10 are scored in
+`predictions_cross_perplexity.md`.
+
+| | Verdict | Numbers |
+|---|---|---|
+| L0 | **Passed** | Control candidates 0.4% (within field; worst *forest*, 1 pair) and 0.3% (cross field; worst *home*, 3 pairs); *food* in 1 cross-field pair |
+| L1 | **Falsified** | Vocabulary shrink: median 8.4%, minimum 4.1%; 37 main-grid and books cells between 6.0% and 8.0%, under the 8% floor (none under 4%). Neighbour pools (words with at least 50 occurrences) shrank instead of growing: −11.4% and −11.7% (philosophy 2010s, 2020s), −12.5% and −12.6% (HCI) |
+| L2 | **Passed** | Both seeds: HCI 2020s 5 of the VR set (*illusion, immersion, ownership, presence, self-location*); philosophy 2020s 6 of the phenomenological set (*affectivity, corporeality, embodied, intersubjectivity, spatiality, temporality*) |
+| L3 | **Passed** | No candidate transition in either seed; highest cosine rank 93 (seed 42, 2000s → 2010s) with shift rank 5 |
+| L4 | **Passed** | 1980s 2 of the symbolic set (*knowledge, reasoning*); 2010s 3 and 2020s 5 of the learned set (*embedding, encoder, feature, latent, learned*) |
+| L5 | **Passed** | 5 of the experiential set (*experiential, interactivity, materiality, physicality, sensorial*) |
+| L6 | **Falsified** | Cross-field cosine rank, psychology × computer science: 38 and 23 (1960s, 1970s), 12 and 24 (2000s, 2010s); early mean 30, late mean 18, gap 13, under 15 |
+| L7 | **Passed** | Philosophy 2010s → 2020s cosine rank 99, shift rank 96, a candidate; 2020s neighbours *qualia, conscious, cognition, mind, computational, computation, reality, substrate, information_processing, neural, substrate-independent, intelligence, informational, nonlocal, sentience* |
+
+### Reading
+
+- **Lemmatisation changed the instrument less than expected, and in one respect the other way.**
+  Vocabularies shrank by 4–10%, not the 8%+ predicted for the main grid, because many plural
+  types had no singular in the cell to merge into. The neighbour pools shrank by about 12%
+  rather than growing: when both *structure* and *structures* clear 50 occurrences, merging them
+  removes a pool member, and that outweighs the rare words the merge lifted over the threshold.
+  L1's reasoning was wrong, and the prediction is reported as falsified; the mapping itself did
+  what it was built to do (8.3% of tokens, no wrong merge found in review).
+- **The findings survive.** *Embodiment*'s two senses, *intentionality*'s stability,
+  *representation*'s move from symbolic to learned and HCI's experiential *affordance* all pass
+  on the lemmatised grid, the first two in both seeds. Philosophy's 2020s *consciousness* is a
+  candidate again, and its lemmatised neighbours carry both earlier readings at once (*qualia,
+  substrate, computational, information_processing, sentience*).
+- ***Information*'s convergence is not robust.** It appeared in both unlemmatised TWEC seeds and
+  not in PPMI-SVD; on the lemmatised grid the gap is 13 points, under the committed 15. It moves
+  to the not-robust list.

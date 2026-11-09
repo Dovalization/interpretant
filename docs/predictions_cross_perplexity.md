@@ -296,3 +296,21 @@ E(AI → computer science) < E(computer science → AI) and E(cognitive psycholo
 (the reversal observed in D1, now predicted). *Falsified* if either pair falls short.
 
 Scored by `scripts/score_predictions_round4.py`. Results are appended below after the run.
+
+### Round 4 results (2026-11-09, `scripts/score_predictions_round4.py`)
+
+Scored as written on the lemmatised corpus. 3 passed.
+
+| | Verdict | Numbers (seeds 1–5) |
+|---|---|---|
+| L8 | **Passed** | Change 1990s → 2020s in E(philosophy → HCI): −0.071, −0.103, −0.066, −0.057, −0.097; in E(HCI → philosophy): +0.014, +0.001, −0.045, +0.002, −0.005, smaller in absolute value in every seed |
+| L9 | **Passed** | Mean excess over 10 fields, 2010s minus 1980s: −0.050, −0.049, −0.040, −0.059, −0.056 |
+| L10 | **Passed** | AI → computer science below the reverse in 6 of 6 decades; cognitive psychology → psychology below the reverse in 6 of 6 |
+
+### Reading
+
+The one-sided philosophy → HCI effect, the convergence of fields between the 1980s and the
+2010s, and the subfield → parent asymmetry all hold on the lemmatised corpus with values within
+a few thousandths of a bit of the unlemmatised run. The convergence and the asymmetry, first seen
+as reversals of D5 and D1, are now predicted results. The cause of the philosophy → HCI effect
+remains open.

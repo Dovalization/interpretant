@@ -4,7 +4,7 @@
 
 `interpretant` measures how academic communities change what they do with a word. It trains one word-embedding model per field and decade on a grid of research abstracts (eleven fields, 1950s–2020s) and two centuries of canonical books, puts every model in one coordinate system, and judges each word's movement against the movement of the whole vocabulary. Every claim is tested against predictions committed to git before the evidence existed.
 
-Two findings have survived a second training seed, a second method and pre-registered tests. **_Embodiment_ means two different things**: virtual reality's sense of body ownership in HCI, phenomenological corporeality in philosophy. And **philosophy's language model came to predict HCI's abstracts better over thirty years, while HCI's model did not learn philosophy's language**.
+Two findings have survived a second training seed, a second method, a lemmatised rebuild of the corpus and pre-registered tests. **_Embodiment_ means two different things**: virtual reality's sense of body ownership in HCI, phenomenological corporeality in philosophy. And **philosophy's language model came to predict HCI's abstracts better over thirty years, while HCI's model did not learn philosophy's language**.
 
 ![Nearest neighbours of embodiment in philosophy and HCI, by decade](figures/embodiment.png)
 
@@ -12,30 +12,31 @@ Two findings have survived a second training seed, a second method and pre-regis
 
 ## Findings
 
-Results are tested against predictions committed before the evidence: three rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method) and four rounds on cross-perplexity. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md) and [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md); the story is in [devlog 04](devlogs/04.md).
+Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed) and four rounds on cross-perplexity. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md) and [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md); the story is in [devlog 04](devlogs/04.md).
 
 **Robust across seeds and methods**
 
-- **_Embodiment_ means two different things.** In HCI it is virtual reality's sense of body ownership and presence (neighbours: _ownership, presence, illusion, self-location, agency_); in philosophy it is phenomenological corporeality (_corporeality, intersubjectivity, temporality, spatiality_). The word is now about three times as frequent in HCI as in philosophy.
-- **_Intentionality_ is stable** in philosophy from the 1980s to the 2020s.
-- **Philosophy's language model came to predict HCI's abstracts better, and not the reverse.** From the 1990s to the 2020s, robust to shared abstracts, training size and five resampled runs. The effect is specific to HCI, and its cause is open: neither HCI borrowing philosophy's language nor philosophy broadening into technology survived testing.
+- **_Embodiment_ means two different things.** In HCI it is virtual reality's sense of body ownership and presence (neighbours: _ownership, presence, illusion, immersion, self-location_); in philosophy it is phenomenological corporeality (_corporeality, intersubjectivity, temporality, spatiality, affectivity_). It passed every test it faced: unseen decades, a second seed, a second method, and the lemmatised corpus in both seeds. The word is now about three times as frequent in HCI as in philosophy.
+- **_Intentionality_ is stable** in philosophy from the 1980s to the 2020s, under both methods and in both seeds of the lemmatised corpus.
+- **Philosophy's language model came to predict HCI's abstracts better, and not the reverse.** From the 1990s to the 2020s, robust to shared abstracts, training size, five resampled runs and the lemmatised corpus. The effect is specific to HCI, and its cause is open: neither HCI borrowing philosophy's language nor philosophy broadening into technology survived testing.
+- **Fields converged between the 1980s and the 2010s**, and **a subfield's model predicts its parent field better than the reverse** (AI → computer science, cognitive psychology → psychology): both first seen as reversed predictions, then predicted and confirmed on the lemmatised corpus.
 
 ![Excess cross-entropy between philosophy and HCI, 1990s to 2020s](figures/philosophy_hci.png)
 
 **Robust in part**
 
-- _Representation_ in AI moves towards learned representations (_embeddings, latent, contrastive, encoder_) in every run; its symbolic 1980s (_knowledge, declarative, frame-based_) holds in TWEC only.
-- HCI's _affordance_ is about experiential qualities (_physicality, qualities, interactivity_) in the 2010s in every run; the 2020s depend on the method.
+- _Representation_ in AI moves towards learned representations (_embedding, latent, encoder, learned_) in every run including the lemmatised one; its symbolic 1980s (_knowledge, reasoning, declarative_) holds in TWEC only.
+- HCI's _affordance_ is about experiential qualities (_physicality, experiential, interactivity, materiality_) in the 2010s in every run; the 2020s depend on the method.
+- Philosophy's 2020s _consciousness_ moves (a candidate under TWEC in both corpora); the lemmatised neighbours carry both earlier readings at once, computational vocabulary (_computational, substrate, information_processing_) and theories of consciousness (_qualia, sentience_).
 
 ![Nearest neighbours of representation in AI, 1980s, 2000s and 2020s](figures/representation_ai.png)
 
 **Open**
 
-- _Information_ converging between psychology and computer science appears with TWEC, not with PPMI-SVD.
-- Philosophy's 2020s _consciousness_ shifts under both methods, described as computational by one and as theories of consciousness (_IIT, global workspace_) by the other.
-- Fields may be converging rather than specialising: with equal training, the mean cross-perplexity between fields fell from the 1980s to the 2010s in every run. It was observed in the data that tested the opposite prediction, so it needs its own test.
+- _Information_ converging between psychology and computer science: seen in both unlemmatised TWEC seeds, absent in PPMI-SVD, and under the committed threshold on the lemmatised corpus. Not robust.
+- The cause of the one-sided philosophy → HCI effect.
 
-My guesses before each round were worse than the method. Round 1 passed 3 of 9 predictions; the misses, stated as predictions, passed on unseen evidence in round 2 (7 of 9). The predictions files record every miss and every correction of an interpretation.
+My guesses before each round were worse than the method. Round 1 passed 3 of 9 predictions; the misses, stated as predictions, passed on unseen evidence in round 2 (7 of 9); round 4, on the lemmatised corpus, passed 9 of 11, and one of its misses was a wrong guess about the instrument itself (neighbour pools shrank when frequent plurals merged, instead of growing). The predictions files record every miss and every correction of an interpretation.
 
 ---
 
@@ -71,6 +72,8 @@ flowchart TD
 Every question here compares something specific, one field across decades or several fields in the same decade, so the corpus is a grid of cells, one per field and decade, each built the same way. The design and its rationale are in [`docs/corpus.md`](docs/corpus.md).
 
 ![Research abstracts per field and decade cell](figures/corpus_grid.png)
+
+Regular plurals and British spellings are collapsed before training (`corpus lemmas`); verbs, participles and _-ing_ nominalisations are left alone, because a general lemmatiser turns _learning_ into _learn_. The unlemmatised grid remains on disk as the frozen evidence for rounds 1–3.
 
 **The OpenAlex grid** (about 677,000 abstracts): a seeded random sample of up to 10,000 English research abstracts per field and decade, 1950s–2020s, for eleven fields sharing OpenAlex's single topic taxonomy. Only research prose is kept (articles, reviews, book chapters, books, dissertations, conference papers); archive catalogue records, scraped web pages, duplicates and non-English text are removed, and no author may exceed 1% of a cell.
 
