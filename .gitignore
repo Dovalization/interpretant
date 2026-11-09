@@ -43,7 +43,7 @@ data/*.azw3
 data/*.txt
 data/*.html
 data/*.htm
-data/words_of_interest.txt
+!data/words_of_interest.txt
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/external/.gitkeep

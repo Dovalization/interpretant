@@ -183,6 +183,15 @@ class TestPreprocessText:
         result = preprocess_text("state-of-the-art method")
         assert "state-of-the-art" in result
 
+    def test_maps_target_plurals_and_british_spellings_to_lemmas(self) -> None:
+        result = preprocess_text("Behaviour of Networks and their Representations")
+        assert result == "behavior of network and their representation"
+
+    def test_leaves_ambiguous_and_non_target_forms_alone(self) -> None:
+        assert preprocess_text("the media controls the networking") == (
+            "the media controls the networking"
+        )
+
 
 class TestFilterEmpty:
     def test_removes_empty_strings(self) -> None:

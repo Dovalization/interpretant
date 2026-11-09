@@ -3,6 +3,39 @@
 import re
 import unicodedata
 
+# Plurals and British spellings of the target words (data/words_of_interest.txt), mapped
+# onto the lemma so each target gets one vector instead of several split ones. Forms that
+# are mostly verbs ("controls") or carry a separate sense ("media") are left alone.
+TARGET_VARIANTS: dict[str, str] = {
+    "representations": "representation",
+    "perceptions": "perception",
+    "experiences": "experience",
+    "cognitions": "cognition",
+    "minds": "mind",
+    "meanings": "meaning",
+    "intelligences": "intelligence",
+    "computations": "computation",
+    "memories": "memory",
+    "models": "model",
+    "networks": "network",
+    "systems": "system",
+    "complexities": "complexity",
+    "behaviour": "behavior",
+    "behaviours": "behavior",
+    "behaviors": "behavior",
+    "symbols": "symbol",
+    "signs": "sign",
+    "affordances": "affordance",
+    "embodiments": "embodiment",
+    "interfaces": "interface",
+    "users": "user",
+    "agents": "agent",
+    "simulations": "simulation",
+    "images": "image",
+    "mediums": "medium",
+}
+_VARIANT_RE = re.compile(r"\b(" + "|".join(TARGET_VARIANTS) + r")\b")
+
 
 def preprocess_text(text: str) -> str:
     """Normalise and clean a raw document string.
@@ -14,6 +47,7 @@ def preprocess_text(text: str) -> str:
     4. Strip LaTeX-style math spans (``$...$`` and ``$$...$$``)
     5. Collapse punctuation runs to a single space
     6. Collapse whitespace
+    7. Map target-word variants onto their lemma (``TARGET_VARIANTS``)
 
     Args:
         text: Raw document string.
@@ -40,7 +74,7 @@ def preprocess_text(text: str) -> str:
     text = re.sub(r"(?<!\w)-|-(?!\w)", " ", text)
     # Collapse whitespace
     text = re.sub(r"\s+", " ", text).strip()
-    return text
+    return _VARIANT_RE.sub(lambda match: TARGET_VARIANTS[match.group(1)], text)
 
 
 def is_long_enough(text: str, min_tokens: int = 20) -> bool:

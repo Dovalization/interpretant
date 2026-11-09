@@ -1,0 +1,59 @@
+# Words of interest for drift analysis. One word per line; "#" starts a comment.
+# Fixed in November 2026, before retraining on the redesigned corpus (docs/corpus.md).
+# Words are lemmas: preprocessing maps plurals and British spellings of these words onto
+# them (interpretant.corpus.preprocessing.TARGET_VARIANTS).
+
+# --- Core: measurable across most of the field × decade grid ---
+# Mind and cognition
+consciousness
+representation
+perception
+experience
+cognition
+mind
+meaning
+# Computation and information
+intelligence
+computation
+information
+learning
+memory
+attention
+model
+# Systems
+network
+system
+feedback
+control
+complexity
+emergence
+behavior
+# Signs
+symbol
+sign
+
+# --- Late arrivals: each series starts in the first decade above the threshold ---
+affordance
+embodiment
+intentionality
+interface
+user
+agent
+simulation
+
+# --- Context only: everyday senses dominate; read in books and communication cells ---
+image
+medium
+
+# --- Phrase targets: enable after phrase detection (Stage 0, step 4) ---
+# neural_network
+# social_network
+# artificial_intelligence
+# mental_representation
+# user_interface
+# information_processing
+# feedback_loop
+
+# Dropped in November 2026: understanding (mostly the verb), form, pattern, signal
+# (everyday senses outweigh any conceptual change). Control words are in
+# data/control_words.txt.
