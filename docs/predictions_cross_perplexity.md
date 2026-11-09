@@ -246,3 +246,25 @@ occurrence, at least 3 of {ethics, ethical, social, society, human, humans, priv
 moral, responsibility, values, fairness} are in the top 50.
 
 Each prediction is *falsified* if its condition fails.
+
+### Technology-turn results (2026-11-09, `scripts/score_technology_turn.py`)
+
+Scored as written. 1 passed (by the letter only), 3 falsified.
+
+| | Verdict | Numbers (seeds 1–5) |
+|---|---|---|
+| H1 | **Falsified** | Change 1990s→2020s, E(philosophy → computer science): −0.025, +0.016, +0.079, +0.103, +0.109; E(philosophy → AI): +0.060, +0.031, +0.035, +0.003, −0.013 |
+| H2 | **Passed** (letter only) | E(computer science → philosophy) changed less in every seed (+0.001, +0.010, −0.048, −0.014, +0.015), but E(philosophy → computer science) mostly rose, so the pass does not support the hypothesis |
+| H3 | **Falsified** | Share of full-cell philosophy abstracts with a technology word: 3.1% (1980s), 3.3%, 2.9%, 3.6%, 6.5% (2020s) |
+| H4 | **Falsified** | None of the 12 ethics and society words in the top 50, led by *digital, signal, compression, memory, interface, implementation* |
+
+### Reading
+
+The hypothesis drawn from the exploratory count fails on fresh evidence. Philosophy's model got
+worse, not better, at predicting computer science and AI abstracts from the 1990s to the 2020s,
+so philosophy did not broadly turn towards computing's language; its technology vocabulary
+jumps only in the 2020s, while philosophy and HCI were closest in the 2010s. The robust result
+stands as measured — philosophy's model predicts HCI's abstracts better over time, and not the
+reverse — but it is specific to HCI, and neither explanation tested so far (HCI borrowing
+philosophy's language, philosophy broadening into technology) accounts for it. Its cause is
+open.
