@@ -390,6 +390,91 @@ def corpus_books_stats(books_dir: Path) -> None:
     console.print(f"Manifest entries: {manifest_entries}  Missing: {stats['missing']}")
 
 
+@corpus.group("openalex")
+def corpus_openalex() -> None:
+    """OpenAlex abstract samples per field and decade (the field × decade grid)."""
+
+
+@corpus_openalex.command("download")
+@click.option(
+    "--raw-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/raw/openalex"),
+    show_default=True,
+)
+@click.option("--field", "fields", multiple=True, help="Field slug; repeat it. Default: all.")
+@click.option("--start", default=1950, show_default=True, help="First decade (inclusive).")
+@click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
+@click.option(
+    "--sample-size", default=10_000, show_default=True, help="Works per cell (max 10000)."
+)
+@click.option("--seed", default=42, show_default=True, help="Sampling seed; keep it fixed.")
+def corpus_openalex_download(
+    raw_dir: Path, fields: tuple[str, ...], start: int, end: int, sample_size: int, seed: int
+) -> None:
+    """Download a seeded sample of English abstracts for each field and decade.
+
+    Finished cells are skipped, so a run stopped by the daily credit budget resumes where it
+    left off.
+    """
+    from interpretant.corpus.openalex import (
+        FIELDS,
+        BudgetExhaustedError,
+        OpenAlexClient,
+        OpenAlexSettings,
+        download_cell,
+    )
+
+    unknown = set(fields) - FIELDS.keys()
+    if unknown:
+        raise click.BadParameter(f"unknown fields {sorted(unknown)}; choose from {sorted(FIELDS)}")
+    client = OpenAlexClient(OpenAlexSettings().openalex_api_key)  # type: ignore[call-arg]
+    for field in fields or FIELDS:
+        for decade in range(start, end, 10):
+            try:
+                works = download_cell(client, raw_dir, field, decade, sample_size, seed)
+            except BudgetExhaustedError as error:
+                console.print(f"[yellow]Daily budget spent ({error}); rerun to resume.[/yellow]")
+                return
+            console.print(f"  {field:14} {decade}s  {works:>6,} works")
+    console.print("[green]Done.[/green]")
+
+
+@corpus_openalex.command("ingest")
+@click.option(
+    "--raw-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/raw/openalex"),
+    show_default=True,
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed/openalex/texts"),
+    show_default=True,
+)
+@click.option("--start", default=1950, show_default=True, help="First decade (inclusive).")
+@click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
+def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int) -> None:
+    """Preprocess downloaded samples into ``<field>_<decade>.txt``, one abstract per line."""
+    from interpretant.corpus.openalex import FIELDS, OpenAlexSource
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    table = Table(title="OpenAlex ingest (documents per cell)", show_lines=False)
+    table.add_column("Field", style="cyan")
+    decades = list(range(start, end, 10))
+    for decade in decades:
+        table.add_column(str(decade), justify="right")
+    for field in FIELDS:
+        counts = []
+        for decade, documents in OpenAlexSource(raw_dir, field).iter_decade_slices(start, end, 10):
+            if documents:
+                (output_dir / f"{field}_{decade}.txt").write_text("\n".join(documents), "utf-8")
+            counts.append(f"{len(documents):,}")
+        table.add_row(field, *counts)
+    console.print(table)
+
+
 @corpus.command("audit")
 @click.option(
     "--processed-dir",
