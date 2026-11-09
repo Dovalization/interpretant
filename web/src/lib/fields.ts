@@ -32,10 +32,14 @@ const FIELD_SLOTS: Record<string, number> = {
 
 export const fieldLabel = (field: string): string => FIELD_LABELS[field] ?? field;
 
-/** CSS colour for a field: a chart slot, or the muted foreground for unslotted fields. */
+/**
+ * CSS colour for a field: a chart slot, or the muted foreground for unslotted fields. The
+ * raw `--chart-N` tokens are used (not Tailwind's `--color-chart-N`), because Tailwind 4 only
+ * emits theme variables that a utility class references.
+ */
 export const fieldColor = (field: string): string => {
   const slot = FIELD_SLOTS[field];
-  return slot === undefined ? "var(--color-muted-foreground)" : `var(--color-chart-${slot})`;
+  return slot === undefined ? "var(--muted-foreground)" : `var(--chart-${slot})`;
 };
 
 export const decadeLabel = (decade: number): string => `${decade}s`;
