@@ -158,3 +158,30 @@ Scored as written. 3 passed, 3 falsified (two of them in the opposite direction)
   fields grew closer from the 1980s to the 2010s in every seed. This convergence and D1's
   reversed asymmetry are observations from these data; each needs its own prediction and
   independent evidence before it counts as a finding.
+
+---
+
+## Follow-up: HCI and philosophy (committed 2026-11-09, before the evidence below was
+inspected)
+
+Uses the corrected run (`data/drift/cross_perplexity_corrected.parquet`: shared abstracts
+removed, 200,000 training tokens, seeds 1–5). Only E(philosophy → HCI) for the 1990s and 2020s
+had been inspected (D4); every value below other than those two is unseen. "Mean" is the mean
+over the 5 seeds.
+
+**F1 — HCI's move towards philosophy is concentrated after 2000** (the decade of embodied and
+phenomenological approaches in HCI). Mean E(philosophy → HCI) falls more from the 2000s to the
+2020s than from the 1990s to the 2000s. *Falsified* if the later fall is not larger.
+
+**F2 — The movement is one-sided: HCI moves towards philosophy more than philosophy moves
+towards HCI.** In every seed, E(HCI → philosophy) changes less between the 1990s and the
+2020s, in absolute value, than E(philosophy → HCI) does. *Falsified* if any seed shows the
+opposite.
+
+**F3 — The words behind it are philosophy's words.** Per-word excess is the bits per
+occurrence that HCI's own model saves over philosophy's model on HCI's held-out text,
+pooled over the 5 seeds (both models retrained exactly as in the corrected run). Ranking the
+words occurring in both decades' HCI held-out text by their fall in per-word excess from the
+1990s to the 2020s, weighted by their 2020s occurrences, at least 2 of {embodiment, embodied,
+affordance, experience, experiential, phenomenological, phenomenology, body, bodily, meaning,
+practice, perception} are among the top 50. *Falsified* if fewer than 2 are.
