@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+
+# Build output
+dist/
+.next/
+
+# Test and launch artifacts
+test-results/
+playwright-report/
+docs/screenshots/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.pyc
+
+# Static export
+out/
+.vercel
