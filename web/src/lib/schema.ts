@@ -123,3 +123,18 @@ export const PredictionsSchema = z.object({
   predictions: z.array(PredictionSchema),
 });
 export type Predictions = z.infer<typeof PredictionsSchema>;
+
+export const FallRowSchema = z.object({
+  model: z.string(),
+  text: z.string(),
+  early: z.number().int(),
+  late: z.number().int(),
+  fall: z.number(),
+  mix: z.number(),
+  rate: z.number(),
+  seeds: z.array(z.number()),
+});
+export type FallRow = z.infer<typeof FallRowSchema>;
+
+export const FallsSchema = z.object({ rows: z.array(FallRowSchema) });
+export type Falls = z.infer<typeof FallsSchema>;

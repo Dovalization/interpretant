@@ -281,6 +281,38 @@ def export_web(  # noqa: PLR0913
             ],
         },
     )
+    falls_path = drift_dir / "cross_perplexity_decomposition.parquet"
+    if falls_path.exists():
+        falls = pd.read_parquet(falls_path)
+        grouped_falls = (
+            falls.sort_values("seed")
+            .groupby(["model_field", "text_field", "early", "late"])
+            .agg(
+                fall=("fall", "mean"),
+                mix=("mix", "mean"),
+                rate=("rate", "mean"),
+                seeds=("fall", list),
+            )
+            .reset_index()
+        )
+        _dump(
+            output_dir / "falls.json",
+            {
+                "rows": [
+                    {
+                        "model": row.model_field,
+                        "text": row.text_field,
+                        "early": int(row.early),
+                        "late": int(row.late),
+                        "fall": round(float(row.fall), 4),
+                        "mix": round(float(row.mix), 4),
+                        "rate": round(float(row.rate), 4),
+                        "seeds": [round(float(value), 4) for value in row.seeds],
+                    }
+                    for row in grouped_falls.itertuples()
+                ]
+            },
+        )
     _dump(output_dir / "predictions.json", parse_predictions(predictions_paths))
     log(f"wrote {output_dir}")
 

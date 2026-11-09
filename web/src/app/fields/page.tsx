@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { FieldsExplorer } from "@/components/explorer/fields-explorer";
 import { ArticleMeta } from "@/components/layout/article-meta";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getPerplexity } from "@/data";
+import { getFalls, getPerplexity } from "@/data";
 
 import type { Metadata } from "next";
 
@@ -24,7 +24,7 @@ export default function FieldsPage() {
         </p>
       </div>
       <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-        <FieldsExplorer table={getPerplexity()} />
+        <FieldsExplorer table={getPerplexity()} falls={getFalls()} />
       </Suspense>
     </article>
   );

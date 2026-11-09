@@ -1,9 +1,12 @@
 import { readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 import {
   type Corpus,
   CorpusSchema,
+  type Falls,
+  FallsSchema,
   type Perplexity,
   PerplexitySchema,
   type Predictions,
@@ -45,3 +48,9 @@ export const getWord = (word: string): WordData =>
 export const getPerplexity = (): Perplexity => readJson("perplexity.json", PerplexitySchema);
 
 export const getPredictions = (): Predictions => readJson("predictions.json", PredictionsSchema);
+
+/** The mix/rate decomposition of every pair's fall; absent until `drift decompose` has run. */
+export const getFalls = (): Falls =>
+  existsSync(path.join(DATA_DIR, "falls.json"))
+    ? readJson("falls.json", FallsSchema)
+    : { rows: [] };
