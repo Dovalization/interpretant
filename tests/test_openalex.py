@@ -11,7 +11,7 @@ from interpretant.corpus.openalex import (
     abstract_from_inverted_index,
     cell_filter,
     cell_path,
-    clean_abstracts,
+    clean_cell,
     download_cell,
     work_record,
 )
@@ -107,16 +107,15 @@ def test_full_download_follows_the_cursor_past_the_sample_cap(tmp_path: Path) ->
 
 
 def test_clean_abstracts_drops_duplicates_catalogue_records_and_empty_text() -> None:
-    cell = clean_abstracts(
-        [
-            "Script from the WBAP-TV/NBC station in Fort Worth, Texas, relating a news story.",
-            "Letter from Sabin, Albert B. to Rous, Peyton dated 1951-10-13.",
-            "Users perceive affordances in interfaces.",
-            "Users perceive affordances in interfaces.",
-            "  ",
-            "A letter from the editor would not open a catalogue record.",
-        ]
-    )
+    abstracts = [
+        "Script from the WBAP-TV/NBC station in Fort Worth, Texas, relating a news story.",
+        "Letter from Sabin, Albert B. to Rous, Peyton dated 1951-10-13.",
+        "Users perceive affordances in interfaces.",
+        "Users perceive affordances in interfaces.",
+        "  ",
+        "A letter from the editor would not open a catalogue record.",
+    ]
+    cell = clean_cell({"abstract": abstract} for abstract in abstracts)
 
     assert cell.documents == [
         "user perceive affordance in interface",
@@ -131,3 +130,13 @@ def test_source_yields_cleaned_abstracts_per_decade(tmp_path: Path) -> None:
     slices = dict(OpenAlexSource(tmp_path, "hci").iter_decade_slices(1980, 2000, 10))
 
     assert slices == {1980: [], 1990: ["user interface revisited"]}
+
+
+def test_clean_cell_caps_an_author_who_dominates_the_cell() -> None:
+    records = [{"abstract": f"consortium paper {n}", "authors": ["A1"]} for n in range(20)]
+    records += [{"abstract": f"single paper {n}", "authors": [f"B{n}"]} for n in range(80)]
+
+    cell = clean_cell(records, max_author_share=0.05)
+
+    assert cell.author_capped == 15
+    assert sum(doc.startswith("consortium") for doc in cell.documents) == 5

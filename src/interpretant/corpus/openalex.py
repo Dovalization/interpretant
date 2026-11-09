@@ -5,7 +5,8 @@ computer science and the social sciences share field labels across the whole ser
 cell of the field × decade grid is a seeded random sample of English research prose with
 abstracts (``RESEARCH_TYPES``), stored as ``data/raw/openalex/<field>/<decade>.jsonl.gz``
 with one work per line. Ingest drops duplicate abstracts and archive catalogue records
-("Letter from X to Y dated ...", "Script from ..."), which OpenAlex indexes as works.
+("Letter from X to Y dated ...", "Script from ..."), which OpenAlex indexes as works, then
+caps any author at 1% of a cell's works (``interpretant.corpus.caps``).
 
 Requests need an API key (``OPENALEX_API_KEY`` in the environment or ``.env``): a list page
 of 200 works costs one credit from the key's daily budget.
@@ -29,6 +30,7 @@ from typing import Any
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from interpretant.corpus.base import CorpusSource
+from interpretant.corpus.caps import MAX_AUTHOR_SHARE, cap_author_works
 from interpretant.corpus.preprocessing import is_long_enough, preprocess_text
 
 API_URL = "https://api.openalex.org/works"
@@ -110,13 +112,23 @@ class CleanedCell:
     empty: int = 0
     duplicates: int = 0
     catalogue_records: int = 0
+    author_capped: int = 0
 
 
-def clean_abstracts(abstracts: Iterable[str]) -> CleanedCell:
-    """Preprocess abstracts, dropping empty ones, exact duplicates and catalogue records."""
+def clean_cell(
+    records: Iterable[dict[str, Any]], max_author_share: float = MAX_AUTHOR_SHARE, seed: int = 42
+) -> CleanedCell:
+    """Preprocess a cell's abstracts and apply the cleaning rules in order.
+
+    Catalogue records, empty abstracts and exact duplicates go first, so they do not count
+    towards any author's share; then no author may appear in more than ``max_author_share``
+    of the remaining works.
+    """
     cell = CleanedCell()
     seen: set[str] = set()
-    for abstract in abstracts:
+    kept: list[tuple[list[str], str]] = []
+    for record in records:
+        abstract = str(record["abstract"])
         if _CATALOGUE_RECORD.match(abstract):
             cell.catalogue_records += 1
             continue
@@ -127,7 +139,10 @@ def clean_abstracts(abstracts: Iterable[str]) -> CleanedCell:
             cell.duplicates += 1
         else:
             seen.add(text)
-            cell.documents.append(text)
+            kept.append((list(record.get("authors") or []), text))
+    allowed = cap_author_works([authors for authors, _ in kept], max_author_share, seed)
+    cell.author_capped = len(kept) - len(allowed)
+    cell.documents = [text for index, (_, text) in enumerate(kept) if index in allowed]
     return cell
 
 
@@ -248,7 +263,7 @@ class OpenAlexSource(CorpusSource):
         self.raw_dir = raw_dir
         self.field = field
 
-    def _records(self, decade: int) -> Iterator[dict[str, object]]:
+    def _records(self, decade: int) -> Iterator[dict[str, Any]]:
         path = cell_path(self.raw_dir, self.field, decade)
         if not path.exists():
             return
@@ -262,7 +277,7 @@ class OpenAlexSource(CorpusSource):
         )
 
     def cell(self, decade: int) -> CleanedCell:
-        return clean_abstracts(str(record["abstract"]) for record in self._records(decade))
+        return clean_cell(self._records(decade))
 
     def iter_documents(self) -> Iterator[str]:
         for decade in self._decades():

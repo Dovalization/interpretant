@@ -153,3 +153,10 @@ def test_stats_per_field(books_dir: Path) -> None:
 def test_document_count(books_dir: Path) -> None:
     source = BooksSource(books_dir=books_dir)
     assert source.document_count() == 2
+
+
+def test_decade_documents_pairs_each_present_book_with_its_author(books_dir: Path) -> None:
+    documents = BooksSource(books_dir=books_dir).decade_documents(1960)
+
+    assert [author for author, _ in documents] == ["Author A"]
+    assert documents[0][1].startswith("the quick brown fox")

@@ -156,6 +156,19 @@ class BooksSource(CorpusSource):
         filename = str(entry.get("filename") or Path(str(entry.get("file", ""))).name)
         return self.books_dir / str(entry.get("decade", "")) / filename
 
+    def decade_documents(self, decade: int) -> list[tuple[str, str]]:
+        """Return ``(author, preprocessed text)`` for every present book filed in ``decade``."""
+        label = _decade_label(decade)
+        documents: list[tuple[str, str]] = []
+        for entry in self.manifest():
+            path = self.entry_path(entry)
+            if str(entry.get("decade", "")) != label or not path.is_file():
+                continue
+            text = self._file_to_text(path)
+            if text:
+                documents.append((str(entry.get("author", "")), text))
+        return documents
+
     def validate(self) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
         """Return (present, missing) based on whether each manifest file exists on disk."""
         present: list[dict[str, object]] = []

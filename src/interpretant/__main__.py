@@ -278,14 +278,28 @@ def corpus_books() -> None:
 )  # noqa: E501
 @click.option("--start", default=1820, show_default=True, help="First decade (inclusive).")
 @click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
-def corpus_books_ingest(
+@click.option(
+    "--author-cap",
+    default=250_000,
+    show_default=True,
+    help="Tokens per author per decade; larger authors contribute a seeded sample of chunks.",
+)
+@click.option(
+    "--leave-out-largest-author",
+    is_flag=True,
+    help="Drop each decade's largest author (leave-one-author-out check; use --output-dir).",
+)
+def corpus_books_ingest(  # noqa: PLR0913
     books_dir: Path,
     output_dir: Path | None,
     start: int,
     end: int,
+    author_cap: int,
+    leave_out_largest_author: bool,
 ) -> None:
-    """Preprocess extracted book texts into decade-sliced token files."""
+    """Preprocess extracted book texts into decade-sliced token files, capping authors."""
     from interpretant.corpus.books import BooksSource
+    from interpretant.corpus.caps import cap_author_tokens, largest_author
 
     source = BooksSource(books_dir=books_dir)
     texts_dir = output_dir or Path("data/processed/books/texts")
@@ -295,16 +309,25 @@ def corpus_books_ingest(
     console.print(f"  books dir  : {books_dir}")
     console.print(f"  output dir : {texts_dir}")
     console.print(f"  decades    : {start}–{end - 1}")
+    console.print(f"  author cap : {author_cap:,} tokens")
 
     table = Table(title="Books ingest results", show_lines=True)
     table.add_column("Decade", style="cyan")
-    table.add_column("Documents", justify="right")
-    table.add_column("Output file")
+    table.add_column("Books", justify="right")
+    table.add_column("Tokens", justify="right")
+    table.add_column("Left out" if leave_out_largest_author else "Largest author")
 
-    for decade, docs in source.iter_decade_slices(start=start, end=end, step=10):
-        out_file = texts_dir / f"books_{decade}.txt"
-        out_file.write_text("\n".join(docs), encoding="utf-8")
-        table.add_row(str(decade), str(len(docs)), str(out_file))
+    for decade in range(start, end, 10):
+        books = source.decade_documents(decade)
+        if not books:
+            continue
+        top = largest_author(books)
+        if leave_out_largest_author:
+            books = [(author, text) for author, text in books if author != top]
+        documents = cap_author_tokens(books, author_cap)
+        (texts_dir / f"books_{decade}.txt").write_text("\n".join(documents), encoding="utf-8")
+        tokens = sum(len(document.split()) for document in documents)
+        table.add_row(str(decade), str(len(books)), f"{tokens:,}", top)
 
     console.print(table)
     console.print("[green]Done.[/green]")
@@ -470,7 +493,7 @@ def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int
     """Clean and preprocess downloaded cells into ``<field>_<decade>.txt``, one per line.
 
     The table shows documents kept per cell and, after the minus sign, how many were dropped
-    as duplicates or archive catalogue records.
+    as duplicates, archive catalogue records or by the 1% author cap.
     """
     from interpretant.corpus.openalex import FIELDS, OpenAlexSource
 
@@ -489,7 +512,7 @@ def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int
                 (output_dir / f"{field}_{decade}.txt").write_text(
                     "\n".join(cell.documents), "utf-8"
                 )
-            dropped = cell.duplicates + cell.catalogue_records
+            dropped = cell.duplicates + cell.catalogue_records + cell.author_capped
             counts.append(
                 f"{len(cell.documents):,} −{dropped:,}" if dropped else f"{len(cell.documents):,}"
             )
