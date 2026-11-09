@@ -9,11 +9,15 @@ project's goals require.
 | Source | Layer | Coverage | Loader |
 |---|---|---|---|
 | Books | Curated philosophy, cognitive science, AI, design and cultural theory | 1820s–2020s, 364 manifest entries | `BooksSource` (`data/external/books/`, `manifest.json`) |
-| ACL Anthology | NLP abstracts | 1965–present | `ACLAnthologySource` |
-| arXiv | cs.CL, cs.LG, cs.AI, physics.hist-ph, q-bio, nlin abstracts | 1991–present | `ArxivSource` |
-| PubMed | Biomedical abstracts | 1960s–2020s | `PubMedSource` |
+| ACL Anthology | NLP abstracts; optional layer, outside the main corpus | 1965–present | `ACLAnthologySource` |
+| arXiv | cs.CL, cs.LG, cs.AI, physics.hist-ph, q-bio, nlin abstracts; optional layer | 1991–present | `ArxivSource` |
+| PubMed | Biomedical abstracts; optional layer | 1960s–2020s | `PubMedSource` |
 | OpenAlex | Abstracts in 11 fields (the field × decade grid) | 1950s–2020s | `OpenAlexSource` |
 | S2ORC | Stub | — | `S2ORCSource` |
+
+Since November 2026 the main corpus is the books and the OpenAlex grid; the grid covers
+ACL's, arXiv's and PubMed's fields with one taxonomy and one sampling rule, so those three
+stay out unless added back as their own layers.
 
 Processed text lives in `data/processed/<source>/texts/<source>_<decade>.txt`, one document
 per line.

@@ -546,6 +546,14 @@ def corpus_phrases() -> None:
     show_default=True,
 )
 @click.option(
+    "--source",
+    "sources",
+    multiple=True,
+    default=("books", "openalex"),
+    show_default=True,
+    help="Processed sources to include (the main corpus is books and the OpenAlex grid).",
+)
+@click.option(
     "--tokens-per-file",
     default=300_000,
     show_default=True,
@@ -561,6 +569,7 @@ def corpus_phrases() -> None:
 )
 def corpus_phrases_learn(  # noqa: PLR0913
     processed_dir: Path,
+    sources: tuple[str, ...],
     words_file: Path,
     tokens_per_file: int,
     min_count: int,
@@ -574,7 +583,9 @@ def corpus_phrases_learn(  # noqa: PLR0913
     from interpretant.corpus.audit import load_target_words
     from interpretant.corpus.phrases import learn_phrases, sample_chunks, split_targets
 
-    paths = sorted(processed_dir.glob("*/texts/*.txt"))
+    paths = sorted(
+        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
+    )
     protected, forced = split_targets(load_target_words(words_file))
     console.print(f"  files     : {len(paths)} (≤{tokens_per_file:,} tokens each)")
     console.print(f"  protected : {len(protected)} targets   forced : {sorted(forced)}")
@@ -600,6 +611,14 @@ def corpus_phrases_learn(  # noqa: PLR0913
     show_default=True,
 )
 @click.option(
+    "--source",
+    "sources",
+    multiple=True,
+    default=("books", "openalex"),
+    show_default=True,
+    help="Processed sources to include (the main corpus is books and the OpenAlex grid).",
+)
+@click.option(
     "--model",
     "model_path",
     type=click.Path(path_type=Path),
@@ -612,12 +631,17 @@ def corpus_phrases_learn(  # noqa: PLR0913
     default=Path("data/phrased"),
     show_default=True,
 )
-def corpus_phrases_apply(processed_dir: Path, model_path: Path, output_dir: Path) -> None:
+def corpus_phrases_apply(
+    processed_dir: Path, sources: tuple[str, ...], model_path: Path, output_dir: Path
+) -> None:
     """Rewrite every processed file with phrases merged, mirroring the directory layout."""
     from interpretant.corpus.phrases import PhraseModel
 
     model = PhraseModel.load(model_path)
-    for path in sorted(processed_dir.glob("*/texts/*.txt")):
+    paths = sorted(
+        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
+    )
+    for path in paths:
         target = output_dir / path.relative_to(processed_dir)
         target.parent.mkdir(parents=True, exist_ok=True)
         with path.open(encoding="utf-8") as source, target.open("w", encoding="utf-8") as out:

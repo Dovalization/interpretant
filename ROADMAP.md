@@ -28,7 +28,8 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       devlog 02 findings survive
 - [x] Phrase detection (gensim `Phrases`) before training, so `neural_network` and
       `social_network` get their own trajectories (`corpus phrases learn|apply`)
-- [ ] Language filter for ACL (French papers surfaced in the phrase review)
+- [ ] Optional: re-process ACL from raw with a language filter (French papers surfaced in
+      the phrase review) if ACL is added back as its own layer
 - [x] Manifest: English edition year, translator and original language for every
       translation; misfiled entries moved (`scripts/redate_books.py`; 18 wrong or unreadable
       files replaced, 2 duplicates excluded, 1 removed, 2 pre-1820 books moved to `canon/`)
@@ -38,7 +39,9 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       equal-size systematic samples (replaces the PubMed files lost in June 2026)
       - [x] `corpus openalex download|ingest`: seeded samples of up to 10,000 abstracts per
             cell for 11 fields, 1950s–2020s
-      - [ ] Map PubMed, ACL and arXiv onto the same fields
+      - [x] Decided (November 2026): the main corpus is books plus the OpenAlex grid. The
+            grid already covers ACL's, arXiv's and PubMed's fields with one taxonomy and
+            one sampling rule; they stay out as optional layers
 - [ ] Control words: 15–20 frequency-matched everyday words in `data/control_words.txt`; a
       target drifts only if it moves more than the controls in the same cell
 - [ ] TWEC slices per field and decade on a shared compass
