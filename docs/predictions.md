@@ -197,3 +197,47 @@ Scored against the round 2 definitions, unchanged. 7 passed, 2 falsified.
   full-cell version is a candidate for round 3.
 - Cross-field controls remain the weak point: *food* differs across fields in meaning while
   being evenly frequent, so frequency-based control selection does not screen it out.
+
+---
+
+## Round 3 (committed 2026-11-09, before the PPMI-SVD grid was built)
+
+Round 2's confirmed findings, tested with a second method: count-based PPMI-SVD vectors per
+cell (`ppmi grid`, `models/ppmi_grid`), which share nothing with TWEC but the text. PPMI cells
+are factorised separately and not aligned, so every test uses neighbour lists or
+neighbourhood shift, never cosine drift. Neighbours and *near a set* are defined as in round
+1. A PPMI *shift rank* is a word's `shift_rank` from `compare_cells` and `add_noise_floor`
+run on two PPMI cells (the same functions as `drift grid`). A prediction passes only if every
+listed piece of evidence agrees.
+
+**Disclosure.** While testing `ppmi grid`, one PPMI cell was inspected: philosophy, 1990s
+(main grid), neighbours of *consciousness*. No prediction below uses that cell.
+
+**T0 — the two methods agree in general.** For the target words measured (at least 150
+occurrences) in the full philosophy and full HCI cells of the 2010s and 2020s, the median
+Jaccard similarity between their TWEC (seed 42) and PPMI neighbour lists is at least 0.2.
+
+**T1 — *representation* in AI** (main grid). 1980s near
+{knowledge, logic, rule, symbolic, reasoning, frame}; 2010s or 2020s near
+{feature, learned, embedding, deep, latent, encoder}.
+
+**T2 — HCI's *embodiment*** (full cells, 2010s and 2020s). At least 3 of {presence,
+ownership, illusion, immersion, self-location, avatar, virtual, agency} in each decade.
+
+**T3 — philosophy's *embodiment*** (full cells, 2010s and 2020s). At least 3 of
+{corporeality, spatiality, intersubjectivity, affectivity, temporality, lived, flesh,
+embodied} in each decade.
+
+**T4 — HCI's *affordance*** (full cells, 2010s and 2020s). At least 3 of {experiential,
+qualities, physicality, interactivity, metaphors, sensorial, materiality} in each decade.
+
+**T5 — philosophy's *consciousness* turns computational** (full cells). PPMI shift rank for
+2010s → 2020s above 95, and at least 3 of {computation, computational, neural, substrate,
+information_processing, informational, intelligence} among the 2020s neighbours.
+
+**T6 — *information* converges** (main grid, psychology × computer science). Mean PPMI
+shift rank between the two fields over the 1960s–70s at least 15 points higher than over the
+2000s–10s.
+
+**T7 — *intentionality* stable** (full cells, philosophy). No transition from the 1980s to
+the 2020s has a PPMI shift rank above 95.
