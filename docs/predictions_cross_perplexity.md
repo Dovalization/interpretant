@@ -90,3 +90,45 @@ C4 — HCI's language becoming more predictable from philosophy's between the 19
 C3 points the right way with a small effect; C5 is not interpretable as run. A corrected
 follow-up (subfield abstracts removed from parent cells, one training size across compared
 decades, repeated samples for uncertainty) must be committed as new predictions, not edits.
+
+---
+
+## Corrected run (committed 2026-11-09, before the corrected code exists)
+
+Fixes the three flaws above. Everything not listed here is as in the first run (bigram
+Kneser-Ney, discount 0.75, 1,000 held-out abstracts per cell, one vocabulary per decade,
+excess cross-entropy).
+
+- **No shared abstracts.** Any abstract that appears in more than one cell of a decade is
+  removed from every cell of that decade before splitting, so no model can have trained on
+  another cell's held-out text.
+- **One training size across decades.** Every qualifying field in every decade trains on
+  exactly 200,000 tokens; a field qualifies if its training pool, after the removal above, has
+  at least 200,000 tokens.
+- **Repeated samples.** The run is repeated with seeds 1 to 5; each seed draws its own
+  held-out abstracts and training sample. A comparison between decades *holds* only if it
+  goes the predicted way in all 5 seeds.
+
+**D0 — Own model best.** In every seed, for at least 95% of qualifying cells, the field's own
+model gives its held-out text the lowest cross-entropy.
+
+**D1 — Broad fields predict their subfields better than the reverse.** Using the mean excess
+over the 5 seeds, E(computer science → AI) < E(AI → computer science) and
+E(psychology → cognitive psychology) < E(cognitive psychology → psychology), each in at least
+6 of the decades where both qualify (or in every such decade, if fewer than 6).
+
+**D2 — Subfields sit closest to their parent field.** Using the mean excess over the 5
+seeds, computer science has the lowest excess for AI's text and psychology for cognitive
+psychology's, each in at least 6 of the decades where they qualify (or in every such decade,
+if fewer than 6).
+
+**D3 — Philosophy absorbs AI's language in the 2020s.** E(AI → philosophy) is lower in the
+2020s than in the 2010s in all 5 seeds.
+
+**D4 — HCI moves towards philosophy.** E(philosophy → HCI) is lower in the 2020s than in the
+1990s in all 5 seeds.
+
+**D5 — Fields grow more specialised.** The mean E(A → B) over all ordered pairs of fields
+qualifying in both decades is higher in the 2010s than in the 1980s in all 5 seeds.
+
+Each prediction is *falsified* if its condition fails.
