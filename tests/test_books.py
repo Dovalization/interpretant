@@ -111,6 +111,26 @@ def test_validate_identifies_present(books_dir: Path) -> None:
     assert "author_b_book_b.txt" in filenames
 
 
+def test_entry_path_accepts_legacy_file_key(books_dir: Path) -> None:
+    source = BooksSource(books_dir=books_dir)
+    entry: dict[str, object] = {
+        "decade": "1960s",
+        "file": "data/external/books/1960s/author_a_book_a.txt",
+    }
+    assert source.entry_path(entry).is_file()
+
+
+def test_validate_treats_entry_without_file_name_as_missing(books_dir: Path) -> None:
+    manifest_path = books_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest.append({"author": "Author D", "title": "No file", "decade": "1960s"})
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    _present, missing = BooksSource(books_dir=books_dir).validate()
+
+    assert {str(entry["author"]) for entry in missing} == {"Author C", "Author D"}
+
+
 def test_stats_returns_counts(books_dir: Path) -> None:
     source = BooksSource(books_dir=books_dir)
     stats = source.stats()

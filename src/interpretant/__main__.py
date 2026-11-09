@@ -390,6 +390,154 @@ def corpus_books_stats(books_dir: Path) -> None:
     console.print(f"Manifest entries: {manifest_entries}  Missing: {stats['missing']}")
 
 
+@corpus.command("audit")
+@click.option(
+    "--processed-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--words-file",
+    type=click.Path(path_type=Path),
+    default=Path("data/words_of_interest.txt"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--books-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/external/books"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--min-occurrences",
+    default=150,
+    show_default=True,
+    help="Occurrences a word needs in both decades for a transition to count as reliable.",
+)  # noqa: E501
+@click.option("--output", type=click.Path(path_type=Path), help="Also write the audit as JSON.")
+def corpus_audit(
+    processed_dir: Path,
+    words_file: Path,
+    books_dir: Path,
+    min_occurrences: int,
+    output: Path | None,
+) -> None:
+    """Report cell volume, target-word coverage and books-manifest risks."""
+    import json
+    from dataclasses import asdict
+
+    from interpretant.corpus.audit import (
+        author_concentration,
+        flag_manifest_entries,
+        format_decade_ranges,
+        load_target_words,
+        merge_by_decade,
+        reliable_transitions,
+        scan_processed,
+    )
+    from interpretant.corpus.books import BooksSource
+
+    targets = load_target_words(words_file)
+    cells = scan_processed(processed_dir, set(targets))
+    merged = merge_by_decade(cells)
+    sources = sorted({cell.source for cell in cells})
+    tokens_by_cell = {(cell.source, cell.decade): cell.tokens for cell in cells}
+
+    volume_table = Table(title="Tokens per cell (millions)", show_lines=False)
+    volume_table.add_column("Decade", style="cyan")
+    for source in sources:
+        volume_table.add_column(source, justify="right")
+    volume_table.add_column("merged", justify="right", style="bold")
+    for decade, total in merged.items():
+        cells_row = [
+            f"{tokens_by_cell[(source, decade)] / 1e6:.2f}"
+            if (source, decade) in tokens_by_cell
+            else "—"
+            for source in sources
+        ]
+        volume_table.add_row(str(decade), *cells_row, f"{total.tokens / 1e6:.2f}")
+    console.print(volume_table)
+
+    transitions_total = max(len(merged) - 1, 0)
+    transitions_by_word = {
+        word: reliable_transitions(merged, word, min_occurrences) for word in targets
+    }
+    coverage_table = Table(
+        title=f"Target coverage (merged, ≥{min_occurrences} occurrences)", show_lines=False
+    )
+    coverage_table.add_column("Word", style="magenta")
+    coverage_table.add_column("Reliable transitions", justify="right")
+    coverage_table.add_column("Decades at threshold")
+    coverage_table.add_column("Min–max count", justify="right")
+    for word in targets:
+        counts = [cell.target_counts[word] for cell in merged.values()]
+        covered = [d for d, cell in merged.items() if cell.target_counts[word] >= min_occurrences]
+        reliable = f"{len(transitions_by_word[word])}/{transitions_total}"
+        coverage_table.add_row(
+            word,
+            reliable if transitions_by_word[word] else f"[red]{reliable}[/red]",
+            format_decade_ranges(covered) or "—",
+            f"{min(counts, default=0):,}–{max(counts, default=0):,}",
+        )
+    console.print(coverage_table)
+
+    books = BooksSource(books_dir=books_dir)
+    present, missing = books.validate()
+    book_words = [
+        (
+            str(entry.get("decade", "")),
+            str(entry.get("author", "")),
+            len(books.entry_path(entry).read_text(encoding="utf-8", errors="replace").split()),
+        )
+        for entry in present
+        if str(entry.get("decade", "")).endswith("0s")
+    ]
+    concentration = author_concentration(book_words)
+    concentration_table = Table(title="Books: largest author per decade", show_lines=False)
+    concentration_table.add_column("Decade", style="cyan")
+    concentration_table.add_column("Books", justify="right")
+    concentration_table.add_column("Words (M)", justify="right")
+    concentration_table.add_column("Top author")
+    concentration_table.add_column("Share", justify="right")
+    for summary in concentration:
+        share = f"{summary.top_share:.0%}"
+        concentration_table.add_row(
+            summary.decade,
+            str(summary.books),
+            f"{summary.words / 1e6:.2f}",
+            summary.top_author,
+            f"[red]{share}[/red]" if summary.top_share >= 0.25 else share,
+        )
+    console.print(concentration_table)
+
+    flags = sorted(flag_manifest_entries(books.manifest()), key=lambda flag: flag.decade)
+    flag_table = Table(title=f"Books: dating risks ({len(flags)} entries)", show_lines=False)
+    flag_table.add_column("Decade", style="cyan")
+    flag_table.add_column("Author")
+    flag_table.add_column("Title")
+    flag_table.add_column("Reasons")
+    for flag in flags:
+        flag_table.add_row(flag.decade, flag.author, flag.title[:50], "; ".join(flag.reasons))
+    console.print(flag_table)
+    console.print(f"Manifest entries without a file on disk: {len(missing)}")
+
+    if output is not None:
+        report = {
+            "min_occurrences": min_occurrences,
+            "cells": [
+                {**asdict(cell), "target_counts": dict(cell.target_counts)} for cell in cells
+            ],
+            "reliable_transitions": transitions_by_word,
+            "author_concentration": [asdict(summary) for summary in concentration],
+            "book_flags": [asdict(flag) for flag in flags],
+            "missing_books": [str(books.entry_path(entry)) for entry in missing],
+        }
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+        console.print(f"[green]Wrote {output}[/green]")
+
+
 # ---------------------------------------------------------------------------
 # embed
 # ---------------------------------------------------------------------------

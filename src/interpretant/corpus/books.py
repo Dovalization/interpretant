@@ -147,15 +147,21 @@ class BooksSource(CorpusSource):
         raw: list[dict[str, object]] = json.loads(manifest_path.read_text(encoding="utf-8"))
         return raw
 
+    def entry_path(self, entry: dict[str, object]) -> Path:
+        """Resolve a manifest entry to its text file.
+
+        Most entries name the file with ``filename`` inside the decade directory; a few
+        older ones carry a ``file`` path that ends in the same decade directory.
+        """
+        filename = str(entry.get("filename") or Path(str(entry.get("file", ""))).name)
+        return self.books_dir / str(entry.get("decade", "")) / filename
+
     def validate(self) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
         """Return (present, missing) based on whether each manifest file exists on disk."""
         present: list[dict[str, object]] = []
         missing: list[dict[str, object]] = []
         for entry in self.manifest():
-            filename = str(entry.get("filename", ""))
-            decade_label = str(entry.get("decade", ""))
-            path = self.books_dir / decade_label / filename
-            (present if path.exists() else missing).append(entry)
+            (present if self.entry_path(entry).is_file() else missing).append(entry)
         return present, missing
 
     def stats(self) -> dict[str, object]:
@@ -167,10 +173,8 @@ class BooksSource(CorpusSource):
         per_decade: dict[str, dict[str, int]] = {}
         for entry in present:
             label = str(entry.get("decade", ""))
-            filename = str(entry.get("filename", ""))
-            path = self.books_dir / label / filename
             try:
-                text = path.read_text(encoding="utf-8", errors="replace")
+                text = self.entry_path(entry).read_text(encoding="utf-8", errors="replace")
                 word_count = len(text.split())
             except OSError:
                 word_count = 0
