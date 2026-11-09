@@ -76,13 +76,20 @@ class KneserNeyBigram:
 
     def cross_entropy(self, documents: Iterable[str]) -> float:
         """Average bits per token over the documents, end-of-document tokens included."""
-        bits, count = 0.0, 0
+        bits, occurrences = self.word_bits(documents)
+        total = sum(occurrences.values())
+        return sum(bits.values()) / total if total else float("nan")
+
+    def word_bits(self, documents: Iterable[str]) -> tuple[Counter[str], Counter[str]]:
+        """Total bits and occurrences per predicted word (unknown words pooled as <unk>)."""
+        bits: Counter[str] = Counter()
+        occurrences: Counter[str] = Counter()
         for document in documents:
             tokens = self._tokens(document)
             for previous, word in zip(tokens, tokens[1:], strict=False):
-                bits -= math.log2(self.probability(word, previous))
-                count += 1
-        return bits / count if count else float("nan")
+                bits[word] -= math.log2(self.probability(word, previous))
+                occurrences[word] += 1
+        return bits, occurrences
 
 
 @dataclass
@@ -148,15 +155,45 @@ def decade_cross_entropy(
     tokens and qualifies only if its pool is at least that large; with ``drop_shared``
     abstracts appearing in more than one cell are removed first.
     """
+    columns = ["model_field", "text_field", "cross_entropy", "training_tokens"]
+    decade = build_decade(cells, seed, fixed_budget, drop_shared)
+    if decade is None:
+        return pd.DataFrame(columns=columns)
+    rows = [
+        {
+            "model_field": model_field,
+            "text_field": field,
+            "cross_entropy": model.cross_entropy(held_out),
+            "training_tokens": decade.budget,
+        }
+        for model_field, model in decade.models.items()
+        for field, held_out in decade.held_out.items()
+    ]
+    return pd.DataFrame(rows, columns=columns)
+
+
+@dataclass
+class DecadeModels:
+    models: dict[str, KneserNeyBigram]
+    held_out: dict[str, list[str]]
+    budget: int
+
+
+def build_decade(
+    cells: list[Path],
+    seed: int = 42,
+    fixed_budget: int | None = None,
+    drop_shared: bool = False,
+) -> DecadeModels | None:
+    """Train every qualifying field's model and keep its held-out abstracts (None if < 2)."""
     contents = dict(read_cell(path) for path in cells)
     if drop_shared:
         contents = remove_shared(contents)
     texts = [split_cell(field, lines, seed=seed) for field, lines in contents.items()]
     floor = fixed_budget or MIN_TRAINING_TOKENS
     qualifying = [text for text in texts if text.pool_tokens >= floor]
-    columns = ["model_field", "text_field", "cross_entropy", "training_tokens"]
     if len(qualifying) < 2:
-        return pd.DataFrame(columns=columns)
+        return None
     budget = fixed_budget or min(MAX_TRAINING_TOKENS, min(t.pool_tokens for t in qualifying))
     samples = {text.field: training_sample(text.training_pool, budget) for text in qualifying}
     counts: Counter[str] = Counter()
@@ -164,18 +201,13 @@ def decade_cross_entropy(
         for line in sample:
             counts.update(line.split())
     vocabulary = {word for word, count in counts.items() if count >= MIN_VOCABULARY_COUNT}
-    models = {field: KneserNeyBigram(vocabulary).fit(sample) for field, sample in samples.items()}
-    rows = [
-        {
-            "model_field": model_field,
-            "text_field": text.field,
-            "cross_entropy": model.cross_entropy(text.held_out),
-            "training_tokens": budget,
-        }
-        for model_field, model in models.items()
-        for text in qualifying
-    ]
-    return pd.DataFrame(rows, columns=columns)
+    return DecadeModels(
+        models={
+            field: KneserNeyBigram(vocabulary).fit(sample) for field, sample in samples.items()
+        },
+        held_out={text.field: text.held_out for text in qualifying},
+        budget=budget,
+    )
 
 
 def add_excess(table: pd.DataFrame) -> pd.DataFrame:

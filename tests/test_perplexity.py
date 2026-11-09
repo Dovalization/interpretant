@@ -95,3 +95,14 @@ def test_add_excess_compares_within_each_seed() -> None:
     )
 
     assert list(add_excess(table).excess) == [0.0, 1.0, 0.0, 3.0]
+
+
+def test_word_bits_add_up_to_the_cross_entropy() -> None:
+    documents = [PHILOSOPHY, COMPUTING]
+    model = KneserNeyBigram(set(PHILOSOPHY.split())).fit([PHILOSOPHY] * 10)
+
+    bits, occurrences = model.word_bits(documents)
+
+    assert sum(bits.values()) / sum(occurrences.values()) == pytest.approx(
+        model.cross_entropy(documents)
+    )
