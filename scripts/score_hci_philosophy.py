@@ -14,9 +14,10 @@ import pandas as pd
 
 from interpretant.drift.perplexity import END, UNKNOWN, build_decade
 
-TABLE = pd.read_parquet("data/drift/cross_perplexity_corrected.parquet")
+# Paths moved on 2026-11-10 when the lemmatised grid took the default paths; the evidence is unchanged.
+TABLE = pd.read_parquet("data/drift/unlemmatised/cross_perplexity_corrected.parquet")
 SEEDS = sorted(TABLE.seed.unique())
-TEXTS = Path("data/phrased/openalex/texts")
+TEXTS = Path("data/phrased_unlemmatised/openalex/texts")
 PHILOSOPHICAL = {
     "embodiment",
     "embodied",

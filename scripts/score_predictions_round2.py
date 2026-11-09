@@ -20,9 +20,10 @@ from interpretant.corpus.audit import load_target_words
 from interpretant.drift.grid import add_noise_floor, compare_cells
 from interpretant.drift.metrics import batch_neighborhood_shift
 
-SEED42, SEED43 = Path("models/twec_grid"), Path("models/twec_grid_seed43")
-WITHIN42 = pd.read_parquet("data/drift/within_field.parquet")
-CROSS42 = pd.read_parquet("data/drift/cross_field.parquet")
+# Paths moved on 2026-11-10 when the lemmatised grid took the default paths; the evidence is unchanged.
+SEED42, SEED43 = Path("models/twec_grid_unlemmatised"), Path("models/twec_grid_seed43_unlemmatised")
+WITHIN42 = pd.read_parquet("data/drift/unlemmatised/within_field.parquet")
+CROSS42 = pd.read_parquet("data/drift/unlemmatised/cross_field.parquet")
 
 
 @cache

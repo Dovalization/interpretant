@@ -13,9 +13,10 @@ import numpy as np
 import pandas as pd
 from gensim.models import KeyedVectors
 
-MODELS = Path("models/twec_grid")
-WITHIN = pd.read_parquet("data/drift/within_field.parquet")
-CROSS = pd.read_parquet("data/drift/cross_field.parquet")
+# Paths moved on 2026-11-10 when the lemmatised grid took the default paths; the evidence is unchanged.
+MODELS = Path("models/twec_grid_unlemmatised")
+WITHIN = pd.read_parquet("data/drift/unlemmatised/within_field.parquet")
+CROSS = pd.read_parquet("data/drift/unlemmatised/cross_field.parquet")
 MEASURE_MIN = 150
 
 

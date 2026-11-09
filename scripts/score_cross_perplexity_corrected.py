@@ -8,7 +8,8 @@ from __future__ import annotations
 
 import pandas as pd
 
-TABLE = pd.read_parquet("data/drift/cross_perplexity_corrected.parquet")
+# Paths moved on 2026-11-10 when the lemmatised grid took the default paths; the evidence is unchanged.
+TABLE = pd.read_parquet("data/drift/unlemmatised/cross_perplexity_corrected.parquet")
 SEEDS = sorted(TABLE.seed.unique())
 MEAN = TABLE.groupby(["decade", "model_field", "text_field"], as_index=False).excess.mean()
 

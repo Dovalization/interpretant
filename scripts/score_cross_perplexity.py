@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import pandas as pd
 
-TABLE = pd.read_parquet("data/drift/cross_perplexity.parquet")
+# Paths moved on 2026-11-10 when the lemmatised grid took the default paths; the evidence is unchanged.
+TABLE = pd.read_parquet("data/drift/unlemmatised/cross_perplexity.parquet")
 
 
 def excess(decade: int, model_field: str, text_field: str) -> float | None:
