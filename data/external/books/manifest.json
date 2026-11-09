@@ -608,7 +608,7 @@
       "philosophy_of_mind",
       "phenomenology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Routledge",
     "source_url": "",
     "filename": "merleau_ponty_phenomenology_perception.txt",
@@ -623,7 +623,7 @@
       "philosophy_of_mind",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Blackwell",
     "source_url": "",
     "filename": "wittgenstein_philosophical_investigations.txt",
@@ -638,7 +638,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Harvard University Press",
     "source_url": "",
     "filename": "fodor_language_thought.txt",
@@ -653,7 +653,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Bradford Books",
     "source_url": "",
     "filename": "dennett_brainstorms.txt",
@@ -668,7 +668,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Little, Brown",
     "source_url": "",
     "filename": "dennett_consciousness_explained.txt",
@@ -683,7 +683,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "varela_thompson_embodied_mind.txt",
@@ -697,7 +697,7 @@
     "fields": [
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Oxford University Press",
     "source_url": "",
     "filename": "chalmers_conscious_mind.txt",
@@ -712,7 +712,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "clark_being_there.txt",
@@ -741,7 +741,7 @@
     "fields": [
       "ai_cs"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "minsky_papert_perceptrons.txt",
@@ -756,7 +756,7 @@
       "ai_cs",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Prentice-Hall",
     "source_url": "",
     "filename": "newell_simon_human_problem_solving.txt",
@@ -771,7 +771,7 @@
       "ai_cs",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Basic Books",
     "source_url": "",
     "filename": "hofstadter_godel_escher_bach.txt",
@@ -787,7 +787,7 @@
       "philosophy_of_mind",
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Ablex",
     "source_url": "",
     "filename": "winograd_flores_computers_cognition.txt",
@@ -802,7 +802,7 @@
       "ai_cs",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Simon & Schuster",
     "source_url": "",
     "filename": "minsky_society_mind.txt",
@@ -816,7 +816,7 @@
     "fields": [
       "ai_cs"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "brooks_cambrian_intelligence.txt",
@@ -831,7 +831,7 @@
       "design",
       "ai_cs"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "simon_sciences_artificial.txt",
@@ -845,7 +845,7 @@
     "fields": [
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Harvard University Press",
     "source_url": "",
     "filename": "alexander_notes_synthesis_form.txt",
@@ -859,7 +859,7 @@
     "fields": [
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Pantheon Books",
     "source_url": "",
     "filename": "papanek_design_real_world.txt",
@@ -873,7 +873,7 @@
     "fields": [
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Graphics Press",
     "source_url": "",
     "filename": "tufte_visual_display.txt",
@@ -888,7 +888,7 @@
       "design",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Basic Books",
     "source_url": "",
     "filename": "norman_design_everyday_things.txt",
@@ -917,7 +917,7 @@
     "fields": [
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "thackara_in_the_bubble.txt",
@@ -931,7 +931,7 @@
     "fields": [
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "HarperBusiness",
     "source_url": "",
     "filename": "brown_change_by_design.txt",
@@ -945,7 +945,7 @@
     "fields": [
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "manzini_design_everybody_designs.txt",
@@ -975,7 +975,7 @@
       "arts",
       "design"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "McGraw-Hill",
     "source_url": "",
     "filename": "mcluhan_understanding_media.txt",
@@ -989,7 +989,7 @@
     "fields": [
       "arts"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Farrar, Straus & Giroux",
     "source_url": "",
     "filename": "sontag_against_interpretation.txt",
@@ -1003,7 +1003,7 @@
     "fields": [
       "arts"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Penguin / BBC",
     "source_url": "",
     "filename": "berger_ways_seeing.txt",
@@ -1018,7 +1018,7 @@
       "arts",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Fontana Press",
     "source_url": "",
     "filename": "barthes_image_music_text.txt",
@@ -1048,7 +1048,7 @@
       "arts",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Duke University Press",
     "source_url": "",
     "filename": "jameson_postmodernism.txt",
@@ -1077,7 +1077,7 @@
     "fields": [
       "arts"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "groys_art_power.txt",
@@ -1092,7 +1092,7 @@
       "ai_cs",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "MIT Press",
     "source_url": "",
     "filename": "chomsky_aspects_theory_syntax.txt",
@@ -1107,7 +1107,7 @@
       "arts",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Zone Books (English 1994)",
     "source_url": "",
     "filename": "debord_society_spectacle.txt",
@@ -1122,7 +1122,7 @@
       "arts",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Harvard University Press (English 1989)",
     "source_url": "",
     "filename": "eco_open_work.txt",
@@ -1137,7 +1137,7 @@
       "cross_field",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Indiana University Press",
     "source_url": "",
     "filename": "eco_theory_semiotics.txt",
@@ -1152,7 +1152,7 @@
       "cross_field",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "University of Minnesota Press (English 1984)",
     "source_url": "",
     "filename": "lyotard_postmodern_condition.txt",
@@ -1167,7 +1167,7 @@
       "cross_field",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "University of Chicago Press",
     "source_url": "",
     "filename": "kuhn_structure_scientific_revolutions.txt",
@@ -1197,7 +1197,7 @@
       "cross_field",
       "arts"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Semiotext(e) (English 1986)",
     "source_url": "",
     "filename": "virilio_speed_politics.txt",
@@ -1227,7 +1227,7 @@
       "cross_field",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Harvester Wheatsheaf (English 1993)",
     "source_url": "",
     "filename": "latour_never_been_modern.txt",
@@ -1243,7 +1243,7 @@
       "ai_cs",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "University of Chicago Press",
     "source_url": "",
     "filename": "hayles_posthuman.txt",
@@ -1646,14 +1646,14 @@
     "year": 1966,
     "decade": "1960s",
     "fields": [
-      "psychoanalysis",
+      "philosophy",
       "philosophy_of_mind"
     ],
-    "status": "open_access",
-    "source": "manually sourced",
+    "status": "public_domain",
+    "source": "PDF extraction",
     "source_url": "",
     "filename": "lacan_ecrits.txt",
-    "notes": "Fink translation. Mirror stage, symbolic/imaginary/real, Other, jouissance."
+    "notes": "Fink translation. Subject, signifier, Other, mirror stage, symbolic/imaginary/real, jouissance, desire."
   },
   {
     "author": "Paul Ricoeur",
@@ -1708,7 +1708,7 @@
       "philosophy",
       "sociology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "habermas_theory_communicative_action.txt",
@@ -1937,7 +1937,7 @@
       "epistemology",
       "philosophy_of_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "popper_logic_scientific_discovery.txt",
@@ -1953,7 +1953,7 @@
       "epistemology",
       "philosophy_of_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "popper_conjectures_refutations.txt",
@@ -1969,7 +1969,7 @@
       "epistemology",
       "philosophy_of_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "feyerabend_against_method.txt",
@@ -1985,7 +1985,7 @@
       "epistemology",
       "philosophy_of_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "lakatos_scientific_research_programmes.txt",
@@ -2000,7 +2000,7 @@
       "philosophy",
       "epistemology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "quine_logical_point_of_view.txt",
@@ -2016,7 +2016,7 @@
       "epistemology",
       "philosophy_of_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "polanyi_personal_knowledge.txt",
@@ -2032,7 +2032,7 @@
       "philosophy_of_science",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "latour_woolgar_laboratory_life.txt",
@@ -2048,7 +2048,7 @@
       "philosophy_of_science",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "latour_science_in_action.txt",
@@ -2064,7 +2064,7 @@
       "epistemology",
       "philosophy_of_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "hacking_representing_intervening.txt",
@@ -2079,7 +2079,7 @@
       "philosophy",
       "epistemology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "putnam_reason_truth_history.txt",
@@ -2095,7 +2095,7 @@
       "epistemology",
       "arts_culture"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "goodman_ways_of_worldmaking.txt",
@@ -2111,7 +2111,7 @@
       "epistemology",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "searle_speech_acts.txt",
@@ -2126,7 +2126,7 @@
       "philosophy",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "searle_intentionality.txt",
@@ -2141,7 +2141,7 @@
       "philosophy",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "searle_rediscovery_mind.txt",
@@ -2158,7 +2158,7 @@
       "philosophy_of_mind",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "castoriadis_imaginary_institution.txt",
@@ -2220,7 +2220,7 @@
       "design",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "gibson_ecological_approach.txt",
@@ -2236,7 +2236,7 @@
       "linguistics",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "lakoff_johnson_metaphors.txt",
@@ -2252,7 +2252,7 @@
       "anthropology",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "geertz_interpretation_cultures.txt",
@@ -2266,9 +2266,10 @@
     "fields": [
       "philosophy_of_mind",
       "cognitive_science",
-      "cross_field"
+      "cross_field",
+      "neuroscience"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "damasio_descartes_error.txt",
@@ -2284,7 +2285,7 @@
       "arts",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "kittler_gramophone_film_typewriter.txt",
@@ -2300,7 +2301,7 @@
       "philosophy_of_mind",
       "sociology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "beauvoir_second_sex.txt",
@@ -2316,7 +2317,7 @@
       "sociology",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "arendt_human_condition.txt",
@@ -2331,7 +2332,7 @@
       "sociology",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "luhmann_social_systems.txt",
@@ -2347,7 +2348,7 @@
       "sociology",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "mead_mind_self_society.txt",
@@ -2363,7 +2364,7 @@
       "sociology",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "butler_gender_trouble.txt",
@@ -2379,7 +2380,7 @@
       "design",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "de_certeau_practice_everyday_life.txt",
@@ -2395,7 +2396,7 @@
       "philosophy",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "latour_reassembling_social.txt",
@@ -2411,7 +2412,7 @@
       "cognitive_science",
       "ai_cs"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "clark_supersizing_mind.txt",
@@ -2427,7 +2428,7 @@
       "arts",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "flusser_philosophy_photography.txt",
@@ -2443,7 +2444,7 @@
       "arts",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "dewey_art_as_experience.txt",
@@ -2459,7 +2460,7 @@
       "anthropology",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "mauss_the_gift.txt",
@@ -2475,7 +2476,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "rumelhart_mcclelland_pdp.txt",
@@ -2490,7 +2491,7 @@
       "ai_cs",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "russell_norvig_ai.txt",
@@ -2504,9 +2505,10 @@
     "fields": [
       "philosophy_of_mind",
       "cognitive_science",
-      "ai_cs"
+      "ai_cs",
+      "neuroscience"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "marr_vision.txt",
@@ -2521,7 +2523,7 @@
       "sociology",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "goffman_presentation_self.txt",
@@ -2536,7 +2538,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "neisser_cognitive_psychology.txt",
@@ -2567,7 +2569,7 @@
       "philosophy_of_mind",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Archive.org (Boyce Gibson translation, 1931)",
     "source_url": "https://archive.org/download/ideasgeneralintro00huss/ideasgeneralintro00huss_djvu.txt",
     "filename": "husserl_ideas_1.txt",
@@ -2643,7 +2645,7 @@
       "cognitive_science",
       "cross_field"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "thompson_mind_in_life.txt",
@@ -2658,7 +2660,7 @@
       "philosophy_of_mind",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "wegner_illusion_conscious_will.txt",
@@ -3286,7 +3288,7 @@
       "philosophy_of_science",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Internet Archive",
     "source_url": "",
     "filename": "whitehead_science_modern_world.txt",
@@ -3301,7 +3303,7 @@
       "philosophy_of_science",
       "epistemology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "duhem_aim_structure_physical_theory.txt",
@@ -3316,7 +3318,7 @@
       "philosophy_of_science",
       "logic"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "carnap_unity_science.txt",
@@ -3331,7 +3333,7 @@
       "philosophy_of_science",
       "epistemology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "neurath_carnap_encyclopedia_unified_science.txt",
@@ -3347,7 +3349,7 @@
       "aesthetics",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "langer_philosophy_new_key.txt",
@@ -3362,7 +3364,7 @@
       "philosophy",
       "sociology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "taylor_sources_self.txt",
@@ -3376,7 +3378,7 @@
     "fields": [
       "sociology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "giddens_consequences_modernity.txt",
@@ -3390,7 +3392,7 @@
     "fields": [
       "sociology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "beck_risk_society.txt",
@@ -3404,7 +3406,7 @@
     "fields": [
       "sociology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "bauman_life_fragments.txt",
@@ -3420,7 +3422,7 @@
       "sociology",
       "political_philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "habermas_between_facts_norms.txt",
@@ -3435,7 +3437,7 @@
       "philosophy",
       "epistemology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "meillassoux_after_finitude.txt",
@@ -3450,7 +3452,7 @@
       "philosophy",
       "aesthetics"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "harman_weird_realism.txt",
@@ -3465,7 +3467,7 @@
       "philosophy",
       "philosophy_of_mind"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "stiegler_technics_time_3.txt",
@@ -3481,7 +3483,7 @@
       "aesthetics",
       "arts_culture"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "manually sourced",
     "source_url": "",
     "filename": "ranciere_emancipated_spectator.txt",
@@ -3510,9 +3512,10 @@
     "fields": [
       "psychology",
       "philosophy_of_mind",
-      "cognitive_science"
+      "cognitive_science",
+      "neuroscience"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "wundt_principles_physiological_psychology.txt",
@@ -3528,7 +3531,7 @@
       "epistemology",
       "philosophy_of_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "tarski_introduction_logic.txt",
@@ -3544,7 +3547,7 @@
       "philosophy",
       "cognitive_science"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "morris_signs_language_behavior.txt",
@@ -3560,7 +3563,7 @@
       "philosophy",
       "arts"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "langer_feeling_form.txt",
@@ -3576,7 +3579,7 @@
       "arts_culture",
       "philosophy"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "galloway_protocol.txt",
@@ -3592,7 +3595,7 @@
       "philosophy",
       "arts_culture"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "hansen_new_philosophy_new_media.txt",
@@ -3608,7 +3611,7 @@
       "philosophy",
       "linguistics"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "mcluhan_gutenberg_galaxy.txt",
@@ -3624,10 +3627,1563 @@
       "philosophy_of_science",
       "sociology"
     ],
-    "status": "pending",
+    "status": "available",
     "source": "Manual",
     "source_url": "",
     "filename": "comte_positive_philosophy.txt",
     "notes": "Hackett abridgment of Cours de philosophie positive. Foundational positivism vocabulary: positive, empirical, sociology, hierarchy of sciences."
+  },
+  {
+    "author": "Auguste Comte",
+    "title": "A General View of Positivism",
+    "year": 1848,
+    "decade": "1840s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/53799",
+    "filename": "comte_general_view_positivism.txt",
+    "notes": "Bridges translation. Positivism, sociology, science, progress, order, humanity. Complements the Positive Philosophy already in corpus with Comte's later synthetic statement."
+  },
+  {
+    "author": "T.H. Huxley",
+    "title": "Evidence as to Man's Place in Nature",
+    "year": 1863,
+    "decade": "1860s",
+    "fields": [
+      "biology",
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/2931",
+    "filename": "huxley_man_place_in_nature.txt",
+    "notes": "Evolution, ape, ancestry, morphology, homology, species. Key text linking Darwin's evolution to human origins vocabulary."
+  },
+  {
+    "author": "Alexander Bain",
+    "title": "Moral Science: A Compendium of Ethics",
+    "year": 1869,
+    "decade": "1860s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/12913",
+    "filename": "bain_moral_science.txt",
+    "notes": "Association, pleasure, pain, motive, will, habit, moral, sentiment. Systematic associationist psychology applied to ethics; links Bain's Mind and Body vocabulary."
+  },
+  {
+    "author": "T.H. Huxley",
+    "title": "Hume",
+    "year": 1879,
+    "decade": "1870s",
+    "fields": [
+      "philosophy"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/18819",
+    "filename": "huxley_hume.txt",
+    "notes": "Causation, impression, idea, belief, scepticism, experience, matter, mind. Huxley's exposition of Hume anchors empiricist epistemology vocabulary for the 1870s."
+  },
+  {
+    "author": "G.H. Lewes",
+    "title": "The Physical Basis of Mind",
+    "year": 1877,
+    "decade": "1870s",
+    "fields": [
+      "philosophy_of_mind",
+      "biology"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/60212",
+    "filename": "lewes_physical_basis_of_mind.txt",
+    "notes": "Consciousness, neural, sensation, reflex, organism, stimulus, response. Second series of Problems of Life and Mind; bridges physiology and psychology vocabulary."
+  },
+  {
+    "author": "W.K. Clifford",
+    "title": "The Scientific Basis of Morals and Other Essays",
+    "year": 1875,
+    "decade": "1870s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/50189",
+    "filename": "clifford_scientific_basis_of_morals.txt",
+    "notes": "Ethics of belief, evidence, tribe, cosmic emotion, energy, matter. Includes 'The Ethics of Belief' (1877) — foundational for epistemology of testimony and inference."
+  },
+  {
+    "author": "Alfred Russel Wallace",
+    "title": "Darwinism",
+    "year": 1889,
+    "decade": "1880s",
+    "fields": [
+      "biology",
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/14558",
+    "filename": "wallace_darwinism.txt",
+    "notes": "Natural selection, variation, adaptation, species, struggle, environment, fitness. Wallace's systematic defence and extension of Darwinism; introduces 'Darwinism' as a term."
+  },
+  {
+    "author": "Francis Galton",
+    "title": "Inquiries into Human Faculty and Its Development",
+    "year": 1883,
+    "decade": "1880s",
+    "fields": [
+      "psychology",
+      "biology"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/11562",
+    "filename": "galton_inquiries_human_faculty.txt",
+    "notes": "Mental imagery, association, statistics, regression, correlation, eugenics, faculty. First systematic use of statistical vocabulary in psychology; coin 'eugenics'."
+  },
+  {
+    "author": "T.H. Huxley",
+    "title": "Evolution and Ethics, and Other Essays",
+    "year": 1893,
+    "decade": "1890s",
+    "fields": [
+      "philosophy",
+      "biology"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/2940",
+    "filename": "huxley_evolution_and_ethics.txt",
+    "notes": "Evolution, ethics, nature, struggle, adaptation, cosmic process, social order. Huxley's late synthesis pitting evolutionary naturalism against moral philosophy."
+  },
+  {
+    "author": "James Mill",
+    "title": "Analysis of the Phenomena of the Human Mind, Vol. 1",
+    "year": 1829,
+    "decade": "1820s",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/analysisofphen01milluoft",
+    "filename": "james_mill_analysis_v1.txt",
+    "notes": "Association, idea, sensation, train, consciousness, pleasure, pain. Foundational associationist text; J.S. Mill's annotated 1869 edition grounds Bain and later British empiricism."
+  },
+  {
+    "author": "James Mill",
+    "title": "Analysis of the Phenomena of the Human Mind, Vol. 2",
+    "year": 1829,
+    "decade": "1820s",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/analysisofphen02mill",
+    "filename": "james_mill_analysis_v2.txt",
+    "notes": "Continuation: belief, reasoning, will, moral sentiment. Together with Vol. 1 the definitive statement of associationist psychology before Bain."
+  },
+  {
+    "author": "Friedrich Schleiermacher",
+    "title": "On Religion: Speeches to its Cultured Despisers",
+    "year": 1799,
+    "decade": "1820s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/cu31924070675743",
+    "filename": "schleiermacher_on_religion.txt",
+    "notes": "Oman translation (1893). Intuition, feeling, infinite, universe, religion, piety, contemplation. Shapes Romantic vocabulary of experience and grounds Dilthey's hermeneutics."
+  },
+  {
+    "author": "Dugald Stewart",
+    "title": "Elements of the Philosophy of the Human Mind, Vol. 3",
+    "year": 1827,
+    "decade": "1820s",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/bim_eighteenth-century_elements-of-the-philosop_stewart-dugald_1827_3",
+    "filename": "stewart_elements_philosophy.txt",
+    "notes": "Conception, abstraction, analogy, reason, attention, generalisation. Final volume of Stewart's systematic faculty psychology; major source for early 19th-century Scottish common-sense vocabulary."
+  },
+  {
+    "author": "Herbert Spencer",
+    "title": "The Principles of Psychology",
+    "year": 1855,
+    "decade": "1850s",
+    "fields": [
+      "philosophy_of_mind",
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/b21965377",
+    "filename": "spencer_principles_psychology.txt",
+    "notes": "Association, evolution, adaptation, feeling, nervous, reflex, correspondence. First systematic evolutionary psychology; introduces 'survival of the fittest' vocabulary a decade before Darwin."
+  },
+  {
+    "author": "Alexander Bain",
+    "title": "The Senses and the Intellect",
+    "year": 1855,
+    "decade": "1850s",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/sensesintellect00bain",
+    "filename": "bain_senses_intellect.txt",
+    "notes": "Sensation, perception, discrimination, association, motor, nerve, attention. With Emotions and the Will, constitutes the first comprehensive empirical psychology in English."
+  },
+  {
+    "author": "Alexander Bain",
+    "title": "The Emotions and the Will",
+    "year": 1859,
+    "decade": "1850s",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/emotionswill00bain_0",
+    "filename": "bain_emotions_will.txt",
+    "notes": "Emotion, will, pleasure, pain, movement, habit, belief, action. Companion to Senses and Intellect; establishes belief-as-readiness-to-act, foundational for Peirce and James."
+  },
+  {
+    "author": "H.T. Buckle",
+    "title": "History of Civilisation in England, Vol. 1",
+    "year": 1857,
+    "decade": "1850s",
+    "fields": [
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/historyciviliza31buckgoog",
+    "filename": "buckle_history_civilisation.txt",
+    "notes": "Climate, food, scepticism, progress, civilisation, generalisation, statistics, cause. Ambitious application of natural-science methods to history; anticipates positivist social science vocabulary."
+  },
+  {
+    "author": "Hermann von Helmholtz",
+    "title": "Treatise on Physiological Optics, Vol. 3",
+    "year": 1867,
+    "decade": "1860s",
+    "fields": [
+      "philosophy_of_mind",
+      "philosophy_of_science",
+      "neuroscience"
+    ],
+    "status": "public_domain",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/helmholtzstreati0003jame",
+    "filename": "helmholtz_physiological_optics_v3.txt",
+    "notes": "Southall translation (1925). Perception, inference, sign, unconscious inference, sensation, colour, space, judgment. Empirical grounding for everything from James to Gibson; introduces 'unconscious inference' as core perceptual vocabulary."
+  },
+  {
+    "author": "S.T. Coleridge",
+    "title": "Biographia Literaria",
+    "year": 1817,
+    "decade": "1820s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/6081",
+    "filename": "coleridge_biographia_literaria.txt",
+    "notes": "Imagination, symbol, organic form, method, genius, will, consciousness. Philosophical foundations of Romanticism; distinction between imagination and fancy; critique of Hartley's associationism."
+  },
+  {
+    "author": "Charles Lyell",
+    "title": "Principles of Geology",
+    "year": 1830,
+    "decade": "1830s",
+    "fields": [
+      "philosophy_of_science",
+      "biology"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/33224",
+    "filename": "lyell_principles_of_geology.txt",
+    "notes": "9th ed. (1853). Uniformitarianism, cause, change, epoch, stratum, species, extinct, geological. Foundational vocabulary for natural history and scientific reasoning about deep time."
+  },
+  {
+    "author": "Walter Bagehot",
+    "title": "Physics and Politics",
+    "year": 1872,
+    "decade": "1870s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/4350",
+    "filename": "bagehot_physics_and_politics.txt",
+    "notes": "Custom, competition, variability, progress, nation, imitation, discussion. Applies evolutionary vocabulary to politics; bridges Spencer's sociology and Darwin's selection."
+  },
+  {
+    "author": "W.S. Jevons",
+    "title": "The Principles of Science",
+    "year": 1874,
+    "decade": "1870s",
+    "fields": [
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/74864",
+    "filename": "jevons_principles_of_science.txt",
+    "notes": "2nd ed. (1883). Induction, inference, probability, hypothesis, observation, measurement, logic, classification. The most systematic 19th-century treatment of scientific method; source for much of Peirce's terminology."
+  },
+  {
+    "author": "William James",
+    "title": "The Will to Believe and Other Essays in Popular Philosophy",
+    "year": 1897,
+    "decade": "1890s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/26659",
+    "filename": "james_will_to_believe.txt",
+    "notes": "Belief, evidence, will, truth, hypothesis, option, faith, action. Pragmatist epistemology; 'The Will to Believe' and 'The Sentiment of Rationality' establish core pragmatist vocabulary."
+  },
+  {
+    "author": "G.W.F. Hegel",
+    "title": "The Logic of Hegel (Science of Logic)",
+    "year": 1816,
+    "decade": "1820s",
+    "fields": [
+      "philosophy",
+      "cross_field"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/55108",
+    "filename": "hegel_science_of_logic.txt",
+    "notes": "Wallace translation. Concept, being, nothing, becoming, dialectic, negation, mediation. Core logical vocabulary for Marx, Lukacs, Frankfurt School."
+  },
+  {
+    "author": "Herbert Spencer",
+    "title": "First Principles",
+    "year": 1862,
+    "decade": "1860s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/55046",
+    "filename": "spencer_first_principles.txt",
+    "notes": "Synthetic philosophy vocabulary: evolution, force, integration, differentiation, equilibration. Introduced these terms systematically before Darwin became the standard reference."
+  },
+  {
+    "author": "Henri Bergson",
+    "title": "Time and Free Will",
+    "year": 1889,
+    "decade": "1880s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_mind"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/56852",
+    "filename": "bergson_time_and_free_will.txt",
+    "notes": "Pogson translation. Duration, consciousness, multiplicity, memory, intensity. Earlier work establishing the core vocabulary extended in Matter and Memory and Creative Evolution."
+  },
+  {
+    "author": "William Whewell",
+    "title": "History of the Inductive Sciences",
+    "year": 1837,
+    "decade": "1830s",
+    "fields": [
+      "philosophy_of_science"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/68693",
+    "filename": "whewell_history_inductive_sciences.txt",
+    "notes": "Induction, hypothesis, consilience of inductions, colligation, verification. Source of Peirce's abduction vocabulary and 19th-century philosophy of science terminology."
+  },
+  {
+    "file": "data/external/books/2010s/floridi_philosophy_of_information.txt",
+    "author": "Luciano Floridi",
+    "title": "The Philosophy of Information",
+    "year": 2011,
+    "decade": "2010s",
+    "fields": [
+      "philosophy",
+      "philosophy_of_science"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/2010s/ingold_being_alive.txt",
+    "author": "Tim Ingold",
+    "title": "Being Alive",
+    "year": 2011,
+    "decade": "2010s",
+    "fields": [
+      "philosophy",
+      "design"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/2010s/hui_existence_digital_objects.txt",
+    "author": "Yuk Hui",
+    "title": "On the Existence of Digital Objects",
+    "year": 2016,
+    "decade": "2010s",
+    "fields": [
+      "philosophy",
+      "cross_field"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/2020s/coeckelbergh_ai_ethics.txt",
+    "author": "Mark Coeckelbergh",
+    "title": "AI Ethics",
+    "year": 2020,
+    "decade": "2020s",
+    "fields": [
+      "philosophy",
+      "cross_field"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/2020s/pasquale_new_laws_of_robotics.txt",
+    "author": "Frank Pasquale",
+    "title": "New Laws of Robotics",
+    "year": 2020,
+    "decade": "2020s",
+    "fields": [
+      "philosophy",
+      "cross_field"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/2020s/crawford_atlas_of_ai.txt",
+    "author": "Kate Crawford",
+    "title": "Atlas of AI",
+    "year": 2021,
+    "decade": "2020s",
+    "fields": [
+      "philosophy",
+      "cross_field"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/1920s/lukacs_history_class_consciousness.txt",
+    "author": "Georg Lukács",
+    "title": "History and Class Consciousness",
+    "year": 1923,
+    "decade": "1920s",
+    "fields": [
+      "philosophy",
+      "cross_field"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/1900s/sherrington_integrative_action.txt",
+    "author": "Charles Sherrington",
+    "title": "The Integrative Action of the Nervous System",
+    "year": 1906,
+    "decade": "1900s",
+    "fields": [
+      "biology",
+      "neuroscience"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/1950s/ashby_intro_cybernetics.txt",
+    "author": "W. Ross Ashby",
+    "title": "An Introduction to Cybernetics",
+    "year": 1956,
+    "decade": "1950s",
+    "fields": [
+      "systems_theory"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/1960s/bertalanffy_general_system_theory.txt",
+    "author": "Ludwig von Bertalanffy",
+    "title": "General System Theory",
+    "year": 1968,
+    "decade": "1960s",
+    "fields": [
+      "systems_theory"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/1940s/hebb_organization_behavior.txt",
+    "author": "D.O. Hebb",
+    "title": "The Organization of Behavior",
+    "year": 1949,
+    "decade": "1940s",
+    "fields": [
+      "biology",
+      "cognitive_science",
+      "neuroscience"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "file": "data/external/books/2000s/dayan_abbott_theoretical_neuroscience.txt",
+    "author": "Peter Dayan and L.F. Abbott",
+    "title": "Theoretical Neuroscience",
+    "year": 2001,
+    "decade": "2000s",
+    "fields": [
+      "biology",
+      "ai_cs",
+      "cognitive_science",
+      "neuroscience"
+    ],
+    "status": "available",
+    "source": "pdf_extraction"
+  },
+  {
+    "author": "Ivan Pavlov",
+    "title": "Conditioned Reflexes",
+    "year": 1927,
+    "decade": "1920s",
+    "fields": [
+      "biology",
+      "psychology",
+      "neuroscience"
+    ],
+    "status": "available",
+    "source": "Archive.org (Dover reprint of Anrep translation)",
+    "filename": "pavlov_conditioned_reflexes.txt",
+    "notes": "Anrep translation. Classical conditioning, conditioned stimulus, inhibition, cortical activity."
+  },
+  {
+    "author": "James Bridle",
+    "title": "Ways of Being",
+    "year": 2022,
+    "decade": "2020s",
+    "fields": [
+      "philosophy",
+      "ai_cs",
+      "arts_culture"
+    ],
+    "status": "available",
+    "source": "manually sourced",
+    "filename": "bridle_ways_of_being.txt",
+    "notes": "Non-human intelligence, more-than-human thinking, ecology of technology."
+  },
+  {
+    "author": "David Chalmers",
+    "title": "Reality+: Virtual Worlds and the Philosophy of Mind",
+    "year": 2022,
+    "decade": "2020s",
+    "fields": [
+      "philosophy_of_mind",
+      "philosophy"
+    ],
+    "status": "available",
+    "source": "manually sourced",
+    "filename": "chalmers_reality_plus.txt",
+    "notes": "Virtual reality, consciousness, representation, simulation. Extends hard problem of consciousness to digital minds."
+  },
+  {
+    "title": "Lectures on the Philosophy of the Human Mind, Vol. 1",
+    "author": "Thomas Brown",
+    "decade": "1820s",
+    "year": 1820,
+    "filename": "brown_lectures_philosophy_mind.txt",
+    "fields": [
+      "psychology",
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Frankenstein; or, The Modern Prometheus",
+    "author": "Mary Wollstonecraft Shelley",
+    "decade": "1820s",
+    "year": 1818,
+    "filename": "shelley_frankenstein.txt",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "On Love",
+    "author": "Stendhal",
+    "decade": "1820s",
+    "year": 1822,
+    "filename": "stendhal_on_love.txt",
+    "fields": [
+      "psychology",
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Confessions of an English Opium-Eater",
+    "author": "Thomas De Quincey",
+    "decade": "1820s",
+    "year": 1821,
+    "filename": "de_quincey_confessions_opium_eater.txt",
+    "fields": [
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Voyage of the Beagle",
+    "author": "Charles Darwin",
+    "decade": "1830s",
+    "year": 1839,
+    "filename": "darwin_voyage_beagle.txt",
+    "fields": [
+      "neuroscience"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "A Preliminary Discourse on the Study of Natural Philosophy",
+    "author": "John Herschel",
+    "decade": "1830s",
+    "year": 1830,
+    "filename": "herschel_preliminary_discourse.txt",
+    "fields": [
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Society in America (Vols. 1 & 2)",
+    "author": "Harriet Martineau",
+    "decade": "1830s",
+    "year": 1837,
+    "filename": "martineau_society_in_america.txt",
+    "fields": [
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Reflections on the Decline of Science in England",
+    "author": "Charles Babbage",
+    "decade": "1830s",
+    "year": 1830,
+    "filename": "babbage_reflections_decline_science.txt",
+    "fields": [
+      "systems_theory",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "A Treatise on Man",
+    "author": "Adolphe Quetelet",
+    "decade": "1830s",
+    "year": 1835,
+    "filename": "quetelet_treatise_on_man.txt",
+    "fields": [
+      "sociology",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "On Heroes, Hero-Worship, and the Heroic in History",
+    "author": "Thomas Carlyle",
+    "decade": "1840s",
+    "year": 1841,
+    "filename": "carlyle_on_heroes.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Ego and His Own",
+    "author": "Max Stirner",
+    "decade": "1840s",
+    "year": 1844,
+    "filename": "stirner_ego_and_his_own.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Cosmos: A Sketch of the Physical Description of the Universe, Vol. 1",
+    "author": "Alexander von Humboldt",
+    "decade": "1840s",
+    "year": 1845,
+    "filename": "humboldt_cosmos_vol1.txt",
+    "fields": [
+      "systems_theory"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Eureka: A Prose Poem",
+    "author": "Edgar Allan Poe",
+    "decade": "1840s",
+    "year": 1848,
+    "filename": "poe_eureka.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "systems_theory"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Narrative of the Life of Frederick Douglass",
+    "author": "Frederick Douglass",
+    "decade": "1840s",
+    "year": 1845,
+    "filename": "douglass_narrative.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Either/Or, Part I",
+    "author": "Søren Kierkegaard",
+    "decade": "1840s",
+    "year": 1843,
+    "filename": "kierkegaard_either_or_pt1.txt",
+    "fields": [
+      "phenomenology",
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Leaves of Grass",
+    "author": "Walt Whitman",
+    "decade": "1850s",
+    "year": 1855,
+    "filename": "whitman_leaves_of_grass.txt",
+    "fields": [
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "My Bondage and My Freedom",
+    "author": "Frederick Douglass",
+    "decade": "1850s",
+    "year": 1855,
+    "filename": "douglass_my_bondage_my_freedom.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Eighteenth Brumaire of Louis Bonaparte",
+    "author": "Karl Marx",
+    "decade": "1850s",
+    "year": 1852,
+    "filename": "marx_eighteenth_brumaire.txt",
+    "fields": [
+      "political_philosophy",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "London Labour and the London Poor, Vol. 1",
+    "author": "Henry Mayhew",
+    "decade": "1850s",
+    "year": 1851,
+    "filename": "mayhew_london_labour_vol1.txt",
+    "fields": [
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Social Statics",
+    "author": "Herbert Spencer",
+    "decade": "1850s",
+    "year": 1851,
+    "filename": "spencer_social_statics.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Subjection of Women",
+    "author": "John Stuart Mill",
+    "decade": "1860s",
+    "year": 1869,
+    "filename": "mill_subjection_of_women.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Principles of Biology, Vol. 1",
+    "author": "Herbert Spencer",
+    "decade": "1860s",
+    "year": 1864,
+    "filename": "spencer_principles_biology_vol1.txt",
+    "fields": [
+      "neuroscience"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "An Introduction to the Study of Experimental Medicine",
+    "author": "Claude Bernard",
+    "decade": "1860s",
+    "year": 1865,
+    "filename": "bernard_introduction_experimental_medicine.txt",
+    "fields": [
+      "neuroscience"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Geological Evidences of the Antiquity of Man",
+    "author": "Charles Lyell",
+    "decade": "1860s",
+    "year": 1863,
+    "filename": "lyell_geological_evidences_antiquity.txt",
+    "fields": [
+      "neuroscience"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Thoughts Out of Season, Part I",
+    "author": "Friedrich Nietzsche",
+    "decade": "1870s",
+    "year": 1873,
+    "filename": "nietzsche_thoughts_out_of_season_pt1.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Thoughts Out of Season, Part II",
+    "author": "Friedrich Nietzsche",
+    "decade": "1870s",
+    "year": 1876,
+    "filename": "nietzsche_thoughts_out_of_season_pt2.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Human, All Too Human",
+    "author": "Friedrich Nietzsche",
+    "decade": "1870s",
+    "year": 1878,
+    "filename": "nietzsche_human_all_too_human.txt",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The History of Creation, Vol. 1",
+    "author": "Ernst Haeckel",
+    "decade": "1870s",
+    "year": 1876,
+    "filename": "haeckel_history_of_creation_vol1.txt",
+    "fields": [
+      "neuroscience"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Autobiography",
+    "author": "John Stuart Mill",
+    "decade": "1870s",
+    "year": 1873,
+    "filename": "mill_autobiography.txt",
+    "fields": [
+      "sociology",
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "On Intelligence",
+    "author": "Hippolyte Taine",
+    "decade": "1870s",
+    "year": 1871,
+    "filename": "taine_on_intelligence.txt",
+    "fields": [
+      "cognitive_science",
+      "psychology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "English Men of Science",
+    "author": "Francis Galton",
+    "decade": "1870s",
+    "year": 1874,
+    "filename": "galton_english_men_of_science.txt",
+    "fields": [
+      "cognitive_science",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Science and Culture, and Other Essays",
+    "author": "T.H. Huxley",
+    "decade": "1880s",
+    "year": 1881,
+    "filename": "huxley_science_and_culture.txt",
+    "fields": [
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Contributions to the Analysis of the Sensations",
+    "author": "Ernst Mach",
+    "decade": "1880s",
+    "year": 1886,
+    "filename": "mach_analysis_of_sensations.txt",
+    "fields": [
+      "phenomenology",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Mental Evolution in Animals",
+    "author": "George Romanes",
+    "decade": "1880s",
+    "year": 1883,
+    "filename": "romanes_mental_evolution_animals.txt",
+    "fields": [
+      "neuroscience",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Sense of Beauty",
+    "author": "George Santayana",
+    "decade": "1890s",
+    "year": 1896,
+    "filename": "santayana_sense_of_beauty.txt",
+    "fields": [
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Twilight of the Idols / The Antichrist",
+    "author": "Friedrich Nietzsche",
+    "decade": "1890s",
+    "year": 1889,
+    "filename": "nietzsche_twilight_idols.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Psychology: Briefer Course",
+    "author": "William James",
+    "decade": "1890s",
+    "year": 1892,
+    "filename": "james_psychology_briefer_course.txt",
+    "fields": [
+      "psychology",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Grammar of Science",
+    "author": "Karl Pearson",
+    "decade": "1890s",
+    "year": 1892,
+    "filename": "pearson_grammar_of_science.txt",
+    "fields": [
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Principia Ethica",
+    "author": "G.E. Moore",
+    "decade": "1900s",
+    "year": 1903,
+    "filename": "moore_principia_ethica.txt",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "A Pluralistic Universe",
+    "author": "William James",
+    "decade": "1900s",
+    "year": 1909,
+    "filename": "james_pluralistic_universe.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "An Introduction to Metaphysics",
+    "author": "Henri Bergson",
+    "decade": "1900s",
+    "year": 1903,
+    "filename": "bergson_introduction_to_metaphysics.txt",
+    "fields": [
+      "phenomenology",
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Principles of Mathematics",
+    "author": "Bertrand Russell",
+    "decade": "1900s",
+    "year": 1903,
+    "filename": "russell_principles_of_mathematics.txt",
+    "fields": [
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Psychology of the Unconscious",
+    "author": "C.G. Jung",
+    "decade": "1910s",
+    "year": 1912,
+    "filename": "jung_psychology_unconscious.txt",
+    "fields": [
+      "psychology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "A General Introduction to Psychoanalysis",
+    "author": "Sigmund Freud",
+    "decade": "1910s",
+    "year": 1917,
+    "filename": "freud_general_introduction_psychoanalysis.txt",
+    "fields": [
+      "psychology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Essays in Experimental Logic",
+    "author": "John Dewey",
+    "decade": "1910s",
+    "year": 1916,
+    "filename": "dewey_essays_experimental_logic.txt",
+    "fields": [
+      "cognitive_science",
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Why Men Fight",
+    "author": "Bertrand Russell",
+    "decade": "1910s",
+    "year": 1916,
+    "filename": "russell_why_men_fight.txt",
+    "fields": [
+      "political_philosophy",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Behaviorism",
+    "author": "John B. Watson",
+    "decade": "1920s",
+    "year": 1924,
+    "filename": "watson_behaviorism.txt",
+    "fields": [
+      "psychology",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Work of Art in the Age of Mechanical Reproduction",
+    "author": "Walter Benjamin",
+    "decade": "1930s",
+    "year": 1935,
+    "filename": "benjamin_work_of_art.txt",
+    "fields": [
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "An Essay on Man",
+    "author": "Ernst Cassirer",
+    "decade": "1940s",
+    "year": 1944,
+    "filename": "cassirer_essay_on_man.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "A System of Phrenology",
+    "author": "George Combe",
+    "decade": "1820s",
+    "year": 1825,
+    "filename": "combe_system_phrenology.txt",
+    "fields": [
+      "neuroscience",
+      "psychology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Lectures on the Philosophy of the Human Mind, Vol. 2",
+    "author": "Thomas Brown",
+    "decade": "1820s",
+    "year": 1820,
+    "filename": "brown_lectures_philosophy_mind_vol2.txt",
+    "fields": [
+      "psychology",
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Influence of Habit on the Faculty of Thinking",
+    "author": "Maine de Biran",
+    "decade": "1820s",
+    "year": 1803,
+    "filename": "maine_de_biran_influence_of_habit.txt",
+    "fields": [
+      "psychology",
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Lectures on Metaphysics and Logic",
+    "author": "William Hamilton",
+    "decade": "1820s",
+    "year": 1859,
+    "filename": "hamilton_lectures_metaphysics_logic.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Introduction to the History of Philosophy",
+    "author": "Victor Cousin",
+    "decade": "1820s",
+    "year": 1828,
+    "filename": "cousin_introduction_history_philosophy.txt",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "How to Observe Morals and Manners",
+    "author": "Harriet Martineau",
+    "decade": "1830s",
+    "year": 1838,
+    "filename": "martineau_how_to_observe.txt",
+    "fields": [
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Illustrations of Political Economy (selection)",
+    "author": "Harriet Martineau",
+    "decade": "1830s",
+    "year": 1832,
+    "filename": "martineau_illustrations_political_economy.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Essays on Some Unsettled Questions of Political Economy",
+    "author": "John Stuart Mill",
+    "decade": "1830s",
+    "year": 1844,
+    "filename": "mill_essays_unsettled_questions.txt",
+    "fields": [
+      "political_philosophy",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Philosophy of the Inductive Sciences",
+    "author": "William Whewell",
+    "decade": "1830s",
+    "year": 1840,
+    "filename": "whewell_philosophy_inductive_sciences.txt",
+    "fields": [
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Letters on Natural Magic",
+    "author": "David Brewster",
+    "decade": "1830s",
+    "year": 1832,
+    "filename": "brewster_letters_natural_magic.txt",
+    "fields": [
+      "cognitive_science",
+      "systems_theory"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Catechism of Positive Religion",
+    "author": "Auguste Comte",
+    "decade": "1850s",
+    "year": 1852,
+    "filename": "comte_catechism_positive_religion.txt",
+    "fields": [
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Biographical History of Philosophy",
+    "author": "George Henry Lewes",
+    "decade": "1850s",
+    "year": 1857,
+    "filename": "lewes_biographical_history_philosophy.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Dissertations and Discussions, Vol. 1",
+    "author": "John Stuart Mill",
+    "decade": "1850s",
+    "year": 1859,
+    "filename": "mill_dissertations_discussions_vol1.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Enfranchisement of Women",
+    "author": "Harriet Taylor Mill",
+    "decade": "1850s",
+    "year": 1851,
+    "filename": "harriet_taylor_mill_enfranchisement_women.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Vestiges of the Natural History of Creation",
+    "author": "Robert Chambers",
+    "decade": "1850s",
+    "year": 1844,
+    "filename": "chambers_vestiges_natural_history.txt",
+    "fields": [
+      "neuroscience"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "History of Civilisation in England, Vol. 2",
+    "author": "Henry Thomas Buckle",
+    "decade": "1850s",
+    "year": 1861,
+    "filename": "buckle_history_civilisation_vol2.txt",
+    "fields": [
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Philosophy of the Unconscious",
+    "author": "Eduard von Hartmann",
+    "decade": "1860s",
+    "year": 1869,
+    "filename": "von_hartmann_philosophy_unconscious.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "psychology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Education: Intellectual, Moral, and Physical",
+    "author": "Herbert Spencer",
+    "decade": "1860s",
+    "year": 1861,
+    "filename": "spencer_education.txt",
+    "fields": [
+      "cognitive_science",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Fragments of Science",
+    "author": "John Tyndall",
+    "decade": "1860s",
+    "year": 1871,
+    "filename": "tyndall_fragments_of_science.txt",
+    "fields": [
+      "cognitive_science",
+      "systems_theory"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Researches into the Early History of Mankind",
+    "author": "Edward Tylor",
+    "decade": "1860s",
+    "year": 1865,
+    "filename": "tylor_researches_early_history_mankind.txt",
+    "fields": [
+      "anthropology",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Physiology of Mind",
+    "author": "Henry Maudsley",
+    "decade": "1860s",
+    "year": 1876,
+    "filename": "maudsley_physiology_of_mind.txt",
+    "fields": [
+      "neuroscience",
+      "psychology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Principles of Sociology, Vol. 1",
+    "author": "Herbert Spencer",
+    "decade": "1870s",
+    "year": 1876,
+    "filename": "spencer_principles_sociology_vol1.txt",
+    "fields": [
+      "sociology",
+      "systems_theory"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Science of Ethics",
+    "author": "Leslie Stephen",
+    "decade": "1880s",
+    "year": 1882,
+    "filename": "leslie_stephen_science_ethics.txt",
+    "fields": [
+      "philosophy_of_mind",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Religious Aspect of Philosophy",
+    "author": "Josiah Royce",
+    "decade": "1880s",
+    "year": 1885,
+    "filename": "royce_religious_aspect_philosophy.txt",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Mental Evolution in Man",
+    "author": "George Romanes",
+    "decade": "1880s",
+    "year": 1888,
+    "filename": "romanes_mental_evolution_man.txt",
+    "fields": [
+      "neuroscience",
+      "cognitive_science"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Appearance and Reality",
+    "author": "Francis Herbert Bradley",
+    "decade": "1890s",
+    "year": 1893,
+    "filename": "bradley_appearance_and_reality.txt",
+    "fields": [
+      "philosophy_of_mind"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Instincts of the Herd in Peace and War",
+    "author": "Wilfred Trotter",
+    "decade": "1910s",
+    "year": 1916,
+    "filename": "trotter_instincts_herd.txt",
+    "fields": [
+      "sociology",
+      "psychology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The German Ideology",
+    "author": "Karl Marx",
+    "decade": "1840s",
+    "year": 1846,
+    "filename": "marx_german_ideology.txt",
+    "fields": [
+      "political_philosophy",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Wages, Price and Profit",
+    "author": "Karl Marx",
+    "decade": "1860s",
+    "year": 1865,
+    "filename": "marx_wages_price_profit.txt",
+    "fields": [
+      "political_philosophy",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Civil War in France",
+    "author": "Karl Marx",
+    "decade": "1870s",
+    "year": 1871,
+    "filename": "marx_civil_war_in_france.txt",
+    "fields": [
+      "political_philosophy",
+      "sociology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "The Anatomy and Philosophy of Expression",
+    "author": "Charles Bell",
+    "decade": "1820s",
+    "year": 1824,
+    "filename": "bell_anatomy_philosophy_expression.txt",
+    "fields": [
+      "neuroscience",
+      "phenomenology"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Economy and Society",
+    "author": "Max Weber",
+    "decade": "1910s",
+    "year": 1922,
+    "filename": "weber_economy_and_society.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
+  },
+  {
+    "title": "Ideology and Utopia",
+    "author": "Karl Mannheim",
+    "decade": "1930s",
+    "year": 1929,
+    "filename": "mannheim_ideology_utopia.txt",
+    "fields": [
+      "sociology",
+      "political_philosophy"
+    ],
+    "status": "available"
   }
 ]

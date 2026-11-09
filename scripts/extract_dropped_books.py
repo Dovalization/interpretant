@@ -176,6 +176,18 @@ MAPPINGS: list[tuple[str, str, str]] = [
     ("*Mind*Life*Thompson*", "2000s", "thompson_mind_in_life.txt"),
     ("*Wegner*Illusion*Conscious*Will*", "2000s", "wegner_illusion_conscious_will.txt"),
     ("*Hofstadter*Strange*Loop*", "2000s", "hofstadter_i_am_strange_loop.txt"),
+    # ── New additions ────────────────────────────────────────────────────────
+    # Cybernetics
+    ("*Ashby*Introduction*Cybernetics*", "1950s", "ashby_intro_cybernetics.txt"),
+    ("*Bertalanffy*General*System*Theory*", "1960s", "bertalanffy_general_system_theory.txt"),
+    # Neuroscience
+    ("*Sherrington*Integrative*Action*", "1900s", "sherrington_integrative_action.txt"),
+    ("*Pavlov*Conditioned*Reflexes*", "1920s", "pavlov_conditioned_reflexes.txt"),
+    ("*Hebb*Organization*Behavior*", "1940s", "hebb_organization_behavior.txt"),
+    ("*Dayan*Abbott*Theoretical*neuroscience*", "2000s", "dayan_abbott_theoretical_neuroscience.txt"),
+    # 2020s
+    ("*Bridle*Ways*Being*", "2020s", "bridle_ways_of_being.txt"),
+    ("*Chalmers*Reality*", "2020s", "chalmers_reality_plus.txt"),
 ]
 
 
@@ -272,16 +284,18 @@ def main() -> None:
     for pattern, decade, output_name in MAPPINGS:
         dest = BOOKS_DIR / decade / output_name
 
-        src = find_file(pattern)
-        if src is None:
-            print(f"NOT FOUND  {pattern}")
-            results.append((output_name, "not_found", None))
-            continue
-
+        # Check dest first — already extracted files are always skipped regardless
+        # of whether the source still exists in data/ (it may have been moved).
         if dest.exists():
             words = len(dest.read_text(errors="replace").split())
             print(f"skip  {output_name} (already present, {words:,} words)")
             results.append((output_name, "skip", words))
+            continue
+
+        src = find_file(pattern)
+        if src is None:
+            print(f"NOT FOUND  {pattern}")
+            results.append((output_name, "not_found", None))
             continue
 
         print(f"extracting  {src.name[:70]} ...", end="", flush=True)
