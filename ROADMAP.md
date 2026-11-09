@@ -51,7 +51,16 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
 - [ ] TWEC slices per field and decade on a shared compass
 - [ ] PPMI-SVD per cell as a count-based robustness check (Church 2017: word2vec approximates
       a PMI factorisation; Hamilton et al. 2016: SVD is more stable on small corpora). A drift
-      finding counts only if TWEC and PPMI-SVD agree
+      finding counts only if TWEC and PPMI-SVD agree. Use the tuned count-model settings of
+      Levy, Goldberg & Dagan (2015) so the comparison is fair: context-distribution smoothing
+      (0.75), shifted PPMI, eigenvalue weighting, the same 5-word window
+- [ ] Held-out check per cell: hold out 10% of each cell's text and measure how well its
+      model predicts it, flagging cells whose model memorised a small corpus (complements the
+      seed check, which tests agreement between runs, not generalisation)
+- [ ] Backoff for sparse cells: when a word misses the occurrence threshold in a field x
+      decade cell, fall back to a coarser cell (two decades, then the field overall) instead
+      of dropping it, as n-gram models back off to shorter contexts. Fix the backoff rule
+      before results; it trades time resolution for coverage
 - [ ] Cross-perplexity between cells: a Kneser-Ney n-gram model per field × decade, each cell
       scored by every other cell's model. Perplexity is asymmetric, so the field × field
       matrix measures the direction of borrowing, and its change over decades measures
