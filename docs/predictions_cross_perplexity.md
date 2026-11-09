@@ -52,3 +52,41 @@ genuine open question.)
 ## Results
 
 To be added below this line after the run. Predictions are not edited after the run.
+
+### Results (2026-11-09, `scripts/score_cross_perplexity.py`)
+
+Scored as written. 5 passed, 1 falsified; two design flaws found after the run limit what
+several of them mean.
+
+| | Verdict | Numbers |
+|---|---|---|
+| C0 | **Passed** | Own model best in 76 of 79 cells (96%); the 3 misses are AI and computer science in the 2010s–2020s |
+| C1 | **Falsified** | computer science → AI below AI → computer science in 5 of 6 decades; psychology → cognitive psychology below the reverse in 2 of 7 |
+| C2 | **Passed** | Computer science closest to AI in 6 of 6 decades; psychology closest to cognitive psychology in 7 of 7 |
+| C3 | **Passed** | E(AI → philosophy) 1.61 bits (2010s), 1.56 (2020s) |
+| C4 | **Passed** | E(philosophy → HCI) 2.12 bits (1990s), 1.94 (2020s) |
+| C5 | **Passed** | Mean excess over 11 fields 1.08 bits (1980s), 1.20 (2010s) |
+
+### Design flaws found after the run
+
+- **Parent and subfield cells share abstracts.** OpenAlex files AI under computer science and
+  cognitive psychology under psychology, so 18–29% of AI's abstracts are also in computer
+  science's cell and 10–20% of cognitive psychology's in psychology's. A parent's model can
+  have trained on the subfield's held-out abstracts, which produced negative excess values
+  (computer science predicting AI's 2020s text better than AI's own model) and C0's three
+  misses, and favours the parent in C1 and C2. C2's pass is therefore weak evidence.
+- **Training size was equal within decades, not across them.** C3 compares two decades
+  trained on 1,000,000 tokens each and is unaffected; C4 compares 858,655 with 1,000,000;
+  C5 compares 205,731 (1980s) with 1,000,000 (2010s). A model trained on five times more text
+  captures more field-specific detail, which raises excess on its own, so C5 may reflect
+  training size as much as specialisation.
+- **No uncertainty estimate.** C3's change (0.05 bits, 3%) could be sampling noise; C4's
+  (0.18 bits, 9%) is larger but equally untested.
+
+### Reading
+
+C4 — HCI's language becoming more predictable from philosophy's between the 1990s and the
+2020s, the whole-language counterpart of the *embodiment* finding — is the cleanest result.
+C3 points the right way with a small effect; C5 is not interpretable as run. A corrected
+follow-up (subfield abstracts removed from parent cells, one training size across compared
+decades, repeated samples for uncertainty) must be committed as new predictions, not edits.
