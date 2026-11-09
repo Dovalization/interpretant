@@ -417,6 +417,140 @@ def corpus_phrases_apply(
         console.print(f"  {target}")
 
 
+@corpus.group("lemmas")
+def corpus_lemmas() -> None:
+    """Lemma map: collapse plurals and British spellings before phrase detection."""
+
+
+@corpus_lemmas.command("learn")
+@click.option(
+    "--processed-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed"),
+    show_default=True,
+)
+@click.option(
+    "--source",
+    "sources",
+    multiple=True,
+    default=("books", "openalex", "openalex_full"),
+    show_default=True,
+)
+@click.option(
+    "--words-file",
+    type=click.Path(path_type=Path),
+    default=Path("data/words_of_interest.txt"),
+    show_default=True,
+)
+@click.option(
+    "--overrides",
+    "overrides_path",
+    type=click.Path(path_type=Path),
+    default=Path("data/lemma_overrides.tsv"),
+    show_default=True,
+)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed/lemmas.tsv"),
+    show_default=True,
+)
+@click.option("--review", default=150, show_default=True, help="Most frequent mappings to print.")
+def corpus_lemmas_learn(  # noqa: PLR0913
+    processed_dir: Path,
+    sources: tuple[str, ...],
+    words_file: Path,
+    overrides_path: Path,
+    output: Path,
+    review: int,
+) -> None:
+    """Learn the type-level lemma map from every processed file and write it for review."""
+    from collections import Counter  # noqa: PLC0415
+
+    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
+    from interpretant.corpus.lemmas import (  # noqa: PLC0415
+        count_types,
+        learn_lemma_map,
+        read_overrides,
+    )
+
+    paths = sorted(
+        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
+    )
+    console.print(f"  counting types in {len(paths)} files")
+    counts = count_types(tqdm(paths, unit="file"))
+    protected = set(load_target_words(words_file))
+    lemma_map = learn_lemma_map(counts, protected, read_overrides(overrides_path))
+    output.parent.mkdir(parents=True, exist_ok=True)
+    lemma_map.save(output, counts)
+    by_rule: Counter[str] = Counter()
+    tokens_by_rule: Counter[str] = Counter()
+    for token, rule in lemma_map.rules.items():
+        by_rule[rule] += 1
+        tokens_by_rule[rule] += counts[token]
+    total_tokens = sum(counts.values())
+    console.print(f"  types: {len(counts):,}   tokens: {total_tokens:,}")
+    for rule in sorted(by_rule):
+        console.print(
+            f"  {rule:9} {by_rule[rule]:>8,} types   {tokens_by_rule[rule]:>12,} tokens"
+            f" ({tokens_by_rule[rule] / total_tokens:.2%})"
+        )
+    table = Table(title=f"{review} most frequent mappings", show_lines=False)
+    for column in ("token", "lemma", "count", "rule"):
+        table.add_column(column)
+    ranked = sorted(lemma_map.mapping, key=lambda token: -counts[token])[:review]
+    for token in ranked:
+        table.add_row(token, lemma_map.mapping[token], f"{counts[token]:,}", lemma_map.rules[token])
+    console.print(table)
+    console.print(f"[green]{len(lemma_map.mapping):,} types mapped[/green] → {output}")
+
+
+@corpus_lemmas.command("apply")
+@click.option(
+    "--processed-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed"),
+    show_default=True,
+)
+@click.option(
+    "--source",
+    "sources",
+    multiple=True,
+    default=("books", "openalex", "openalex_full"),
+    show_default=True,
+)
+@click.option(
+    "--map",
+    "map_path",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed/lemmas.tsv"),
+    show_default=True,
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/lemmatised"),
+    show_default=True,
+)
+def corpus_lemmas_apply(
+    processed_dir: Path, sources: tuple[str, ...], map_path: Path, output_dir: Path
+) -> None:
+    """Rewrite every processed file with the lemma map applied, mirroring the layout."""
+    from interpretant.corpus.lemmas import LemmaMap  # noqa: PLC0415
+
+    lemma_map = LemmaMap.load(map_path)
+    paths = sorted(
+        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
+    )
+    for path in tqdm(paths, unit="file"):
+        target = output_dir / path.relative_to(processed_dir)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with path.open(encoding="utf-8") as source, target.open("w", encoding="utf-8") as out:
+            for line in source:
+                out.write(lemma_map.apply(line) + "\n")
+    console.print(f"[green]{len(paths)} files[/green] → {output_dir}")
+
+
 @corpus.command("audit")
 @click.option(
     "--processed-dir",

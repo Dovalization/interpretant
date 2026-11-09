@@ -1,0 +1,49 @@
+# Overrides for the lemma map (interpretant.corpus.lemmas): token<TAB>lemma.
+# An empty lemma keeps the token as it is. "#" starts a comment.
+
+# Irregular plurals worth collapsing
+phenomena	phenomenon
+criteria	criterion
+corpora	corpus
+stimuli	stimulus
+indices	index
+matrices	matrix
+hypotheses	hypothesis
+theses	thesis
+axes	axis
+schemata	schema
+automata	automaton
+children	child
+selves	self
+men	man
+women	woman
+
+# Kept as they are: separate senses, or function words a plural rule would merge
+data
+media
+means
+its
+does
+goes
+yes
+thus
+plus
+versus
+species
+series
+news
+physics
+ethics
+politics
+economics
+mathematics
+statistics
+linguistics
+semantics
+semiotics
+dynamics
+mechanics
+genetics
+analytics
+humanities
+glasses
