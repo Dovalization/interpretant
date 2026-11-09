@@ -1341,6 +1341,63 @@ def twec_grid(  # noqa: PLR0913
     console.print(f"[green]Done.[/green] Models in {output_dir}")
 
 
+@cli.group()
+def ppmi() -> None:
+    """Count-based PPMI-SVD embeddings per cell (robustness check on TWEC)."""
+
+
+@ppmi.command("grid")
+@click.option(
+    "--input-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased"),
+    show_default=True,
+)
+@click.option(
+    "--layer",
+    "layers",
+    multiple=True,
+    default=("books", "openalex", "openalex_full"),
+    show_default=True,
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/ppmi_grid"),
+    show_default=True,
+)
+@click.option("--window", default=5, show_default=True)
+@click.option("--dimensions", default=100, show_default=True)
+@click.option("--min-count", default=20, show_default=True, help="Vocabulary threshold per cell.")
+def ppmi_grid(
+    input_dir: Path,
+    layers: tuple[str, ...],
+    output_dir: Path,
+    window: int,
+    dimensions: int,
+    min_count: int,
+) -> None:
+    """Build PPMI-SVD vectors for every cell; finished cells are skipped.
+
+    Each cell is factorised on its own, so compare PPMI cells by neighbourhood shift only.
+    """
+    from interpretant.embedding.grid import discover_cells  # noqa: PLC0415
+    from interpretant.embedding.ppmi import train_cell  # noqa: PLC0415
+
+    cells = discover_cells(input_dir, layers)
+    console.print(
+        f"[bold]PPMI-SVD grid[/bold]: {len(cells)} cells, window {window}, {dimensions} dims"
+    )
+    for cell in tqdm(cells, desc="  cells", unit="cell"):
+        target = output_dir / cell.layer / f"{cell.name}_{cell.decade}.kv"
+        if target.exists():
+            continue
+        vectors = train_cell(cell.path, window, dimensions, min_count)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        vectors.save(str(target))
+    console.print(f"[green]Done.[/green] Models in {output_dir}")
+
+
 # ---------------------------------------------------------------------------
 # align
 # ---------------------------------------------------------------------------

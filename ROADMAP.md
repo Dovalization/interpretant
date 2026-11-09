@@ -53,7 +53,8 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       a PMI factorisation; Hamilton et al. 2016: SVD is more stable on small corpora). A drift
       finding counts only if TWEC and PPMI-SVD agree. Use the tuned count-model settings of
       Levy, Goldberg & Dagan (2015) so the comparison is fair: context-distribution smoothing
-      (0.75), shifted PPMI, eigenvalue weighting, the same 5-word window
+      (0.75), no PMI shift (shifting helps word2vec-style methods but hurts SVD), eigenvalue
+      weighting (0.5), the same 5-word window (`ppmi grid`)
 - [ ] Held-out check per cell: hold out 10% of each cell's text and measure how well its
       model predicts it, flagging cells whose model memorised a small corpus (complements the
       seed check, which tests agreement between runs, not generalisation)
