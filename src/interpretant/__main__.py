@@ -409,10 +409,21 @@ def corpus_openalex() -> None:
     "--sample-size", default=10_000, show_default=True, help="Works per cell (max 10000)."
 )
 @click.option("--seed", default=42, show_default=True, help="Sampling seed; keep it fixed.")
-def corpus_openalex_download(
-    raw_dir: Path, fields: tuple[str, ...], start: int, end: int, sample_size: int, seed: int
+@click.option(
+    "--full",
+    is_flag=True,
+    help="Download every matching work instead of a sample (use a separate --raw-dir).",
+)
+def corpus_openalex_download(  # noqa: PLR0913
+    raw_dir: Path,
+    fields: tuple[str, ...],
+    start: int,
+    end: int,
+    sample_size: int,
+    seed: int,
+    full: bool,
 ) -> None:
-    """Download a seeded sample of English abstracts for each field and decade.
+    """Download English research-prose abstracts for each field and decade.
 
     Finished cells are skipped, so a run stopped by the daily credit budget resumes where it
     left off.
@@ -432,7 +443,7 @@ def corpus_openalex_download(
     for field in fields or FIELDS:
         for decade in range(start, end, 10):
             try:
-                works = download_cell(client, raw_dir, field, decade, sample_size, seed)
+                works = download_cell(client, raw_dir, field, decade, sample_size, seed, full)
             except BudgetExhaustedError as error:
                 console.print(f"[yellow]Daily budget spent ({error}); rerun to resume.[/yellow]")
                 return
@@ -456,21 +467,32 @@ def corpus_openalex_download(
 @click.option("--start", default=1950, show_default=True, help="First decade (inclusive).")
 @click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
 def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int) -> None:
-    """Preprocess downloaded samples into ``<field>_<decade>.txt``, one abstract per line."""
+    """Clean and preprocess downloaded cells into ``<field>_<decade>.txt``, one per line.
+
+    The table shows documents kept per cell and, after the minus sign, how many were dropped
+    as duplicates or archive catalogue records.
+    """
     from interpretant.corpus.openalex import FIELDS, OpenAlexSource
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    table = Table(title="OpenAlex ingest (documents per cell)", show_lines=False)
+    table = Table(title="OpenAlex ingest (kept −dropped per cell)", show_lines=False)
     table.add_column("Field", style="cyan")
     decades = list(range(start, end, 10))
     for decade in decades:
         table.add_column(str(decade), justify="right")
     for field in FIELDS:
+        source = OpenAlexSource(raw_dir, field)
         counts = []
-        for decade, documents in OpenAlexSource(raw_dir, field).iter_decade_slices(start, end, 10):
-            if documents:
-                (output_dir / f"{field}_{decade}.txt").write_text("\n".join(documents), "utf-8")
-            counts.append(f"{len(documents):,}")
+        for decade in decades:
+            cell = source.cell(decade)
+            if cell.documents:
+                (output_dir / f"{field}_{decade}.txt").write_text(
+                    "\n".join(cell.documents), "utf-8"
+                )
+            dropped = cell.duplicates + cell.catalogue_records
+            counts.append(
+                f"{len(cell.documents):,} −{dropped:,}" if dropped else f"{len(cell.documents):,}"
+            )
         table.add_row(field, *counts)
     console.print(table)
 

@@ -33,13 +33,29 @@ uv run interpretant corpus openalex download   # needs OPENALEX_API_KEY in .env
 uv run interpretant corpus openalex ingest     # data/processed/openalex/texts/<field>_<decade>.txt
 ```
 
-Each cell is a seeded random sample (seed 42) of up to 10,000 English works with abstracts,
+Each cell is a seeded random sample (seed 42) of up to 10,000 English works of research
+prose with abstracts (articles, reviews, book chapters, books, dissertations and conference
+papers; one genre rule for every field),
 filtered by the work's primary topic: philosophy, history and philosophy of science,
 language and linguistics, psychology, experimental and cognitive psychology, neuroscience,
 computer science, AI, HCI, sociology and political science, and communication. The raw
 cells keep each work's id, year and author ids, so an author cap can be applied later.
 A full download costs about 3,800 credits of the key's 10,000 daily budget; finished cells
 are skipped, so a run stopped by the budget resumes the next day.
+
+OpenAlex also indexes archive catalogue records as works. The first, unfiltered download
+(kept in `data/raw/openalex_unfiltered/` as a reference) found catalogue records of letters in
+a third of 1950s history and philosophy of science (Albert Sabin's alone were 15%), and identical news-script records from a
+Fort Worth TV station in half of 1960s–70s communication. Book reviews, editorials,
+letters, preprints (often the same paper as a published article) and datasets are
+therefore excluded at download, each work's `type` is stored, and `corpus openalex ingest`
+drops exact duplicate abstracts and catalogue patterns ("Letter from X to Y dated ...",
+"Script from ..."), reporting how many it removed per cell. Findings must also hold in an
+articles-only re-check.
+
+`--full` downloads every matching work instead of a sample, for words too rare to measure
+in 10,000 abstracts (HCI 2000s–2020s, for *affordance*); those cells are kept in a separate
+`--raw-dir` because they break the equal-size grid.
 
 Two caveats from the November 2026 probe. Psychology contains experimental and cognitive
 psychology, and computer science contains AI and HCI, so those samples overlap. And topic
