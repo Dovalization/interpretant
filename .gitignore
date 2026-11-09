@@ -44,6 +44,7 @@ data/*.txt
 data/*.html
 data/*.htm
 !data/words_of_interest.txt
+!data/control_words.txt
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/external/.gitkeep

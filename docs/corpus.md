@@ -83,9 +83,13 @@ Preprocessing maps plurals and British spellings of the targets onto the lemma
 target gets one vector instead of several. Forms that are mostly verbs (*controls*) or
 carry another sense (*media*) are left alone.
 
-Control words, frequency-matched to the targets and expected to stay stable, will go in
-`data/control_words.txt`; a target counts as drifting only if it moves more than the
-controls in the same cell.
+The noise floor comes from the whole vocabulary: for each pair of cells, drift is fitted
+against log frequency over every word above the threshold in both cells, and a target
+counts as drifting only if it is in the top 5% at its frequency. `data/control_words.txt`
+holds 38 everyday words (*people*, *day*, *water*, *church*, ...) spanning the targets'
+frequency range, chosen by `scripts/select_control_words.py`; they should sit at or below
+the curve. They cannot carry the noise floor themselves: everyday words are rare in
+abstracts, and only *people* reaches 150 occurrences in most cells.
 
 ### Phrase detection
 

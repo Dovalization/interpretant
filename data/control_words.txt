@@ -1,0 +1,43 @@
+# Control words: everyday words expected to keep their meaning, chosen to span the
+# targets' frequency range on the phrased main corpus (scripts/select_control_words.py).
+# They check the whole-vocabulary noise floor: they should not drift above it.
+# word  count  matched_target  target_count
+people  # 79,646  system  280,934
+day  # 30,494  model  180,099
+child  # 28,196  information  125,945
+student  # 25,151  learning  125,154
+year  # 24,082  experience  110,271
+death  # 20,388  behavior  84,662
+country  # 19,111  user  79,524
+home  # 16,862  control  78,354
+war  # 16,811  image  70,260
+teacher  # 15,866  network  65,056
+water  # 15,081  meaning  57,735
+city  # 13,890  mind  52,060
+food  # 11,916  memory  51,268
+hospital  # 11,587  attention  50,032
+woman  # 10,391  perception  49,922
+night  # 10,218  representation  42,843
+father  # 9,857  consciousness  33,868
+church  # 9,443  agent  26,517
+house  # 9,165  sign  25,823
+mother  # 8,877  interface  25,439
+money  # 7,857  intelligence  21,507
+tree  # 7,250  complexity  20,758
+week  # 6,683  simulation  20,365
+sea  # 6,553  feedback  17,522
+son  # 6,448  symbol  14,755
+sun  # 5,956  cognition  13,258
+king  # 5,816  neural_network  12,968
+fire  # 5,496  medium  12,271
+road  # 5,073  user_interface  10,430
+morning  # 5,006  computation  9,603
+friend  # 4,893  artificial_intelligence  9,125
+street  # 4,314  emergence  8,317
+island  # 3,467  information_processing  3,432
+winter  # 2,753  social_network  2,810
+iron  # 2,704  embodiment  2,779
+forest  # 2,183  intentionality  2,170
+snow  # 1,612  affordance  1,614
+meat  # 891  mental_representation  852
+shoe  # 240  feedback_loop  348

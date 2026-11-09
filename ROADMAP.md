@@ -24,6 +24,9 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       concentration, dating risks (`--output` writes JSON)
 - [ ] Gate drift on the audit: skip transitions below `--min-occurrences`, show counts in
       the dashboard
+- [ ] Noise floor from the whole vocabulary: for each pair of cells, fit drift against log
+      frequency over every word above the threshold in both cells; a target drifts only if it
+      is in the top 5% at its frequency. Control words must sit at or below the curve
 - [ ] Compare *network*, *learning* and *representation* against HistWords to see which
       devlog 02 findings survive
 - [x] Phrase detection (gensim `Phrases`) before training, so `neural_network` and
@@ -42,8 +45,9 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       - [x] Decided (November 2026): the main corpus is books plus the OpenAlex grid. The
             grid already covers ACL's, arXiv's and PubMed's fields with one taxonomy and
             one sampling rule; they stay out as optional layers
-- [ ] Control words: 15–20 frequency-matched everyday words in `data/control_words.txt`; a
-      target drifts only if it moves more than the controls in the same cell
+- [x] Control words: 38 everyday words spanning the targets' frequency range
+      (`scripts/select_control_words.py`, `data/control_words.txt`), kept as a sanity check on
+      the noise floor; too rare in most cells to carry it themselves
 - [ ] TWEC slices per field and decade on a shared compass
 - [ ] PPMI-SVD per cell as a count-based robustness check (Church 2017: word2vec approximates
       a PMI factorisation; Hamilton et al. 2016: SVD is more stable on small corpora). A drift
