@@ -232,7 +232,8 @@ def l5() -> None:
     report(
         "L5 affordance experiential",
         near(words, EXPERIENTIAL) >= 3,
-        f"{near(words, EXPERIENTIAL)} of the set {sorted(set(words) & EXPERIENTIAL)}; neighbours {words[:12]}",
+        f"{near(words, EXPERIENTIAL)} of the set {sorted(set(words) & EXPERIENTIAL)}; "
+        f"neighbours {words[:12]}",
     )
 
 
@@ -262,7 +263,8 @@ def l7() -> None:
     report(
         "L7 consciousness moves",
         bool(row.candidate),
-        f"2010s->2020s cos {row.cosine_rank:.0f} nb {row.shift_rank:.0f} candidate={bool(row.candidate)}; "
+        f"2010s->2020s cos {row.cosine_rank:.0f} nb {row.shift_rank:.0f} "
+        f"candidate={bool(row.candidate)}; "
         f"2020s neighbours {words[:15]}",
     )
 
@@ -328,7 +330,8 @@ def l10() -> None:
         needed = 5 if len(decades) >= 6 else len(decades)
         passed &= len(hits) >= needed
         lines.append(
-            f"{child}->{parent} lower in {len(hits)}/{len(decades)} decades {decades} (needed {needed})"
+            f"{child}->{parent} lower in {len(hits)}/{len(decades)} decades {decades} "
+            f"(needed {needed})"
         )
     report("L10 subfield asymmetry", passed, "\n  ".join(lines))
 
