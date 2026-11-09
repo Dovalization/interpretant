@@ -187,6 +187,10 @@ class TestPreprocessText:
         result = preprocess_text("Behaviour of Networks and their Representations")
         assert result == "behavior of network and their representation"
 
+    def test_removes_urls_and_dois(self) -> None:
+        result = preprocess_text("Code at https://github.com/x/y and doi 10.5281/zenodo.123 here")
+        assert result == "code at and doi here"
+
     def test_leaves_ambiguous_and_non_target_forms_alone(self) -> None:
         assert preprocess_text("the media controls the networking") == (
             "the media controls the networking"

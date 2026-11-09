@@ -125,18 +125,96 @@ def test_clean_abstracts_drops_duplicates_catalogue_records_and_empty_text() -> 
 
 
 def test_source_yields_cleaned_abstracts_per_decade(tmp_path: Path) -> None:
-    write_cell(tmp_path, "hci", 1990, ["User Interfaces, Revisited", "User interfaces revisited"])
+    write_cell(
+        tmp_path,
+        "hci",
+        1990,
+        [
+            "User Interfaces, Revisited for Older Adults",
+            "User interfaces revisited for older adults",
+        ],
+    )
 
     slices = dict(OpenAlexSource(tmp_path, "hci").iter_decade_slices(1980, 2000, 10))
 
-    assert slices == {1980: [], 1990: ["user interface revisited"]}
+    assert slices == {1980: [], 1990: ["user interface revisited for older adults"]}
 
 
 def test_clean_cell_caps_an_author_who_dominates_the_cell() -> None:
-    records = [{"abstract": f"consortium paper {n}", "authors": ["A1"]} for n in range(20)]
-    records += [{"abstract": f"single paper {n}", "authors": [f"B{n}"]} for n in range(80)]
+    records = [
+        {"abstract": f"consortium paper number {n} on imaging", "authors": ["A1"]}
+        for n in range(20)
+    ]
+    records += [
+        {"abstract": f"this is the paper number {n} of a single author", "authors": [f"B{n}"]}
+        for n in range(80)
+    ]
 
     cell = clean_cell(records, max_author_share=0.05)
 
     assert cell.author_capped == 15
     assert sum(doc.startswith("consortium") for doc in cell.documents) == 5
+
+
+def test_clean_cell_drops_scraped_pages_and_citations_and_strips_urls() -> None:
+    abstracts = [
+        "No AccessJournal of Speech and Hearing ResearchResearch Article 1 Jun 1958",
+        "Journal of Communication, Volume 3, Issue 2, 1 November 1953, Pages 120-123",
+        "https://www.sil.org/resources/archives/3576",
+        "We train a parser on treebanks. Code: https://github.com/x/y. "
+        "© 2019 Elsevier B.V. All rights reserved.",
+    ]
+
+    cell = clean_cell({"abstract": abstract} for abstract in abstracts)
+
+    assert cell.documents == ["we train a parser on treebanks code"]
+    assert (cell.web_pages, cell.catalogue_records, cell.empty) == (1, 1, 1)
+
+
+def test_clean_cell_keeps_research_about_social_media() -> None:
+    abstracts = [
+        "As one of the most popular social media platforms, Twitter attracts many journalists.",
+        "Researchers had no access to Facebook data before the platform opened its API.",
+        "Share Facebook Twitter LinkedIn Reddit Email Export citation Add to favorites",
+    ]
+
+    cell = clean_cell({"abstract": abstract} for abstract in abstracts)
+
+    assert len(cell.documents) == 2
+    assert cell.web_pages == 1
+
+
+def test_clean_cell_strips_appended_footers_and_drops_citation_menus() -> None:
+    abstracts = [
+        "Bodies that learn language become wordlings. This content downloaded from "
+        "207.46.13.145 on Wed, 27 Apr 2016 05:09:54 UTC All use subject to "
+        "http://about.jstor.org/terms",
+        "Capitalism reorganises the working day. Click here to purchase a PDF version of "
+        "this article at the Monthly Review website.",
+        "Download citation file: Ris (Zotero) Reference Manager EasyBib Bookends Mendeley",
+    ]
+
+    cell = clean_cell({"abstract": abstract} for abstract in abstracts)
+
+    assert cell.documents == [
+        "bodies that learn language become wordlings",
+        "capitalism reorganises the working day",
+    ]
+    assert cell.web_pages == 1
+
+
+def test_clean_cell_drops_non_english_abstracts_and_mastheads() -> None:
+    abstracts = [
+        "Se encuentran interesantes diferencias asi como similitudes en esta exploracion "
+        "de los periodistas",
+        "Cette etude analyse les representations de la conscience dans les textes du corpus",
+        "Editor Roy Mason editor Doug Hodges photographer Marvin Bayles business manager",
+        "This study analyses how the representation of consciousness changed in the corpus.",
+    ]
+
+    cell = clean_cell({"abstract": abstract} for abstract in abstracts)
+
+    assert cell.documents == [
+        "this study analyses how the representation of consciousness changed in the corpus"
+    ]
+    assert cell.non_english == 3

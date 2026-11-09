@@ -493,7 +493,8 @@ def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int
     """Clean and preprocess downloaded cells into ``<field>_<decade>.txt``, one per line.
 
     The table shows documents kept per cell and, after the minus sign, how many were dropped
-    as duplicates, archive catalogue records or by the 1% author cap.
+    as duplicates, archive catalogue or citation records, scraped web pages, or by the 1% author
+    cap.
     """
     from interpretant.corpus.openalex import FIELDS, OpenAlexSource
 
@@ -512,7 +513,13 @@ def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int
                 (output_dir / f"{field}_{decade}.txt").write_text(
                     "\n".join(cell.documents), "utf-8"
                 )
-            dropped = cell.duplicates + cell.catalogue_records + cell.author_capped
+            dropped = (
+                cell.duplicates
+                + cell.catalogue_records
+                + cell.web_pages
+                + cell.non_english
+                + cell.author_capped
+            )
             counts.append(
                 f"{len(cell.documents):,} −{dropped:,}" if dropped else f"{len(cell.documents):,}"
             )

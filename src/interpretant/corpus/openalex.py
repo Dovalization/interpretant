@@ -45,6 +45,145 @@ RESEARCH_TYPES = ("article", "review", "book-chapter", "book", "dissertation", "
 _CATALOGUE_RECORD = re.compile(
     r"^\s*(letter|script|telegram|memo(randum)?|postcard|note)\s+(from|to|by)\b", re.IGNORECASE
 )
+# Publisher pages scraped in place of an abstract: a paywall banner at the start, citation
+# and alert widgets, the Altmetric donut, or the share bar ("Facebook Twitter LinkedIn ...").
+# A lone "Twitter" or "Facebook" is left alone: social media are a research topic.
+_WEB_PAGE = re.compile(
+    r"^\s*no ?access|export citation|save to binder|add to favorites|track citations|"
+    r"e-alerts|clicking on the donut|facebook\W{0,3}twitter\W{0,3}(linkedin|reddit|e-?mail)|"
+    r"download citation file|easybib|refworks|request reuse permissions|rft_id|(%2[0-9a-f]){3}",
+    re.IGNORECASE,
+)
+# A citation string standing in for an abstract: "Volume 3, Issue 2, ..., Pages 120-123".
+_CITATION_RECORD = re.compile(r"\bvolume \d+,? (issue|number) \d+\b.*\bpages? \d+", re.IGNORECASE)
+# Footers and promotions appended to real abstracts: JSTOR's download stamp and
+# "Click here to purchase a PDF version of this article ...".
+_APPENDED_FOOTER = re.compile(
+    r"this content downloaded from [\d.]+.*?utc(\s*all use subject to\s*\S+)?|click here[^.]*\.",
+    re.IGNORECASE,
+)
+# "© 2019 Elsevier B.V. All rights reserved." or, without the formula, to the sentence end.
+_COPYRIGHT = re.compile(
+    r"(©|\(c\)|copyright).{0,150}?all rights reserved\.?|(©|\(c\)|copyright)\s*\d{4}\b[^.]*\.?",
+    re.IGNORECASE,
+)
+MIN_ABSTRACT_WORDS = 5
+
+# Function words for a cheap language check: OpenAlex labels some French, Spanish and
+# Portuguese abstracts (and mastheads with no prose at all) as English.
+_ENGLISH_WORDS = frozenset(
+    [
+        "the",
+        "of",
+        "and",
+        "to",
+        "in",
+        "is",
+        "that",
+        "for",
+        "are",
+        "with",
+        "as",
+        "by",
+        "this",
+        "be",
+        "on",
+        "from",
+        "which",
+        "it",
+        "an",
+        "at",
+        "or",
+        "not",
+        "have",
+        "we",
+        "these",
+        "their",
+        "was",
+        "were",
+        "has",
+        "been",
+        "can",
+    ]
+)
+_OTHER_WORDS = frozenset(
+    [
+        "le",
+        "la",
+        "les",
+        "des",
+        "du",
+        "une",
+        "est",
+        "que",
+        "qui",
+        "dans",
+        "pour",
+        "sur",
+        "pas",
+        "au",
+        "aux",
+        "ce",
+        "cette",
+        "ces",
+        "sont",
+        "avec",
+        "par",
+        "nous",
+        "el",
+        "los",
+        "las",
+        "del",
+        "por",
+        "para",
+        "una",
+        "con",
+        "como",
+        "pero",
+        "sus",
+        "esta",
+        "este",
+        "entre",
+        "der",
+        "die",
+        "das",
+        "und",
+        "ist",
+        "nicht",
+        "mit",
+        "sich",
+        "auf",
+        "dem",
+        "den",
+        "zur",
+        "os",
+        "um",
+        "uma",
+        "dos",
+        "das",
+        "pelo",
+        "pela",
+        "nao",
+        "sao",
+    ]
+)
+
+
+def looks_english(text: str) -> bool:
+    """Return whether a preprocessed abstract reads as English prose."""
+    tokens = text.split()
+    english = sum(token in _ENGLISH_WORDS for token in tokens)
+    other = sum(token in _OTHER_WORDS for token in tokens)
+    return english > other and english >= 0.05 * len(tokens)
+
+
+def strip_boilerplate(abstract: str) -> str:
+    """Remove copyright footers, download stamps and promotions from a real abstract.
+
+    URLs and DOIs are removed later by ``preprocess_text``, for every source.
+    """
+    return _COPYRIGHT.sub(" ", _APPENDED_FOOTER.sub(" ", abstract))
+
 
 # Field slug → OpenAlex filter. Slugs are alphanumeric so processed files follow the
 # ``<source>_<decade>.txt`` convention the audit reads.
@@ -112,6 +251,8 @@ class CleanedCell:
     empty: int = 0
     duplicates: int = 0
     catalogue_records: int = 0
+    web_pages: int = 0
+    non_english: int = 0
     author_capped: int = 0
 
 
@@ -120,21 +261,28 @@ def clean_cell(
 ) -> CleanedCell:
     """Preprocess a cell's abstracts and apply the cleaning rules in order.
 
-    Catalogue records, empty abstracts and exact duplicates go first, so they do not count
-    towards any author's share; then no author may appear in more than ``max_author_share``
-    of the remaining works.
+    Catalogue records, scraped web pages, citation strings, abstracts too short to be
+    abstracts, non-English abstracts and exact duplicates go first, so they do not count
+    towards any author's share;
+    then no author may appear in more than ``max_author_share`` of the remaining works. URLs
+    and copyright footers are stripped from the abstracts that stay.
     """
     cell = CleanedCell()
     seen: set[str] = set()
     kept: list[tuple[list[str], str]] = []
     for record in records:
         abstract = str(record["abstract"])
-        if _CATALOGUE_RECORD.match(abstract):
+        if _CATALOGUE_RECORD.match(abstract) or _CITATION_RECORD.search(abstract):
             cell.catalogue_records += 1
             continue
-        text = preprocess_text(abstract)
-        if not text:
+        if _WEB_PAGE.search(abstract):
+            cell.web_pages += 1
+            continue
+        text = preprocess_text(strip_boilerplate(abstract))
+        if len(text.split()) < MIN_ABSTRACT_WORDS:
             cell.empty += 1
+        elif not looks_english(text):
+            cell.non_english += 1
         elif text in seen:
             cell.duplicates += 1
         else:

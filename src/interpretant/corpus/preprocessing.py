@@ -35,13 +35,15 @@ TARGET_VARIANTS: dict[str, str] = {
     "mediums": "medium",
 }
 _VARIANT_RE = re.compile(r"\b(" + "|".join(TARGET_VARIANTS) + r")\b")
+# URLs and DOIs: their pieces ("https", "www", "github", "zenodo") are not words.
+_URL_OR_DOI = re.compile(r"https?://\S+|\bwww\.\S+|\bdoi\.org/\S+|\b10\.\d{4,9}/\S+", re.IGNORECASE)
 
 
 def preprocess_text(text: str) -> str:
     """Normalise and clean a raw document string.
 
     Steps applied in order:
-    1. Unicode NFKC normalisation
+    1. Unicode NFKC normalisation, then URLs and DOIs removed
     2. Lowercase
     3. NFKD transliteration to ASCII (café→cafe, übermensch→ubermensch, différance→differance)
     4. Strip LaTeX-style math spans (``$...$`` and ``$$...$$``)
@@ -56,6 +58,7 @@ def preprocess_text(text: str) -> str:
         Cleaned, lowercased string.
     """
     text = unicodedata.normalize("NFKC", text)
+    text = _URL_OR_DOI.sub(" ", text)
     text = text.lower()
     # Rejoin PDF line-break artifacts: "var¬ \niables" → "variables".
     # U+00AC (NOT SIGN) is used by some PDF extractors as a soft-hyphen substitute.
