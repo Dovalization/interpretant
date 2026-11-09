@@ -314,3 +314,61 @@ The one-sided philosophy → HCI effect, the convergence of fields between the 1
 a few thousandths of a bit of the unlemmatised run. The convergence and the asymmetry, first seen
 as reversals of D5 and D1, are now predicted results. The cause of the philosophy → HCI effect
 remains open.
+
+---
+
+## Round G: where the philosophy → HCI gain sits (committed 2026-11-09, before any
+per-abstract number existed)
+
+E(philosophy → HCI) fell from the 1990s to the 2020s in every seed, on both corpora (D4, L8),
+and HCI → philosophy did not move (F2). Two whole-field explanations failed: HCI borrowing
+philosophy's words (F3) and philosophy turning towards technology (H1–H4). This round asks
+*where* in HCI's text the gain sits: in a subset of abstracts (topics the two fields came to
+share) or across all of them (a register philosophy's model came to cover).
+
+### Method (fixed before results)
+
+- Lemmatised cells (`data/phrased/openalex/texts`), the corrected design (shared abstracts
+  removed, 200,000 training tokens, 1,000 held-out abstracts, seeds 1–5), decades 1990 and
+  2020, rebuilt with `build_decade` exactly as L8 was scored.
+- **Per-abstract excess** of an HCI held-out abstract: its bits per token under philosophy's
+  model minus under HCI's own model (end token included). Its mean over the 1,000 abstracts is
+  E(philosophy → HCI) up to length weighting.
+- The **fall** of a statistic is its 1990s value minus its 2020s value.
+- A **philosophy-flavoured** HCI abstract contains at least one of {ethics, ethical, moral,
+  phenomenology, phenomenological, embodiment, embodied, ontology, ontological, epistemic,
+  epistemological, hermeneutic, agency, autonomy, meaning, experience, value, values, critical,
+  theory, theoretical, reflection, reflexive, normative}. The list is fixed here.
+
+### Predictions
+
+**G1 — The fall is spread across abstracts, not carried by a subset.** In every seed, the
+median per-abstract excess falls by at least 70% of the mean's fall. *Falsified* if any seed
+is under 70%.
+
+**G2 — The lower tail does not do the work.** In every seed, the fall of the 25th percentile
+is at most 1.5 times the fall of the 75th percentile. *Falsified* if any seed exceeds 1.5.
+
+**G3 — The gain reaches abstracts with none of philosophy's themes.** In at least 4 of 5
+seeds, the fall in mean excess over the non-flavoured HCI abstracts is at least 60% of the
+fall over the flavoured ones. *Falsified* otherwise; if the flavoured fall is the larger one,
+the effect is topical after all.
+
+**G4 — The vocabulary doing it is small.** Pooling the five seeds, per-word excess as in F3
+(bits HCI's model saves over philosophy's, per occurrence), scored per word as the fall in
+per-occurrence excess times 2020s occurrences: the 50 highest-scoring words account for at
+least 40% of the sum of all positive scores. *Falsified* if under 40%.
+
+**G5 — One-sided at the document level.** In every seed, the median per-abstract excess of
+philosophy's held-out abstracts under HCI's model changes between the 1990s and the 2020s by
+less, in absolute value, than half the fall of HCI's median under philosophy's model.
+*Falsified* if any seed fails.
+
+**Reading rule, written now.** G1–G3 passing together means a register effect: philosophy's
+model learned to cover how HCI writes, everywhere in HCI. G1 or G3 failing with the lower tail
+or the flavoured partition carrying the fall means topics. G4 says whether the register is a
+few words or many. Exploratory and unscored: the ten HCI 2020s held-out abstracts with the
+lowest excess and the ten with the highest, first 25 words each, printed for reading.
+
+Scored by `scripts/score_decomposition.py`, committed before it is run. Results are appended
+below after the run.
