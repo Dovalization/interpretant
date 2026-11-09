@@ -922,7 +922,16 @@ def drift() -> None:
     help="Output parquet file path.",
 )
 @click.option("--words", "-w", multiple=True, help="Words to analyse (default: all shared vocab).")
-def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None:
+@click.option(
+    "--neighborhood-k",
+    type=int,
+    default=10,
+    show_default=True,
+    help="Nearest-neighbour count for neighbourhood shift Jaccard distance.",
+)  # noqa: E501
+def drift_compute(  # noqa: E501
+    model_dir: Path, output: Path, words: tuple[str, ...], neighborhood_k: int
+) -> None:
     """Compute drift metrics for aligned models and write to parquet."""
     import pandas as pd
 
@@ -930,8 +939,8 @@ def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None
     from interpretant.drift.metrics import (
         average_pairwise_distance,
         batch_neighborhood_shift,
-        build_decade_index,
         cosine_distance,
+        frequency_corrected_drift,
     )
 
     console.print("[bold]Computing drift metrics[/bold]")
@@ -945,66 +954,82 @@ def drift_compute(model_dir: Path, output: Path, words: tuple[str, ...]) -> None
     if not decades:
         raise click.ClickException(f"No aligned models found in {model_dir}")
 
-    shared_vocab = aligner.shared_vocabulary()
-    # When specific words are requested, keep only those present in every decade.
-    # Words absent from any decade (e.g. "affordance" pre-1960s) are skipped with a warning.
+    words_in_any_decade = set.union(*[aligner.vocab_for_decade(d) for d in decades])
+
     if words:
-        missing = [w for w in words if w not in shared_vocab]
-        if missing:
+        never_present = [w for w in words if w not in words_in_any_decade]
+        if never_present:
             console.print(  # noqa: E501
-                f"[yellow]Warning: {len(missing)} word(s) absent from ≥1 decade and will be skipped: {', '.join(missing)}[/yellow]"  # noqa: E501
+                f"[yellow]Warning: {len(never_present)} word(s) not found in any decade: {', '.join(never_present)}[/yellow]"  # noqa: E501
             )
-        target_words = [w for w in words if w in shared_vocab]
+        target_words = [w for w in words if w in words_in_any_decade]
     else:
-        target_words = shared_vocab
+        target_words = sorted(words_in_any_decade)
     console.print(f"  words          : {len(target_words):,}")
     console.print(f"  decades        : {decades}")
+    console.print(f"  neighborhood-k : {neighborhood_k}")
 
-    console.print("  Building decade indices …")
-    # Pre-build normalised matrices per decade for vectorised neighbourhood shift.
-    decade_index: dict[int, tuple[list[str], object]] = {
-        decade: build_decade_index(
-            {word: aligner.get_vector(word, decade) for word in shared_vocab}
+    freq_cache = {decade: aligner.word_freqs(decade) for decade in decades}
+    has_freq = any(f is not None for f in freq_cache.values())
+    if has_freq:
+        console.print("  frequency data : available (cosine_drift_corrected will be computed)")
+    else:
+        console.print(
+            "  [yellow]frequency data : not found in .kv files — cosine_drift_corrected will be NaN[/yellow]"  # noqa: E501
         )
-        for decade in tqdm(decades, desc="  indexing", unit="decade", leave=False)
-    }
 
-    # Full trajectory per target word for avg_pairwise_distance
-    trajectories: dict[str, list[object]] = {
-        word: [aligner.get_vector(word, decade) for decade in decades] for word in target_words
+    # avg_pairwise_distance spans all decades — compute only for global shared vocab.
+    shared_vocab = aligner.shared_vocabulary()
+    apd_map: dict[str, float] = {
+        word: average_pairwise_distance([aligner.get_vector(word, d) for d in decades])
+        for word in shared_vocab
     }
 
     rows = []
     for i in tqdm(range(1, len(decades)), desc="Computing drift", unit="transition"):
         t0, t1 = decades[i - 1], decades[i]
-        words_t0, matrix_t0 = decade_index[t0]  # type: ignore[misc]
-        words_t1, matrix_t1 = decade_index[t1]  # type: ignore[misc]
+        pair_vocab = aligner.vocabulary_for_pair(t0, t1)
+        pair_vocab_set = set(pair_vocab)
+        pair_targets = [w for w in target_words if w in pair_vocab_set]
+
+        # Build normalised matrices directly from KeyedVectors — no intermediate dict.
+        words_t0, matrix_t0 = aligner.build_pair_index(t0, pair_vocab)
+        words_t1, matrix_t1 = aligner.build_pair_index(t1, pair_vocab)
 
         ns_scores = batch_neighborhood_shift(
-            target_words,
+            pair_targets,
             words_t0,
-            matrix_t0,
+            matrix_t0,  # type: ignore[arg-type]
             words_t1,
             matrix_t1,  # type: ignore[arg-type]
+            k=neighborhood_k,
         )
 
-        for word in target_words:
+        freqs_t0 = freq_cache.get(t0)
+        freqs_t1 = freq_cache.get(t1)
+        for word in pair_targets:
             v0 = aligner.get_vector(word, t0)
             v1 = aligner.get_vector(word, t1)
             cd = cosine_distance(v0, v1)
             ns = ns_scores.get(word, 0.0)
-            apd = average_pairwise_distance(trajectories[word])  # type: ignore[arg-type]
+            if freqs_t0 and freqs_t1 and word in freqs_t0 and word in freqs_t1:
+                cd_corrected: float | None = frequency_corrected_drift(
+                    cd, freqs_t0[word], freqs_t1[word]
+                )
+            else:
+                cd_corrected = None
             rows.append(
                 {
                     "word": word,
                     "decade": t1,
                     "cosine_drift": cd,
+                    "cosine_drift_corrected": cd_corrected,
                     "neighborhood_shift": ns,
-                    "avg_pairwise_distance": apd,
                 }
             )
 
     df = pd.DataFrame(rows)
+    df["avg_pairwise_distance"] = df["word"].map(apd_map)
     output.parent.mkdir(parents=True, exist_ok=True)
     df.to_parquet(output, index=False)
 

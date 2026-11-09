@@ -83,6 +83,52 @@ class ProcrustesAligner(Aligner):
         """Return words present in every decade's model."""
         return list(self._shared_vocab)
 
+    def vocab_for_decade(self, decade: int) -> set[str]:
+        """Return the vocabulary set for a single decade (keys only, no vectors)."""
+        return set(self._keyed_vectors[decade].key_to_index.keys())
+
+    def vocabulary_for_pair(self, decade_a: int, decade_b: int) -> list[str]:
+        """Return words present in both decade_a and decade_b."""
+        vocab_a = set(self._keyed_vectors[decade_a].key_to_index.keys())
+        vocab_b = set(self._keyed_vectors[decade_b].key_to_index.keys())
+        return sorted(vocab_a & vocab_b)
+
+    def vectors_for_decade(self, decade: int) -> dict[str, np.ndarray]:
+        """Return all word vectors for a given decade as a plain dict."""
+        kv = self._keyed_vectors[decade]
+        return {word: kv[word] for word in kv.key_to_index}
+
+    def build_pair_index(self, decade: int, words: list[str]) -> tuple[list[str], np.ndarray]:
+        """Return a normalised embedding matrix for the given words in decade.
+
+        Builds directly from the KeyedVectors without materialising an intermediate
+        word→vector dict, saving one full-vocabulary allocation per call.
+
+        Args:
+            decade: The decade to look up vectors from.
+            words: Words to include; all must be present in the decade's vocabulary.
+
+        Returns:
+            Tuple of (words, normalised_matrix) where matrix[i] is the unit vector
+            for words[i].
+        """
+        kv = self._keyed_vectors[decade]
+        matrix = np.array([kv[w] for w in words], dtype=np.float32)
+        norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+        norms = np.where(norms == 0, 1.0, norms)
+        return words, matrix / norms
+
+    def word_freqs(self, decade: int) -> dict[str, float] | None:
+        """Return relative frequencies for all words in decade, or None if unavailable."""
+        kv = self._keyed_vectors[decade]
+        counts = kv.expandos.get("count")
+        if counts is None:
+            return None
+        total = float(counts.sum())
+        if total == 0:
+            return None
+        return {word: float(counts[idx]) / total for word, idx in kv.key_to_index.items()}
+
     def decades(self) -> list[int]:
         """Return sorted list of aligned decades."""
         return sorted(self._keyed_vectors.keys())
