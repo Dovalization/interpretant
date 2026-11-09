@@ -54,6 +54,34 @@ def decade_label(decade: int) -> str:
     return f"{decade}s"
 
 
+def same_family(word: str, other: str, min_prefix: int = 5, share: float = 0.6) -> bool:
+    """Whether two words are inflections or spelling variants of each other.
+
+    The models are not lemmatised, so *structure* and *structures*, *embedding* and
+    *embeddings*, or *conceptualisation* and *conceptualization* appear as separate
+    neighbours. Two words count as one family when their common prefix is at least
+    ``min_prefix`` characters and ``share`` of the shorter word.
+    """
+    prefix = 0
+    for first, second in zip(word, other, strict=False):
+        if first != second:
+            break
+        prefix += 1
+    return prefix >= min_prefix and prefix >= share * min(len(word), len(other))
+
+
+def distinct_neighbours(word: str, neighbours: list[str], k: int) -> list[str]:
+    """The first ``k`` neighbours that are not variants of ``word`` or of an earlier one."""
+    kept: list[str] = []
+    for neighbour in neighbours:
+        if same_family(word, neighbour) or any(same_family(neighbour, seen) for seen in kept):
+            continue
+        kept.append(neighbour)
+        if len(kept) == k:
+            break
+    return kept
+
+
 @dataclass(frozen=True)
 class NeighbourColumn:
     """One cell's nearest neighbours of the word under study."""
@@ -74,16 +102,25 @@ def neighbour_panel(
 ) -> Figure:
     """Ranked neighbour lists, one column per cell, grouped and coloured by field.
 
-    A word that also appears among another field's neighbours is set in muted ink, so the
-    columns show at a glance how little two fields share.
+    Inflections of the word and later variants of an earlier neighbour are left out
+    (:func:`distinct_neighbours`). A word that also appears among another field's neighbours
+    is set in muted ink, so the columns show at a glance how little two fields share.
     """
     fields = list(dict.fromkeys(column.field for column in columns))
     colours = dict(zip(fields, SERIES, strict=False))
+    shown = {
+        (column.field, column.decade): distinct_neighbours(word, column.words, k)
+        for column in columns
+    }
     shared = {
         neighbour
         for column in columns
-        for neighbour in column.words[:k]
-        if any(neighbour in other.words[:k] for other in columns if other.field != column.field)
+        for neighbour in shown[(column.field, column.decade)]
+        if any(
+            neighbour in shown[(other.field, other.decade)]
+            for other in columns
+            if other.field != column.field
+        )
     }
     width = 1.35 * len(columns) + 0.8
     rows = 2.4 + k * 0.78 + 1.6
@@ -111,7 +148,7 @@ def neighbour_panel(
             fontproperties=font("Regular", 7.5),
         )
         axes.plot([x, position + 0.92], [1.75, 1.75], color=colour, linewidth=1.2)
-        for rank, neighbour in enumerate(column.words[:k]):
+        for rank, neighbour in enumerate(shown[(column.field, column.decade)]):
             ink = INK_MUTED if neighbour in shared else INK
             axes.text(
                 x,

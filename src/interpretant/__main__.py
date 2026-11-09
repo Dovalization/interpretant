@@ -2018,14 +2018,14 @@ def figures(model_dir: Path, drift_dir: Path, audit_path: Path, output_dir: Path
         + [column("openalex_full", "hci", decade, "embodiment") for decade in (2000, 2010, 2020)],
         title="Embodiment means two different things",
         subtitle="Nearest neighbours of embodiment in every philosophy and HCI abstract, by decade",
-        footnote="TWEC models on the full OpenAlex cells; 25 neighbours from words with at least 50 occurrences, top 12 shown. Same result with a second seed and with PPMI-SVD.",  # noqa: E501
+        footnote="TWEC models on the full OpenAlex cells; 25 neighbours from words with at least 50 occurrences, the first 12 distinct words shown (inflections and spelling variants collapsed). Same result with a second seed and with PPMI-SVD.",  # noqa: E501
     )
     drawn["representation_ai"] = neighbour_panel(
         "representation",
         [column("openalex", "ai", decade, "representation") for decade in (1980, 2000, 2020)],
         title="Representation in AI, from symbolic to learned",
         subtitle="Nearest neighbours of representation in 10,000-abstract AI cells",
-        footnote="TWEC models on the main OpenAlex grid; the symbolic 1980s holds in TWEC only, the learned 2020s in every run.",  # noqa: E501
+        footnote="TWEC models on the main OpenAlex grid, first 12 distinct neighbours (inflections and spelling variants collapsed); the symbolic 1980s holds in TWEC only, the learned 2020s in every run.",  # noqa: E501
     )
     table = pd.read_parquet(drift_dir / "cross_perplexity_corrected.parquet")
     drawn["philosophy_hci"] = excess_by_decade(

@@ -12,8 +12,10 @@ import pytest
 from interpretant.visualization.figures import (
     NeighbourColumn,
     corpus_grid,
+    distinct_neighbours,
     excess_by_decade,
     neighbour_panel,
+    same_family,
 )
 
 
@@ -80,3 +82,19 @@ def test_corpus_grid_shows_counts_and_marks_empty_cells() -> None:
     assert {"120", "10,000", "3,000", "–"} <= texts(figure)
     image = axes.images[0].get_array()
     assert np.ma.is_masked(image[0, 0])
+
+
+def test_variants_of_the_word_and_of_earlier_neighbours_are_collapsed() -> None:
+    assert same_family("structure", "structures")
+    assert same_family("conceptualisation", "conceptualization")
+    assert same_family("learn", "learned")
+    assert not same_family("self-location", "self-perception")
+    assert not same_family("sense", "sensorial")
+
+    neighbours = ["representing", "structures", "knowledge", "structure", "declarative", "learn"]
+
+    assert distinct_neighbours("representation", neighbours, k=3) == [
+        "structures",
+        "knowledge",
+        "declarative",
+    ]
