@@ -1562,6 +1562,108 @@ def drift_compute(  # noqa: E501
 # ---------------------------------------------------------------------------
 
 
+@drift.command("grid")
+@click.option(
+    "--model-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/twec_grid"),
+    show_default=True,
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/drift"),
+    show_default=True,
+)
+@click.option(
+    "--words-file",
+    type=click.Path(path_type=Path),
+    default=Path("data/words_of_interest.txt"),
+    show_default=True,
+)
+@click.option(
+    "--controls-file",
+    type=click.Path(path_type=Path),
+    default=Path("data/control_words.txt"),
+    show_default=True,
+)
+@click.option("--measure-min", default=150, show_default=True, help="Occurrences in both cells.")
+@click.option("--neighbour-min", default=50, show_default=True, help="Occurrences for a neighbour.")
+@click.option("--neighbours", default=25, show_default=True)
+def drift_grid(  # noqa: PLR0913
+    model_dir: Path,
+    output_dir: Path,
+    words_file: Path,
+    controls_file: Path,
+    measure_min: int,
+    neighbour_min: int,
+    neighbours: int,
+) -> None:
+    """Measure drift on the grid: within-field trajectories and cross-field divergence.
+
+    Writes within_field.parquet (each field's consecutive decades, including the books and
+    the full cells) and cross_field.parquet (every two OpenAlex fields in the same decade),
+    one row per word measured in a pair, with percentile ranks against the pair's
+    whole-vocabulary noise floor and a candidate flag.
+    """
+    import pandas as pd  # noqa: PLC0415
+    from gensim.models import KeyedVectors  # noqa: PLC0415
+
+    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
+    from interpretant.drift.grid import (  # noqa: PLC0415
+        add_noise_floor,
+        compare_cells,
+        cross_field_pairs,
+        discover_models,
+        within_field_pairs,
+    )
+
+    targets = set(load_target_words(words_file))
+    controls = set(load_target_words(controls_file))
+    loaded: dict[Path, KeyedVectors] = {}
+
+    def vectors(path: Path) -> KeyedVectors:
+        if path not in loaded:
+            loaded[path] = KeyedVectors.load(str(path))
+        return loaded[path]
+
+    tables = {
+        "within_field": within_field_pairs(
+            discover_models(model_dir, ("books", "openalex", "openalex_full"))
+        ),
+        "cross_field": cross_field_pairs(discover_models(model_dir, ("openalex",))),
+    }
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for name, pairs in tables.items():
+        frames = []
+        for cell_a, cell_b in tqdm(pairs, desc=f"  {name}", unit="pair"):
+            pair = add_noise_floor(
+                compare_cells(
+                    vectors(cell_a.path),
+                    vectors(cell_b.path),
+                    measure_min,
+                    neighbour_min,
+                    neighbours,
+                )
+            )
+            pair.insert(0, "layer", cell_a.layer)
+            pair.insert(1, "field_a", cell_a.name)
+            pair.insert(2, "decade_a", cell_a.decade)
+            pair.insert(3, "field_b", cell_b.name)
+            pair.insert(4, "decade_b", cell_b.decade)
+            frames.append(pair)
+        table = pd.concat(frames, ignore_index=True)
+        table["is_target"] = table["word"].isin(targets)
+        table["is_control"] = table["word"].isin(controls)
+        table.to_parquet(output_dir / f"{name}.parquet", index=False)
+        control_rate = table.loc[table["is_control"], "candidate"].mean()
+        console.print(
+            f"  {name}: {len(pairs)} pairs, {len(table):,} rows, "
+            f"{int(table.loc[table['is_target'], 'candidate'].sum())} target candidates, "
+            f"controls flagged {control_rate:.1%} (expected under ~5%)"
+        )
+
+
 @cli.group()
 def pdf() -> None:
     """PDF text extraction commands (books corpus)."""
