@@ -90,6 +90,8 @@ Results are tested against predictions committed to git before the evidence exis
 - **_Embodiment_ means two different things.** In HCI it is virtual reality's sense of body ownership and presence (neighbours: _ownership, presence, illusion, self-location, agency_); in philosophy it is phenomenological corporeality (_corporeality, intersubjectivity, temporality, spatiality, being-in-the-world_). The word is now about three times as frequent in HCI as in philosophy.
 - **_Intentionality_ is stable** in philosophy from the 1980s to the 2020s.
 
+- **HCI's language moved towards philosophy's** between the 1990s and the 2020s: philosophy's language model predicts HCI's abstracts better in the 2020s, robust to shared abstracts, training size and five resampled runs ([cross-perplexity predictions](docs/predictions_cross_perplexity.md)). It is the whole-language counterpart of the _embodiment_ result.
+
 **Robust in part**
 
 - _Representation_ in AI moves towards learned representations (_embeddings, latent, contrastive, encoder_) in every run; its symbolic 1980s (_knowledge, declarative, frame-based_) holds in TWEC only.
@@ -99,6 +101,8 @@ Results are tested against predictions committed to git before the evidence exis
 
 - _Information_ converging between psychology and computer science appears with TWEC, not with PPMI-SVD.
 - Philosophy's 2020s _consciousness_ shifts under both methods, described as computational by one and as theories of consciousness (_IIT, global workspace_) by the other.
+- Fields may be converging rather than specialising: with equal training, the mean cross-perplexity between fields fell from the 1980s to the 2010s in every run. It was observed in the data that tested the opposite prediction, so it needs its own test.
+- Philosophy absorbing AI's language in the 2020s did not survive the corrected run.
 
 ---
 
@@ -175,7 +179,8 @@ To explore the interface without any corpus data, `make app-demo` runs the dashb
 
 The full plan is in [`ROADMAP.md`](ROADMAP.md). Next:
 
-- [ ] Cross-perplexity between cells, to measure the direction of borrowing
+- [x] Cross-perplexity between cells (first run and corrected run)
+- [ ] Cross-perplexity in both directions across all decades, and the words behind HCI's move towards philosophy
 - [ ] Held-out check per cell and a backoff rule for sparse cells
 - [ ] Point the dashboard at the grid drift tables
 - [ ] Sense-level drift with contextual embeddings for the open findings

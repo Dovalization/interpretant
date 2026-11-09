@@ -132,3 +132,29 @@ if fewer than 6).
 qualifying in both decades is higher in the 2010s than in the 1980s in all 5 seeds.
 
 Each prediction is *falsified* if its condition fails.
+
+### Corrected run results (2026-11-09, `scripts/score_cross_perplexity_corrected.py`)
+
+Scored as written. 3 passed, 3 falsified (two of them in the opposite direction).
+
+| | Verdict | Numbers (seeds 1–5) |
+|---|---|---|
+| D0 | **Passed** | Own model best in 100% of cells in every seed |
+| D1 | **Falsified** (reversed) | Parent → subfield lower in 0 of 6 decades for both pairs: without shared abstracts, the subfield's model predicts the parent's text better than the reverse |
+| D2 | **Passed** | Computer science closest to AI and psychology closest to cognitive psychology in 6 of 6 decades |
+| D3 | **Falsified** | E(AI → philosophy), 2020s minus 2010s: −0.055, −0.053, −0.041, +0.024, +0.005 |
+| D4 | **Passed** | E(philosophy → HCI), 2020s minus 1990s: −0.072, −0.103, −0.065, −0.056, −0.096 |
+| D5 | **Falsified** (reversed) | Mean excess over 10 fields, 2010s minus 1980s: −0.042, −0.046, −0.040, −0.061, −0.056 |
+
+### Reading
+
+- **HCI's language moved towards philosophy's** between the 1990s and the 2020s, robust to
+  shared abstracts, training size and sampling (all 5 seeds). It is the whole-language
+  counterpart of the *embodiment* finding: the field that took up *embodiment* and
+  *affordance* became more predictable from philosophy overall.
+- **Philosophy absorbing AI's language is not established**: the first run's 0.05-bit drop is
+  within seed-to-seed noise.
+- **The first run's specialisation was a training-size artefact.** With equal training, the
+  fields grew closer from the 1980s to the 2010s in every seed. This convergence and D1's
+  reversed asymmetry are observations from these data; each needs its own prediction and
+  independent evidence before it counts as a finding.
