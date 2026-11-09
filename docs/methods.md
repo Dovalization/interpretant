@@ -10,9 +10,17 @@ is described in [`corpus.md`](corpus.md); the results and their tests are in
 of the soft-hyphen artifact, transliteration to ASCII, removal of LaTeX spans, URLs and DOIs,
 replacement of non-alphanumeric characters (except in-word hyphens) with spaces, and whitespace
 collapsing. Plurals and British spellings of the target words are mapped onto one lemma
-(`TARGET_VARIANTS`); the rest of the vocabulary is not lemmatised (see the roadmap). There is no
-stop-word removal: skip-gram's frequent-word subsampling does that job without changing the
-context windows.
+(`TARGET_VARIANTS`). There is no stop-word removal: skip-gram's frequent-word subsampling does
+that job without changing the context windows.
+
+`corpus lemmas learn|apply` (`corpus/lemmas.py`) then normalises the rest of the vocabulary at
+the type level, and only in two ways: regular plurals collapse onto their singular (simplemma's
+lemma, accepted only when the token is a regular plural of it), and British spellings onto
+American ones (rules gated on simplemma's lexicon, an exception list and the American form's
+own corpus frequency). Verbs, participles and *-ing* nominalisations stay as they are, because
+a general lemmatiser maps *learning* to *learn* and *embedding* to *embed*. The map is written
+to `data/processed/lemmas.tsv` for review; the hand-kept part is `data/lemma_overrides.tsv`.
+Round 4 of the predictions tests which findings survive this change.
 
 `corpus phrases learn` fits one gensim `Phrases` model (normalised PMI ≥ 0.5, minimum count 20)
 on a balanced sample of 300,000 tokens from every cell, so the large modern cells do not decide

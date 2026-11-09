@@ -28,6 +28,21 @@ replacement of non-alphanumeric characters (except in-word hyphens) with spaces,
 whitespace collapsing. There is no stop-word removal: skip-gram's frequent-word subsampling
 does that job without changing the context windows.
 
+### Lemmatisation
+
+Since November 2026 the processed cells pass through a type-level lemma map before phrase
+detection (`corpus lemmas learn|apply`, `data/lemmatised/`). The map collapses regular plurals
+onto their singular (simplemma's lemma, accepted only when the token is `lemma + s/es`,
+`y → ies` or the *-is/-es* alternation) and British spellings onto American ones (rules for
+*-ise/-isation*, *-yse*, *-our*, *-re*, doubled *l* and a short word list, gated on
+simplemma's lexicon, an exception list and the American form's own frequency in the corpus).
+Verbs, participles and *-ing* nominalisations are deliberately left alone: a general
+lemmatiser turns *learning* into *learn* and *meaning* into *mean*, which would destroy the
+concepts under study. Target words, hyphenated and phrase tokens are never mapped. Irregular
+plurals and words kept on purpose (*data*, *media*, *means*, *odds*) are in the tracked
+`data/lemma_overrides.tsv`; the learned map (`data/processed/lemmas.tsv`, about 37,000
+types, 8.3% of tokens) is written for review and regenerated from the vocabulary.
+
 ### OpenAlex grid
 
 ```bash

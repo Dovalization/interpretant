@@ -25,6 +25,7 @@ One pipeline, run from the CLI in this order. Every command has `--help`.
 
 ```
 corpus books ingest / corpus openalex download|ingest   data/processed/<layer>/texts/<cell>.txt
+corpus lemmas learn|apply                               data/lemmatised/<layer>/texts/<cell>.txt
 corpus phrases learn|apply                              data/phrased/<layer>/texts/<cell>.txt
 corpus audit --processed-dir data/phrased --output data/phrased/audit.json
 twec grid [--seed 43 --output-dir models/twec_grid_seed43]   models/twec_grid/<layer>/<field>_<decade>.kv
@@ -55,7 +56,8 @@ analysis: predictions first, in their own commit.
   Orchestration still lives here; the library modules are pure functions and small classes.
 - `corpus/`: `base.py` (`CorpusSource` ABC, `iter_decade_slices`), `books.py` (manifest +
   extracted texts, author cap), `openalex.py` (API client, sampling, cleaning at ingest),
-  `caps.py` (author caps), `phrases.py` (gensim `Phrases` on a balanced sample),
+  `caps.py` (author caps), `lemmas.py` (type-level plural and spelling map), `phrases.py`
+  (gensim `Phrases` on a balanced sample),
   `preprocessing.py` (`preprocess_text`, target variant map), `audit.py` (cell counts, target
   coverage, manifest risks), `pdf_extractor.py` (Docling with PyMuPDF fallback).
 - `embedding/`: `base.py` (`training_sentences`: splits lines at 10,000 tokens, gensim's

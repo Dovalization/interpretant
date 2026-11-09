@@ -100,7 +100,9 @@ uv run interpretant corpus books ingest
 uv run interpretant corpus openalex download
 uv run interpretant corpus openalex ingest
 
-# Merge multi-word terms (neural_network, ...), then audit coverage
+# Collapse plurals and British spellings, merge multi-word terms, then audit coverage
+uv run interpretant corpus lemmas learn      # writes data/processed/lemmas.tsv for review
+uv run interpretant corpus lemmas apply
 uv run interpretant corpus phrases learn
 uv run interpretant corpus phrases apply
 uv run interpretant corpus audit --processed-dir data/phrased --output data/phrased/audit.json
