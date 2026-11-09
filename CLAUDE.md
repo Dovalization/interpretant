@@ -19,6 +19,24 @@ make app-demo                # dashboard on synthetic data
 make app                     # dashboard on models/twec_grid
 ```
 
+## Web explorer (`web/`)
+
+A static Next.js app (pnpm, TypeScript strict, Tailwind 4, shadcn base-nova on Base UI,
+recharts, nuqs) that reads the JSON written by `uv run python -m interpretant.export web/data`
+(`src/interpretant/export.py`; `export web` joins the CLI after the lemmatised run). The JSON is
+tracked so the site builds without Python.
+
+```bash
+cd web && pnpm install
+pnpm dev                     # local dev server
+pnpm lint && pnpm typecheck && pnpm test && pnpm build   # the CI gates; build writes out/
+```
+
+Conventions follow axm: `eslint.config.js` bans `any`, `!` and `let`; imports sorted; UI
+primitives in `src/components/ui`; pages under `src/app`; pure data helpers in `src/lib` with
+vitest tests next to them; chart colours come from `--chart-N` tokens, one per field, never
+cycled (`src/lib/fields.ts`).
+
 ## Pipeline
 
 One pipeline, run from the CLI in this order. Every command has `--help`.

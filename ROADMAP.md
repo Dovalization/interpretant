@@ -55,9 +55,9 @@ Each item that produces results gets its predictions committed first.
    TWEC loops out of `__main__.py` into the library with tests on synthetic cells; replace the
    seven `score_*.py` scripts' shared helpers with one module. GitHub Actions running ruff,
    mypy and pytest.
-3. **Dashboard on the grid tables.** Export per-target neighbours, ranks, candidate flags and
-   cross-perplexity to one small parquet; point Streamlit at it; deploy, so the README can
-   link a live demo.
+3. **Deploy the web explorer** (`web/`, built November 2026) and link it from the README, the
+   GitHub "About" field and doval.dev (whose project schema needs an `href` field). Retire the
+   Streamlit dashboard once the explorer covers its two panels.
 4. **Explain the one-sided philosophy → HCI effect.** Score HCI's held-out abstracts
    individually under philosophy's model and test whether the gain concentrates in a readable
    subset (topics) or spreads evenly (shared academic register).
