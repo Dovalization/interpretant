@@ -13,29 +13,49 @@ corpus ingest → preprocess → embed → align → drift → visualise
 
 ---
 
+## Stage 0 — Corpus redesign (November 2026)
+
+The November 2026 audit showed that the current corpus cannot test the README's goals:
+target words are too rare in most decades, single authors dominate decades, translations
+are dated by the original, sources enter partway through the series, and fields are merged
+into one model per decade. The rationale and target design are in `docs/corpus.md`.
+
+- [x] `corpus audit` — tokens per cell, target coverage and reliable transitions, author
+      concentration, dating risks (`--output` writes JSON)
+- [ ] Gate drift on the audit: skip transitions below `--min-occurrences`, show counts in
+      the dashboard
+- [ ] Compare *network*, *learning* and *representation* against HistWords to see which
+      devlog 02 findings survive
+- [ ] Phrase detection (gensim `Phrases`) before training, so `neural_network` and
+      `social_network` get their own trajectories
+- [x] Manifest: English edition year, translator and original language for every
+      translation; misfiled entries moved (`scripts/redate_books.py`; 18 wrong or unreadable
+      files replaced, 2 duplicates excluded, 1 removed, 2 pre-1820 books moved to `canon/`)
+- [ ] Author cap per cell and a leave-one-author-out check
+- [ ] Field × decade grid from 1960: OpenAlex plus PubMed, ACL and arXiv on one taxonomy,
+      equal-size systematic samples (replaces the PubMed files lost in June 2026)
+      - [x] `corpus openalex download|ingest`: seeded samples of up to 10,000 abstracts per
+            cell for 11 fields, 1950s–2020s
+      - [ ] Map PubMed, ACL and arXiv onto the same fields
+- [ ] TWEC slices per field and decade on a shared compass
+- [ ] Public-domain books before 1930, sampled by Library of Congress class and dated by
+      edition
+- [ ] Decide how to treat 1930–1960
+
+---
+
 ## Stage 1 — Corpus ingestion & preprocessing
 
-### Sources
+### State on disk (November 2026)
 
-| Source | Decades covered | Raw docs | Status |
-|--------|----------------|----------|--------|
-| arXiv (Kaggle snapshot) | 1990–2010 | ~78K | ✅ done |
-| ACL Anthology | 1960–2020 | ~90K | ✅ done |
-| PubMed baseline (n0001–n0100) | 1970–1990 | ~3M | ✅ done |
-| PubMed baseline (n0800–n0900) | ~2000s | ~3M est. | 🔄 downloading |
-| PubMed baseline (n1100–n1200) | ~2010s+ | ~3M est. | 🔄 downloading |
+Run `uv run interpretant corpus audit` for current per-cell counts.
 
-### Processed text files
-
-| Decade | arXiv | ACL | PubMed | Total |
-|--------|-------|-----|--------|-------|
-| 1960s  | —     | 160 | —      | 160   |
-| 1970s  | —     | 458 | 1,255,590 | 1,256,048 |
-| 1980s  | —     | 2,389 | 615,698 | 618,087 |
-| 1990s  | 1,729 | 5,974 | 1,128,709 | 1,136,412 |
-| 2000s  | 4,383 | 15,352 | *(pending)* | 19,735+ |
-| 2010s  | 72,164 | 34,740 | *(pending)* | 106,904+ |
-| 2020s  | —     | 31,388 | *(pending)* | 31,388+ |
+| Source | Processed decades | Raw files | Status |
+|--------|-------------------|-----------|--------|
+| Books | 1820s–2020s | 364 manifest entries, all present | ✅ intact; processed files predate ~90 manifest additions, re-run `corpus books ingest` |
+| ACL Anthology | 1960s–2020s | `anthology+abstracts.bib.gz` | ✅ intact |
+| arXiv (Kaggle snapshot) | 1990s, 2000s, 2020s | deleted | ⚠️ `arxiv_2010.txt` (72K docs) deleted June 2026 |
+| PubMed baseline | 1960s only | deleted | ❌ 1970s–2020s processed files deleted June 2026; replaced by the Stage 0 field grid |
 
 ### Known data quality notes
 - arXiv: clean, no short lines, 25 duplicates in 72K (negligible)
@@ -44,15 +64,19 @@ corpus ingest → preprocess → embed → align → drift → visualise
 - PubMed decade coverage is driven by PMID ordering — n0001–n0100 = pre-1990, n0800+ = 2000s, n1100+ = 2010s+
 
 ### Pending
-- [ ] PubMed n0800 download completes → re-run `corpus preprocess --config-name pubmed`
-- [ ] PubMed n1100 download completes → re-run `corpus preprocess --config-name pubmed`
-- [ ] Validate 2000s/2010s PubMed doc counts look reasonable
+- [x] ~~PubMed n0800/n1100 downloads and preprocessing~~ — done in March 2026, then deleted;
+      superseded by the Stage 0 field grid (the baseline file numbering changes yearly, so
+      the ranges above no longer map to decades)
+- [x] Re-run `corpus books ingest` so processed books match the manifest (42.3M tokens)
 
 ---
 
 ## Stage 2 — Embedding training
 
-**Status: implemented, not yet run on real data**
+**Status: ran in March 2026 with TWEC (see Stage 3); models partly deleted, retrain after Stage 0**
+
+Surviving TWEC models in `models/twec/`: 1820s–1970s and 2020s. The compass and the
+1980s–2010s decade models lost their `.vectors.npy` files in June 2026 and cannot be loaded.
 
 ### What's implemented ✅
 - `Word2VecTrainer` — skip-gram, 300-dim, window=10, min_count=10, 5 epochs
@@ -66,14 +90,20 @@ corpus ingest → preprocess → embed → align → drift → visualise
   - Rich table: docs / tokens / vocab size per decade
 
 ### Pending
-- [ ] Wait for PubMed preprocessing to finish, then run: `interpretant embed train`
-- [ ] Validate vocab sizes are >5K per decade
+- [x] ~~Run `interpretant embed train`~~ — superseded by `twec train` (March 2026)
+- [x] ~~Validate vocab sizes are >5K per decade~~ — 108K–196K per decade from the 1960s
+- [ ] Retrain after Stage 0, with phrase detection and per-field slices
 
 ---
 
 ## Stage 3 — Alignment
 
-**Status: implemented, not yet run on real data**
+**Status: TWEC in use; Procrustes kept as the fallback**
+
+TWEC is implemented as a trainer, not an aligner: `embedding/twec.py` and the `twec train`
+command train every decade against a shared compass, so decade vectors share one coordinate
+system and need no post-hoc alignment. It runs on standard gensim, so the `TWECAligner`
+stub in `alignment/twec.py` (which asks for a custom gensim fork) is obsolete.
 
 ### What's implemented ✅
 - `ProcrustesAligner.fit()` — loads gensim models, computes orthogonal Procrustes rotation per decade
@@ -83,14 +113,18 @@ corpus ingest → preprocess → embed → align → drift → visualise
 - `align run` CLI — fully wired: `--model-dir`, `--output-dir`, `--reference-decade`
 
 ### Pending
-- [ ] Run once Stage 2 completes: `interpretant align run`
-- [ ] Validate shared vocabulary size >5K words across all decades
+- [x] ~~Run `interpretant align run`~~ — not needed with TWEC
+- [ ] Remove the obsolete `TWECAligner` stub
 
 ---
 
 ## Stage 4 — Drift computation
 
-**Status: implemented, not yet run on real data**
+**Status: ran in March 2026 on the TWEC models — `data/processed/drift.parquet`, 592,584 rows**
+
+Since then: per-pair vocabularies instead of a global intersection, neighbourhood `k`
+lowered to 10 (`--neighborhood-k`), and chunked target-row similarity to bound memory.
+The results predate the corpus audit: many transitions fall below the reliability threshold.
 
 ### What's implemented ✅
 - `cosine_distance(v1, v2)` — 1 − cosine similarity
@@ -102,14 +136,19 @@ corpus ingest → preprocess → embed → align → drift → visualise
   - `--words` flag for curated word list; defaults to full shared vocab
 
 ### Pending
-- [ ] Run once Stage 3 completes: `interpretant drift compute`
+- [x] ~~Run `interpretant drift compute`~~ — done March 2026
+- [ ] Skip transitions below the audit threshold (Stage 0)
 - [ ] `changepoint.py` is a stub — implement PELT or BOCPD for drift breakpoint detection
 
 ---
 
 ## Stage 5 — Visualisation & app
 
-**Status: demo works with synthetic data, real-data path implemented but untested**
+**Status: demo works with synthetic data; the real-data path reads Procrustes output
+(`models/aligned/*.kv`), not the TWEC models, and is untested**
+
+The plots used in the devlogs come from standalone scripts in `scripts/` (`plot_drift.py`,
+`plot_fields.py`, `plot_word.py`), not from the dashboard.
 
 ### What's implemented
 - Streamlit dashboard with 4 panels: sidebar, trajectory scatter (PCA), drift line chart, neighbours table ✅
@@ -120,7 +159,7 @@ corpus ingest → preprocess → embed → align → drift → visualise
 - Real-data path: loads `models/aligned/*.kv` via `ProcrustesAligner.load_aligned()` ✅
 
 ### What needs building
-- [ ] Test real-data dashboard path end-to-end once Stages 2–4 complete
+- [ ] Point the real-data path at the TWEC models and test it end to end
 - [ ] Implement `build_heatmap_figure()` — word × decade drift heatmap
 - [ ] Add corpus selector to sidebar (show drift per source or merged)
 - [ ] Add decade range slider to sidebar
@@ -137,16 +176,16 @@ corpus ingest → preprocess → embed → align → drift → visualise
 | mypy (strict) | ✅ |
 | pytest + synthetic fixtures | ✅ |
 | Hydra/OmegaConf config tree | ✅ |
-| DVC pipeline (`dvc.yaml`) | ✅ defined, not yet run end-to-end |
+| DVC pipeline (`dvc.yaml`) | ✅ defined, not yet run end-to-end; does not include the `twec train` stage |
 | Makefile targets | ✅ |
-| MkDocs docs structure | ✅ stubs |
-| Git repo | ❌ not initialised |
+| MkDocs docs structure | ✅ `corpus.md` written (Nov 2026); other pages are stubs |
+| Git repo | ✅ initialised March 2026 |
 
 ---
 
 ## Stage 1b — Books corpus (PDF extraction)
 
-**Status: not started**
+**Status: implemented and in use — 364 manifest entries across 1820s–2020s**
 
 A parallel corpus path for book-length texts (philosophy, history of science, etc.) that don't appear in arXiv/ACL/PubMed. PDFs are dropped into an inbox folder and extracted to clean `.txt` files via Docling, then ingested into decade slices alongside the journal corpora.
 
@@ -205,7 +244,8 @@ pymupdf>=1.24
 
 ### Pending
 - [ ] README section on PDF extraction
-- [ ] Drop real PDFs into inbox and run end-to-end to validate
+- [x] ~~Drop real PDFs into inbox and run end-to-end to validate~~ — done; the books layer
+      was built this way (Docling handled scanned books such as Hansen)
 
 ### Notes
 - Docling v2 API: use `DocumentConverter`, call `result.document.export_to_markdown()`. Do NOT use v1 `DoclingDocument` directly.
@@ -216,11 +256,14 @@ pymupdf>=1.24
 
 ## Immediate next actions (in order)
 
-1. **PubMed preprocessing finishes** (running now, ~300 files, ~25 min) → validate 2000s/2010s doc counts
-2. **Run `interpretant embed train`** — merged arxiv + acl + pubmed, 1970–2020
-3. **Run `interpretant align run`** — Procrustes alignment, reference decade 2010
-4. **Run `interpretant drift compute`** — writes `drift.parquet`
-5. **Validate dashboard on real data** — `interpretant app`
-6. **Implement heatmap panel** (`build_heatmap_figure`)
-7. **Drop PDFs into inbox, run `pdf extract` + `corpus books ingest`** — validate books pipeline end-to-end
-8. **Initialise git repo**
+The March 2026 list (PubMed preprocessing, train, align, drift, books validation, git) is
+done. The work now follows Stage 0:
+
+1. **Gate drift on the audit** — `drift compute` skips transitions below `--min-occurrences`
+2. **HistWords comparison** — check *network*, *learning* and *representation* against
+   general English to see which devlog 02 findings survive
+3. **Phrase detection** before training
+4. **Manifest dating** — English edition, translator, original language; fix misfiled entries
+5. **Field × decade grid from 1960** — OpenAlex, PubMed, ACL, arXiv
+6. **Retrain TWEC** with per-field slices, then recompute drift
+7. **Dashboard on TWEC output**, heatmap panel
