@@ -620,3 +620,37 @@ CHI, CHI EA, UIST, VRST, IJHCI, HFES proceedings, CRC Press eBooks and two more,
 documents); every text holds out **150** abstracts; every model trains on **90,000 tokens**
 (HCI_v's smallest pool over seeds is 166,316 / 101,999 tokens). K1–K4 and the reading rule
 are as in round K. Scored by `scripts/score_venue.py` with these constants.
+
+### Round K′ results (2026-11-09, `scripts/score_venue.py`)
+
+Scored as written. 3 passed, 1 falsified.
+
+| | Verdict | Numbers (seeds 1–5) |
+|---|---|---|
+| K1 | **Passed** | Falls on HCI_v: psychology 0.054, 0.163, 0.109, 0.025, 0.108; sociology 0.243, 0.346, 0.290, 0.322, 0.231 |
+| K2 | **Passed** | Mix > rate in 5 of 5 for both; psychology (fall, mix, rate) ≈ (0.09, 0.17, −0.07), sociology ≈ (0.29, 0.22, 0.06) |
+| K3 | **Falsified** | Mean fall on HCI_v over mean fall on HCI_all: psychology 0.092 / 0.184, just under 0.50; sociology 0.286 / 0.234 = 1.22 |
+| K4 | **Passed** | AI's mean fall on HCI_v −0.053 against psychology's 0.092 |
+
+Shared venues at the K′ rule: CHI (305 / 218 documents), CHI EA (258 / 155), HFES proceedings
+(440 / 35), *Behaviour and Information Technology* (134 / 23), UIST (100 / 52), IJHCI
+(76 / 99), CRC Press eBooks (97 / 115), VRST (33 / 52), DIS (28 / 107). They hold 20.2% of the
+1990s cleaned cell and 8.9% of the 2020s one.
+
+### Reading
+
+By the rule written before round K: **both happened.** The field moved: inside the venues HCI
+had in both decades, psychology's and sociology's models predict its 2020s abstracts better in
+every seed, through the word mix, while AI's model does not. And the label broadened: the
+OpenAlex HCI cell went from 915 sources to 3,601, the venue-stable share fell from a fifth to
+under a tenth, and the sources that grew are virtual-reality workshops, repositories, publisher
+eBook series and sensor journals. How much of round J's measured size each accounts for depends
+on the model doing the measuring: for sociology's the effect is larger inside fixed venues than
+on the whole cell (nothing of it is the label); for psychology's, half of it. K3 failed on
+psychology's ratio by less than a thousandth of a bit, and the verdict stands as written.
+
+So the headline keeps its substance with a qualification: HCI's prose moved out of computing's
+register into the behavioural and social sciences' inside its own venues, and OpenAlex's HCI
+label also widened to take in work from adjacent fields, which made the whole-cell measurement
+larger than the field's own move. Both are findings about the corpus; the second is also a
+warning about any claim that rests on a subfield label held fixed across seventy years.

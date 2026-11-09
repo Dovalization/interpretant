@@ -40,6 +40,7 @@ ROUNDS: dict[str, tuple[str, str]] = {
     "H": ("Follow-up", "philosophy's turn towards technology"),
     "G": ("Decomposition", "where the philosophy → HCI gain sits"),
     "J": ("Mechanism", "is the philosophy → HCI effect HCI's own word mix"),
+    "K": ("Venues", "the field's move or OpenAlex's label (scored as round K′)"),
 }
 _TITLE = re.compile(r"^\*\*([A-Z]\d+) — ([\s\S]*?)\*\*", re.MULTILINE)
 _VERDICT = re.compile(

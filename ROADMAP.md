@@ -42,8 +42,9 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
   experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
   under TWEC in both corpora, described differently by each method).
 - Not robust: *information* converging between psychology and computer science.
-- Open: the cause of HCI's move (the field's own history, CHI's turn to user studies, is the
-  obvious candidate; the corpus can date it decade by decade).
+- Open: the cause of HCI's move (CHI's turn to user studies is the obvious candidate; the
+  corpus can date it decade by decade). Label scope over time is now a known hazard: a
+  venue-stable check should accompany any whole-cell claim that spans decades.
 
 ---
 
@@ -59,9 +60,10 @@ Each item that produces results gets its predictions committed first.
 3. **Deploy the web explorer** (`web/`, built November 2026) and link it from the README, the
    GitHub "About" field and doval.dev (whose project schema needs an `href` field). Retire the
    Streamlit dashboard once the explorer covers its two panels.
-4. ~~Explain the one-sided philosophy → HCI effect~~ Rounds G and J (2026-11-09): HCI's
-   language moved out of computing's register into the behavioural and social sciences'; the
-   gain is HCI's own word mix and every non-computing model shares it.
+4. ~~Explain the one-sided philosophy → HCI effect~~ Rounds G, J and K′ (2026-11-09): HCI's
+   language moved out of computing's register into the behavioural and social sciences',
+   inside its own venues; the OpenAlex HCI label also widened (915 → 3,601 sources), which
+   inflated the whole-cell size. Venue lookups: `corpus openalex sources`.
 5. **Field separability over time.** A TF-IDF and logistic-regression classifier that guesses
    the field from an abstract, per decade; falling accuracy between two fields measures
    convergence, and the misclassified abstracts are the borrowing cases to read.
