@@ -35,7 +35,7 @@ export function FrequencyChart({ points, fields }: FrequencyChartProps) {
         {fields.map((field) => (
           <Line
             key={field}
-            type="monotone"
+            type="linear"
             dataKey={field}
             name={fieldLabel(field)}
             stroke={fieldColor(field)}

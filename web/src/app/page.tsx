@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { CorpusGrid } from "@/components/explorer/corpus-grid";
+import { roundTotals } from "@/components/explorer/scorecard";
 import { FigurePanel } from "@/components/figure-panel";
 import { ArticleMeta } from "@/components/layout/article-meta";
 import { StatStrip } from "@/components/stat-strip";
@@ -80,6 +81,52 @@ export default function HomePage() {
           </Link>
         ))}
       </section>
+
+      <FigurePanel
+        heading="Tested against predictions committed before the evidence"
+        subheading="Every round, with its misses"
+        legend={
+          <>
+            Each prediction names its comparison, threshold and what falsifies it, and is committed
+            to git before the evidence exists. The verdicts are never edited.{" "}
+            <Link
+              href="/predictions"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              Read the ledger
+            </Link>
+            .
+          </>
+        }
+      >
+        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {predictions.rounds.map((round) => {
+            const totals = roundTotals(
+              predictions.predictions.filter((prediction) => prediction.round === round.id),
+            );
+            const total = totals.passed + totals.falsified;
+            return (
+              <li key={round.id} className="rounded-md border bg-card p-3">
+                <p className="text-sm font-semibold">{round.title}</p>
+                <p className="text-xs text-muted-foreground">{round.subtitle}</p>
+                <div className="mt-2 flex h-1.5 overflow-hidden rounded-full bg-muted">
+                  {total > 0 && (
+                    <span
+                      className="bg-success"
+                      style={{ width: `${(totals.passed / total) * 100}%` }}
+                    />
+                  )}
+                </div>
+                <p className="mt-1.5 text-xs text-muted-foreground tabular-nums">
+                  {totals.pending > 0
+                    ? `${totals.pending} pending`
+                    : `${totals.passed} of ${total} passed`}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      </FigurePanel>
 
       <FigurePanel
         heading="The corpus is a grid"

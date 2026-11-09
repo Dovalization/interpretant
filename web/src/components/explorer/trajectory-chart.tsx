@@ -52,7 +52,7 @@ export function TrajectoryChart({ field, rows }: TrajectoryChartProps) {
           <ReferenceLine y={95} stroke="var(--color-muted-foreground)" strokeDasharray="4 4" />
           <Tooltip content={<ChartTooltipContent />} cursor={{ stroke: "var(--color-border)" }} />
           <Line
-            type="monotone"
+            type="linear"
             dataKey="cosineRank"
             stroke={color}
             strokeWidth={2}
@@ -70,7 +70,7 @@ export function TrajectoryChart({ field, rows }: TrajectoryChartProps) {
             isAnimationActive={false}
           />
           <Line
-            type="monotone"
+            type="linear"
             dataKey="shiftRank"
             stroke={color}
             strokeWidth={2}
