@@ -507,3 +507,36 @@ Reading rule: J1, J2 and J4 passing means the effect was HCI's text changing, an
 "philosophy → HCI" result of D4 and L8 is one instance of a general gain on HCI; J3 passing
 means the change is the word mix. J4 failing with J1 passing means a general convergence that
 HCI merely shares. Scored by `scripts/score_mix.py`, committed before it is run.
+
+### Round J results (2026-11-09, `scripts/score_mix.py`)
+
+Scored as written. 3 passed, 1 falsified.
+
+| | Verdict | Numbers |
+|---|---|---|
+| J1 | **Falsified** | 7 of 9 models gain on HCI (needed 8). Falls of mean E(X → HCI), 1990s → 2020s: neuroscience 0.640, sociology 0.256, psychology 0.252, communication 0.110, cognitive psychology 0.082, linguistics 0.048, history and philosophy of science 0.015; **AI −0.033, computer science −0.004** |
+| J2 | **Passed** | 6 of 9 fall in all 5 seeds: cognitive psychology, communication, linguistics, neuroscience, psychology, sociology |
+| J3 | **Passed** | Mix effect exceeds rate effect in 5 of 5 seeds for both: psychology (fall, mix, rate) ≈ (0.25, 0.25, 0.01); sociology ≈ (0.26, 0.18, 0.07) |
+| J4 | **Passed** | 7 of 9 models fall more on HCI than their median fall on other texts; the two exceptions are AI (−0.033 vs 0.079) and computer science (−0.004 vs 0.105) |
+
+For comparison, philosophy's fall on HCI (L8) is 0.071–0.103 bits: among the smaller gains.
+
+### Reading
+
+The mechanism is confirmed and it has a shape the earlier rounds could not see. **HCI's
+language moved out of computing's register and towards the behavioural and social sciences'.**
+Every non-computing field's model predicts HCI's 2020s abstracts better than its 1990s ones, in
+every seed, and by more than it gained on other texts; the gain is almost entirely a change in
+HCI's word mix (for psychology's model the per-word rates did not change at all). The two
+computing models, AI and computer science, are the exceptions J1 needed and did not get: they
+did not gain on HCI, and relative to their gains elsewhere they lost ground. HCI stopped writing
+GUI-engineering prose (*menu, display, graphical, user_interface, software, operator*) and
+started writing *research, study, participant, experience*, which the social sciences' models
+already knew and computing's did not.
+
+Seen from here, the result of rounds D, F, H, L and G, "philosophy's model came to predict HCI
+better", was true and misleading: philosophy was one of the smaller beneficiaries of a change
+in HCI that favoured psychology, sociology and neuroscience far more. The one-sidedness (F2, G5)
+follows too: HCI moved; nobody moved towards HCI. What the embedding grid showed for one word,
+*embodiment* becoming HCI's own virtual-reality term, the language models show for HCI as a
+whole, from the other side: the field's prose became a behavioural science's.

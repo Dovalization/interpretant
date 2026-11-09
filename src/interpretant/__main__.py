@@ -1555,6 +1555,7 @@ def figures(model_dir: Path, drift_dir: Path, audit_path: Path, output_dir: Path
         NeighbourColumn,
         corpus_grid,
         excess_by_decade,
+        fall_by_model,
         field_label,
         neighbour_panel,
     )
@@ -1592,6 +1593,15 @@ def figures(model_dir: Path, drift_dir: Path, audit_path: Path, output_dir: Path
         title="Philosophy's model learned to predict HCI; HCI's did not learn philosophy",
         subtitle="Excess cross-entropy of one field's held-out abstracts under the other field's bigram model",  # noqa: E501
         footnote="Kneser-Ney bigrams, 200,000 training tokens per cell, shared abstracts removed, 1,000 held-out abstracts; points are 5 resampled runs, lines their mean.",  # noqa: E501
+    )
+    drawn["hci_gains"] = fall_by_model(
+        table,
+        "hci",
+        1990,
+        2020,
+        title="HCI's language moved towards the behavioural and social sciences'",
+        subtitle="How much better each field's model predicts HCI's abstracts in the 2020s than in the 1990s",  # noqa: E501
+        footnote="Bars: mean over five resampled runs; points: the runs. Corrected design (200,000 training tokens, shared abstracts removed, 1,000 held-out abstracts). AI's and computer science's models are the two that did not gain.",  # noqa: E501
     )
     report = json.loads(audit_path.read_text(encoding="utf-8"))
     cells = pd.DataFrame(report["cells"])[["source", "decade", "documents"]]

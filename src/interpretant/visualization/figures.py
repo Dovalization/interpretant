@@ -286,3 +286,53 @@ def corpus_grid(
     if footnote:
         add_footnote(figure, footnote)
     return figure
+
+
+def fall_by_model(
+    table: pd.DataFrame,
+    text_field: str,
+    early: int,
+    late: int,
+    title: str,
+    subtitle: str = "",
+    footnote: str = "",
+) -> Figure:
+    """How much better each field's model predicts one field's text in ``late`` than ``early``.
+
+    One bar per model (the fall of excess cross-entropy, bits per token, mean over seeds), the
+    seeds as points, sorted; one hue, since the bars are one measure.
+    """
+    rows = table[table["text_field"] == text_field]
+    rows = rows[rows["model_field"] != text_field]
+    falls = (
+        rows.pivot_table(index=["model_field", "seed"], columns="decade", values="excess")
+        .pipe(lambda frame: frame[early] - frame[late])
+        .rename("fall")
+        .reset_index()
+    )
+    means = falls.groupby("model_field")["fall"].mean().sort_values()
+    models = list(means.index)
+    height = 0.42 * len(models) + 2.2
+    figure = new_figure((8, height), title, subtitle)
+    axes = figure.add_axes((0.3, 0.12, 0.66, plot_top(height) - 0.12))
+    style_axes(axes, grid_axis="x")
+    positions = range(len(models))
+    axes.barh(positions, means.to_numpy(), color=SERIES[0], height=0.55, zorder=2)
+    for position, model in zip(positions, models, strict=True):
+        seeds = falls.loc[falls["model_field"] == model, "fall"]
+        axes.scatter(
+            seeds, [position] * len(seeds), s=18, color=INK, alpha=0.6, zorder=3, linewidths=0
+        )
+    axes.axvline(0, color=AXIS, linewidth=0.8)
+    axes.set_yticks(list(positions))
+    axes.set_yticklabels([field_label(model) for model in models])
+    axes.tick_params(axis="y", length=0)
+    axes.set_xlabel(
+        f"fall in excess cross-entropy on {field_label(text_field)}'s abstracts, "
+        f"{decade_label(early)} to {decade_label(late)} (bits per token)",
+        color=INK_SECONDARY,
+        fontproperties=font("Regular", 9),
+    )
+    if footnote:
+        add_footnote(figure, footnote)
+    return figure
