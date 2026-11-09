@@ -106,3 +106,51 @@ Scored against the definitions above, unchanged. 3 passed, 6 falsified.
   theories of mind. These remain falsified; any hypothesis drawn from the observed neighbours
   is new and must be tested on independent evidence (other seeds, PPMI-SVD), not on these
   results.
+
+---
+
+## Round 2 (committed 2026-11-09, before the seed-43 models and any of the evidence below
+were inspected)
+
+Round 1's surprises become predictions here, tested only on evidence not yet seen: the grid
+retrained with seed 43 (`models/twec_grid_seed43`, same text, compass sample and settings;
+only the training randomness differs), and decades or field pairs round 1 did not inspect.
+The definitions of round 1 apply. A prediction passes only if **every** listed piece of
+evidence agrees; any disagreement falsifies it.
+
+**R1 — P3 replicates** (seed 43). *representation* in AI: 1980s near
+{knowledge, logic, rule, symbolic, reasoning, frame}; 2010s or 2020s near
+{feature, learned, embedding, deep, latent, encoder}.
+
+**R2 — P7 replicates** (seed 43). No candidate for *intentionality* in philosophy (full
+cells) in any transition from the 1980s to the 2020s.
+
+**R3 — HCI's *embodiment* is the virtual-reality sense** (full cells; seed 43 2020s, and
+seed 42 2010s). At least 3 of {presence, ownership, illusion, immersion, self-location,
+avatar, virtual, agency} among its neighbours.
+
+**R4 — philosophy's *embodiment* is phenomenological** (full cells; seed 43 2020s, and seed
+42 2010s). At least 3 of {corporeality, spatiality, intersubjectivity, affectivity,
+temporality, lived, flesh, embodied} among its neighbours.
+
+**R5 — philosophy's 2020s *consciousness* turns computational** (seed 43 full cells, and seed
+42 main grid). 2010s → 2020s is a candidate, and the 2020s neighbours contain at least 3 of
+{computation, computational, neural, substrate, information_processing, informational,
+intelligence}.
+
+**R6 — *information* converges between psychology and computer science** (seed 43
+psychology × computer science, and seed 42 cognitive psychology × computer science). The
+mean cross-field rank over the 1960s–70s is at least 15 points higher than over the
+2000s–10s.
+
+**R7 — HCI's *affordance* is about experiential qualities** (seed 43 full cells, 2010s and
+2020s). At least 3 of {experiential, qualities, physicality, interactivity, metaphors,
+sensorial, materiality} among its neighbours in each decade.
+
+**R8 — corrected cross-field sanity check** (seed 42 cross-field table). Cross-field controls
+are the 15 words of `data/control_words.txt` whose per-million rate varies least across the
+11 OpenAlex fields (lowest coefficient of variation, decades pooled), chosen from counts
+only and written to `data/control_words_cross_field.txt`. Under 5% of their measurements
+are candidates, and no control is a candidate in more pairs than the 99th percentile of a
+binomial distribution with its number of measured pairs and the table's overall candidate
+rate. *Falsified* if either bound is broken.
