@@ -26,8 +26,9 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       the dashboard
 - [ ] Compare *network*, *learning* and *representation* against HistWords to see which
       devlog 02 findings survive
-- [ ] Phrase detection (gensim `Phrases`) before training, so `neural_network` and
-      `social_network` get their own trajectories
+- [x] Phrase detection (gensim `Phrases`) before training, so `neural_network` and
+      `social_network` get their own trajectories (`corpus phrases learn|apply`)
+- [ ] Language filter for ACL (French papers surfaced in the phrase review)
 - [x] Manifest: English edition year, translator and original language for every
       translation; misfiled entries moved (`scripts/redate_books.py`; 18 wrong or unreadable
       files replaced, 2 duplicates excluded, 1 removed, 2 pre-1820 books moved to `canon/`)

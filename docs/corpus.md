@@ -83,6 +83,22 @@ Control words, frequency-matched to the targets and expected to stay stable, wil
 `data/control_words.txt`; a target counts as drifting only if it moves more than the
 controls in the same cell.
 
+### Phrase detection
+
+```bash
+uv run interpretant corpus phrases learn   # data/processed/phrases.model + phrases.tsv for review
+uv run interpretant corpus phrases apply   # data/phrased/<source>/texts/<source>_<decade>.txt
+```
+
+One gensim `Phrases` model (normalised PMI ≥ 0.5, min count 20) is learned from a
+balanced sample, 300,000 tokens from every processed file, so the large modern cells do not
+decide the phrases of the 1850s, and the same model is applied everywhere. Learned phrases
+never absorb a single-word target; the phrase targets are always merged. The learning step
+also repairs words broken across lines in OCR'd books: a pair whose halves join into a word
+more frequent than the pair (*lan guage*) is written as that word. A November 2026 trial on
+the books, ACL and arXiv learned about 1,260 phrases and 92 repairs; it also surfaced French
+text in ACL (*sur_les*, *c_est*), which needs a language filter.
+
 ## Auditing the corpus
 
 ```bash
