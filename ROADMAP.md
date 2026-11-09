@@ -38,10 +38,30 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       - [x] `corpus openalex download|ingest`: seeded samples of up to 10,000 abstracts per
             cell for 11 fields, 1950s–2020s
       - [ ] Map PubMed, ACL and arXiv onto the same fields
+- [ ] Control words: 15–20 frequency-matched everyday words in `data/control_words.txt`; a
+      target drifts only if it moves more than the controls in the same cell
 - [ ] TWEC slices per field and decade on a shared compass
+- [ ] PPMI-SVD per cell as a count-based robustness check (Church 2017: word2vec approximates
+      a PMI factorisation; Hamilton et al. 2016: SVD is more stable on small corpora). A drift
+      finding counts only if TWEC and PPMI-SVD agree
+- [ ] Cross-perplexity between cells: a Kneser-Ney n-gram model per field × decade, each cell
+      scored by every other cell's model. Perplexity is asymmetric, so the field × field
+      matrix measures the direction of borrowing, and its change over decades measures
+      convergence and divergence
 - [ ] Public-domain books before 1930, sampled by Library of Congress class and dated by
       edition
 - [ ] Decide how to treat 1930–1960
+
+### After the first results
+
+- [ ] Field separability over time: a TF-IDF and logistic-regression classifier that guesses
+      the field from an abstract, per decade. Falling accuracy between two fields measures
+      convergence; misclassified abstracts are the borrowing cases to read
+- [ ] Sense-level drift with contextual embeddings: encode every occurrence of polysemous
+      targets (*network*, *representation*, *interface*), cluster the occurrences into
+      senses, and track each sense's share by field and decade (Giulianelli et al. 2020).
+      Catches bare uses that phrase detection cannot separate. Runs on the homelab
+      RTX 4070 SUPER (12 GB)
 
 ---
 
