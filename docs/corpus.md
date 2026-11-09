@@ -146,6 +146,11 @@ The audit reports four things:
   Island*), mostly from wrong Gutenberg IDs. Four more were a different translation or
   work than the manifest said (Hegel's *Phenomenology* is Inwood 2018, Kant is Meiklejohn
   1855, Kafka's *Trial* is Wyllie, Descartes was the *Discourse*).
+- **Books were mostly untrained.** gensim's compiled training loop truncates a sentence
+  after 10,000 tokens, and books are stored one per line (about 120,000 tokens on
+  average). Every training run before November 2026 saw only the first 10,000 tokens of
+  each book, mostly front matter. Training now splits each line into sentences of at most
+  10,000 tokens (`interpretant.embedding.base.training_sentences`).
 - **Data loss.** PubMed processed files for the 1970s–2020s, raw PubMed and arXiv
   downloads, `arxiv_2010.txt`, the compass vectors and the 1980s–2010s decade vectors were
   deleted in June 2026. `drift.parquet` and `field_lexicons.json` survive.

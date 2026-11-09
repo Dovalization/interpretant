@@ -32,7 +32,8 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
 - [x] Manifest: English edition year, translator and original language for every
       translation; misfiled entries moved (`scripts/redate_books.py`; 18 wrong or unreadable
       files replaced, 2 duplicates excluded, 1 removed, 2 pre-1820 books moved to `canon/`)
-- [ ] Author cap per cell and a leave-one-author-out check
+- [x] Author cap per cell and a leave-one-author-out check (books: 250,000 tokens per
+      author per decade; OpenAlex: 1% of works; `corpus books ingest --leave-out-largest-author`)
 - [ ] Field × decade grid from 1960: OpenAlex plus PubMed, ACL and arXiv on one taxonomy,
       equal-size systematic samples (replaces the PubMed files lost in June 2026)
       - [x] `corpus openalex download|ingest`: seeded samples of up to 10,000 abstracts per
