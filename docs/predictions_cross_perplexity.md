@@ -212,3 +212,37 @@ earlier description, "HCI's language moved towards philosophy's", was wrong and 
 corrected in the README and ROADMAP. Philosophy's turn to technology is a hypothesis from
 these data and needs its own test. F3's ranking, weighted by occurrences, lets very frequent
 words dominate; a per-occurrence ranking would be the better design for such a test.
+
+---
+
+## Philosophy's turn towards technology (committed 2026-11-09, before the evidence below was
+inspected)
+
+Tests the hypothesis from the follow-up: philosophy's language broadened into technology. All
+evidence is unseen: philosophy's pairs with computer science and AI in the corrected run, the
+full philosophy cells with a technology lexicon that excludes every word of the exploratory
+count (*digital, virtual, design, user, interface, technology, algorithm*), and a word ranking
+per occurrence rather than weighted by frequency.
+
+**H1 — Philosophy's model comes to predict computing's text better.** In all 5 seeds,
+E(philosophy → computer science) and E(philosophy → AI) are each lower in the 2020s than in
+the 1990s.
+
+**H2 — The change is one-sided.** In all 5 seeds, E(computer science → philosophy) changes
+less between the 1990s and the 2020s, in absolute value, than E(philosophy → computer
+science) does.
+
+**H3 — Philosophy writes more about technology, decade by decade.** In the full philosophy
+cells, the share of abstracts containing at least one word of {internet, online, software,
+computer, computers, computational, robot, robots, artificial_intelligence, algorithmic, data,
+machine, machines, web, cyber, automation, platform, platforms} rises at every step from the
+1980s to the 2020s.
+
+**H4 — Philosophy reaches computing through ethics and society.** On computer science's
+held-out text, per-word excess (bits per occurrence that computer science's own model saves
+over philosophy's, pooled over the 5 seeds) is compared between the 1990s and the 2020s for
+words with at least 100 pooled occurrences in each decade. Ranked by their fall per
+occurrence, at least 3 of {ethics, ethical, social, society, human, humans, privacy, trust,
+moral, responsibility, values, fairness} are in the top 50.
+
+Each prediction is *falsified* if its condition fails.
