@@ -12,13 +12,13 @@ Two findings have survived a second training seed, a second method, a lemmatised
 
 ## Findings
 
-Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed) and four rounds on cross-perplexity. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md) and [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md); the story is in [devlog 04](devlogs/04.md) (the grid) and [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus).
+Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed) and five rounds on cross-perplexity. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md) and [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md); the story is in [devlog 04](devlogs/04.md) (the grid) and [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus).
 
 **Robust across seeds and methods**
 
 - **_Embodiment_ means two different things.** In HCI it is virtual reality's sense of body ownership and presence (neighbours: _ownership, presence, illusion, immersion, self-location_); in philosophy it is phenomenological corporeality (_corporeality, intersubjectivity, temporality, spatiality, affectivity_). It passed every test it faced: unseen decades, a second seed, a second method, and the lemmatised corpus in both seeds. The word is now about three times as frequent in HCI as in philosophy.
 - **_Intentionality_ is stable** in philosophy from the 1980s to the 2020s, under both methods and in both seeds of the lemmatised corpus.
-- **Philosophy's language model came to predict HCI's abstracts better, and not the reverse.** From the 1990s to the 2020s, robust to shared abstracts, training size, five resampled runs and the lemmatised corpus. The effect is specific to HCI, and its cause is open: neither HCI borrowing philosophy's language nor philosophy broadening into technology survived testing.
+- **Philosophy's language model came to predict HCI's abstracts better, and not the reverse.** From the 1990s to the 2020s, robust to shared abstracts, training size, five resampled runs and the lemmatised corpus. The effect is specific to HCI and is a matter of register, not topics: the whole distribution of HCI abstracts became more predictable, most of all the ones without any philosophical theme, and the words carrying it are HCI's ordinary nouns (_user, design, interface, interaction, digital_). Neither HCI borrowing philosophy's language nor philosophy broadening into computing survived testing; the reading that fits every round is that philosophy acquired HCI's objects without computing's methods.
 - **Fields converged between the 1980s and the 2010s**, and **a subfield's model predicts its parent field better than the reverse** (AI → computer science, cognitive psychology → psychology): both first seen as reversed predictions, then predicted and confirmed on the lemmatised corpus.
 
 ![Excess cross-entropy between philosophy and HCI, 1990s to 2020s](figures/philosophy_hci.png)
@@ -34,7 +34,8 @@ Results are tested against predictions committed before the evidence: four round
 **Open**
 
 - _Information_ converging between psychology and computer science: seen in both unlemmatised TWEC seeds, absent in PPMI-SVD, and under the committed threshold on the lemmatised corpus. Not robust.
-- The cause of the one-sided philosophy → HCI effect.
+- Whether philosophy's gain on HCI is specifically HCI's object nouns (_user, interface, design, the digital_) rather than computing's method nouns: the reading from rounds F, H and G, not yet a scored prediction.
+- The share of HCI abstracts using philosophy's theme words (_experience, value, meaning, agency, embodied_) doubled from the 1990s to the 2020s; observed in round G, not predicted.
 
 My guesses before each round were worse than the method. Round 1 passed 3 of 9 predictions; the misses, stated as predictions, passed on unseen evidence in round 2 (7 of 9); round 4, on the lemmatised corpus, passed 9 of 11, and one of its misses was a wrong guess about the instrument itself (neighbour pools shrank when frequent plurals merged, instead of growing). The predictions files record every miss and every correction of an interpretation.
 

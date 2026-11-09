@@ -372,3 +372,54 @@ lowest excess and the ten with the highest, first 25 words each, printed for rea
 
 Scored by `scripts/score_decomposition.py`, committed before it is run. Results are appended
 below after the run.
+
+### Round G results (2026-11-09, `scripts/score_decomposition.py`)
+
+Scored as written. 3 passed, 2 falsified.
+
+| | Verdict | Numbers (seeds 1–5) |
+|---|---|---|
+| G1 | **Passed** | Median fall / mean fall: 0.84, 1.39, 1.21, 1.53, 0.84 |
+| G2 | **Falsified** | q25 fall / q75 fall: 1.00, 1.63, 0.55, 2.16, 0.82; over 1.5 in seeds 2 and 4 |
+| G3 | **Passed** | Fall on plain abstracts vs flavoured ones (bits): (0.144, −0.026), (0.092, 0.072), (0.030, 0.070), (0.069, −0.005), (0.082, 0.032); plain at or above 60% of flavoured in 4 of 5 seeds, and larger than it in 4 |
+| G4 | **Falsified** | The 50 highest-scoring words hold 38.8% of the positive score (needed 40%); top 20: *the, user, design, system, of, interface, research, interaction, a, environment, digital, are, virtual, information, factor, present, on, device, development, is* |
+| G5 | **Passed** | (HCI median fall under philosophy, change of philosophy's median under HCI): (0.120, +0.031), (0.190, +0.022), (0.109, −0.007), (0.163, +0.026), (0.093, −0.003) |
+
+Per-seed means and medians of HCI's per-abstract excess under philosophy's model, 1990s →
+2020s: means 1.81 → 1.66, 1.73 → 1.60, 1.70 → 1.61, 1.77 → 1.66, 1.75 → 1.64; medians
+1.80 → 1.68, 1.77 → 1.58, 1.74 → 1.63, 1.78 → 1.62, 1.75 → 1.66.
+
+### Reading
+
+By the rule written before the run, this is a **register effect, not a topical one**. The
+whole distribution of HCI abstracts moved: the median fell at least as much as the mean, and
+the abstracts that gained most were the ones with none of philosophy's theme words, while the
+flavoured ones barely moved. Philosophy's model did not learn a philosophical corner of HCI; it
+learned to predict the ordinary HCI abstract. G2's failure is a noisy statistic (the two
+quartiles' falls swing from 0.55 to 2.16 across seeds) and does not point either way; G4 missed
+by 1.2 points, so the gain is carried by somewhat more than fifty word types, led by function
+words and HCI's core nouns.
+
+Two observations from the run, not predicted and not findings:
+
+- **HCI's use of philosophy's theme words doubled.** The share of HCI held-out abstracts
+  containing at least one of the fixed theme words (*experience, value, meaning, agency,
+  embodied, ethics, ...*) rose from 22–24% in the 1990s to 48–52% in the 2020s in every seed.
+  The themed vocabulary spread through HCI; the gain in predictability did not come from those
+  abstracts.
+- **The register the model learned is HCI's expository one.** The HCI 2020s abstracts cheapest
+  under philosophy's model are reflective and first-person (a position paper on prototypes as
+  instruments of knowledge, personal reflections on thirty years of VR, an essay on software
+  not doing what you want); the costliest are machine-learning system papers (sign-language
+  recognition, gesture recognition, traffic-police gestures).
+
+Together with F3 (the words whose excess fell were *user, design, interface, virtual, digital,
+interaction*) and the exploratory counts in the follow-up (philosophy's use of *digital*,
+*interface*, *user* and *design* rising several-fold per million tokens), the most economical
+account is that **philosophy acquired HCI's objects, not computing's methods**: by the 2020s
+philosophy writes about users, interfaces, design and the digital often enough that its model
+predicts the ordinary HCI abstract better, while it predicts computer science and AI, whose
+core vocabulary is algorithmic, no better than before (H1). HCI's register did not move towards
+philosophy at all (F2, G5). This is a reading built from three rounds of evidence, not a scored
+prediction; the test that would settle it is a pre-registered contrast, in the full philosophy
+cells, between HCI's object nouns and computing's method nouns.

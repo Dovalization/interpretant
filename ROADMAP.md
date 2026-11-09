@@ -41,7 +41,8 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
   experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
   under TWEC in both corpora, described differently by each method).
 - Not robust: *information* converging between psychology and computer science.
-- Open: the cause of the philosophy → HCI effect.
+- Open: whether philosophy's gain on HCI is specifically HCI's object vocabulary (the
+  reading from rounds F, H and G).
 
 ---
 
@@ -57,9 +58,9 @@ Each item that produces results gets its predictions committed first.
 3. **Deploy the web explorer** (`web/`, built November 2026) and link it from the README, the
    GitHub "About" field and doval.dev (whose project schema needs an `href` field). Retire the
    Streamlit dashboard once the explorer covers its two panels.
-4. **Explain the one-sided philosophy → HCI effect.** Score HCI's held-out abstracts
-   individually under philosophy's model and test whether the gain concentrates in a readable
-   subset (topics) or spreads evenly (shared academic register).
+4. ~~Explain the one-sided philosophy → HCI effect~~ Round G (2026-11-09): a register
+   effect, not a topical one. Remaining test: HCI's object nouns against computing's method
+   nouns in the full philosophy cells, pre-registered.
 5. **Field separability over time.** A TF-IDF and logistic-regression classifier that guesses
    the field from an abstract, per decade; falling accuracy between two fields measures
    convergence, and the misclassified abstracts are the borrowing cases to read.
