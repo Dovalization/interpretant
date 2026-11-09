@@ -2,8 +2,8 @@
   {
     "author": "G.W.F. Hegel",
     "title": "The Phenomenology of Spirit",
-    "year": 1807,
-    "decade": "1820s",
+    "year": 2018,
+    "decade": "2010s",
     "fields": [
       "philosophy",
       "cross_field"
@@ -12,13 +12,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/2082",
     "filename": "hegel_phenomenology_spirit.txt",
-    "notes": "Baillie translation. Dialectic, consciousness, self-consciousness, spirit, Aufhebung."
+    "notes": "Baillie translation. Dialectic, consciousness, self-consciousness, spirit, Aufhebung.",
+    "original_year": 1807,
+    "original_language": "German",
+    "translator": "Michael Inwood"
   },
   {
     "author": "Friedrich Nietzsche",
     "title": "Beyond Good and Evil",
-    "year": 1886,
-    "decade": "1880s",
+    "year": 1907,
+    "decade": "1900s",
     "fields": [
       "philosophy",
       "cross_field"
@@ -27,28 +30,34 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/4363",
     "filename": "nietzsche_beyond_good_evil.txt",
-    "notes": "Zimmern translation. Will to power, perspectivism, critique of morality."
+    "notes": "Zimmern translation. Will to power, perspectivism, critique of morality.",
+    "original_year": 1886,
+    "original_language": "German",
+    "translator": "Helen Zimmern"
   },
   {
     "author": "Friedrich Nietzsche",
     "title": "On the Genealogy of Morality",
-    "year": 1887,
-    "decade": "1880s",
+    "year": 1910,
+    "decade": "1910s",
     "fields": [
       "philosophy",
       "cross_field"
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/998",
+    "source_url": "https://www.gutenberg.org/ebooks/52319",
     "filename": "nietzsche_genealogy_morality.txt",
-    "notes": "Samuel translation. Ressentiment, slave morality, ascetic ideal."
+    "notes": "Samuel translation. Ressentiment, slave morality, ascetic ideal.",
+    "original_year": 1887,
+    "original_language": "German",
+    "translator": "Horace B. Samuel"
   },
   {
     "author": "Friedrich Nietzsche",
     "title": "Thus Spoke Zarathustra",
-    "year": 1883,
-    "decade": "1880s",
+    "year": 1909,
+    "decade": "1900s",
     "fields": [
       "philosophy",
       "arts"
@@ -57,13 +66,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/1998",
     "filename": "nietzsche_zarathustra.txt",
-    "notes": "Common translation. Eternal recurrence, Übermensch, will to power as literary philosophy."
+    "notes": "Common translation. Eternal recurrence, Übermensch, will to power as literary philosophy.",
+    "original_year": 1883,
+    "original_language": "German",
+    "translator": "Thomas Common"
   },
   {
     "author": "Karl Marx",
     "title": "Capital, Vol. 1",
-    "year": 1867,
-    "decade": "1860s",
+    "year": 1887,
+    "decade": "1880s",
     "fields": [
       "cross_field",
       "philosophy"
@@ -72,28 +84,34 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/35023",
     "filename": "marx_capital_vol1.txt",
-    "notes": "Moore/Aveling translation. Commodity, value, labour, alienation, capital, representation."
+    "notes": "Moore/Aveling translation. Commodity, value, labour, alienation, capital, representation.",
+    "original_year": 1867,
+    "original_language": "German",
+    "translator": "Samuel Moore and Edward Aveling"
   },
   {
     "author": "Karl Marx, Friedrich Engels",
     "title": "The Communist Manifesto",
-    "year": 1848,
-    "decade": "1840s",
+    "year": 1888,
+    "decade": "1880s",
     "fields": [
       "cross_field",
       "philosophy"
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/61530",
+    "source_url": "https://www.gutenberg.org/ebooks/61",
     "filename": "marx_communist_manifesto.txt",
-    "notes": "Foundational Marxist text. Class, history, consciousness, production."
+    "notes": "Foundational Marxist text. Class, history, consciousness, production.",
+    "original_year": 1848,
+    "original_language": "German",
+    "translator": "Samuel Moore"
   },
   {
     "author": "Fyodor Dostoevsky",
     "title": "The Brothers Karamazov",
-    "year": 1880,
-    "decade": "1880s",
+    "year": 1912,
+    "decade": "1910s",
     "fields": [
       "arts",
       "philosophy"
@@ -102,13 +120,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/28054",
     "filename": "dostoevsky_brothers_karamazov.txt",
-    "notes": "Garnett translation. Faith, reason, consciousness, freedom, the Grand Inquisitor. Influenced Freud, Nietzsche, existentialism."
+    "notes": "Garnett translation. Faith, reason, consciousness, freedom, the Grand Inquisitor. Influenced Freud, Nietzsche, existentialism.",
+    "original_year": 1880,
+    "original_language": "Russian",
+    "translator": "Constance Garnett"
   },
   {
     "author": "Fyodor Dostoevsky",
     "title": "Notes from Underground",
-    "year": 1864,
-    "decade": "1860s",
+    "year": 1918,
+    "decade": "1910s",
     "fields": [
       "arts",
       "philosophy"
@@ -117,13 +138,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/600",
     "filename": "dostoevsky_notes_underground.txt",
-    "notes": "Proto-existentialist text. Underground consciousness, rationality, freedom."
+    "notes": "Proto-existentialist text. Underground consciousness, rationality, freedom.",
+    "original_year": 1864,
+    "original_language": "Russian",
+    "translator": "Constance Garnett"
   },
   {
     "author": "Fyodor Dostoevsky",
     "title": "Crime and Punishment",
-    "year": 1866,
-    "decade": "1860s",
+    "year": 1914,
+    "decade": "1910s",
     "fields": [
       "arts",
       "philosophy"
@@ -132,41 +156,14 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/2554",
     "filename": "dostoevsky_crime_punishment.txt",
-    "notes": "Garnett translation. Consciousness, guilt, psychology, moral reasoning."
+    "notes": "Garnett translation. Consciousness, guilt, psychology, moral reasoning.",
+    "original_year": 1866,
+    "original_language": "Russian",
+    "translator": "Constance Garnett"
   },
   {
     "author": "Sigmund Freud",
     "title": "The Interpretation of Dreams",
-    "year": 1899,
-    "decade": "1900s",
-    "fields": [
-      "philosophy_of_mind",
-      "cross_field"
-    ],
-    "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/16311",
-    "filename": "freud_interpretation_dreams.txt",
-    "notes": "Brill translation. Unconscious, symbol, representation, wish-fulfilment, dreamwork."
-  },
-  {
-    "author": "Sigmund Freud",
-    "title": "The Psychopathology of Everyday Life",
-    "year": 1901,
-    "decade": "1900s",
-    "fields": [
-      "philosophy_of_mind",
-      "cross_field"
-    ],
-    "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/596",
-    "filename": "freud_psychopathology_everyday_life.txt",
-    "notes": "Brill translation. Parapraxes, slips, unconscious motivations."
-  },
-  {
-    "author": "Sigmund Freud",
-    "title": "Totem and Taboo",
     "year": 1913,
     "decade": "1910s",
     "fields": [
@@ -175,15 +172,54 @@
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/16311",
+    "filename": "freud_interpretation_dreams.txt",
+    "notes": "Brill translation. Unconscious, symbol, representation, wish-fulfilment, dreamwork.",
+    "original_year": 1899,
+    "original_language": "German",
+    "translator": "A. A. Brill"
+  },
+  {
+    "author": "Sigmund Freud",
+    "title": "The Psychopathology of Everyday Life",
+    "year": 1914,
+    "decade": "1910s",
+    "fields": [
+      "philosophy_of_mind",
+      "cross_field"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/596",
+    "filename": "freud_psychopathology_everyday_life.txt",
+    "notes": "Brill translation. Parapraxes, slips, unconscious motivations.",
+    "original_year": 1901,
+    "original_language": "German",
+    "translator": "A. A. Brill"
+  },
+  {
+    "author": "Sigmund Freud",
+    "title": "Totem and Taboo",
+    "year": 1950,
+    "decade": "1950s",
+    "fields": [
+      "philosophy_of_mind",
+      "cross_field"
+    ],
+    "status": "public_domain",
+    "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/37850",
     "filename": "freud_totem_taboo.txt",
-    "notes": "Brill translation. Psychoanalysis meets anthropology; symbol, taboo, ritual, representation."
+    "notes": "Brill translation. Psychoanalysis meets anthropology; symbol, taboo, ritual, representation.",
+    "original_year": 1913,
+    "original_language": "German",
+    "translator": "James Strachey"
   },
   {
     "author": "Franz Kafka",
     "title": "The Metamorphosis",
-    "year": 1915,
-    "decade": "1910s",
+    "year": 2002,
+    "decade": "2000s",
     "fields": [
       "arts",
       "philosophy"
@@ -192,13 +228,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/5200",
     "filename": "kafka_metamorphosis.txt",
-    "notes": "Wyllie translation. Body, alienation, identity, transformation. Influenced Derrida, Deleuze."
+    "notes": "Wyllie translation. Body, alienation, identity, transformation. Influenced Derrida, Deleuze.",
+    "original_year": 1915,
+    "original_language": "German",
+    "translator": "David Wyllie"
   },
   {
     "author": "Franz Kafka",
     "title": "The Trial",
-    "year": 1925,
-    "decade": "1920s",
+    "year": 2003,
+    "decade": "2000s",
     "fields": [
       "arts",
       "philosophy"
@@ -207,7 +246,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/7849",
     "filename": "kafka_trial.txt",
-    "notes": "Willa and Edwin Muir translation. Power, system, bureaucracy, the law, interpretation."
+    "notes": "Willa and Edwin Muir translation. Power, system, bureaucracy, the law, interpretation.",
+    "original_year": 1925,
+    "original_language": "German",
+    "translator": "David Wyllie"
   },
   {
     "author": "John Dewey",
@@ -257,8 +299,8 @@
   {
     "author": "Ernst Cassirer",
     "title": "The Philosophy of Symbolic Forms, Vol. 1",
-    "year": 1923,
-    "decade": "1920s",
+    "year": 1953,
+    "decade": "1950s",
     "fields": [
       "philosophy",
       "cross_field"
@@ -267,13 +309,16 @@
     "source": "Uberty.org",
     "source_url": "https://uberty.org/wp-content/uploads/2015/12/Ernst_Cassirer_The_Philosophy_of_Symbolic_Forms1c.pdf",
     "filename": "cassirer_philosophy_symbolic_forms.txt",
-    "notes": "Language as symbolic form. Symbol, representation, myth, culture, consciousness."
+    "notes": "Language as symbolic form. Symbol, representation, myth, culture, consciousness.",
+    "original_year": 1923,
+    "original_language": "German",
+    "translator": "Ralph Manheim"
   },
   {
     "author": "Norbert Wiener",
     "title": "The Human Use of Human Beings",
     "year": 1950,
-    "decade": "1940s",
+    "decade": "1950s",
     "fields": [
       "ai_cs",
       "cross_field"
@@ -317,8 +362,8 @@
   {
     "author": "Claude Lévi-Strauss",
     "title": "Structural Anthropology",
-    "year": 1958,
-    "decade": "1950s",
+    "year": 1963,
+    "decade": "1960s",
     "fields": [
       "cross_field",
       "philosophy"
@@ -327,7 +372,10 @@
     "source": "Monoskop",
     "source_url": "https://monoskop.org/images/e/e8/Levi-Strauss_Claude_Structural_Anthropology_1963.pdf",
     "filename": "levi_strauss_structural_anthropology.txt",
-    "notes": "English translation 1963. Myth, structure, symbol, kinship as language. Foundational structuralism."
+    "notes": "English translation 1963. Myth, structure, symbol, kinship as language. Foundational structuralism.",
+    "original_year": 1958,
+    "original_language": "French",
+    "translator": "Claire Jacobson and Brooke Grundfest Schoepf"
   },
   {
     "author": "Manuel Castells",
@@ -347,7 +395,7 @@
   {
     "author": "Bernard Stiegler",
     "title": "Technics and Time, Vol. 1",
-    "year": 1994,
+    "year": 1998,
     "decade": "1990s",
     "fields": [
       "philosophy",
@@ -357,7 +405,10 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/technicstime0000stie",
     "filename": "stiegler_technics_time.txt",
-    "notes": "English translation 1998. Technology, memory, time-consciousness. Bridges Heidegger and media theory."
+    "notes": "English translation 1998. Technology, memory, time-consciousness. Bridges Heidegger and media theory.",
+    "original_year": 1994,
+    "original_language": "French",
+    "translator": "Richard Beardsworth and George Collins"
   },
   {
     "author": "Lawrence Lessig",
@@ -392,8 +443,8 @@
   {
     "author": "Ferdinand de Saussure",
     "title": "Course in General Linguistics",
-    "year": 1916,
-    "decade": "1910s",
+    "year": 1959,
+    "decade": "1950s",
     "fields": [
       "cross_field",
       "philosophy"
@@ -402,7 +453,10 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/courseingenerall00saus",
     "filename": "saussure_course_general_linguistics.txt",
-    "notes": "English translation (Baskin, 1959). Foundational for semiotics: sign, signifier, signified, arbitrariness."
+    "notes": "English translation (Baskin, 1959). Foundational for semiotics: sign, signifier, signified, arbitrariness.",
+    "original_year": 1916,
+    "original_language": "French",
+    "translator": "Wade Baskin"
   },
   {
     "author": "John Dewey",
@@ -437,8 +491,8 @@
   {
     "author": "Martin Heidegger",
     "title": "Poetry, Language, Thought",
-    "year": 1935,
-    "decade": "1930s",
+    "year": 1971,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "arts"
@@ -447,7 +501,10 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/ApolloHumanRightsBooks",
     "filename": "heidegger_poetry_language_thought.txt",
-    "notes": "Includes 'The Origin of the Work of Art' (1935-36). English collection 1971. Thing, dwelling, world-disclosure."
+    "notes": "Includes 'The Origin of the Work of Art' (1935-36). English collection 1971. Thing, dwelling, world-disclosure.",
+    "original_year": 1935,
+    "original_language": "German",
+    "translator": "Albert Hofstadter"
   },
   {
     "author": "Claude Shannon, Warren Weaver",
@@ -467,8 +524,8 @@
   {
     "author": "Roland Barthes",
     "title": "Mythologies",
-    "year": 1957,
-    "decade": "1950s",
+    "year": 1972,
+    "decade": "1970s",
     "fields": [
       "arts",
       "cross_field"
@@ -477,12 +534,15 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/barthes-roland-mythologies-en-1972",
     "filename": "barthes_mythologies.txt",
-    "notes": "English translation (Lavers, 1972). Semiotics of everyday culture: myth, sign, image, form."
+    "notes": "English translation (Lavers, 1972). Semiotics of everyday culture: myth, sign, image, form.",
+    "original_year": 1957,
+    "original_language": "French",
+    "translator": "Annette Lavers"
   },
   {
     "author": "Michel Foucault",
     "title": "Discipline and Punish",
-    "year": 1975,
+    "year": 1977,
     "decade": "1970s",
     "fields": [
       "cross_field",
@@ -492,12 +552,15 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/DisciplinePunishTheBirthOfThePrison",
     "filename": "foucault_discipline_punish.txt",
-    "notes": "English translation (Sheridan, 1977). Surveillance, discipline, power-knowledge. Panopticon."
+    "notes": "English translation (Sheridan, 1977). Surveillance, discipline, power-knowledge. Panopticon.",
+    "original_year": 1975,
+    "original_language": "French",
+    "translator": "Alan Sheridan"
   },
   {
     "author": "Gilles Deleuze, Félix Guattari",
     "title": "A Thousand Plateaus",
-    "year": 1980,
+    "year": 1987,
     "decade": "1980s",
     "fields": [
       "cross_field",
@@ -507,7 +570,10 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/AThousandPlateaus_20180115",
     "filename": "deleuze_guattari_thousand_plateaus.txt",
-    "notes": "English translation (Massumi, 1987). Rhizome, assemblage, network, complexity, becoming."
+    "notes": "English translation (Massumi, 1987). Rhizome, assemblage, network, complexity, becoming.",
+    "original_year": 1980,
+    "original_language": "French",
+    "translator": "Brian Massumi"
   },
   {
     "author": "William James",
@@ -527,8 +593,8 @@
   {
     "author": "Edmund Husserl",
     "title": "Logical Investigations",
-    "year": 1900,
-    "decade": "1900s",
+    "year": 1970,
+    "decade": "1970s",
     "fields": [
       "philosophy_of_mind",
       "phenomenology"
@@ -537,13 +603,16 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/logicalinvestiga01huss",
     "filename": "husserl_logical_investigations.txt",
-    "notes": "English translation (Findlay, 1970). Sets ground for phenomenological method."
+    "notes": "English translation (Findlay, 1970). Sets ground for phenomenological method.",
+    "original_year": 1900,
+    "original_language": "German",
+    "translator": "J. N. Findlay"
   },
   {
     "author": "Henri Bergson",
     "title": "Creative Evolution",
-    "year": 1907,
-    "decade": "1900s",
+    "year": 1911,
+    "decade": "1910s",
     "fields": [
       "philosophy_of_mind",
       "philosophy"
@@ -552,7 +621,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/26163",
     "filename": "bergson_creative_evolution.txt",
-    "notes": "English translation (Mitchell, 1911). Duration, consciousness, and élan vital."
+    "notes": "English translation (Mitchell, 1911). Duration, consciousness, and élan vital.",
+    "original_year": 1907,
+    "original_language": "French",
+    "translator": "Arthur Mitchell"
   },
   {
     "author": "Bertrand Russell",
@@ -572,7 +644,7 @@
   {
     "author": "Ludwig Wittgenstein",
     "title": "Tractatus Logico-Philosophicus",
-    "year": 1921,
+    "year": 1922,
     "decade": "1920s",
     "fields": [
       "philosophy_of_mind",
@@ -582,7 +654,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/5740",
     "filename": "wittgenstein_tractatus.txt",
-    "notes": "Ogden translation. Picture theory of meaning."
+    "notes": "Ogden translation. Picture theory of meaning.",
+    "original_year": 1921,
+    "original_language": "German",
+    "translator": "C. K. Ogden"
   },
   {
     "author": "Gilbert Ryle",
@@ -602,8 +677,8 @@
   {
     "author": "Maurice Merleau-Ponty",
     "title": "Phenomenology of Perception",
-    "year": 1945,
-    "decade": "1940s",
+    "year": 1962,
+    "decade": "1960s",
     "fields": [
       "philosophy_of_mind",
       "phenomenology"
@@ -612,7 +687,10 @@
     "source": "Routledge",
     "source_url": "",
     "filename": "merleau_ponty_phenomenology_perception.txt",
-    "notes": "English translation (Smith, 1962). Embodied cognition foundational text."
+    "notes": "English translation (Smith, 1962). Embodied cognition foundational text.",
+    "original_year": 1945,
+    "original_language": "French",
+    "translator": "Colin Smith"
   },
   {
     "author": "Ludwig Wittgenstein",
@@ -627,7 +705,10 @@
     "source": "Blackwell",
     "source_url": "",
     "filename": "wittgenstein_philosophical_investigations.txt",
-    "notes": "Late Wittgenstein; language games, private language argument."
+    "notes": "Late Wittgenstein; language games, private language argument.",
+    "original_year": 1953,
+    "original_language": "German",
+    "translator": "G. E. M. Anscombe"
   },
   {
     "author": "Jerry Fodor",
@@ -954,17 +1035,20 @@
   {
     "author": "Walter Benjamin",
     "title": "Illuminations",
-    "year": 1955,
-    "decade": "1950s",
+    "year": 1968,
+    "decade": "1960s",
     "fields": [
       "arts",
       "philosophy"
     ],
     "status": "author_posted",
-    "source": "Schocken Books (English 1968)",
-    "source_url": "https://www.marxists.org/reference/subject/philosophy/works/ge/benjamin.htm",
+    "source": "Manually sourced (EPUB)",
+    "source_url": "",
     "filename": "benjamin_illuminations.txt",
-    "notes": "Includes 'Work of Art in Age of Mechanical Reproduction'. Marxists.org has key essays."
+    "notes": "Includes 'Work of Art in Age of Mechanical Reproduction'. Marxists.org has key essays.",
+    "original_year": 1955,
+    "original_language": "German",
+    "translator": "Harry Zohn"
   },
   {
     "author": "Marshall McLuhan",
@@ -1022,13 +1106,16 @@
     "source": "Fontana Press",
     "source_url": "",
     "filename": "barthes_image_music_text.txt",
-    "notes": "Death of the Author; rhetoric of the image."
+    "notes": "Death of the Author; rhetoric of the image.",
+    "original_year": 1977,
+    "original_language": "French",
+    "translator": "Stephen Heath"
   },
   {
     "author": "Jean Baudrillard",
     "title": "Simulacra and Simulation",
-    "year": 1981,
-    "decade": "1980s",
+    "year": 1994,
+    "decade": "1990s",
     "fields": [
       "arts",
       "philosophy"
@@ -1037,7 +1124,10 @@
     "source": "Semiotext(e) (English 1994)",
     "source_url": "https://www.egs.edu/faculty/jean-baudrillard/articles/simulacra-and-simulations/",
     "filename": "baudrillard_simulacra_simulation.txt",
-    "notes": "Hyperreality; precession of simulacra."
+    "notes": "Hyperreality; precession of simulacra.",
+    "original_year": 1981,
+    "original_language": "French",
+    "translator": "Sheila Faria Glaser"
   },
   {
     "author": "Fredric Jameson",
@@ -1101,8 +1191,8 @@
   {
     "author": "Guy Debord",
     "title": "The Society of the Spectacle",
-    "year": 1967,
-    "decade": "1960s",
+    "year": 2002,
+    "decade": "2000s",
     "fields": [
       "arts",
       "cross_field"
@@ -1111,13 +1201,16 @@
     "source": "Zone Books (English 1994)",
     "source_url": "",
     "filename": "debord_society_spectacle.txt",
-    "notes": "Spectacle as social relation mediated by images. Simulation, representation, medium."
+    "notes": "Spectacle as social relation mediated by images. Simulation, representation, medium.",
+    "original_year": 1967,
+    "original_language": "French",
+    "translator": "Ken Knabb"
   },
   {
     "author": "Umberto Eco",
     "title": "The Open Work",
-    "year": 1962,
-    "decade": "1960s",
+    "year": 1989,
+    "decade": "1980s",
     "fields": [
       "arts",
       "cross_field"
@@ -1126,7 +1219,10 @@
     "source": "Harvard University Press (English 1989)",
     "source_url": "",
     "filename": "eco_open_work.txt",
-    "notes": "Aesthetic openness, interpretation, form, information. Semiotics of art."
+    "notes": "Aesthetic openness, interpretation, form, information. Semiotics of art.",
+    "original_year": 1962,
+    "original_language": "Italian",
+    "translator": "Anna Cancogni"
   },
   {
     "author": "Umberto Eco",
@@ -1146,7 +1242,7 @@
   {
     "author": "Jean-François Lyotard",
     "title": "The Postmodern Condition",
-    "year": 1979,
+    "year": 1984,
     "decade": "1980s",
     "fields": [
       "cross_field",
@@ -1156,7 +1252,10 @@
     "source": "University of Minnesota Press (English 1984)",
     "source_url": "",
     "filename": "lyotard_postmodern_condition.txt",
-    "notes": "Knowledge, narrative, legitimation in postmodern era. Language games, complexity."
+    "notes": "Knowledge, narrative, legitimation in postmodern era. Language games, complexity.",
+    "original_year": 1979,
+    "original_language": "French",
+    "translator": "Geoff Bennington and Brian Massumi"
   },
   {
     "author": "Thomas S. Kuhn",
@@ -1191,8 +1290,8 @@
   {
     "author": "Paul Virilio",
     "title": "Speed and Politics",
-    "year": 1977,
-    "decade": "1970s",
+    "year": 1986,
+    "decade": "1980s",
     "fields": [
       "cross_field",
       "arts"
@@ -1201,7 +1300,10 @@
     "source": "Semiotext(e) (English 1986)",
     "source_url": "",
     "filename": "virilio_speed_politics.txt",
-    "notes": "Dromology; speed as political force. Cross-field: urbanism, war, media."
+    "notes": "Dromology; speed as political force. Cross-field: urbanism, war, media.",
+    "original_year": 1977,
+    "original_language": "French",
+    "translator": "Mark Polizzotti"
   },
   {
     "author": "Donna Haraway",
@@ -1221,7 +1323,7 @@
   {
     "author": "Bruno Latour",
     "title": "We Have Never Been Modern",
-    "year": 1991,
+    "year": 1993,
     "decade": "1990s",
     "fields": [
       "cross_field",
@@ -1231,7 +1333,10 @@
     "source": "Harvester Wheatsheaf (English 1993)",
     "source_url": "",
     "filename": "latour_never_been_modern.txt",
-    "notes": "Actor-network theory precursor; critique of modernity's purification."
+    "notes": "Actor-network theory precursor; critique of modernity's purification.",
+    "original_year": 1991,
+    "original_language": "French",
+    "translator": "Catherine Porter"
   },
   {
     "author": "N. Katherine Hayles",
@@ -1268,8 +1373,8 @@
   {
     "author": "Max Weber",
     "title": "The Protestant Ethic and the Spirit of Capitalism",
-    "year": 1905,
-    "decade": "1900s",
+    "year": 1930,
+    "decade": "1930s",
     "fields": [
       "sociology",
       "cross_field"
@@ -1278,12 +1383,15 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/protestantethics00webe",
     "filename": "weber_protestant_ethic.txt",
-    "notes": "Parsons translation. Rationalization, capitalism, Protestant work ethic."
+    "notes": "Parsons translation. Rationalization, capitalism, Protestant work ethic.",
+    "original_year": 1905,
+    "original_language": "German",
+    "translator": "Talcott Parsons"
   },
   {
     "author": "Sigmund Freud",
     "title": "The Ego and the Id",
-    "year": 1923,
+    "year": 1927,
     "decade": "1920s",
     "fields": [
       "psychoanalysis",
@@ -1293,13 +1401,16 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/egoid00freu",
     "filename": "freud_ego_id.txt",
-    "notes": "Riviere translation. Ego, id, super-ego, structural model."
+    "notes": "Riviere translation. Ego, id, super-ego, structural model.",
+    "original_year": 1923,
+    "original_language": "German",
+    "translator": "Joan Riviere"
   },
   {
     "author": "Martin Heidegger",
     "title": "Being and Time",
-    "year": 1927,
-    "decade": "1920s",
+    "year": 1962,
+    "decade": "1960s",
     "fields": [
       "philosophy",
       "philosophy_of_mind"
@@ -1308,13 +1419,16 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/pdfy-SaLxmFGdSFG3KBHV",
     "filename": "heidegger_being_time.txt",
-    "notes": "Macquarrie & Robinson translation. Dasein, thrownness, temporality, being-in-the-world."
+    "notes": "Macquarrie & Robinson translation. Dasein, thrownness, temporality, being-in-the-world.",
+    "original_year": 1927,
+    "original_language": "German",
+    "translator": "John Macquarrie and Edward Robinson"
   },
   {
     "author": "Carl Jung",
     "title": "Psychological Types",
-    "year": 1921,
-    "decade": "1920s",
+    "year": 1971,
+    "decade": "1970s",
     "fields": [
       "psychoanalysis",
       "philosophy_of_mind"
@@ -1323,13 +1437,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "jung_psychological_types.txt",
-    "notes": "Collected Works vol. 6. Introvert/extrovert typology, psychological functions, individuation."
+    "notes": "Collected Works vol. 6. Introvert/extrovert typology, psychological functions, individuation.",
+    "original_year": 1921,
+    "original_language": "German",
+    "translator": "H. G. Baynes, revised by R. F. C. Hull"
   },
   {
     "author": "Franz Kafka",
     "title": "The Castle",
-    "year": 1926,
-    "decade": "1920s",
+    "year": 1930,
+    "decade": "1930s",
     "fields": [
       "literature"
     ],
@@ -1337,13 +1454,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/18013",
     "filename": "kafka_castle.txt",
-    "notes": "Willa & Edwin Muir translation. Bureaucracy, alienation, inaccessible authority."
+    "notes": "Willa & Edwin Muir translation. Bureaucracy, alienation, inaccessible authority.",
+    "original_year": 1926,
+    "original_language": "German",
+    "translator": "Willa and Edwin Muir"
   },
   {
     "author": "György Lukács",
     "title": "History and Class Consciousness",
-    "year": 1923,
-    "decade": "1920s",
+    "year": 1971,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "sociology",
@@ -1353,13 +1473,16 @@
     "source": "Marxists Internet Archive",
     "source_url": "https://www.marxists.org/archive/lukacs/works/history/",
     "filename": "lukacs_history_class_consciousness.txt",
-    "notes": "Reification, totality, class consciousness, Western Marxism."
+    "notes": "Reification, totality, class consciousness, Western Marxism.",
+    "original_year": 1923,
+    "original_language": "German",
+    "translator": "Rodney Livingstone"
   },
   {
     "author": "Sigmund Freud",
     "title": "Civilization and Its Discontents",
-    "year": 1930,
-    "decade": "1930s",
+    "year": 1961,
+    "decade": "1960s",
     "fields": [
       "psychoanalysis",
       "philosophy"
@@ -1368,13 +1491,16 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/civilizationitsd00freu",
     "filename": "freud_civilization_discontents.txt",
-    "notes": "Riviere translation. Eros and death drive, sublimation, cultural repression."
+    "notes": "Riviere translation. Eros and death drive, sublimation, cultural repression.",
+    "original_year": 1930,
+    "original_language": "German",
+    "translator": "James Strachey"
   },
   {
     "author": "Antonio Gramsci",
     "title": "Prison Notebooks",
-    "year": 1935,
-    "decade": "1930s",
+    "year": 1971,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "sociology",
@@ -1384,13 +1510,16 @@
     "source": "Marxists Internet Archive",
     "source_url": "https://www.marxists.org/archive/gramsci/prison_notebooks/",
     "filename": "gramsci_prison_notebooks.txt",
-    "notes": "Hegemony, organic intellectuals, civil society, passive revolution."
+    "notes": "Hegemony, organic intellectuals, civil society, passive revolution.",
+    "original_year": 1935,
+    "original_language": "Italian",
+    "translator": "Quintin Hoare and Geoffrey Nowell Smith"
   },
   {
     "author": "Carl Jung",
     "title": "The Archetypes and the Collective Unconscious",
-    "year": 1934,
-    "decade": "1930s",
+    "year": 1959,
+    "decade": "1950s",
     "fields": [
       "psychoanalysis",
       "philosophy_of_mind"
@@ -1399,13 +1528,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "jung_archetypes_collective_unconscious.txt",
-    "notes": "Collected Works vol. 9i. Archetypes, shadow, anima/animus, collective unconscious."
+    "notes": "Collected Works vol. 9i. Archetypes, shadow, anima/animus, collective unconscious.",
+    "original_year": 1934,
+    "original_language": "German",
+    "translator": "R. F. C. Hull"
   },
   {
     "author": "Albert Camus",
     "title": "The Myth of Sisyphus",
-    "year": 1942,
-    "decade": "1940s",
+    "year": 1955,
+    "decade": "1950s",
     "fields": [
       "philosophy",
       "literature"
@@ -1414,7 +1546,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "camus_myth_of_sisyphus.txt",
-    "notes": "O'Brien translation. Absurdism, revolt, freedom, meaning-making."
+    "notes": "O'Brien translation. Absurdism, revolt, freedom, meaning-making.",
+    "original_year": 1942,
+    "original_language": "French",
+    "translator": "Justin O'Brien"
   },
   {
     "author": "Erich Fromm",
@@ -1435,8 +1570,8 @@
   {
     "author": "Jean Piaget",
     "title": "The Psychology of Intelligence",
-    "year": 1947,
-    "decade": "1940s",
+    "year": 1950,
+    "decade": "1950s",
     "fields": [
       "cognitive_science",
       "philosophy_of_mind"
@@ -1445,13 +1580,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "piaget_psychology_intelligence.txt",
-    "notes": "Piercy & Berlyne translation. Schemas, assimilation, accommodation, stages."
+    "notes": "Piercy & Berlyne translation. Schemas, assimilation, accommodation, stages.",
+    "original_year": 1947,
+    "original_language": "French",
+    "translator": "Malcolm Piercy and D. E. Berlyne"
   },
   {
     "author": "Jean-Paul Sartre",
     "title": "Being and Nothingness",
-    "year": 1943,
-    "decade": "1940s",
+    "year": 1956,
+    "decade": "1950s",
     "fields": [
       "philosophy",
       "philosophy_of_mind"
@@ -1460,13 +1598,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "sartre_being_nothingness.txt",
-    "notes": "Barnes translation. Being-for-itself, being-in-itself, bad faith, existential freedom."
+    "notes": "Barnes translation. Being-for-itself, being-in-itself, bad faith, existential freedom.",
+    "original_year": 1943,
+    "original_language": "French",
+    "translator": "Hazel E. Barnes"
   },
   {
     "author": "Theodor W. Adorno",
     "title": "Minima Moralia",
-    "year": 1951,
-    "decade": "1950s",
+    "year": 1974,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "sociology"
@@ -1475,13 +1616,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "adorno_minima_moralia.txt",
-    "notes": "Jephcott translation. Aphoristic critique of modernity, damaged life, cultural industry."
+    "notes": "Jephcott translation. Aphoristic critique of modernity, damaged life, cultural industry.",
+    "original_year": 1951,
+    "original_language": "German",
+    "translator": "E. F. N. Jephcott"
   },
   {
     "author": "Gaston Bachelard",
     "title": "The Poetics of Space",
-    "year": 1958,
-    "decade": "1950s",
+    "year": 1964,
+    "decade": "1960s",
     "fields": [
       "philosophy",
       "design"
@@ -1490,7 +1634,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "bachelard_poetics_space.txt",
-    "notes": "Jolas translation. Phenomenology of inhabited space, house, nest, corners, miniature."
+    "notes": "Jolas translation. Phenomenology of inhabited space, house, nest, corners, miniature.",
+    "original_year": 1958,
+    "original_language": "French",
+    "translator": "Maria Jolas"
   },
   {
     "author": "Herbert Marcuse",
@@ -1511,8 +1658,8 @@
   {
     "author": "Gilbert Simondon",
     "title": "On the Mode of Existence of Technical Objects",
-    "year": 1958,
-    "decade": "1950s",
+    "year": 2017,
+    "decade": "2010s",
     "fields": [
       "philosophy",
       "ai_cs",
@@ -1522,13 +1669,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "simondon_mode_existence_technical_objects.txt",
-    "notes": "Mellamphy translation. Individuation, concretization, technical mentality, transduction."
+    "notes": "Mellamphy translation. Individuation, concretization, technical mentality, transduction.",
+    "original_year": 1958,
+    "original_language": "French",
+    "translator": "Cecile Malaspina and John Rogove"
   },
   {
     "author": "Theodor W. Adorno",
     "title": "Negative Dialectics",
-    "year": 1966,
-    "decade": "1960s",
+    "year": 1973,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "sociology"
@@ -1537,12 +1687,15 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "adorno_negative_dialectics.txt",
-    "notes": "Ashton translation. Non-identity, constellation, critique of ontology."
+    "notes": "Ashton translation. Non-identity, constellation, critique of ontology.",
+    "original_year": 1966,
+    "original_language": "German",
+    "translator": "E. B. Ashton"
   },
   {
     "author": "Louis Althusser",
     "title": "For Marx",
-    "year": 1965,
+    "year": 1969,
     "decade": "1960s",
     "fields": [
       "philosophy",
@@ -1552,13 +1705,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "althusser_for_marx.txt",
-    "notes": "Brewster translation. Structural Marxism, overdetermination, ideological state apparatuses."
+    "notes": "Brewster translation. Structural Marxism, overdetermination, ideological state apparatuses.",
+    "original_year": 1965,
+    "original_language": "French",
+    "translator": "Ben Brewster"
   },
   {
     "author": "Gilles Deleuze",
     "title": "Difference and Repetition",
-    "year": 1968,
-    "decade": "1960s",
+    "year": 1994,
+    "decade": "1990s",
     "fields": [
       "philosophy"
     ],
@@ -1566,13 +1722,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "deleuze_difference_repetition.txt",
-    "notes": "Patton translation. Difference, repetition, virtual/actual, intensity, Ideas."
+    "notes": "Patton translation. Difference, repetition, virtual/actual, intensity, Ideas.",
+    "original_year": 1968,
+    "original_language": "French",
+    "translator": "Paul Patton"
   },
   {
     "author": "Jacques Derrida",
     "title": "Of Grammatology",
-    "year": 1967,
-    "decade": "1960s",
+    "year": 1976,
+    "decade": "1970s",
     "fields": [
       "philosophy"
     ],
@@ -1580,13 +1739,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "derrida_of_grammatology.txt",
-    "notes": "Spivak translation. Différance, trace, arche-writing, logocentrism, supplement."
+    "notes": "Spivak translation. Différance, trace, arche-writing, logocentrism, supplement.",
+    "original_year": 1967,
+    "original_language": "French",
+    "translator": "Gayatri Chakravorty Spivak"
   },
   {
     "author": "Jacques Derrida",
     "title": "Writing and Difference",
-    "year": 1967,
-    "decade": "1960s",
+    "year": 1978,
+    "decade": "1970s",
     "fields": [
       "philosophy"
     ],
@@ -1594,13 +1756,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "derrida_writing_difference.txt",
-    "notes": "Bass translation. Structuralism's limits, force and signification, play."
+    "notes": "Bass translation. Structuralism's limits, force and signification, play.",
+    "original_year": 1967,
+    "original_language": "French",
+    "translator": "Alan Bass"
   },
   {
     "author": "Michel Foucault",
     "title": "The Order of Things",
-    "year": 1966,
-    "decade": "1960s",
+    "year": 1970,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "sociology"
@@ -1609,13 +1774,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "foucault_order_of_things.txt",
-    "notes": "Episteme, archaeology of knowledge, discourse, death of man."
+    "notes": "Episteme, archaeology of knowledge, discourse, death of man.",
+    "original_year": 1966,
+    "original_language": "French",
+    "translator": "Alan Sheridan (uncredited)"
   },
   {
     "author": "Hans-Georg Gadamer",
     "title": "Truth and Method",
-    "year": 1960,
-    "decade": "1960s",
+    "year": 1989,
+    "decade": "1980s",
     "fields": [
       "philosophy"
     ],
@@ -1623,13 +1791,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "gadamer_truth_method.txt",
-    "notes": "Weinsheimer & Marshall translation. Hermeneutics, fusion of horizons, tradition, game."
+    "notes": "Weinsheimer & Marshall translation. Hermeneutics, fusion of horizons, tradition, game.",
+    "original_year": 1960,
+    "original_language": "German",
+    "translator": "Joel Weinsheimer and Donald G. Marshall"
   },
   {
     "author": "Jürgen Habermas",
     "title": "Knowledge and Human Interests",
-    "year": 1968,
-    "decade": "1960s",
+    "year": 1971,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "sociology"
@@ -1638,13 +1809,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "habermas_knowledge_human_interests.txt",
-    "notes": "Shapiro translation. Cognitive interests, emancipatory knowledge, critique of positivism."
+    "notes": "Shapiro translation. Cognitive interests, emancipatory knowledge, critique of positivism.",
+    "original_year": 1968,
+    "original_language": "German",
+    "translator": "Jeremy J. Shapiro"
   },
   {
     "author": "Jacques Lacan",
     "title": "Écrits",
-    "year": 1966,
-    "decade": "1960s",
+    "year": 2006,
+    "decade": "2000s",
     "fields": [
       "philosophy",
       "philosophy_of_mind"
@@ -1653,12 +1827,15 @@
     "source": "PDF extraction",
     "source_url": "",
     "filename": "lacan_ecrits.txt",
-    "notes": "Fink translation. Subject, signifier, Other, mirror stage, symbolic/imaginary/real, jouissance, desire."
+    "notes": "Fink translation. Subject, signifier, Other, mirror stage, symbolic/imaginary/real, jouissance, desire.",
+    "original_year": 1966,
+    "original_language": "French",
+    "translator": "Bruce Fink"
   },
   {
     "author": "Paul Ricoeur",
     "title": "The Conflict of Interpretations",
-    "year": 1969,
+    "year": 1974,
     "decade": "1970s",
     "fields": [
       "philosophy"
@@ -1667,7 +1844,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "ricoeur_conflict_interpretations.txt",
-    "notes": "Essays in hermeneutics. Symbol, text, interpretation, phenomenology."
+    "notes": "Essays in hermeneutics. Symbol, text, interpretation, phenomenology.",
+    "original_year": 1969,
+    "original_language": "French",
+    "translator": "Don Ihde (ed.)"
   },
   {
     "author": "Lev Vygotsky",
@@ -1682,13 +1862,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "vygotsky_mind_in_society.txt",
-    "notes": "Zone of proximal development, scaffolding, social constructivism, mediation."
+    "notes": "Zone of proximal development, scaffolding, social constructivism, mediation.",
+    "original_year": 1930,
+    "original_language": "Russian",
+    "translator": "Michael Cole, Vera John-Steiner, Sylvia Scribner and Ellen Souberman (eds.)"
   },
   {
     "author": "Pierre Bourdieu",
     "title": "The Logic of Practice",
-    "year": 1980,
-    "decade": "1980s",
+    "year": 1990,
+    "decade": "1990s",
     "fields": [
       "sociology",
       "cross_field"
@@ -1697,12 +1880,15 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "bourdieu_logic_practice.txt",
-    "notes": "Nice translation. Habitus, field, capital, practice theory."
+    "notes": "Nice translation. Habitus, field, capital, practice theory.",
+    "original_year": 1980,
+    "original_language": "French",
+    "translator": "Richard Nice"
   },
   {
     "author": "Jürgen Habermas",
     "title": "The Theory of Communicative Action, Vol. 1",
-    "year": 1981,
+    "year": 1984,
     "decade": "1980s",
     "fields": [
       "philosophy",
@@ -1712,7 +1898,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "habermas_theory_communicative_action.txt",
-    "notes": "McCarthy translation. Communicative rationality, lifeworld, system, speech acts. Source PDF has custom font encoding — extraction failed. Needs clean EPUB or different edition."
+    "notes": "McCarthy translation. Communicative rationality, lifeworld, system, speech acts. Source PDF has custom font encoding — extraction failed. Needs clean EPUB or different edition.",
+    "original_year": 1981,
+    "original_language": "German",
+    "translator": "Thomas McCarthy"
   },
   {
     "author": "James Bridle",
@@ -1765,8 +1954,8 @@
   {
     "author": "Sigmund Freud",
     "title": "Beyond the Pleasure Principle",
-    "year": 1920,
-    "decade": "1920s",
+    "year": 1961,
+    "decade": "1960s",
     "fields": [
       "psychoanalysis",
       "philosophy_of_mind"
@@ -1775,13 +1964,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "freud_beyond_pleasure_principle.txt",
-    "notes": "Strachey translation. Death drive, repetition compulsion, pleasure/reality principles."
+    "notes": "Strachey translation. Death drive, repetition compulsion, pleasure/reality principles.",
+    "original_year": 1920,
+    "original_language": "German",
+    "translator": "James Strachey"
   },
   {
     "author": "Max Horkheimer and Theodor W. Adorno",
     "title": "Dialectic of Enlightenment",
-    "year": 1944,
-    "decade": "1940s",
+    "year": 2002,
+    "decade": "2000s",
     "fields": [
       "philosophy",
       "sociology"
@@ -1790,7 +1982,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "adorno_horkheimer_dialectic_enlightenment.txt",
-    "notes": "Jephcott translation. Culture industry, myth, Enlightenment as domination."
+    "notes": "Jephcott translation. Culture industry, myth, Enlightenment as domination.",
+    "original_year": 1944,
+    "original_language": "German",
+    "translator": "Edmund Jephcott"
   },
   {
     "author": "Pierre Bourdieu",
@@ -1805,7 +2000,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "bourdieu_distinction.txt",
-    "notes": "Nice translation. Taste, cultural capital, habitus, class reproduction."
+    "notes": "Nice translation. Taste, cultural capital, habitus, class reproduction.",
+    "original_year": 1979,
+    "original_language": "French",
+    "translator": "Richard Nice"
   },
   {
     "author": "Roman Jakobson",
@@ -1825,8 +2023,8 @@
   {
     "author": "Jorge Luis Borges",
     "title": "Ficciones",
-    "year": 1944,
-    "decade": "1940s",
+    "year": 1962,
+    "decade": "1960s",
     "fields": [
       "literature"
     ],
@@ -1834,7 +2032,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "borges_ficciones.txt",
-    "notes": "Kerrigan translation. Labyrinths, infinite library, reality and fiction."
+    "notes": "Kerrigan translation. Labyrinths, infinite library, reality and fiction.",
+    "original_year": 1944,
+    "original_language": "Spanish",
+    "translator": "Anthony Kerrigan (ed.)"
   },
   {
     "author": "Maurice Merleau-Ponty",
@@ -1849,12 +2050,15 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "merleau_ponty_visible_invisible.txt",
-    "notes": "Lingis translation. Flesh, chiasm, reversibility, perceptual ontology."
+    "notes": "Lingis translation. Flesh, chiasm, reversibility, perceptual ontology.",
+    "original_year": 1964,
+    "original_language": "French",
+    "translator": "Alphonso Lingis"
   },
   {
     "author": "Émile Durkheim",
     "title": "The Elementary Forms of the Religious Life",
-    "year": 1912,
+    "year": 1915,
     "decade": "1910s",
     "fields": [
       "sociology",
@@ -1864,7 +2068,10 @@
     "source": "Archive.org",
     "source_url": "https://archive.org/details/elementaryformso00durk",
     "filename": "durkheim_elementary_forms.txt",
-    "notes": "Swain translation. Collective effervescence, sacred/profane, totemism."
+    "notes": "Swain translation. Collective effervescence, sacred/profane, totemism.",
+    "original_year": 1912,
+    "original_language": "French",
+    "translator": "Joseph Ward Swain"
   },
   {
     "author": "Herbert Marcuse",
@@ -1884,24 +2091,27 @@
   {
     "author": "René Descartes",
     "title": "Meditations on First Philosophy",
-    "year": 1641,
-    "decade": "1890s",
+    "year": 1853,
+    "decade": "1850s",
     "fields": [
       "philosophy",
       "epistemology",
       "philosophy_of_mind"
     ],
     "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/59",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/meditationsselec00desc",
     "filename": "descartes_meditations.txt",
-    "notes": "Filed in 1890s as earliest training decade anchor (written 1641). Foundational epistemology, dualism, cogito, clear-and-distinct ideas."
+    "notes": "Filed in 1890s as earliest training decade anchor (written 1641). Foundational epistemology, dualism, cogito, clear-and-distinct ideas.",
+    "original_year": 1641,
+    "original_language": "Latin",
+    "translator": "John Veitch"
   },
   {
     "author": "Immanuel Kant",
     "title": "Critique of Pure Reason",
-    "year": 1781,
-    "decade": "1890s",
+    "year": 1855,
+    "decade": "1850s",
     "fields": [
       "philosophy",
       "epistemology"
@@ -1910,7 +2120,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/4280",
     "filename": "kant_critique_pure_reason.txt",
-    "notes": "Kemp Smith translation. Filed in 1890s as earliest training decade anchor (written 1781). Epistemology, transcendental idealism, categories of understanding."
+    "notes": "Kemp Smith translation. Filed in 1890s as earliest training decade anchor (written 1781). Epistemology, transcendental idealism, categories of understanding.",
+    "original_year": 1781,
+    "original_language": "German",
+    "translator": "J. M. D. Meiklejohn"
   },
   {
     "author": "Bertrand Russell",
@@ -1941,7 +2154,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "popper_logic_scientific_discovery.txt",
-    "notes": "Falsificationism, demarcation, corroboration, basic statements. Falsifiability criterion."
+    "notes": "Falsificationism, demarcation, corroboration, basic statements. Falsifiability criterion.",
+    "original_year": 1934,
+    "original_language": "German",
+    "translator": "Karl Popper, Julius Freed and Lan Freed"
   },
   {
     "author": "Karl Popper",
@@ -2150,8 +2366,8 @@
   {
     "author": "Cornelius Castoriadis",
     "title": "The Imaginary Institution of Society",
-    "year": 1975,
-    "decade": "1970s",
+    "year": 1987,
+    "decade": "1980s",
     "fields": [
       "philosophy",
       "sociology",
@@ -2162,7 +2378,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "castoriadis_imaginary_institution.txt",
-    "notes": "Blamey translation. Social imaginary, radical imagination, instituting/instituted society, autonomy. Key for symbol, image, representation, form."
+    "notes": "Blamey translation. Social imaginary, radical imagination, instituting/instituted society, autonomy. Key for symbol, image, representation, form.",
+    "original_year": 1975,
+    "original_language": "French",
+    "translator": "Kathleen Blamey"
   },
   {
     "author": "William James",
@@ -2289,13 +2508,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "kittler_gramophone_film_typewriter.txt",
-    "notes": "Technical media and discourse networks. Key for medium, signal, information, memory from media systems perspective."
+    "notes": "Technical media and discourse networks. Key for medium, signal, information, memory from media systems perspective.",
+    "original_year": 1986,
+    "original_language": "German",
+    "translator": "Geoffrey Winthrop-Young and Michael Wutz"
   },
   {
     "author": "Simone de Beauvoir",
     "title": "The Second Sex",
-    "year": 1949,
-    "decade": "1940s",
+    "year": 1953,
+    "decade": "1950s",
     "fields": [
       "philosophy",
       "philosophy_of_mind",
@@ -2305,7 +2527,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "beauvoir_second_sex.txt",
-    "notes": "Existentialist phenomenology of embodiment and consciousness. Key feminist philosophy; fills 1940s gap in embodiment/consciousness."
+    "notes": "Existentialist phenomenology of embodiment and consciousness. Key feminist philosophy; fills 1940s gap in embodiment/consciousness.",
+    "original_year": 1949,
+    "original_language": "French",
+    "translator": "H. M. Parshley"
   },
   {
     "author": "Hannah Arendt",
@@ -2326,8 +2551,8 @@
   {
     "author": "Niklas Luhmann",
     "title": "Social Systems",
-    "year": 1984,
-    "decade": "1980s",
+    "year": 1995,
+    "decade": "1990s",
     "fields": [
       "sociology",
       "cross_field"
@@ -2336,7 +2561,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "luhmann_social_systems.txt",
-    "notes": "Systems theory, autopoiesis, complexity, communication. Completes Wiener → Bateson → Luhmann arc. Key for complexity, information, behavior."
+    "notes": "Systems theory, autopoiesis, complexity, communication. Completes Wiener → Bateson → Luhmann arc. Key for complexity, information, behavior.",
+    "original_year": 1984,
+    "original_language": "German",
+    "translator": "John Bednarz Jr. with Dirk Baecker"
   },
   {
     "author": "George Herbert Mead",
@@ -2373,7 +2601,7 @@
   {
     "author": "Michel de Certeau",
     "title": "The Practice of Everyday Life",
-    "year": 1980,
+    "year": 1984,
     "decade": "1980s",
     "fields": [
       "sociology",
@@ -2384,7 +2612,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "de_certeau_practice_everyday_life.txt",
-    "notes": "Tactics vs strategies, everyday practice. Key for user, behavior, pattern, form — bridges design and critical theory."
+    "notes": "Tactics vs strategies, everyday practice. Key for user, behavior, pattern, form — bridges design and critical theory.",
+    "original_year": 1980,
+    "original_language": "French",
+    "translator": "Steven Rendall"
   },
   {
     "author": "Bruno Latour",
@@ -2421,8 +2652,8 @@
   {
     "author": "Vilém Flusser",
     "title": "Towards a Philosophy of Photography",
-    "year": 1983,
-    "decade": "1980s",
+    "year": 2000,
+    "decade": "2000s",
     "fields": [
       "philosophy",
       "arts",
@@ -2432,7 +2663,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "flusser_philosophy_photography.txt",
-    "notes": "Technical images, apparatus, program. Key for image, simulation, medium, model — fills gap between Barthes and Baudrillard."
+    "notes": "Technical images, apparatus, program. Key for image, simulation, medium, model — fills gap between Barthes and Baudrillard.",
+    "original_year": 1983,
+    "original_language": "German",
+    "translator": "Anthony Mathews"
   },
   {
     "author": "John Dewey",
@@ -2453,8 +2687,8 @@
   {
     "author": "Marcel Mauss",
     "title": "The Gift",
-    "year": 1925,
-    "decade": "1920s",
+    "year": 1954,
+    "decade": "1950s",
     "fields": [
       "sociology",
       "anthropology",
@@ -2464,7 +2698,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "mauss_the_gift.txt",
-    "notes": "Exchange, reciprocity, symbol, social obligation. Foundational social theory; fills 1920s gap in anthropology/sociology."
+    "notes": "Exchange, reciprocity, symbol, social obligation. Foundational social theory; fills 1920s gap in anthropology/sociology.",
+    "original_year": 1925,
+    "original_language": "French",
+    "translator": "Ian Cunnison"
   },
   {
     "author": "David E. Rumelhart, James L. McClelland",
@@ -2563,8 +2800,8 @@
   {
     "author": "Edmund Husserl",
     "title": "Ideas: General Introduction to Pure Phenomenology",
-    "year": 1913,
-    "decade": "1910s",
+    "year": 1931,
+    "decade": "1930s",
     "fields": [
       "philosophy_of_mind",
       "philosophy"
@@ -2573,13 +2810,16 @@
     "source": "Archive.org (Boyce Gibson translation, 1931)",
     "source_url": "https://archive.org/download/ideasgeneralintro00huss/ideasgeneralintro00huss_djvu.txt",
     "filename": "husserl_ideas_1.txt",
-    "notes": "Pure phenomenology, intentionality, consciousness, noema/noesis. Foundational for intentionality and perception coverage in 1910s. Fetchable from Archive.org when available (503 during corpus build)."
+    "notes": "Pure phenomenology, intentionality, consciousness, noema/noesis. Foundational for intentionality and perception coverage in 1910s. Fetchable from Archive.org when available (503 during corpus build).",
+    "original_year": 1913,
+    "original_language": "German",
+    "translator": "W. R. Boyce Gibson"
   },
   {
     "author": "Thorstein Veblen",
     "title": "The Theory of the Leisure Class",
     "year": 1899,
-    "decade": "1900s",
+    "decade": "1890s",
     "fields": [
       "sociology",
       "cross_field"
@@ -2594,14 +2834,14 @@
     "author": "William James",
     "title": "Essays in Radical Empiricism",
     "year": 1912,
-    "decade": "1900s",
+    "decade": "1910s",
     "fields": [
       "philosophy_of_mind",
       "philosophy"
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/5235",
+    "source_url": "https://www.gutenberg.org/ebooks/32547",
     "filename": "james_essays_radical_empiricism.txt",
     "notes": "Pure experience, radical empiricism, consciousness as process. Extends James's treatment of experience, perception, consciousness."
   },
@@ -2633,7 +2873,10 @@
     "source": "Archive.org (Paul & Palmer translation, 1911)",
     "source_url": "https://archive.org/download/mattermemory00berguoft/mattermemory00berguoft_djvu.txt",
     "filename": "bergson_matter_memory.txt",
-    "notes": "Perception, memory, image, duration. Key for perception, memory, image, representation — Bergson already in corpus (Creative Evolution)."
+    "notes": "Perception, memory, image, duration. Key for perception, memory, image, representation — Bergson already in corpus (Creative Evolution).",
+    "original_year": 1896,
+    "original_language": "French",
+    "translator": "Nancy Margaret Paul and W. Scott Palmer"
   },
   {
     "author": "Evan Thompson",
@@ -2685,8 +2928,8 @@
   {
     "author": "Arthur Schopenhauer",
     "title": "The World as Will and Representation, Vol. 1",
-    "year": 1818,
-    "decade": "1820s",
+    "year": 1958,
+    "decade": "1950s",
     "fields": [
       "philosophy"
     ],
@@ -2694,13 +2937,16 @@
     "source": "Internet Archive",
     "source_url": "https://archive.org/download/worldaswillandre00scho/worldaswillandre00scho_djvu.txt",
     "filename": "schopenhauer_world_as_will_vol1.txt",
-    "notes": "Payne translation. Will, representation, pessimism, aesthetics. Bridges Kant to later 19th-century philosophy."
+    "notes": "Payne translation. Will, representation, pessimism, aesthetics. Bridges Kant to later 19th-century philosophy.",
+    "original_year": 1818,
+    "original_language": "German",
+    "translator": "E. F. J. Payne"
   },
   {
     "author": "G.W.F. Hegel",
     "title": "Elements of the Philosophy of Right",
-    "year": 1820,
-    "decade": "1820s",
+    "year": 1942,
+    "decade": "1940s",
     "fields": [
       "philosophy",
       "political_philosophy"
@@ -2709,7 +2955,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/68951",
     "filename": "hegel_philosophy_right.txt",
-    "notes": "Dyde translation. State, civil society, ethical life, freedom, property."
+    "notes": "Dyde translation. State, civil society, ethical life, freedom, property.",
+    "original_year": 1820,
+    "original_language": "German",
+    "translator": "T. M. Knox and S. W. Dyde"
   },
   {
     "author": "Alexis de Tocqueville",
@@ -2724,22 +2973,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/816",
     "filename": "tocqueville_democracy_america.txt",
-    "notes": "Reeve translation. Democracy, equality, individualism, tyranny of the majority."
-  },
-  {
-    "author": "Søren Kierkegaard",
-    "title": "Fear and Trembling",
-    "year": 1843,
-    "decade": "1840s",
-    "fields": [
-      "philosophy",
-      "theology"
-    ],
-    "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/36484",
-    "filename": "kierkegaard_fear_trembling.txt",
-    "notes": "Paulos translation. Faith, ethics, the individual, Abraham, teleological suspension."
+    "notes": "Reeve translation. Democracy, equality, individualism, tyranny of the majority.",
+    "original_year": 1835,
+    "original_language": "French",
+    "translator": "Henry Reeve"
   },
   {
     "author": "John Stuart Mill",
@@ -2821,8 +3058,8 @@
   {
     "author": "Franz Brentano",
     "title": "Psychology from an Empirical Standpoint",
-    "year": 1874,
-    "decade": "1870s",
+    "year": 1973,
+    "decade": "1970s",
     "fields": [
       "philosophy",
       "psychology"
@@ -2831,13 +3068,16 @@
     "source": "Internet Archive",
     "source_url": "https://archive.org/download/psychologyfromanempirical00bren/psychologyfromanempirical00bren_djvu.txt",
     "filename": "brentano_psychology_empirical.txt",
-    "notes": "Intentionality (Intentionalität) as defining mark of mental phenomena. Origin of the intentionality concept, predating Husserl by decades. Foundational for phenomenology and philosophy of mind."
+    "notes": "Intentionality (Intentionalität) as defining mark of mental phenomena. Origin of the intentionality concept, predating Husserl by decades. Foundational for phenomenology and philosophy of mind.",
+    "original_year": 1874,
+    "original_language": "German",
+    "translator": "Antos C. Rancurello, D. B. Terrell and Linda L. McAlister"
   },
   {
     "author": "Friedrich Nietzsche",
     "title": "The Birth of Tragedy",
-    "year": 1872,
-    "decade": "1880s",
+    "year": 1909,
+    "decade": "1900s",
     "fields": [
       "philosophy",
       "aesthetics"
@@ -2846,7 +3086,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/51356",
     "filename": "nietzsche_birth_tragedy.txt",
-    "notes": "Apollonian/Dionysian duality, Greek tragedy, music, Schopenhauer, early Nietzsche."
+    "notes": "Apollonian/Dionysian duality, Greek tragedy, music, Schopenhauer, early Nietzsche.",
+    "original_year": 1872,
+    "original_language": "German",
+    "translator": "William A. Haussmann"
   },
   {
     "author": "Thomas Carlyle",
@@ -2893,23 +3136,26 @@
   },
   {
     "author": "Søren Kierkegaard",
-    "title": "The Concept of Anxiety",
-    "year": 1844,
-    "decade": "1840s",
+    "title": "The Concept of Dread",
+    "year": 1944,
+    "decade": "1940s",
     "fields": [
       "philosophy"
     ],
     "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/4596",
+    "source": "Manually sourced (PDF text layer)",
+    "source_url": "",
     "filename": "kierkegaard_concept_anxiety.txt",
-    "notes": "Anxiety as a category of freedom and possibility; precursor to Heidegger's thrownness and existentialist psychology."
+    "notes": "Anxiety as a category of freedom and possibility; precursor to Heidegger's thrownness and existentialist psychology.",
+    "original_year": 1844,
+    "original_language": "Danish",
+    "translator": "Walter Lowrie"
   },
   {
     "author": "Friedrich Engels",
     "title": "The Condition of the Working Class in England",
-    "year": 1845,
-    "decade": "1840s",
+    "year": 1887,
+    "decade": "1880s",
     "fields": [
       "sociology",
       "political_philosophy"
@@ -2918,7 +3164,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/17306",
     "filename": "engels_condition_working_class.txt",
-    "notes": "Empirical grounding for Marxist theory; industrial capitalism, urban alienation, class formation."
+    "notes": "Empirical grounding for Marxist theory; industrial capitalism, urban alienation, class formation.",
+    "original_year": 1845,
+    "original_language": "German",
+    "translator": "Florence Kelley Wischnewetzky"
   },
   {
     "author": "John Stuart Mill",
@@ -2967,17 +3216,20 @@
   {
     "author": "Karl Marx",
     "title": "A Contribution to the Critique of Political Economy",
-    "year": 1859,
-    "decade": "1850s",
+    "year": 1904,
+    "decade": "1900s",
     "fields": [
       "political_philosophy",
       "sociology"
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/11458",
+    "source_url": "https://www.gutenberg.org/ebooks/46423",
     "filename": "marx_critique_political_economy.txt",
-    "notes": "Contains the famous base/superstructure preface; concise statement of historical materialism."
+    "notes": "Contains the famous base/superstructure preface; concise statement of historical materialism.",
+    "original_year": 1859,
+    "original_language": "German",
+    "translator": "N. I. Stone"
   },
   {
     "author": "Francis Galton",
@@ -2989,8 +3241,8 @@
       "philosophy_of_science"
     ],
     "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/7124",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/hereditarygeniu01galtgoog",
     "filename": "galton_hereditary_genius.txt",
     "notes": "Historically pivotal for psychology and statistics despite controversial thesis; introduces statistical thinking to human sciences."
   },
@@ -3003,8 +3255,8 @@
       "sociology"
     ],
     "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/37850",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/studyofsociology00spen_0",
     "filename": "spencer_study_of_sociology.txt",
     "notes": "Social Darwinism; 'survival of the fittest' in social context. Establishes sociology as a discipline."
   },
@@ -3041,17 +3293,20 @@
   {
     "author": "Gottlob Frege",
     "title": "The Foundations of Arithmetic",
-    "year": 1884,
-    "decade": "1880s",
+    "year": 1953,
+    "decade": "1950s",
     "fields": [
       "philosophy",
       "logic"
     ],
     "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/48312",
+    "source": "Manually sourced (OCR of scanned PDF)",
+    "source_url": "",
     "filename": "frege_foundations_arithmetic.txt",
-    "notes": "Origin of analytic philosophy and philosophy of mathematics. Concept, object, number, definition. Influenced Russell and the entire analytic tradition."
+    "notes": "Origin of analytic philosophy and philosophy of mathematics. Concept, object, number, definition. Influenced Russell and the entire analytic tradition.",
+    "original_year": 1884,
+    "original_language": "German",
+    "translator": "J. L. Austin"
   },
   {
     "author": "Herbert Spencer",
@@ -3062,55 +3317,61 @@
       "political_philosophy"
     ],
     "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/6836",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/manversusstate00spen",
     "filename": "spencer_man_versus_state.txt",
     "notes": "Individualism vs. state intervention; echoes Mill, prefigures 20th-c classical liberalism and libertarianism."
   },
   {
     "author": "James George Frazer",
     "title": "The Golden Bough (abridged)",
-    "year": 1890,
-    "decade": "1890s",
+    "year": 1922,
+    "decade": "1920s",
     "fields": [
       "anthropology",
       "philosophy"
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/3035",
+    "source_url": "https://www.gutenberg.org/ebooks/3623",
     "filename": "frazer_golden_bough.txt",
     "notes": "Myth, magic, ritual, religion across cultures. Enormous influence on 20th-c anthropology, literature (Eliot, Joyce), and theory."
   },
   {
     "author": "G.W.F. Hegel",
     "title": "Lectures on the Philosophy of History",
-    "year": 1837,
-    "decade": "1830s",
+    "year": 1857,
+    "decade": "1850s",
     "fields": [
       "philosophy",
       "sociology"
     ],
     "status": "public_domain",
-    "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/48766",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/lecturesonphilos00hegeiala",
     "filename": "hegel_philosophy_history.txt",
-    "notes": "Sibree translation. World spirit, historical development, dialectic in history. Bridges Phenomenology to Marx."
+    "notes": "Sibree translation. World spirit, historical development, dialectic in history. Bridges Phenomenology to Marx.",
+    "original_year": 1837,
+    "original_language": "German",
+    "translator": "J. Sibree"
   },
   {
     "author": "Ludwig Feuerbach",
     "title": "The Essence of Christianity",
-    "year": 1841,
-    "decade": "1840s",
+    "year": 1854,
+    "decade": "1850s",
     "fields": [
       "philosophy",
       "sociology"
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/5851",
+    "source_url": "https://www.gutenberg.org/ebooks/47025",
     "filename": "feuerbach_essence_christianity.txt",
-    "notes": "Projection theory of religion; God as alienated human essence. Direct influence on Marx's alienation concept."
+    "notes": "Projection theory of religion; God as alienated human essence. Direct influence on Marx's alienation concept.",
+    "original_year": 1841,
+    "original_language": "German",
+    "translator": "George Eliot"
   },
   {
     "author": "Oscar Wilde",
@@ -3130,7 +3391,7 @@
   {
     "author": "Leo Tolstoy",
     "title": "What is Art?",
-    "year": 1897,
+    "year": 1898,
     "decade": "1890s",
     "fields": [
       "aesthetics",
@@ -3140,13 +3401,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/64908",
     "filename": "tolstoy_what_is_art.txt",
-    "notes": "Art as communication of feeling; critique of aestheticism and formalism. Influential counter-position to Wilde."
+    "notes": "Art as communication of feeling; critique of aestheticism and formalism. Influential counter-position to Wilde.",
+    "original_year": 1897,
+    "original_language": "Russian",
+    "translator": "Aylmer Maude"
   },
   {
     "author": "Henri Poincaré",
-    "title": "Science and Hypothesis",
-    "year": 1902,
-    "decade": "1900s",
+    "title": "The Foundations of Science (Science and Hypothesis, The Value of Science, Science and Method)",
+    "year": 1913,
+    "decade": "1910s",
     "fields": [
       "philosophy_of_science",
       "epistemology"
@@ -3155,12 +3419,15 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/39713",
     "filename": "poincare_science_hypothesis.txt",
-    "notes": "Conventionalism in science; role of hypothesis, geometry, and intuition. Key pre-Vienna Circle philosophy of science."
+    "notes": "Conventionalism in science; role of hypothesis, geometry, and intuition. Key pre-Vienna Circle philosophy of science.",
+    "original_year": 1902,
+    "original_language": "French",
+    "translator": "George Bruce Halsted"
   },
   {
     "author": "Benedetto Croce",
     "title": "Aesthetic as Science of Expression and General Linguistic",
-    "year": 1902,
+    "year": 1909,
     "decade": "1900s",
     "fields": [
       "aesthetics",
@@ -3169,15 +3436,18 @@
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/12330",
+    "source_url": "https://www.gutenberg.org/ebooks/9306",
     "filename": "croce_aesthetic.txt",
-    "notes": "Expression, intuition, and art as language. Foundational idealist aesthetics; influenced Collingwood and Italian culture broadly."
+    "notes": "Expression, intuition, and art as language. Foundational idealist aesthetics; influenced Collingwood and Italian culture broadly.",
+    "original_year": 1902,
+    "original_language": "Italian",
+    "translator": "Douglas Ainslie"
   },
   {
     "author": "Henri Poincaré",
     "title": "The Value of Science",
     "year": 1905,
-    "decade": "1900s",
+    "decade": "excluded",
     "fields": [
       "philosophy_of_science",
       "epistemology"
@@ -3186,7 +3456,8 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/39528",
     "filename": "poincare_value_science.txt",
-    "notes": "Mathematical intuition, objectivity, and the nature of scientific truth. Companion to Science and Hypothesis."
+    "notes": "Mathematical intuition, objectivity, and the nature of scientific truth. Companion to Science and Hypothesis.",
+    "exclusion": "wrong text (Kroeber, Mohave Pottery); The Value of Science is inside poincare_science_hypothesis.txt"
   },
   {
     "author": "John Dewey",
@@ -3222,8 +3493,8 @@
   {
     "author": "Albert Einstein",
     "title": "Relativity: The Special and General Theory",
-    "year": 1916,
-    "decade": "1910s",
+    "year": 1920,
+    "decade": "1920s",
     "fields": [
       "philosophy_of_science"
     ],
@@ -3231,7 +3502,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/5001",
     "filename": "einstein_relativity.txt",
-    "notes": "Popular exposition of special and general relativity. Introduces space-time, simultaneity, reference frames into broad discourse."
+    "notes": "Popular exposition of special and general relativity. Introduces space-time, simultaneity, reference frames into broad discourse.",
+    "original_year": 1916,
+    "original_language": "German",
+    "translator": "Robert W. Lawson"
   },
   {
     "author": "Bertrand Russell",
@@ -3260,7 +3534,7 @@
     ],
     "status": "public_domain",
     "source": "Project Gutenberg",
-    "source_url": "https://www.gutenberg.org/ebooks/34953",
+    "source_url": "https://www.gutenberg.org/ebooks/57795",
     "filename": "eliot_sacred_wood.txt",
     "notes": "Tradition and the Individual Talent; impersonal theory of poetry. Foundational for Anglo-American literary modernism."
   },
@@ -3297,8 +3571,8 @@
   {
     "author": "Pierre Duhem",
     "title": "The Aim and Structure of Physical Theory",
-    "year": 1906,
-    "decade": "1900s",
+    "year": 1954,
+    "decade": "1950s",
     "fields": [
       "philosophy_of_science",
       "epistemology"
@@ -3307,7 +3581,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "duhem_aim_structure_physical_theory.txt",
-    "notes": "Holism (Duhem-Quine thesis), underdetermination, theory-ladenness of observation. Foundational for 20th-c philosophy of science."
+    "notes": "Holism (Duhem-Quine thesis), underdetermination, theory-ladenness of observation. Foundational for 20th-c philosophy of science.",
+    "original_year": 1906,
+    "original_language": "French",
+    "translator": "Philip P. Wiener"
   },
   {
     "author": "Rudolf Carnap",
@@ -3322,7 +3599,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "carnap_unity_science.txt",
-    "notes": "Logical syntax, physicalism, unified science language. Vienna Circle manifesto text."
+    "notes": "Logical syntax, physicalism, unified science language. Vienna Circle manifesto text.",
+    "original_year": 1932,
+    "original_language": "German",
+    "translator": "Max Black"
   },
   {
     "author": "Otto Neurath, Rudolf Carnap, Charles Morris (eds.)",
@@ -3359,7 +3639,7 @@
     "author": "Charles Taylor",
     "title": "Sources of the Self",
     "year": 1989,
-    "decade": "1990s",
+    "decade": "1980s",
     "fields": [
       "philosophy",
       "sociology"
@@ -3396,7 +3676,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "beck_risk_society.txt",
-    "notes": "Risk, reflexive modernization, second modernity. Foundational for sociology of risk and late-modern society."
+    "notes": "Risk, reflexive modernization, second modernity. Foundational for sociology of risk and late-modern society.",
+    "original_year": 1986,
+    "original_language": "German",
+    "translator": "Mark Ritter"
   },
   {
     "author": "Zygmunt Bauman",
@@ -3426,13 +3709,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "habermas_between_facts_norms.txt",
-    "notes": "Discourse theory of law and democracy; deliberative politics. Companion to Theory of Communicative Action."
+    "notes": "Discourse theory of law and democracy; deliberative politics. Companion to Theory of Communicative Action.",
+    "original_year": 1992,
+    "original_language": "German",
+    "translator": "William Rehg"
   },
   {
     "author": "Quentin Meillassoux",
     "title": "After Finitude",
     "year": 2008,
-    "decade": "2010s",
+    "decade": "2000s",
     "fields": [
       "philosophy",
       "epistemology"
@@ -3441,7 +3727,10 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "meillassoux_after_finitude.txt",
-    "notes": "Speculative realism, correlationism, contingency, the absolute. Central text of 2000s-2010s continental philosophy revival."
+    "notes": "Speculative realism, correlationism, contingency, the absolute. Central text of 2000s-2010s continental philosophy revival.",
+    "original_year": 2006,
+    "original_language": "French",
+    "translator": "Ray Brassier"
   },
   {
     "author": "Graham Harman",
@@ -3461,7 +3750,7 @@
   {
     "author": "Bernard Stiegler",
     "title": "Technics and Time 3: Cinematic Time and the Question of Malaise",
-    "year": 2010,
+    "year": 2011,
     "decade": "2010s",
     "fields": [
       "philosophy",
@@ -3471,13 +3760,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "stiegler_technics_time_3.txt",
-    "notes": "Tertiary retention, cinematic consciousness, attention, malaise. Completes the Technics and Time trilogy."
+    "notes": "Tertiary retention, cinematic consciousness, attention, malaise. Completes the Technics and Time trilogy.",
+    "original_year": 2001,
+    "original_language": "French",
+    "translator": "Stephen Barker"
   },
   {
     "author": "Jacques Rancière",
     "title": "The Emancipated Spectator",
     "year": 2009,
-    "decade": "2010s",
+    "decade": "2000s",
     "fields": [
       "philosophy",
       "aesthetics",
@@ -3487,13 +3779,16 @@
     "source": "manually sourced",
     "source_url": "",
     "filename": "ranciere_emancipated_spectator.txt",
-    "notes": "Distribution of the sensible, spectatorship, emancipation, aesthetics and politics."
+    "notes": "Distribution of the sensible, spectatorship, emancipation, aesthetics and politics.",
+    "original_year": 2008,
+    "original_language": "French",
+    "translator": "Gregory Elliott"
   },
   {
     "author": "Friedrich Nietzsche",
     "title": "The Gay Science",
-    "year": 1882,
-    "decade": "1880s",
+    "year": 1910,
+    "decade": "1910s",
     "fields": [
       "philosophy",
       "cross_field"
@@ -3502,13 +3797,16 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/52881",
     "filename": "nietzsche_gay_science.txt",
-    "notes": "Titled \"The Joyful Wisdom\" in the Common translation. God is dead, perspectivism, eternal recurrence, amor fati."
+    "notes": "Titled \"The Joyful Wisdom\" in the Common translation. God is dead, perspectivism, eternal recurrence, amor fati.",
+    "original_year": 1882,
+    "original_language": "German",
+    "translator": "Thomas Common"
   },
   {
     "author": "Wilhelm Wundt",
     "title": "Principles of Physiological Psychology",
-    "year": 1874,
-    "decade": "1870s",
+    "year": 1904,
+    "decade": "1900s",
     "fields": [
       "psychology",
       "philosophy_of_mind",
@@ -3519,13 +3817,16 @@
     "source": "Manual",
     "source_url": "",
     "filename": "wundt_principles_physiological_psychology.txt",
-    "notes": "First systematic experimental psychology textbook. Apperception, sensation, psychophysics. Foundational for cognitive science genealogy."
+    "notes": "First systematic experimental psychology textbook. Apperception, sensation, psychophysics. Foundational for cognitive science genealogy.",
+    "original_year": 1874,
+    "original_language": "German",
+    "translator": "Edward Bradford Titchener"
   },
   {
     "author": "Alfred Tarski",
     "title": "Introduction to Logic",
-    "year": 1941,
-    "decade": "1930s",
+    "year": 1994,
+    "decade": "1990s",
     "fields": [
       "logic",
       "epistemology",
@@ -3535,7 +3836,10 @@
     "source": "Manual",
     "source_url": "",
     "filename": "tarski_introduction_logic.txt",
-    "notes": "Formal semantics, truth, deduction. Bridges Frege-Carnap formal tradition into natural language discourse. Key for tracking \"truth\" and \"reference\" vocabulary."
+    "notes": "Formal semantics, truth, deduction. Bridges Frege-Carnap formal tradition into natural language discourse. Key for tracking \"truth\" and \"reference\" vocabulary.",
+    "original_year": 1936,
+    "original_language": "Polish",
+    "translator": "Olaf Helmer, revised"
   },
   {
     "author": "Charles Morris",
@@ -3548,7 +3852,7 @@
       "cognitive_science"
     ],
     "status": "available",
-    "source": "Manual",
+    "source": "Manually sourced (OCR of scanned PDF)",
     "source_url": "",
     "filename": "morris_signs_language_behavior.txt",
     "notes": "Synthesises Peirce semiotics with behaviorism. Bridges 1930s Peirce Collected Papers entry to post-war linguistics. Sign, signification, pragmatics."
@@ -3620,8 +3924,8 @@
   {
     "author": "Auguste Comte",
     "title": "The Positive Philosophy of Auguste Comte",
-    "year": 1830,
-    "decade": "1830s",
+    "year": 1853,
+    "decade": "1850s",
     "fields": [
       "philosophy",
       "philosophy_of_science",
@@ -3631,13 +3935,16 @@
     "source": "Manual",
     "source_url": "",
     "filename": "comte_positive_philosophy.txt",
-    "notes": "Hackett abridgment of Cours de philosophie positive. Foundational positivism vocabulary: positive, empirical, sociology, hierarchy of sciences."
+    "notes": "Hackett abridgment of Cours de philosophie positive. Foundational positivism vocabulary: positive, empirical, sociology, hierarchy of sciences.",
+    "original_year": 1830,
+    "original_language": "French",
+    "translator": "Harriet Martineau"
   },
   {
     "author": "Auguste Comte",
     "title": "A General View of Positivism",
-    "year": 1848,
-    "decade": "1840s",
+    "year": 1865,
+    "decade": "1860s",
     "fields": [
       "philosophy",
       "philosophy_of_science"
@@ -3646,7 +3953,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/53799",
     "filename": "comte_general_view_positivism.txt",
-    "notes": "Bridges translation. Positivism, sociology, science, progress, order, humanity. Complements the Positive Philosophy already in corpus with Comte's later synthetic statement."
+    "notes": "Bridges translation. Positivism, sociology, science, progress, order, humanity. Complements the Positive Philosophy already in corpus with Comte's later synthetic statement.",
+    "original_year": 1848,
+    "original_language": "French",
+    "translator": "J. H. Bridges"
   },
   {
     "author": "T.H. Huxley",
@@ -3798,8 +4108,8 @@
   {
     "author": "Friedrich Schleiermacher",
     "title": "On Religion: Speeches to its Cultured Despisers",
-    "year": 1799,
-    "decade": "1820s",
+    "year": 1893,
+    "decade": "1890s",
     "fields": [
       "philosophy",
       "philosophy_of_mind"
@@ -3808,7 +4118,10 @@
     "source": "Internet Archive",
     "source_url": "https://archive.org/details/cu31924070675743",
     "filename": "schleiermacher_on_religion.txt",
-    "notes": "Oman translation (1893). Intuition, feeling, infinite, universe, religion, piety, contemplation. Shapes Romantic vocabulary of experience and grounds Dilthey's hermeneutics."
+    "notes": "Oman translation (1893). Intuition, feeling, infinite, universe, religion, piety, contemplation. Shapes Romantic vocabulary of experience and grounds Dilthey's hermeneutics.",
+    "original_year": 1799,
+    "original_language": "German",
+    "translator": "John Oman"
   },
   {
     "author": "Dugald Stewart",
@@ -3884,8 +4197,8 @@
   {
     "author": "Hermann von Helmholtz",
     "title": "Treatise on Physiological Optics, Vol. 3",
-    "year": 1867,
-    "decade": "1860s",
+    "year": 1925,
+    "decade": "1920s",
     "fields": [
       "philosophy_of_mind",
       "philosophy_of_science",
@@ -3895,13 +4208,16 @@
     "source": "Internet Archive",
     "source_url": "https://archive.org/details/helmholtzstreati0003jame",
     "filename": "helmholtz_physiological_optics_v3.txt",
-    "notes": "Southall translation (1925). Perception, inference, sign, unconscious inference, sensation, colour, space, judgment. Empirical grounding for everything from James to Gibson; introduces 'unconscious inference' as core perceptual vocabulary."
+    "notes": "Southall translation (1925). Perception, inference, sign, unconscious inference, sensation, colour, space, judgment. Empirical grounding for everything from James to Gibson; introduces 'unconscious inference' as core perceptual vocabulary.",
+    "original_year": 1867,
+    "original_language": "German",
+    "translator": "James P. C. Southall"
   },
   {
     "author": "S.T. Coleridge",
     "title": "Biographia Literaria",
     "year": 1817,
-    "decade": "1820s",
+    "decade": "canon",
     "fields": [
       "philosophy",
       "philosophy_of_mind"
@@ -3910,7 +4226,8 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/6081",
     "filename": "coleridge_biographia_literaria.txt",
-    "notes": "Imagination, symbol, organic form, method, genius, will, consciousness. Philosophical foundations of Romanticism; distinction between imagination and fancy; critique of Hartley's associationism."
+    "notes": "Imagination, symbol, organic form, method, genius, will, consciousness. Philosophical foundations of Romanticism; distinction between imagination and fancy; critique of Hartley's associationism.",
+    "exclusion": "English original of 1817, before the first decade"
   },
   {
     "author": "Charles Lyell",
@@ -3974,8 +4291,8 @@
   {
     "author": "G.W.F. Hegel",
     "title": "The Logic of Hegel (Science of Logic)",
-    "year": 1816,
-    "decade": "1820s",
+    "year": 1892,
+    "decade": "1890s",
     "fields": [
       "philosophy",
       "cross_field"
@@ -3984,7 +4301,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/55108",
     "filename": "hegel_science_of_logic.txt",
-    "notes": "Wallace translation. Concept, being, nothing, becoming, dialectic, negation, mediation. Core logical vocabulary for Marx, Lukacs, Frankfurt School."
+    "notes": "Wallace translation. Concept, being, nothing, becoming, dialectic, negation, mediation. Core logical vocabulary for Marx, Lukacs, Frankfurt School.",
+    "original_year": 1817,
+    "original_language": "German",
+    "translator": "William Wallace"
   },
   {
     "author": "Herbert Spencer",
@@ -4004,8 +4324,8 @@
   {
     "author": "Henri Bergson",
     "title": "Time and Free Will",
-    "year": 1889,
-    "decade": "1880s",
+    "year": 1910,
+    "decade": "1910s",
     "fields": [
       "philosophy",
       "philosophy_of_mind"
@@ -4014,7 +4334,10 @@
     "source": "Project Gutenberg",
     "source_url": "https://www.gutenberg.org/ebooks/56852",
     "filename": "bergson_time_and_free_will.txt",
-    "notes": "Pogson translation. Duration, consciousness, multiplicity, memory, intensity. Earlier work establishing the core vocabulary extended in Matter and Memory and Creative Evolution."
+    "notes": "Pogson translation. Duration, consciousness, multiplicity, memory, intensity. Earlier work establishing the core vocabulary extended in Matter and Memory and Creative Evolution.",
+    "original_year": 1889,
+    "original_language": "French",
+    "translator": "F. L. Pogson"
   },
   {
     "author": "William Whewell",
@@ -4031,7 +4354,6 @@
     "notes": "Induction, hypothesis, consilience of inductions, colligation, verification. Source of Peirce's abduction vocabulary and 19th-century philosophy of science terminology."
   },
   {
-    "file": "data/external/books/2010s/floridi_philosophy_of_information.txt",
     "author": "Luciano Floridi",
     "title": "The Philosophy of Information",
     "year": 2011,
@@ -4041,10 +4363,10 @@
       "philosophy_of_science"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "floridi_philosophy_of_information.txt"
   },
   {
-    "file": "data/external/books/2010s/ingold_being_alive.txt",
     "author": "Tim Ingold",
     "title": "Being Alive",
     "year": 2011,
@@ -4054,10 +4376,10 @@
       "design"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "ingold_being_alive.txt"
   },
   {
-    "file": "data/external/books/2010s/hui_existence_digital_objects.txt",
     "author": "Yuk Hui",
     "title": "On the Existence of Digital Objects",
     "year": 2016,
@@ -4067,10 +4389,10 @@
       "cross_field"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "hui_existence_digital_objects.txt"
   },
   {
-    "file": "data/external/books/2020s/coeckelbergh_ai_ethics.txt",
     "author": "Mark Coeckelbergh",
     "title": "AI Ethics",
     "year": 2020,
@@ -4080,10 +4402,10 @@
       "cross_field"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "coeckelbergh_ai_ethics.txt"
   },
   {
-    "file": "data/external/books/2020s/pasquale_new_laws_of_robotics.txt",
     "author": "Frank Pasquale",
     "title": "New Laws of Robotics",
     "year": 2020,
@@ -4093,10 +4415,10 @@
       "cross_field"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "pasquale_new_laws_of_robotics.txt"
   },
   {
-    "file": "data/external/books/2020s/crawford_atlas_of_ai.txt",
     "author": "Kate Crawford",
     "title": "Atlas of AI",
     "year": 2021,
@@ -4106,23 +4428,10 @@
       "cross_field"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "crawford_atlas_of_ai.txt"
   },
   {
-    "file": "data/external/books/1920s/lukacs_history_class_consciousness.txt",
-    "author": "Georg Lukács",
-    "title": "History and Class Consciousness",
-    "year": 1923,
-    "decade": "1920s",
-    "fields": [
-      "philosophy",
-      "cross_field"
-    ],
-    "status": "available",
-    "source": "pdf_extraction"
-  },
-  {
-    "file": "data/external/books/1900s/sherrington_integrative_action.txt",
     "author": "Charles Sherrington",
     "title": "The Integrative Action of the Nervous System",
     "year": 1906,
@@ -4132,10 +4441,10 @@
       "neuroscience"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "sherrington_integrative_action.txt"
   },
   {
-    "file": "data/external/books/1950s/ashby_intro_cybernetics.txt",
     "author": "W. Ross Ashby",
     "title": "An Introduction to Cybernetics",
     "year": 1956,
@@ -4144,10 +4453,10 @@
       "systems_theory"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "ashby_intro_cybernetics.txt"
   },
   {
-    "file": "data/external/books/1960s/bertalanffy_general_system_theory.txt",
     "author": "Ludwig von Bertalanffy",
     "title": "General System Theory",
     "year": 1968,
@@ -4156,10 +4465,10 @@
       "systems_theory"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "bertalanffy_general_system_theory.txt"
   },
   {
-    "file": "data/external/books/1940s/hebb_organization_behavior.txt",
     "author": "D.O. Hebb",
     "title": "The Organization of Behavior",
     "year": 1949,
@@ -4170,10 +4479,10 @@
       "neuroscience"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "hebb_organization_behavior.txt"
   },
   {
-    "file": "data/external/books/2000s/dayan_abbott_theoretical_neuroscience.txt",
     "author": "Peter Dayan and L.F. Abbott",
     "title": "Theoretical Neuroscience",
     "year": 2001,
@@ -4185,7 +4494,8 @@
       "neuroscience"
     ],
     "status": "available",
-    "source": "pdf_extraction"
+    "source": "pdf_extraction",
+    "filename": "dayan_abbott_theoretical_neuroscience.txt"
   },
   {
     "author": "Ivan Pavlov",
@@ -4200,7 +4510,10 @@
     "status": "available",
     "source": "Archive.org (Dover reprint of Anrep translation)",
     "filename": "pavlov_conditioned_reflexes.txt",
-    "notes": "Anrep translation. Classical conditioning, conditioned stimulus, inhibition, cortical activity."
+    "notes": "Anrep translation. Classical conditioning, conditioned stimulus, inhibition, cortical activity.",
+    "original_year": 1926,
+    "original_language": "Russian",
+    "translator": "G. V. Anrep"
   },
   {
     "author": "James Bridle",
@@ -4246,25 +4559,29 @@
   {
     "title": "Frankenstein; or, The Modern Prometheus",
     "author": "Mary Wollstonecraft Shelley",
-    "decade": "1820s",
+    "decade": "canon",
     "year": 1818,
     "filename": "shelley_frankenstein.txt",
     "fields": [
       "philosophy_of_mind"
     ],
-    "status": "available"
+    "status": "available",
+    "exclusion": "English original of 1818, before the first decade"
   },
   {
     "title": "On Love",
     "author": "Stendhal",
-    "decade": "1820s",
-    "year": 1822,
+    "decade": "1910s",
+    "year": 1915,
     "filename": "stendhal_on_love.txt",
     "fields": [
       "psychology",
       "phenomenology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1822,
+    "original_language": "French",
+    "translator": "Philip Sidney Woolf and Cecil N. Sidney Woolf"
   },
   {
     "title": "Confessions of an English Opium-Eater",
@@ -4325,14 +4642,17 @@
   {
     "title": "A Treatise on Man",
     "author": "Adolphe Quetelet",
-    "decade": "1830s",
-    "year": 1835,
+    "decade": "1840s",
+    "year": 1842,
     "filename": "quetelet_treatise_on_man.txt",
     "fields": [
       "sociology",
       "cognitive_science"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1835,
+    "original_language": "French",
+    "translator": "R. Knox"
   },
   {
     "title": "On Heroes, Hero-Worship, and the Heroic in History",
@@ -4349,25 +4669,31 @@
   {
     "title": "The Ego and His Own",
     "author": "Max Stirner",
-    "decade": "1840s",
-    "year": 1844,
+    "decade": "1900s",
+    "year": 1907,
     "filename": "stirner_ego_and_his_own.txt",
     "fields": [
       "philosophy_of_mind",
       "political_philosophy"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1844,
+    "original_language": "German",
+    "translator": "Steven T. Byington"
   },
   {
     "title": "Cosmos: A Sketch of the Physical Description of the Universe, Vol. 1",
     "author": "Alexander von Humboldt",
     "decade": "1840s",
-    "year": 1845,
+    "year": 1849,
     "filename": "humboldt_cosmos_vol1.txt",
     "fields": [
       "systems_theory"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1845,
+    "original_language": "German",
+    "translator": "E. C. Otté"
   },
   {
     "title": "Eureka: A Prose Poem",
@@ -4396,14 +4722,17 @@
   {
     "title": "Either/Or, Part I",
     "author": "Søren Kierkegaard",
-    "decade": "1840s",
-    "year": 1843,
+    "decade": "1980s",
+    "year": 1987,
     "filename": "kierkegaard_either_or_pt1.txt",
     "fields": [
       "phenomenology",
       "philosophy_of_mind"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1843,
+    "original_language": "Danish",
+    "translator": "Howard V. Hong and Edna H. Hong"
   },
   {
     "title": "Leaves of Grass",
@@ -4431,14 +4760,17 @@
   {
     "title": "The Eighteenth Brumaire of Louis Bonaparte",
     "author": "Karl Marx",
-    "decade": "1850s",
-    "year": 1852,
+    "decade": "1890s",
+    "year": 1898,
     "filename": "marx_eighteenth_brumaire.txt",
     "fields": [
       "political_philosophy",
       "sociology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1852,
+    "original_language": "German",
+    "translator": "Daniel De Leon"
   },
   {
     "title": "London Labour and the London Poor, Vol. 1",
@@ -4489,13 +4821,16 @@
   {
     "title": "An Introduction to the Study of Experimental Medicine",
     "author": "Claude Bernard",
-    "decade": "1860s",
-    "year": 1865,
+    "decade": "1920s",
+    "year": 1927,
     "filename": "bernard_introduction_experimental_medicine.txt",
     "fields": [
       "neuroscience"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1865,
+    "original_language": "French",
+    "translator": "Henry Copley Greene"
   },
   {
     "title": "The Geological Evidences of the Antiquity of Man",
@@ -4511,37 +4846,46 @@
   {
     "title": "Thoughts Out of Season, Part I",
     "author": "Friedrich Nietzsche",
-    "decade": "1870s",
-    "year": 1873,
+    "decade": "1900s",
+    "year": 1909,
     "filename": "nietzsche_thoughts_out_of_season_pt1.txt",
     "fields": [
       "philosophy_of_mind",
       "phenomenology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1873,
+    "original_language": "German",
+    "translator": "Anthony M. Ludovici"
   },
   {
     "title": "Thoughts Out of Season, Part II",
     "author": "Friedrich Nietzsche",
-    "decade": "1870s",
-    "year": 1876,
+    "decade": "1900s",
+    "year": 1909,
     "filename": "nietzsche_thoughts_out_of_season_pt2.txt",
     "fields": [
       "philosophy_of_mind",
       "phenomenology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1874,
+    "original_language": "German",
+    "translator": "Adrian Collins"
   },
   {
     "title": "Human, All Too Human",
     "author": "Friedrich Nietzsche",
-    "decade": "1870s",
-    "year": 1878,
+    "decade": "1900s",
+    "year": 1908,
     "filename": "nietzsche_human_all_too_human.txt",
     "fields": [
       "philosophy_of_mind"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1878,
+    "original_language": "German",
+    "translator": "Alexander Harvey"
   },
   {
     "title": "The History of Creation, Vol. 1",
@@ -4552,7 +4896,10 @@
     "fields": [
       "neuroscience"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1868,
+    "original_language": "German",
+    "translator": "E. Ray Lankester (rev.)"
   },
   {
     "title": "Autobiography",
@@ -4576,7 +4923,10 @@
       "cognitive_science",
       "psychology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1870,
+    "original_language": "French",
+    "translator": "T. D. Haye"
   },
   {
     "title": "English Men of Science",
@@ -4604,14 +4954,17 @@
   {
     "title": "Contributions to the Analysis of the Sensations",
     "author": "Ernst Mach",
-    "decade": "1880s",
-    "year": 1886,
+    "decade": "1890s",
+    "year": 1897,
     "filename": "mach_analysis_of_sensations.txt",
     "fields": [
       "phenomenology",
       "cognitive_science"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1886,
+    "original_language": "German",
+    "translator": "C. M. Williams"
   },
   {
     "title": "Mental Evolution in Animals",
@@ -4639,14 +4992,17 @@
   {
     "title": "Twilight of the Idols / The Antichrist",
     "author": "Friedrich Nietzsche",
-    "decade": "1890s",
-    "year": 1889,
+    "decade": "1910s",
+    "year": 1911,
     "filename": "nietzsche_twilight_idols.txt",
     "fields": [
       "philosophy_of_mind",
       "phenomenology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1889,
+    "original_language": "German",
+    "translator": "Anthony M. Ludovici"
   },
   {
     "title": "Psychology: Briefer Course",
@@ -4697,14 +5053,17 @@
   {
     "title": "An Introduction to Metaphysics",
     "author": "Henri Bergson",
-    "decade": "1900s",
-    "year": 1903,
+    "decade": "1910s",
+    "year": 1912,
     "filename": "bergson_introduction_to_metaphysics.txt",
     "fields": [
       "phenomenology",
       "philosophy_of_mind"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1903,
+    "original_language": "French",
+    "translator": "T. E. Hulme"
   },
   {
     "title": "The Principles of Mathematics",
@@ -4721,23 +5080,29 @@
     "title": "Psychology of the Unconscious",
     "author": "C.G. Jung",
     "decade": "1910s",
-    "year": 1912,
+    "year": 1916,
     "filename": "jung_psychology_unconscious.txt",
     "fields": [
       "psychology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1912,
+    "original_language": "German",
+    "translator": "Beatrice M. Hinkle"
   },
   {
     "title": "A General Introduction to Psychoanalysis",
     "author": "Sigmund Freud",
-    "decade": "1910s",
-    "year": 1917,
+    "decade": "1920s",
+    "year": 1920,
     "filename": "freud_general_introduction_psychoanalysis.txt",
     "fields": [
       "psychology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1917,
+    "original_language": "German",
+    "translator": "G. Stanley Hall (pref.)"
   },
   {
     "title": "Essays in Experimental Logic",
@@ -4778,13 +5143,14 @@
   {
     "title": "The Work of Art in the Age of Mechanical Reproduction",
     "author": "Walter Benjamin",
-    "decade": "1930s",
+    "decade": "excluded",
     "year": 1935,
     "filename": "benjamin_work_of_art.txt",
     "fields": [
       "sociology"
     ],
-    "status": "available"
+    "status": "available",
+    "exclusion": "duplicate: the essay is in benjamin_illuminations.txt"
   },
   {
     "title": "An Essay on Man",
@@ -4825,19 +5191,22 @@
   {
     "title": "The Influence of Habit on the Faculty of Thinking",
     "author": "Maine de Biran",
-    "decade": "1820s",
-    "year": 1803,
+    "decade": "1920s",
+    "year": 1929,
     "filename": "maine_de_biran_influence_of_habit.txt",
     "fields": [
       "psychology",
       "philosophy_of_mind"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1803,
+    "original_language": "French",
+    "translator": "Margaret Donaldson Boehm"
   },
   {
     "title": "Lectures on Metaphysics and Logic",
     "author": "William Hamilton",
-    "decade": "1820s",
+    "decade": "1850s",
     "year": 1859,
     "filename": "hamilton_lectures_metaphysics_logic.txt",
     "fields": [
@@ -4849,13 +5218,16 @@
   {
     "title": "Introduction to the History of Philosophy",
     "author": "Victor Cousin",
-    "decade": "1820s",
-    "year": 1828,
+    "decade": "1830s",
+    "year": 1832,
     "filename": "cousin_introduction_history_philosophy.txt",
     "fields": [
       "philosophy_of_mind"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1828,
+    "original_language": "French",
+    "translator": "Henning Gotfried Linberg"
   },
   {
     "title": "How to Observe Morals and Manners",
@@ -4869,7 +5241,7 @@
     "status": "available"
   },
   {
-    "title": "Illustrations of Political Economy (selection)",
+    "title": "Illustrations of Political Economy, Vol. 6",
     "author": "Harriet Martineau",
     "decade": "1830s",
     "year": 1832,
@@ -4878,12 +5250,14 @@
       "sociology",
       "political_philosophy"
     ],
-    "status": "available"
+    "status": "available",
+    "source": "Internet Archive",
+    "source_url": "https://archive.org/details/illustrationsofp06martuoft"
   },
   {
     "title": "Essays on Some Unsettled Questions of Political Economy",
     "author": "John Stuart Mill",
-    "decade": "1830s",
+    "decade": "1840s",
     "year": 1844,
     "filename": "mill_essays_unsettled_questions.txt",
     "fields": [
@@ -4895,7 +5269,7 @@
   {
     "title": "The Philosophy of the Inductive Sciences",
     "author": "William Whewell",
-    "decade": "1830s",
+    "decade": "1840s",
     "year": 1840,
     "filename": "whewell_philosophy_inductive_sciences.txt",
     "fields": [
@@ -4919,12 +5293,15 @@
     "title": "The Catechism of Positive Religion",
     "author": "Auguste Comte",
     "decade": "1850s",
-    "year": 1852,
+    "year": 1858,
     "filename": "comte_catechism_positive_religion.txt",
     "fields": [
       "sociology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1852,
+    "original_language": "French",
+    "translator": "Richard Congreve"
   },
   {
     "title": "The Biographical History of Philosophy",
@@ -4965,18 +5342,20 @@
   {
     "title": "Vestiges of the Natural History of Creation",
     "author": "Robert Chambers",
-    "decade": "1850s",
+    "decade": "1840s",
     "year": 1844,
     "filename": "chambers_vestiges_natural_history.txt",
     "fields": [
       "neuroscience"
     ],
-    "status": "available"
+    "status": "available",
+    "source": "Project Gutenberg",
+    "source_url": "https://www.gutenberg.org/ebooks/7116"
   },
   {
     "title": "History of Civilisation in England, Vol. 2",
     "author": "Henry Thomas Buckle",
-    "decade": "1850s",
+    "decade": "1860s",
     "year": 1861,
     "filename": "buckle_history_civilisation_vol2.txt",
     "fields": [
@@ -4987,14 +5366,17 @@
   {
     "title": "Philosophy of the Unconscious",
     "author": "Eduard von Hartmann",
-    "decade": "1860s",
-    "year": 1869,
+    "decade": "1880s",
+    "year": 1884,
     "filename": "von_hartmann_philosophy_unconscious.txt",
     "fields": [
       "philosophy_of_mind",
       "psychology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1869,
+    "original_language": "German",
+    "translator": "William Chatterton Coupland"
   },
   {
     "title": "Education: Intellectual, Moral, and Physical",
@@ -5011,7 +5393,7 @@
   {
     "title": "Fragments of Science",
     "author": "John Tyndall",
-    "decade": "1860s",
+    "decade": "1870s",
     "year": 1871,
     "filename": "tyndall_fragments_of_science.txt",
     "fields": [
@@ -5035,7 +5417,7 @@
   {
     "title": "The Physiology of Mind",
     "author": "Henry Maudsley",
-    "decade": "1860s",
+    "decade": "1870s",
     "year": 1876,
     "filename": "maudsley_physiology_of_mind.txt",
     "fields": [
@@ -5117,14 +5499,17 @@
   {
     "title": "The German Ideology",
     "author": "Karl Marx",
-    "decade": "1840s",
-    "year": 1846,
+    "decade": "1970s",
+    "year": 1976,
     "filename": "marx_german_ideology.txt",
     "fields": [
       "political_philosophy",
       "sociology"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1846,
+    "original_language": "German",
+    "translator": "Marx-Engels Collected Works"
   },
   {
     "title": "Wages, Price and Profit",
@@ -5165,25 +5550,31 @@
   {
     "title": "Economy and Society",
     "author": "Max Weber",
-    "decade": "1910s",
-    "year": 1922,
+    "decade": "1960s",
+    "year": 1968,
     "filename": "weber_economy_and_society.txt",
     "fields": [
       "sociology",
       "political_philosophy"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1922,
+    "original_language": "German",
+    "translator": "Guenther Roth and Claus Wittich (eds.)"
   },
   {
     "title": "Ideology and Utopia",
     "author": "Karl Mannheim",
     "decade": "1930s",
-    "year": 1929,
+    "year": 1936,
     "filename": "mannheim_ideology_utopia.txt",
     "fields": [
       "sociology",
       "political_philosophy"
     ],
-    "status": "available"
+    "status": "available",
+    "original_year": 1929,
+    "original_language": "German",
+    "translator": "Louis Wirth and Edward Shils"
   }
 ]
