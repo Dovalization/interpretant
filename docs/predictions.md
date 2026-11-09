@@ -241,3 +241,35 @@ shift rank between the two fields over the 1960s–70s at least 15 points higher
 
 **T7 — *intentionality* stable** (full cells, philosophy). No transition from the 1980s to
 the 2020s has a PPMI shift rank above 95.
+
+## Round 3 results (2026-11-09, `scripts/score_predictions_round3.py`)
+
+Scored against the round 3 definitions, unchanged. 4 passed, 4 falsified.
+
+| | Verdict | Numbers |
+|---|---|---|
+| T0 | **Passed** | Median Jaccard between TWEC and PPMI neighbour lists 0.32 over 144 word-cells |
+| T1 | **Falsified** | 1980s: 1 of the symbolic set (*knowledge*; the list also has *declarative, procedural, frame-based*, outside the set); 2010s and 2020s: 3 and 5 of the learned set (*embeddings, latent, contrastive, learned, encoder, feature*) |
+| T2 | **Passed** | 4 of the VR set in each decade (*ownership, illusion, self-location, agency*) |
+| T3 | **Passed** | 7 and 6 of the phenomenological set (*corporeality, intersubjectivity, temporality, spatiality, affectivity*) |
+| T4 | **Falsified** | 2010s: 6 of the experiential set; 2020s: 2 (*experiential, qualities*; the list leans *interactional, relational, affective, theories*) |
+| T5 | **Falsified** | Shift rank 91, below 95; 1 of the computational set; 2020s neighbours *qualia, orch-or, workspace, gwt, iit, integrated, substrates* |
+| T6 | **Falsified** | PPMI shift rank, psychology × computer science: 76 and 58 (1960s–70s), 63 and 85 (2000s–10s): no convergence |
+| T7 | **Passed** | Shift ranks 60, 79, 82, 76; none above 95 |
+
+### Status of the findings after three rounds
+
+Evidence: TWEC seed 42 (round 1), TWEC seed 43 and unseen decades or field pairs (round 2),
+PPMI-SVD (round 3).
+
+- **Robust across seeds and methods.** *embodiment* has two senses: virtual-reality body
+  ownership and presence in HCI, phenomenological corporeality in philosophy (passed every
+  test, rounds 2 and 3). *intentionality* in philosophy is stable from the 1980s to the 2020s
+  (P7, R2, T7).
+- **Robust in part.** *representation* in AI moves towards learned representations in every
+  run; its symbolic 1980s passes in TWEC but not under the committed word set in PPMI. HCI's
+  experiential *affordance* holds in the 2010s in every run; the 2020s depend on the method.
+- **Not robust.** *information* converging between psychology and computer science appears in
+  both TWEC seeds but not in PPMI-SVD. Philosophy's 2020s *consciousness* changes in both
+  methods but is described differently by each (computational vocabulary in TWEC, named
+  theories of consciousness in PPMI) and misses the committed thresholds in PPMI.
