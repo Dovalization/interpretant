@@ -65,8 +65,7 @@ Each item that produces results gets its predictions committed first.
    convergence, and the misclassified abstracts are the borrowing cases to read.
 6. **Held-out check per cell**: hold out 10% of each cell's text and measure how well its
    model predicts it, flagging cells whose model memorised a small corpus.
-7. **Devlog 05** on cross-perplexity: the corrected design, the reversed predictions and the
-   open question.
+7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
 8. **Sense-level drift** with contextual embeddings for *consciousness* and *information*:
    encode occurrences, cluster into senses, track each sense's share by field and decade
    (Giulianelli et al. 2020). Runs on the homelab GPU.
