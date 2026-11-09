@@ -45,14 +45,14 @@ simulation
 image
 medium
 
-# --- Phrase targets: enable after phrase detection (Stage 0, step 4) ---
-# neural_network
-# social_network
-# artificial_intelligence
-# mental_representation
-# user_interface
-# information_processing
-# feedback_loop
+# --- Phrase targets: always merged by phrase detection (corpus phrases learn) ---
+neural_network
+social_network
+artificial_intelligence
+mental_representation
+user_interface
+information_processing
+feedback_loop
 
 # Dropped in November 2026: understanding (mostly the verb), form, pattern, signal
 # (everyday senses outweigh any conceptual change). Control words are in
