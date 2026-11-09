@@ -132,6 +132,30 @@ def compare_cells(
     )
 
 
+def cell_neighbours(
+    vectors: KeyedVectors,
+    word: str,
+    k: int = NEIGHBOURS,
+    pool_min: int = NEIGHBOUR_MIN,
+    measure_min: int = MEASURE_MIN,
+) -> list[str]:
+    """Return a word's ``k`` nearest neighbours in one cell, nearest first.
+
+    Neighbours are drawn from words with at least ``pool_min`` occurrences, as in
+    :func:`compare_cells`; a word under ``measure_min`` occurrences has no reliable
+    neighbourhood and gets an empty list.
+    """
+    counts = _counts(vectors)
+    if counts.get(word, 0) < measure_min:
+        return []
+    pool = [other for other, count in counts.items() if count >= pool_min and other != word]
+    if not pool:
+        return []
+    similarity = _unit_rows(vectors, pool) @ _unit_rows(vectors, [word])[0]
+    order = np.argsort(-similarity)[:k]
+    return [pool[position] for position in order]
+
+
 def add_noise_floor(
     pair: pd.DataFrame,
     quantile: float = FLOOR_QUANTILE,

@@ -11,6 +11,7 @@ from gensim.models import KeyedVectors
 from interpretant.drift.grid import (
     CellModel,
     add_noise_floor,
+    cell_neighbours,
     compare_cells,
     cross_field_pairs,
     within_field_pairs,
@@ -95,3 +96,19 @@ def test_pairs_follow_consecutive_decades_and_same_decade_fields() -> None:
 
     assert within == [(1990, 2000)]
     assert across == [("hci", "philosophy", 2000)]
+
+
+def test_cell_neighbours_come_from_the_pool_and_need_a_measurable_word() -> None:
+    vectors = dict(BASE)
+    vectors["near"] = BASE["w0"] + 0.01
+    vectors["rare"] = BASE["w0"] + 0.02
+    counts = {**dict.fromkeys(vectors, 500), "rare": 10}
+    keyed = make_vectors(vectors, counts)
+
+    neighbours = cell_neighbours(keyed, "w0", k=3)
+
+    assert neighbours[0] == "near"
+    assert "rare" not in neighbours
+    assert "w0" not in neighbours
+    assert len(neighbours) == 3
+    assert cell_neighbours(keyed, "rare") == []
