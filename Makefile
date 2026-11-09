@@ -1,4 +1,4 @@
-.PHONY: install lint type-check test app docs clean
+.PHONY: install lint type-check test figures app app-demo clean
 
 install:
 	uv sync --all-extras
@@ -17,20 +17,14 @@ type-check:
 test:
 	uv run pytest tests/ -v --cov=src/interpretant --cov-report=term-missing
 
+figures:
+	uv run interpretant figures
+
 app:
-	uv run streamlit run src/interpretant/app/main.py
+	uv run interpretant app
 
 app-demo:
-	uv run streamlit run src/interpretant/app/main.py -- --demo
-
-docs:
-	uv run mkdocs serve
-
-docs-build:
-	uv run mkdocs build
-
-pipeline:
-	uv run dvc repro
+	uv run interpretant app --demo
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +

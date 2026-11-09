@@ -12,12 +12,6 @@ SEED = 42
 
 
 @pytest.fixture(scope="session")
-def synthetic_vocab() -> list[str]:
-    """Return the canonical 6-word demo vocabulary."""
-    return list(VOCAB)
-
-
-@pytest.fixture(scope="session")
 def synthetic_model() -> dict[int, dict[str, np.ndarray]]:
     """Return seeded synthetic embedding model: {decade: {word: vector}}.
 

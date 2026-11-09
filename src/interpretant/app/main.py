@@ -64,6 +64,23 @@ def _decade_drift_series(word_vectors: dict[int, np.ndarray]) -> pd.Series:
     )
 
 
+def _load_field_vectors(layer_dir: Path, field: str) -> dict[str, dict[int, np.ndarray]]:
+    """Load one field's decade models from the TWEC grid, restricted to the target words."""
+    from gensim.models import KeyedVectors
+
+    from interpretant.corpus.audit import load_target_words
+
+    targets = load_target_words(Path("data/words_of_interest.txt"))
+    result: dict[str, dict[int, np.ndarray]] = {}
+    for path in sorted(layer_dir.glob(f"{field}_*.kv")):
+        decade = int(path.stem.rsplit("_", 1)[1])
+        keyed = KeyedVectors.load(str(path))
+        for word in targets:
+            if word in keyed.key_to_index:
+                result.setdefault(word, {})[decade] = np.asarray(keyed[word])
+    return {word: decades for word, decades in result.items() if len(decades) >= 2}
+
+
 # ---------------------------------------------------------------------------
 # App
 # ---------------------------------------------------------------------------
@@ -89,23 +106,27 @@ def main(demo: bool = False) -> None:
             vectors = _make_synthetic_vectors()
             available_words = sorted(vectors.keys())
         else:
-            aligned_dir = Path("models/aligned")
-            if not aligned_dir.exists() or not any(aligned_dir.glob("*.kv")):
+            model_dir = Path("models/twec_grid")
+            layers = (
+                sorted(path.name for path in model_dir.iterdir() if path.is_dir())
+                if model_dir.exists()
+                else []
+            )
+            if not layers:
                 st.warning(
-                    "No aligned models found in `models/aligned/`. "
-                    "Run `make pipeline` first, or launch with `make app-demo`."
+                    "No grid models found in `models/twec_grid/`. "
+                    "Run `interpretant twec grid` first, or launch with `make app-demo`."
                 )
                 st.stop()
-            else:
-                from interpretant.alignment.procrustes import ProcrustesAligner
-
-                aligner = ProcrustesAligner()
-                aligner.load_aligned(aligned_dir)
-                available_words = aligner.shared_vocabulary()
-                vectors = {
-                    word: {decade: aligner.get_vector(word, decade) for decade in aligner.decades()}
-                    for word in available_words
-                }
+            layer = st.selectbox(
+                "Layer", layers, index=layers.index("openalex") if "openalex" in layers else 0
+            )
+            fields = sorted(
+                {path.stem.rsplit("_", 1)[0] for path in (model_dir / layer).glob("*.kv")}
+            )
+            field = st.selectbox("Field", fields, index=0)
+            vectors = _load_field_vectors(model_dir / layer, field)
+            available_words = sorted(vectors.keys())
 
         selected_word = st.selectbox("Select word", available_words, index=0)
         k_neighbors = st.slider("Neighbours (k)", min_value=5, max_value=30, value=10)

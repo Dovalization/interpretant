@@ -4,7 +4,7 @@ Trains a single "compass" model on all decades combined, then trains each
 decade model initialised from the compass with context vectors (syn1neg)
 frozen after every epoch. Because all decade models share the same context
 matrix, their target vectors are already in the same coordinate system —
-no post-hoc Procrustes alignment required.
+no post-hoc alignment required.
 
 Reference: Di Carlo et al. (2019) "Training Temporal Word Embeddings with
 a Compass". https://arxiv.org/abs/1906.02376
@@ -43,7 +43,8 @@ class _FileSentences:
     """Re-iterable sentence source backed by one or more text files.
 
     Each file is expected to have one tokenised document per line, with tokens
-    separated by whitespace — the format written by ``corpus preprocess``.
+    separated by whitespace — the format written by ``corpus openalex ingest`` and
+    ``corpus books ingest``.
     gensim calls ``__iter__`` once for vocabulary building and once per training
     epoch, so the class must support multiple iterations without consuming the
     underlying data.

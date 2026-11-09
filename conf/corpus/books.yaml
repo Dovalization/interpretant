@@ -1,5 +1,0 @@
-# @package _global_.corpus
-name: books
-books_dir: data/external/books
-min_year: 1820
-max_year: 2030

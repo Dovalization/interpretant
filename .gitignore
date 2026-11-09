@@ -28,7 +28,7 @@ multirun/
 logs/*.log
 !logs/.gitkeep
 
-# Data & models (tracked by DVC)
+# Data & models
 data/raw/*
 data/processed/*
 data/external/*
@@ -58,10 +58,6 @@ data/external/books/**/*.djvu
 data/external/books/**/*.mobi
 data/external/books/**/*.azw3
 !models/.gitkeep
-
-# DVC
-.dvc/cache/
-.dvc/tmp/
 
 # Jupyter
 .ipynb_checkpoints/

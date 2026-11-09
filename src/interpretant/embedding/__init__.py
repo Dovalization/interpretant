@@ -1,7 +1,5 @@
-"""Embedding trainers."""
+"""Embedding helpers and trainers for the grid."""
 
-from interpretant.embedding.base import EmbeddingTrainer
-from interpretant.embedding.fasttext import FastTextTrainer
-from interpretant.embedding.word2vec import Word2VecTrainer
+from interpretant.embedding.base import MAX_SENTENCE_TOKENS, training_sentences
 
-__all__ = ["EmbeddingTrainer", "Word2VecTrainer", "FastTextTrainer"]
+__all__ = ["MAX_SENTENCE_TOKENS", "training_sentences"]

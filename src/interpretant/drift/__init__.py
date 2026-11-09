@@ -1,15 +1,5 @@
-"""Drift metrics and changepoint detection."""
+"""Drift on the field × decade grid and cross-perplexity between cells."""
 
-from interpretant.drift.metrics import (
-    average_pairwise_distance,
-    cosine_distance,
-    frequency_corrected_drift,
-    neighborhood_shift,
-)
+from interpretant.drift.metrics import cosine_distance
 
-__all__ = [
-    "cosine_distance",
-    "neighborhood_shift",
-    "frequency_corrected_drift",
-    "average_pairwise_distance",
-]
+__all__ = ["cosine_distance"]

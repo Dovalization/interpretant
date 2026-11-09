@@ -87,7 +87,7 @@ def scan_processed(processed_dir: Path, targets: set[str]) -> list[CellStats]:
 
 
 def merge_by_decade(cells: Iterable[CellStats]) -> dict[int, CellStats]:
-    """Sum cells across sources, mirroring how ``embed train`` merges corpora per decade."""
+    """Sum cells across sources, giving one merged cell per decade."""
     merged: dict[int, CellStats] = {}
     for cell in cells:
         total = merged.setdefault(cell.decade, CellStats(source="merged", decade=cell.decade))
