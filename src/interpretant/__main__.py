@@ -1008,6 +1008,41 @@ def embed_train(  # noqa: PLR0913
 # ---------------------------------------------------------------------------
 
 
+def _configure_gensim_logging() -> None:
+    """Silence gensim's harmless Apple Silicon finalizer noise and show training progress."""
+    import logging  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+
+    # Suppress the harmless gensim Apple Silicon finalizer spam.
+    # our_dot_float is a Cython symbol missing from the pre-built wheel;
+    # Python emits "Exception ignored" for it but it doesn't affect training.
+    _prev_unraisable_hook = sys.unraisablehook
+
+    def _unraisable_hook(args: sys.UnraisableHookArgs) -> None:
+        # Check object, exc_type name, and exc_value string to be thorough.
+        haystack = " ".join(
+            [
+                str(getattr(args, "object", "") or ""),
+                getattr(getattr(args, "exc_type", None), "__name__", ""),
+                str(getattr(args, "exc_value", "") or ""),
+            ]
+        )
+        if "our_dot_float" in haystack:
+            return
+        _prev_unraisable_hook(args)
+
+    sys.unraisablehook = _unraisable_hook
+
+    # Enable gensim progress logging so mid-epoch word/sec updates appear in the log.
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(name)s %(message)s",
+        datefmt="%H:%M:%S",
+        force=True,
+    )
+    logging.getLogger("gensim").setLevel(logging.INFO)
+
+
 @cli.group()
 def twec() -> None:
     """Temporal Word Embeddings with a Compass (TWEC) commands."""
@@ -1082,39 +1117,9 @@ def twec_train(  # noqa: PLR0913
     Outputs one .kv file per decade directly usable by 'drift compute'
     without a separate alignment step.
     """
-    import logging  # noqa: PLC0415
-    import sys  # noqa: PLC0415
-
     from interpretant.embedding.twec import TWECTrainer, _EpochProgressCallback  # noqa: PLC0415
 
-    # Suppress the harmless gensim Apple Silicon finalizer spam.
-    # our_dot_float is a Cython symbol missing from the pre-built wheel;
-    # Python emits "Exception ignored" for it but it doesn't affect training.
-    _prev_unraisable_hook = sys.unraisablehook
-
-    def _unraisable_hook(args: sys.UnraisableHookArgs) -> None:
-        # Check object, exc_type name, and exc_value string to be thorough.
-        haystack = " ".join(
-            [
-                str(getattr(args, "object", "") or ""),
-                getattr(getattr(args, "exc_type", None), "__name__", ""),
-                str(getattr(args, "exc_value", "") or ""),
-            ]
-        )
-        if "our_dot_float" in haystack:
-            return
-        _prev_unraisable_hook(args)
-
-    sys.unraisablehook = _unraisable_hook
-
-    # Enable gensim progress logging so mid-epoch word/sec updates appear in the log.
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(name)s %(message)s",
-        datefmt="%H:%M:%S",
-        force=True,
-    )
-    logging.getLogger("gensim").setLevel(logging.INFO)
+    _configure_gensim_logging()
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1229,6 +1234,105 @@ def twec_train(  # noqa: PLR0913
         "\n[green]Done.[/green] Run drift compute with: "
         f"[cyan]uv run interpretant drift compute --model-dir {output_dir}[/cyan]"
     )
+
+
+@twec.command("grid")
+@click.option(
+    "--input-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased"),
+    show_default=True,
+)
+@click.option(
+    "--layer",
+    "layers",
+    multiple=True,
+    default=("books", "openalex"),
+    show_default=True,
+    help="Main layers: they define the compass and the comparable grid.",
+)
+@click.option(
+    "--extra-layer",
+    "extra_layers",
+    multiple=True,
+    default=("openalex_full",),
+    show_default=True,
+    help="Layers trained against the compass but left out of it (full cells).",
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/twec_grid"),
+    show_default=True,
+)
+@click.option("--compass-tokens-per-cell", default=200_000, show_default=True)
+@click.option("--vector-size", default=100, show_default=True)
+@click.option("--window", default=5, show_default=True)
+@click.option("--min-count", default=5, show_default=True, help="Compass vocabulary threshold.")
+@click.option("--epochs", default=10, show_default=True)
+@click.option("--workers", default=4, show_default=True)
+@click.option("--seed", default=42, show_default=True)
+def twec_grid(  # noqa: PLR0913
+    input_dir: Path,
+    layers: tuple[str, ...],
+    extra_layers: tuple[str, ...],
+    output_dir: Path,
+    compass_tokens_per_cell: int,
+    vector_size: int,
+    window: int,
+    min_count: int,
+    epochs: int,
+    workers: int,
+    seed: int,
+) -> None:
+    """Train one TWEC model per field × decade cell on a balanced compass.
+
+    The compass is trained on the same token budget from every main cell; each cell's model
+    is then trained with the compass's context vectors frozen, so every cell shares one
+    space. Finished cells are skipped, so an interrupted run resumes.
+    """
+    from interpretant.embedding.grid import discover_cells, write_compass_sample  # noqa: PLC0415
+    from interpretant.embedding.twec import TWECTrainer, _EpochProgressCallback  # noqa: PLC0415
+
+    _configure_gensim_logging()
+    main_cells = discover_cells(input_dir, layers)
+    extra_cells = discover_cells(input_dir, extra_layers)
+    trainer = TWECTrainer(
+        vector_size=vector_size,
+        window=window,
+        min_count=min_count,
+        workers=workers,
+        epochs=epochs,
+        seed=seed,
+    )
+    console.print(f"[bold]TWEC grid[/bold]: {len(main_cells)} main cells, {len(extra_cells)} extra")
+    console.print(f"  dims {vector_size}  window {window}  epochs {epochs}  min_count {min_count}")
+
+    compass_path = output_dir / "compass.model"
+    if compass_path.exists():
+        trainer.load_compass(compass_path)
+        console.print(f"  compass loaded from {compass_path}")
+    else:
+        sample_path = output_dir / "compass_sample.txt"
+        tokens = write_compass_sample(main_cells, compass_tokens_per_cell, sample_path)
+        console.print(f"  compass sample: {tokens:,} tokens → training compass …")
+        with tqdm(total=epochs, desc="  compass", unit="epoch", leave=True) as bar:
+            trainer.train_compass([sample_path], extra_callbacks=[_EpochProgressCallback(bar)])
+        trainer.save_compass(output_dir)
+        sample_path.unlink()
+    console.print(f"  compass vocab: [cyan]{trainer.compass_vocab_size:,}[/cyan] words")
+
+    for cell in tqdm(main_cells + extra_cells, desc="  cells", unit="cell"):
+        target = output_dir / cell.layer / f"{cell.name}_{cell.decade}.kv"
+        if target.exists():
+            continue
+        with tqdm(total=epochs, desc=f"    {cell.label}", unit="epoch", leave=False) as bar:
+            kv = trainer.train_decade(
+                [cell.path], cell.decade, extra_callbacks=[_EpochProgressCallback(bar)]
+            )
+        target.parent.mkdir(parents=True, exist_ok=True)
+        kv.save(str(target))
+    console.print(f"[green]Done.[/green] Models in {output_dir}")
 
 
 # ---------------------------------------------------------------------------
