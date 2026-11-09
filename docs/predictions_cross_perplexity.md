@@ -540,3 +540,56 @@ in HCI that favoured psychology, sociology and neuroscience far more. The one-si
 follows too: HCI moved; nobody moved towards HCI. What the embedding grid showed for one word,
 *embodiment* becoming HCI's own virtual-reality term, the language models show for HCI as a
 whole, from the other side: the field's prose became a behavioural science's.
+
+---
+
+## Round K: the field's move, or the label's? (committed 2026-11-09, before any venue was
+fetched)
+
+Round J found that every non-computing field's model predicts HCI's 2020s abstracts better
+than its 1990s ones, through HCI's own word mix. A field here is OpenAlex's primary-topic
+subfield applied retrospectively; if what OpenAlex files under HCI broadened over those
+decades, the move could be the label's scope rather than the field's prose. The check holds
+the venues fixed.
+
+### Method (fixed before any venue was fetched)
+
+- **Venue lookup**: for every work in the HCI 1990s and 2020s cells, its
+  `primary_location.source` id and name from OpenAlex, saved to
+  `data/raw/openalex/hci/sources_<decade>.jsonl`.
+- **Shared venues**: the sources with at least 100 cleaned documents in *both* decades' HCI
+  cells. The **venue-stable cell** HCI_v of a decade is the cleaned HCI documents whose source
+  is a shared venue; works without a source are outside it.
+- **Models**: the corrected design (lemmatised text, shared abstracts removed across the
+  decade's cells, seeds 1–5), except that every model in this round trains on **100,000
+  tokens** and every text holds out **500 abstracts**, because HCI_v is smaller than a cell.
+  HCI_v and the whole HCI cell (HCI_all) are scored in the same run under the same settings.
+  HCI_v qualifies only if its pool after the held-out split has at least 100,000 tokens in
+  both decades; otherwise the round is reported as untestable.
+- Mix and rate effects as in rounds G and J.
+
+### Predictions
+
+**K1 — The fall survives inside fixed venues.** E(psychology → HCI_v) and
+E(sociology → HCI_v) are lower in the 2020s than in the 1990s in all 5 seeds. *Falsified* if
+either fails in any seed.
+
+**K2 — And it is still the word mix.** For both models, the mix effect exceeds the rate effect
+on HCI_v in at least 4 of 5 seeds. *Falsified* otherwise.
+
+**K3 — Most of the effect is the field's, not the label's.** For both models, the mean fall on
+HCI_v is at least half the mean fall on HCI_all measured in the same run. *Falsified* if
+either ratio is under 0.5.
+
+**K4 — Computing still does not gain.** The mean fall of E(AI → HCI_v) is less than a third of
+the mean fall of E(psychology → HCI_v). *Falsified* otherwise.
+
+Reported, not scored: the shared venues and their document counts per decade; the share of
+each decade's cleaned HCI cell that lies in shared venues; the ten sources that grew most as a
+share of the cell.
+
+**Reading rule.** K1–K3 passing means round J's finding is the field's: HCI's prose moved even
+inside the venues it always had. K3 failing with K1 passing means both happened, the field
+moved and the label broadened, in the proportion K3 reports. K1 failing means round J measured
+OpenAlex's classification, and the README's headline is withdrawn to the embedding finding.
+Scored by `scripts/score_venue.py`, committed before it is run.
