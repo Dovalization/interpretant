@@ -468,3 +468,42 @@ field's model should predict HCI's 2020s abstracts better than its 1990s ones, w
 mix effect dominating; the corrected table already holds those cells, uninspected. And the
 earlier reading's test, HCI's object nouns against computing's method nouns in philosophy's
 cells, is now secondary. The next round, if run, is the first of these.
+
+---
+
+## Round J: is it HCI's mix? (committed 2026-11-09, before the cells below were inspected)
+
+The exploratory decomposition after round G attributed most of the fall in
+E(philosophy → HCI) to HCI's word mix moving away from its 1990s interface jargon. If that is
+the mechanism, it is not about philosophy at all: every field's model should predict HCI's
+2020s abstracts better than its 1990s ones, and the same mix effect should dominate for them.
+The corrected table (`data/drift/cross_perplexity_corrected.parquet`, lemmatised corpus, seeds
+1–5) holds E(X → HCI) for every other field X; none of those cells has been inspected beyond
+philosophy's. Fields converged on average between the 1980s and the 2010s (D5, L9), so a fall
+alone is not enough; the fall on HCI must stand out against each model's falls on other texts.
+
+Definitions: the nine *other* models are AI, cognitive psychology, communication, computer
+science, history and philosophy of science, linguistics, neuroscience, psychology and
+sociology. "Mean" is the mean over the five seeds. The *fall* of E(X → Y) is its 1990s value
+minus its 2020s value. The mix and rate effects are computed exactly as in the exploratory
+decomposition (1990s per-word rates at the 2020s word frequencies; words with no 1990s rate
+keep their 2020s rate).
+
+**J1 — Every field's model gains on HCI.** For at least 8 of the 9 other models, mean
+E(X → HCI) is lower in the 2020s than in the 1990s. *Falsified* if fewer than 8.
+
+**J2 — In every seed.** For at least 6 of the 9 other models, E(X → HCI) is lower in the 2020s
+than in the 1990s in all 5 seeds. *Falsified* if fewer than 6.
+
+**J3 — The mix effect dominates for other models too.** For psychology's model and for
+sociology's model (chosen now: neither computing nor philosophy), the mix effect exceeds the
+rate effect in at least 4 of 5 seeds each. *Falsified* if either falls short.
+
+**J4 — HCI's fall stands out.** For at least 7 of the 9 other models, the fall of mean
+E(X → HCI) exceeds the median fall of mean E(X → Y) over the other text fields Y (Y ≠ X,
+Y ≠ HCI) that qualify in both decades. *Falsified* if fewer than 7.
+
+Reading rule: J1, J2 and J4 passing means the effect was HCI's text changing, and the
+"philosophy → HCI" result of D4 and L8 is one instance of a general gain on HCI; J3 passing
+means the change is the word mix. J4 failing with J1 passing means a general convergence that
+HCI merely shares. Scored by `scripts/score_mix.py`, committed before it is run.
