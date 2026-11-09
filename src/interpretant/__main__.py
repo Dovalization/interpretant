@@ -303,7 +303,7 @@ def corpus_phrases() -> None:
 @click.option(
     "--processed-dir",
     type=click.Path(path_type=Path),
-    default=Path("data/processed"),
+    default=Path("data/lemmatised"),
     show_default=True,
 )
 @click.option(
@@ -331,7 +331,7 @@ def corpus_phrases() -> None:
 @click.option(
     "--output",
     type=click.Path(path_type=Path),
-    default=Path("data/processed/phrases.model"),
+    default=Path("data/lemmatised/phrases.model"),
     show_default=True,
 )
 def corpus_phrases_learn(  # noqa: PLR0913
@@ -374,7 +374,7 @@ def corpus_phrases_learn(  # noqa: PLR0913
 @click.option(
     "--processed-dir",
     type=click.Path(path_type=Path),
-    default=Path("data/processed"),
+    default=Path("data/lemmatised"),
     show_default=True,
 )
 @click.option(
@@ -389,7 +389,7 @@ def corpus_phrases_learn(  # noqa: PLR0913
     "--model",
     "model_path",
     type=click.Path(path_type=Path),
-    default=Path("data/processed/phrases.model"),
+    default=Path("data/lemmatised/phrases.model"),
     show_default=True,
 )
 @click.option(
@@ -1448,6 +1448,72 @@ def pdf_status(inbox: Path, processed: Path) -> None:
         else:
             table.add_row("[dim]folder not found[/dim]", "")
         console.print(table)
+
+
+# ---------------------------------------------------------------------------
+# export
+# ---------------------------------------------------------------------------
+
+
+@cli.group()
+def export() -> None:
+    """Exports of the models and tables for other surfaces."""
+
+
+@export.command("web")
+@click.option(
+    "--model-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/twec_grid"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--ppmi-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/ppmi_grid"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--drift-dir", type=click.Path(path_type=Path), default=Path("data/drift"), show_default=True
+)  # noqa: E501
+@click.option(
+    "--audit",
+    "audit_path",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased/audit.json"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--words-file",
+    type=click.Path(path_type=Path),
+    default=Path("data/words_of_interest.txt"),
+    show_default=True,
+)  # noqa: E501
+@click.option(
+    "--output-dir", type=click.Path(path_type=Path), default=Path("web/data"), show_default=True
+)  # noqa: E501
+def export_web_command(  # noqa: PLR0913
+    model_dir: Path,
+    ppmi_dir: Path,
+    drift_dir: Path,
+    audit_path: Path,
+    words_file: Path,
+    output_dir: Path,
+) -> None:
+    """Write the JSON the web explorer (web/) builds from: neighbours, drift rows, counts,
+    cross-perplexity and the prediction verdicts."""
+    from interpretant.export import PREDICTIONS_PATHS, export_web  # noqa: PLC0415
+
+    export_web(
+        model_dir=model_dir,
+        ppmi_dir=ppmi_dir,
+        drift_dir=drift_dir,
+        audit_path=audit_path,
+        predictions_paths=PREDICTIONS_PATHS,
+        words_file=words_file,
+        output_dir=output_dir,
+        log=console.print,
+    )
 
 
 # ---------------------------------------------------------------------------

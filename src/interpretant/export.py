@@ -286,19 +286,18 @@ def _dump(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n", "utf-8")
 
 
+PREDICTIONS_PATHS = (Path("docs/predictions.md"), Path("docs/predictions_cross_perplexity.md"))
+
+
 if __name__ == "__main__":
     import sys
 
-    root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("web/data")
     export_web(
-        model_dir=Path("models/twec_grid_unlemmatised"),
-        ppmi_dir=Path("models/ppmi_grid_unlemmatised"),
-        drift_dir=Path("data/drift/unlemmatised"),
-        audit_path=Path("data/phrased_unlemmatised/audit.json"),
-        predictions_paths=[
-            Path("docs/predictions.md"),
-            Path("docs/predictions_cross_perplexity.md"),
-        ],
+        model_dir=Path("models/twec_grid"),
+        ppmi_dir=Path("models/ppmi_grid"),
+        drift_dir=Path("data/drift"),
+        audit_path=Path("data/phrased/audit.json"),
+        predictions_paths=PREDICTIONS_PATHS,
         words_file=Path("data/words_of_interest.txt"),
-        output_dir=root,
+        output_dir=Path(sys.argv[1]) if len(sys.argv) > 1 else Path("web/data"),
     )
