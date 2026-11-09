@@ -1,4 +1,4 @@
-"""Score round K (K1-K4): does HCI's register move survive inside fixed venues?
+"""Score round K / K' (K1-K4): does HCI's register move survive inside fixed venues?
 
 Committed before it was run. Rebuilds the HCI 1990s and 2020s cells with their work ids,
 restricts them to the venues present in both decades (the venue-stable cell HCI_v), and
@@ -30,9 +30,9 @@ RAW = Path("data/raw/openalex")
 TEXTS = Path("data/phrased/openalex/texts")
 SEEDS = (1, 2, 3, 4, 5)
 EARLY, LATE = 1990, 2020
-BUDGET = 100_000
-HELD_OUT = 500
-SHARED_MIN = 100
+BUDGET = 90_000
+HELD_OUT = 150
+SHARED_MIN = 20
 MODELS = ("psychology", "sociology", "ai")
 
 
@@ -100,7 +100,7 @@ def main() -> None:
         for decade in (EARLY, LATE)
     }
 
-    print("Shared venues (at least 100 cleaned documents in both decades):")
+    print(f"Shared venues (at least {SHARED_MIN} cleaned documents in both decades):")
     for source in shared:
         print(f"  {names.get(source, source)}: {counts[EARLY][source]} / {counts[LATE][source]}")
     for decade in (EARLY, LATE):
@@ -131,7 +131,7 @@ def main() -> None:
         if pool_tokens < BUDGET:
             print(
                 f"\nUNTESTABLE: HCI_v in the {decade}s has fewer than {BUDGET:,} training tokens "
-                "after holding out 500 abstracts; no excess computed."
+                f"after holding out {HELD_OUT} abstracts; no excess computed."
             )
             return
 

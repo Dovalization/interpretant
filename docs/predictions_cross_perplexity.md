@@ -593,3 +593,30 @@ inside the venues it always had. K3 failing with K1 passing means both happened,
 moved and the label broadened, in the proportion K3 reports. K1 failing means round J measured
 OpenAlex's classification, and the README's headline is withdrawn to the embedding finding.
 Scored by `scripts/score_venue.py`, committed before it is run.
+
+### Round K results (2026-11-09, `scripts/score_venue.py`)
+
+**Untestable as written.** With the rule of at least 100 cleaned documents in both decades,
+the shared venues are CHI (305 / 218 documents) and CHI Extended Abstracts (258 / 155) only;
+HCI_v is 563 documents in the 1990s and 373 in the 2020s, and the 1990s training pool after
+holding out 500 abstracts is 5,913 tokens. No excess was computed.
+
+Reported numbers: the 1990s cleaned HCI cell (7,294 documents) spans 915 distinct sources,
+with 1,271 documents lacking one; the 2020s cell (9,665 documents) spans 3,601 sources, 177
+without one. The shared-venue share of the cell fell from 7.7% to 3.9%. The sources that grew
+most as a share of the cell: IEEE VR workshops (VRW), Zenodo, AHFE International, Routledge
+eBooks, Proceedings of the ACM on Human-Computer Interaction, *Sensors*, IEEE TVCG, Designing
+Interactive Systems, IEEE Access, *Frontiers in Virtual Reality*. The label OpenAlex applies as
+HCI is far more diffuse in the 2020s than in the 1990s, whatever the prose did.
+
+---
+
+## Round K′: the same test at feasible sizes (committed 2026-11-09, before any excess was
+computed)
+
+Identical to round K except for three sizes, chosen from the pool sizes above (inputs, not
+evidence): shared venues need **at least 20** cleaned documents in both decades (9 venues:
+CHI, CHI EA, UIST, VRST, IJHCI, HFES proceedings, CRC Press eBooks and two more, 1,471 / 856
+documents); every text holds out **150** abstracts; every model trains on **90,000 tokens**
+(HCI_v's smallest pool over seeds is 166,316 / 101,999 tokens). K1–K4 and the reading rule
+are as in round K. Scored by `scripts/score_venue.py` with these constants.
