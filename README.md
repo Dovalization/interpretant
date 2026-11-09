@@ -1,5 +1,7 @@
 # interpretant
 
+[![CI](https://github.com/Dovalization/interpretant/actions/workflows/ci.yml/badge.svg)](https://github.com/Dovalization/interpretant/actions/workflows/ci.yml)
+
 `interpretant` measures how academic communities change what they do with a word. It trains one word-embedding model per field and decade on a grid of research abstracts (eleven fields, 1950s–2020s) and two centuries of canonical books, puts every model in one coordinate system, and judges each word's movement against the movement of the whole vocabulary. Every claim is tested against predictions committed to git before the evidence existed.
 
 Two findings have survived a second training seed, a second method and pre-registered tests. **_Embodiment_ means two different things**: virtual reality's sense of body ownership in HCI, phenomenological corporeality in philosophy. And **philosophy's language model came to predict HCI's abstracts better over thirty years, while HCI's model did not learn philosophy's language**.
