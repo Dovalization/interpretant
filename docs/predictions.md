@@ -273,3 +273,78 @@ PPMI-SVD (round 3).
   both TWEC seeds but not in PPMI-SVD. Philosophy's 2020s *consciousness* changes in both
   methods but is described differently by each (computational vocabulary in TWEC, named
   theories of consciousness in PPMI) and misses the committed thresholds in PPMI.
+
+---
+
+## Round 4 (committed 2026-11-10, before the lemmatised corpus was built)
+
+The cells are rebuilt from a lemmatised corpus: regular plurals collapse onto their singular
+and British spellings onto American ones (`corpus lemmas learn|apply`, rules in
+`src/interpretant/corpus/lemmas.py`, overrides in `data/lemma_overrides.tsv`); verbs,
+participles and *-ing* nominalisations are left as they are. Phrases are relearned on the
+lemmatised text, then the grid is retrained with seeds 42 and 43, PPMI-SVD is rebuilt, and
+`drift grid` and `drift perplexity` are rerun. The lemmatised grid takes the default paths
+(`models/twec_grid`, `data/drift/*.parquet`); the unlemmatised artefacts rounds 1–3 were
+scored on stay under `*_unlemmatised` paths, and the scorers of those rounds point there.
+
+The definitions of round 1 apply (candidate, neighbours from words with at least 50
+occurrences, *near a set* = at least 2 of the set among the 25 neighbours; the R-round sets
+ask for at least 3). The word sets are those of rounds 1–3, unchanged; they contain no plural
+or British form, so lemmatisation does not favour them.
+
+**Disclosure.** The lemma map was reviewed before these predictions: its 200 most frequent
+mappings, the spelling merges, and the share of each unlemmatised cell's vocabulary it
+touches (4.6% and 5.6% of the full philosophy and HCI 2020s cells, 9.9% to 12.6% of the
+main-grid and books cells inspected). No model, drift table or cross-perplexity table of the
+lemmatised corpus existed. The audit's reliable-transition count will not change by design:
+the target words were already mapped onto one lemma by `TARGET_VARIANTS` at preprocessing,
+so the lemmatisation changes the neighbourhoods and the noise floor, not the targets' counts.
+
+**L0 — method sanity.** In each lemmatised table, under 5% of control-word measurements are
+candidates, and no control word is a candidate in more than 3 pairs (the round-1 rule; *food*
+exceeded it in rounds 1 and 2 and is expected to again, and is reported as such). *Falsified*
+if the 5% bound is broken by any control other than *food*, or if any control other than
+*food* exceeds 3 pairs.
+
+**L1 — lemmatisation did its job.** (a) In every cell of the seed-42 lemmatised grid the
+vocabulary (the `.kv` keys) is at least 4% smaller than in the same unlemmatised cell, and at
+least 8% smaller in every main-grid and books cell. (b) In each of the full philosophy and HCI
+cells of the 2010s and 2020s, the neighbour pool (words with at least 50 occurrences) is at
+least 3% larger than in the unlemmatised cell. *Falsified* if any cell misses (a) or any of
+the four cells misses (b).
+
+**L2 — *embodiment*'s two senses survive** (full cells, 2020s, both seeds). HCI: at least 3
+of {presence, ownership, illusion, immersion, self-location, avatar, virtual, agency}.
+Philosophy: at least 3 of {corporeality, spatiality, intersubjectivity, affectivity,
+temporality, lived, flesh, embodied}. *Falsified* if either side fails in either seed.
+
+**L3 — *intentionality* stable** (full cells, philosophy, both seeds). No candidate
+transition from the 1980s to the 2020s. *Falsified* if any transition is a candidate in
+either seed.
+
+**L4 — *representation* in AI** (main grid, seed 42). 1980s near {knowledge, logic, rule,
+symbolic, reasoning, frame}; 2010s or 2020s near {feature, learned, embedding, deep, latent,
+encoder}. *Falsified* if either half fails.
+
+**L5 — HCI's *affordance* is experiential** (full cells, seed 42, 2010s). At least 3 of
+{experiential, qualities, physicality, interactivity, metaphors, sensorial, materiality}.
+*Falsified* otherwise.
+
+**L6 — *information* converges between psychology and computer science** (main grid, seed
+42; stated as a prediction for the first time, after appearing in both unlemmatised TWEC
+seeds and not in PPMI). The mean cross-field cosine rank over the 1960s–70s is at least 15
+points higher than over the 2000s–10s. *Falsified* if the gap is under 15.
+
+**L7 — philosophy's *consciousness* moves in the 2020s** (full cells, seed 42). 2010s → 2020s
+is a candidate. The direction of the move (computational vocabulary or named theories of
+consciousness) is not predicted: the two unlemmatised methods disagreed on it, and the 2020s
+neighbours are reported for the record. *Falsified* if the transition is not a candidate.
+
+Lemmatised PPMI-SVD cells are built for the record and for later rounds; no prediction in
+this round uses them.
+
+## Scoring
+
+`scripts/score_predictions_round4.py`, committed before the lemmatised corpus exists, scores
+L0–L7 and prints the evidence for each. Results are appended below after the run; the
+predictions above are not edited.

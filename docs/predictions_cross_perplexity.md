@@ -268,3 +268,31 @@ stands as measured — philosophy's model predicts HCI's abstracts better over t
 reverse — but it is specific to HCI, and neither explanation tested so far (HCI borrowing
 philosophy's language, philosophy broadening into technology) accounts for it. Its cause is
 open.
+
+---
+
+## Round 4: the lemmatised corpus (committed 2026-11-10, before the lemmatised corpus was
+built)
+
+`drift perplexity` is rerun on the lemmatised cells with the corrected design (shared abstracts
+removed, 200,000 training tokens, 1,000 held-out abstracts, seeds 1–5; output
+`data/drift/cross_perplexity_corrected.parquet`, the unlemmatised table having moved to
+`data/drift/unlemmatised/`). Lemmatisation shrinks every vocabulary, so absolute excess values
+will differ from the unlemmatised run and are not compared across the two corpora; only
+directions within the lemmatised run are predicted. "Mean" is the mean over the 5 seeds.
+
+**L8 — philosophy's model predicts HCI better over time, one-sidedly.** E(philosophy → HCI)
+is lower in the 2020s than in the 1990s in all 5 seeds, and in every seed E(HCI → philosophy)
+changes less between the 1990s and the 2020s, in absolute value, than E(philosophy → HCI)
+does (D4 and F2 on the lemmatised corpus). *Falsified* if either part fails in any seed.
+
+**L9 — fields converge.** The mean E(A → B) over all ordered pairs of fields qualifying in
+both decades is lower in the 2010s than in the 1980s in all 5 seeds (the reversal observed
+in D5, now predicted). *Falsified* if any seed shows the opposite.
+
+**L10 — the subfield asymmetry holds.** Using the mean excess over the 5 seeds,
+E(AI → computer science) < E(computer science → AI) and E(cognitive psychology → psychology)
+< E(psychology → cognitive psychology) in at least 5 of the 6 decades where both qualify
+(the reversal observed in D1, now predicted). *Falsified* if either pair falls short.
+
+Scored by `scripts/score_predictions_round4.py`. Results are appended below after the run.
