@@ -647,6 +647,11 @@ def twec() -> None:
     default=None,
     help="Path to a saved compass.model to skip compass training (e.g. models/twec/compass.model).",
 )  # noqa: E501
+@click.option(
+    "--source-cap",
+    default=None,
+    help="Per-source document cap as 'source:N,...' (e.g. 'pubmed:10000,arxiv:5000').",
+)  # noqa: E501
 def twec_train(  # noqa: PLR0913
     corpora: tuple[str, ...],
     input_dir: Path,
@@ -660,6 +665,7 @@ def twec_train(  # noqa: PLR0913
     epochs: int,
     max_docs_per_decade: int,
     load_compass: Path | None,
+    source_cap: str | None,
 ) -> None:
     """Train TWEC embeddings: compass on all decades, then per-decade models.
 
@@ -711,6 +717,8 @@ def twec_train(  # noqa: PLR0913
     )  # noqa: E501
     if max_docs_per_decade:
         console.print(f"  max docs : {max_docs_per_decade:,} per file")
+    if source_cap:
+        console.print(f"  source caps : {source_cap}")
 
     trainer = TWECTrainer(
         vector_size=vector_size,
@@ -743,7 +751,20 @@ def twec_train(  # noqa: PLR0913
         f"(streaming — no data loaded yet)"
     )
 
-    _max_docs = max_docs_per_decade if max_docs_per_decade else None
+    path_caps: dict[Path, int] = {}
+    if source_cap:
+        cap_map: dict[str, int] = {}
+        for entry in source_cap.split(","):
+            source_name, n = entry.strip().split(":")
+            cap_map[source_name.strip()] = int(n)
+        for path in all_paths:
+            source_prefix = "_".join(path.stem.split("_")[:-1])
+            if source_prefix in cap_map:
+                path_caps[path] = cap_map[source_prefix]
+
+    _max_docs: int | dict[Path, int] | None = path_caps or (
+        max_docs_per_decade if max_docs_per_decade else None
+    )
 
     # --- Phase 2: train or load compass ---
     if load_compass is not None:

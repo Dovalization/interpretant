@@ -53,21 +53,26 @@ class _FileSentences:
             temporal range of the file rather than just the first N lines.
     """
 
-    def __init__(self, paths: list[Path], max_docs: int | None = None) -> None:
+    def __init__(self, paths: list[Path], max_docs: int | dict[Path, int] | None = None) -> None:
         self._paths = paths
-        self._max_docs = max_docs
+        # Per-path document limits (used as count cap in __iter__).
+        self._path_limits: dict[Path, int] = {}
         # Pre-compute stride per file: one line-count pass at construction time.
         # stride=1 means take every line; stride=k means take every k-th line.
         self._strides: dict[Path, int] = {}
         if max_docs is not None:
             for path in paths:
-                with path.open(encoding="utf-8") as fh:
-                    total = sum(1 for _ in fh)
-                self._strides[path] = max(1, total // max_docs)
+                limit = max_docs.get(path) if isinstance(max_docs, dict) else max_docs
+                if limit is not None:
+                    self._path_limits[path] = limit
+                    with path.open(encoding="utf-8") as fh:
+                        total = sum(1 for _ in fh)
+                    self._strides[path] = max(1, total // limit)
 
     def __iter__(self) -> Iterator[list[str]]:
         for path in self._paths:
             stride = self._strides.get(path, 1)
+            limit = self._path_limits.get(path)
             count = 0
             with path.open(encoding="utf-8") as fh:
                 for i, line in enumerate(fh):
@@ -77,7 +82,7 @@ class _FileSentences:
                     if tokens:
                         yield tokens
                         count += 1
-                        if self._max_docs is not None and count >= self._max_docs:
+                        if limit is not None and count >= limit:
                             break
 
 
@@ -151,7 +156,7 @@ class TWECTrainer:
     def train_compass(
         self,
         corpus_paths: list[Path],
-        max_docs: int | None = None,
+        max_docs: int | dict[Path, int] | None = None,
         extra_callbacks: list[Any] | None = None,
     ) -> None:
         """Train the compass on all decades' text, streaming from disk.
@@ -203,7 +208,7 @@ class TWECTrainer:
         self,
         decade_paths: list[Path],
         decade: int,
-        max_docs: int | None = None,
+        max_docs: int | dict[Path, int] | None = None,
         extra_callbacks: list[Any] | None = None,
     ) -> KeyedVectors:
         """Train a decade model with compass context vectors frozen.
