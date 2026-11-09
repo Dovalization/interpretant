@@ -218,3 +218,44 @@ def test_clean_cell_drops_non_english_abstracts_and_mastheads() -> None:
         "this study analyses how the representation of consciousness changed in the corpus"
     ]
     assert cell.non_english == 3
+
+
+def test_clean_cell_keeps_ids_aligned_with_the_documents_it_keeps() -> None:
+    records = [
+        {"id": "W1", "abstract": "we study how people read interfaces on small screens today"},
+        {"id": "W2", "abstract": "we study how people read interfaces on small screens today"},
+        {"id": "W3", "abstract": "a second abstract about something else entirely in english"},
+    ]
+
+    cell = clean_cell(records)
+
+    assert cell.ids == ["W1", "W3"]
+    assert len(cell.ids) == len(cell.documents)
+
+
+def test_sources_for_batches_ids_and_fills_missing_works() -> None:
+    from interpretant.corpus.openalex import IDS_PER_REQUEST, OpenAlexClient
+
+    calls: list[dict[str, object]] = []
+
+    class StubClient(OpenAlexClient):
+        def _get(self, params: dict[str, object]) -> dict[str, object]:
+            calls.append(params)
+            ids = str(params["filter"]).split(":", 1)[1].split("|")
+            return {
+                "results": [
+                    {
+                        "id": f"https://openalex.org/{work_id}",
+                        "primary_location": {"source": {"id": "S1", "display_name": "CHI"}},
+                    }
+                    for work_id in ids[:-1]
+                ]
+            }
+
+    ids = [f"https://openalex.org/W{n}" for n in range(IDS_PER_REQUEST + 1)]
+    sources = StubClient("key").sources_for(ids)
+
+    assert len(calls) == 2
+    assert sources[ids[0]] == ("S1", "CHI")
+    assert sources[ids[IDS_PER_REQUEST - 1]] == (None, None)
+    assert sources[ids[IDS_PER_REQUEST]] == (None, None)

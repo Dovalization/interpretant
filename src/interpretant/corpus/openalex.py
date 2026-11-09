@@ -248,6 +248,7 @@ class CleanedCell:
     """A cell's documents after cleaning, with what each rule removed."""
 
     documents: list[str] = dataclass_field(default_factory=list)
+    ids: list[str] = dataclass_field(default_factory=list)
     empty: int = 0
     duplicates: int = 0
     catalogue_records: int = 0
@@ -269,7 +270,7 @@ def clean_cell(
     """
     cell = CleanedCell()
     seen: set[str] = set()
-    kept: list[tuple[list[str], str]] = []
+    kept: list[tuple[list[str], str, str]] = []
     for record in records:
         abstract = str(record["abstract"])
         if _CATALOGUE_RECORD.match(abstract) or _CITATION_RECORD.search(abstract):
@@ -287,10 +288,11 @@ def clean_cell(
             cell.duplicates += 1
         else:
             seen.add(text)
-            kept.append((list(record.get("authors") or []), text))
-    allowed = cap_author_works([authors for authors, _ in kept], max_author_share, seed)
+            kept.append((list(record.get("authors") or []), text, str(record.get("id") or "")))
+    allowed = cap_author_works([authors for authors, _, _ in kept], max_author_share, seed)
     cell.author_capped = len(kept) - len(allowed)
-    cell.documents = [text for index, (_, text) in enumerate(kept) if index in allowed]
+    cell.documents = [text for index, (_, text, _) in enumerate(kept) if index in allowed]
+    cell.ids = [work_id for index, (_, _, work_id) in enumerate(kept) if index in allowed]
     return cell
 
 
@@ -299,6 +301,7 @@ def cell_path(raw_dir: Path, field: str, decade: int) -> Path:
 
 
 _SELECT = "id,publication_year,type,authorships,abstract_inverted_index"
+IDS_PER_REQUEST = 50  # OpenAlex accepts up to 50 values in one OR filter
 
 
 class OpenAlexClient:
@@ -329,6 +332,26 @@ class OpenAlexClient:
         params = {"filter": filters, "per-page": PAGE_SIZE, "cursor": cursor, "select": _SELECT}
         data = self._get(params)
         return data["results"], data["meta"].get("next_cursor")
+
+    def sources_for(self, ids: list[str]) -> dict[str, tuple[str | None, str | None]]:
+        """Return each work's primary source (id, name), fetched ``IDS_PER_REQUEST`` at a time."""
+        sources: dict[str, tuple[str | None, str | None]] = {}
+        for start in range(0, len(ids), IDS_PER_REQUEST):
+            batch = ids[start : start + IDS_PER_REQUEST]
+            short = [work_id.rsplit("/", 1)[-1] for work_id in batch]
+            results = self._get(
+                {
+                    "filter": "ids.openalex:" + "|".join(short),
+                    "per-page": IDS_PER_REQUEST,
+                    "select": "id,primary_location",
+                }
+            )["results"]
+            for work in results:
+                source = (work.get("primary_location") or {}).get("source") or {}
+                sources[str(work["id"])] = (source.get("id"), source.get("display_name"))
+            for work_id in batch:
+                sources.setdefault(work_id, (None, None))
+        return sources
 
     def _get(self, params: dict[str, object]) -> dict[str, Any]:
         url = f"{API_URL}?{urllib.parse.urlencode({**params, 'api_key': self.api_key})}"
@@ -386,6 +409,38 @@ def download_cell(
             written += 1
     partial.rename(path)
     return written
+
+
+def fetch_sources(client: OpenAlexClient, raw_dir: Path, field: str, decade: int) -> Path:
+    """Look up the primary source of every work in a downloaded cell.
+
+    Writes ``<field>/sources_<decade>.jsonl`` (id, source_id, source_name) next to the cell and
+    skips ids already written, so an interrupted run resumes.
+    """
+    output = raw_dir / field / f"sources_{decade}.jsonl"
+    done: set[str] = set()
+    if output.exists():
+        with output.open(encoding="utf-8") as handle:
+            done = {json.loads(line)["id"] for line in handle if line.strip()}
+    with gzip.open(cell_path(raw_dir, field, decade), "rt", encoding="utf-8") as cell:
+        pending = [
+            record["id"]
+            for record in (json.loads(line) for line in cell)
+            if record["id"] not in done
+        ]
+    with output.open("a", encoding="utf-8") as handle:
+        for start in range(0, len(pending), IDS_PER_REQUEST * 10):
+            batch = pending[start : start + IDS_PER_REQUEST * 10]
+            for work_id, (source_id, source_name) in client.sources_for(batch).items():
+                handle.write(
+                    json.dumps(
+                        {"id": work_id, "source_id": source_id, "source_name": source_name},
+                        ensure_ascii=False,
+                    )
+                    + "\n"
+                )
+            handle.flush()
+    return output
 
 
 def _cell_works(

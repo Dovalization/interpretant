@@ -241,6 +241,34 @@ def corpus_openalex_download(  # noqa: PLR0913
     console.print("[green]Done.[/green]")
 
 
+@corpus_openalex.command("sources")
+@click.option(
+    "--raw-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/raw/openalex"),
+    show_default=True,
+)
+@click.option("--field", "fields", multiple=True, default=("hci",), show_default=True)
+@click.option(
+    "--decade", "decades", multiple=True, type=int, default=(1990, 2020), show_default=True
+)  # noqa: E501
+def corpus_openalex_sources(
+    raw_dir: Path, fields: tuple[str, ...], decades: tuple[int, ...]
+) -> None:
+    """Look up the primary source (venue) of every work in the given cells (needs the API key)."""
+    from interpretant.corpus.openalex import (  # noqa: PLC0415
+        OpenAlexClient,
+        OpenAlexSettings,
+        fetch_sources,
+    )
+
+    client = OpenAlexClient(OpenAlexSettings().openalex_api_key)  # type: ignore[call-arg]
+    for field in fields:
+        for decade in decades:
+            output = fetch_sources(client, raw_dir, field, decade)
+            console.print(f"  {field} {decade}s → {output}")
+
+
 @corpus_openalex.command("ingest")
 @click.option(
     "--raw-dir",
