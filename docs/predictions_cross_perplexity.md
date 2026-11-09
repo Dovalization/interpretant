@@ -423,3 +423,48 @@ core vocabulary is algorithmic, no better than before (H1). HCI's register did n
 philosophy at all (F2, G5). This is a reading built from three rounds of evidence, not a scored
 prediction; the test that would settle it is a pre-registered contrast, in the full philosophy
 cells, between HCI's object nouns and computing's method nouns.
+
+### Exploratory, after scoring: function words, and a mix/rate decomposition
+
+Prompted by the question whether *the* and *of* should count as words in G4. Not predicted, not
+scored; the numbers are from the same models.
+
+- **Function words are 15% of G4's positive score**, content words 85%; the content-word part
+  is broad (top 50 words 37%, top 100 48%), led by *user, design, system, interface, research,
+  interaction, environment, digital, virtual, information, present, device, this_paper,
+  analysis, experiment*. G4's verdict does not depend on function words.
+- **Per-word rates got worse on net.** Words whose per-occurrence excess rose outweigh those
+  whose excess fell (112% of the positive score), led by *language, sign, dataset, learning,
+  hand, app, accuracy, gesture, deep, network*: the machine-learning vocabulary that entered
+  HCI in the 2020s.
+- **The fall of E(philosophy → HCI) is mostly a change in HCI's word mix, not in philosophy's
+  skill at HCI's words.** Splitting the fall into a mix effect (1990s per-word rates applied to
+  the 2020s word frequencies) and a rate effect (the rest), per seed: fall 0.071, 0.103, 0.066,
+  0.057, 0.097 bits; mix effect 0.039, 0.064, 0.068, 0.086, 0.091; rate effect 0.032, 0.039,
+  −0.001, −0.029, 0.005. The mix effect dominates in every seed; the rate effect is positive in
+  two, about zero in two, negative in one.
+- **The mix effect is HCI shedding its 1990s interface jargon.** The words whose falling share
+  lowered the excess most (seed 1): *interface, user_interface, design, computer, system, user,
+  software, task, designer, information, describe, graphical, display, technique, tool,
+  virtual_environment, graphic, menu, device, input, development, operator, database, hci*.
+  Words whose rising share raised it: *gesture, research, immersive, participant, sign,
+  virtual_reality, ux, metaverse, study, accuracy, digital, technology, vr*.
+
+### Corrected reading
+
+The reading above, "philosophy acquired HCI's objects", is at best the smaller half. The
+larger and more consistent half is that **HCI's own vocabulary moved away from the
+GUI-engineering lexicon of the 1990s** (menus, displays, graphical interfaces, software,
+operators, databases), which philosophy's model finds most alien, towards a more generic
+empirical register (*research, study, participant*) and the vocabulary of experience and
+technology; philosophy's model finds the result less foreign without having learned much. This
+is still consistent with every scored result: the change is spread across HCI's abstracts (G1,
+G3), it is one-sided because philosophy's mix did not move (F2, G5), and philosophy's model did
+not improve on computer science or AI (H1), whose jargon HCI partly adopted (*dataset, accuracy,
+deep, network*), which is also why the per-word rates got worse on net.
+
+Two things follow, and neither is scored yet. If the mechanism is HCI's mix, then *every*
+field's model should predict HCI's 2020s abstracts better than its 1990s ones, with the same
+mix effect dominating; the corrected table already holds those cells, uninspected. And the
+earlier reading's test, HCI's object nouns against computing's method nouns in philosophy's
+cells, is now secondary. The next round, if run, is the first of these.
