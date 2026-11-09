@@ -1,0 +1,19 @@
+# Cross-field control words (prediction R8): the 15 control words whose per-million
+# rate varies least across the 11 OpenAlex fields
+# (scripts/select_cross_field_controls.py).
+# word  coefficient_of_variation
+road  # 0.52
+fire  # 0.60
+people  # 0.61
+meat  # 0.63
+day  # 0.63
+sun  # 0.64
+shoe  # 0.64
+student  # 0.64
+forest  # 0.64
+winter  # 0.65
+year  # 0.66
+food  # 0.66
+home  # 0.69
+woman  # 0.79
+house  # 0.80
