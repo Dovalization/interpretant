@@ -26,39 +26,92 @@ RULE_OVERRIDE = "override"
 RULE_PLURAL = "plural"
 RULE_SPELLING = "spelling"
 
-# Words ending in -ise where -ise is not the British suffix (and their derivatives).
-ISE_EXCEPTIONS = (
-    "advertise",
-    "advise",
-    "arise",
-    "comprise",
-    "compromise",
-    "concise",
-    "demise",
-    "despise",
-    "devise",
-    "disguise",
-    "enterprise",
-    "excise",
-    "exercise",
-    "expertise",
-    "franchise",
-    "improvise",
-    "likewise",
-    "merchandise",
-    "otherwise",
-    "paradise",
-    "praise",
-    "precise",
-    "premise",
-    "promise",
-    "raise",
-    "revise",
-    "supervise",
-    "surprise",
-    "televise",
-    "treatise",
+# Stems (without the final e) of words where -ise is not the British suffix: *surprise*,
+# *surprising*, *arising*; and the suffixes -wise and -rise, which never are.
+ISE_EXCEPTION_STEMS = (
+    "advertis",
+    "advis",
+    "apprais",
+    "aris",
+    "chastis",
+    "circumcis",
+    "compris",
+    "compromis",
+    "concis",
+    "demis",
+    "despis",
+    "devis",
+    "disguis",
+    "enterpris",
+    "excis",
+    "exercis",
+    "exorcis",
+    "expertis",
+    "franchis",
+    "guis",
+    "improvis",
+    "incis",
+    "merchandis",
+    "paradis",
+    "prais",
+    "precis",
+    "premis",
+    "promis",
+    "rais",
+    "repris",
+    "revis",
+    "supervis",
+    "surmis",
+    "surpris",
+    "televis",
+    "treatis",
 )
+ISE_EXCEPTION_SUFFIXES = ("wise", "rise", "rising", "risen")
+# Verbs whose final l doubles before a suffix in British spelling only.
+DOUBLE_L_STEMS = (
+    "bevel",
+    "cancel",
+    "channel",
+    "chisel",
+    "counsel",
+    "dial",
+    "enamel",
+    "equal",
+    "fuel",
+    "funnel",
+    "grovel",
+    "initial",
+    "jewel",
+    "label",
+    "level",
+    "libel",
+    "marvel",
+    "mislabel",
+    "model",
+    "panel",
+    "parallel",
+    "pencil",
+    "quarrel",
+    "refuel",
+    "relabel",
+    "remodel",
+    "revel",
+    "rival",
+    "shovel",
+    "signal",
+    "spiral",
+    "stencil",
+    "total",
+    "travel",
+    "tunnel",
+    "unlabel",
+    "unravel",
+)
+DOUBLE_L_SUFFIXES = ("ing", "ed", "er", "ers", "ation", "ations")
+# A spelling merge must also exist in the corpus: the candidate's count must be at least
+# this share of the token's, which stops simplemma's lexicon from accepting forms that
+# never occur (*controled*, *surprizing*).
+SPELLING_MIN_SHARE = 0.1
 OUR_STEMS = (
     "behaviour",
     "colour",
@@ -96,7 +149,6 @@ SPELLINGS = {
 }
 _ISE_SUFFIX = re.compile(r"(is)(ation|ations|e|ed|es|ing|er|ers|able)$")
 _YSE_SUFFIX = re.compile(r"(ys)(e|ed|es|ing|er|ers)$")
-_DOUBLE_L = re.compile(r"[aeiou]ll(ing|ed|er|ers)$")
 _WORD = re.compile(r"^[a-z]+$")
 
 
@@ -124,7 +176,7 @@ def singular(token: str) -> str | None:
 def _spelling_candidate(token: str) -> str | None:
     if token in SPELLINGS:
         return SPELLINGS[token]
-    if token.startswith(ISE_EXCEPTIONS):
+    if token.startswith(ISE_EXCEPTION_STEMS) or token.endswith(ISE_EXCEPTION_SUFFIXES):
         return None
     if _ISE_SUFFIX.search(token):
         return _ISE_SUFFIX.sub(lambda match: "iz" + match.group(2), token)
@@ -138,17 +190,24 @@ def _spelling_candidate(token: str) -> str | None:
             return stem[:-2] + "er"
         if token.startswith(stem[:-1]) and token[len(stem) - 1 :] in ("ed", "ing"):
             return stem[:-2] + "er" + token[len(stem) - 1 :]
-    if (match := _DOUBLE_L.search(token)) is not None:
-        return token[: match.start() + 1] + "l" + match.group(1)
+    for stem in DOUBLE_L_STEMS:
+        if token.startswith(stem + "l") and token[len(stem) + 1 :] in DOUBLE_L_SUFFIXES:
+            return token[: len(stem)] + token[len(stem) + 1 :]
     return None
 
 
-def american(token: str) -> str | None:
-    """The American spelling of a British form, or ``None`` when the token is not one."""
+def american(token: str, counts: Counter[str] | None = None) -> str | None:
+    """The American spelling of a British form, or ``None`` when the token is not one.
+
+    With ``counts``, the American form must also occur in the corpus at least
+    ``SPELLING_MIN_SHARE`` as often as the token.
+    """
     if len(token) < MIN_SPELLING_LENGTH:
         return None
     candidate = _spelling_candidate(token)
     if candidate is None or candidate == token or not _known(candidate):
+        return None
+    if counts is not None and counts[candidate] < max(1, SPELLING_MIN_SHARE * counts[token]):
         return None
     return candidate
 
@@ -197,7 +256,12 @@ def read_overrides(path: Path) -> dict[str, str]:
     return overrides
 
 
-def normal_form(token: str, protected: set[str], overrides: dict[str, str]) -> tuple[str, str]:
+def normal_form(
+    token: str,
+    protected: set[str],
+    overrides: dict[str, str],
+    counts: Counter[str] | None = None,
+) -> tuple[str, str]:
     """Return ``(lemma, rule)`` for one token type; ``(token, "")`` when it stays as it is."""
     if token in protected or not _WORD.match(token):
         return token, ""
@@ -209,7 +273,7 @@ def normal_form(token: str, protected: set[str], overrides: dict[str, str]) -> t
         lemma, rule = single, RULE_PLURAL
     if lemma in overrides:
         return overrides[lemma] or lemma, rule or RULE_OVERRIDE
-    if lemma not in protected and (spelled := american(lemma)) is not None:
+    if lemma not in protected and (spelled := american(lemma, counts)) is not None:
         lemma, rule = spelled, RULE_SPELLING if rule == "" else rule
     return lemma, rule
 
@@ -221,7 +285,7 @@ def learn_lemma_map(
     protected_set = set(protected)
     lemma_map = LemmaMap()
     for token in counts:
-        lemma, rule = normal_form(token, protected_set, overrides)
+        lemma, rule = normal_form(token, protected_set, overrides, counts)
         if lemma != token:
             lemma_map.mapping[token] = lemma
             lemma_map.rules[token] = rule

@@ -64,7 +64,22 @@ def test_british_spellings_map_to_american(token: str, lemma: str) -> None:
 
 @pytest.mark.parametrize(
     "token",
-    ["promise", "exercise", "surprise", "enterprise", "hour", "contour", "genre", "falling"],
+    [
+        "promise",
+        "exercise",
+        "surprise",
+        "surprising",
+        "arising",
+        "otherwise",
+        "enterprise",
+        "hour",
+        "contour",
+        "genre",
+        "falling",
+        "filled",
+        "controlled",
+        "willing",
+    ],
 )
 def test_spelling_rules_leave_lookalikes_alone(token: str) -> None:
     assert american(token) is None
@@ -93,7 +108,7 @@ def test_overrides_win_and_an_empty_lemma_keeps_the_token(tmp_path: Path) -> Non
 
 
 def test_learned_map_applies_to_a_line_and_round_trips(tmp_path: Path) -> None:
-    counts = Counter({"structures": 5, "learning": 9, "behaviours": 2, "network": 3})
+    counts = Counter({"structures": 5, "learning": 9, "behaviours": 2, "behavior": 4, "network": 3})
 
     lemma_map = learn_lemma_map(counts, protected={"network"}, overrides={})
     lemma_map.save(tmp_path / "lemmas.tsv", counts)
@@ -103,3 +118,10 @@ def test_learned_map_applies_to_a_line_and_round_trips(tmp_path: Path) -> None:
     assert loaded.apply("the structures of learning behaviours") == (
         "the structure of learning behavior"
     )
+
+
+def test_spelling_merges_need_the_american_form_in_the_corpus() -> None:
+    counts = Counter({"organisation": 50, "organization": 500, "colonisation": 50})
+
+    assert american("organisation", counts) == "organization"
+    assert american("colonisation", counts) is None
