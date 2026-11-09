@@ -90,7 +90,7 @@ Results are tested against predictions committed to git before the evidence exis
 - **_Embodiment_ means two different things.** In HCI it is virtual reality's sense of body ownership and presence (neighbours: _ownership, presence, illusion, self-location, agency_); in philosophy it is phenomenological corporeality (_corporeality, intersubjectivity, temporality, spatiality, being-in-the-world_). The word is now about three times as frequent in HCI as in philosophy.
 - **_Intentionality_ is stable** in philosophy from the 1980s to the 2020s.
 
-- **HCI's language moved towards philosophy's** between the 1990s and the 2020s: philosophy's language model predicts HCI's abstracts better in the 2020s, robust to shared abstracts, training size and five resampled runs ([cross-perplexity predictions](docs/predictions_cross_perplexity.md)). It is the whole-language counterpart of the _embodiment_ result.
+- **Philosophy's language came to cover HCI's.** From the 1990s to the 2020s, philosophy's language model predicts HCI's abstracts better, while HCI's model predicts philosophy's no better — robust to shared abstracts, training size and five resampled runs ([cross-perplexity predictions](docs/predictions_cross_perplexity.md)). The words behind it are HCI's own (_user, design, interface, virtual, digital_), and philosophy's abstracts use them far more in the 2020s (_digital_ 21 times as often): a sign of philosophy turning towards technology, not of HCI borrowing philosophy's language. That reading is a hypothesis still to test.
 
 **Robust in part**
 
@@ -180,7 +180,7 @@ To explore the interface without any corpus data, `make app-demo` runs the dashb
 The full plan is in [`ROADMAP.md`](ROADMAP.md). Next:
 
 - [x] Cross-perplexity between cells (first run and corrected run)
-- [ ] Cross-perplexity in both directions across all decades, and the words behind HCI's move towards philosophy
+- [ ] Test philosophy's turn towards technology vocabulary, with a per-occurrence word ranking
 - [ ] Held-out check per cell and a backoff rule for sparse cells
 - [ ] Point the dashboard at the grid drift tables
 - [ ] Sense-level drift with contextual embeddings for the open findings

@@ -64,10 +64,11 @@ into one model per decade. The rationale and target design are in `docs/corpus.m
       before results; it trades time resolution for coverage
 - [x] Cross-perplexity between cells: a Kneser-Ney bigram model per field × decade, each cell
       scored by every other cell's model (`drift perplexity`; corrected run with shared
-      abstracts removed, one training size and 5 seeds). HCI's language moved towards
-      philosophy's (robust); see `docs/predictions_cross_perplexity.md`
-- [ ] Follow-up: both directions across all decades, the words behind HCI's move, and a test
-      of the convergence observed in the corrected run
+      abstracts removed, one training size and 5 seeds). Philosophy's model came to predict
+      HCI's abstracts better and not the reverse (robust); the follow-up attributes it to HCI's
+      own vocabulary, which philosophy took up. See `docs/predictions_cross_perplexity.md`
+- [ ] Test philosophy's turn towards technology vocabulary (per-occurrence word ranking) and
+      the convergence of fields observed in the corrected run
 - [ ] Public-domain books before 1930, sampled by Library of Congress class and dated by
       edition
 - [ ] Decide how to treat 1930–1960

@@ -185,3 +185,30 @@ words occurring in both decades' HCI held-out text by their fall in per-word exc
 1990s to the 2020s, weighted by their 2020s occurrences, at least 2 of {embodiment, embodied,
 affordance, experience, experiential, phenomenological, phenomenology, body, bodily, meaning,
 practice, perception} are among the top 50. *Falsified* if fewer than 2 are.
+
+### Follow-up results (2026-11-09, `scripts/score_hci_philosophy.py`)
+
+Scored as written. 1 passed, 2 falsified.
+
+| | Verdict | Numbers |
+|---|---|---|
+| F1 | **Falsified** | Mean E(philosophy → HCI): 1.700 (1990s), 1.652 (2000s), 1.521 (2010s), 1.622 (2020s); fall 1990s→2000s 0.048, 2000s→2020s 0.031. Closest in the 2010s, partly apart again in the 2020s |
+| F2 | **Passed** | Per seed, change 1990s→2020s in E(philosophy → HCI) vs E(HCI → philosophy): (−0.072, +0.018), (−0.103, +0.002), (−0.065, −0.040), (−0.056, +0.003), (−0.096, −0.006) |
+| F3 | **Falsified** | None of the 12 words in the top 50, which is led by *the, user, design, system, of, interface, research, virtual, digital, interaction, environment* |
+
+### Reinterpretation of D4 and F2
+
+E(A → B) falls when B's language moves towards A's **or** when A's language broadens to cover
+B's. F3 points to the second: the words whose excess fell most are HCI's own vocabulary (*user,
+design, interface, virtual, digital, interaction*), which philosophy's model learned to predict,
+not philosophy's vocabulary. An exploratory count, made after scoring and not a test, agrees:
+per million tokens, philosophy's abstracts use *digital* 6 → 126, *interface* 10 → 49,
+*virtual* 10 → 40, *user* 8 → 29 and *design* 47 → 134 between the 1990s and the 2020s.
+
+So the robust result is that **philosophy's language model came to predict HCI's abstracts
+better, while HCI's model did not come to predict philosophy's** — consistent with philosophy
+turning towards digital technology rather than with HCI borrowing philosophy's language. The
+earlier description, "HCI's language moved towards philosophy's", was wrong and has been
+corrected in the README and ROADMAP. Philosophy's turn to technology is a hypothesis from
+these data and needs its own test. F3's ranking, weighted by occurrences, lets very frequent
+words dominate; a per-occurrence ranking would be the better design for such a test.
