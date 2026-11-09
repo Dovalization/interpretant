@@ -69,7 +69,7 @@ between psychology, sociology and neuroscience. `drift grid` writes one row per 
 A candidate becomes a finding only after the robustness checks: the second seed, PPMI-SVD, and a
 prediction committed before the evidence (below).
 
-## Cross-perplexity: who predicts whom
+## Cross-perplexity: whose language predicts whose
 
 `drift perplexity` fits one bigram language model with interpolated Kneser-Ney smoothing
 (discount 0.75) per field and decade on the main OpenAlex grid, and scores every field's
@@ -81,6 +81,25 @@ seeds 1–5) removes any abstract that appears in more than one cell of a decade
 model on exactly 200,000 tokens, holds out 1,000 abstracts per cell, uses one vocabulary per
 decade (words with at least 5 occurrences in that decade's training samples), and repeats the
 whole run with five seeds; a comparison holds only if it goes the same way in all five.
+
+**Predictable is not borrowed.** A fall in E(A → B) between two decades has two possible
+sources: B's word frequencies changed towards words A's model already handled, or A's model
+became better at B's words. Rounds G, J and K′ found the first dominating for HCI, which the
+pair-level number alone cannot show. Two tools therefore accompany every reading of a fall:
+
+- `drift decompose` splits each pair's fall into a **mix effect** (the earlier per-word excess
+  rates applied to the later word frequencies) and a **rate effect** (the remainder);
+  `fall = mix + rate`. A fall that is all mix says the text moved and the model learned
+  nothing. Output: `data/drift/cross_perplexity_decomposition.parquet`.
+- `drift perplexity --order 1` repeats the run with add-one **unigram** models, the
+  lexical-composition control. A fall the unigram models reproduce is a change in which words
+  a text uses; what the bigram models add beyond it is phrase structure. Output:
+  `data/drift/cross_perplexity_unigram.parquet`.
+
+Whole-cell comparisons across decades also rest on OpenAlex's subfield labels holding their
+scope; round K′ showed the HCI label widening from 915 to 3,601 sources between the 1990s and
+the 2020s. A venue-stable check (`corpus openalex sources`, then the cell restricted to the
+venues present in both decades) should accompany any such claim.
 
 ## Pre-registration
 
