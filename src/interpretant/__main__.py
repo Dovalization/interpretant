@@ -1959,6 +1959,102 @@ def pdf_status(inbox: Path, processed: Path) -> None:
 
 
 # ---------------------------------------------------------------------------
+# figures
+# ---------------------------------------------------------------------------
+
+
+@cli.command("figures")
+@click.option(
+    "--model-dir",
+    type=click.Path(path_type=Path),
+    default=Path("models/twec_grid"),
+    show_default=True,
+)
+@click.option(
+    "--drift-dir", type=click.Path(path_type=Path), default=Path("data/drift"), show_default=True
+)
+@click.option(
+    "--audit",
+    "audit_path",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased/audit.json"),
+    show_default=True,
+    help="Output of `corpus audit --output`; the corpus grid figure reads its cell counts.",
+)
+@click.option(
+    "--output-dir", type=click.Path(path_type=Path), default=Path("figures"), show_default=True
+)
+def figures(model_dir: Path, drift_dir: Path, audit_path: Path, output_dir: Path) -> None:
+    """Draw the README figures from the trained grid models and the drift tables."""
+    import json  # noqa: PLC0415
+
+    import pandas as pd  # noqa: PLC0415
+    from gensim.models import KeyedVectors  # noqa: PLC0415
+    from matplotlib.figure import Figure  # noqa: PLC0415
+
+    from interpretant.drift.grid import cell_neighbours  # noqa: PLC0415
+    from interpretant.visualization.figures import (  # noqa: PLC0415
+        NeighbourColumn,
+        corpus_grid,
+        excess_by_decade,
+        field_label,
+        neighbour_panel,
+    )
+
+    def column(layer: str, field: str, decade: int, word: str) -> NeighbourColumn:
+        vectors = KeyedVectors.load(str(model_dir / layer / f"{field}_{decade}.kv"))
+        count = int(vectors.get_vecattr(word, "count")) if word in vectors.key_to_index else 0
+        return NeighbourColumn(field, decade, count, cell_neighbours(vectors, word))
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    drawn: dict[str, Figure] = {}
+
+    drawn["embodiment"] = neighbour_panel(
+        "embodiment",
+        [
+            column("openalex_full", "philosophy", decade, "embodiment")
+            for decade in (1990, 2000, 2010, 2020)
+        ]
+        + [column("openalex_full", "hci", decade, "embodiment") for decade in (2000, 2010, 2020)],
+        title="Embodiment means two different things",
+        subtitle="Nearest neighbours of embodiment in every philosophy and HCI abstract, by decade",
+        footnote="TWEC models on the full OpenAlex cells; 25 neighbours from words with at least 50 occurrences, top 12 shown. Same result with a second seed and with PPMI-SVD.",  # noqa: E501
+    )
+    drawn["representation_ai"] = neighbour_panel(
+        "representation",
+        [column("openalex", "ai", decade, "representation") for decade in (1980, 2000, 2020)],
+        title="Representation in AI, from symbolic to learned",
+        subtitle="Nearest neighbours of representation in 10,000-abstract AI cells",
+        footnote="TWEC models on the main OpenAlex grid; the symbolic 1980s holds in TWEC only, the learned 2020s in every run.",  # noqa: E501
+    )
+    table = pd.read_parquet(drift_dir / "cross_perplexity_corrected.parquet")
+    drawn["philosophy_hci"] = excess_by_decade(
+        table[table["decade"] >= 1990],
+        [("philosophy", "hci"), ("hci", "philosophy")],
+        title="Philosophy's model learned to predict HCI; HCI's did not learn philosophy",
+        subtitle="Excess cross-entropy of one field's held-out abstracts under the other field's bigram model",  # noqa: E501
+        footnote="Kneser-Ney bigrams, 200,000 training tokens per cell, shared abstracts removed, 1,000 held-out abstracts; points are 5 resampled runs, lines their mean.",  # noqa: E501
+    )
+    report = json.loads(audit_path.read_text(encoding="utf-8"))
+    cells = pd.DataFrame(report["cells"])[["source", "decade", "documents"]]
+    fields = sorted(
+        {str(source) for source in cells["source"] if source != "books"},
+        key=lambda field: field_label(field).lower(),
+    )
+    drawn["corpus_grid"] = corpus_grid(
+        cells[cells["source"] != "books"],
+        title="The corpus is a grid",
+        subtitle="Research abstracts per field × decade cell after cleaning (sampled to 10,000 per cell)",  # noqa: E501
+        footnote="OpenAlex, seeded sample of English research prose; duplicates, catalogue records, scraped pages and non-English text removed; no author above 1% of a cell.",  # noqa: E501
+        fields=fields,
+    )
+    for name, figure in drawn.items():
+        path = output_dir / f"{name}.png"
+        figure.savefig(path, dpi=150, facecolor=figure.get_facecolor())
+        console.print(f"  wrote {path}")
+
+
+# ---------------------------------------------------------------------------
 # app
 # ---------------------------------------------------------------------------
 
