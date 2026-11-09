@@ -809,6 +809,8 @@ def embed_train(  # noqa: PLR0913
     separate: bool,
 ) -> None:
     """Train decade-sliced word embedding models from preprocessed text."""
+    from interpretant.embedding.base import training_sentences
+
     if config_name == "word2vec":
         from interpretant.embedding.word2vec import Word2VecTrainer
 
@@ -855,11 +857,11 @@ def embed_train(  # noqa: PLR0913
                     )
                     continue
 
-                sentences: list[list[str]] = []
-                for line in candidate.read_text(encoding="utf-8").splitlines():
-                    tokens = line.split()
-                    if tokens:
-                        sentences.append(tokens)
+                sentences: list[list[str]] = [
+                    sentence
+                    for line in candidate.read_text(encoding="utf-8").splitlines()
+                    for sentence in training_sentences(line)
+                ]
 
                 total_tokens = sum(len(s) for s in sentences)
                 console.print(
@@ -912,12 +914,12 @@ def embed_train(  # noqa: PLR0913
             continue
 
         # Load and tokenise all documents for this decade
-        sentences_merged: list[list[str]] = []
-        for text_file in decade_files:
-            for line in text_file.read_text(encoding="utf-8").splitlines():
-                tokens = line.split()
-                if tokens:
-                    sentences_merged.append(tokens)
+        sentences_merged: list[list[str]] = [
+            sentence
+            for text_file in decade_files
+            for line in text_file.read_text(encoding="utf-8").splitlines()
+            for sentence in training_sentences(line)
+        ]
 
         total_tokens = sum(len(s) for s in sentences_merged)
         console.print(

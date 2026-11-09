@@ -20,6 +20,8 @@ from typing import Any
 from gensim.models import KeyedVectors, Word2Vec
 from gensim.models.callbacks import CallbackAny2Vec
 
+from interpretant.embedding.base import training_sentences
+
 logger = logging.getLogger(__name__)
 
 
@@ -78,9 +80,9 @@ class _FileSentences:
                 for i, line in enumerate(fh):
                     if i % stride != 0:
                         continue
-                    tokens = line.split()
-                    if tokens:
-                        yield tokens
+                    sentences = list(training_sentences(line))
+                    if sentences:
+                        yield from sentences
                         count += 1
                         if limit is not None and count >= limit:
                             break
