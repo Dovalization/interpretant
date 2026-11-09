@@ -163,3 +163,37 @@ and seed-43 models of the same cell. For every target candidate in the seed-42 t
 neighbourhood shift between the two cells of its pair must exceed its seed noise in both
 cells. At least 80% of the within-field target candidates and at least 80% of the
 cross-field target candidates pass. *Falsified* if either share is below 80%.
+
+## Round 2 results (2026-11-09, `scripts/score_predictions_round2.py`)
+
+Scored against the round 2 definitions, unchanged. 7 passed, 2 falsified.
+
+| | Verdict | Numbers |
+|---|---|---|
+| R1 | **Passed** | Seed 43 AI 1980s neighbours include *knowledge, declarative, frame-based, procedural, formalism*; 2020s include *embeddings, encoder, learned, contrastive, latent* (5 of the learned set) |
+| R2 | **Passed** | Seed 43: no candidate for *intentionality* in philosophy (full cells) in any transition |
+| R3 | **Passed** | 6 of the VR set in both the seed-43 2020s and the seed-42 2010s: *ownership, presence, illusion, self-location, agency, immersion* |
+| R4 | **Passed** | 6 and 7 of the phenomenological set: *corporeality, temporality, affectivity, spatiality, intersubjectivity* |
+| R5 | **Falsified** | Seed 43 full cells: a candidate with 7 computational neighbours (*computation, computational, substrate, neural, intelligence, informational*); seed 42 main grid: not a candidate (3 hits) |
+| R6 | **Passed** | Seed 43 psychology × computer science: 1960s–70s mean 36, 2000s–10s mean 10; seed 42 cognitive psychology × computer science: 55 and 36 (gap 19) |
+| R7 | **Passed** | Seed 43 HCI: 6 and 5 of the experiential set (*physicality, qualities, experiential, interactivity, sensorial, tangible*) |
+| R8 | **Falsified** | Cross-field controls 0.96% candidates, but *food* exceeds its binomial bound (4 of 27 pairs, bound 3) |
+| R9 | **Passed** | 54 of 54 within-field and 473 of 473 cross-field target candidates change more between their cells than between two trainings of the same cell |
+
+### Reading
+
+- Five observations from round 1 now hold on evidence that did not exist when they were
+  predicted: *embodiment* has two senses (virtual-reality body ownership and presence in HCI,
+  phenomenological corporeality in philosophy); HCI's *affordance* is about experiential
+  qualities; *information* converged between psychology, cognitive psychology and computer
+  science; *representation* in AI moved from symbolic to learned representations; and
+  *intentionality* in philosophy is stable.
+- Training noise is large: retraining a cell changes an ordinary word's 25 neighbours by a
+  median Jaccard distance of about 0.4, against about 0.6 between consecutive decades. Raw
+  neighbourhood shift is mostly noise; the top-5% candidates (median 0.89, minimum 0.72)
+  clear it. Read neighbourhood results only through the noise floor.
+- R5 marks the resolution limit: philosophy's computational turn in *consciousness* is robust
+  in the full cells across seeds but does not clear the floor in 10,000-abstract cells. A
+  full-cell version is a candidate for round 3.
+- Cross-field controls remain the weak point: *food* differs across fields in meaning while
+  being evenly frequent, so frequency-based control selection does not screen it out.
