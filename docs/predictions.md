@@ -75,3 +75,34 @@ cross-field rank for sociology × computer science is lower in the 2010s than in
 Each prediction is scored as passed, falsified or untestable, with the numbers behind it, in
 a results section added below this line after `drift grid` runs. Predictions are not edited
 after the run.
+
+## Results (2026-11-09, `scripts/score_predictions.py`)
+
+Scored against the definitions above, unchanged. 3 passed, 6 falsified.
+
+| | Verdict | Numbers |
+|---|---|---|
+| P1 | **Falsified** (second criterion) | Control candidates 0.7% (within field, worst control *day* in 1 pair) and 0.9% (cross field), under 5%; but *food* is a candidate in 4 cross-field pairs, above the limit of 3 |
+| P2 | **Falsified** | AI 1980s→1990s cosine rank 84, neighbour rank 90; 2000s→2010s 79 and 54; neither a candidate |
+| P3 | **Passed** | 1980s neighbours include *knowledge, declarative, frame-based, formalism, reasoning*; 2020s include *embeddings, encoder, latent, contrastive, self-supervised, learned* (5 of the learned set) |
+| P4 | **Falsified** | Philosophy leans ecological in both decades (2 vs 0: *environments, environment, perception, atmospheres, tactile*); HCI matches neither set (0 vs 0: *qualities, experiential, physicality, interactivity, metaphors*) |
+| P5 | **Falsified** | HCI 2020s: *sense of embodiment, ownership, disembodiment, presence, illusion, self-location, immersion, agency* (0 of the set); philosophy 2020s: *embodied, corporeality, spatiality, temporality, affectivity, intersubjectivity* (0 of the set) |
+| P6 | **Falsified** | 2010s→2020s is a candidate (ranks 98 and 99), but only 1 new word of the AI set (*computational*); 2020s neighbours include *computation, computational, intelligence, neural, substrate, information_processing* |
+| P7 | **Passed** | No transition from the 1980s to the 2020s is a candidate |
+| P8 | **Falsified** | Opposite direction: psychology × computer science rank 51 and 39 in the 1960s–70s, 18 and 15 in the 2000s–10s (the fields converged) |
+| P9 | **Passed** (negligible) | 96.6 in the 1990s, 96.3 in the 2010s: lower, but *network* stays highly field-specific in both |
+
+### Reading
+
+- By P1's own rule, the results are not yet interpreted. The share of flagged controls is
+  low; the breach is one control in the cross-field table. The limit of 3 pairs was set
+  without computing what chance gives, and *food* is a weak cross-field control because
+  fields study food differently (eating behaviour, food security, feeding circuits). The
+  within-field table passes on both criteria. Cross-field controls need replacing with words
+  that are stable across fields as well as across time before P8 and P9 are read.
+- P4–P6 got the direction right (different senses per field; a 2020s shift in
+  *consciousness*) and the vocabulary wrong: HCI's *embodiment* is virtual reality's body
+  ownership and presence, philosophy's 2020s *consciousness* moved towards computational
+  theories of mind. These remain falsified; any hypothesis drawn from the observed neighbours
+  is new and must be tested on independent evidence (other seeds, PPMI-SVD), not on these
+  results.
