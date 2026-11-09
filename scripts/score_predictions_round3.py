@@ -15,7 +15,7 @@ from gensim.models import KeyedVectors
 from interpretant.corpus.audit import load_target_words
 from interpretant.drift.grid import add_noise_floor, compare_cells
 
-# Paths moved on 2026-11-10 when the lemmatised grid took the default paths; the evidence is unchanged.
+# Paths moved on 2026-11-10 when the lemmatised grid took the defaults; the evidence is unchanged.
 TWEC, PPMI = Path("models/twec_grid_unlemmatised"), Path("models/ppmi_grid_unlemmatised")
 
 

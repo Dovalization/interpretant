@@ -17,7 +17,6 @@ import urllib.parse
 import urllib.request
 import zipfile
 from html.parser import HTMLParser
-from typing import Optional
 
 try:
     import fitz  # PyMuPDF
@@ -74,7 +73,8 @@ BOOKS: list[tuple] = [
      "Max Stirner", "The Ego and His Own",
      1844, ["philosophy_of_mind", "political_philosophy"], "gutenberg", 34580),
     ("1840s", "humboldt_cosmos_vol1.txt",
-     "Alexander von Humboldt", "Cosmos: A Sketch of the Physical Description of the Universe, Vol. 1",
+     "Alexander von Humboldt",
+     "Cosmos: A Sketch of the Physical Description of the Universe, Vol. 1",
      1845, ["systems_theory"], "gutenberg", 14565),
     ("1840s", "poe_eureka.txt",
      "Edgar Allan Poe", "Eureka: A Prose Poem",
@@ -423,7 +423,8 @@ BOOKS: list[tuple] = [
     ("1830s", "tocqueville_memoir_on_pauperism.txt",
      "Alexis de Tocqueville", "Memoir on Pauperism",
      1835, ["sociology", "political_philosophy"],
-     "archive_merge", ["tocqueville-1st-letter-pauperism-1835", "tocqueville-2nd-letter-pauperism-1837"]),
+     "archive_merge",
+     ["tocqueville-1st-letter-pauperism-1835", "tocqueville-2nd-letter-pauperism-1837"]),
 
     # 1840s — Marx German Ideology via Marxists.org chapter crawl
     ("1840s", "marx_german_ideology.txt",
@@ -524,7 +525,7 @@ BOOKS: list[tuple] = [
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 
-def fetch_url(url: str, retries: int = 3) -> Optional[bytes]:
+def fetch_url(url: str, retries: int = 3) -> bytes | None:
     for attempt in range(retries):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
@@ -569,7 +570,7 @@ class _HTMLTextExtractor(HTMLParser):
             self.parts.append(data)
 
 
-def extract_epub(data: bytes) -> Optional[str]:
+def extract_epub(data: bytes) -> str | None:
     try:
         with zipfile.ZipFile(io.BytesIO(data)) as zf:
             names = [n for n in zf.namelist() if n.endswith((".html", ".xhtml", ".htm"))]
@@ -596,7 +597,7 @@ def extract_epub(data: bytes) -> Optional[str]:
         return None
 
 
-def extract_pdf(data: bytes) -> Optional[str]:
+def extract_pdf(data: bytes) -> str | None:
     if not HAS_FITZ:
         print("    PyMuPDF not available; skipping PDF")
         return None
@@ -610,7 +611,7 @@ def extract_pdf(data: bytes) -> Optional[str]:
         return None
 
 
-def fetch_gutenberg_text(gid: int) -> Optional[str]:
+def fetch_gutenberg_text(gid: int) -> str | None:
     # Try cache URL first (most reliable)
     for url in [
         f"https://www.gutenberg.org/cache/epub/{gid}/pg{gid}.txt",
@@ -627,7 +628,7 @@ def fetch_gutenberg_text(gid: int) -> Optional[str]:
     return None
 
 
-def fetch_archive_text(identifier: str) -> Optional[str]:
+def fetch_archive_text(identifier: str) -> str | None:
     base = f"https://archive.org/download/{identifier}"
     # Plain OCR text
     for suffix in [f"/{identifier}_djvu.txt", f"/{identifier}.txt"]:
@@ -647,7 +648,7 @@ def fetch_archive_text(identifier: str) -> Optional[str]:
     return None
 
 
-def fetch_archive_epub(identifier: str) -> Optional[str]:
+def fetch_archive_epub(identifier: str) -> str | None:
     base = f"https://archive.org/download/{identifier}"
     data = fetch_url(f"{base}/{identifier}.epub")
     if data:
@@ -655,7 +656,7 @@ def fetch_archive_epub(identifier: str) -> Optional[str]:
     return fetch_archive_text(identifier)  # fallback
 
 
-def fetch_archive_pdf(identifier: str) -> Optional[str]:
+def fetch_archive_pdf(identifier: str) -> str | None:
     base = f"https://archive.org/download/{identifier}"
     data = fetch_url(f"{base}/{identifier}.pdf")
     if data:
@@ -663,14 +664,14 @@ def fetch_archive_pdf(identifier: str) -> Optional[str]:
     return fetch_archive_text(identifier)
 
 
-def fetch_pdf_url(url: str) -> Optional[str]:
+def fetch_pdf_url(url: str) -> str | None:
     data = fetch_url(url)
     if data:
         return extract_pdf(data)
     return None
 
 
-def fetch_marxists(url: str) -> Optional[str]:
+def fetch_marxists(url: str) -> str | None:
     """Fetch and strip HTML from marxists.org."""
     data = fetch_url(url)
     if not data:
@@ -681,7 +682,7 @@ def fetch_marxists(url: str) -> Optional[str]:
     return " ".join(p.parts)
 
 
-def fetch_archive_merge(identifiers: list[str]) -> Optional[str]:
+def fetch_archive_merge(identifiers: list[str]) -> str | None:
     """Fetch and concatenate multiple Archive.org items."""
     parts = []
     for identifier in identifiers:
@@ -692,7 +693,7 @@ def fetch_archive_merge(identifiers: list[str]) -> Optional[str]:
     return "\n\n".join(parts) if parts else None
 
 
-def fetch_marxists_toc(base_url: str) -> Optional[str]:
+def fetch_marxists_toc(base_url: str) -> str | None:
     """Fetch all chapter pages from a Marxists.org work index."""
     index_data = fetch_url(base_url)
     if not index_data:
@@ -752,7 +753,7 @@ def main() -> None:
 
         print(f"\n→ {title} ({decade})")
 
-        text: Optional[str] = None
+        text: str | None = None
 
         if source == "gutenberg":
             text = fetch_gutenberg_text(int(source_id))  # type: ignore[arg-type]
@@ -787,7 +788,7 @@ def main() -> None:
             text = fetch_marxists_toc(str(source_id))
 
         if not text or len(text.strip()) < 500:
-            print(f"  FAILED — no usable text retrieved")
+            print("  FAILED — no usable text retrieved")
             failed.append(f"{decade}/{filename}")
             time.sleep(1)
             continue
