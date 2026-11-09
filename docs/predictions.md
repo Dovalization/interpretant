@@ -154,3 +154,12 @@ only and written to `data/control_words_cross_field.txt`. Under 5% of their meas
 are candidates, and no control is a candidate in more pairs than the 99th percentile of a
 binomial distribution with its number of measured pairs and the table's overall candidate
 rate. *Falsified* if either bound is broken.
+
+**R9 — drift exceeds training noise** (committed 2026-11-09 before the seed-43 grid finished
+training). The two seeds have separate compasses, so vectors are not compared across seeds;
+neighbour lists are. A word's *seed noise* in a cell is the neighbourhood shift (Jaccard over
+25 neighbours drawn from words with at least 50 occurrences in that cell) between the seed-42
+and seed-43 models of the same cell. For every target candidate in the seed-42 tables, its
+neighbourhood shift between the two cells of its pair must exceed its seed noise in both
+cells. At least 80% of the within-field target candidates and at least 80% of the
+cross-field target candidates pass. *Falsified* if either share is below 80%.
