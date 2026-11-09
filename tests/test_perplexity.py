@@ -10,9 +10,12 @@ import pytest
 from interpretant.drift.perplexity import (
     END,
     UNKNOWN,
+    DecadeModels,
     KneserNeyBigram,
+    UnigramModel,
     add_excess,
     decade_cross_entropy,
+    decompose_fall,
     training_sample,
 )
 
@@ -121,3 +124,31 @@ def test_document_cross_entropy_is_the_length_weighted_piece_of_the_corpus_value
     )
     assert weighted == pytest.approx(model.cross_entropy(documents))
     assert per_document[0] < per_document[1]
+
+
+def test_unigram_control_sums_to_one_and_prefers_its_own_words() -> None:
+    vocabulary = set(PHILOSOPHY.split()) | set(COMPUTING.split())
+    model = UnigramModel(vocabulary).fit([PHILOSOPHY] * 20)
+
+    assert sum(model.probability(word) for word in model.vocabulary) == pytest.approx(1.0)
+    assert model.cross_entropy([PHILOSOPHY]) < model.cross_entropy([COMPUTING])
+    bits, occurrences = model.word_bits([COMPUTING])
+    assert sum(bits.values()) / sum(occurrences.values()) == pytest.approx(
+        model.cross_entropy([COMPUTING])
+    )
+
+
+def test_fall_decomposes_into_mix_and_rate_and_pure_mix_changes_leave_rate_at_zero() -> None:
+    vocabulary = set(PHILOSOPHY.split()) | set(COMPUTING.split())
+    model_a = UnigramModel(vocabulary).fit([PHILOSOPHY] * 20)
+    model_b = UnigramModel(vocabulary).fit([COMPUTING] * 20)
+    # Same models in both decades, held-out text changing from computing-heavy to mixed:
+    # every change in excess is a change of word mix.
+    early = DecadeModels({"a": model_a, "b": model_b}, {"b": [COMPUTING] * 4}, 1)
+    late = DecadeModels({"a": model_a, "b": model_b}, {"b": [COMPUTING, PHILOSOPHY]}, 1)
+
+    decomposition = decompose_fall(early, late, "a", "b")
+
+    assert decomposition.fall == pytest.approx(decomposition.mix + decomposition.rate)
+    assert decomposition.rate == pytest.approx(0.0)
+    assert decomposition.fall > 0

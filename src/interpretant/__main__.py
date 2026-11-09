@@ -1149,6 +1149,13 @@ def drift() -> None:
 )
 @click.option("--seed", "seeds", multiple=True, default=(42,), show_default=True)
 @click.option(
+    "--order",
+    default=2,
+    show_default=True,
+    type=click.Choice([1, 2]),
+    help="2: Kneser-Ney bigram; 1: add-one unigram, the lexical-composition control.",
+)  # noqa: E501
+@click.option(
     "--fixed-budget",
     default=0,
     show_default=True,
@@ -1157,8 +1164,13 @@ def drift() -> None:
 @click.option(
     "--drop-shared", is_flag=True, help="Remove abstracts that appear in more than one cell."
 )
-def drift_perplexity(
-    texts_dir: Path, output: Path, seeds: tuple[int, ...], fixed_budget: int, drop_shared: bool
+def drift_perplexity(  # noqa: PLR0913
+    texts_dir: Path,
+    output: Path,
+    seeds: tuple[int, ...],
+    order: int,
+    fixed_budget: int,
+    drop_shared: bool,
 ) -> None:
     """Cross-entropy of every field's held-out abstracts under every field's model, per decade.
 
@@ -1174,7 +1186,7 @@ def drift_perplexity(
     frames = []
     for seed in seeds:
         for decade, cells in tqdm(sorted(by_decade.items()), desc=f"  seed {seed}", unit="decade"):
-            table = decade_cross_entropy(cells, seed, fixed_budget or None, drop_shared)
+            table = decade_cross_entropy(cells, seed, fixed_budget or None, drop_shared, order)
             table.insert(0, "decade", decade)
             table.insert(0, "seed", seed)
             frames.append(table)
@@ -1187,6 +1199,63 @@ def drift_perplexity(
     result = add_excess(pd.concat(frames, ignore_index=True))
     output.parent.mkdir(parents=True, exist_ok=True)
     result.to_parquet(output, index=False)
+    console.print(f"[green]{len(result):,} rows[/green] → {output}")
+
+
+@drift.command("decompose")
+@click.option(
+    "--texts-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased/openalex/texts"),
+    show_default=True,
+)
+@click.option("--early", default=1990, show_default=True)
+@click.option("--late", default=2020, show_default=True)
+@click.option("--seed", "seeds", multiple=True, default=(1, 2, 3, 4, 5), show_default=True)
+@click.option("--order", default=2, show_default=True, type=click.Choice([1, 2]))
+@click.option("--fixed-budget", default=200_000, show_default=True)
+@click.option("--text", "texts", multiple=True, help="Text fields to decompose; default all.")
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=Path("data/drift/cross_perplexity_decomposition.parquet"),
+    show_default=True,
+)
+def drift_decompose(  # noqa: PLR0913
+    texts_dir: Path,
+    early: int,
+    late: int,
+    seeds: tuple[int, ...],
+    order: int,
+    fixed_budget: int,
+    texts: tuple[str, ...],
+    output: Path,
+) -> None:
+    """Split every pair's fall in excess cross-entropy between two decades into a word-mix
+    effect (the text's word frequencies changed) and a rate effect (the model's per-word
+    skill changed). A fall that is all mix says the text moved; the model learned nothing."""
+    import pandas as pd  # noqa: PLC0415
+
+    from interpretant.drift.perplexity import build_decade, decompose_decades  # noqa: PLC0415
+
+    frames = []
+    for seed in tqdm(seeds, desc="  seeds", unit="seed"):
+        decades = [
+            build_decade(sorted(texts_dir.glob(f"*_{decade}.txt")), seed, fixed_budget, True, order)
+            for decade in (early, late)
+        ]
+        if decades[0] is None or decades[1] is None:
+            raise click.ClickException("a decade has fewer than two qualifying fields")
+        table = decompose_decades(decades[0], decades[1], texts or None)
+        table.insert(0, "late", late)
+        table.insert(0, "early", early)
+        table.insert(0, "seed", seed)
+        frames.append(table)
+    result = pd.concat(frames, ignore_index=True)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    result.to_parquet(output, index=False)
+    summary = result.groupby(["model_field", "text_field"])[["fall", "mix", "rate"]].mean()
+    console.print(summary.round(3).to_string())
     console.print(f"[green]{len(result):,} rows[/green] → {output}")
 
 

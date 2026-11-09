@@ -85,16 +85,62 @@ class KneserNeyBigram:
         bits, occurrences = self.word_bits([document])
         return sum(bits.values()) / sum(occurrences.values())
 
-    def word_bits(self, documents: Iterable[str]) -> tuple[Counter[str], Counter[str]]:
+    def word_bits(self, documents: Iterable[str]) -> tuple[dict[str, float], Counter[str]]:
         """Total bits and occurrences per predicted word (unknown words pooled as <unk>)."""
-        bits: Counter[str] = Counter()
+        bits: defaultdict[str, float] = defaultdict(float)
         occurrences: Counter[str] = Counter()
         for document in documents:
             tokens = self._tokens(document)
             for previous, word in zip(tokens, tokens[1:], strict=False):
                 bits[word] -= math.log2(self.probability(word, previous))
                 occurrences[word] += 1
-        return bits, occurrences
+        return dict(bits), occurrences
+
+
+class UnigramModel:
+    """Add-one unigram model over the same fixed vocabulary: the lexical-composition control.
+
+    A fall in excess cross-entropy that a unigram model reproduces is a change in which words
+    a text uses; what the bigram model adds beyond it is phrase structure.
+    """
+
+    def __init__(self, vocabulary: set[str]) -> None:
+        self.vocabulary = vocabulary | {END, UNKNOWN}
+        self.counts: Counter[str] = Counter()
+        self.total = 0
+
+    def _tokens(self, document: str) -> list[str]:
+        return [w if w in self.vocabulary else UNKNOWN for w in document.split()] + [END]
+
+    def fit(self, documents: Iterable[str]) -> UnigramModel:
+        for document in documents:
+            self.counts.update(self._tokens(document))
+        self.total = sum(self.counts.values())
+        return self
+
+    def probability(self, word: str) -> float:
+        return (self.counts[word] + 1) / (self.total + len(self.vocabulary))
+
+    def word_bits(self, documents: Iterable[str]) -> tuple[dict[str, float], Counter[str]]:
+        bits: defaultdict[str, float] = defaultdict(float)
+        occurrences: Counter[str] = Counter()
+        for document in documents:
+            for word in self._tokens(document):
+                bits[word] -= math.log2(self.probability(word))
+                occurrences[word] += 1
+        return dict(bits), occurrences
+
+    def cross_entropy(self, documents: Iterable[str]) -> float:
+        bits, occurrences = self.word_bits(documents)
+        total = sum(occurrences.values())
+        return sum(bits.values()) / total if total else float("nan")
+
+    def document_cross_entropy(self, document: str) -> float:
+        bits, occurrences = self.word_bits([document])
+        return sum(bits.values()) / sum(occurrences.values())
+
+
+LanguageModel = KneserNeyBigram | UnigramModel
 
 
 @dataclass
@@ -152,6 +198,7 @@ def decade_cross_entropy(
     seed: int = 42,
     fixed_budget: int | None = None,
     drop_shared: bool = False,
+    order: int = 2,
 ) -> pd.DataFrame:
     """Score every qualifying field's held-out text with every qualifying field's model.
 
@@ -161,7 +208,7 @@ def decade_cross_entropy(
     abstracts appearing in more than one cell are removed first.
     """
     columns = ["model_field", "text_field", "cross_entropy", "training_tokens"]
-    decade = build_decade(cells, seed, fixed_budget, drop_shared)
+    decade = build_decade(cells, seed, fixed_budget, drop_shared, order)
     if decade is None:
         return pd.DataFrame(columns=columns)
     rows = [
@@ -179,7 +226,7 @@ def decade_cross_entropy(
 
 @dataclass
 class DecadeModels:
-    models: dict[str, KneserNeyBigram]
+    models: dict[str, LanguageModel]
     held_out: dict[str, list[str]]
     budget: int
 
@@ -189,8 +236,12 @@ def build_decade(
     seed: int = 42,
     fixed_budget: int | None = None,
     drop_shared: bool = False,
+    order: int = 2,
 ) -> DecadeModels | None:
-    """Train every qualifying field's model and keep its held-out abstracts (None if < 2)."""
+    """Train every qualifying field's model and keep its held-out abstracts (None if < 2).
+
+    ``order`` 2 is the Kneser-Ney bigram model; 1 the add-one unigram control.
+    """
     contents = dict(read_cell(path) for path in cells)
     if drop_shared:
         contents = remove_shared(contents)
@@ -206,10 +257,12 @@ def build_decade(
         for line in sample:
             counts.update(line.split())
     vocabulary = {word for word, count in counts.items() if count >= MIN_VOCABULARY_COUNT}
+
+    def model(sample: list[str]) -> LanguageModel:
+        return (KneserNeyBigram(vocabulary) if order == 2 else UnigramModel(vocabulary)).fit(sample)
+
     return DecadeModels(
-        models={
-            field: KneserNeyBigram(vocabulary).fit(sample) for field, sample in samples.items()
-        },
+        models={field: model(sample) for field, sample in samples.items()},
         held_out={text.field: text.held_out for text in qualifying},
         budget=budget,
     )
@@ -223,3 +276,69 @@ def add_excess(table: pd.DataFrame) -> pd.DataFrame:
     result["own_cross_entropy"] = own.reindex(pd.MultiIndex.from_frame(result[keys])).to_numpy()
     result["excess"] = result.cross_entropy - result.own_cross_entropy
     return result
+
+
+@dataclass(frozen=True)
+class FallDecomposition:
+    """A fall in excess cross-entropy between two decades, split into two effects.
+
+    ``mix`` is the part due to the text's word frequencies changing (the earlier per-word
+    excess rates applied to the later frequencies); ``rate`` is the part due to the model's
+    per-word excess rates changing at the later frequencies. ``fall = mix + rate``.
+    """
+
+    fall: float
+    mix: float
+    rate: float
+
+
+def per_word_excess(
+    model: LanguageModel, own: LanguageModel, held_out: list[str]
+) -> tuple[dict[str, float], dict[str, int]]:
+    """Per-word excess rate (bits per occurrence over the text's own model) and occurrences."""
+    other_bits, counts = model.word_bits(held_out)
+    own_bits, _ = own.word_bits(held_out)
+    return {w: (other_bits[w] - own_bits[w]) / counts[w] for w in counts}, dict(counts)
+
+
+def decompose_fall(
+    early: DecadeModels, late: DecadeModels, model_field: str, text_field: str
+) -> FallDecomposition:
+    """Split the fall of E(model_field -> text_field) from ``early`` to ``late``.
+
+    Words with no earlier rate (new in the later text) keep their later rate, so they count
+    towards the mix effect at their actual cost.
+    """
+    rates_early, counts_early = per_word_excess(
+        early.models[model_field], early.models[text_field], early.held_out[text_field]
+    )
+    rates_late, counts_late = per_word_excess(
+        late.models[model_field], late.models[text_field], late.held_out[text_field]
+    )
+    n_early, n_late = sum(counts_early.values()), sum(counts_late.values())
+    mean_early = sum(rates_early[w] * c for w, c in counts_early.items()) / n_early
+    mean_late = sum(rates_late[w] * c for w, c in counts_late.items()) / n_late
+    counterfactual = (
+        sum(rates_early.get(w, rates_late[w]) * c for w, c in counts_late.items()) / n_late
+    )
+    return FallDecomposition(
+        fall=mean_early - mean_late,
+        mix=mean_early - counterfactual,
+        rate=counterfactual - mean_late,
+    )
+
+
+def decompose_decades(
+    early: DecadeModels, late: DecadeModels, text_fields: Iterable[str] | None = None
+) -> pd.DataFrame:
+    """Decompose the fall for every model x text pair qualifying in both decades."""
+    fields = sorted(set(early.models) & set(late.models))
+    texts = [t for t in fields if text_fields is None or t in set(text_fields)]
+    rows = [
+        {"model_field": model_field, "text_field": text_field, **vars(d)}
+        for text_field in texts
+        for model_field in fields
+        if model_field != text_field
+        for d in [decompose_fall(early, late, model_field, text_field)]
+    ]
+    return pd.DataFrame(rows, columns=["model_field", "text_field", "fall", "mix", "rate"])
