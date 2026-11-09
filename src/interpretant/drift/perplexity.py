@@ -80,6 +80,11 @@ class KneserNeyBigram:
         total = sum(occurrences.values())
         return sum(bits.values()) / total if total else float("nan")
 
+    def document_cross_entropy(self, document: str) -> float:
+        """Bits per token of one document, end token included: the per-abstract excess's unit."""
+        bits, occurrences = self.word_bits([document])
+        return sum(bits.values()) / sum(occurrences.values())
+
     def word_bits(self, documents: Iterable[str]) -> tuple[Counter[str], Counter[str]]:
         """Total bits and occurrences per predicted word (unknown words pooled as <unk>)."""
         bits: Counter[str] = Counter()

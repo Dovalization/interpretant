@@ -106,3 +106,18 @@ def test_word_bits_add_up_to_the_cross_entropy() -> None:
     assert sum(bits.values()) / sum(occurrences.values()) == pytest.approx(
         model.cross_entropy(documents)
     )
+
+
+def test_document_cross_entropy_is_the_length_weighted_piece_of_the_corpus_value() -> None:
+    documents = [PHILOSOPHY, COMPUTING, "the world model learns"]
+    model = KneserNeyBigram(set(PHILOSOPHY.split())).fit([PHILOSOPHY] * 10)
+
+    per_document = [model.document_cross_entropy(document) for document in documents]
+    lengths = [len(document.split()) + 1 for document in documents]
+    weighted = sum(h * n for h, n in zip(per_document, lengths, strict=True)) / sum(lengths)
+
+    assert model.document_cross_entropy(PHILOSOPHY) == pytest.approx(
+        model.cross_entropy([PHILOSOPHY])
+    )
+    assert weighted == pytest.approx(model.cross_entropy(documents))
+    assert per_document[0] < per_document[1]
