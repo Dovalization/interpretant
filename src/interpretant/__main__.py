@@ -792,9 +792,7 @@ def twec_train(  # noqa: PLR0913
         )
 
     console.print(table)
-    console.print(
-        f"\n[green]Done.[/green] Models in [cyan]{output_dir}[/cyan]"
-    )
+    console.print(f"\n[green]Done.[/green] Models in [cyan]{output_dir}[/cyan]")
 
 
 @twec.command("grid")

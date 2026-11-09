@@ -4,20 +4,18 @@ The corpus decides what the drift metrics can mean. This page describes the curr
 sources, how to audit them, what the November 2026 audit found, and the corpus design the
 project's goals require.
 
-## Current sources
+## Sources
 
-| Source | Layer | Coverage | Loader |
+| Layer | Content | Coverage | Loader |
 |---|---|---|---|
-| Books | Curated philosophy, cognitive science, AI, design and cultural theory | 1820s–2020s, 364 manifest entries | `BooksSource` (`data/external/books/`, `manifest.json`) |
-| ACL Anthology | NLP abstracts; optional layer, outside the main corpus | 1965–present | `ACLAnthologySource` |
-| arXiv | cs.CL, cs.LG, cs.AI, physics.hist-ph, q-bio, nlin abstracts; optional layer | 1991–present | `ArxivSource` |
-| PubMed | Biomedical abstracts; optional layer | 1960s–2020s | `PubMedSource` |
-| OpenAlex | Abstracts in 11 fields (the field × decade grid) | 1950s–2020s | `OpenAlexSource` |
-| S2ORC | Stub | — | `S2ORCSource` |
+| Books | Curated philosophy, cognitive science, AI, design and cultural theory | 1820s–2020s, 358 titles | `BooksSource` (`data/external/books/`, `manifest.json`) |
+| OpenAlex grid | Research abstracts in 11 fields, up to 10,000 per cell | 1950s–2020s | `OpenAlexSource` (`corpus openalex download|ingest`) |
+| OpenAlex full cells | Every abstract of one field, for rare targets | philosophy 1980s–2020s, HCI 2000s–2020s | the same, with `--full` |
 
-Since November 2026 the main corpus is the books and the OpenAlex grid; the grid covers
-ACL's, arXiv's and PubMed's fields with one taxonomy and one sampling rule, so those three
-stay out unless added back as their own layers.
+Until November 2026 the corpus also drew on PubMed, the ACL Anthology and arXiv, merged with
+the books into one model per decade. The grid covers their fields with one taxonomy and one
+sampling rule, so those loaders were removed; an ACL layer with a language filter remains an
+option in the roadmap.
 
 Processed text lives in `data/processed/<source>/texts/<source>_<decade>.txt`, one document
 per line.
@@ -105,7 +103,7 @@ never absorb a single-word target; the phrase targets are always merged. The lea
 also repairs words broken across lines in OCR'd books: a pair whose halves join into a word
 more frequent than the pair (*lan guage*) is written as that word. A November 2026 trial on
 the books, ACL and arXiv learned about 1,260 phrases and 92 repairs; it also surfaced French
-text in ACL (*sur_les*, *c_est*), which needs a language filter.
+text in ACL (*sur_les*, *c_est*); ACL has since left the corpus.
 
 ## Auditing the corpus
 
@@ -117,8 +115,7 @@ uv run interpretant corpus audit --min-occurrences 300 # stricter reliability th
 
 The audit reports four things:
 
-1. **Tokens per cell**: one cell per `(source, decade)`, plus the merged decade that
-   `embed train` uses.
+1. **Tokens per cell**: one cell per `(source, decade)`, plus the merged decade.
 2. **Target coverage**: for each word in `data/words_of_interest.txt`, the decades where it
    reaches `--min-occurrences` (default 150) and the number of reliable transitions. A
    transition is reliable only when the word reaches the threshold in both decades. A
@@ -147,8 +144,8 @@ The audit reports four things:
   in the 1960s with 13M tokens against 3M of books. Books tagged `ai_cs` appear from the
   1970s and are 67% of the 2010s. A jump at 1960 cannot be separated from the change of
   sources.
-- **The design merges fields.** `embed train` merges all sources into one model per decade,
-  so field-specific trajectories, borrowing and divergence are never measured.
+- **The design merged fields.** One model per decade over every source, so field-specific
+  trajectories, borrowing and divergence were never measured.
 - **Wrong files.** 19 book files held a different text from the one in the manifest (for
   example, Nietzsche's *Genealogy* was Dante's *Purgatorio*; Galton was *The Coral
   Island*), mostly from wrong Gutenberg IDs. Four more were a different translation or
@@ -221,8 +218,8 @@ Rules for every cell:
    fields, 252 subfields and about 4,500 topics with one model, so philosophy,
    psychology, neuroscience, computer science and the social sciences share labels.
    Abstracts arrive as an inverted index and cover about 45% of pre-2000 works.
-   PubMed, ACL and arXiv stay as specialised sources mapped onto the same taxonomy.
-   Sample systematically per field and decade at equal size.
+   The grid covers the fields PubMed, ACL and arXiv served. Sample systematically per
+   field and decade at equal size.
 3. **Public-domain books (before 1930).** Sample by Library of Congress class (B, BF, Q, H)
    instead of curating, and date each volume by the scanned edition. HathiTrust's
    public-domain dataset needs research approval and an institutional agreement; the

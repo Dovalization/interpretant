@@ -1,81 +1,94 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code in this repository.
 
 ## Commands
 
 ```bash
-# Install all dependencies (including dev extras)
-uv sync --all-extras
+uv sync --all-extras         # install, with dev extras
 
-# Lint and format check
-make lint                    # ruff check + ruff format --check
-make fmt                     # ruff format + ruff check --fix (auto-fixes)
-
-# Type checking
-make type-check              # mypy src/ (strict mode)
-
-# Tests
+make lint                    # ruff check + ruff format --check (src/, tests/)
+make fmt                     # ruff format + ruff check --fix
+make type-check              # mypy src/ (strict; the remaining errors are missing pandas/sklearn stubs)
 make test                    # pytest with coverage
-uv run pytest tests/test_drift.py -v          # single test file
-uv run pytest tests/ -k "test_cosine" -v      # single test by name
+uv run pytest tests/test_drift_grid.py -v     # one file
+uv run pytest tests/ -k "neighbour" -v        # one test by name
 
-# Dashboard
-make app-demo                # synthetic data, no corpus required
-make app                     # real data (requires models/aligned/*.kv)
-
-# Full pipeline (DVC)
-make pipeline                # dvc repro
+make figures                 # redraw figures/*.png from the models and drift tables
+make app-demo                # dashboard on synthetic data
+make app                     # dashboard on models/twec_grid
 ```
 
 ## Pipeline
 
-The pipeline has five sequential stages. Commands must be run in this order; the CLI is the authoritative entry point for each stage.
+One pipeline, run from the CLI in this order. Every command has `--help`.
 
 ```
-corpus preprocess → embed train → align run → drift compute → app
+corpus books ingest / corpus openalex download|ingest   data/processed/<layer>/texts/<cell>.txt
+corpus phrases learn|apply                              data/phrased/<layer>/texts/<cell>.txt
+corpus audit --processed-dir data/phrased --output data/phrased/audit.json
+twec grid [--seed 43 --output-dir models/twec_grid_seed43]   models/twec_grid/<layer>/<field>_<decade>.kv
+ppmi grid                                               models/ppmi_grid/...
+drift grid                                              data/drift/within_field.parquet, cross_field.parquet
+drift perplexity --drop-shared --fixed-budget 200000 --seed 1 ... --seed 5
+figures                                                 figures/*.png
 ```
 
-1. **`corpus preprocess --config-name <acl|pubmed|arxiv|books>`** — reads raw files from `data/raw/<source>/`, writes decade-sliced text files to `data/processed/<source>/texts/<source>_<decade>.txt`. One doc per line, whitespace-tokenised. PubMed uses `ProcessPoolExecutor` for parallelism; ACL uses `ThreadPoolExecutor`. Books are ingested first via `corpus books ingest` (Docling + PyMuPDF fallback).
+A cell is one `<field>_<decade>` text file: one document per line, whitespace-tokenised,
+phrases joined with `_`. Layers: `books`, `openalex` (the equal-size grid), `openalex_full`
+(whole fields, within-field trajectories only).
 
-2. **`embed train`** — reads all `data/processed/<corpus>/texts/<corpus>_<decade>.txt` files for each decade, merges them (or trains separately with `--separate`), trains a gensim Word2Vec or FastText model per decade, saves to `models/raw/<config-name>/<decade>.model`.
+## Pre-registration
 
-3. **`align run`** — loads all `.model` files, computes orthogonal Procrustes rotation for each decade onto a reference decade (default: 2010), saves aligned `KeyedVectors` to `models/aligned/<decade>.kv`.
-
-4. **`drift compute`** — loads aligned `.kv` files, computes cosine distance, neighbourhood shift (Jaccard), and average pairwise distance for each word across consecutive decades, writes `data/processed/drift.parquet`.
-
-5. **`app`** — Streamlit dashboard; reads `models/aligned/*.kv` directly at startup. Demo mode (`--demo`) uses seeded synthetic data and requires no corpus.
+Predictions are written to `docs/predictions.md` or `docs/predictions_cross_perplexity.md`
+and **committed before the code that tests them is run or the evidence is inspected**. A
+scorer in `scripts/score_*.py` is committed next, then run; its verdicts are appended under the
+predictions, which are never edited after the fact. A falsified prediction stays falsified;
+a corrected interpretation is written as a new section, not an edit. Follow this for any new
+analysis: predictions first, in their own commit.
 
 ## Architecture
 
-**`src/interpretant/`**
+`src/interpretant/`
 
-- **`__main__.py`** — the entire CLI; Click groups `corpus`, `embed`, `align`, `drift`, `pdf`, and command `app`. All pipeline logic lives here; the library modules provide pure functions/classes only.
+- `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift`, `figures`, `pdf`, `app`).
+  Orchestration still lives here; the library modules are pure functions and small classes.
+- `corpus/`: `base.py` (`CorpusSource` ABC, `iter_decade_slices`), `books.py` (manifest +
+  extracted texts, author cap), `openalex.py` (API client, sampling, cleaning at ingest),
+  `caps.py` (author caps), `phrases.py` (gensim `Phrases` on a balanced sample),
+  `preprocessing.py` (`preprocess_text`, target variant map), `audit.py` (cell counts, target
+  coverage, manifest risks), `pdf_extractor.py` (Docling with PyMuPDF fallback).
+- `embedding/`: `base.py` (`training_sentences`: splits lines at 10,000 tokens, gensim's
+  silent truncation limit), `twec.py` (`TWECTrainer`: balanced compass, frozen context
+  vectors per cell), `grid.py` (cell discovery, compass sample), `ppmi.py` (PPMI-SVD with
+  Levy et al. 2015 settings).
+- `drift/`: `grid.py` (`compare_cells`, `add_noise_floor`, `cell_neighbours`, pair
+  enumeration; the constants `MEASURE_MIN`, `NEIGHBOUR_MIN`, `NEIGHBOURS`, `FLOOR_QUANTILE`),
+  `metrics.py` (cosine distance, batched neighbourhood shift), `perplexity.py` (Kneser-Ney
+  bigrams, shared-abstract removal, fixed training budget, excess cross-entropy).
+- `visualization/`: `figures.py` (the README figures), `style.py` (palette, fonts),
+  `trajectory.py` and `neighbors.py` (dashboard panels).
+- `app/main.py`: Streamlit dashboard; demo mode is synthetic, real mode reads
+  `models/twec_grid` for one field, restricted to `data/words_of_interest.txt`.
 
-- **`corpus/`** — all corpus sources implement `CorpusSource` (ABC in `base.py`). The key method is `iter_decade_slices(start, end, step, min_tokens, workers) -> Iterator[tuple[int, list[str]]]`. Sources: `pubmed.py` (XML.gz streaming with `iterparse`), `acl.py` (BibTeX), `arxiv.py` (JSONL), `books.py` (first-class corpus layer — canonical philosophy, AI, design, and cultural theory texts; pre-extracted text files + manifest), `s2orc.py` (stub). `preprocessing.py` has shared text-cleaning helpers. `pdf_extractor.py` wraps Docling with PyMuPDF fallback.
+`scripts/`: `redate_books.py` (the record of every book edition decision), `fetch_*.py`
+(book acquisition), `select_*_controls.py` (control words), `score_*.py` (one per prediction
+round; frozen once run).
 
-- **`embedding/`** — `EmbeddingTrainer` ABC with `Word2VecTrainer` and `FastTextTrainer`. Each `train(sentences, decade)` then `save(output_dir, decade) -> Path`.
+## Data and models
 
-- **`alignment/`** — `Aligner` ABC. `ProcrustesAligner` is the active implementation; `TWECAligner` is a stub requiring a custom gensim fork (not on PyPI). `ProcrustesAligner.fit()` loads all decade models, computes shared vocab, and rotates each onto the reference decade. `load_aligned()` is the read path used by `drift compute` and `app`.
-
-- **`drift/metrics.py`** — pure functions: `cosine_distance`, `neighborhood_shift` (Jaccard on top-25 neighbours), `frequency_corrected_drift`, `average_pairwise_distance`. `_top_k_neighbors` is module-level (not private to a class) so it can be used by both metrics and visualisation.
-
-- **`visualization/`** — `trajectory.py` (PCA → 2D Plotly scatter), `neighbors.py` (nearest-neighbour comparison DataFrame), `heatmap.py` (stub for drift heatmap panel).
-
-- **`drift/changepoint.py`** — stub for PELT/BOCPD changepoint detection.
-
-- **`app/main.py`** — Streamlit dashboard. In demo mode, generates synthetic vectors with `_make_synthetic_vectors()`. In real mode, calls `ProcrustesAligner.load_aligned()` at startup.
-
-## Configuration
-
-Hydra/OmegaConf configs live in `conf/`. The CLI merges `conf/config.yaml` (base, defines `data_dir`) with `conf/corpus/<name>.yaml` before constructing corpus sources. Embedding and alignment configs are in `conf/embedding/` and `conf/alignment/` but are currently used only for documentation — the CLI accepts their parameters as explicit options.
+`data/` and `models/` are local; only `data/words_of_interest.txt`, the control-word files
+and the books manifest are tracked. Book source files are copyrighted and never committed,
+nor are their filenames. `.env` holds `OPENALEX_API_KEY`.
 
 ## Tests
 
-Tests are **synthetic only** — no real NLP data, no network calls. `tests/conftest.py` provides `synthetic_model` (seeded `{decade: {word: vector}}`) and `synthetic_vocab`. Tests cover: drift metrics, Procrustes alignment, embedding trainers, corpus preprocessing utilities, and PDF extractor quality checks.
+Synthetic only: no real models, no corpus files, no network. Figures are tested on tiny
+`KeyedVectors` and DataFrames built in the test.
 
 ## Code style
 
-- Line length: 100 (`ruff.toml`)
-- mypy strict — all public functions need type annotations; use `# type: ignore[...]` with a specific code when suppression is necessary
-- Long CLI `@click.option` lines use `# noqa: E501`; module-level free functions used with `ProcessPoolExecutor` must be defined at module level (not nested) for pickle compatibility on macOS
+- Line length 100 (`.ruff.toml`); mypy strict; `# type: ignore[code]` with a specific code.
+- Long `@click.option` lines take `# noqa: E501`; functions used with `ProcessPoolExecutor`
+  are module-level for pickling on macOS.
+- British spelling in prose and identifiers (`neighbour`), American where a library fixes it.
