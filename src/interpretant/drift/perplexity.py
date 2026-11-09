@@ -96,11 +96,32 @@ class FieldText:
         return sum(len(line.split()) for line in self.training_pool)
 
 
-def split_cell(path: Path, held_out: int = HELD_OUT, seed: int = 42) -> FieldText:
+def read_cell(path: Path) -> tuple[str, list[str]]:
+    """Return a cell's field name and its non-empty abstracts."""
+    lines = [line.strip() for line in path.read_text(encoding="utf-8").splitlines()]
+    return path.stem.rsplit("_", 1)[0], [line for line in lines if line]
+
+
+def remove_shared(cells: dict[str, list[str]]) -> dict[str, list[str]]:
+    """Drop every abstract that appears in more than one cell, from all of them.
+
+    OpenAlex files subfields under their parent field (AI under computer science), so the
+    same abstract can sit in two cells; a model trained on one cell would then have seen the
+    other cell's held-out text.
+    """
+    presence: Counter[str] = Counter()
+    for lines in cells.values():
+        presence.update(set(lines))
+    return {
+        field: [line for line in lines if presence[line] == 1] for field, lines in cells.items()
+    }
+
+
+def split_cell(field: str, lines: list[str], held_out: int = HELD_OUT, seed: int = 42) -> FieldText:
     """Set aside ``held_out`` abstracts with a fixed seed; the rest is the training pool."""
-    lines = [line.strip() for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    random.Random(seed).shuffle(lines)
-    return FieldText(path.stem.rsplit("_", 1)[0], lines[held_out:], lines[:held_out])
+    shuffled = list(lines)
+    random.Random(seed).shuffle(shuffled)
+    return FieldText(field, shuffled[held_out:], shuffled[:held_out])
 
 
 def training_sample(pool: list[str], tokens: int) -> list[str]:
@@ -114,14 +135,29 @@ def training_sample(pool: list[str], tokens: int) -> list[str]:
     return sample
 
 
-def decade_cross_entropy(cells: list[Path], seed: int = 42) -> pd.DataFrame:
-    """Score every qualifying field's held-out text with every qualifying field's model."""
-    texts = [split_cell(path, seed=seed) for path in cells]
-    qualifying = [text for text in texts if text.pool_tokens >= MIN_TRAINING_TOKENS]
+def decade_cross_entropy(
+    cells: list[Path],
+    seed: int = 42,
+    fixed_budget: int | None = None,
+    drop_shared: bool = False,
+) -> pd.DataFrame:
+    """Score every qualifying field's held-out text with every qualifying field's model.
+
+    By default every qualifying field trains on the smallest qualifying pool, capped at
+    ``MAX_TRAINING_TOKENS``. With ``fixed_budget`` every field trains on exactly that many
+    tokens and qualifies only if its pool is at least that large; with ``drop_shared``
+    abstracts appearing in more than one cell are removed first.
+    """
+    contents = dict(read_cell(path) for path in cells)
+    if drop_shared:
+        contents = remove_shared(contents)
+    texts = [split_cell(field, lines, seed=seed) for field, lines in contents.items()]
+    floor = fixed_budget or MIN_TRAINING_TOKENS
+    qualifying = [text for text in texts if text.pool_tokens >= floor]
     columns = ["model_field", "text_field", "cross_entropy", "training_tokens"]
     if len(qualifying) < 2:
         return pd.DataFrame(columns=columns)
-    budget = min(MAX_TRAINING_TOKENS, min(text.pool_tokens for text in qualifying))
+    budget = fixed_budget or min(MAX_TRAINING_TOKENS, min(t.pool_tokens for t in qualifying))
     samples = {text.field: training_sample(text.training_pool, budget) for text in qualifying}
     counts: Counter[str] = Counter()
     for sample in samples.values():
@@ -143,12 +179,10 @@ def decade_cross_entropy(cells: list[Path], seed: int = 42) -> pd.DataFrame:
 
 
 def add_excess(table: pd.DataFrame) -> pd.DataFrame:
-    """Add each row's excess over the text field's own model, per decade."""
-    own = table[table.model_field == table.text_field].set_index(["decade", "text_field"])
+    """Add each row's excess over the text field's own model, per decade (and seed)."""
+    keys = ["seed", "decade", "text_field"] if "seed" in table else ["decade", "text_field"]
+    own = table[table.model_field == table.text_field].set_index(keys)["cross_entropy"]
     result = table.copy()
-    result["own_cross_entropy"] = [
-        own.loc[(decade, field), "cross_entropy"]
-        for decade, field in zip(result.decade, result.text_field, strict=True)
-    ]
+    result["own_cross_entropy"] = own.reindex(pd.MultiIndex.from_frame(result[keys])).to_numpy()
     result["excess"] = result.cross_entropy - result.own_cross_entropy
     return result

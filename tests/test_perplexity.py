@@ -62,3 +62,36 @@ def test_decade_cross_entropy_scores_every_pair_with_equal_training(tmp_path: Pa
     assert scored.loc[("philosophy", "philosophy"), "excess"] == 0
     assert scored.loc[("compsci", "philosophy"), "excess"] > 0
     assert isinstance(scored, pd.DataFrame)
+
+
+def test_remove_shared_drops_abstracts_found_in_more_than_one_cell() -> None:
+    from interpretant.drift.perplexity import remove_shared
+
+    cells = {"compsci": ["shared paper", "cs only"], "ai": ["shared paper", "ai only"]}
+
+    assert remove_shared(cells) == {"compsci": ["cs only"], "ai": ["ai only"]}
+
+
+def test_fixed_budget_trains_everyone_equally_and_drops_small_cells(tmp_path: Path) -> None:
+    (tmp_path / "philosophy_1990.txt").write_text("\n".join([PHILOSOPHY] * 30_000))
+    (tmp_path / "compsci_1990.txt").write_text("\n".join([COMPUTING] * 30_000))
+    (tmp_path / "hci_1990.txt").write_text("\n".join([COMPUTING + " user"] * 1_100))
+
+    table = decade_cross_entropy(sorted(tmp_path.glob("*.txt")), fixed_budget=50_000)
+
+    assert set(table.text_field) == {"philosophy", "compsci"}
+    assert set(table.training_tokens) == {50_000}
+
+
+def test_add_excess_compares_within_each_seed() -> None:
+    table = pd.DataFrame(
+        {
+            "seed": [1, 1, 2, 2],
+            "decade": [2010] * 4,
+            "model_field": ["a", "b", "a", "b"],
+            "text_field": ["a", "a", "a", "a"],
+            "cross_entropy": [5.0, 6.0, 4.0, 7.0],
+        }
+    )
+
+    assert list(add_excess(table).excess) == [0.0, 1.0, 0.0, 3.0]

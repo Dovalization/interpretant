@@ -1632,8 +1632,19 @@ def drift_compute(  # noqa: E501
     default=Path("data/drift/cross_perplexity.parquet"),
     show_default=True,
 )
-@click.option("--seed", default=42, show_default=True)
-def drift_perplexity(texts_dir: Path, output: Path, seed: int) -> None:
+@click.option("--seed", "seeds", multiple=True, default=(42,), show_default=True)
+@click.option(
+    "--fixed-budget",
+    default=0,
+    show_default=True,
+    help="Train every field in every decade on exactly this many tokens (0: per-decade rule).",
+)
+@click.option(
+    "--drop-shared", is_flag=True, help="Remove abstracts that appear in more than one cell."
+)
+def drift_perplexity(
+    texts_dir: Path, output: Path, seeds: tuple[int, ...], fixed_budget: int, drop_shared: bool
+) -> None:
     """Cross-entropy of every field's held-out abstracts under every field's model, per decade.
 
     Method and predictions: docs/predictions_cross_perplexity.md.
@@ -1646,12 +1657,18 @@ def drift_perplexity(texts_dir: Path, output: Path, seed: int) -> None:
     for path in sorted(texts_dir.glob("*_*.txt")):
         by_decade.setdefault(int(path.stem.rsplit("_", 1)[1]), []).append(path)
     frames = []
-    for decade, cells in tqdm(sorted(by_decade.items()), desc="  decades", unit="decade"):
-        table = decade_cross_entropy(cells, seed)
-        table.insert(0, "decade", decade)
-        frames.append(table)
-        fields = table.text_field.nunique()
-        console.print(f"  {decade}s: {fields} fields, {table.training_tokens.max():,} tokens each")
+    for seed in seeds:
+        for decade, cells in tqdm(sorted(by_decade.items()), desc=f"  seed {seed}", unit="decade"):
+            table = decade_cross_entropy(cells, seed, fixed_budget or None, drop_shared)
+            table.insert(0, "decade", decade)
+            table.insert(0, "seed", seed)
+            frames.append(table)
+            fields = table.text_field.nunique()
+            if fields:
+                console.print(
+                    f"  seed {seed} {decade}s: {fields} fields, "
+                    f"{table.training_tokens.max():,} tokens each"
+                )
     result = add_excess(pd.concat(frames, ignore_index=True))
     output.parent.mkdir(parents=True, exist_ok=True)
     result.to_parquet(output, index=False)
