@@ -1270,7 +1270,8 @@ def twec_train(  # noqa: PLR0913
 @click.option("--window", default=5, show_default=True)
 @click.option("--min-count", default=5, show_default=True, help="Compass vocabulary threshold.")
 @click.option("--epochs", default=10, show_default=True)
-@click.option("--workers", default=4, show_default=True)
+@click.option("--negative", default=5, show_default=True, help="Negative samples per word.")
+@click.option("--workers", default=8, show_default=True)
 @click.option("--seed", default=42, show_default=True)
 def twec_grid(  # noqa: PLR0913
     input_dir: Path,
@@ -1282,6 +1283,7 @@ def twec_grid(  # noqa: PLR0913
     window: int,
     min_count: int,
     epochs: int,
+    negative: int,
     workers: int,
     seed: int,
 ) -> None:
@@ -1303,10 +1305,14 @@ def twec_grid(  # noqa: PLR0913
         min_count=min_count,
         workers=workers,
         epochs=epochs,
+        negative=negative,
         seed=seed,
     )
     console.print(f"[bold]TWEC grid[/bold]: {len(main_cells)} main cells, {len(extra_cells)} extra")
-    console.print(f"  dims {vector_size}  window {window}  epochs {epochs}  min_count {min_count}")
+    console.print(
+        f"  dims {vector_size}  window {window}  epochs {epochs}  negative {negative}"
+        f"  min_count {min_count}"
+    )
 
     compass_path = output_dir / "compass.model"
     if compass_path.exists():
