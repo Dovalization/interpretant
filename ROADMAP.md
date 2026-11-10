@@ -36,7 +36,9 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
 
 - Robust: *embodiment*'s two senses (HCI, philosophy); *intentionality* stable in
   philosophy; HCI's language moving out of computing's register into the behavioural and
-  social sciences' (every non-computing model gains on HCI, one-sided, a word-mix effect);
+  social sciences' under the language models (every non-computing model gains on HCI,
+  one-sided, a word-mix effect; a classifier, round S, sees the move away from 1990s HCI but
+  not its one-sidedness);
   fields converging between the 1980s and the 2010s; the subfield → parent asymmetry.
 - Robust in part: *representation* in AI towards learned representations; HCI's
   experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
@@ -64,9 +66,12 @@ Each item that produces results gets its predictions committed first.
    language moved out of computing's register into the behavioural and social sciences',
    inside its own venues; the OpenAlex HCI label also widened (915 → 3,601 sources), which
    inflated the whole-cell size. Venue lookups: `corpus openalex sources`.
-5. **Field separability over time.** A TF-IDF and logistic-regression classifier that guesses
-   the field from an abstract, per decade; falling accuracy between two fields measures
-   convergence, and the misclassified abstracts are the borrowing cases to read.
+5. ~~Field separability over time~~ Round S (2026-11-09), 1 of 6 passed: a TF-IDF classifier
+   confirms HCI's prose moved away from its 1990s self, partly towards the behavioural and
+   social sciences, but the move is small, not one-sided (psychology's and sociology's 2020s
+   abstracts drift towards 1990s HCI too) and HCI leaks towards computing as much; fields did
+   not become harder to tell apart (S5). Open: whether technology vocabulary spreading into
+   every field explains the drift towards HCI (remove a fixed term list and reclassify).
 6. **Held-out check per cell**: hold out 10% of each cell's text and measure how well its
    model predicts it, flagging cells whose model memorised a small corpus.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).

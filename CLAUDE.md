@@ -50,6 +50,7 @@ twec grid [--seed 43 --output-dir models/twec_grid_seed43]   models/twec_grid/<l
 ppmi grid                                               models/ppmi_grid/...
 drift grid                                              data/drift/within_field.parquet, cross_field.parquet
 drift perplexity --drop-shared --fixed-budget 200000 --seed 1 ... --seed 5
+drift separability                                      data/drift/separability_{pairs,assignments}.parquet
 figures                                                 figures/*.png
 ```
 
@@ -90,7 +91,8 @@ analysis: predictions first, in their own commit.
   `FLOOR_QUANTILE`), `metrics.py` (cosine distance, batched neighbourhood shift),
   `perplexity.py` (Kneser-Ney bigrams and the unigram control, shared-abstract removal, fixed
   training budget, excess cross-entropy, the mix/rate decomposition; `cross_entropy_runs`,
-  `decompose_runs`).
+  `decompose_runs`), `separability.py` (TF-IDF and logistic-regression field classifiers:
+  pairwise accuracy and assignment shares per decade; `separability_runs`, round S).
 - `predictions.py`: helpers the scorers share (`report`, `load_vectors`, `word_count`,
   `overlap`). Scorers are frozen, so a change here must leave every scorer's output
   byte-identical: rerun them all and diff.

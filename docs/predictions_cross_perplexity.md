@@ -723,3 +723,62 @@ gives the direction without the language models' asymmetry. S1 passing with S4 f
 mean HCI and those fields converged without HCI being the one that moved. S0 failing would make
 the classifier too blunt for the rest to mean much. Scored by `scripts/score_separability.py`,
 committed before it is run.
+
+### Round S results (2026-11-09, `scripts/score_separability.py`)
+
+Scored as written. 1 passed, 5 falsified.
+
+| | Verdict | Numbers |
+|---|---|---|
+| S0 | **Falsified** | Every pair is separable (lowest mean accuracy 0.848 in the 1990s, 0.836 in the 2020s), and computer science–AI and psychology–cognitive psychology are in the bottom five; computer science–HCI is not (0.929 and 0.932), so the second clause fails |
+| S1 | **Falsified** | 3 of 5 (needed 4). Harder to tell apart in every seed: psychology 0.961–0.971 → 0.953–0.957, neuroscience 0.967–0.970 → 0.958–0.964, sociology 0.973–0.975 → 0.965–0.968; easier: cognitive psychology 0.947–0.955 → 0.956–0.962, communication 0.972–0.977 → 0.975–0.981 |
+| S2 | **Passed** | HCI–computer science 0.929 → 0.932; HCI–AI 0.949 → 0.956 |
+| S3 | **Falsified** | Share of HCI's held-out abstracts sent to the behavioural and social fields rises in 4 of 5 seeds (about 0.06 → 0.07), but the share sent to computing falls in only 2 of 5 |
+| S4 | **Falsified** | HCI's part passes in 5 of 5 seeds (the 1990s classifier sends 0.055–0.070 of HCI's 1990s abstracts to the behavioural and social fields, 0.110–0.123 of its 2020s ones); the other two fail in every seed: psychology's 2020s abstracts go to HCI more often (0.003–0.013 → 0.018–0.028), and so do sociology's (0.000–0.007 → 0.010–0.022) |
+| S5 | **Falsified** | Mean pairwise accuracy did not fall from the 1980s to the 2010s: 0.9488 → 0.9487 in seed 1, a small rise in seeds 2–5 (largest 0.9471 → 0.9503) |
+
+### Reading
+
+The classifier agrees with the language models on one thing and not on the rest. **It agrees
+that HCI's prose moved away from its 1990s self towards the behavioural and social sciences**:
+a classifier trained on the 1990s sends about twice as many of HCI's 2020s abstracts to those
+fields as of its 1990s ones, in every seed, and HCI became harder to tell from psychology,
+neuroscience and sociology while staying as easy to tell from computing (S2). But the effect is
+small against a ceiling (pairwise accuracies move by about 0.01 around 0.95–0.97), it misses two
+of the five fields, and it is **not one-sided**: psychology's and sociology's 2020s abstracts
+also look more like 1990s HCI to the 1990s classifier (S4's second and third parts, in every
+seed). Round J's "nobody moved towards HCI" was a statement about the language models'
+asymmetry; the classifier does not reproduce it.
+
+S5 contradicts D5 and L9 at face value: whatever convergence the language models measure (L9
+showed it is a convergence of word mixes), it does not make fields harder for a classifier to
+tell apart. The two readings can both hold: average word frequencies can draw together while
+each field keeps enough marker words for a classifier to separate it at 95%. S0's surprise is
+that HCI is not one of computer science's hardest neighbours: its vocabulary is distinctive
+enough to keep it apart from the field it is filed under.
+
+### Exploratory, after scoring: who else drifts under the 1990s classifier
+
+Not predicted; read from `data/drift/separability_assignments.parquet` after the scorer ran.
+Means over the five seeds.
+
+- **Every field drifts.** The 1990s classifier recognises most fields' 2020s abstracts less well
+  than their 1990s ones (computer science 0.796 → 0.621, neuroscience 0.841 → 0.634, AI 0.772 →
+  0.624, HCI 0.865 → 0.748); only psychology, cognitive psychology and linguistics hold steady.
+  Thirty years of vocabulary change blurs any fixed classifier.
+- **Almost every field drifts towards HCI.** The share of a field's 2020s abstracts sent to HCI
+  rises for ten of the eleven fields (computer science 0.046 → 0.073, neuroscience 0.005 →
+  0.025, psychology 0.008 → 0.022, sociology 0.003 → 0.015; only cognitive psychology falls).
+  The likeliest reading, untested here, is that technology vocabulary the 1990s classifier tied
+  to HCI spread to every field by the 2020s.
+- **HCI's 2020s abstracts leak in every direction.** The 1990s classifier sends 0.111 of them to
+  AI and computer science together, about as much as to the five behavioural and social fields
+  together (0.117), and up from 0.06 for each group in the 1990s.
+
+Taken together, the classifier sees HCI's language spreading away from its 1990s core, partly
+towards the behavioural and social sciences and partly towards computing, while technology
+words spread into everyone else's abstracts. That is a weaker and more symmetric picture than
+round J's, and a claim that HCI moved "out of computing's register" should be stated as the
+language models' finding, not as one both instruments confirm. A next round could test the
+technology-vocabulary reading directly by removing a fixed list of technology terms before
+classifying.
