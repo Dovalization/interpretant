@@ -1017,6 +1017,40 @@ def drift_separability(  # noqa: PLR0913
     console.print(f"[green]{len(pairs):,} pair rows, {len(assignments):,} assignment rows[/green]")
 
 
+@drift.command("heldout")
+@click.option(
+    "--input-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased"),
+    show_default=True,
+)
+@click.option(
+    "--layer",
+    "layers",
+    multiple=True,
+    default=("books", "openalex", "openalex_full"),
+    show_default=True,
+)
+@click.option("--seed", "seeds", multiple=True, default=(1, 2, 3), show_default=True)
+@click.option("--workers", default=4, show_default=True)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=Path("data/drift/heldout.parquet"),
+    show_default=True,
+)
+def drift_heldout(
+    input_dir: Path, layers: tuple[str, ...], seeds: tuple[int, ...], workers: int, output: Path
+) -> None:
+    """Held-out minus training cross-entropy of every cell's bigram model (round M)."""
+    from interpretant.drift.heldout import heldout_runs  # noqa: PLC0415
+
+    table = heldout_runs(input_dir, layers, seeds, workers, console.print)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    table.to_parquet(output, index=False)
+    console.print(f"[green]{len(table):,} rows[/green] → {output}")
+
+
 @drift.command("grid")
 @click.option(
     "--model-dir",

@@ -43,6 +43,7 @@ ROUNDS: dict[str, tuple[str, str]] = {
     "K": ("Venues", "the field's move or OpenAlex's label (scored as round K′)"),
     "S": ("Separability", "a classifier that guesses each abstract's field"),
     "V": ("Technology vocabulary", "round S's classifier without 29 technology terms"),
+    "M": ("Held-out check", "does every cell's model generalise to text it never saw"),
 }
 _TITLE = re.compile(r"^\*\*([A-Z]\d+) — ([\s\S]*?)\*\*", re.MULTILINE)
 _VERDICT = re.compile(
