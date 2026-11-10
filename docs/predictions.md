@@ -567,3 +567,31 @@ Reading rule:
   a binary classifier at all.
 
 Scored by `scripts/score_grid_semeval.py`, committed before it is run.
+
+## Round 6 results (2026-11-10, `scripts/score_grid_semeval.py`)
+
+Scored as written. 3 passed, 1 falsified.
+
+| | Verdict | Numbers (seed 42; seed 43) |
+|---|---|---|
+| B1 | **Falsified** | The grid as built, 19 measurable targets: ρ 0.219; 0.211 |
+| B2 | **Passed** | The extended grid, all 37 targets: ρ 0.285; 0.295 |
+| B3 | **Passed** | One target flagged of 19 in each seed, *plane* (changed) |
+| B4 | **Passed** | Accuracy 0.595; 0.595 (majority 0.568), from the single correct flag |
+
+During training gensim printed several hundred warnings "Exception ignored in
+'gensim.models.word2vec_inner.our_dot_float'"; training completed and the results are in the
+expected range, but the warning can signal a numerical problem in gensim's optimised routine on
+this machine. Whether the grid's own training printed it is not known (its logs were not kept).
+
+### Reading
+
+B2 passed, so by the reading rule the grid's embedding method is comparable to published systems
+on clean data: ranked by cosine drift, it tracks human graded change at 0.29, the low end of the
+static-embedding systems' 0.30–0.42 and far above the count baseline's 0.02. Its misses on this
+corpus, where check 1a found the changes present, come from the cells or from the candidate rule,
+not from the method. B3 locates most of it in the rule: requiring the top 5% on both measures
+flagged one of 19 measurable targets on a benchmark where 16 of 37 changed. The caution round 5
+measured is the candidate rule's own property, visible on clean data. B1 against B2 shows the
+150-occurrence floor's cost: half the targets unmeasured and a weaker, noisier agreement on the
+rest.
