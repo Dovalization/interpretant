@@ -47,6 +47,7 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
   experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
   under TWEC in both corpora, described differently by each method).
 - Not robust: *information* converging between psychology and computer science.
+- Not achieved: senses by field and decade (item 8); its readings are exploratory only.
 - Open: whether round N's computing reading is its measure's artefact (counting assignments
   misreads a field that changes more than the rest), as round W suggests without testing it. No
   further direction round is planned. Label scope over time is a known hazard: a
@@ -90,14 +91,16 @@ Each item that produces results gets its predictions committed first.
    predictions, which was set against the wrong baseline; exploratory, both point towards the
    behavioural and social sciences. No direction rounds follow it.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
-8. **Sense-level drift** with contextual embeddings: encode every occurrence of a word in its
-   sentence, cluster all fields' and decades' occurrences together into senses, and track each
-   sense's share by field and decade (Giulianelli et al. 2020; `drift senses`). Two encoders,
-   SciBERT and ModernBERT. First a calibration round on known answers (round C): *attention*'s
-   mechanism sense appearing in AI from the mid-2010s and not in psychology, and AI's sense of
-   *intelligence* entering other fields in the 2020s. Only the encoders that pass it are used
-   on open questions (round D): *information* across psychology and computing, philosophy's
-   2020s *consciousness*, *embodiment* and *intelligence* by sense. Runs on the M3's GPU.
+8. ~~Sense-level drift~~ **Stopped 2026-11-10, did not pass calibration.** Contextual
+   embeddings of every occurrence, clustered into senses shared by every cell (Giulianelli et
+   al. 2020; `drift senses`), calibrated on known changes before any open question. Round C
+   (SciBERT and ModernBERT, which agreed): the silhouette chose two senses and joined the
+   attention mechanism with cognitive attention. Round C′ (eight senses): *attention* separated,
+   but the language-model sense of *hallucination* took a mixed sense in two seeds. Round C″ (a
+   repaired sense-set rule): failed on *prompt* in both directions. The encoder placed every
+   known change correctly; no rule for turning clusters into a meaning's share held on unseen
+   data. By the rule committed with round C″, round D was not run (`docs/predictions_senses.md`,
+   devlog 06). Word-targeted OpenAlex cells and a label-noise measurement remain on disk.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before

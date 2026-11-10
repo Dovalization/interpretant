@@ -12,7 +12,7 @@ One finding has survived a second training seed, a second method, a lemmatised r
 
 ## Findings
 
-Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed), seven rounds on cross-perplexity, three with a field classifier, one with both instruments, and a held-out check on every cell's model. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md) and [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md); the story is in [devlog 04](devlogs/04.md) (the grid) and [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus).
+Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed), seven rounds on cross-perplexity, three with a field classifier, one with both instruments, a held-out check on every cell's model, and three calibration rounds for a sense-level instrument, which it did not pass. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md), [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md) and [`docs/predictions_senses.md`](docs/predictions_senses.md); the story is in [devlog 04](devlogs/04.md) (the grid), [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus) and [devlog 06](devlogs/06.md) (senses, and when to stop).
 
 **Robust across seeds and methods**
 
@@ -186,6 +186,8 @@ uv run python scripts/score_predictions.py
 
 **Movement between fields needs a reference.** Whether a field moved towards another depends on whether the other is taken as it was then or as it is now, on what the movement is netted against, and on whether the instrument weighs every word or the words that tell fields apart. The HCI rounds differ on all three, which is why the findings above report HCI's change and no direction.
 
+**Senses are not measured.** A word's vector mixes its senses. An instrument that clusters contextual embeddings (SciBERT) of each occurrence was calibrated on three changes with a known history, _attention_'s mechanism sense in AI, the language-model sense of _hallucination_ and of _prompt_, and did not pass: the encoder placed each change where its history puts it, but no rule for turning clusters into one meaning's share held on a case it was not chosen on. By a rule committed before the last round, sense-level drift was stopped. Its readings, such as AI's sense of _intelligence_ spreading into other fields in the 2020s, are exploratory only.
+
 **Decade granularity is coarse.** Training on ten-year windows smooths over within-decade shifts and may misattribute the timing of changes that happened rapidly at decade boundaries.
 
 **Equal cells trade volume for comparability.** A 10,000-abstract cell cannot measure late-arriving words such as _affordance_ or _intentionality_; full cells can, but only within their field. Cross-field comparisons also rest on few control words, and one of them (_food_) genuinely differs across fields.
@@ -194,7 +196,7 @@ uv run python scripts/score_predictions.py
 
 ## Roadmap
 
-The plan is in [`ROADMAP.md`](ROADMAP.md). Next: the web explorer online, and sense-level drift with contextual embeddings for _information_ and _consciousness_.
+The plan is in [`ROADMAP.md`](ROADMAP.md). Next: the web explorer online.
 
 ---
 
