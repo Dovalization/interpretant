@@ -26,6 +26,7 @@ export function FallBars({ rows, highlight }: FallBarsProps) {
   const width = (value: number) => `${(Math.abs(value) / scale) * 50}%`;
   const offset = (value: number) =>
     value >= 0 ? "50%" : `${50 - (Math.abs(value) / scale) * 50}%`;
+  const text = sorted[0] ? fieldLabel(sorted[0].text) : "the text";
 
   return (
     <div className="flex flex-col gap-2">
@@ -38,6 +39,15 @@ export function FallBars({ rows, highlight }: FallBarsProps) {
           <span className="size-2.5 rounded-sm" style={{ backgroundColor: "var(--chart-2)" }} />
           model&apos;s per-word skill changed
         </span>
+      </div>
+      {/* Axis: what each side of the centre line means. Same columns as the rows below. */}
+      <div className="grid grid-cols-[1fr_auto] gap-x-3 text-xs text-muted-foreground sm:grid-cols-[9rem_1fr_5.5rem]">
+        <span className="hidden sm:block" />
+        <div className="col-span-2 grid grid-cols-2 sm:col-span-1">
+          <span className="pr-2 text-right">← predicts {text} worse</span>
+          <span className="pl-2">predicts {text} better →</span>
+        </div>
+        <span className="hidden text-right sm:block">total</span>
       </div>
       {sorted.map((row) => {
         const seeds = [...row.seeds].sort((a, b) => a - b);
@@ -90,8 +100,10 @@ export function FallBars({ rows, highlight }: FallBarsProps) {
         );
       })}
       <p className="mt-1 text-xs text-muted-foreground">
-        Right of the centre line: excess fell. Total fall at the right, with the range over the five
-        seeds beneath it. Hover a bar for its value.
+        Each bar is one part of the change from the {sorted[0]?.early ?? 1990}s to the{" "}
+        {sorted[0]?.late ?? 2020}s; the two parts add up to the total at the right, with the range
+        over the five seeds beneath it. Bars pointing opposite ways mean the parts pulled against
+        each other. Hover a bar for its value.
       </p>
     </div>
   );
