@@ -53,10 +53,10 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
 Each item that produces results gets its predictions committed first.
 
 1. ~~Lemmatise the corpus~~ Done 2026-11-09 as round 4 (`docs/predictions.md`).
-2. **Library-first orchestration and a `predictions` package.** Move the grid, perplexity and
-   TWEC loops out of `__main__.py` into the library with tests on synthetic cells; replace the
-   seven `score_*.py` scripts' shared helpers with one module. GitHub Actions running ruff,
-   mypy and pytest.
+2. ~~Library-first orchestration and a `predictions` package~~ Done 2026-11-09: the corpus,
+   grid, drift, perplexity and figure loops moved from the CLI into the library with tests,
+   the scorers share `interpretant.predictions`, mypy is at zero and enforced in CI, and
+   `tests/test_pipeline.py` runs the whole pipeline on a synthetic grid.
 3. **Deploy the web explorer** (`web/`, built November 2026) and link it from the README, the
    GitHub "About" field and doval.dev (whose project schema needs an `href` field). Retire the
    Streamlit dashboard once the explorer covers its two panels.

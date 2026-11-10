@@ -70,23 +70,33 @@ analysis: predictions first, in their own commit.
 
 `src/interpretant/`
 
-- `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift`, `figures`, `pdf`, `app`).
-  Orchestration still lives here; the library modules are pure functions and small classes.
-- `corpus/`: `base.py` (`CorpusSource` ABC, `iter_decade_slices`), `books.py` (manifest +
-  extracted texts, author cap), `openalex.py` (API client, sampling, cleaning at ingest),
+- `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift`, `export`, `figures`, `pdf`,
+  `app`). Commands parse options, call one library function and print; the loops (ingest,
+  grid training, drift, cross-perplexity, figures) live in the library with tests.
+- `corpus/`: `books.py` (manifest + extracted texts, author cap, `ingest_books`),
+  `openalex.py` (API client, sampling, cleaning at ingest, `ingest_fields`), `files.py`
+  (`source_texts`, `rewrite_texts`: one stage's cell files into the next),
   `caps.py` (author caps), `lemmas.py` (type-level plural and spelling map), `phrases.py`
   (gensim `Phrases` on a balanced sample),
   `preprocessing.py` (`preprocess_text`, target variant map), `audit.py` (cell counts, target
-  coverage, manifest risks), `pdf_extractor.py` (Docling with PyMuPDF fallback).
+  coverage, manifest risks; `audit_corpus`), `pdf_extractor.py` (Docling with PyMuPDF
+  fallback).
 - `embedding/`: `base.py` (`training_sentences`: splits lines at 10,000 tokens, gensim's
   silent truncation limit), `twec.py` (`TWECTrainer`: balanced compass, frozen context
-  vectors per cell), `grid.py` (cell discovery, compass sample), `ppmi.py` (PPMI-SVD with
-  Levy et al. 2015 settings).
+  vectors per cell), `grid.py` (cell discovery, compass sample, `train_twec_grid`,
+  `build_ppmi_grid`), `ppmi.py` (PPMI-SVD with Levy et al. 2015 settings).
 - `drift/`: `grid.py` (`compare_cells`, `add_noise_floor`, `cell_neighbours`, pair
-  enumeration; the constants `MEASURE_MIN`, `NEIGHBOUR_MIN`, `NEIGHBOURS`, `FLOOR_QUANTILE`),
-  `metrics.py` (cosine distance, batched neighbourhood shift), `perplexity.py` (Kneser-Ney
-  bigrams, shared-abstract removal, fixed training budget, excess cross-entropy).
-- `visualization/`: `figures.py` (the README figures), `style.py` (palette, fonts),
+  enumeration, `measure_grid`; the constants `MEASURE_MIN`, `NEIGHBOUR_MIN`, `NEIGHBOURS`,
+  `FLOOR_QUANTILE`), `metrics.py` (cosine distance, batched neighbourhood shift),
+  `perplexity.py` (Kneser-Ney bigrams and the unigram control, shared-abstract removal, fixed
+  training budget, excess cross-entropy, the mix/rate decomposition; `cross_entropy_runs`,
+  `decompose_runs`).
+- `predictions.py`: helpers the scorers share (`report`, `load_vectors`, `word_count`,
+  `overlap`). Scorers are frozen, so a change here must leave every scorer's output
+  byte-identical: rerun them all and diff.
+- `export.py`: the JSON the web explorer reads.
+- `visualization/`: `figures.py` (the figure functions and `readme_figures`, the README's
+  five figures), `style.py` (palette, fonts),
   `trajectory.py` and `neighbors.py` (dashboard panels).
 - `app/main.py`: Streamlit dashboard; demo mode is synthetic, real mode reads
   `models/twec_grid` for one field, restricted to `data/words_of_interest.txt`.
@@ -104,7 +114,8 @@ nor are their filenames. `.env` holds `OPENALEX_API_KEY`.
 ## Tests
 
 Synthetic only: no real models, no corpus files, no network. Figures are tested on tiny
-`KeyedVectors` and DataFrames built in the test.
+`KeyedVectors` and DataFrames built in the test. `tests/test_pipeline.py` runs the whole CLI,
+lemmas to decomposition, on a synthetic two-field, two-decade grid in a few seconds.
 
 ## Code style
 
