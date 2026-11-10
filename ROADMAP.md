@@ -135,6 +135,13 @@ Each item that produces results gets its predictions committed first.
 
    Not part of it: clustering usages into senses, repairing the grid, the direction of HCI's
    change.
+8d. **Meaning by sense labels** (planned 2026-11-10, not started;
+   [`docs/plan_sense_labels.md`](docs/plan_sense_labels.md)). A language model labels each
+   usage with one sense from a fixed list per word, and a cell's meaning is its distribution
+   over the list, so a change of context without a change of sense should not register. Ladder:
+   DWUG EN, the author's gold labels, known answers over time with check 1b's placebo, then
+   between fields and open questions. Waits on an API key, the choice of model and the
+   author's review of the sense lists.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
