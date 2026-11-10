@@ -2,7 +2,9 @@
 # Claude on 2026-11-10 for the author's approval. Not frozen until approved. Three choices come
 # from the labeller pilot, which showed check 2b's usages: platform's delivery_channel sense,
 # having's obligation sense, and the boundary between component's first and third senses.
-# Cue words: lowercase whole words that signal the sense within five words of the target.
+# Cue words: lowercase whole words that signal the sense within five words of the target;
+# "<word" counts only before the target, ">word" only after it; "<<word" and ">>word" only
+# as the word right next to it.
 
 [attention]
 word = "attention"
@@ -50,7 +52,7 @@ cues = ["written", "essay", "verbal", "spoken", "dialogue", "dialog", "interface
 key = "quick_or_immediate"
 definition = "The adjective: done or happening quickly, without delay"
 example = "Prompt treatment reduces the risk of complications."
-cues = ["treatment", "diagnosis", "payment", "delivery", "intervention", "repair", "medical", "notification"]
+cues = [">treatment", ">diagnosis", ">payment", ">delivery", ">intervention", ">repair", ">medical", ">notification"]
 
 [[prompt.senses]]
 key = "to_cause_or_provoke"
@@ -173,22 +175,22 @@ word = "having"
 key = "perfect_auxiliary"
 definition = "The auxiliary before a past participle, marking a completed action"
 example = "Having trained the model, we evaluate it on held-out data."
-cues = ["been", "shown", "proved", "proven", "demonstrated", "found", "completed", "received", "obtained", "established", "achieved", "reached", "made", "observed"]
+cues = [">been", ">shown", ">proved", ">proven", ">demonstrated", ">found", ">completed", ">received", ">obtained", ">established", ">achieved", ">reached", ">made", ">observed"]
 
 [[having.senses]]
 key = "possessing_or_containing"
 definition = "Possessing, containing or being characterised by something"
 example = "Patients having a history of stroke were excluded."
-cues = ["property", "properties", "value", "values", "number", "high", "low", "same", "different", "access", "similar", "large", "small", "higher", "lower"]
+cues = [">property", ">properties", ">value", ">values", ">number", ">high", ">low", ">same", ">different", ">access", ">similar", ">large", ">small", ">higher", ">lower"]
 
 [[having.senses]]
 key = "experiencing_or_causing"
 definition = "Experiencing, undergoing or causing something, as in having difficulty or having something done"
 example = "Students reported having trouble with the final task."
-cues = ["difficulty", "difficulties", "trouble", "problems", "fun", "experience", "experienced"]
+cues = [">difficulty", ">difficulties", ">trouble", ">problems", ">fun", ">experience", ">experienced"]
 
 [[having.senses]]
 key = "obligation"
 definition = "Being required to do something, as in having to"
 example = "The design avoids having to retrain the whole model."
-cues = ["avoid", "avoids", "avoiding", "without", "instead"]
+cues = [">>to"]
