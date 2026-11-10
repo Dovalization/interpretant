@@ -1145,3 +1145,164 @@ The verdicts above stand as scored. What changes is how much weight they carry:
 
 The exploratory section's proposal, a text-side correction to the relative gain, is superseded.
 Round W uses a measure that leaves the text field's own model out altogether.
+
+## Round W: the frame of reference, or what the instrument weighs? (committed 2026-11-10, before any language model scored another decade's text)
+
+Rounds J and K′ and round N disagree on the direction of HCI's change, and they differ in three
+things at once. J and K′ used language models, each decade's own (a 2020s model on 2020s text),
+and compared each model's gain on HCI with its gains on other texts. Round N used a classifier
+held at the 1990s and compared HCI's gain towards a target with other fields' gains towards it.
+Round N's reading offered one explanation, untested: a language model weighs every word by its
+frequency, a classifier weighs the words that tell fields apart. The frame of reference and the
+baseline are two more. Round W holds the frame and the baseline fixed: both instruments are
+trained on the same 1990s abstracts, score the same held-out abstracts with the same measure,
+and are netted against the same fields. Only the instrument differs. It also asks whether the
+direction holds inside the venues HCI had in both decades, which round N did not check.
+
+This is the last round on the direction of HCI's change. The reading rule fixes what the README
+says under every outcome.
+
+### Calibration (synthetic, before these predictions)
+
+These runs use `tests/test_direction.py`'s six synthetic fields at the corpus's sample size
+(2,000 per field, 1,600 to train and 400 held out, five seeds). The fields share 95% of their
+words, and by the 2020s every field replaces 30% of its own words with new ones. Settings add a
+planted move (HCI borrows 5%, 10%, 20% or 40% of its field words from psychology), a field sink
+(every other field borrows 10% or 20% from HCI), and a field that changes more than the rest
+(HCI replaces 45%, 60% or 80% of its words and borrows from nobody). The calibration scripts
+were not committed; their outputs are summarised here.
+
+- **Assignment by language model fails.** The first design gave each held-out abstract to the
+  field whose 1990s bigram model scored it lowest, then applied round N's relative gain. It found
+  neither the 5% nor the 10% planted move (+0.031, sd 0.025; +0.061, sd 0.036). Home shares were
+  0.62–0.65, against the classifier's 0.81–0.83. Hard assignments throw away most of what a
+  language model measures, so that design was dropped before any corpus run.
+- **Round N's relative gain has the blind spot its reading suspected.** A field that changes
+  more than the rest gets present relative gains towards groups it never borrowed from (round
+  N's correction section has the numbers).
+- **A two-target contrast has neither problem.** The *contrast* of a text field A is A's mean
+  cost under the behavioural and social group's models minus its mean cost under the computing
+  group's (each group without A). Neither A's own model nor a field everyone drifts towards
+  enters it. In all twelve settings (those above, plus a sink and a field changing more than the
+  rest combined, with and without a planted move) and six queries per instrument, it reported no
+  move that was not planted. The eight original settings gave the same with the synthetic corpus
+  regenerated for every seed. The classifier's contrast found every planted
+  move towards a single field from 5% (+0.187, sd 0.093) and towards a group from 10%. The
+  language models' contrast found planted moves from 20% (+0.059, sd 0.017). At 10% it found
+  one only when the corpus was regenerated per seed (+0.032, sd 0.013). Their seed spread is far
+  smaller than the classifier's, but so is their response: in this regime the field words are
+  5% of tokens, and a language model weighs the other 95% as well.
+
+- **A change in which abstracts a field holds.** The settings above change every abstract's
+  words. The planted check below changes the mix instead: one decade's held-out abstracts are
+  halved, and 10% of HCI's second half is replaced with another field's abstracts. On the
+  synthetic fields at the corpus's size, the classifier found the move towards psychology and
+  towards computer science (+0.293, sd 0.048; +0.308, sd 0.101). The language models found the
+  move towards psychology (+0.035, sd 0.006) but not towards computer science (+0.018, sd
+  0.013); at 20% they found both. Neither instrument reported a move in the unplanted halves.
+
+So the language models are the weaker instrument here. A move they do not find is weak evidence
+of no move; a move they do find is not an artefact of drift, sinks or a field changing more.
+The synthetic fields differ in 5% of their tokens and real fields in far more, so the planted
+check is run again on real abstracts, as a gate.
+
+### Method (fixed before any corpus run)
+
+- **Samples.** Round N's: for each seed 1–5, and for the 1990s and the 2020s, 2,000 abstracts
+  per field with shared abstracts removed, the first 1,600 for training and the last 400 held
+  out. Both instruments see the same abstracts.
+- **Classifier.** Round N's 1990s classifier, refitted on the same samples. Its assignment shares
+  must reproduce round N's table; the scorer stops if they do not. A text field A's cost under
+  field T is the mean of −log₂ p(T | abstract) over A's held-out abstracts.
+- **Language models.** One Kneser-Ney bigram model per field, trained on the field's 1990s
+  training abstracts. All are trained on the same number of tokens: abstracts are taken in drawn
+  order until the count reaches the smallest field's training total in that seed. The vocabulary
+  is every word with at least 5 occurrences across those samples. A's cost under T is the mean,
+  over A's held-out abstracts, of bits per scored token under T's model. Only vocabulary words
+  and the end token are scored; unknown words still serve as context. All models share the
+  vocabulary, so every model scores the same tokens of an abstract.
+- **Contrast.** For text field A in decade d, c(A, d) = mean cost of A under the behavioural and
+  social models (psychology, cognitive psychology, neuroscience, sociology, communication) minus
+  mean cost under the computing models (computer science, AI), each group without A. A's
+  *movement towards the behavioural and social sciences over computing* is
+  c(A, 1990s) − c(A, 2020s). Its *relative movement* subtracts the median movement of the ten
+  other fields; a negative relative movement is a move towards computing over the behavioural
+  and social sciences.
+- **Present.** An effect in either direction is present when it has that sign in all five seeds
+  and its mean is at least twice its standard deviation, as in round N.
+- **The venue-stable cell.** HCI_v is round K′'s: HCI's abstracts from the nine venues with at
+  least 20 cleaned documents in both decades, shared abstracts removed. Its 1990s text is every
+  such abstract outside that seed's HCI training abstracts; its 2020s text is every such
+  abstract. It is netted against the same ten fields, with HCI's own text not among them. The
+  cell holds the venues fixed, not their shares: by round K′'s counts the HFES proceedings are
+  30% of its 1990s documents and 4% of its 2020s ones, CHI and CHI EA 38% and 44%.
+- **The planted check on real abstracts.** For each seed and each instrument, the 1990s
+  held-out abstracts are halved (200 per field in each half; the first half stands for the
+  early decade, the second for the late one). HCI's late half has its first 10% replaced with
+  computer science's late abstracts in one run and with psychology's in another; every other
+  field's text is left as drawn. An instrument *passes* when HCI's relative movement towards
+  computing over the behavioural and social sciences is present with computer science planted,
+  the reverse movement is present with psychology planted, and neither is present in the
+  unplanted halves. The halves are half the size of the real held-out sets, so the check is
+  stricter than the round it guards. It uses only 1990s text and is run by the scorer, before
+  any prediction is scored.
+- Already seen: every result through round N, including the classifier's relative gains and
+  home shares under the 1990s classifier; round J's mix effects for psychology's and sociology's
+  models, which apply 1990s per-word rates to 2020s word frequencies and so are near relatives
+  of a score under a 1990s model; round K′'s venue list and document counts. Not computed: any
+  language model's score on another decade's text, any classifier probability (round N used
+  only the predicted labels), anything on HCI_v outside round K′, and the mix effects for AI's
+  and computer science's models. The contrast and the planted check are implemented
+  (`interpretant.drift.direction`) and have run only on synthetic fields.
+
+### Predictions
+
+**W1 — Both instruments see the fields.** Under both instruments, in every seed, every field's
+own 1990s model gives its 1990s held-out abstracts a lower cost than any other field's model.
+*Falsified* if any field fails under either instrument in any seed.
+
+**W2 — The classifier's contrast agrees with round N.** Under the classifier, HCI's relative
+movement towards computing over the behavioural and social sciences is present. *Falsified* if
+absent or present the other way.
+
+**W3 — The language models, in the same frame, see the opposite.** Under the language models,
+HCI's relative movement towards the behavioural and social sciences over computing is present.
+*Falsified* if absent or present the other way.
+
+**W4 — Inside its own venues, the classifier still finds the move towards computing.** Under
+the classifier, HCI_v's relative movement towards computing over the behavioural and social
+sciences is present. *Falsified* if absent or present the other way.
+
+**W5 — Inside its own venues, the language models find the move towards the behavioural and
+social sciences.** Under the language models, HCI_v's relative movement towards the
+behavioural and social sciences over computing is present. *Falsified* if absent or present the
+other way.
+
+Reading rule. The two instruments are on different scales, so they are compared by direction,
+not by size. They **agree** when both relative movements are present in the same direction,
+and **disagree** when both are present in opposite directions. Any other result is inconclusive
+for the instrument whose movement is absent.
+
+- They agree: the frame of reference and the baseline explain the split between rounds J, K′
+  and N, and the instruments do not. The README states that direction for a fixed 1990s
+  reference, net of every field's movement. Rounds J and K′ stand as what they measured: each
+  decade's own models.
+- They disagree (W2 and W3 both pass): the instruments differ within one frame, on the same
+  abstracts, and the difference is what each weighs. The README reports both directions as
+  instrument-dependent and claims none. One table of the words that carry the difference may
+  follow, labelled exploratory.
+- One instrument's movement is absent: in this frame that instrument sees no direction. A
+  language-model absence is weak evidence (see the calibration). The README keeps "no direction
+  is claimed" and says which instrument saw what.
+- HCI_v decides whether a direction belongs to the field or to the widening label. A direction
+  present on the whole cell and absent on HCI_v is described as the label's; one present on
+  both, as the field's within its own venues, whose shares changed (the HFES proceedings fell
+  from 30% to 4% of HCI_v's documents).
+- If W1 fails, the instrument that fails cannot carry a direction at this size, and the README
+  says so.
+- If an instrument fails the planted check, its predictions among W2–W5 are reported as
+  untestable, neither passed nor falsified, and the README says that instrument could not find
+  a planted move of this size in this frame.
+
+Under every outcome, no further round is run on the direction of HCI's change. Scored by
+`scripts/score_reference_frame.py`, committed before it is run.
