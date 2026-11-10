@@ -218,7 +218,8 @@ def second() -> None:
     repeats = [(r["item"], r["repeat_of"]) for r in key if r["repeat_of"]]
     print(f"{len(items)} distinct pairs judged by both")
     print(
-        f"between judges: Spearman {between:.3f}, exact {exact:.0%}, within one point {within_one:.0%}"
+        f"between judges: Spearman {between:.3f}, exact {exact:.0%}, "
+        f"within one point {within_one:.0%}"
     )
     print(
         f"XL-LEXEME with the author {rho(scores, [author[i] for i in items]):.3f}, "
