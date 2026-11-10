@@ -72,3 +72,41 @@ Reading rule:
   decides whether the pipeline proceeds.
 
 Scored by `scripts/score_pairs_benchmark.py`, committed before it is run.
+
+### Round U results (2026-11-10, `scripts/score_pairs_benchmark.py`)
+
+Scored as written. 3 passed, 1 falsified. 46 words, 9,107 usages.
+
+| | Verdict | Numbers |
+|---|---|---|
+| U1 | **Passed** | APD's agreement with `change_graded`: 0.864 (published 0.886, needed 0.85) |
+| U2 | **Passed** | APD 0.864, PRT 0.650 (published 0.886 and 0.676) |
+| U3 | **Falsified** | J's agreement: 0.539 (needed 0.75) |
+| U4 | **Passed** | Periods shuffled 20 times: J's mean agreement −0.124 (range −0.384 to +0.350); APD's +0.842 (range +0.838 to +0.846) |
+
+The model's revision c9f85c6f holds its weights as `pytorch_model.bin`; `transformers` also
+fetched a safetensors copy from an open pull request by Hugging Face's conversion bot
+(`refs/pr/1`). The two files were compared after the run: all 392 tensors are identical, so the
+run used the pinned weights.
+
+### Reading
+
+U1 passed, so the pipeline is validated and rung 2 may start with this configuration. J's
+agreement is more than 0.05 under APD's, so by the reading rule rung 2's primary measure is APD,
+and the README is to note that APD also responds to a word's variety of uses when the instrument
+is reported there.
+
+### Exploratory, after scoring: how much of APD is change
+
+Not predicted in size; U4 bet only that APD would keep at least 0.4.
+
+With every word's usages shuffled between the two periods, so that no difference between periods
+can be measured, APD still agrees with the graded change score at 0.842, against 0.864 with the
+periods intact. Almost all of APD's agreement on this benchmark comes from how varied a word's
+usages are overall, not from a difference between the periods: words with more senses in the
+pooled data also have higher graded change scores, so a measure of variety ranks the 46 words
+nearly as well as a measure of change. J nets each period's own variety out and falls to noise
+when the periods are shuffled; its 0.539 is the agreement that remains attributable to change
+between the periods. A reproduction of 0.864 therefore validates the pipeline, not APD as a
+measure of change. Rung 2's predictions should carry the shuffled control and J beside APD, or
+APD would mostly rank the corpus's words by their number of senses.

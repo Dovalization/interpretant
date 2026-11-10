@@ -117,7 +117,11 @@ Each item that produces results gets its predictions committed first.
    each, with no clustering, judged by XL-LEXEME (an encoder trained on word-in-context
    judgements), by a language model on a subsample, and by the author on a small gold set. A
    calibration ladder, each rung pre-registered with its own stopping rule:
-   1. reproduce XL-LEXEME's published result on DWUG EN, a human-annotated benchmark;
+   1. ~~reproduce XL-LEXEME's published result on DWUG EN~~ Round U (2026-11-10), 3 of 4: APD
+      0.864 against the published 0.886, so the pipeline is validated; but with the periods
+      shuffled APD keeps 0.842, so on this benchmark it mostly measures a word's variety of
+      uses, and the across-minus-within measure (0.539, noise when shuffled) carries the
+      change signal (`docs/predictions_pairs.md`);
    2. this project's known answers over time (*attention, hallucination, prompt, alignment,
       platform, network*, and quiet transitions), configuration frozen from rung 1;
    3. known answers between fields: *embodiment* between HCI and philosophy diverges, random
