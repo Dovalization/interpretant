@@ -11,11 +11,11 @@ word = "attention"
 key = "cognitive_attention"
 definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience"
 example = "Sleep loss impairs sustained attention in older adults."
-cues = ["sustained", "selective", "divided", "deficit", "deficits", "adhd", "cognitive", "participants", "children", "vigilance", "distraction", "executive", "focus", "focused", "focusing", "bias", "biases", "orienting", "control"]
+cues = ["sustained", "selective", "divided", "deficit", "deficits", "adhd", "cognitive", "participants", "children", "vigilance", "distraction", "executive", "bias", "biases", "orienting", "control"]
 
 [[attention.senses]]
 key = "notice_or_consideration"
-definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing"
+definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing, including authors directing it, as in we focus our attention on"
 example = "The issue has received growing attention from policymakers."
 cues = ["received", "receive", "receiving", "drawn", "draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "increasing", "growing", "considerable", "little", "special", "deserves", "public", "media", "scholarly", "widespread"]
 
