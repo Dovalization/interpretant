@@ -330,3 +330,30 @@ Reading rule:
 
 Cost: about $3 for consolidation and revision (Opus, batch prices), $3.50 for the coverage pass
 and $4 for half B on Sonnet, about $0.15 for JEV; the substitutes run locally.
+
+### Round Q amendment: a rule-built arm (committed 2026-11-10, while step A ran and before its output was read; before step B)
+
+Added at the author's request, to measure how much the language model's part in building the
+lists matters. Nothing above changes.
+
+- **Rule-built lists.** From step A's evidence alone, with no language model: every kept
+  substitute community of a word becomes one sense, keyed by its two most frequent substitutes and
+  described as "the sense in which the word could be replaced by" its ten most frequent
+  substitutes, with no example. A word with no kept community gets one sense, "the word in any
+  use". No coverage pass or revision: the lists are frozen as generated
+  (`data/sense_lists/dwug_en_rules.toml`, with their community map) and committed before half B is
+  labelled with them. They hold no DWUG text.
+- **Labelling.** Half B again, by the same three labellers: Sonnet and JEV with the rule-built
+  lists (10% repeats, seed 2026), and the substitute labeller reading each usage's community
+  directly, which makes this arm free of generative models end to end.
+- **Predictions, for each labeller.** R1: Spearman on half B at least 0.70. R2: at least the same
+  labeller's Spearman with Opus's lists (round Q's Q1) minus 0.10. R3: partial Spearman at least
+  0.40. R4: at most 10% *other* or *unclear*. R5 (Sonnet and JEV): repeats at least 85% the same.
+  R6 (grouping) and R7 (agreement between the labellers on these lists) are descriptive.
+- **Reading rule.** R2 decides how the language model's part in building the lists is described:
+  passing, as changing the result little; failing, as mattering, with the gap reported. A labeller
+  that passes R1, R3, R4 and R5 (the substitute labeller R1, R3 and R4) also passes rung 1 with
+  rule-built lists, which then become an alternative for rung 2.
+- Cost: about $3.50 for Sonnet and $0.12 for JEV on half B; the substitute labeller runs locally.
+
+Scored by `scripts/score_labels_induced.py score_rules`, added with this amendment.
