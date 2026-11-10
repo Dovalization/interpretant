@@ -40,6 +40,7 @@ SENSE_RANGE = range(2, 11)
 CONTEXT_WORDS = 100
 SILHOUETTE_SAMPLE = 5_000
 LAYERS = 4
+NARROW_CHARS = 200
 
 Abstracts = Mapping[tuple[str, int], Sequence[tuple[str, str]]]
 
@@ -152,6 +153,21 @@ def span_mask(offsets: np.ndarray, start: int, end: int) -> np.ndarray:
     return (offsets[:, 0] < end) & (offsets[:, 1] > start) & (offsets[:, 1] > offsets[:, 0])
 
 
+def narrowed(occurrence: Occurrence, chars: int = NARROW_CHARS) -> Occurrence:
+    """The occurrence with its context cut to ``chars`` characters on either side, for a
+    context the encoder truncates before reaching it (text without spaces between words)."""
+    first = max(occurrence.start - chars, 0)
+    context = occurrence.context[first : occurrence.end + chars]
+    return Occurrence(
+        occurrence.field,
+        occurrence.decade,
+        occurrence.work_id,
+        context,
+        occurrence.start - first,
+        occurrence.end - first,
+    )
+
+
 class TransformerEncoder:
     """A Hugging Face encoder: an occurrence's vector is the mean of the last ``layers`` hidden
     layers over the subword tokens that overlap it."""
@@ -170,26 +186,35 @@ class TransformerEncoder:
     def encode(self, occurrences: Sequence[Occurrence]) -> np.ndarray:
         vectors: list[np.ndarray] = []
         for first in range(0, len(occurrences), self.batch_size):
-            batch = occurrences[first : first + self.batch_size]
-            encoded = self.tokenizer(
-                [occurrence.context for occurrence in batch],
-                return_offsets_mapping=True,
-                padding=True,
-                truncation=True,
-                max_length=512,
-                return_tensors="pt",
-            )
-            offsets = encoded.pop("offset_mapping").numpy()
-            with self.torch.no_grad():
-                output = self.model(**encoded.to(self.device), output_hidden_states=True)
-            hidden = self.torch.stack(output.hidden_states[-self.layers :]).mean(0)
-            hidden_rows = hidden.float().cpu().numpy()
-            for row, occurrence in enumerate(batch):
-                mask = span_mask(offsets[row], occurrence.start, occurrence.end)
-                if not mask.any():
-                    raise ValueError(f"no token covers the occurrence in {occurrence.work_id}")
-                vectors.append(hidden_rows[row][mask].mean(axis=0))
+            vectors.extend(self._encode_batch(occurrences[first : first + self.batch_size]))
         return np.vstack(vectors)
+
+    def _encode_batch(self, batch: Sequence[Occurrence], narrow: bool = True) -> list[np.ndarray]:
+        """One vector per occurrence; an occurrence past the encoder's 512 tokens is encoded
+        again from its :func:`narrowed` context."""
+        encoded = self.tokenizer(
+            [occurrence.context for occurrence in batch],
+            return_offsets_mapping=True,
+            padding=True,
+            truncation=True,
+            max_length=512,
+            return_tensors="pt",
+        )
+        offsets = encoded.pop("offset_mapping").numpy()
+        with self.torch.no_grad():
+            output = self.model(**encoded.to(self.device), output_hidden_states=True)
+        hidden = self.torch.stack(output.hidden_states[-self.layers :]).mean(0)
+        hidden_rows = hidden.float().cpu().numpy()
+        vectors: list[np.ndarray] = []
+        for row, occurrence in enumerate(batch):
+            mask = span_mask(offsets[row], occurrence.start, occurrence.end)
+            if mask.any():
+                vectors.append(hidden_rows[row][mask].mean(axis=0))
+            elif narrow:
+                vectors.extend(self._encode_batch([narrowed(occurrence)], narrow=False))
+            else:
+                raise ValueError(f"no token covers the occurrence in {occurrence.work_id}")
+        return vectors
 
 
 def induce_senses(

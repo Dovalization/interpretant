@@ -28,6 +28,7 @@ from interpretant.drift.senses import (
     examples,
     induce_senses,
     jensen_shannon,
+    narrowed,
     sample_occurrences,
     sense_runs,
     sense_shares,
@@ -219,3 +220,14 @@ def test_an_abstract_in_two_fields_of_one_decade_is_dropped_from_both() -> None:
         ("psychology", 2020): [("W3", "c")],
         ("psychology", 1990): [("W1", "a")],
     }
+
+
+def test_a_narrowed_context_keeps_the_occurrence_and_its_offsets() -> None:
+    context = "字" * 700 + "intelligence" + "字" * 300
+    occurrence = Occurrence("ai", 2020, "W1", context, 700, 712)
+
+    narrow = narrowed(occurrence, chars=50)
+
+    assert len(narrow.context) == 50 + 12 + 50
+    assert narrow.context[narrow.start : narrow.end] == "intelligence"
+    assert narrowed(Occurrence("ai", 2020, "W1", "intelligence here", 0, 12), 50).start == 0
