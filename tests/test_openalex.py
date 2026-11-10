@@ -37,8 +37,10 @@ class FakeClient:
     def __init__(self, works: list[dict[str, object]]) -> None:
         self.works = works
         self.pages_requested: list[int] = []
+        self.filters: list[str] = []
 
     def count(self, filters: str) -> int:
+        self.filters.append(filters)
         return len(self.works)
 
     def sample_page(
@@ -277,3 +279,14 @@ def test_ingest_fields_writes_non_empty_cells_and_counts_what_was_dropped(tmp_pa
     assert cleaned["hci"][1990].dropped == 1
     assert cleaned["hci"][2000].documents == []
     assert [path.name for path in (tmp_path / "texts").iterdir()] == ["hci_1990.txt"]
+
+
+def test_a_word_targeted_download_adds_the_abstract_search_to_the_cell_filter(
+    tmp_path: Path,
+) -> None:
+    client = FakeClient([make_work(number, f"embodiment abstract {number}") for number in range(5)])
+
+    written = download_cell(client, tmp_path, "hci", 2000, sample_size=1_000, word="embodiment")  # type: ignore[arg-type]
+
+    assert written == 5
+    assert client.filters == [cell_filter("hci", 2000) + ",abstract.search:embodiment"]

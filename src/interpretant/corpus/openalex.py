@@ -397,11 +397,14 @@ def download_cell(
     sample_size: int = MAX_SAMPLE,
     seed: int = 42,
     full: bool = False,
+    word: str | None = None,
 ) -> int:
     """Download one cell and return its number of works; existing cells are kept.
 
     A cell is a seeded sample of up to ``sample_size`` works, or every matching work when
-    ``full`` is set (for a word too rare to measure in a sample). The file is written under a
+    ``full`` is set (for a word too rare to measure in a sample). With ``word``, only works
+    whose abstract contains it count (OpenAlex's stemmed abstract search), for the sense
+    rounds' word-targeted cells. The file is written under a
     temporary name and renamed when complete, so an interrupted download leaves no partial
     cell behind.
     """
@@ -409,7 +412,7 @@ def download_cell(
     if path.exists():
         with gzip.open(path, "rt", encoding="utf-8") as existing:
             return sum(1 for _ in existing)
-    filters = cell_filter(field, decade)
+    filters = cell_filter(field, decade) + (f",abstract.search:{word}" if word else "")
     path.parent.mkdir(parents=True, exist_ok=True)
     partial = path.with_suffix(".partial")
     written = 0

@@ -197,6 +197,11 @@ def corpus_openalex() -> None:
     is_flag=True,
     help="Download every matching work instead of a sample (use a separate --raw-dir).",
 )
+@click.option(
+    "--word",
+    default=None,
+    help="Only works whose abstract contains this word (use a separate --raw-dir).",
+)
 def corpus_openalex_download(  # noqa: PLR0913
     raw_dir: Path,
     fields: tuple[str, ...],
@@ -205,6 +210,7 @@ def corpus_openalex_download(  # noqa: PLR0913
     sample_size: int,
     seed: int,
     full: bool,
+    word: str | None,
 ) -> None:
     """Download English research-prose abstracts for each field and decade.
 
@@ -226,7 +232,7 @@ def corpus_openalex_download(  # noqa: PLR0913
     for field in fields or FIELDS:
         for decade in range(start, end, 10):
             try:
-                works = download_cell(client, raw_dir, field, decade, sample_size, seed, full)
+                works = download_cell(client, raw_dir, field, decade, sample_size, seed, full, word)
             except BudgetExhaustedError as error:
                 console.print(f"[yellow]Daily budget spent ({error}); rerun to resume.[/yellow]")
                 return
