@@ -3,7 +3,7 @@
 Committed before either labeller was run. Three steps:
 
     uv run python scripts/pilot_labellers.py sonnet    # labels through the Claude Code CLI
-    uv run --extra labels python scripts/pilot_labellers.py jev   # needs TYPESAFE_API_KEY
+    uv run --extra labels python scripts/pilot_labellers.py jev   # TYPESAFE_API_KEY in .env
     uv run python scripts/pilot_labellers.py compare
 
 Labels and each labeller's usage figures are written to data/labels/pilot/ (identifiers and labels
@@ -30,6 +30,7 @@ from interpretant.drift.labels import (
     Item,
     Labeller,
     SenseList,
+    TypeSafeSettings,
     blocks,
     label_blocks,
     load_sense_lists,
@@ -138,7 +139,7 @@ def jev() -> None:
     from typesafe_sdk import TypeSafeClient  # noqa: PLC0415
 
     lists = load_sense_lists(LISTS)
-    client = TypeSafeClient(model=JEV_MODEL)
+    client = TypeSafeClient(api_key=TypeSafeSettings().typesafe_api_key, model=JEV_MODEL)  # type: ignore[call-arg]
     labels: dict[str, str] = {}
     detail: dict[str, str] = {}
     raw = OUT / "raw" / "jev"

@@ -23,6 +23,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from scipy.spatial.distance import jensenshannon
 
 from interpretant.drift.pairs import Usage, centred
@@ -242,3 +243,11 @@ def distribution(labels: Sequence[str], senses: SenseList) -> np.ndarray:
 def divergence(first: np.ndarray, second: np.ndarray) -> float:
     """Jensen-Shannon divergence in bits, 0 to 1 (scipy returns its square root)."""
     return float(jensenshannon(first, second, base=2) ** 2)
+
+
+class TypeSafeSettings(BaseSettings):
+    """The TypeSafe API key, from the environment or ``.env``, as the OpenAlex key is read."""
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    typesafe_api_key: str
