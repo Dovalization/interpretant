@@ -1112,3 +1112,36 @@ never departs from the other fields'. A next round should give the relative gain
 correction (a field's gain towards a target relative to its gain towards every target) and
 calibrate it on a synthetic field that changes more than the rest, before asking the 1980s
 classifier anything.
+
+### Correction (2026-11-10): the blind spot, calibrated
+
+Round N's reading named a blind spot in the relative gain: it removes drift that every field
+shares, not one field changing more than the rest. A synthetic calibration run for round W, after
+round N was scored, measured it. It used the same six synthetic fields at the corpus's sample
+size (2,000 per field, five seeds), with general drift (every field replaces 30% of its own
+words) and HCI alone replacing more of its words and borrowing from nobody:
+
+| HCI replaces | HCI's home share | Relative gains present (classifier) |
+|---|---|---|
+| 30% (as every field) | 0.83 to 0.71 | none |
+| 45% | 0.83 to 0.64 | towards a two-field group (+0.057, sd 0.014) |
+| 60% | 0.83 to 0.57 | towards the group (+0.075, sd 0.029) and towards one field in it (+0.029, sd 0.008) |
+| 80% | 0.83 to 0.38 | towards every target tested, including a field outside the group (+0.075, sd 0.026) |
+
+A field that changes more than the rest sends more of its abstracts everywhere, and larger target
+groups receive more of them. The relative gain can therefore report a move that is a field's own
+change and nothing else.
+
+The verdicts above stand as scored. What changes is how much weight they carry:
+
+- **N1's 1980s part and the 1980s rows of the exploratory table** are what this artefact
+  produces. HCI's home share under the 1980s classifier falls from 0.87 to 0.56, and its gains
+  towards both groups are present. They are not evidence of a direction.
+- **N3 under the 1990s classifier** (towards computing, present) has the opposite shape from
+  the artefact. The artefact favours the larger group, and the behavioural and social group has
+  five fields to computing's two; HCI's gain towards it is absent. No calibration has tested
+  that case, so the move towards computing is unconfirmed rather than refuted.
+- **N4 and N5** concern psychology, whose home share barely moves, and are unaffected.
+
+The exploratory section's proposal, a text-side correction to the relative gain, is superseded.
+Round W uses a measure that leaves the text field's own model out altogether.
