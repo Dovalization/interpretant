@@ -383,3 +383,82 @@ Scored as written on the lemmatised grid (seeds 42 and 43, `data/drift/*.parquet
 - ***Information*'s convergence is not robust.** It appeared in both unlemmatised TWEC seeds and
   not in PPMI-SVD; on the lemmatised grid the gap is 13 points, under the committed 15. It moves
   to the not-robust list.
+
+---
+
+## Round 5: does the grid find changes whose history is known? (committed 2026-11-10, before any drift rank below was inspected)
+
+Every robust finding rests on the TWEC grid, but the grid has been checked only against its own
+noise (controls, seeds, a second method), never against a change whose history is documented.
+The one such test it took failed: P2, *network* at AI's connectionist turn. So it is not known
+how sensitive the grid is, and therefore what its nulls mean (*intentionality*'s stability).
+This round asks the grid to find documented changes, within and across fields, and to stay
+quiet where nothing documented happened. The sense rounds (`predictions_senses.md`) showed
+that an instrument can look sound against noise and still fail on known answers.
+
+### Method (fixed before any rank is inspected)
+
+- **Grid.** The lemmatised main grid (`models/twec_grid/openalex`, seed 42, and
+  `models/twec_grid_seed43/openalex`). Seed 42's ranks are read from
+  `data/drift/within_field.parquet` and `cross_field.parquet`; seed 43's are computed with the
+  same functions (`compare_cells`, `add_noise_floor`) on the seed-43 cells, as round 4 did.
+- **Candidate**, as in round 1: in the top 5% of its pair on both cosine drift and
+  neighbourhood shift.
+- **Known changes**, each measurable (at least 150 occurrences in both cells):
+  - *attention* in AI, 2010s → 2020s (379 and 1,121 occurrences): the attention mechanism of
+    neural networks (Bahdanau et al. 2014; Vaswani et al. 2017);
+  - *platform* in communication, 2000s → 2010s (173 and 822): digital and social-media
+    platforms (Gillespie 2010);
+  - *network* in AI, 1980s → 1990s (2,119 and 3,924): the revival of neural networks after
+    backpropagation (Rumelhart, Hinton and Williams 1986);
+  - *alignment* in AI, 2010s → 2020s (201 and 533): aligning language models with human
+    intent (Ouyang et al. 2022), a weaker case because the 2020s also use cross-modal
+    alignment.
+- **Quiet transitions**, where no change is documented: *attention* in AI 1990s → 2000s, and
+  *attention* in psychology 2010s → 2020s.
+- **Cross-field.** *attention*'s cross-field cosine rank between AI and each of psychology,
+  cognitive psychology and neuroscience, in the 1990s and the 2020s.
+- Already seen: which words and transitions are measurable and their counts; round C and C′'s
+  readings of *attention*'s senses (the mechanism holds about 55% of AI's 2020s occurrences);
+  P2's unlemmatised result for *network* (AI 1980s → 1990s cosine rank 84, neighbour rank 90,
+  not a candidate). Not inspected: any lemmatised drift rank for these words, in either seed.
+
+### Predictions
+
+**E1 — *attention* in AI, 2010s → 2020s, is a candidate in both seeds.** *Falsified* if not a
+candidate in either.
+
+**E2 — *platform* in communication, 2000s → 2010s, is a candidate in both seeds.** *Falsified*
+if not a candidate in either.
+
+**E3 — *network* in AI, 1980s → 1990s, is a candidate in both seeds** (P2 retested on the
+lemmatised grid). *Falsified* if not a candidate in either.
+
+**E4 — *alignment* in AI, 2010s → 2020s, is a candidate in both seeds.** *Falsified* if not a
+candidate in either.
+
+**E5 — The grid stays quiet where nothing documented changed.** *attention* in AI 1990s →
+2000s and in psychology 2010s → 2020s is not a candidate, in either seed. *Falsified* if either
+is a candidate in either seed.
+
+**E6 — Across fields, the new sense shows.** In both seeds, *attention*'s cross-field cosine
+rank between AI and each of psychology, cognitive psychology and neuroscience is higher in the
+2020s than in the 1990s, and at least 90 in the 2020s. *Falsified* if any of the three pairs
+fails either condition in either seed.
+
+Reading rule:
+
+- **At least two of E1–E3 pass, and E5 passes:** the grid finds documented changes and does not
+  flag quiet ones. The robust findings stand with a calibrated instrument, and a pre-registered
+  survey of field-specific meanings on the grid may be designed.
+- **Fewer than two of E1–E3 pass:** the grid misses documented changes. Its candidates remain
+  evidence (the controls stay quiet), but its nulls are not evidence of stability: the README
+  qualifies *intentionality*'s stability accordingly, and no survey is built on the grid.
+- **E5 fails:** the grid flags transitions where nothing documented happened, and its
+  candidates are read with that rate in mind; the README says so.
+- E4 is the weak case and does not count towards the rule. E6 decides whether cross-field
+  ranks (the measure behind P8, P9, R6, T6 and L6) can register a new sense; it does not affect
+  the within-field reading.
+- Whatever the outcome, no round follows to repair the grid.
+
+Scored by `scripts/score_grid_calibration.py`, committed before it is run.
