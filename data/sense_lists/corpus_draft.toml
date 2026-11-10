@@ -187,7 +187,7 @@ cues = [">property", ">properties", ">value", ">values", ">number", ">high", ">l
 key = "experiencing_or_causing"
 definition = "Experiencing, undergoing or causing something, as in having difficulty or having something done"
 example = "Students reported having trouble with the final task."
-cues = [">difficulty", ">difficulties", ">trouble", ">problems", ">fun", ">experience", ">experienced"]
+cues = [">difficulty", ">difficulties", ">trouble", ">problems", ">fun"]
 
 [[having.senses]]
 key = "obligation"
