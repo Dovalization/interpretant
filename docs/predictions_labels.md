@@ -416,3 +416,63 @@ Opus merged such groups at first, and the revision then split 14 words up to eig
 Whether the hand-written lists win because their writer knew the answers or because they draw the
 lines a reader draws, this round cannot say, as round Z could not; it does show that neither the
 substitute evidence nor a language model consolidating it recovers those lines.
+
+## Round E: a classifier on XL-LEXEME, trained from cue words, no generative model (committed 2026-11-10, before any classifier was trained or any usage labelled by it)
+
+Round Q showed that lists built from the texts rank DWUG's changes far worse than hand-written
+lists, whoever labels. The author chose the next design: humans draw the lines (on this corpus,
+lists drafted by Claude and approved by the author), and a classic NLP model does the labelling,
+with no generative model in the pipeline and no labelling by the author. Round E tests that
+labeller on DWUG, with round Y's hand-written lists standing in for approved ones, on round Q's
+halves, so it compares directly with Sonnet and JEV on the same usages.
+
+### Method (fixed before any classifier is trained)
+
+- **Lists.** Round Y's (`data/sense_lists/dwug_en.toml`), 149 senses over 46 words.
+- **Cue words.** For every sense, words that signal it when they appear near the target
+  (`data/sense_lists/dwug_en_cues.toml`, committed before this file), written from general
+  knowledge before any DWUG usage was read for them; round Q's step A evidence for *plane* and
+  *attack*, with three half-A usages per substitute group, had been seen.
+- **Seeds, from half A only.** A half-A usage is a seed for a sense when a cue of that sense, and
+  of no other sense of the word, appears among the five words on either side of the target
+  (lowercased words, the target itself left out). Each sense's invented example from the list is
+  also a seed, the target found as the first word starting with the lemma; so every sense has at
+  least one.
+- **Classifier.** XL-LEXEME (round U's configuration) encodes every seed and every half-B usage.
+  For each word, a logistic regression (scikit-learn, C = 1, balanced class weights, 1,000
+  iterations) is trained on the length-normalised vectors of its seeds and gives every half-B usage
+  one listed sense; it never says *other* or *unclear*.
+- **Measures, on half B.** As round Q: the divergence's Spearman with DWUG's graded change, the
+  partial Spearman controlling for the mean shuffled divergence, the adjusted Rand index.
+- **Reference figures on the same half B,** with round Y's lists: Sonnet 0.693, JEV 0.800 (round
+  Q's Q2); DWUG's clusters 0.966 (partial 0.849).
+- Already seen: rounds Y, Z and Q in full, including the reference figures above. Not computed:
+  any seed count, any classifier, any label.
+
+### Predictions
+
+**E1 — The classifier ranks the benchmark's changes.** Spearman on half B at least 0.70.
+*Falsified* below.
+
+**E2 — It does about as well as a language model labeller.** Spearman on half B at least Sonnet's
+0.693 minus 0.10, that is 0.593. *Falsified* below.
+
+**E3 — It tracks change beyond variety.** Partial Spearman at least 0.40. *Falsified* below.
+
+**E4 — Agreement with the language models.** The share of half-B usages on which the classifier
+gives the same label as Sonnet and as JEV did with the same lists in round Y, counting their
+*other* and *unclear* as disagreement. Descriptive.
+
+**E5 — Seeds.** The number of cue seeds per sense, and the share of senses with at least three.
+Descriptive.
+
+**E6 — Examples alone.** The same classifier trained on the list's invented examples only (one per
+sense): its Spearman on half B. Descriptive: how much the cue seeds add to the definitions.
+
+Reading rule: the classifier passes rung 1 if E3 passes and E1 or E2 does (as good as the bar, or
+within 0.10 of a language model labeller on the same usages). It then goes to rung 2 on this
+corpus with lists and cue words drafted by Claude and approved by the author, and Sonnet and JEV
+as comparison points. If it fails, a language model labeller is the fallback, and the gap is
+reported as the cost of leaving generative models out.
+
+Scored by `scripts/score_labels_classifier.py`, committed before it is run.
