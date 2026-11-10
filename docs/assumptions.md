@@ -207,3 +207,42 @@ the author's choices for open questions, not for calibration.
 3. **A4, finer time windows** around documented dates, after A5 has located the change.
 
 The rest are scope statements to add to the README, or practices for future rounds (A8, A9).
+
+## Diagnostic plan: the instrument or the data?
+
+Broad first, then narrower. Each test is committed with the outcome that crosses each
+possibility out before it is run.
+
+**Level 0: which side?** Two instruments, two kinds of data:
+
+| | Known-good data (human benchmark) | This corpus |
+|---|---|---|
+| Usage-pair pipeline (XL-LEXEME) | Round U: reproduces 0.864 against 0.886 | Round X |
+| Embedding grid (TWEC) | Not tested: SemEval-2020 English is the benchmark for this kind of instrument | Round 5: 1 of 4 found |
+
+Round U crossed out a broken pipeline. If round X passes, the pipeline also works on this corpus
+and the earlier failures belong to the earlier instruments. If it fails, the same pipeline that
+works on a benchmark fails here, and suspicion moves to the data side. The grid on SemEval-2020
+settles the grid's half independently: weak there too means the grid is weak; strong there means
+this corpus is the problem for it as well.
+
+**Level 1: is the change missing, or invisible?**
+
+- **1a. Manipulation check (A5).** Is each known change present in the cells the instrument
+  reads? Marker counts and a blind reading of sampled usages, per cell. If a change is absent,
+  the known answer or the cell (A1, A4) is at fault, not the instrument.
+- **1b. Planted change on real abstracts.** Replace a known share of a word's usages in one cell
+  with usages of another sense, and measure detection against the same cell unplanted. Planted
+  found but real missed points to the cells' structure (A1, A2, A4); planted missed points to the
+  instrument on this genre (A6, A7).
+
+**Level 2: narrow whichever side is left.**
+
+- Data side: one known answer and *embodiment* on venue-defined cells; composition shift
+  measured per cell; finer time windows around documented dates. One assumption removed at a
+  time.
+- Instrument side: about 100 usage pairs from this corpus judged by the author as same or
+  different meaning, to see whether XL-LEXEME reads abstract sentences correctly.
+
+**Order.** Round X first (level 0). Then 1a and the grid on SemEval-2020, whatever round X shows.
+Then 1b or level 2, depending on what is left.
