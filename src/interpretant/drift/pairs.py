@@ -116,6 +116,21 @@ def average_pairwise_distance(first: np.ndarray, second: np.ndarray) -> float:
     return float(1 - (first @ second.T).mean())
 
 
+def within_pairwise_distance(vectors: np.ndarray) -> float:
+    """The mean cosine distance over every pair of distinct vectors in one set."""
+    unit = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
+    similarities = unit @ unit.T
+    count = len(unit)
+    return float(1 - (similarities.sum() - np.trace(similarities)) / (count * (count - 1)))
+
+
+def across_minus_within(first: np.ndarray, second: np.ndarray) -> float:
+    """APD between the two sets minus the mean of their within-set APDs: distance that the
+    sets' own variety of usages does not explain."""
+    within = (within_pairwise_distance(first) + within_pairwise_distance(second)) / 2
+    return average_pairwise_distance(first, second) - within
+
+
 def prototype_distance(first: np.ndarray, second: np.ndarray) -> float:
     """The cosine distance between the mean vectors of ``first`` and ``second``."""
     a, b = first.mean(axis=0), second.mean(axis=0)

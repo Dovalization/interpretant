@@ -10,12 +10,14 @@ import pytest
 
 from interpretant.drift.pairs import (
     Usage,
+    across_minus_within,
     average_pairwise_distance,
     centred,
     dwug_graded_change,
     dwug_usages,
     marked_tokens,
     prototype_distance,
+    within_pairwise_distance,
 )
 
 
@@ -88,3 +90,24 @@ def test_dwug_readers_take_usages_by_period_and_the_graded_change(tmp_path: Path
         2: ["fox"],
     }
     assert dwug_graded_change(tmp_path) == {"fox_nn": 0.25}
+
+
+def test_within_distance_ignores_each_vector_paired_with_itself() -> None:
+    vectors = np.array([[1.0, 0.0], [0.0, 1.0]])
+
+    assert within_pairwise_distance(vectors) == pytest.approx(1.0)
+
+
+def test_across_minus_within_separates_variety_from_change() -> None:
+    rng = np.random.default_rng(1)
+
+    def sample(share_of_second_sense: float) -> np.ndarray:
+        senses = np.where(rng.random(400) < share_of_second_sense, 1, 0)
+        return np.eye(2)[senses] + rng.normal(0, 0.05, (400, 2))
+
+    varied_early, varied_late = sample(0.5), sample(0.5)
+    stable_early, moved_late = sample(0.0), sample(1.0)
+
+    assert average_pairwise_distance(varied_early, varied_late) == pytest.approx(0.5, abs=0.05)
+    assert across_minus_within(varied_early, varied_late) == pytest.approx(0.0, abs=0.02)
+    assert across_minus_within(stable_early, moved_late) == pytest.approx(1.0, abs=0.02)
