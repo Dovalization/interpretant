@@ -1,0 +1,34 @@
+# Round C control words: 30 drawn at random (seed 2026) from the words in at least
+# 100 abstracts in each of AI's and psychology's 1990s and 2020s cells
+# (570 words; scripts/select_sense_controls.py).
+# word  abstracts in ai_1990 ai_2020 psychology_1990 psychology_2020
+abstract  # 575 639 449 769
+activity  # 125 160 290 492
+comparison  # 296 354 285 222
+component  # 271 235 181 197
+conducted  # 134 567 493 1544
+control  # 1138 601 735 939
+critical  # 178 832 273 542
+defined  # 434 232 274 228
+description  # 354 102 154 120
+generally  # 180 176 270 193
+having  # 177 132 320 359
+important  # 745 837 736 1046
+increasing  # 165 453 243 471
+life  # 101 274 705 1242
+methodology  # 330 388 129 372
+necessary  # 374 285 233 304
+paper  # 3948 3471 1016 810
+people  # 125 372 672 1115
+planning  # 438 235 143 208
+principles  # 200 272 184 220
+quality  # 305 911 388 836
+report  # 233 163 511 458
+scale  # 242 759 646 1210
+series  # 276 249 248 142
+successful  # 175 150 253 237
+techniques  # 1075 1291 282 416
+theoretical  # 349 405 456 521
+theory  # 823 355 822 669
+weight  # 241 186 131 136
+years  # 282 428 998 1452
