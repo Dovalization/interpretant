@@ -29,7 +29,7 @@ cues = ["self", "multi", "head", "heads", "mechanism", "mechanisms", "layer", "l
 key = "computational_selection"
 definition = "In AI systems other than neural attention mechanisms: a system selecting what to process, as in feature selection, focus-of-attention in robots and agents, or saliency models in computer vision"
 example = "The robot uses a saliency map to direct its attention to moving objects."
-cues = ["saliency", "salient", "robot", "robots", "robotic", "agent", "agents", "computational", "selection", "foveation", "gaze"]
+cues = ["saliency", "salient", "robot", "robots", "robotic", "computational", "foveation", "visual-attention"]
 
 [prompt]
 word = "prompt"
