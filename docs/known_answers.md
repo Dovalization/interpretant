@@ -108,6 +108,8 @@ with a documented date and field, and two transitions where nothing documented h
 | *attention* in AI, 1990s → 2000s (nothing documented) | 17, 41; 47, 69 | no |
 | *attention* in psychology, 2010s → 2020s (nothing documented) | 17, 42; 27, 42 | no |
 
+![The grid's ranks for four documented changes and two quiet transitions, against its candidate rule](../figures/known_answers_grid.png)
+
 The grid flagged one documented change in four, and that one was the case judged weakest
 before the run, because the 2020s also use *alignment* for cross-modal alignment. It flagged
 neither quiet transition. Across fields, *attention*'s rank between AI and psychology, cognitive
@@ -178,6 +180,8 @@ exposed something a change in the measure could mean other than the change it wa
   read its probabilities instead of its labels. HCI's movement came out towards the behavioural
   and social sciences, and strongly (−0.867 towards computing, sd 0.139), in agreement with the
   language models (+0.343 towards the behavioural and social sciences, sd 0.035).
+
+![Round N's and round W's readings of the same 1990s classifier, side by side](../figures/two_readings.png)
 
 Synthetic calibration helped and did not settle it. Round W's predictions were guarded by a
 planted check: replace 10% of HCI's abstracts with another field's and see whether each
