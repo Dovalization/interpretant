@@ -1,3 +1,4 @@
+import { HorizontalScroll } from "@/components/horizontal-scroll";
 import { decadeLabel, fieldLabel } from "@/lib/fields";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +28,7 @@ export function CorpusGrid({ cells, fields, decades }: CorpusGridProps) {
   const max = Math.max(...cells.map((cell) => cell.documents ?? 0), 1);
 
   return (
-    <div className="overflow-x-auto">
+    <HorizontalScroll>
       <table className="w-full border-separate border-spacing-0.5 text-sm">
         <thead>
           <tr>
@@ -82,6 +83,6 @@ export function CorpusGrid({ cells, fields, decades }: CorpusGridProps) {
           ))}
         </tbody>
       </table>
-    </div>
+    </HorizontalScroll>
   );
 }

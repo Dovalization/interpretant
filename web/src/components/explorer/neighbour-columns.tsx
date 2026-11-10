@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { HorizontalScroll } from "@/components/horizontal-scroll";
 import { decadeLabel, fieldColor, fieldLabel } from "@/lib/fields";
 import { cn } from "@/lib/utils";
 
@@ -43,7 +44,7 @@ export function NeighbourColumns({ columns, shared, k }: NeighbourColumnsProps) 
           <h3 className="mb-2 text-base font-bold" style={{ color: fieldColor(group.field) }}>
             {fieldLabel(group.field)}
           </h3>
-          <div className="flex gap-6 overflow-x-auto pb-2">
+          <HorizontalScroll className="flex gap-6 pb-2">
             {group.columns.map((column) => (
               <div key={column.decade} className="w-32 shrink-0">
                 <div
@@ -78,7 +79,7 @@ export function NeighbourColumns({ columns, shared, k }: NeighbourColumnsProps) 
                 </ol>
               </div>
             ))}
-          </div>
+          </HorizontalScroll>
         </section>
       ))}
     </div>

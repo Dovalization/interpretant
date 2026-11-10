@@ -35,12 +35,14 @@ export function VerdictBadge({ verdict, note }: { verdict?: Verdict; note?: stri
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold capitalize",
+        "inline-flex flex-wrap items-center justify-end gap-x-1 rounded-md px-2 py-0.5 text-xs font-semibold capitalize",
         VERDICT_STYLE[verdict],
       )}
     >
       {verdict}
-      {note && <span className="font-normal normal-case opacity-80">({note})</span>}
+      {note && (
+        <span className="font-normal whitespace-nowrap normal-case opacity-80">({note})</span>
+      )}
     </span>
   );
 }

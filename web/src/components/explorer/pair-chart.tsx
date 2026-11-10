@@ -59,7 +59,7 @@ export function PairChart({ a, b, points }: PairChartProps) {
           axisLine={false}
           width={44}
           domain={["auto", "auto"]}
-          tickFormatter={(value: number) => value.toFixed(1)}
+          tickFormatter={(value: number) => value.toFixed(2)}
         />
         <Tooltip content={<ChartTooltipContent />} cursor={{ stroke: "var(--color-border)" }} />
         <ChartLegend content={<ChartLegendContent />} />

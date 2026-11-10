@@ -1,6 +1,7 @@
 "use client";
 
-import { fieldLabel } from "@/lib/fields";
+import { HorizontalScroll } from "@/components/horizontal-scroll";
+import { fieldLabel, fieldShortLabel } from "@/lib/fields";
 import { perplexityMean } from "@/lib/perplexity";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +32,7 @@ const RAMP = [
 export function PerplexityMatrix({ matrix, selected, onSelect }: PerplexityMatrixProps) {
   const { fields, cell, max } = matrix;
   return (
-    <div className="overflow-x-auto">
+    <HorizontalScroll>
       <table className="border-separate border-spacing-0.5 text-xs">
         <thead>
           <tr>
@@ -45,10 +46,10 @@ export function PerplexityMatrix({ matrix, selected, onSelect }: PerplexityMatri
               <th
                 key={field}
                 scope="col"
-                className="h-24 align-bottom font-semibold text-muted-foreground"
+                className="h-28 align-bottom font-semibold text-muted-foreground"
               >
                 <span className="inline-block w-9 origin-bottom-left -rotate-45 whitespace-nowrap">
-                  {fieldLabel(field)}
+                  {fieldShortLabel(field)}
                 </span>
               </th>
             ))}
@@ -95,6 +96,6 @@ export function PerplexityMatrix({ matrix, selected, onSelect }: PerplexityMatri
           ))}
         </tbody>
       </table>
-    </div>
+    </HorizontalScroll>
   );
 }

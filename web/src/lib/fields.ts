@@ -32,6 +32,11 @@ const FIELD_SLOTS: Record<string, number> = {
 
 export const fieldLabel = (field: string): string => FIELD_LABELS[field] ?? field;
 
+const SHORT_LABELS: Record<string, string> = { histphilsci: "Hist. & phil. of science" };
+
+/** A label short enough for rotated matrix headers and narrow bar labels. */
+export const fieldShortLabel = (field: string): string => SHORT_LABELS[field] ?? fieldLabel(field);
+
 /**
  * CSS colour for a field: a chart slot, or the muted foreground for unslotted fields. The
  * raw `--chart-N` tokens are used (not Tailwind's `--color-chart-N`), because Tailwind 4 only

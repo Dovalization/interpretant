@@ -1,6 +1,6 @@
 "use client";
 
-import { fieldLabel } from "@/lib/fields";
+import { fieldLabel, fieldShortLabel } from "@/lib/fields";
 import { cn } from "@/lib/utils";
 
 import type { FallRow } from "@/lib/schema";
@@ -49,8 +49,11 @@ export function FallBars({ rows, highlight }: FallBarsProps) {
               highlight === row.model && "font-semibold",
             )}
           >
-            <span className="truncate text-right text-muted-foreground">
-              {fieldLabel(row.model)}
+            <span
+              className="truncate text-right text-muted-foreground"
+              title={fieldLabel(row.model)}
+            >
+              {fieldShortLabel(row.model)}
             </span>
             <div className="relative h-7">
               <div className="absolute inset-y-0 left-1/2 w-px bg-border" />

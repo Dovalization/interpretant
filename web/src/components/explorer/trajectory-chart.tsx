@@ -27,8 +27,8 @@ export function TrajectoryChart({ field, rows }: TrajectoryChartProps) {
     counts: `${row.countA.toLocaleString("en-US")} → ${row.countB.toLocaleString("en-US")}`,
   }));
   const config = {
-    cosineRank: { label: "cosine drift rank", color },
-    shiftRank: { label: "neighbourhood shift rank", color },
+    cosineRank: { label: "cosine drift", color },
+    shiftRank: { label: "neighbour shift", color },
   };
 
   if (rows.length === 0) {
@@ -50,7 +50,11 @@ export function TrajectoryChart({ field, rows }: TrajectoryChartProps) {
           <XAxis dataKey="transition" tickLine={false} axisLine={false} fontSize={11} />
           <YAxis domain={[0, 100]} ticks={[0, 50, 95]} tickLine={false} axisLine={false} />
           <ReferenceLine y={95} stroke="var(--color-muted-foreground)" strokeDasharray="4 4" />
-          <Tooltip content={<ChartTooltipContent />} cursor={{ stroke: "var(--color-border)" }} />
+          <Tooltip
+            content={<ChartTooltipContent />}
+            cursor={{ stroke: "var(--color-border)" }}
+            offset={24}
+          />
           <Line
             type="linear"
             dataKey="cosineRank"

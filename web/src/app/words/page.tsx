@@ -33,7 +33,9 @@ export default function WordsPage() {
       </div>
       {tiers.map((tier) => (
         <section key={tier}>
-          <h2 className="mb-1 font-heading text-3xl font-semibold capitalize">{tier}</h2>
+          <h2 className="mb-1 font-heading text-3xl font-semibold first-letter:uppercase">
+            {tier}
+          </h2>
           <p className="mb-5 text-muted-foreground">{TIER_NOTES[tier]}</p>
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {words
@@ -46,7 +48,7 @@ export default function WordsPage() {
                   >
                     <span className="font-semibold">{word.word.replaceAll("_", " ")}</span>
                     <span className="text-sm text-muted-foreground tabular-nums">
-                      {word.measurableCells} cells
+                      {word.measurableCells} {word.measurableCells === 1 ? "cell" : "cells"}
                     </span>
                   </Link>
                 </li>

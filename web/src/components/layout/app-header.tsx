@@ -30,7 +30,11 @@ export function AppHeader() {
   const scrolled = useScrolled();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-(--header-height)">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 h-(--header-height) border-b bg-background/85 backdrop-blur-md transition-colors ${
+        scrolled ? "border-border" : "border-transparent"
+      }`}
+    >
       <div className="container mx-auto flex h-full items-center gap-3 px-4 sm:px-8">
         <button
           onClick={toggle}

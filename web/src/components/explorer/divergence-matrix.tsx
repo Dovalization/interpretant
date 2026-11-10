@@ -1,6 +1,7 @@
 "use client";
 
-import { fieldLabel } from "@/lib/fields";
+import { HorizontalScroll } from "@/components/horizontal-scroll";
+import { fieldLabel, fieldShortLabel } from "@/lib/fields";
 import { cn } from "@/lib/utils";
 
 import type { DivergenceMatrix as Matrix } from "@/lib/explorer";
@@ -35,7 +36,7 @@ export function DivergenceMatrix({ matrix, highlight }: DivergenceMatrixProps) {
     );
   }
   return (
-    <div className="overflow-x-auto">
+    <HorizontalScroll>
       <table className="border-separate border-spacing-0.5 text-xs">
         <thead>
           <tr>
@@ -46,10 +47,10 @@ export function DivergenceMatrix({ matrix, highlight }: DivergenceMatrixProps) {
               <th
                 key={field}
                 scope="col"
-                className="h-24 align-bottom font-semibold text-muted-foreground"
+                className="h-28 align-bottom font-semibold text-muted-foreground"
               >
                 <span className="inline-block w-8 origin-bottom-left -rotate-45 whitespace-nowrap">
-                  {fieldLabel(field)}
+                  {fieldShortLabel(field)}
                 </span>
               </th>
             ))}
@@ -94,6 +95,6 @@ export function DivergenceMatrix({ matrix, highlight }: DivergenceMatrixProps) {
           ))}
         </tbody>
       </table>
-    </div>
+    </HorizontalScroll>
   );
 }
