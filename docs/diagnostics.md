@@ -213,3 +213,27 @@ similarity still spreads from about 0.45 to 0.97: it responds to the context aro
 as to its meaning, the confound Kutuzov et al. (2022) describe. Part of the disagreement is sense
 granularity: the author judged telephone, computer and neural networks as one meaning of *network*
 in several pairs, where XL-LEXEME separates them.
+
+## Check 2b′: a second, independent judge (committed 2026-11-10, before the second judge saw any pair)
+
+Check 2b compared XL-LEXEME with one judge, so its agreement mixes the model's errors with the
+judge's mistakes and sense boundaries. A second judge on the same pairs gives the agreement
+between judges, the ceiling for any instrument, and makes XL-LEXEME's agreement with each judge
+interpretable. No person was available; the second judge is a fresh instance of Claude (a
+subagent with none of this project's conversation), as Periti and Tahmasebi (2024) used GPT-4.
+It is another instrument, not gold, and is reported as such.
+
+### Method
+
+- **Input.** The same 100 items, with the contexts trimmed exactly as the author saw them (30
+  words either side of the marked word), and `docs/gold_guidelines.md` verbatim, in a file outside
+  the repository. The second judge is given nothing else: not the author's judgements, not
+  XL-LEXEME's scores, not the key.
+- **Output.** One DURel judgement per item (4, 3, 2, 1, or 0 for cannot decide).
+- **Reported, not predicted:** Spearman between the two judges over the 96 distinct pairs (pairs
+  either judge marked 0 left out); the share of pairs on which they agree exactly and within one
+  point; XL-LEXEME's Spearman with the second judge and with the mean of the two; the second
+  judge's consistency on the four repeated pairs.
+
+Nothing here changes check 2b's verdict. Scored by `scripts/gold_pairs.py` (the `second` step),
+committed before the second judge runs.

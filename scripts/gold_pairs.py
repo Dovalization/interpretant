@@ -191,5 +191,45 @@ def score() -> None:
     )
 
 
+def second() -> None:
+    """Check 2b′: agreement between the author and a second judge, and XL-LEXEME with each."""
+    author = judgements()
+    with (OUT / "gold_pairs_second_judge.tsv").open(encoding="utf-8") as table:
+        other = {
+            row["item"]: int(row["judgement"]) for row in csv.DictReader(table, delimiter="\t")
+        }
+    with (OUT / "gold_pairs_key.tsv").open(encoding="utf-8") as table:
+        key = list(csv.DictReader(table, delimiter="\t"))
+    stored = np.load(CACHE)
+    a = stored["a"] / np.linalg.norm(stored["a"], axis=1, keepdims=True)
+    b = stored["b"] / np.linalg.norm(stored["b"], axis=1, keepdims=True)
+    similarity = {row["item"]: float(a[i] @ b[i]) for i, row in enumerate(key)}
+    rows = [r for r in key if not r["repeat_of"] and author[r["item"]] > 0 and other[r["item"]] > 0]
+    items = [r["item"] for r in rows]
+
+    def rho(first: list[float], second_values: list[float]) -> float:
+        return float(spearmanr(first, second_values).statistic)
+
+    between = rho([author[i] for i in items], [other[i] for i in items])
+    exact = statistics.mean(author[i] == other[i] for i in items)
+    within_one = statistics.mean(abs(author[i] - other[i]) <= 1 for i in items)
+    mean_judge = [(author[i] + other[i]) / 2 for i in items]
+    scores = [similarity[i] for i in items]
+    repeats = [(r["item"], r["repeat_of"]) for r in key if r["repeat_of"]]
+    print(f"{len(items)} distinct pairs judged by both")
+    print(
+        f"between judges: Spearman {between:.3f}, exact {exact:.0%}, within one point {within_one:.0%}"
+    )
+    print(
+        f"XL-LEXEME with the author {rho(scores, [author[i] for i in items]):.3f}, "
+        f"with the second judge {rho(scores, [other[i] for i in items]):.3f}, "
+        f"with their mean {rho(scores, mean_judge):.3f}"
+    )
+    print(
+        f"second judge's consistency on repeated pairs: "
+        f"{[abs(other[i] - other[o]) for i, o in repeats]}"
+    )
+
+
 if __name__ == "__main__":
-    {"sample": sample, "score": score}[sys.argv[1]]()
+    {"sample": sample, "score": score, "second": second}[sys.argv[1]]()
