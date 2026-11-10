@@ -883,3 +883,47 @@ field, the gain in the share of its abstracts the 1990s classifier sends to each
 The pair that converged, by a classifier's account, is HCI and psychology, from both sides; what
 round J saw as HCI leaving computing for the behavioural sciences is, here, HCI and psychology
 meeting, with HCI travelling further.
+
+## Round M: does every cell's model generalise? (committed 2026-11-09, before any held-out score exists)
+
+A cell built from a few hundred abstracts can yield a model that has memorised its text: its
+neighbour lists and its scores then describe those abstracts, not the field. The drift and
+perplexity rounds guard against small cells with occurrence thresholds, noise floors and fixed
+training budgets, but no round has measured, cell by cell, how well a model trained on a cell
+predicts text from that cell it never saw. Round M does, and asks whether any robust finding
+rests on a cell that fails.
+
+### Method (fixed before any score is computed)
+
+- **Cells.** Every cell of the lemmatised, phrased corpus: books, the main OpenAlex grid and
+  the full cells (`data/phrased/<layer>/texts/<cell>.txt`).
+- **Split.** A cell's stored documents (one per line) are shuffled with a fixed seed; 10% are
+  held out (at least one), the rest are the training part, capped at 5,000,000 tokens (taken
+  in shuffled order). Seeds 1–3; "mean" is the mean over them.
+- **Model and measure.** A Kneser-Ney bigram model (`KneserNeyBigram`, vocabulary = training
+  words with at least 5 occurrences) is fitted on the training part. Its *gap* is the
+  cross-entropy of the held-out documents minus the cross-entropy of a random sample of the
+  training documents of the same number of documents, in bits per token. A model that
+  generalises has a small gap; one that memorised a small cell has a large one.
+- **Flag.** A cell is *flagged* when its mean gap exceeds 1.5 times the median mean gap of the
+  main-grid cells of the 2000s, 2010s and 2020s (33 cells of about 10,000 abstracts, the
+  reference size).
+
+### Predictions
+
+**M0 — Size drives the gap.** Over all cells, the Spearman correlation between a cell's
+training tokens and its mean gap is −0.8 or stronger. *Falsified* if weaker than −0.8.
+
+**M1 — The check has teeth.** HCI's main-grid cells of the 1950s, 1960s and 1970s (18, 152 and
+459 abstracts) and AI's of the 1950s (234) are all flagged. *Falsified* if any is not.
+
+**M2 — No robust finding rests on a flagged cell.** None of these cells is flagged: philosophy's
+full cells of the 1980s–2020s and HCI's of the 2000s–2020s (*embodiment*, *intentionality*,
+*consciousness*); AI's main-grid cells of the 1980s, 2000s, 2010s and 2020s (*representation*);
+and every main-grid cell of the 1980s, 1990s, 2010s and 2020s (the HCI rounds and the
+convergence of fields). *Falsified* if any is flagged.
+
+Reading rule: M0 and M1 passing mean the measure sees what it should; M2 passing means the
+README's robust findings rest on cells that generalise. A flagged cell under M2 names a finding
+whose evidence needs a second look, and every flagged cell is a cell whose neighbour lists the
+explorer should mark. Scored by `scripts/score_heldout.py`, committed before it is run.
