@@ -1129,14 +1129,17 @@ def drift_senses(  # noqa: PLR0913
     from interpretant.drift.senses import (  # noqa: PLC0415
         TransformerEncoder,
         cased_abstracts,
+        drop_shared,
         sense_runs,
     )
 
-    abstracts = {
-        (field, decade): cased_abstracts(raw_dir, field, decade)
-        for field in fields
-        for decade in decades
-    }
+    abstracts = drop_shared(
+        {
+            (field, decade): cased_abstracts(raw_dir, field, decade)
+            for field in fields
+            for decade in decades
+        }
+    )
     encoder = TransformerEncoder(model_name)
     table = sense_runs(abstracts, words, seeds, encoder, cap, log=console.print)
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -8,7 +8,8 @@ every cell, and a cell's sense distribution is the share of its occurrences in e
 (Giulianelli et al. 2020). The number of senses is the k in ``SENSE_RANGE`` with the best
 silhouette.
 
-Occurrences come from the cased abstracts behind the cleaned cells: up to ``CAP`` abstracts per
+Occurrences come from the cased abstracts behind the cleaned cells, with abstracts found in
+more than one field's cell removed: up to ``CAP`` abstracts per
 cell that contain the word, one occurrence each, drawn per seed so the seed-noise rule of
 :func:`interpretant.drift.direction.present` applies.
 """
@@ -70,6 +71,21 @@ def cased_abstracts(raw_dir: Path, field: str, decade: int) -> list[tuple[str, s
         for record in records
         if record["id"] in kept
     ]
+
+
+def drop_shared(abstracts: Abstracts) -> dict[tuple[str, int], list[tuple[str, str]]]:
+    """Remove every abstract that appears in more than one field's cell of the same decade."""
+    cells: Counter[tuple[str, int]] = Counter(
+        (work_id, decade)
+        for (_, decade), documents in abstracts.items()
+        for work_id, _ in documents
+    )
+    return {
+        (field, decade): [
+            (work_id, text) for work_id, text in documents if cells[(work_id, decade)] == 1
+        ]
+        for (field, decade), documents in abstracts.items()
+    }
 
 
 def word_pattern(word: str) -> re.Pattern[str]:

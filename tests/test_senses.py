@@ -24,6 +24,7 @@ from interpretant.drift.senses import (
     context_around,
     context_words,
     distribution,
+    drop_shared,
     examples,
     induce_senses,
     jensen_shannon,
@@ -202,3 +203,19 @@ def test_cased_abstracts_keep_case_and_punctuation_and_drop_the_label(tmp_path: 
     found = cased_abstracts(tmp_path, "psychology", 1990)
 
     assert found == [("W1", text.removeprefix("Abstract: "))]
+
+
+def test_an_abstract_in_two_fields_of_one_decade_is_dropped_from_both() -> None:
+    abstracts = {
+        ("ai", 2020): [("W1", "a"), ("W2", "b")],
+        ("psychology", 2020): [("W2", "b"), ("W3", "c")],
+        ("psychology", 1990): [("W1", "a")],
+    }
+
+    kept = drop_shared(abstracts)
+
+    assert kept == {
+        ("ai", 2020): [("W1", "a")],
+        ("psychology", 2020): [("W3", "c")],
+        ("psychology", 1990): [("W1", "a")],
+    }
