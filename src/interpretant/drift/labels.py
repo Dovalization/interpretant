@@ -333,52 +333,62 @@ class BatchLabeller:
 
     def label(self, work: Sequence[tuple[SenseList, Item]], record: Path) -> dict[str, str]:
         """Labels by item key; ``record`` is a directory holding the run's batch and results."""
-        import time  # noqa: PLC0415
-
-        import anthropic  # noqa: PLC0415
-
         senses_of = {f"r{index}": senses for index, (senses, _) in enumerate(work)}
         key_of = {f"r{index}": item.key for index, (_, item) in enumerate(work)}
-        results_path = record / "results.jsonl"
-        if not results_path.exists():
-            client = anthropic.Anthropic(api_key=AnthropicSettings().anthropic_api_key)  # type: ignore[call-arg]
-            batch_path = record / "batch.json"
-            if batch_path.exists():
-                batch_id = json.loads(batch_path.read_text(encoding="utf-8"))["id"]
-            else:
-                requests = [
-                    {"custom_id": custom_id, "params": self.params(senses, item)}
-                    for custom_id, (senses, item) in zip(senses_of, work, strict=True)
-                ]
-                batch = client.messages.batches.create(requests=requests)  # type: ignore[arg-type]
-                batch_id = batch.id
-                record.mkdir(parents=True, exist_ok=True)
-                batch_path.write_text(
-                    json.dumps({"id": batch_id, "model": self.model, "keys": key_of}),
-                    encoding="utf-8",
-                )
-            while client.messages.batches.retrieve(batch_id).processing_status != "ended":
-                time.sleep(self.poll_seconds)
-            lines = []
-            for result in client.messages.batches.results(batch_id):
-                stored: dict[str, object] = {
-                    "custom_id": result.custom_id,
-                    "type": result.result.type,
-                }
-                if result.result.type == "succeeded":
-                    message = result.result.message
-                    stored["stop_reason"] = message.stop_reason
-                    stored["text"] = next((b.text for b in message.content if b.type == "text"), "")
-                    stored["input_tokens"] = message.usage.input_tokens
-                    stored["output_tokens"] = message.usage.output_tokens
-                    stored["model"] = message.model
-                lines.append(json.dumps(stored))
-            results_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-        stored_results = [
-            json.loads(line) for line in results_path.read_text(encoding="utf-8").splitlines()
+        requests: list[dict[str, object]] = [
+            {"custom_id": custom_id, "params": self.params(senses, item)}
+            for custom_id, (senses, item) in zip(senses_of, work, strict=True)
         ]
-        found = {r["custom_id"]: single_label(r, senses_of[r["custom_id"]]) for r in stored_results}
+        stored = run_batch(
+            requests, record, {"model": self.model, "keys": key_of}, self.poll_seconds
+        )
+        found = {r["custom_id"]: single_label(r, senses_of[str(r["custom_id"])]) for r in stored}
         return {key_of[custom_id]: found.get(custom_id, FAILED) for custom_id in key_of}
+
+
+def run_batch(
+    requests: Sequence[dict[str, object]],
+    record: Path,
+    meta: dict[str, object],
+    poll_seconds: float = 30.0,
+) -> list[dict[str, object]]:
+    """Send ``requests`` as one Message Batch and return every result as stored.
+
+    The batch's identifier and ``meta`` are stored in ``record`` before polling and every result
+    when the batch ends, so an interrupted run resumes and a finished one is never sent again.
+    A stored result has the request's ``custom_id``, its ``type`` and, when it succeeded, its
+    ``stop_reason``, ``text``, token counts and ``model``.
+    """
+    import time  # noqa: PLC0415
+
+    import anthropic  # noqa: PLC0415
+
+    results_path = record / "results.jsonl"
+    if not results_path.exists():
+        client = anthropic.Anthropic(api_key=AnthropicSettings().anthropic_api_key)  # type: ignore[call-arg]
+        batch_path = record / "batch.json"
+        if batch_path.exists():
+            batch_id = json.loads(batch_path.read_text(encoding="utf-8"))["id"]
+        else:
+            batch = client.messages.batches.create(requests=requests)  # type: ignore[arg-type]
+            batch_id = batch.id
+            record.mkdir(parents=True, exist_ok=True)
+            batch_path.write_text(json.dumps({"id": batch_id, **meta}), encoding="utf-8")
+        while client.messages.batches.retrieve(batch_id).processing_status != "ended":
+            time.sleep(poll_seconds)
+        lines = []
+        for result in client.messages.batches.results(batch_id):
+            stored: dict[str, object] = {"custom_id": result.custom_id, "type": result.result.type}
+            if result.result.type == "succeeded":
+                message = result.result.message
+                stored["stop_reason"] = message.stop_reason
+                stored["text"] = next((b.text for b in message.content if b.type == "text"), "")
+                stored["input_tokens"] = message.usage.input_tokens
+                stored["output_tokens"] = message.usage.output_tokens
+                stored["model"] = message.model
+            lines.append(json.dumps(stored))
+        results_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return [json.loads(line) for line in results_path.read_text(encoding="utf-8").splitlines()]
 
 
 JEV_YES, JEV_NO = 0.7, 0.3
