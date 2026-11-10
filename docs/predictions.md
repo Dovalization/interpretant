@@ -502,3 +502,68 @@ Not predicted, and not a reason to revise any verdict.
   fact, and both are untested: communication's 2000s cell (2000–2009) may already hold the
   digital-platform sense, and AI's 1980s cell (1980–1989) straddles the revival of neural
   networks in 1986. Decade cells can place a change inside a cell instead of between two.
+
+---
+
+## Round 6: the grid on a human benchmark (committed 2026-11-10, before any model was trained on the benchmark)
+
+Round 5 showed the grid missing documented changes, and check 1a (`docs/diagnostics.md`) showed
+those changes present in the cells it read. This round asks whether the grid's method is weak on
+clean data too, or only on this corpus: the level-0 test of the diagnostic plan
+(`docs/assumptions.md`). SemEval-2020 Task 1 English (Schlechtweg et al. 2020) is the standard
+benchmark for this kind of instrument: two lemmatised corpora of CCOHA, 1810–1860 (6.56 million
+tokens) and 1960–2010 (6.77 million), and 37 target words with a binary change label (16
+changed) and a graded change score from human annotation. Published English results: graded
+change, Spearman 0.436 for the best system, 0.30–0.42 for static-embedding systems such as SGNS
+with orthogonal Procrustes (0.422), 0.022 for the count baseline; binary change, accuracy 0.730
+for the best system, 0.568 for always predicting no change.
+
+### Method (fixed before any model is trained)
+
+- **Data.** The official English test data (`semeval2020_ulscd_eng.zip`, IMS Stuttgart, kept under
+  `data/external/`): the lemmatised corpora, `targets.txt`, `truth/binary.txt`, `truth/graded.txt`.
+- **Models.** The grid's TWEC configuration, unchanged: 100 dimensions, window 5, skip-gram, 10
+  epochs, 5 negative samples, compass vocabulary threshold 5; a compass trained on the same token
+  budget from each corpus, here 6,500,000 tokens each (the grid's principle at a size comparable
+  to its 23-million-token compass, where 200,000 per cell over two cells would give 400,000);
+  then one model per corpus with the compass's context vectors frozen. Seeds 42 and 43.
+- **Measures.** `compare_cells` and `add_noise_floor` as the grid uses them: cosine drift,
+  neighbourhood change (25 neighbours from words with at least 50 occurrences in both corpora),
+  their percentiles within frequency bands, and the candidate rule (top 5% on both).
+- **The grid as built** measures words with at least 150 occurrences in both corpora: 19 of the
+  37 targets. **The extended grid** lowers that floor to 85, so all 37 are measured (the rarest
+  target has 89 occurrences).
+- **Agreement** is Spearman's ρ between cosine drift and the graded score; **accuracy** treats
+  candidates as changed and the rest as stable.
+- Already seen: the published results above; the corpora's sizes; each target's occurrence
+  counts. Not computed: any model, vector or drift value on these corpora.
+
+### Predictions
+
+**B1 — The grid as built tracks graded change.** On its 19 measurable targets, cosine drift's
+agreement with the graded score is at least 0.25 in both seeds. *Falsified* if under 0.25 in
+either.
+
+**B2 — So does the extended grid, at published systems' level.** On all 37 targets, cosine
+drift's agreement is at least 0.25 in both seeds. *Falsified* if under 0.25 in either.
+
+**B3 — The grid is cautious on clean data too.** In the grid as built, at most 4 of the 19
+targets are candidates in each seed, and in each seed either none is flagged or at least 75% of
+the flagged ones are changed. *Falsified* if either fails in either seed.
+
+**B4 — The candidate rule beats always predicting no change.** On all 37 targets (extended
+grid), the candidate rule's accuracy is above 0.568 in both seeds. *Falsified* otherwise.
+
+Reading rule:
+
+- **B2 passes (ρ ≥ 0.25):** the grid's embedding method is comparable to published systems on
+  clean data. Its misses on this corpus, where check 1a found the changes present, come from the
+  cells or from the candidate threshold, not from the method.
+- **B2 gives ρ under 0.15 in either seed:** the method is weak even on clean data; the grid's
+  failures belong to the instrument.
+- **In between:** reported as ambiguous.
+- B3 says whether caution is the candidate rule's own property, visible on clean data. B1
+  against B2 says how much the 150-occurrence floor costs. B4 says whether the rule is useful as
+  a binary classifier at all.
+
+Scored by `scripts/score_grid_semeval.py`, committed before it is run.
