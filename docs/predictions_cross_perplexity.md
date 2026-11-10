@@ -782,3 +782,58 @@ round J's, and a claim that HCI moved "out of computing's register" should be st
 language models' finding, not as one both instruments confirm. A next round could test the
 technology-vocabulary reading directly by removing a fixed list of technology terms before
 classifying.
+
+## Round V: is the drift towards HCI technology vocabulary? (committed 2026-11-09, before any classifier ran without it)
+
+Round S's exploratory note found that, under a classifier trained on the 1990s, ten of the
+eleven fields' 2020s abstracts look more like 1990s HCI, and read that as technology vocabulary
+(the words that marked HCI in the 1990s) spreading into every field. Round V tests that reading
+by removing a fixed list of technology terms and repeating round S's classifiers. If the reading
+is right, the drift towards HCI disappears without those words, while HCI's own move towards the
+behavioural and social sciences, if it is more than technology words, survives.
+
+### Method (fixed before any classifier runs without the terms)
+
+- **Exactly round S's method and samples** (same seeds, same 2,000 abstracts per field), for the
+  1990s and the 2020s only, with one change: before any classifier sees them, every token that
+  is a listed term, or a phrase with a listed term as a component, is removed from every
+  abstract.
+- **The terms** are the 29 in `data/technology_terms.txt`, committed with these predictions:
+  technology, technological, digital, online, internet, web, website, computer, computing,
+  computational, software, hardware, device, mobile, smartphone, app, interface, user, algorithm,
+  algorithmic, automation, automated, robot, robotic, virtual, platform, machine, ai, artificial.
+  They name computing artefacts and the digital medium; general research words (*data, network,
+  model, system*) and other fields' core words (*media*) stay in.
+- Groups, shares and "mean" as in round S. A field's *drift towards HCI* is the share of its
+  2020s held-out abstracts that the 1990s classifier sends to HCI, minus the share of its 1990s
+  held-out abstracts it sends there.
+
+### Predictions
+
+**V0 — Still a working classifier.** Without the terms, every pair's mean accuracy is still at
+least 0.75 in both the 1990s and the 2020s. *Falsified* if any pair falls below 0.75.
+
+**V1 — Psychology and sociology stop drifting towards HCI.** Without the terms, the drift
+towards HCI is zero or negative in at least 4 of 5 seeds for psychology, and the same for
+sociology (round S's S4 parts two and three, which failed in every seed with the terms).
+*Falsified* if either field falls short.
+
+**V2 — The drift towards HCI shrinks across the board.** Without the terms, at most 5 of the 10
+non-HCI fields have a positive mean drift towards HCI (9 of 10 had one in round S, all but
+cognitive psychology). *Falsified* if 6 or more do.
+
+Correction to round S's exploratory note: it says the share sent to HCI "rises for ten of the
+eleven fields"; by its own table it rises for 9 of the 10 non-HCI fields (HCI's share of its own
+abstracts fell, and cognitive psychology's share fell).
+
+**V3 — HCI's move survives without the technology words.** Without the terms, the 1990s
+classifier sends a larger share of HCI's 2020s held-out abstracts than of its 1990s ones to the
+behavioural and social fields, in at least 4 of 5 seeds. *Falsified* otherwise.
+
+Reading rule: V1 and V2 passing mean round S's symmetric picture was technology vocabulary
+spreading into every field, and with V3 passing, HCI's move towards the behavioural and social
+sciences is real and one-sided once those words are set aside: round S's S4 would have passed.
+V1 or V2 failing means other fields really did come to write more like 1990s HCI, and the
+one-sidedness of round J belongs to the language models alone. V3 failing means HCI's move, as
+a classifier sees it, was technology vocabulary too. Scored by `scripts/score_technology_terms.py`,
+committed before it is run.

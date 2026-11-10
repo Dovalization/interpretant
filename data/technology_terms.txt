@@ -1,0 +1,34 @@
+# Technology terms removed before classifying in round V (docs/predictions_cross_perplexity.md).
+# Fixed before any classifier ran without them. A token is removed when it is one of these
+# words or a phrase with one of them as a component (user_interface, machine_learning).
+# Chosen as names of computing artefacts and of the digital medium; general research words
+# (data, network, model, system) and other fields' core words (media) are left in.
+technology
+technological
+digital
+online
+internet
+web
+website
+computer
+computing
+computational
+software
+hardware
+device
+mobile
+smartphone
+app
+interface
+user
+algorithm
+algorithmic
+automation
+automated
+robot
+robotic
+virtual
+platform
+machine
+ai
+artificial
