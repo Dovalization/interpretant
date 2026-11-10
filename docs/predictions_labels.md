@@ -178,3 +178,28 @@ and XL-LEXEME's 0.864), both are consistent, and Sonnet groups usages slightly b
 XL-LEXEME's clustering (0.287 against 0.273, below GPT-4's 0.340). Neither has been shown to
 measure variety, because the test meant to show it fails the gold standard itself (0.855). Both
 stopped on that test alone.
+
+### Round Z results for JEV (2026-11-10, `scripts/score_labels_wordnet.py`)
+
+Scored as written, before Sonnet's round Z labels were back. JEV labelled all 9,666 requests
+with none failed.
+
+| | Verdict | Numbers |
+|---|---|---|
+| Z1 | **Falsified** | Spearman 0.635 over 46 words (needed 0.70) |
+| Z2 | **Falsified** | round Z 0.635, round Y 0.821, difference −0.187 (at most 0.10) |
+| Z3 | **Passed** | 96.6% of 879 repeats labelled the same (needed 85%) |
+| Z4 | Descriptive | mean ARI 0.220 with WordNet lists, 0.267 with round Y's |
+
+By the reading rule, every citation of JEV's round Y result says that it depends on the sense
+lists.
+
+Exploratory, after scoring: with WordNet's lists JEV found no listed sense that fitted (*other*
+or *unclear*) for 19.2% of the earlier period's usages and 19.4% of the later's, against 8.3%
+and 8.8% with round Y's lists. The WordNet lists fit this corpus worse in both periods alike,
+not only its 19th-century usages. The drop is therefore consistent with two readings this round
+cannot separate: round Y's lists were better because their writer knew which words changed, or
+they were better because they were written for these words and WordNet's first four senses miss
+many of the uses (the cap, modern frequency order and single-sense words). Either way, the
+result depends on the list, which for this corpus is the reason the author's review of the lists
+matters.
