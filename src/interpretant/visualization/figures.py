@@ -1,4 +1,5 @@
-"""The figures in the README: neighbour panels, cross-perplexity by decade, the corpus grid.
+"""The figures in the README and the known-answers essay: neighbour panels, cross-perplexity
+by decade, the corpus grid, the grid against known answers and two readings side by side.
 
 Each function takes already-computed inputs (neighbour lists, a cross-perplexity table, cell
 counts) and returns a matplotlib figure, so the figures can be tested on synthetic data and
@@ -17,6 +18,7 @@ from gensim.models import KeyedVectors
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 
 from interpretant.drift.grid import cell_neighbours
 from interpretant.visualization.style import (
@@ -337,6 +339,133 @@ def fall_by_model(
         color=INK_SECONDARY,
         fontproperties=font("Regular", 9),
     )
+    if footnote:
+        add_footnote(figure, footnote)
+    return figure
+
+
+def known_answer_ranks(
+    ranks: pd.DataFrame,
+    title: str,
+    subtitle: str = "",
+    footnote: str = "",
+    threshold: float = 95.0,
+    label_offsets: dict[str, tuple[float, float, str]] | None = None,
+) -> Figure:
+    """Where documented changes and quiet transitions fall against the grid's candidate rule.
+
+    ``ranks`` has one row per case and seed: ``case`` (a label), ``documented`` (whether the
+    change is documented), ``cosine_rank`` and ``shift_rank`` (percentiles in the word's
+    frequency band). A case is flagged when both ranks reach ``threshold``, the shaded corner.
+    Each case's seeds are joined by a line and labelled at their mean, offset by
+    ``label_offsets[case]`` (points right, points up, alignment) where crowded.
+    """
+    offsets = label_offsets or {}
+    height = 6.8
+    figure = new_figure((8, height), title, subtitle)
+    axes = figure.add_axes((0.1, 0.16, 0.84, plot_top(height) - 0.16))
+    style_axes(axes, grid_axis="both")
+    axes.fill_between([threshold, 100], threshold, 100, color=SEQUENTIAL[1], zorder=1, linewidth=0)
+    colours = {True: SERIES[1], False: SERIES[0]}
+    for case, rows in ranks.groupby("case", sort=False):
+        colour = colours[bool(rows["documented"].iloc[0])]
+        axes.plot(rows["cosine_rank"], rows["shift_rank"], color=colour, linewidth=0.8, zorder=2)
+        axes.scatter(
+            rows["cosine_rank"], rows["shift_rank"], s=28, color=colour, zorder=3, linewidths=0
+        )
+        right, up, alignment = offsets.get(str(case), (6.0, -3.0, "left"))
+        axes.annotate(
+            str(case),
+            (rows["cosine_rank"].mean(), rows["shift_rank"].mean()),
+            xytext=(right, up),
+            textcoords="offset points",
+            color=INK,
+            fontproperties=font("Regular", 8.5),
+            ha=alignment,
+            va="center",
+        )
+    axes.set_xlim(0, 102)
+    axes.set_ylim(0, 107)
+    axes.set_xlabel(
+        "vector drift, percentile in the word's frequency band",
+        color=INK_SECONDARY,
+        fontproperties=font("Regular", 9),
+    )
+    axes.set_ylabel(
+        "neighbourhood change, percentile",
+        color=INK_SECONDARY,
+        fontproperties=font("Regular", 9),
+    )
+    handles = [
+        Line2D([], [], marker="o", linestyle="", color=SERIES[1], label="documented change"),
+        Line2D([], [], marker="o", linestyle="", color=SERIES[0], label="nothing documented"),
+        Patch(color=SEQUENTIAL[1], label="flagged as a change (top 5% on both)"),
+    ]
+    axes.legend(handles=handles, loc="lower right", frameon=False, prop=font("Regular", 9))
+    if footnote:
+        add_footnote(figure, footnote)
+    return figure
+
+
+@dataclass(frozen=True)
+class ReadingPanel:
+    """One way of reading a measurement: rows of per-seed values on one axis, with optional
+    captions for what each side of zero means."""
+
+    heading: str
+    axis_label: str
+    rows: list[tuple[str, list[float]]]
+    left_caption: str = ""
+    right_caption: str = ""
+
+
+def readings(
+    panels: list[ReadingPanel], title: str, subtitle: str = "", footnote: str = ""
+) -> Figure:
+    """Panels side by side, each a few rows of seed values with their mean as a bar, so two
+    readings of the same samples can be compared by sign, not by scale."""
+    height = 4.6
+    figure = new_figure((10, height), title, subtitle)
+    top = plot_top(height, header=1.4)
+    width = 0.92 / len(panels)
+    for index, panel in enumerate(panels):
+        left = 0.04 + index * width + 0.3 * width
+        axes = figure.add_axes((left, 0.3, width * 0.66, top - 0.3))
+        style_axes(axes, grid_axis="x")
+        positions = list(range(len(panel.rows)))[::-1]
+        for position, (_, values) in zip(positions, panel.rows, strict=True):
+            axes.barh(position, float(np.mean(values)), color=SERIES[0], height=0.5, zorder=2)
+            axes.scatter(
+                values,
+                [position] * len(values),
+                s=18,
+                color=INK,
+                alpha=0.6,
+                zorder=3,
+                linewidths=0,
+            )
+        axes.axvline(0, color=INK_MUTED, linewidth=0.8)
+        axes.set_yticks(positions)
+        axes.set_yticklabels([label for label, _ in panel.rows])
+        axes.tick_params(axis="y", length=0)
+        limit = max(abs(value) for _, values in panel.rows for value in values) * 1.15
+        axes.set_xlim(-limit, limit)
+        axes.set_title(
+            panel.heading, loc="left", color=INK, fontproperties=font("SemiBold", 10), pad=8
+        )
+        axes.set_xlabel(panel.axis_label, color=INK_SECONDARY, fontproperties=font("Regular", 8.5))
+        for side, caption in ((0.0, panel.left_caption), (1.0, panel.right_caption)):
+            if caption:
+                axes.text(
+                    side,
+                    -0.32,
+                    caption,
+                    transform=axes.transAxes,
+                    color=INK_MUTED,
+                    fontproperties=font("Regular", 8),
+                    ha="left" if side == 0.0 else "right",
+                    va="top",
+                )
     if footnote:
         add_footnote(figure, footnote)
     return figure
