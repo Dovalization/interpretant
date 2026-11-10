@@ -66,5 +66,5 @@ namespace_packages = true
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
-module = ["gensim.*", "scipy.*", "sklearn.*", "streamlit.*", "plotly.*", "tqdm.*"]
+module = ["gensim.*", "scipy.*", "sklearn.*", "streamlit.*", "plotly.*", "tqdm.*", "networkx.*", "nltk.*"]
 ignore_missing_imports = true
