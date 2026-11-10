@@ -1,0 +1,281 @@
+item	case	decade
+1	prompt, AI	2020
+2	prompt, AI	2020
+3	attention, AI (quiet)	2000
+4	alignment, AI	2010
+5	network, AI	1990
+6	attention, psychology (quiet)	2010
+7	platform, communication	2000
+8	attention, psychology (quiet)	2010
+9	alignment, AI	2010
+10	network, AI	1980
+11	attention, psychology (quiet)	2020
+12	attention, psychology (quiet)	2020
+13	attention, psychology (quiet)	2020
+14	alignment, AI	2020
+15	alignment, AI	2020
+16	platform, communication	2010
+17	network, AI	1980
+18	attention, psychology (quiet)	2020
+19	platform, communication	2000
+20	platform, communication	2000
+21	prompt, AI	2000
+22	attention, AI	2020
+23	attention, psychology (quiet)	2010
+24	network, AI	1980
+25	network, AI	1980
+26	attention, AI	2020
+27	platform, communication	2000
+28	attention, AI (quiet)	1990
+29	network, AI	1980
+30	attention, AI	2020
+31	prompt, AI	2020
+32	alignment, AI	2020
+33	platform, communication	2010
+34	network, AI	1990
+35	prompt, AI	2020
+36	attention, AI (quiet)	1990
+37	network, AI	1990
+38	network, AI	1990
+39	prompt, AI	2000
+40	attention, AI (quiet)	1990
+41	prompt, AI	2000
+42	platform, communication	2000
+43	attention, psychology (quiet)	2010
+44	network, AI	1980
+45	attention, AI	2010
+46	platform, communication	2010
+47	network, AI	1980
+48	network, AI	1990
+49	alignment, AI	2010
+50	attention, AI (quiet)	2000
+51	alignment, AI	2010
+52	attention, psychology (quiet)	2010
+53	prompt, AI	2020
+54	attention, AI (quiet)	2000
+55	attention, AI (quiet)	2000
+56	attention, psychology (quiet)	2010
+57	platform, communication	2010
+58	alignment, AI	2010
+59	attention, psychology (quiet)	2020
+60	prompt, AI	2000
+61	network, AI	1980
+62	attention, AI	2010
+63	platform, communication	2000
+64	attention, psychology (quiet)	2020
+65	platform, communication	2010
+66	attention, AI	2010
+67	attention, psychology (quiet)	2010
+68	attention, psychology (quiet)	2020
+69	attention, AI	2020
+70	alignment, AI	2010
+71	prompt, AI	2020
+72	attention, AI	2010
+73	prompt, AI	2000
+74	attention, AI	2010
+75	attention, AI (quiet)	2000
+76	attention, psychology (quiet)	2020
+77	platform, communication	2000
+78	attention, AI (quiet)	1990
+79	platform, communication	2010
+80	attention, AI (quiet)	1990
+81	network, AI	1990
+82	attention, AI (quiet)	1990
+83	attention, AI	2010
+84	network, AI	1980
+85	network, AI	1980
+86	network, AI	1980
+87	attention, AI (quiet)	1990
+88	prompt, AI	2000
+89	attention, AI (quiet)	1990
+90	attention, psychology (quiet)	2010
+91	attention, AI (quiet)	2000
+92	attention, psychology (quiet)	2020
+93	alignment, AI	2020
+94	attention, AI (quiet)	1990
+95	platform, communication	2010
+96	attention, AI	2010
+97	attention, psychology (quiet)	2020
+98	attention, AI	2020
+99	prompt, AI	2020
+100	network, AI	1990
+101	attention, psychology (quiet)	2010
+102	platform, communication	2010
+103	attention, AI	2020
+104	platform, communication	2010
+105	platform, communication	2010
+106	prompt, AI	2020
+107	platform, communication	2000
+108	alignment, AI	2020
+109	attention, psychology (quiet)	2020
+110	attention, AI	2020
+111	attention, AI (quiet)	2000
+112	prompt, AI	2000
+113	prompt, AI	2000
+114	platform, communication	2000
+115	attention, AI	2010
+116	attention, AI	2010
+117	attention, AI	2010
+118	alignment, AI	2020
+119	attention, AI	2020
+120	platform, communication	2000
+121	platform, communication	2000
+122	platform, communication	2010
+123	prompt, AI	2020
+124	prompt, AI	2020
+125	network, AI	1990
+126	attention, AI (quiet)	2000
+127	alignment, AI	2020
+128	attention, psychology (quiet)	2020
+129	prompt, AI	2020
+130	prompt, AI	2000
+131	alignment, AI	2020
+132	attention, AI	2020
+133	attention, psychology (quiet)	2010
+134	alignment, AI	2010
+135	network, AI	1990
+136	attention, psychology (quiet)	2010
+137	attention, AI	2020
+138	prompt, AI	2000
+139	alignment, AI	2020
+140	platform, communication	2010
+141	alignment, AI	2010
+142	attention, AI (quiet)	2000
+143	attention, AI	2010
+144	network, AI	1980
+145	attention, AI	2020
+146	platform, communication	2010
+147	prompt, AI	2000
+148	attention, psychology (quiet)	2020
+149	prompt, AI	2020
+150	attention, AI (quiet)	1990
+151	network, AI	1980
+152	network, AI	1990
+153	network, AI	1990
+154	platform, communication	2010
+155	attention, AI (quiet)	1990
+156	platform, communication	2000
+157	prompt, AI	2000
+158	alignment, AI	2010
+159	alignment, AI	2020
+160	attention, AI (quiet)	2000
+161	prompt, AI	2000
+162	platform, communication	2000
+163	platform, communication	2010
+164	attention, AI	2020
+165	network, AI	1980
+166	attention, AI (quiet)	1990
+167	alignment, AI	2010
+168	network, AI	1980
+169	attention, psychology (quiet)	2020
+170	alignment, AI	2020
+171	attention, AI	2010
+172	alignment, AI	2010
+173	attention, psychology (quiet)	2020
+174	attention, psychology (quiet)	2010
+175	attention, AI (quiet)	2000
+176	alignment, AI	2010
+177	attention, AI (quiet)	2000
+178	alignment, AI	2020
+179	network, AI	1980
+180	alignment, AI	2010
+181	attention, AI (quiet)	2000
+182	network, AI	1990
+183	prompt, AI	2000
+184	attention, AI	2020
+185	network, AI	1990
+186	alignment, AI	2010
+187	attention, AI	2020
+188	platform, communication	2000
+189	prompt, AI	2020
+190	attention, AI (quiet)	1990
+191	network, AI	1980
+192	attention, AI (quiet)	1990
+193	prompt, AI	2020
+194	attention, AI	2010
+195	attention, psychology (quiet)	2010
+196	prompt, AI	2000
+197	attention, AI	2020
+198	prompt, AI	2020
+199	platform, communication	2010
+200	network, AI	1990
+201	alignment, AI	2010
+202	attention, AI (quiet)	1990
+203	alignment, AI	2020
+204	attention, AI (quiet)	1990
+205	attention, AI (quiet)	2000
+206	attention, psychology (quiet)	2010
+207	prompt, AI	2000
+208	attention, psychology (quiet)	2020
+209	attention, AI (quiet)	1990
+210	prompt, AI	2000
+211	attention, psychology (quiet)	2010
+212	platform, communication	2010
+213	alignment, AI	2020
+214	attention, psychology (quiet)	2020
+215	platform, communication	2000
+216	platform, communication	2000
+217	attention, psychology (quiet)	2010
+218	platform, communication	2000
+219	attention, AI (quiet)	2000
+220	network, AI	1990
+221	platform, communication	2010
+222	attention, AI	2010
+223	prompt, AI	2020
+224	alignment, AI	2010
+225	alignment, AI	2010
+226	network, AI	1990
+227	platform, communication	2000
+228	network, AI	1980
+229	attention, AI	2020
+230	attention, AI	2010
+231	attention, AI	2020
+232	attention, psychology (quiet)	2010
+233	attention, psychology (quiet)	2020
+234	prompt, AI	2000
+235	attention, AI	2020
+236	alignment, AI	2020
+237	attention, AI	2010
+238	network, AI	1990
+239	prompt, AI	2000
+240	platform, communication	2000
+241	network, AI	1980
+242	attention, AI	2010
+243	attention, AI (quiet)	2000
+244	attention, psychology (quiet)	2020
+245	platform, communication	2000
+246	platform, communication	2010
+247	attention, psychology (quiet)	2010
+248	prompt, AI	2020
+249	attention, AI	2020
+250	attention, AI (quiet)	2000
+251	attention, AI (quiet)	1990
+252	alignment, AI	2020
+253	attention, psychology (quiet)	2010
+254	alignment, AI	2020
+255	prompt, AI	2020
+256	alignment, AI	2010
+257	network, AI	1990
+258	attention, AI	2010
+259	attention, AI (quiet)	2000
+260	attention, AI	2020
+261	alignment, AI	2020
+262	network, AI	1990
+263	alignment, AI	2020
+264	network, AI	1980
+265	attention, psychology (quiet)	2010
+266	alignment, AI	2020
+267	prompt, AI	2020
+268	attention, AI (quiet)	1990
+269	attention, AI (quiet)	2000
+270	platform, communication	2010
+271	attention, psychology (quiet)	2020
+272	attention, AI (quiet)	1990
+273	attention, AI	2010
+274	attention, AI (quiet)	2000
+275	alignment, AI	2010
+276	alignment, AI	2010
+277	prompt, AI	2000
+278	prompt, AI	2020
+279	network, AI	1990
+280	attention, AI	2010

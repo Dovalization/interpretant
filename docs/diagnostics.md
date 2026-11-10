@@ -67,3 +67,33 @@ data.
   and the transition is not used as a quiet case again.
 
 Scored by `scripts/check_known_presence.py`, committed before it is run.
+
+### Check 1a results (2026-11-10, `scripts/check_known_presence.py`)
+
+Scored as written. All five documented changes are present; both quiet transitions are quiet.
+The 280 labels were recorded and committed before the key was opened (commit 2f4eca4).
+
+| Case | Marked share, earlier → later | Read share, earlier → later (yes / no / unclear) | Verdict |
+|---|---|---|---|
+| *attention*, AI, 2010s → 2020s | 0.13 → 0.31 | 0.25 → 0.60 (5/15/0, 12/8/0) | **Present** |
+| *prompt*, AI, 2000s → 2020s | 0.01 → 0.51 | 0.00 → 0.95 (0/20/0, 18/1/1) | **Present** |
+| *platform*, communication, 2000s → 2010s | 0.08 → 0.47 | 0.62 → 0.89 (10/6/4, 17/2/1) | **Present** |
+| *network*, AI, 1980s → 1990s | 0.45 → 0.71 | 0.65 → 0.95 (13/7/0, 19/1/0) | **Present** |
+| *alignment*, AI, 2010s → 2020s | 0.01 → 0.13 | 0.00 → 0.15 (0/20/0, 3/17/0) | **Present** |
+| *attention*, AI, 1990s → 2000s | 0.01 → 0.01 | 0.00 → 0.00 (0/19/1, 0/20/0) | **Quiet** |
+| *attention*, psychology, 2010s → 2020s | 0.00 → 0.00 | 0.00 → 0.00 (0/20/0, 0/20/0) | **Quiet** |
+
+### Reading
+
+Assumption A5 is crossed out for these cases: every documented change is visibly in the cells
+round X reads, and nothing changed in the quiet ones. An instrument that misses one of these
+changes has failed on that case, not the data. That applies to round 5 too, whose cells are the
+same field and decade samples: the grid missed *attention*, *platform* and *network*, all present.
+
+Not predicted, read from the table: the changes differ greatly in size. *prompt* changed almost
+completely. *network* and *platform* changed from an already high start: about two thirds of the
+1980s *network* uses and of the 2000s *platform* uses are already the later sense, so the decade
+cells catch the end of each change, not the change itself (A4). *alignment*, the one case round 5's
+grid flagged, is the smallest change: only about one in seven of its 2020s uses is about aligning
+AI systems. The grid's single hit is therefore unlikely to be the documented change, and more
+likely a broader shift in *alignment*'s contexts.
