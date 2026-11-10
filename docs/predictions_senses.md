@@ -97,3 +97,65 @@ Reading rule:
   context words and nearest examples (seed 1), so the senses can be read, not just counted.
 
 Scored by `scripts/score_senses.py`, committed before the runs.
+
+### Round C results (2026-11-10, `scripts/score_senses.py`)
+
+Scored as written. For each encoder 2 passed and 3 falsified, the same predictions under both.
+
+The first run stopped before any scoring: the SciBERT *intelligence* run met a mostly Chinese
+abstract in AI's 2020s cell, which has no spaces between words, so its 100-word context ran
+past the encoder's 512 tokens and the occurrence was cut off. An occurrence past the limit is
+now encoded again from 200 characters on either side (commit `39c7f97`); every occurrence that
+fits is encoded as before, so the SciBERT *attention* table, finished before the fix and never
+past the limit, was kept. The three remaining runs were made with the fix; the predictions and
+the scorer were not changed.
+
+| | SciBERT | ModernBERT |
+|---|---|---|
+| C1 | **Falsified.** 144–169 marked uses per seed, 0.99 of them in one sense; its share of AI's occurrences 0.147 in the 1990s (above 0.05), 0.580–0.622 in the 2020s | **Falsified.** 0.99 of marked uses in one sense; its share 0.136–0.141 in the 1990s, 0.564–0.614 in the 2020s |
+| C2 | **Falsified.** The mechanism sense holds 0.366 of psychology's 1990s occurrences and 0.374–0.402 of its 2020s ones (above 0.05). Psychology's change in *attention* 0.0005, the controls' median 0.0147 | **Falsified.** The mechanism sense holds 0.327–0.329 and 0.364–0.392 of psychology's occurrences. Change 0.0018, the controls' median 0.0114 |
+| C3 | **Passed.** AI's change in *attention* 0.164, larger than all 30 controls' (largest: *report* 0.083) | **Passed.** 0.165, larger than all 30 (largest: *increasing* 0.066) |
+| C4 | **Passed.** The AI sense rises by 0.554 in communication, 0.385 in history and philosophy of science, 0.535 in sociology, 0.376 in philosophy, each present | **Passed.** 0.505, 0.340, 0.546, 0.395, each present |
+| C5 | **Falsified.** Cognitive psychology's rise +0.292 (sd 0.000), present | **Falsified.** +0.281 (sd 0.003), present |
+
+### Reading
+
+Neither encoder passed C1, so by the reading rule the sense instrument is not used on open
+questions, and a redesign is calibrated on *attention* again, in a new round, first.
+
+C1 and C2 failed on one cause. Both encoders found two senses of *attention* in every seed,
+and the two are not the ones the predictions named. One is attention as something that
+operates: the transformer mechanism, but also cognitive selective attention, joint attention
+and attention deficit disorder. The other is the stock phrase of academic prose (*particular
+attention is given*, *has received less attention*). The marked uses fall almost entirely into
+the first sense (0.99), and its share of AI's occurrences rises from about 0.14 to about 0.59,
+but it already held AI's 1990s cognitive models of attention and a third of psychology's
+occurrences. The instrument found the change in AI and found psychology's distribution
+unchanged; it did not separate the mechanism from cognitive attention, which C1 and C2 required.
+C3 passed under both encoders by a wide margin: AI's change in *attention* is about twice the
+largest of 30 random controls'.
+
+C4 passed: the AI sense of *intelligence* is "artificial intelligence" under both encoders,
+and it rose in all four fields. C5 was a wrong bet, not a failure of the instrument: cognitive
+psychology's 2020s abstracts write about artificial intelligence too (see below).
+
+### Exploratory, after scoring: what the senses are, and what limits the instrument
+
+Not predicted; read from the tables and the scorer's examples.
+
+- **The number of senses is the limit.** The silhouette chose two senses for every *attention*
+  and *intelligence* run, and in about two-thirds of all word and seed runs (81 of 155 under
+  SciBERT's *attention* design, 110 of 165 under ModernBERT's runs). It favours the coarsest
+  split. A redesign should find senses at a finer grain: split each sense again, or fix a
+  larger number in advance and merge senses whose examples read the same.
+- **The encoders agree.** Same numbers of senses, the same splits, shares within a few
+  hundredths. The choice of encoder is not what limits the instrument.
+- **Cognitive psychology's *intelligence*.** Under SciBERT, 96 of cognitive psychology's 289
+  occurrences in the 2020s fall in the AI sense, and every one of them is "artificial
+  intelligence": ChatGPT's creativity measured against people's, explainable AI, generative
+  AI in creative work. Some are mislabelled engineering (microsleep detection in vehicles), a
+  reminder that OpenAlex's field labels are noisy.
+- **Small cells make the seeds nearly identical.** Most non-AI *intelligence* cells hold fewer
+  than 500 occurrences, so every seed draws all of them and only the clustering's start
+  differs; standard deviations near zero make the presence rule almost automatic there. The
+  redesign should draw occurrences with replacement, so seeds vary in small cells too.
