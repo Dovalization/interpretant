@@ -13,6 +13,7 @@ from pathlib import Path
 import pandas as pd
 
 from interpretant.drift.perplexity import END, UNKNOWN, build_decade
+from interpretant.predictions import report
 
 # Paths moved on 2026-11-10 when the lemmatised grid took the defaults; the evidence is unchanged.
 TABLE = pd.read_parquet("data/drift/unlemmatised/cross_perplexity_corrected.parquet")
@@ -42,10 +43,6 @@ def excess(seed: int, decade: int, model_field: str, text_field: str) -> float:
         & (TABLE.text_field == text_field)
     ]
     return float(rows.iloc[0].excess)
-
-
-def report(name: str, passed: bool, detail: str) -> None:
-    print(f"\n{name}: {'PASSED' if passed else 'FALSIFIED'}\n  {detail}")
 
 
 def f1() -> None:

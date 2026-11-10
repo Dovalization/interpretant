@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import pandas as pd
 
+from interpretant.predictions import report
+
 # Paths moved on 2026-11-10 when the lemmatised grid took the defaults; the evidence is unchanged.
 TABLE = pd.read_parquet("data/drift/unlemmatised/cross_perplexity_corrected.parquet")
 SEEDS = sorted(TABLE.seed.unique())
@@ -21,11 +23,6 @@ def excess(table: pd.DataFrame, decade: int, model_field: str, text_field: str) 
         & (table.text_field == text_field)
     ]
     return float(rows.iloc[0].excess) if len(rows) else None
-
-
-def report(name: str, passed: bool | None, detail: str) -> None:
-    verdict = "untestable" if passed is None else "passed" if passed else "falsified"
-    print(f"\n{name}: {verdict.upper()}\n  {detail}")
 
 
 def decades_with(*fields: str) -> list[int]:

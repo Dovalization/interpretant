@@ -6,52 +6,28 @@ ranks come from compare_cells and add_noise_floor, the functions behind drift gr
 
 from __future__ import annotations
 
-from functools import cache
 from pathlib import Path
 
 import numpy as np
-from gensim.models import KeyedVectors
 
 from interpretant.corpus.audit import load_target_words
-from interpretant.drift.grid import add_noise_floor, compare_cells
+from interpretant.drift.grid import add_noise_floor, cell_neighbours, compare_cells
+from interpretant.predictions import load_vectors, overlap, report
 
 # Paths moved on 2026-11-10 when the lemmatised grid took the defaults; the evidence is unchanged.
 TWEC, PPMI = Path("models/twec_grid_unlemmatised"), Path("models/ppmi_grid_unlemmatised")
 
 
-@cache
-def model(root: Path, layer: str, field: str, decade: int) -> KeyedVectors:
-    return KeyedVectors.load(str(root / layer / f"{field}_{decade}.kv"))
-
-
-def count(vectors: KeyedVectors, word: str) -> int:
-    return int(vectors.get_vecattr(word, "count")) if word in vectors.key_to_index else 0
-
-
 def neighbours(root: Path, layer: str, field: str, decade: int, word: str) -> list[str]:
-    vectors = model(root, layer, field, decade)
-    if count(vectors, word) < 150:
-        return []
-    pool = [w for w in vectors.index_to_key if count(vectors, w) >= 50 and w != word]
-    matrix = np.asarray([vectors[w] for w in pool])
-    matrix /= np.linalg.norm(matrix, axis=1, keepdims=True)
-    order = np.argsort(-(matrix @ (vectors[word] / np.linalg.norm(vectors[word]))))[:25]
-    return [pool[i] for i in order]
-
-
-def near(words: list[str], wordset: set[str]) -> int:
-    return len(set(words) & wordset)
+    return cell_neighbours(load_vectors(root, layer, field, decade), word)
 
 
 def shift_rank(layer: str, a: tuple[str, int], b: tuple[str, int], word: str) -> float | None:
-    pair = add_noise_floor(compare_cells(model(PPMI, layer, *a), model(PPMI, layer, *b)))
+    pair = add_noise_floor(
+        compare_cells(load_vectors(PPMI, layer, *a), load_vectors(PPMI, layer, *b))
+    )
     rows = pair[pair.word == word]
     return float(rows.iloc[0].shift_rank) if len(rows) else None
-
-
-def report(name: str, passed: bool | None, detail: str) -> None:
-    verdict = "untestable" if passed is None else "passed" if passed else "falsified"
-    print(f"\n{name}: {verdict.upper()}\n  {detail}")
 
 
 def t0() -> None:
@@ -77,9 +53,9 @@ def t1() -> None:
     learned = {"feature", "learned", "embedding", "deep", "latent", "encoder"}
     early = neighbours(PPMI, "openalex", "ai", 1980, "representation")
     late = {d: neighbours(PPMI, "openalex", "ai", d, "representation") for d in (2010, 2020)}
-    passed = near(early, symbolic) >= 2 and any(near(n, learned) >= 2 for n in late.values())
-    detail = f"1980s symbolic {near(early, symbolic)}: {early[:10]}\n  " + "\n  ".join(
-        f"{d}s learned {near(n, learned)}: {n[:10]}" for d, n in late.items()
+    passed = overlap(early, symbolic) >= 2 and any(overlap(n, learned) >= 2 for n in late.values())
+    detail = f"1980s symbolic {overlap(early, symbolic)}: {early[:10]}\n  " + "\n  ".join(
+        f"{d}s learned {overlap(n, learned)}: {n[:10]}" for d, n in late.items()
     )
     report("T1 representation in AI", passed if early else None, detail)
 
@@ -88,7 +64,7 @@ def sense(name: str, field: str, word: str, wordset: set[str]) -> None:
     lines, passed = [], True
     for decade in (2010, 2020):
         found = neighbours(PPMI, "openalex_full", field, decade, word)
-        hits = near(found, wordset)
+        hits = overlap(found, wordset)
         passed &= hits >= 3
         lines.append(f"{decade}s: {hits} hits {found[:12]}")
     report(name, passed, "\n  ".join(lines))
@@ -106,7 +82,7 @@ def t5() -> None:
     }
     rank = shift_rank("openalex_full", ("philosophy", 2010), ("philosophy", 2020), "consciousness")
     found = neighbours(PPMI, "openalex_full", "philosophy", 2020, "consciousness")
-    hits = near(found, computational)
+    hits = overlap(found, computational)
     passed = None if rank is None else rank > 95 and hits >= 3
     report("T5 consciousness computational", passed, f"shift rank {rank}; {hits} hits {found[:12]}")
 

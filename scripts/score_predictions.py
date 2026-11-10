@@ -11,7 +11,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from gensim.models import KeyedVectors
+
+from interpretant.drift.grid import cell_neighbours
+from interpretant.predictions import load_vectors, overlap, report
 
 # Paths moved on 2026-11-10 when the lemmatised grid took the defaults; the evidence is unchanged.
 MODELS = Path("models/twec_grid_unlemmatised")
@@ -20,24 +22,8 @@ CROSS = pd.read_parquet("data/drift/unlemmatised/cross_field.parquet")
 MEASURE_MIN = 150
 
 
-def model(layer: str, field: str, decade: int) -> KeyedVectors:
-    return KeyedVectors.load(str(MODELS / layer / f"{field}_{decade}.kv"))
-
-
-def count(vectors: KeyedVectors, word: str) -> int:
-    return int(vectors.get_vecattr(word, "count")) if word in vectors.key_to_index else 0
-
-
-def neighbours(layer: str, field: str, decade: int, word: str, k: int = 25) -> list[str]:
-    vectors = model(layer, field, decade)
-    if count(vectors, word) < MEASURE_MIN:
-        return []
-    pool = [w for w in vectors.index_to_key if count(vectors, w) >= 50 and w != word]
-    matrix = np.asarray([vectors[w] for w in pool])
-    matrix /= np.linalg.norm(matrix, axis=1, keepdims=True)
-    target = vectors[word] / np.linalg.norm(vectors[word])
-    order = np.argsort(-(matrix @ target))[:k]
-    return [pool[i] for i in order]
+def neighbours(layer: str, field: str, decade: int, word: str) -> list[str]:
+    return cell_neighbours(load_vectors(MODELS, layer, field, decade), word)
 
 
 def within(layer: str, field: str, decade: int, word: str) -> pd.Series | None:
@@ -59,10 +45,6 @@ def cross_rank(field_a: str, field_b: str, decade: int, word: str) -> float | No
         & (CROSS.word == word)
     ]
     return float(rows.iloc[0]["cosine_rank"]) if len(rows) else None
-
-
-def report(name: str, verdict: str, detail: str) -> None:
-    print(f"\n{name}: {verdict.upper()}\n  {detail}")
 
 
 def p1() -> None:
@@ -100,17 +82,13 @@ def p2() -> None:
     report("P2 network in AI", verdict, "; ".join(parts))
 
 
-def near(words: list[str], wordset: set[str]) -> int:
-    return len(set(words) & wordset)
-
-
 def p3() -> None:
     symbolic = {"knowledge", "logic", "rule", "symbolic", "reasoning", "frame"}
     learned = {"feature", "learned", "embedding", "deep", "latent", "encoder"}
     early = neighbours("openalex", "ai", 1980, "representation")
     late = {d: neighbours("openalex", "ai", d, "representation") for d in (2010, 2020)}
-    early_ok = near(early, symbolic) >= 2
-    late_ok = any(near(n, learned) >= 2 for n in late.values())
+    early_ok = overlap(early, symbolic) >= 2
+    late_ok = any(overlap(n, learned) >= 2 for n in late.values())
     verdict = (
         "untestable"
         if not early or not any(late.values())
@@ -121,8 +99,8 @@ def p3() -> None:
     report(
         "P3 representation in AI",
         verdict,
-        f"1980s symbolic {near(early, symbolic)}: {early[:12]}\n  "
-        + "\n  ".join(f"{d}s learned {near(n, learned)}: {n[:12]}" for d, n in late.items()),
+        f"1980s symbolic {overlap(early, symbolic)}: {early[:12]}\n  "
+        + "\n  ".join(f"{d}s learned {overlap(n, learned)}: {n[:12]}" for d, n in late.items()),
     )
 
 
@@ -145,7 +123,7 @@ def p4() -> None:
                 untestable = True
                 lines.append(f"{field} {decade}s untestable")
                 continue
-            d, e = near(n, design), near(n, ecological)
+            d, e = overlap(n, design), overlap(n, ecological)
             ok &= d > e if leaning == "design" else e > d
             lines.append(f"{field} {decade}s design {d} / ecological {e}: {n[:10]}")
     verdict = "untestable" if untestable else "passed" if ok else "falsified"
@@ -157,12 +135,13 @@ def p5() -> None:
     phil_set = {"phenomenology", "mind", "cognition", "merleau-ponty", "perception", "enactive"}
     hci = neighbours("openalex_full", "hci", 2020, "embodiment")
     phil = neighbours("openalex_full", "philosophy", 2020, "embodiment")
-    ok = near(hci, hci_set) >= 2 and near(phil, phil_set) >= 2
+    ok = overlap(hci, hci_set) >= 2 and overlap(phil, phil_set) >= 2
     verdict = "untestable" if not hci or not phil else "passed" if ok else "falsified"
     report(
         "P5 embodiment HCI vs philosophy",
         verdict,
-        f"HCI {near(hci, hci_set)}: {hci[:12]}\n  philosophy {near(phil, phil_set)}: {phil[:12]}",
+        f"HCI {overlap(hci, hci_set)}: {hci[:12]}\n"
+        f"  philosophy {overlap(phil, phil_set)}: {phil[:12]}",
     )
 
 

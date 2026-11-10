@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from interpretant.drift.perplexity import END, UNKNOWN, DecadeModels, build_decade
+from interpretant.predictions import report
 
 TEXTS = Path("data/phrased/openalex/texts")
 SEEDS = (1, 2, 3, 4, 5)
@@ -88,10 +89,6 @@ def build(seed: int, decade: int) -> DecadeModels:
     if models is None:
         raise SystemExit(f"no qualifying fields for {decade}s, seed {seed}")
     return models
-
-
-def report(name: str, passed: bool, detail: str) -> None:
-    print(f"\n{name}: {'PASSED' if passed else 'FALSIFIED'}\n  {detail}")
 
 
 def main() -> None:

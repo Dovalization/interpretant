@@ -17,6 +17,7 @@ import pandas as pd
 from gensim.models import KeyedVectors
 
 from interpretant.drift.grid import add_noise_floor, cell_neighbours, compare_cells
+from interpretant.predictions import load_vectors, overlap, report, word_count
 
 SEED42, SEED43 = Path("models/twec_grid"), Path("models/twec_grid_seed43")
 UNLEMMATISED = Path("models/twec_grid_unlemmatised")
@@ -58,29 +59,16 @@ EXPERIENTIAL = {
 
 
 @cache
-def model(root: Path, layer: str, field: str, decade: int) -> KeyedVectors:
-    return KeyedVectors.load(str(root / layer / f"{field}_{decade}.kv"))
-
-
-@cache
 def table(name: str) -> pd.DataFrame:
     return pd.read_parquet(DRIFT / f"{name}.parquet")
 
 
-def count(vectors: KeyedVectors, word: str) -> int:
-    return int(vectors.get_vecattr(word, "count")) if word in vectors.key_to_index else 0
-
-
 def pool_size(vectors: KeyedVectors) -> int:
-    return sum(1 for word in vectors.index_to_key if count(vectors, word) >= 50)
+    return sum(1 for word in vectors.index_to_key if word_count(vectors, word) >= 50)
 
 
 def neighbours(root: Path, layer: str, field: str, decade: int, word: str) -> list[str]:
-    return cell_neighbours(model(root, layer, field, decade), word)
-
-
-def near(words: list[str], wordset: set[str]) -> int:
-    return len(set(words) & wordset)
+    return cell_neighbours(load_vectors(root, layer, field, decade), word)
 
 
 def within42(layer: str, field: str, decade: int, word: str) -> pd.Series | None:
@@ -96,7 +84,10 @@ def within42(layer: str, field: str, decade: int, word: str) -> pd.Series | None
 
 def within43(layer: str, field: str, decade: int, word: str) -> pd.Series | None:
     pair = add_noise_floor(
-        compare_cells(model(SEED43, layer, field, decade), model(SEED43, layer, field, decade + 10))
+        compare_cells(
+            load_vectors(SEED43, layer, field, decade),
+            load_vectors(SEED43, layer, field, decade + 10),
+        )
     )
     rows = pair[pair.word == word]
     return rows.iloc[0] if len(rows) else None
@@ -123,11 +114,6 @@ def excess(rows: pd.DataFrame, decade: int, model_field: str, text_field: str) -
     return float(hit.iloc[0].excess)
 
 
-def report(name: str, passed: bool | None, detail: str) -> None:
-    verdict = "UNTESTABLE" if passed is None else "PASSED" if passed else "FALSIFIED"
-    print(f"\n{name}: {verdict}\n  {detail}")
-
-
 def l0() -> None:
     lines, ok = [], True
     for name in ("within_field", "cross_field"):
@@ -151,8 +137,8 @@ def l1() -> None:
     for path in sorted(SEED42.glob("*/*.kv")):
         layer, stem = path.parent.name, path.stem
         field, decade = stem.rsplit("_", 1)
-        before = len(model(UNLEMMATISED, layer, field, int(decade)).index_to_key)
-        after = len(model(SEED42, layer, field, int(decade)).index_to_key)
+        before = len(load_vectors(UNLEMMATISED, layer, field, int(decade)).index_to_key)
+        after = len(load_vectors(SEED42, layer, field, int(decade)).index_to_key)
         shrink = 1 - after / before
         shrinks.append(shrink)
         floor = 0.08 if layer in ("books", "openalex") else 0.04
@@ -161,8 +147,8 @@ def l1() -> None:
     pools = {}
     for field in ("philosophy", "hci"):
         for decade in (2010, 2020):
-            before = pool_size(model(UNLEMMATISED, "openalex_full", field, decade))
-            after = pool_size(model(SEED42, "openalex_full", field, decade))
+            before = pool_size(load_vectors(UNLEMMATISED, "openalex_full", field, decade))
+            after = pool_size(load_vectors(SEED42, "openalex_full", field, decade))
             pools[f"{field} {decade}s"] = round(after / before - 1, 3)
     passed = not misses and all(growth >= 0.03 for growth in pools.values())
     report(
@@ -178,10 +164,10 @@ def l2() -> None:
     for root, seed in ((SEED42, 42), (SEED43, 43)):
         hci = neighbours(root, "openalex_full", "hci", 2020, "embodiment")
         phil = neighbours(root, "openalex_full", "philosophy", 2020, "embodiment")
-        ok &= near(hci, VR) >= 3 and near(phil, PHENOMENOLOGICAL) >= 3
+        ok &= overlap(hci, VR) >= 3 and overlap(phil, PHENOMENOLOGICAL) >= 3
         lines.append(
-            f"seed {seed}: HCI {near(hci, VR)} of VR {sorted(set(hci) & VR)}; philosophy "
-            f"{near(phil, PHENOMENOLOGICAL)} of phenomenological "
+            f"seed {seed}: HCI {overlap(hci, VR)} of VR {sorted(set(hci) & VR)}; philosophy "
+            f"{overlap(phil, PHENOMENOLOGICAL)} of phenomenological "
             f"{sorted(set(phil) & PHENOMENOLOGICAL)}"
         )
     report("L2 embodiment's two senses", ok, "\n  ".join(lines))
@@ -215,13 +201,13 @@ def l3() -> None:
 def l4() -> None:
     early = neighbours(SEED42, "openalex", "ai", 1980, "representation")
     late = {d: neighbours(SEED42, "openalex", "ai", d, "representation") for d in (2010, 2020)}
-    ok = near(early, SYMBOLIC) >= 2 and any(near(n, LEARNED) >= 2 for n in late.values())
+    ok = overlap(early, SYMBOLIC) >= 2 and any(overlap(n, LEARNED) >= 2 for n in late.values())
     report(
         "L4 representation in AI",
         ok,
-        f"1980s {near(early, SYMBOLIC)} of symbolic {sorted(set(early) & SYMBOLIC)}; "
+        f"1980s {overlap(early, SYMBOLIC)} of symbolic {sorted(set(early) & SYMBOLIC)}; "
         + "; ".join(
-            f"{d}s {near(n, LEARNED)} of learned {sorted(set(n) & LEARNED)}"
+            f"{d}s {overlap(n, LEARNED)} of learned {sorted(set(n) & LEARNED)}"
             for d, n in late.items()
         ),
     )
@@ -231,8 +217,8 @@ def l5() -> None:
     words = neighbours(SEED42, "openalex_full", "hci", 2010, "affordance")
     report(
         "L5 affordance experiential",
-        near(words, EXPERIENTIAL) >= 3,
-        f"{near(words, EXPERIENTIAL)} of the set {sorted(set(words) & EXPERIENTIAL)}; "
+        overlap(words, EXPERIENTIAL) >= 3,
+        f"{overlap(words, EXPERIENTIAL)} of the set {sorted(set(words) & EXPERIENTIAL)}; "
         f"neighbours {words[:12]}",
     )
 

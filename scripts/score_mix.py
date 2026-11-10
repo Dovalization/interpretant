@@ -14,6 +14,7 @@ from pathlib import Path
 import pandas as pd
 
 from interpretant.drift.perplexity import DecadeModels, KneserNeyBigram, build_decade
+from interpretant.predictions import report
 
 TABLE = pd.read_parquet("data/drift/cross_perplexity_corrected.parquet")
 TEXTS = Path("data/phrased/openalex/texts")
@@ -44,10 +45,6 @@ def excess(seed: int | None, decade: int, model: str, text: str) -> float:
 
 def fall(seed: int | None, model: str, text: str) -> float:
     return excess(seed, EARLY, model, text) - excess(seed, LATE, model, text)
-
-
-def report(name: str, passed: bool, detail: str) -> None:
-    print(f"\n{name}: {'PASSED' if passed else 'FALSIFIED'}\n  {detail}")
 
 
 def j1() -> None:

@@ -8,7 +8,6 @@ least 50 occurrences in that cell.
 
 from __future__ import annotations
 
-from functools import cache
 from pathlib import Path
 
 import numpy as np
@@ -17,8 +16,9 @@ from gensim.models import KeyedVectors
 from scipy.stats import binom
 
 from interpretant.corpus.audit import load_target_words
-from interpretant.drift.grid import add_noise_floor, compare_cells
+from interpretant.drift.grid import add_noise_floor, cell_neighbours, compare_cells
 from interpretant.drift.metrics import batch_neighborhood_shift
+from interpretant.predictions import load_vectors, overlap, report, word_count
 
 # Paths moved on 2026-11-10 when the lemmatised grid took the defaults; the evidence is unchanged.
 SEED42, SEED43 = Path("models/twec_grid_unlemmatised"), Path("models/twec_grid_seed43_unlemmatised")
@@ -26,38 +26,19 @@ WITHIN42 = pd.read_parquet("data/drift/unlemmatised/within_field.parquet")
 CROSS42 = pd.read_parquet("data/drift/unlemmatised/cross_field.parquet")
 
 
-@cache
-def model(root: Path, layer: str, field: str, decade: int) -> KeyedVectors:
-    return KeyedVectors.load(str(root / layer / f"{field}_{decade}.kv"))
-
-
-def count(vectors: KeyedVectors, word: str) -> int:
-    return int(vectors.get_vecattr(word, "count")) if word in vectors.key_to_index else 0
-
-
 def pool(vectors: KeyedVectors) -> list[str]:
-    return [w for w in vectors.index_to_key if count(vectors, w) >= 50]
+    return [w for w in vectors.index_to_key if word_count(vectors, w) >= 50]
 
 
 def neighbours(root: Path, layer: str, field: str, decade: int, word: str) -> list[str]:
-    vectors = model(root, layer, field, decade)
-    if count(vectors, word) < 150:
-        return []
-    candidates = [w for w in pool(vectors) if w != word]
-    matrix = np.asarray([vectors[w] for w in candidates])
-    matrix /= np.linalg.norm(matrix, axis=1, keepdims=True)
-    order = np.argsort(-(matrix @ (vectors[word] / np.linalg.norm(vectors[word]))))[:25]
-    return [candidates[i] for i in order]
-
-
-def near(words: list[str], wordset: set[str]) -> int:
-    return len(set(words) & wordset)
+    return cell_neighbours(load_vectors(root, layer, field, decade), word)
 
 
 def pair43(layer: str, field_a: str, decade_a: int, field_b: str, decade_b: int) -> pd.DataFrame:
     return add_noise_floor(
         compare_cells(
-            model(SEED43, layer, field_a, decade_a), model(SEED43, layer, field_b, decade_b)
+            load_vectors(SEED43, layer, field_a, decade_a),
+            load_vectors(SEED43, layer, field_b, decade_b),
         )
     )
 
@@ -68,21 +49,17 @@ def row43(layer: str, field_a: str, decade_a: int, field_b: str, decade_b: int, 
     return rows.iloc[0] if len(rows) else None
 
 
-def report(name: str, verdict: str, detail: str) -> None:
-    print(f"\n{name}: {verdict.upper()}\n  {detail}")
-
-
 def r1() -> None:
     symbolic = {"knowledge", "logic", "rule", "symbolic", "reasoning", "frame"}
     learned = {"feature", "learned", "embedding", "deep", "latent", "encoder"}
     early = neighbours(SEED43, "openalex", "ai", 1980, "representation")
     late = {d: neighbours(SEED43, "openalex", "ai", d, "representation") for d in (2010, 2020)}
-    ok = near(early, symbolic) >= 2 and any(near(n, learned) >= 2 for n in late.values())
+    ok = overlap(early, symbolic) >= 2 and any(overlap(n, learned) >= 2 for n in late.values())
     report(
         "R1 P3 replicates",
         "passed" if ok else "falsified",
-        f"1980s symbolic {near(early, symbolic)}: {early[:10]}\n  "
-        + "\n  ".join(f"{d}s learned {near(n, learned)}: {n[:10]}" for d, n in late.items()),
+        f"1980s symbolic {overlap(early, symbolic)}: {early[:10]}\n  "
+        + "\n  ".join(f"{d}s learned {overlap(n, learned)}: {n[:10]}" for d, n in late.items()),
     )
 
 
@@ -105,7 +82,7 @@ def sense(
     lines, ok = [], True
     for root, decade in evidence:
         found = neighbours(root, "openalex_full", field, decade, word)
-        hits = near(found, wordset)
+        hits = overlap(found, wordset)
         ok &= bool(found) and hits >= 3
         lines.append(f"{root.name} {decade}s: {hits} hits {found[:12]}")
     report(name, "passed" if ok else "falsified", "\n  ".join(lines))
@@ -134,7 +111,7 @@ def r5() -> None:
             ]
             row = rows.iloc[0] if len(rows) else None
         found = neighbours(root, layer, "philosophy", 2020, "consciousness")
-        hits = near(found, computational)
+        hits = overlap(found, computational)
         ok &= row is not None and bool(row.candidate) and hits >= 3
         candidate = "untestable" if row is None else f"candidate={row.candidate}"
         lines.append(f"{root.name}/{layer}: {candidate}, {hits} hits {found[:12]}")
@@ -187,8 +164,8 @@ def r8() -> None:
 
 
 def seed_noise(layer: str, field: str, decade: int, word: str) -> float | None:
-    a, b = model(SEED42, layer, field, decade), model(SEED43, layer, field, decade)
-    shared = [w for w in pool(a) if count(b, w) >= 50]
+    a, b = load_vectors(SEED42, layer, field, decade), load_vectors(SEED43, layer, field, decade)
+    shared = [w for w in pool(a) if word_count(b, w) >= 50]
     if word not in shared:
         return None
 

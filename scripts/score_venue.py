@@ -25,6 +25,7 @@ from interpretant.drift.perplexity import (
     remove_shared,
     training_sample,
 )
+from interpretant.predictions import report
 
 RAW = Path("data/raw/openalex")
 TEXTS = Path("data/phrased/openalex/texts")
@@ -72,10 +73,6 @@ def rates_and_counts(
     other_bits, counts = model.word_bits(held_out)
     own_bits, _ = own.word_bits(held_out)
     return {w: (other_bits[w] - own_bits[w]) / counts[w] for w in counts}, dict(counts)
-
-
-def report(name: str, passed: bool, detail: str) -> None:
-    print(f"\n{name}: {'PASSED' if passed else 'FALSIFIED'}\n  {detail}")
 
 
 def main() -> None:
