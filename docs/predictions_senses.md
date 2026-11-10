@@ -352,3 +352,38 @@ Reading rule:
   (seed 1).
 
 Scored by `scripts/score_senses_final.py`, committed before the run.
+
+### Round C″ results (2026-11-10, `scripts/score_senses_final.py`)
+
+Scored as written. 0 passed, 2 falsified. *prompt* had 1,764 occurrences per seed, eight senses.
+
+| | Verdict | Numbers |
+|---|---|---|
+| C″1 | **Falsified** | The meaning set's share of AI's 2020s occurrences: 0.146, 0.498, 0.092, 0.300, 0.774 (seeds 1–5). Of AI's 2000s: 0.000, 0.191, 0.000, 0.010, 0.386. Of psychology's 2000s: 0.000, 0.069, 0.000, 0.009, 0.114. 259–285 marked uses in AI's 2020s per seed |
+| C″2 | **Falsified** | The meaning set's share of psychology's occurrences rises by +0.038 (sd 0.032; seeds +0.026, −0.001, +0.030, +0.049, +0.086), absent |
+
+### Reading
+
+C″1 failed, so by the reading rule sense-level drift ends here. Rounds C, C′ and C″ stand as
+scored, every sense result is exploratory only, round D is not run, and the README says the
+instrument did not pass calibration.
+
+### Exploratory, after scoring: why the meaning set failed both ways
+
+Not predicted; read from the marked shares the scorer prints.
+
+The meaning set was too narrow in seeds 1, 3 and 4 and too broad in seeds 2 and 5. In the
+narrow seeds the most marked sense was the uses of *prompt engineering* (marked share 0.89–0.90),
+a phrase that is itself one of the marks; half of that excluded the other language-model senses
+(0.30–0.44). In the broad seeds the top share was lower (0.49–0.54), and senses that mix AI's
+2000s dialogue-system prompts (*the system prompts the user*) with psychology's prompts cleared
+half of it. The senses themselves were readable throughout: the meaning set's examples are
+prompt engineering, retrieval-augmented generation and zero-shot prompting.
+
+Across the three rounds the encoder placed every known change where its history puts it, and
+every rule that turned clusters into one meaning's share failed on a case it was not chosen on:
+the silhouette's number of senses in round C, the coverage rule in round C′, the relative
+marked share here. Each of those rules leans on hand-chosen marks, so the instrument was
+partly supervised without saying so. A sense instrument worth trying again would be supervised
+openly (hand-labelled occurrences and a classifier on the vectors), and it would be a new
+instrument needing its own calibration.
