@@ -39,14 +39,17 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
 - Depends on the instrument: HCI's change between the 1990s and the 2020s. Both instruments
   see its GUI-engineering vocabulary recede; each decade's own language models read the change
   as a move towards the behavioural and social sciences (J, K′), the classifier held at the
-  1990s, net of every field's drift, as a move towards computing (N). No direction is claimed.
+  1990s, net of every field's drift, as a move towards computing (N). In one frame (W) both
+  instruments read it as a move towards the behavioural and social sciences, exploratory only,
+  as W's predictions were untestable. No direction is claimed.
   Fields converging between the 1980s and the 2010s is the language models' finding only.
 - Robust in part: *representation* in AI towards learned representations; HCI's
   experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
   under TWEC in both corpora, described differently by each method).
 - Not robust: *information* converging between psychology and computer science.
-- Open: whether the instruments disagree on HCI's direction because of the frame of reference
-  or because of what each weighs (round W, below). Label scope over time is a known hazard: a
+- Open: whether round N's computing reading is its measure's artefact (counting assignments
+  misreads a field that changes more than the rest), as round W suggests without testing it. No
+  further direction round is planned. Label scope over time is a known hazard: a
   venue-stable check should accompany any whole-cell claim that spans decades.
 
 ---
@@ -81,10 +84,11 @@ Each item that produces results gets its predictions committed first.
    HCI; since the 1990s HCI moved towards the behavioural and social sciences no more than every
    field did, and towards computing more than any field. The README was restated on
    2026-11-10: HCI's change, and no direction.
-6c. **Round W, the closing round on HCI's direction**: both instruments in one frame (the same
-   1990s abstracts, measure and baseline), on whole cells and on the venue-stable cell,
-   calibrated on synthetic fields first, including a field that changes more than the rest.
-   No direction rounds follow it.
+6c. **Round W, the closing round on HCI's direction** (2026-11-10, 1 passed, 4 untestable):
+   both instruments in one frame (the same 1990s abstracts, measure and baseline), on whole
+   cells and on the venue-stable cell. Both failed the planted check guarding the direction
+   predictions, which was set against the wrong baseline; exploratory, both point towards the
+   behavioural and social sciences. No direction rounds follow it.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
 8. **Sense-level drift** with contextual embeddings for *consciousness* and *information*:
    encode occurrences, cluster into senses, track each sense's share by field and decade
