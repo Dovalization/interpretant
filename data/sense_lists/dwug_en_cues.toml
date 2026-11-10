@@ -1,0 +1,245 @@
+# Cue words for round E (docs/predictions_labels.md): for each sense of round Y's lists
+# (dwug_en.toml), words that signal it when they appear within five words of the target.
+# Written by Claude on 2026-11-10 from general knowledge, before any DWUG usage was read for the
+# purpose; the step A evidence of plane and attack (round Q) had been seen. Lowercase whole words.
+
+[afternoon_nn]
+part_of_the_day = ["morning", "evening", "noon", "tea", "sunday", "monday", "saturday", "yesterday", "o'clock", "late", "early", "sun"]
+late_period = ["life", "career", "age", "century", "empire", "era", "reign"]
+
+[attack_nn]
+violent_assault = ["enemy", "army", "troops", "fort", "siege", "assault", "repulsed", "launched", "soldiers", "regiment", "fleet", "bombs", "raid", "terrorist", "armed"]
+verbal_criticism = ["criticism", "speech", "newspaper", "press", "editorial", "slander", "verbal", "personal", "critics", "pamphlet", "senator"]
+onset_of_illness = ["heart", "fever", "asthma", "gout", "cholera", "illness", "sick", "disease", "severe", "suffered", "symptoms", "panic"]
+offensive_play = ["team", "game", "players", "defense", "goal", "score", "offense", "match"]
+
+[bag_nn]
+container = ["carried", "packed", "paper", "leather", "canvas", "plastic", "shopping", "carpet", "money", "mail", "travelling", "sleeping", "tea"]
+game_taken = ["hunter", "shooting", "grouse", "birds", "game", "sportsman", "day's", "bagged"]
+fold_of_skin = ["eyes", "eye", "under", "puffy", "dark", "wrinkles"]
+slang_use = ["thing", "old", "scene"]
+
+[ball_nn]
+round_object = ["kicked", "threw", "throw", "bounce", "game", "tennis", "football", "golf", "baseball", "rolled", "bat", "catch", "pitch", "crystal", "snow"]
+formal_dance = ["dance", "dancing", "danced", "gown", "invited", "masked", "supper", "partner", "ballroom", "evening", "costume"]
+projectile = ["musket", "cannon", "fired", "rifle", "pistol", "bullet", "shot", "wound", "lead"]
+rounded_body_part = ["foot", "feet", "thumb", "toes", "heel"]
+
+[bar_nn]
+rod_or_block = ["iron", "steel", "gold", "silver", "soap", "chocolate", "bars", "window", "cage", "metal", "candy", "bent"]
+drinking_place = ["drink", "drinks", "whiskey", "beer", "bartender", "hotel", "saloon", "stool", "counter", "ordered", "tavern", "cocktail"]
+legal_profession = ["court", "lawyer", "law", "judge", "called", "admitted", "practice", "jury", "prisoner", "association", "attorney"]
+barrier = ["harbor", "harbour", "sand", "river", "mouth", "ship", "obstacle", "crossed", "vessel", "channel"]
+
+[bit_nn]
+small_piece_or_amount = ["little", "tiny", "piece", "bread", "paper", "while", "wait", "rather", "quite", "bit", "every", "trifle"]
+horse_mouthpiece = ["horse", "bridle", "reins", "mouth", "champed", "teeth", "curb", "saddle"]
+tool_part = ["drill", "brace", "auger", "boring", "screwdriver"]
+binary_digit = ["computer", "data", "byte", "bytes", "digital", "memory", "binary", "processor", "software"]
+
+[chairman_nn]
+presiding_person = ["committee", "board", "meeting", "company", "party", "national", "executive", "council", "elected", "commission", "corporation", "convention"]
+chair_carrier = ["sedan", "chairmen", "carried", "chair", "litter", "porters"]
+
+[chef_nn]
+professional_cook = ["kitchen", "cook", "restaurant", "cuisine", "dinner", "menu", "pastry", "hotel", "food", "dishes", "recipe", "culinary"]
+chief_or_leader = ["battalion", "bureau", "brigade", "staff", "squadron", "d'orchestre", "office", "party"]
+
+[circle_vb]
+move_around = ["overhead", "flew", "around", "round", "orbit", "hawk", "birds", "plane", "slowly", "flying", "vultures"]
+surround = ["wall", "walls", "surrounded", "garden", "lake", "arms", "waist", "trees", "hills"]
+draw_a_circle = ["pencil", "pen", "answer", "word", "map", "page", "red", "marked"]
+
+[contemplation_nn]
+thoughtful_observation = ["silent", "gazing", "view", "scene", "beauty", "lost", "stood", "sight", "admiring", "nature"]
+religious_meditation = ["prayer", "god", "divine", "monks", "spiritual", "holy", "mystic", "religious", "soul", "heaven"]
+intention = ["marriage", "plan", "project", "proposed", "law", "intended", "purchase", "war"]
+
+[donkey_nn]
+animal = ["rode", "riding", "cart", "load", "mule", "horse", "carried", "ears", "braying", "back", "saddle", "stable"]
+foolish_person = ["fool", "stupid", "idiot", "silly", "ass"]
+auxiliary_engine = ["engine", "pump", "boiler", "hoist", "steam", "winch"]
+
+[edge_nn]
+cutting_side = ["knife", "blade", "sword", "razor", "sharp", "axe", "keen", "dull", "cutting"]
+border_or_rim = ["forest", "wood", "woods", "water", "table", "cliff", "town", "field", "road", "river", "bed", "roof", "lake", "precipice"]
+advantage = ["competitive", "gave", "gives", "over", "slight", "winning"]
+sharpness_of_tone = ["voice", "tone", "nervous", "anger", "sarcasm", "humor", "irritation"]
+
+[face_nn]
+front_of_head = ["washed", "eyes", "nose", "beard", "kissed", "pale", "cheeks", "forehead", "hands", "mask", "lips", "chin", "skin"]
+expression = ["smile", "smiling", "frown", "grim", "grave", "expression", "made", "look", "stern", "anxious"]
+surface_or_front = ["clock", "cliff", "rock", "coin", "card", "wall", "mountain", "north", "building", "cube", "dial", "stone"]
+appearance_or_standing = ["lose", "lost", "save", "saving", "danger", "opposition", "public", "value", "brave", "adversity"]
+
+[fiction_nn]
+invented_narrative_literature = ["novel", "novels", "writer", "author", "literature", "science", "stories", "writing", "reader", "readers", "fact", "poetry", "short"]
+invention_or_falsehood = ["mere", "pure", "truth", "false", "lie", "myth", "fabrication", "nothing"]
+convenient_assumption = ["legal", "law", "polite", "useful", "convenient"]
+
+[gas_nn]
+gaseous_substance = ["oxygen", "hydrogen", "carbon", "nitrogen", "vapor", "liquid", "chemical", "gases", "molecules", "pressure", "natural", "greenhouse"]
+fuel_gas = ["lamp", "lamps", "light", "lighted", "lights", "jet", "stove", "heating", "pipes", "lit", "burner", "coal", "street"]
+gasoline = ["tank", "station", "car", "pump", "gallon", "price", "prices", "fill", "pedal", "oil"]
+poison_or_anaesthetic_gas = ["poison", "mustard", "masks", "mask", "chamber", "tear", "laughing", "attack"]
+
+[graft_nn]
+plant_graft = ["tree", "trees", "stock", "apple", "bud", "fruit", "scion", "orchard", "gardener", "vine"]
+tissue_transplant = ["skin", "bone", "surgery", "surgeon", "tissue", "transplant", "patient", "burns", "vein"]
+corruption = ["corruption", "bribery", "politicians", "political", "machine", "city", "mayor", "officials", "scandal", "crooked"]
+hard_work = ["hard", "years", "toil", "sheer"]
+
+[grain_nn]
+cereal = ["wheat", "corn", "barley", "oats", "harvest", "fields", "bushels", "crops", "flour", "mill", "farmers", "rye", "elevator"]
+small_particle = ["sand", "dust", "salt", "truth", "single", "pollen", "sense", "tiny", "gunpowder"]
+texture_or_fibre = ["wood", "against", "fine", "coarse", "leather", "stone", "marble", "film", "texture"]
+unit_of_weight = ["grains", "ounce", "dose", "quinine", "morphine", "weight", "troy"]
+
+[head_nn]
+body_part = ["shook", "nodded", "hat", "hair", "shoulders", "neck", "bald", "turned", "bowed", "hit", "bare", "skull"]
+mind = ["idea", "thought", "clear", "lost", "came", "entered", "cool", "count", "math"]
+leader = ["department", "family", "church", "state", "school", "household", "firm", "government", "office", "college", "nation"]
+top_or_front = ["table", "stairs", "river", "page", "column", "procession", "bed", "valley", "lake", "list", "line"]
+
+[heel_nn]
+back_of_foot = ["foot", "feet", "toe", "toes", "ankle", "achilles", "blister", "sole"]
+shoe_heel = ["shoes", "shoe", "boots", "boot", "high", "spike", "spurs", "clicked"]
+contemptible_person = ["cad", "rat", "scoundrel", "bastard", "louse"]
+end_or_rear_part = ["mast", "loaf", "bread", "hand", "keel", "rudder", "stock", "rifle"]
+
+[include_vb]
+contain_as_part = ["price", "cost", "total", "list", "includes", "including", "contents", "range", "features"]
+make_part_of = ["invited", "decided", "chose", "asked", "agreed", "added", "insisted"]
+
+[land_nn]
+solid_ground = ["sea", "water", "shore", "ocean", "coast", "air", "sighted", "island", "dry", "sail", "ship"]
+property_or_farmland = ["acres", "farm", "owned", "sold", "bought", "estate", "rent", "tenants", "public", "farming", "plots", "cultivation", "soil"]
+country_or_realm = ["native", "promised", "foreign", "holy", "free", "fatherland", "strange", "nation", "dreams"]
+
+[lane_nn]
+narrow_road = ["country", "village", "winding", "hedge", "hedges", "cottage", "walked", "path", "green", "dark", "lover's", "orchard"]
+traffic_division = ["traffic", "highway", "fast", "left", "right", "passing", "shipping", "swimming", "bowling", "bike", "car", "cars"]
+
+[lass_nn]
+girl = ["young", "little", "country", "bonnie", "pretty", "scottish", "village", "farmer's"]
+sweetheart = ["his", "love", "kiss", "courting", "sweetheart", "marry", "wed"]
+
+[maxim_nn]
+saying = ["old", "golden", "rule", "principle", "wisdom", "says", "favorite", "ancient", "proverb", "moral", "political"]
+machine_gun = ["gun", "guns", "machine", "fire", "fired", "bullets", "rifles"]
+
+[multitude_nn]
+great_number = ["of", "reasons", "problems", "things", "objects", "details", "variety", "countless"]
+crowd_or_masses = ["crowd", "people", "assembled", "throng", "vast", "preached", "spoke", "heathen", "applause"]
+
+[ounce_nn]
+unit_of_weight = ["pound", "pounds", "gold", "silver", "weighs", "weight", "grams", "sugar", "dollars", "price"]
+tiny_amount = ["sense", "strength", "energy", "courage", "pride", "every", "last"]
+wild_cat = ["leopard", "panther", "lynx", "beast", "cat", "jaguar"]
+
+[part_nn]
+portion = ["first", "second", "last", "greater", "large", "small", "chapter", "book", "section", "whole", "most", "half"]
+role_or_share = ["play", "played", "role", "took", "taking", "active", "share", "acted", "conspicuous"]
+component = ["spare", "machine", "engine", "parts", "replacement", "moving", "auto", "manufacturer"]
+side_or_region = ["these", "those", "foreign", "country", "world", "my", "his", "her", "behalf"]
+
+[pick_vb]
+choose = ["choose", "chosen", "selected", "team", "winner", "best", "candidate", "card", "carefully", "favorite"]
+pluck_or_gather = ["flowers", "fruit", "apples", "berries", "cotton", "grapes", "strawberries", "harvest"]
+remove_or_pry = ["lock", "teeth", "pocket", "nose", "bone", "pockets", "scab", "lint"]
+pick_up = ["up", "lifted", "phone", "receiver", "speed", "habit"]
+
+[pin_vb]
+fasten = ["note", "badge", "dress", "door", "wall", "shawl", "brooch", "medal", "collar", "board", "notice"]
+hold_down = ["under", "against", "ground", "wreck", "beam", "fallen", "trapped", "wrestler"]
+attach_or_fix_on = ["hopes", "blame", "down", "faith", "responsibility", "crime"]
+
+[plane_nn]
+flat_surface_or_level = ["inclined", "horizontal", "vertical", "geometry", "surface", "angle", "parallel", "higher", "level", "line", "lines", "point", "perpendicular", "spiritual", "moral"]
+aircraft = ["flight", "flew", "pilot", "airport", "landed", "jet", "crash", "engine", "passengers", "air", "takeoff", "aboard", "flying", "aircraft"]
+woodworking_tool = ["carpenter", "wood", "chisel", "saw", "board", "smoothing", "plank", "jack", "bench"]
+plane_tree = ["trees", "sycamore", "avenue", "shade", "leaves", "oak", "elm", "lime"]
+
+[player_nn]
+game_participant = ["team", "game", "football", "baseball", "chess", "basketball", "tennis", "golf", "ball", "coach", "league", "card", "poker"]
+performer = ["piano", "violin", "flute", "organ", "actor", "stage", "music", "theater", "orchestra", "band", "musician", "strolling"]
+influential_party = ["market", "major", "key", "industry", "political", "global", "role", "international", "power"]
+playback_device = ["record", "cd", "dvd", "cassette", "tape", "video", "mp3"]
+
+[prop_nn]
+physical_support = ["roof", "mine", "wall", "beam", "timber", "props", "wooden", "shaft", "tunnel", "fence"]
+supporting_person_or_thing = ["age", "comfort", "old", "family", "chief", "main", "faith"]
+theatre_property = ["stage", "film", "costume", "scene", "theater", "theatre", "movie", "set", "actors"]
+propeller = ["plane", "airplane", "engine", "blade", "spinning", "boat", "aircraft"]
+
+[quilt_nn]
+bed_covering = ["bed", "pillow", "sheets", "blanket", "beneath", "under", "warm", "mattress", "cover", "slept", "covers"]
+patchwork_or_artwork = ["patchwork", "pieced", "sewing", "sewed", "museum", "pattern", "craft", "stitched", "squares", "makers", "bee"]
+
+[rag_nn]
+piece_of_cloth = ["wiped", "oily", "dirty", "damp", "wet", "cloth", "wipe", "dust", "rags", "soaked", "towel"]
+ragged_clothes = ["dressed", "clothed", "wore", "beggar", "tattered", "poverty", "barefoot"]
+poor_newspaper = ["newspaper", "paper", "local", "editor", "tabloid", "printed"]
+ragtime_piece = ["ragtime", "piano", "joplin", "tune", "jazz", "played", "music"]
+
+[rally_nn]
+mass_meeting = ["political", "campaign", "crowd", "speech", "protest", "supporters", "held", "thousands", "candidate", "peace", "pep"]
+recovery_or_regrouping = ["market", "stocks", "prices", "late", "troops", "recovery", "last", "final", "sharp", "brief"]
+exchange_of_strokes = ["tennis", "shot", "shots", "net", "court", "point", "serve"]
+motor_race = ["car", "cars", "driver", "drivers", "race", "racing", "monte", "carlo", "route"]
+
+[record_nn]
+account_or_document = ["records", "kept", "written", "official", "public", "history", "historical", "court", "parish", "documents", "archives", "written"]
+sound_recording_disc = ["played", "album", "label", "company", "song", "songs", "player", "music", "jazz", "vinyl", "singer", "store"]
+best_performance = ["world", "broke", "broken", "breaking", "set", "time", "olympic", "speed", "fastest", "highest", "all-time"]
+persons_history = ["criminal", "voting", "track", "military", "service", "police", "clean", "academic", "good", "excellent"]
+
+[relationship_nn]
+connection_between_things = ["between", "variables", "cause", "causal", "correlation", "inverse", "factors", "theory", "mathematical", "functional"]
+connection_between_people = ["family", "parent", "mother", "father", "friends", "working", "countries", "diplomatic", "business", "teacher", "client", "kinship"]
+romantic_relationship = ["sexual", "romantic", "love", "lover", "girlfriend", "boyfriend", "married", "affair", "dating", "partner"]
+
+[risk_nn]
+possibility_of_harm = ["danger", "dangerous", "high", "great", "health", "disease", "death", "reduce", "run", "ran", "taking", "safety", "increased"]
+insured_or_financial_risk = ["insurance", "insured", "investment", "investors", "capital", "financial", "credit", "portfolio", "premium", "poor"]
+
+[savage_nn]
+supposedly_uncivilised_person = ["noble", "tribe", "tribes", "indians", "civilized", "civilization", "naked", "wild", "heathen", "native", "natives", "barbarous"]
+brutal_person = ["brute", "cruel", "beast", "murderous", "fiend", "monster", "brutal"]
+
+[stab_nn]
+thrust_or_wound = ["knife", "dagger", "wound", "wounds", "back", "chest", "stabbed", "blade", "bayonet", "victim", "heart"]
+sudden_feeling = ["pain", "guilt", "jealousy", "fear", "remorse", "envy", "pity", "regret", "felt", "sharp"]
+attempt = ["have", "take", "make", "made", "took", "at"]
+
+[stroke_vb]
+caress = ["cat", "dog", "hair", "cheek", "head", "beard", "fur", "gently", "hand", "horse", "mane", "chin"]
+flatter_or_soothe = ["ego", "egos", "vanity", "flatter"]
+hit_or_row = ["ball", "putt", "shot", "boat", "crew", "oar", "rowed", "racket"]
+
+[thump_nn]
+heavy_blow = ["fist", "back", "chest", "gave", "blow", "punch", "kick"]
+dull_sound = ["heard", "sound", "floor", "ground", "stairs", "fell", "dull", "heavy", "loud", "landed"]
+
+[tip_vb]
+tilt_or_overturn = ["over", "chair", "scales", "balance", "tilt", "tipped", "boat", "head", "hat", "cart", "spilled", "back"]
+give_gratuity = ["waiter", "porter", "driver", "money", "dollars", "generously", "cab", "bellboy", "coins"]
+give_information = ["off", "police", "favorite", "winner", "likely", "informant", "hint", "warned"]
+cover_the_end = ["arrows", "poison", "steel", "silver", "gold", "brass", "spear", "spears", "iron", "feather"]
+
+[tree_nn]
+plant = ["oak", "pine", "apple", "leaves", "branches", "forest", "trunk", "shade", "planted", "fruit", "roots", "woods", "christmas", "climbed", "cherry", "elm"]
+branching_diagram = ["family", "genealogical", "diagram", "node", "nodes", "decision", "data", "binary", "phylogenetic", "search"]
+wooden_frame = ["shoe", "saddle", "boot", "gallows", "hanged", "cross"]
+
+[twist_nn]
+turning_or_spiral = ["wrist", "turn", "knot", "rope", "spiral", "sharp", "violent", "body", "wire", "neck"]
+unexpected_development = ["plot", "story", "ending", "unexpected", "ironic", "strange", "curious", "new", "fate", "events"]
+dance = ["dance", "danced", "dancing", "chubby", "checker", "music", "rock"]
+small_rolled_piece = ["tobacco", "lemon", "paper", "peel", "candy", "bread"]
+
+[word_nn]
+unit_of_language = ["spelled", "letters", "syllables", "dictionary", "english", "means", "meaning", "pronounce", "language", "vocabulary", "term", "latin", "greek", "verb", "noun"]
+remark_or_talk = ["said", "say", "speak", "spoke", "kind", "few", "last", "single", "sharp", "spoken", "uttered", "whisper"]
+promise = ["gave", "give", "keep", "kept", "honor", "honour", "break", "broke", "pledged", "faith"]
+news_or_message = ["came", "sent", "got", "spread", "received", "news", "brought", "reached", "arrived"]
