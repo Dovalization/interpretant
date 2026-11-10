@@ -19,9 +19,8 @@ from __future__ import annotations
 import itertools
 import random
 from collections import Counter
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Iterable
 from pathlib import Path
-from typing import Any, Protocol
 
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -89,16 +88,6 @@ def split(
     )
 
 
-class FieldAssigner(Protocol):
-    """Anything that assigns abstracts to fields: a fitted classifier, or the nearest language
-    model of :mod:`interpretant.drift.direction`."""
-
-    @property
-    def classes_(self) -> Sequence[Any]: ...
-
-    def predict(self, texts: list[str]) -> Sequence[Any]: ...
-
-
 def fit_fields(train: dict[str, list[str]]) -> Pipeline:
     """Fit one classifier over every field in ``train``."""
     texts = [text for field_texts in train.values() for text in field_texts]
@@ -106,7 +95,7 @@ def fit_fields(train: dict[str, list[str]]) -> Pipeline:
     return classifier().fit(texts, labels)
 
 
-def assignment_shares(model: FieldAssigner, test: dict[str, list[str]]) -> list[dict[str, object]]:
+def assignment_shares(model: Pipeline, test: dict[str, list[str]]) -> list[dict[str, object]]:
     """For every field in ``test``, the share of its abstracts the model assigns to each field."""
     rows: list[dict[str, object]] = []
     for text_field, texts in test.items():

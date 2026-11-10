@@ -114,14 +114,17 @@ def test_word_bits_add_up_to_the_cross_entropy() -> None:
     )
 
 
-def test_known_bits_score_vocabulary_words_and_leave_unknown_ones_out() -> None:
+def test_known_bits_per_token_score_vocabulary_words_and_leave_unknown_ones_out() -> None:
     model = KneserNeyBigram(set(PHILOSOPHY.split())).fit([PHILOSOPHY] * 10)
 
-    bits, _ = model.word_bits([COMPUTING])
+    bits, occurrences = model.word_bits([COMPUTING])
+    known = sum(occurrences.values()) - occurrences[UNKNOWN]
 
-    assert model.known_bits(COMPUTING) == pytest.approx(sum(bits.values()) - bits[UNKNOWN])
-    assert model.known_bits(PHILOSOPHY) == pytest.approx(
-        sum(model.word_bits([PHILOSOPHY])[0].values())
+    assert model.known_bits_per_token(COMPUTING) == pytest.approx(
+        (sum(bits.values()) - bits[UNKNOWN]) / known
+    )
+    assert model.known_bits_per_token(PHILOSOPHY) == pytest.approx(
+        model.document_cross_entropy(PHILOSOPHY)
     )
 
 

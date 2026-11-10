@@ -15,11 +15,18 @@ An effect is *present* when it is positive in every seed and its mean is at leas
 standard deviation across seeds. The method and predictions are fixed in
 docs/predictions_cross_perplexity.md (round N).
 
-Round W asks the language models the same question in the same design: each field's bigram
-model, trained on the reference decade, assigns an abstract to the field whose model gives it
-the fewest bits (:class:`NearestLanguageModel`), and :func:`frame_runs` applies either
-instrument to the same abstracts, on whole cells and with one field's text restricted to a
-venue-stable subset.
+Round W holds the frame of reference and the baseline fixed and changes only the instrument.
+Each instrument trained on one decade gives every held-out abstract a *cost* under every
+field's model: −log₂ p(field | abstract) for the classifier (:class:`ClassifierCosts`), bits per
+scored token for that field's bigram model (:class:`LanguageModelCosts`). The *contrast* of a
+text field between two target groups is its mean cost under one group's models minus under the
+other's, each group without the text field, so neither the field's own model nor a field that
+every field drifts towards enters it unless it is a target. A field's *movement* is the fall in
+its contrast from the training decade to a later one, and the *relative movement* nets the
+median movement of every other field (:func:`relative_movement`). :func:`frame_runs` gives both
+instruments the same abstracts, on whole cells and with one field's text restricted to a
+venue-stable subset; :func:`planted_runs` checks on real abstracts of one decade that an
+instrument finds a move planted in them.
 """
 
 from __future__ import annotations
@@ -28,13 +35,14 @@ import statistics
 from collections import Counter
 from collections.abc import Callable, Iterable
 from pathlib import Path
+from typing import Protocol
 
+import numpy as np
 import pandas as pd
 
 from interpretant.drift.perplexity import MIN_VOCABULARY_COUNT, KneserNeyBigram, training_sample
 from interpretant.drift.separability import (
     PER_FIELD,
-    FieldAssigner,
     assignment_shares,
     decade_samples,
     fit_fields,
@@ -42,6 +50,9 @@ from interpretant.drift.separability import (
 )
 
 PRESENCE_RATIO = 2.0
+PLANTED_SHARE = 0.1
+
+Costs = dict[str, dict[str, float]]
 
 
 def _ignore(message: str) -> None:
@@ -80,14 +91,37 @@ def assignment_runs(  # noqa: PLR0913
     return pd.DataFrame(rows)
 
 
-class NearestLanguageModel:
-    """Assigns an abstract to the field whose bigram model gives it the fewest bits.
+class FieldCosts(Protocol):
+    """An instrument trained on every field of one decade, giving texts a cost per field."""
+
+    def mean_costs(self, texts: list[str]) -> dict[str, float]:
+        """The mean cost of ``texts`` under each field's model."""
+        ...
+
+
+class ClassifierCosts:
+    """Round N's classifier, read through its probabilities: a text's cost under field T is
+    −log₂ p(T | text)."""
+
+    def __init__(self, train: dict[str, list[str]]) -> None:
+        self.pipeline = fit_fields(train)
+
+    def mean_costs(self, texts: list[str]) -> dict[str, float]:
+        bits = -np.log2(self.pipeline.predict_proba(texts))
+        return {
+            str(field): float(bits[:, column].mean())
+            for column, field in enumerate(self.pipeline.classes_)
+        }
+
+
+class LanguageModelCosts:
+    """One bigram model per field: a text's cost under field T is its bits per scored token
+    under T's model.
 
     Every field's model trains on the same number of tokens (the smallest field's training
     total; abstracts taken in their drawn order) over one vocabulary, the words with at least
     ``MIN_VOCABULARY_COUNT`` occurrences across those samples. Only vocabulary words and end
-    tokens are scored, as a classifier's vectoriser ignores words it never saw; otherwise each
-    model's rate of unknown words would decide where an abstract full of new words goes.
+    tokens are scored, so every model scores the same tokens of a text.
     """
 
     def __init__(self, train: dict[str, list[str]]) -> None:
@@ -103,15 +137,20 @@ class NearestLanguageModel:
             for field, sample in sorted(samples.items())
         }
 
-    @property
-    def classes_(self) -> list[str]:
-        return list(self.models)
+    def mean_costs(self, texts: list[str]) -> dict[str, float]:
+        return {
+            field: statistics.fmean(model.known_bits_per_token(text) for text in texts)
+            for field, model in self.models.items()
+        }
 
-    def predict(self, texts: list[str]) -> list[str]:
-        return [
-            min(self.models, key=lambda field: self.models[field].known_bits(text))
-            for text in texts
-        ]
+
+def cost_rows(instrument: FieldCosts, test: dict[str, list[str]]) -> list[dict[str, object]]:
+    """One row per text field in ``test`` and field model, with the text's mean cost."""
+    return [
+        {"text_field": text_field, "model_field": model_field, "cost": cost}
+        for text_field, texts in test.items()
+        for model_field, cost in instrument.mean_costs(texts).items()
+    ]
 
 
 def frame_runs(  # noqa: PLR0913
@@ -119,43 +158,126 @@ def frame_runs(  # noqa: PLR0913
     early: int,
     late: int,
     seeds: Iterable[int],
-    fit: Callable[[dict[str, list[str]]], FieldAssigner] = fit_fields,
+    fit: Callable[[dict[str, list[str]]], FieldCosts] = ClassifierCosts,
     stable: dict[int, list[str]] | None = None,
     field: str = "hci",
     per_field: int = PER_FIELD,
     log: Callable[[str], None] = _ignore,
 ) -> pd.DataFrame:
-    """Fit one assigner per seed on ``early``'s training abstracts and apply it to the held-out
-    abstracts of ``early`` and ``late``: round N's design for one training decade, with the
-    instrument as a parameter (``fit_fields`` for the classifier, ``NearestLanguageModel`` for
-    the language models).
+    """Fit one instrument per seed on ``early``'s training abstracts and score the held-out
+    abstracts of ``early`` and ``late`` under every field's model: round N's samples, with the
+    instrument as a parameter (:class:`ClassifierCosts` or :class:`LanguageModelCosts`).
 
-    One row per seed, cell, test decade, text field and assigned field. Cell ``whole`` holds
-    every field's held-out abstracts. With ``stable`` (a decade's venue-stable abstracts of
+    One row per seed, cell, test decade, text field and model field. Cell ``whole`` holds every
+    field's held-out abstracts. With ``stable`` (a decade's venue-stable abstracts of
     ``field``), cell ``stable`` repeats the other fields' rows and replaces ``field``'s: its
     ``early`` text is every stable abstract outside that seed's training abstracts, its
-    ``late`` text every stable abstract. Filter on the cell before taking a relative gain.
+    ``late`` text every stable abstract.
     """
     rows: list[dict[str, object]] = []
     for seed in seeds:
         train, held_out_early = split(decade_samples(texts_dir, early, seed, per_field))
         _, held_out_late = split(decade_samples(texts_dir, late, seed, per_field))
-        model = fit(train)
+        instrument = fit(train)
         trained = set(train[field]) if field in train else set()
         for decade, held_out in ((early, held_out_early), (late, held_out_late)):
-            assigned = assignment_shares(model, held_out)
+            scored = cost_rows(instrument, held_out)
             key = {"seed": seed, "train_decade": early, "test_decade": decade}
-            rows.extend({**key, "cell": "whole", **row} for row in assigned)
+            rows.extend({**key, "cell": "whole", **row} for row in scored)
             if stable is None:
                 continue
             texts = [text for text in stable[decade] if decade != early or text not in trained]
-            others = [row for row in assigned if row["text_field"] != field]
+            others = [row for row in scored if row["text_field"] != field]
             rows.extend(
                 {**key, "cell": "stable", **row}
-                for row in others + assignment_shares(model, {field: texts})
+                for row in others + cost_rows(instrument, {field: texts})
             )
-        log(f"  seed {seed}: {early}s assigner applied to the {early}s and {late}s")
+        log(f"  seed {seed}: {early}s instrument scored the {early}s and {late}s")
     return pd.DataFrame(rows)
+
+
+def planted_runs(  # noqa: PLR0913
+    texts_dir: Path,
+    decade: int,
+    seeds: Iterable[int],
+    fit: Callable[[dict[str, list[str]]], FieldCosts],
+    donors: Iterable[str],
+    field: str = "hci",
+    planted_share: float = PLANTED_SHARE,
+    per_field: int = PER_FIELD,
+    log: Callable[[str], None] = _ignore,
+) -> pd.DataFrame:
+    """A move planted in real abstracts, all from one decade, for an instrument to find.
+
+    Each seed's held-out abstracts are halved: the first half stands for the early decade, the
+    second for the late one, so no field moves but by resampling. Cell ``none`` scores the
+    halves as drawn. Each donor's cell replaces the first ``planted_share`` of ``field``'s late
+    abstracts with the donor's late abstracts and repeats every other field's rows: a change in
+    which abstracts the field holds, not in their words.
+
+    One row per seed, cell, half (``early`` or ``late``), text field and model field.
+    """
+    rows: list[dict[str, object]] = []
+    for seed in seeds:
+        train, held_out = split(decade_samples(texts_dir, decade, seed, per_field))
+        instrument = fit(train)
+        halves = {
+            "early": {name: texts[: len(texts) // 2] for name, texts in held_out.items()},
+            "late": {name: texts[len(texts) // 2 :] for name, texts in held_out.items()},
+        }
+        scored = {half: cost_rows(instrument, test) for half, test in halves.items()}
+        late = halves["late"]
+        planted = round(len(late[field]) * planted_share)
+        others = [row for row in scored["late"] if row["text_field"] != field]
+        cells = {"none": scored["late"]}
+        for donor in donors:
+            texts = late[donor][:planted] + late[field][planted:]
+            cells[donor] = others + cost_rows(instrument, {field: texts})
+        for cell, late_rows in cells.items():
+            rows.extend(
+                {"seed": seed, "cell": cell, "half": "early", **row} for row in scored["early"]
+            )
+            rows.extend({"seed": seed, "cell": cell, "half": "late", **row} for row in late_rows)
+        log(f"  seed {seed}: {decade}s instrument scored the planted halves")
+    return pd.DataFrame(rows)
+
+
+def cost_matrix(rows: pd.DataFrame) -> Costs:
+    """Text field to model field to cost, from the rows of one seed, cell and test decade."""
+    matrix: Costs = {}
+    for text, model, cost in zip(rows.text_field, rows.model_field, rows.cost, strict=True):
+        matrix.setdefault(str(text), {})[str(model)] = float(cost)
+    return matrix
+
+
+def contrast(costs: Costs, text: str, towards: tuple[str, ...], over: tuple[str, ...]) -> float:
+    """``text``'s mean cost under ``towards``' models minus under ``over``'s, each group
+    without ``text``: lower means ``text`` reads more like ``towards`` than like ``over``."""
+
+    def group_cost(group: tuple[str, ...]) -> float:
+        return statistics.fmean(costs[text][member] for member in group if member != text)
+
+    return group_cost(towards) - group_cost(over)
+
+
+def movement(
+    early: Costs, late: Costs, text: str, towards: tuple[str, ...], over: tuple[str, ...]
+) -> float:
+    """The fall in ``text``'s contrast from ``early`` to ``late``: positive is a move towards
+    ``towards`` over ``over``."""
+    return contrast(early, text, towards, over) - contrast(late, text, towards, over)
+
+
+def relative_movement(
+    early: Costs, late: Costs, text: str, towards: tuple[str, ...], over: tuple[str, ...]
+) -> float:
+    """``text``'s movement minus the median movement of every other field (each field for
+    which both groups keep a member once it is left out)."""
+    others = [
+        other for other in early if other != text and set(towards) - {other} and set(over) - {other}
+    ]
+    baseline = statistics.median(movement(early, late, other, towards, over) for other in others)
+    return movement(early, late, text, towards, over) - baseline
 
 
 def share(  # noqa: PLR0913
