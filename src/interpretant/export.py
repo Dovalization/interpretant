@@ -44,6 +44,7 @@ ROUNDS: dict[str, tuple[str, str]] = {
     "S": ("Separability", "a classifier that guesses each abstract's field"),
     "V": ("Technology vocabulary", "round S's classifier without 29 technology terms"),
     "M": ("Held-out check", "does every cell's model generalise to text it never saw"),
+    "N": ("Direction", "who moved towards whom, net of every field's drift"),
 }
 _TITLE = re.compile(r"^\*\*([A-Z]\d+) — ([\s\S]*?)\*\*", re.MULTILINE)
 _VERDICT = re.compile(

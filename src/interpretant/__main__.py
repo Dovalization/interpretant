@@ -1051,6 +1051,52 @@ def drift_heldout(
     console.print(f"[green]{len(table):,} rows[/green] → {output}")
 
 
+@drift.command("direction")
+@click.option(
+    "--texts-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased/openalex/texts"),
+    show_default=True,
+)
+@click.option(
+    "--train-decade",
+    "train_decades",
+    multiple=True,
+    type=int,
+    default=(1980, 1990),
+    show_default=True,
+)
+@click.option(
+    "--test-decade",
+    "test_decades",
+    multiple=True,
+    type=int,
+    default=(1990, 2000, 2010, 2020),
+    show_default=True,
+)
+@click.option("--seed", "seeds", multiple=True, default=(1, 2, 3, 4, 5), show_default=True)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=Path("data/drift/direction_assignments.parquet"),
+    show_default=True,
+)
+def drift_direction(  # noqa: PLR0913
+    texts_dir: Path,
+    train_decades: tuple[int, ...],
+    test_decades: tuple[int, ...],
+    seeds: tuple[int, ...],
+    output: Path,
+) -> None:
+    """Where each decade's classifier sends later decades' abstracts (round N)."""
+    from interpretant.drift.direction import assignment_runs  # noqa: PLC0415
+
+    table = assignment_runs(texts_dir, train_decades, test_decades, seeds, log=console.print)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    table.to_parquet(output, index=False)
+    console.print(f"[green]{len(table):,} rows[/green] → {output}")
+
+
 @drift.command("grid")
 @click.option(
     "--model-dir",
