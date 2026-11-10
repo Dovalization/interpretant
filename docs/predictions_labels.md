@@ -113,3 +113,47 @@ measures variety, and Sonnet's Y3, when scored, will be read the same way. Wheth
 stopped only by Y3 may continue is the author's decision, and if it does, it continues under a
 new pre-registered round with a variety check calibrated on the gold first, not by reinterpreting
 round Y.
+
+## Round Z: round Y with sense lists from WordNet (committed 2026-11-10, before any usage was labelled with these lists, and before Sonnet's round Y was scored)
+
+A robustness round. Round Y's sense lists were written by Claude, who knew the SemEval-2020
+results in general; a labeller passing round Y could owe part of its result to how the lists
+were drawn. Round Z repeats round Y with lists no one wrote: for each word, the first four
+WordNet 3.0 senses of its part of speech that contain the word itself, in WordNet's order (most
+frequent first), each with WordNet's own definition and example, instance synsets (named people
+and places) left out (`scripts/wordnet_sense_lists.py`, lists committed in 30c4bc4). The
+instance rule was added after a first generation showed two person names (Sir Hiram Maxim under
+*maxim*, Sir Herbert Beerbohm Tree under *tree*), before any usage was labelled with the lists.
+
+### Method
+
+As round Y in everything else: the same 8,787 usages, the same labellers and requests, the same
+10% of repeats (seed 2026), the same divergence and adjusted Rand index. Five words get a single
+WordNet sense (*chairman, chef, lass, maxim, quilt*), so their distribution is that sense against
+*other*. WordNet's order follows modern sense-tagged text, and the cap can drop a sense that
+mattered in the 19th century (*plane* keeps the aeroplane and loses the plane tree); that is the
+price of lists no one chose. No variety check is made: round Y's Y3 was shown unable to separate
+change from variety, and its successor waits for a design calibrated on the gold first.
+
+- Already seen: everything round Y lists, JEV's round Y results, the Y3 correction, and the
+  generated lists. Not seen: Sonnet's round Y scores, or any label made with these lists.
+
+### Predictions (for each labeller)
+
+**Z1 — The WordNet labels rank the benchmark's changes.** Spearman between the labels'
+divergence and DWUG's graded change over the 46 words is at least 0.70. *Falsified* below.
+
+**Z2 — The lists do not drive round Y's result.** The labeller's Spearman in round Z is within
+0.10 of its Spearman in round Y. *Falsified* if they differ by more than 0.10.
+
+**Z3 — The labels are consistent.** At least 85% of the repeated usages get the same label both
+times. *Falsified* below.
+
+**Z4 — Grouping, compared.** The mean adjusted Rand index with DWUG's clusters, reported beside
+round Y's; descriptive.
+
+Reading rule: round Z decides nothing about whether a labeller continues. If Z1 or Z2 fails for a
+labeller, every citation of that labeller's round Y result says that it depends on the sense
+lists. If both pass, round Y's result is reported as not depending on who wrote the lists.
+
+Scored by `scripts/score_labels_wordnet.py`, committed before it is run.
