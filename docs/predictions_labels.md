@@ -222,3 +222,111 @@ dependence belongs to the lists, not to one labeller.
 Exploratory, after scoring: Sonnet found no fitting listed sense for 19.4% and 17.4% of the two
 periods' usages with WordNet's lists, against 8.8% and 9.0% with round Y's, the same pattern as
 JEV's. The two readings recorded for JEV stand, and this round cannot separate them.
+
+## Round Q: sense lists induced from the texts, three labellers (committed 2026-11-10, before any list was induced or any usage of half B labelled)
+
+Rounds Y and Z showed that the labels rank DWUG's changes well, and that the result depends on the
+sense lists: with WordNet's first four senses, both labellers dropped by about 0.18, and found no
+fitting sense for about one usage in five. Round Q builds the lists from the texts instead: from
+one half of each word's usages, with evidence from methods that are not generative language
+models, consolidated by a language model that may only edit what the evidence shows, then frozen
+and measured on the other half by three labellers, one of them not a generative model. If it
+reaches round Y's level, the method needs neither hand-written lists nor any one model.
+
+It also replaces round Y's Y3 with a variety check calibrated on the gold first (below), so a
+labeller that passes round Q passes rung 1, with induced lists, despite round Y's stop.
+
+### Method (fixed before any list is induced)
+
+- **Halves.** For each word and period, DWUG's kept usages (round Y's 8,787), sorted by key and
+  shuffled with one `random.Random(2026)` taken over the words in order and periods 1 then 2; the
+  first half (rounded down) of each is half B, the rest half A. Half B: 4,377 usages. Lists are
+  induced from half A only, and every measure is on half B only.
+- **Step A, evidence from half A, no generative model.**
+  1. *Substitutes.* ModernBERT-large (`answerdotai/ModernBERT-large`, revision 45bb4654) reads
+     each usage's context, cut to 100 words around the target, with " (or even [MASK])" after
+     the target, the pattern of Amrami and Goldberg (2019), and gives its 20 most likely fillers.
+     Fillers are lowercased; dropped if not alphabetic, shorter than two letters, an English stop
+     word (scikit-learn's list), or the target or its form with -s, -es, -d, -ed or -ing.
+     Substitutes found in at least 3 of the word's half-A usages are nodes of a graph whose edges
+     count the usages in which two substitutes appear together; Louvain communities (networkx,
+     resolution 1, seed 2026) group them (Eyal et al. 2022). A usage belongs to the community
+     holding most of its substitutes (ties to the earlier community); communities holding under
+     5% of the word's half-A usages are dropped. Each kept community is shown by its 10 most
+     frequent substitutes and the 3 half-A usages with most substitutes in it.
+  2. *Neighbours.* The 15 most frequent words immediately before or after the target in half A
+     (alphabetic, lowercased, stop words left out), with their counts.
+  3. *Dictionaries.* Every WordNet 3.0 synset of the word's part of speech that contains the word
+     and is not an instance (named people and places), and every Wiktionary sense of that part of
+     speech from kaikki.org's per-word extract (downloaded once, the date recorded), each with its
+     gloss and topic tags.
+- **Step B, consolidation.** Claude Opus 5.5 at high effort, through the Batch API, one request per
+  word, sees the word's evidence and nothing about periods, fields or DWUG's scores, and returns,
+  by a JSON schema, 1 to 8 senses (key, one-line definition, invented example, and the evidence
+  each rests on) and a map from every kept community to one sense or to none. Rules given in the
+  prompt, committed with the code: every sense cites at least one community or neighbour (a
+  dictionary entry alone is not enough, so senses the texts do not show are left out); the fewest
+  senses a careful reader could tell apart in context; senses a reader could not reliably tell
+  apart are merged.
+- **Coverage pass.** Sonnet labels every half-A usage with the consolidated lists (as in round Y).
+  For a word whose half-A usages are more than 10% *other* or *unclear*, a second Opus request gets
+  its list and up to 40 of those usages with their substitutes, and may add senses (8 at most) by
+  the same rules, citing those usages. One revision only; the lists are then frozen whatever their
+  coverage and committed before half B is labelled.
+- **Step C, labelling half B, three labellers.** Sonnet (Batch API, low effort) and JEV
+  (`jev-1.14.0`) as in round Y, with 10% repeats (seed 2026). A third labeller with no generative
+  model: each half-B usage's substitutes, found as in step A, place it in the kept community
+  holding most of them, read through the step B map; a usage in no kept community, or in one
+  mapped to none, is *other*.
+- **Measures, on half B.** The divergence between the two periods' sense distributions, as round
+  Y, and its Spearman with DWUG's graded change. *Change beyond variety:* the partial Spearman of
+  the divergence with the graded change, controlling for the mean divergence over 20 shuffles of
+  the periods (seeds 0 to 19), on ranks with linear residuals.
+- **Calibrated on the gold first.** DWUG's own clusters on half B: Spearman 0.966 with the graded
+  change, mean shuffled divergence alone 0.874, partial controlling for it 0.849. A measure of
+  variety alone would have a partial near 0. A variant considered and dropped: the divergence minus
+  its mean shuffled divergence, on which the gold itself reaches only 0.724.
+- Already seen: rounds Y and Z in full; the gold calibration above; substitutes from BERT-large and
+  ModernBERT-large on five invented sentences (ModernBERT gives the attention mechanism's
+  substitutes, BERT does not); kaikki.org's extract for *plane*. Not computed: any list induced from
+  DWUG, any label of half B, and any round Y labeller's score on half B or on the partial measure.
+
+### Predictions (Sonnet and JEV each; the substitute labeller where stated)
+
+**Q1 — The induced lists rank the benchmark's changes.** Spearman over the 46 words, on half B,
+is at least 0.70. For all three labellers. *Falsified* below.
+
+**Q2 — Induced lists do as well as hand-written ones.** The labeller's Spearman on half B with
+induced lists is at least its round Y labels' Spearman on the same half B, minus 0.10. Sonnet and
+JEV. *Falsified* otherwise.
+
+**Q3 — The measure tracks change beyond variety.** The partial Spearman is at least 0.40, about
+half the gold's 0.849. For all three labellers. *Falsified* below.
+
+**Q4 — The lists cover the texts.** At most 10% of half B's usages are *other* or *unclear*. For
+all three labellers (for the substitute labeller, *other*). *Falsified* above.
+
+**Q5 — The labels are consistent.** At least 85% of the repeats get the same label. Sonnet and
+JEV. *Falsified* below.
+
+**Q6 — Grouping.** The mean adjusted Rand index with DWUG's clusters on half B, beside round Y's
+labels on half B. Descriptive.
+
+**Q7 — The three labellers agree.** The share of half-B usages on which each pair gives the same
+label. Descriptive.
+
+Reading rule:
+
+- A labeller **passes rung 1 with induced lists** if Q1, Q3, Q4 and Q5 pass (for the substitute
+  labeller, Q1, Q3 and Q4). It then goes on to rung 2 with the same pipeline: lists induced from
+  this corpus's texts by the steps above, reviewed by the author before they are frozen.
+- A labeller that fails any of them stops. If all three stop, induced lists stop.
+- Q2 decides how induced lists are described: passing, as doing as well as hand-written ones;
+  failing, as weaker, with the gap reported.
+- Opus induces the lists and Sonnet labels with them; both are Claude models, and Sonnet's
+  coverage labels on half A shape the revision pass. JEV and the substitute labeller are the
+  checks on that: agreement between all three (Q7) is the measure of how much the result rests on
+  one family of models.
+
+Cost: about $3 for consolidation and revision (Opus, batch prices), $3.50 for the coverage pass
+and $4 for half B on Sonnet, about $0.15 for JEV; the substitutes run locally.
