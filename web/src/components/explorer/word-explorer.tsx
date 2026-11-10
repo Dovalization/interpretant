@@ -15,6 +15,7 @@ import { NeighbourColumns } from "@/components/explorer/neighbour-columns";
 import { TrajectoryChart } from "@/components/explorer/trajectory-chart";
 import { FigurePanel } from "@/components/figure-panel";
 import {
+  defaultFields,
   divergence,
   divergenceDecades,
   fieldsInLayer,
@@ -33,19 +34,20 @@ import type { Layer, WordData } from "@/lib/schema";
 interface WordExplorerProps {
   data: WordData;
   defaultLayer: Layer;
-  defaultFields: string[];
 }
 
-export function WordExplorer({ data, defaultLayer, defaultFields }: WordExplorerProps) {
+export function WordExplorer({ data, defaultLayer }: WordExplorerProps) {
   const [state, setState] = useQueryStates({
     layer: parseAsStringLiteral(LAYERS).withDefault(defaultLayer),
     method: parseAsStringLiteral(METHODS).withDefault("twec"),
     k: parseAsInteger.withDefault(12),
-    fields: parseAsArrayOf(parseAsString).withDefault(defaultFields),
+    fields: parseAsArrayOf(parseAsString),
     decade: parseAsInteger,
   });
   const available = fieldsInLayer(data, state.layer, state.method);
-  const fields = state.fields.filter((field) => available.includes(field));
+  const chosen = (state.fields ?? []).filter((field) => available.includes(field));
+  // A layer or method switch can leave no chosen field in the new layer; show its defaults.
+  const fields = chosen.length > 0 ? chosen : defaultFields(data, state.layer, state.method);
   const columns = neighbourColumns(data, state.layer, state.method, fields);
   const shared = sharedWords(columns, state.k);
   const decades = divergenceDecades(data);

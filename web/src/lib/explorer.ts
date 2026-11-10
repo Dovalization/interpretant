@@ -23,21 +23,21 @@ export const fieldsInLayer = (data: WordData, layer: Layer, method: Method): str
       .map((entry) => entry.field),
   ).sort();
 
-/** The layer with the most neighbour lists for the word: full cells when they exist. */
+/**
+ * The research layer (main grid or full cells) with the most neighbour lists for the word.
+ * Books open first only when no research cell measures the word: the findings live in the
+ * research layers, and the books' long series would otherwise win on count alone.
+ */
 export const defaultLayer = (data: WordData): Layer => {
-  const counts = new Map<Layer, number>();
-  for (const entry of data.neighbours.filter((item) => item.method === "twec")) {
-    counts.set(entry.layer, (counts.get(entry.layer) ?? 0) + 1);
-  }
-  return LAYERS.reduce(
-    (best, layer) => ((counts.get(layer) ?? 0) > (counts.get(best) ?? 0) ? layer : best),
-    "openalex",
-  );
+  const lists = (layer: Layer): number =>
+    data.neighbours.filter((entry) => entry.layer === layer && entry.method === "twec").length;
+  const research: Layer = lists("openalex_full") > lists("openalex") ? "openalex_full" : "openalex";
+  return lists(research) === 0 && lists("books") > 0 ? "books" : research;
 };
 
 /** Up to two fields: the ones with the most candidate transitions, then the most cells. */
-export const defaultFields = (data: WordData, layer: Layer): string[] => {
-  const available = fieldsInLayer(data, layer, "twec");
+export const defaultFields = (data: WordData, layer: Layer, method: Method = "twec"): string[] => {
+  const available = fieldsInLayer(data, layer, method);
   const score = (field: string): [number, number] => [
     data.within.filter((row) => row.layer === layer && row.field === field && row.candidate).length,
     data.neighbours.filter((entry) => entry.layer === layer && entry.field === field).length,

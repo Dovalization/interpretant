@@ -56,7 +56,7 @@ interface ChipsProps {
   colorFor?: (value: string) => string;
 }
 
-/** Several choices: toggle chips, each carrying its entity's colour as a leading dot. */
+/** Several choices, at least one kept: toggle chips, each with its entity's colour as a dot. */
 export function Chips({ label, value, options, max, onChange, colorFor }: ChipsProps) {
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -66,7 +66,7 @@ export function Chips({ label, value, options, max, onChange, colorFor }: ChipsP
       <ToggleGroup
         multiple
         value={value}
-        onValueChange={(next) => onChange(max ? next.slice(-max) : next)}
+        onValueChange={(next) => next.length > 0 && onChange(max ? next.slice(-max) : next)}
         variant="outline"
         size="sm"
         className="flex-wrap"

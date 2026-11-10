@@ -85,6 +85,26 @@ describe("explorer helpers", () => {
     expect(fieldsInLayer(DATA, "openalex_full", "ppmi")).toEqual(["hci"]);
   });
 
+  it("opens a research layer even when the books have more lists, and books only as a fallback", () => {
+    const book = (decade: number) => ({
+      layer: "books" as const,
+      field: "books",
+      decade,
+      method: "twec" as const,
+      words: ["mind"],
+    });
+    const books = [1850, 1860, 1870, 1880, 1890].map(book);
+
+    expect(defaultLayer({ ...DATA, neighbours: [...DATA.neighbours, ...books] })).toBe(
+      "openalex_full",
+    );
+    expect(defaultLayer({ ...DATA, neighbours: books })).toBe("books");
+  });
+
+  it("chooses default fields among those the method has", () => {
+    expect(defaultFields(DATA, "openalex_full", "ppmi")).toEqual(["hci"]);
+  });
+
   it("builds columns per field in order, with counts, and finds the shared words", () => {
     const columns = neighbourColumns(DATA, "openalex_full", "twec", ["philosophy", "hci"]);
 
