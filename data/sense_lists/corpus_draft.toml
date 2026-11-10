@@ -13,7 +13,7 @@ word = "attention"
 key = "cognitive_attention"
 definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience"
 example = "Sleep loss impairs sustained attention in older adults."
-cues = ["<<sustained", "<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting"]
+cues = ["<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting"]
 
 [[attention.senses]]
 key = "notice_or_consideration"
