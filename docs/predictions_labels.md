@@ -366,3 +366,53 @@ correlations cannot be computed with it. The scorer now leaves out a word whose 
 shuffled divergence) is undefined, prints which, and computes every correlation over the rest. No
 word was left out for any labeller in the induced arm or for Sonnet in the rule-built arm, so their
 printed results are unchanged; for JEV on the rule-built lists the correlations are over 45 words.
+
+### Round Q results (2026-11-10, `scripts/score_labels_induced.py score` and `score_rules`)
+
+Scored as written, with the correction above. Every label request succeeded (4,815 for each of
+Sonnet and JEV on each arm, 4,377 for the substitute labeller). Opus's first lists held 1 to 5
+senses; the coverage pass found 22 words over 10% *other* or *unclear* on half A (up to 48% for
+*pick*), and the revision left 14 words at the cap of 8 senses.
+
+Lists induced by Opus (half B; round Y's hand-written lists on the same half for reference):
+
+| | Sonnet 5.5 | JEV 1.14 | Substitute labeller |
+|---|---|---|---|
+| Q1 Spearman (needed 0.70) | 0.443, **falsified** | 0.502, **falsified** | 0.433, **falsified** |
+| Q2 against round Y on half B (at most 0.10 below) | 0.693, **falsified** | 0.800, **falsified** | — |
+| Q3 partial Spearman (needed 0.40) | 0.307, **falsified** | 0.362, **falsified** | 0.183, **falsified** |
+| Q4 *other* or *unclear* (at most 10%) | 6.0%, **passed** | 6.8%, **passed** | 1.4%, **passed** |
+| Q5 repeats the same (needed 85%) | 98.4%, **passed** | 98.6%, **passed** | — |
+| Q6 mean ARI (round Y on half B) | 0.252 (0.330) | 0.245 (0.302) | 0.168 |
+
+Q7: Sonnet and JEV agree on 84.9% of half-B usages, each with the substitute labeller on 66.5–66.7%.
+
+Rule-built lists:
+
+| | Sonnet 5.5 | JEV 1.14 | Substitute labeller |
+|---|---|---|---|
+| R1 Spearman (needed 0.70) | 0.385, **falsified** | 0.590 over 45 words, **falsified** | 0.420, **falsified** |
+| R2 against Opus's lists (at most 0.10 below) | 0.443, **passed** | 0.502, **passed** | 0.433, **passed** |
+| R3 partial Spearman (needed 0.40) | 0.272, **falsified** | 0.453, **passed** | 0.207, **falsified** |
+| R4 *other* or *unclear* (at most 10%) | 11.7%, **falsified** | 16.2%, **falsified** | 1.4%, **passed** |
+| R5 repeats the same (needed 85%) | 96.8%, **passed** | 95.7%, **passed** | — |
+| R6 mean ARI | 0.185 | 0.227 | 0.110 |
+
+R7: on rule-built lists Sonnet and JEV agree on 63.9%, each with the substitute labeller on
+51.6–63.0%.
+
+By the reading rules: no labeller passes rung 1 with induced lists or with rule-built lists, and
+induced lists are described as weaker than hand-written ones, by 0.25 for Sonnet and 0.30 for JEV
+on the same half. R2 passed for all three labellers: the language model's part in building the
+lists changes the result little (JEV did better with the rule-built lists than with Opus's).
+
+Read from the tables: lists built from the texts, by either route, cover the texts (Opus's lists
+leave 6–7% unfitted) but rank the benchmark's changes far worse than the hand-written lists did on
+the same usages, and no better than BERT's 0.563 on the full benchmark. Coverage is therefore not
+what the induced lists lack. The substitute communities, read in step A, also split usages by
+topic and grammatical number (*attack*'s military and violent-crime groups, *plane*'s singular and
+plural vehicles), the context-for-meaning confusion of the earlier instruments in another form;
+Opus merged such groups at first, and the revision then split 14 words up to eight senses.
+Whether the hand-written lists win because their writer knew the answers or because they draw the
+lines a reader draws, this round cannot say, as round Z could not; it does show that neither the
+substitute evidence nor a language model consolidating it recovers those lines.
