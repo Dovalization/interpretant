@@ -160,19 +160,19 @@ word = "component"
 key = "part_of_a_system"
 definition = "A separable physical or software part of a machine, device or system, including a module of a model's architecture"
 example = "Each software component exposes a well-defined interface."
-cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module", "modules", "integration", "architecture", "based", "device", "devices", "interface", "interfaces"]
+cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module", "modules", "integration", "architecture", "based", "device", "devices", "interface", "interfaces", "system", "systems", "pipeline", "integrates", "integrated"]
 
 [[component.senses]]
 key = "mathematical_or_measured_component"
 definition = "A constituent of a quantity, signal, vector or data set in mathematical or statistical analysis"
 example = "The first principal component explains most of the variance."
-cues = ["principal", "independent", "analysis", "frequency", "vector", "signal", "variance", "connected", "harmonic", "spectral", "factor", "orthogonal"]
+cues = ["principal", "<<independent", "analysis", "frequency", "vector", "signal", "variance", "connected", "harmonic", "spectral", "factor", "orthogonal"]
 
 [[component.senses]]
 key = "element_of_an_abstract_whole"
 definition = "An element or aspect of an abstract whole, such as a theory, a skill, a process or a programme, that is not a separable module"
 example = "Feedback is a key component of effective teaching."
-cues = ["key", "important", "essential", "critical", "core", "central", "major", "main", "integral", "crucial", "fundamental"]
+cues = ["aspect", "aspects", "dimension", "dimensions", "theory", "theoretical", "conceptual", "construct", "constructs", "skill", "skills", "competence", "curriculum"]
 
 [having]
 word = "having"
