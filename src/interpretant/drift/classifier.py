@@ -20,11 +20,19 @@ TOKEN = re.compile(r"[a-z']+")
 
 def cue_sense(usage: Usage, cues: Mapping[str, Sequence[str]], window: int = 5) -> str | None:
     """The one sense whose cues appear within ``window`` words of the target, or None when no
-    sense's cues do or more than one sense's do."""
-    before = TOKEN.findall(usage.text[: usage.start].lower())[-window:]
-    after = TOKEN.findall(usage.text[usage.end :].lower())[:window]
-    nearby = set(before) | set(after)
-    found = [sense for sense, words in cues.items() if nearby & set(words)]
+    sense's cues do or more than one sense's do. A cue written ``<word`` counts only before the
+    target and ``>word`` only after it; a plain cue counts on either side."""
+    before = set(TOKEN.findall(usage.text[: usage.start].lower())[-window:])
+    after = set(TOKEN.findall(usage.text[usage.end :].lower())[:window])
+
+    def present(cue: str) -> bool:
+        if cue.startswith("<"):
+            return cue[1:] in before
+        if cue.startswith(">"):
+            return cue[1:] in after
+        return cue in before or cue in after
+
+    found = [sense for sense, words in cues.items() if any(present(c) for c in words)]
     return found[0] if len(found) == 1 else None
 
 

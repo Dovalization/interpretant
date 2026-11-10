@@ -44,3 +44,20 @@ def test_the_classifier_follows_the_seeds() -> None:
 
 def test_seeds_of_one_sense_label_everything_with_it() -> None:
     assert classify(np.ones((2, 2)), ["a", "a"], np.zeros((3, 2))) == ["a", "a", "a"]
+
+
+def test_a_cue_can_be_held_to_one_side_of_the_target() -> None:
+    cues = {"perfect": [">obtained"], "possessing": ["images"]}
+    assert (
+        cue_sense(usage("the data was obtained from a source having many images", "having"), cues)
+        == "possessing"
+    )
+    assert cue_sense(usage("having obtained the data we fit a model", "having"), cues) == "perfect"
+    assert (
+        cue_sense(usage("without having to retrain", "having"), {"obligation": ["<without"]})
+        == "obligation"
+    )
+    assert (
+        cue_sense(usage("having to retrain without data", "having"), {"obligation": ["<without"]})
+        is None
+    )
