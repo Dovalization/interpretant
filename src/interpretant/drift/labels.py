@@ -251,3 +251,131 @@ class TypeSafeSettings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     typesafe_api_key: str
+
+
+class AnthropicSettings(BaseSettings):
+    """The Anthropic API key, from ``.env`` only: exported in the shell, it would also switch
+    Claude Code itself from the subscription to the API."""
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    anthropic_api_key: str
+
+
+REFUSED = "refused"
+SINGLE_SYSTEM_PROMPT = (
+    "You label the sense of a word in context. You are given a word, a list of its senses, and "
+    "one usage in which the word is marked with ⟦ and ⟧. Give the one sense from the list that "
+    "the marked word has in that usage. Use 'other' when the marked word has a sense that is not "
+    "on the list, and 'unclear' only when the context does not allow you to tell."
+)
+
+
+def single_prompt(senses: SenseList, usage: Usage) -> str:
+    lines = [f"Word: {senses.word}", "", "Senses:"]
+    lines += [f"- {s.key}: {s.definition} (Example: {s.example})" for s in senses.senses]
+    lines += [
+        f"- {OTHER}: a sense of the word that is not on this list",
+        f"- {UNCLEAR}: the context does not allow you to tell",
+        "",
+        f"Usage: {shown(usage)}",
+    ]
+    return "\n".join(lines)
+
+
+def label_schema(senses: SenseList) -> dict[str, object]:
+    return {
+        "type": "object",
+        "properties": {"label": {"type": "string", "enum": senses.labels}},
+        "required": ["label"],
+        "additionalProperties": False,
+    }
+
+
+def single_label(result: dict[str, object], senses: SenseList) -> str:
+    """The label in one stored batch result: ``refused``, ``failed`` or a label from the list."""
+    if result.get("type") != "succeeded":
+        return FAILED
+    if result.get("stop_reason") == "refusal":
+        return REFUSED
+    try:
+        label = json.loads(str(result.get("text")))["label"]
+    except (json.JSONDecodeError, KeyError, TypeError):
+        return FAILED
+    return str(label) if label in senses.labels else FAILED
+
+
+@dataclass(frozen=True)
+class BatchLabeller:
+    """One usage per request through the Message Batches API, at half the standard price.
+
+    A run's batch identifier and its request-to-item map are stored before polling, and every
+    result is stored when the batch ends, so an interrupted run resumes and a finished one is
+    never sent again. Errored requests are not retried; their items are ``failed``.
+    """
+
+    model: str
+    effort: str
+    max_tokens: int = 2048
+    poll_seconds: float = 30.0
+
+    def params(self, senses: SenseList, item: Item) -> dict[str, object]:
+        return {
+            "model": self.model,
+            "max_tokens": self.max_tokens,
+            "system": SINGLE_SYSTEM_PROMPT,
+            "messages": [{"role": "user", "content": single_prompt(senses, item.usage)}],
+            "output_config": {
+                "effort": self.effort,
+                "format": {"type": "json_schema", "schema": label_schema(senses)},
+            },
+        }
+
+    def label(self, work: Sequence[tuple[SenseList, Item]], record: Path) -> dict[str, str]:
+        """Labels by item key; ``record`` is a directory holding the run's batch and results."""
+        import time  # noqa: PLC0415
+
+        import anthropic  # noqa: PLC0415
+
+        senses_of = {f"r{index}": senses for index, (senses, _) in enumerate(work)}
+        key_of = {f"r{index}": item.key for index, (_, item) in enumerate(work)}
+        results_path = record / "results.jsonl"
+        if not results_path.exists():
+            client = anthropic.Anthropic(api_key=AnthropicSettings().anthropic_api_key)  # type: ignore[call-arg]
+            batch_path = record / "batch.json"
+            if batch_path.exists():
+                batch_id = json.loads(batch_path.read_text(encoding="utf-8"))["id"]
+            else:
+                requests = [
+                    {"custom_id": custom_id, "params": self.params(senses, item)}
+                    for custom_id, (senses, item) in zip(senses_of, work, strict=True)
+                ]
+                batch = client.messages.batches.create(requests=requests)  # type: ignore[arg-type]
+                batch_id = batch.id
+                record.mkdir(parents=True, exist_ok=True)
+                batch_path.write_text(
+                    json.dumps({"id": batch_id, "model": self.model, "keys": key_of}),
+                    encoding="utf-8",
+                )
+            while client.messages.batches.retrieve(batch_id).processing_status != "ended":
+                time.sleep(self.poll_seconds)
+            lines = []
+            for result in client.messages.batches.results(batch_id):
+                stored: dict[str, object] = {
+                    "custom_id": result.custom_id,
+                    "type": result.result.type,
+                }
+                if result.result.type == "succeeded":
+                    message = result.result.message
+                    stored["stop_reason"] = message.stop_reason
+                    stored["text"] = next((b.text for b in message.content if b.type == "text"), "")
+                    stored["input_tokens"] = message.usage.input_tokens
+                    stored["output_tokens"] = message.usage.output_tokens
+                    stored["model"] = message.model
+                lines.append(json.dumps(stored))
+            results_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        stored_results = [
+            json.loads(line) for line in results_path.read_text(encoding="utf-8").splitlines()
+        ]
+        found = {r["custom_id"]: single_label(r, senses_of[r["custom_id"]]) for r in stored_results}
+        return {key_of[custom_id]: found.get(custom_id, FAILED) for custom_id in key_of}

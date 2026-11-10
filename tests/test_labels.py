@@ -11,6 +11,7 @@ import pytest
 
 from interpretant.drift.labels import (
     REPEAT_SUFFIX,
+    BatchLabeller,
     Item,
     Labeller,
     Sense,
@@ -22,6 +23,7 @@ from interpretant.drift.labels import (
     parsed,
     prompt,
     shown,
+    single_label,
 )
 from interpretant.drift.pairs import Usage
 
@@ -122,3 +124,48 @@ def test_the_distribution_leaves_out_unclear_and_failed_labels() -> None:
 def test_divergence_is_zero_for_equal_distributions_and_one_for_disjoint_ones() -> None:
     assert divergence(np.array([0.5, 0.5]), np.array([0.5, 0.5])) == pytest.approx(0.0)
     assert divergence(np.array([1.0, 0.0]), np.array([0.0, 1.0])) == pytest.approx(1.0)
+
+
+def test_a_single_usage_request_asks_for_one_label_from_the_list() -> None:
+    params = BatchLabeller(model="m", effort="low").params(SENSES, items(1)[0])
+    schema = params["output_config"]["format"]["schema"]  # type: ignore[index]
+    assert schema["properties"]["label"]["enum"] == ["cognitive", "mechanism", "other", "unclear"]
+    assert params["output_config"]["effort"] == "low"  # type: ignore[index]
+    assert "Usage: usage 0 ⟦attention⟧ here" in params["messages"][0]["content"]  # type: ignore[index]
+
+
+@pytest.mark.parametrize(
+    ("result", "label"),
+    [
+        (
+            {"type": "succeeded", "stop_reason": "end_turn", "text": '{"label": "mechanism"}'},
+            "mechanism",
+        ),
+        ({"type": "succeeded", "stop_reason": "refusal", "text": ""}, "refused"),
+        ({"type": "succeeded", "stop_reason": "end_turn", "text": '{"label": "visual"}'}, "failed"),
+        ({"type": "succeeded", "stop_reason": "end_turn", "text": "not json"}, "failed"),
+        ({"type": "errored"}, "failed"),
+    ],
+)
+def test_a_stored_batch_result_reads_as_a_label_refusal_or_failure(
+    result: dict[str, object], label: str
+) -> None:
+    assert single_label(result, SENSES) == label
+
+
+def test_stored_batch_results_are_reused_without_calling_the_api(tmp_path: Path) -> None:
+    results = [
+        {
+            "custom_id": "r0",
+            "type": "succeeded",
+            "stop_reason": "end_turn",
+            "text": '{"label": "other"}',
+        },
+        {"custom_id": "r1", "type": "errored"},
+    ]
+    (tmp_path / "results.jsonl").write_text(
+        "\n".join(json.dumps(r) for r in results) + "\n", encoding="utf-8"
+    )
+    work = [(SENSES, item) for item in items(3)]
+    labels = BatchLabeller(model="m", effort="low").label(work, tmp_path)
+    assert labels == {"u0": "other", "u1": "failed", "u2": "failed"}
