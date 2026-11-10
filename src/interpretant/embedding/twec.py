@@ -42,51 +42,19 @@ class _EpochProgressCallback(CallbackAny2Vec):
 class _FileSentences:
     """Re-iterable sentence source backed by one or more text files.
 
-    Each file is expected to have one tokenised document per line, with tokens
-    separated by whitespace — the format written by ``corpus openalex ingest`` and
-    ``corpus books ingest``.
-    gensim calls ``__iter__`` once for vocabulary building and once per training
-    epoch, so the class must support multiple iterations without consuming the
-    underlying data.
-
-    Args:
-        paths: Text files to read from.
-        max_docs: If set, stride-sample at most this many lines per file using
-            a uniform stride (every Nth line), so the sample covers the full
-            temporal range of the file rather than just the first N lines.
+    Each file holds one tokenised document per line, tokens separated by whitespace. gensim
+    calls ``__iter__`` once for vocabulary building and once per training epoch, so the
+    class must support multiple iterations without consuming the underlying data.
     """
 
-    def __init__(self, paths: list[Path], max_docs: int | dict[Path, int] | None = None) -> None:
+    def __init__(self, paths: list[Path]) -> None:
         self._paths = paths
-        # Per-path document limits (used as count cap in __iter__).
-        self._path_limits: dict[Path, int] = {}
-        # Pre-compute stride per file: one line-count pass at construction time.
-        # stride=1 means take every line; stride=k means take every k-th line.
-        self._strides: dict[Path, int] = {}
-        if max_docs is not None:
-            for path in paths:
-                limit = max_docs.get(path) if isinstance(max_docs, dict) else max_docs
-                if limit is not None:
-                    self._path_limits[path] = limit
-                    with path.open(encoding="utf-8") as fh:
-                        total = sum(1 for _ in fh)
-                    self._strides[path] = max(1, total // limit)
 
     def __iter__(self) -> Iterator[list[str]]:
         for path in self._paths:
-            stride = self._strides.get(path, 1)
-            limit = self._path_limits.get(path)
-            count = 0
-            with path.open(encoding="utf-8") as fh:
-                for i, line in enumerate(fh):
-                    if i % stride != 0:
-                        continue
-                    sentences = list(training_sentences(line))
-                    if sentences:
-                        yield from sentences
-                        count += 1
-                        if limit is not None and count >= limit:
-                            break
+            with path.open(encoding="utf-8") as lines:
+                for line in lines:
+                    yield from training_sentences(line)
 
 
 class _FreezeContextCallback(CallbackAny2Vec):
@@ -159,7 +127,6 @@ class TWECTrainer:
     def train_compass(
         self,
         corpus_paths: list[Path],
-        max_docs: int | dict[Path, int] | None = None,
         extra_callbacks: list[Any] | None = None,
     ) -> None:
         """Train the compass on all decades' text, streaming from disk.
@@ -171,11 +138,10 @@ class TWECTrainer:
             corpus_paths: Paths to preprocessed text files (one doc per line).
                 All files are read in order on each pass; gensim makes multiple
                 passes for vocabulary building and per-epoch training.
-            max_docs: If set, cap the number of lines read per file per pass.
             extra_callbacks: Additional ``CallbackAny2Vec`` instances (e.g. a
                 tqdm progress bar callback) to pass to gensim's train loop.
         """
-        sentences = _FileSentences(corpus_paths, max_docs=max_docs)
+        sentences = _FileSentences(corpus_paths)
         logger.info("Training compass on %d file(s)", len(corpus_paths))
         self._compass = Word2Vec(
             sentences=sentences,
@@ -211,7 +177,6 @@ class TWECTrainer:
         self,
         decade_paths: list[Path],
         decade: int,
-        max_docs: int | dict[Path, int] | None = None,
         extra_callbacks: list[Any] | None = None,
     ) -> KeyedVectors:
         """Train a decade model with compass context vectors frozen.
@@ -219,7 +184,6 @@ class TWECTrainer:
         Args:
             decade_paths: Paths to preprocessed text files for this decade.
             decade: The decade label (used only for logging).
-            max_docs: If set, cap the number of lines read per file per pass.
             extra_callbacks: Additional ``CallbackAny2Vec`` instances passed to
                 gensim's train loop alongside the freeze-context callback.
 
@@ -231,7 +195,7 @@ class TWECTrainer:
             raise RuntimeError("No compass available. Call train_compass() first.")
 
         compass = self._compass
-        sentences = _FileSentences(decade_paths, max_docs=max_docs)
+        sentences = _FileSentences(decade_paths)
 
         # Build the decade model's vocabulary from the decade sentences.
         # min_count=1 so all words that appear at least once are included;
@@ -283,18 +247,6 @@ class TWECTrainer:
                 continue
             model.wv.vectors[d_idx] = compass.wv.vectors[c_idx]
             model.syn1neg[d_idx] = compass.syn1neg[c_idx]
-
-    # ------------------------------------------------------------------
-    # I/O helpers
-    # ------------------------------------------------------------------
-
-    @staticmethod
-    def save_decade_kv(kv: KeyedVectors, output_dir: Path, decade: int) -> Path:
-        """Save a decade's KeyedVectors and return the path."""
-        output_dir.mkdir(parents=True, exist_ok=True)
-        path = output_dir / f"{decade}.kv"
-        kv.save(str(path))
-        return path
 
     @property
     def compass_vocab_size(self) -> int:
