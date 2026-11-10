@@ -90,9 +90,14 @@ Each item that produces results gets its predictions committed first.
    predictions, which was set against the wrong baseline; exploratory, both point towards the
    behavioural and social sciences. No direction rounds follow it.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
-8. **Sense-level drift** with contextual embeddings for *consciousness* and *information*:
-   encode occurrences, cluster into senses, track each sense's share by field and decade
-   (Giulianelli et al. 2020). Runs on the homelab GPU.
+8. **Sense-level drift** with contextual embeddings: encode every occurrence of a word in its
+   sentence, cluster all fields' and decades' occurrences together into senses, and track each
+   sense's share by field and decade (Giulianelli et al. 2020; `drift senses`). Two encoders,
+   SciBERT and ModernBERT. First a calibration round on known answers (round C): *attention*'s
+   mechanism sense appearing in AI from the mid-2010s and not in psychology, and AI's sense of
+   *intelligence* entering other fields in the 2020s. Only the encoders that pass it are used
+   on open questions (round D): *information* across psychology and computing, philosophy's
+   2020s *consciousness*, *embodiment* and *intelligence* by sense. Runs on the M3's GPU.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
