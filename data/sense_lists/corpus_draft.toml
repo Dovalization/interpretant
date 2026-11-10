@@ -115,10 +115,16 @@ example = "Migrants rely on kinship networks to find work."
 cues = ["social", "personal", "kinship", "friendship", "professional", "ties", "actors", "organizations", "informal"]
 
 [[network.senses]]
-key = "abstract_or_physical_system"
-definition = "Another system of interconnected elements, such as a graph, a semantic or Bayesian network, a transport network or a biological network"
-example = "Concepts are represented as nodes in a semantic network."
-cues = ["semantic", "conceptual", "bayesian", "belief", "petri", "graph", "road", "transport", "gene", "regulatory", "metabolic", "flow", "causal", "inheritance"]
+key = "knowledge_or_probabilistic_model"
+definition = "A network that AI uses to represent knowledge or uncertainty, such as a semantic network, a Bayesian or belief network, an inference network or a Petri net"
+example = "The diagnosis is computed by propagating evidence through a Bayesian network."
+cues = ["semantic", "conceptual", "bayesian", "belief", "petri", "inheritance", "inference", "causal", "probabilistic"]
+
+[[network.senses]]
+key = "other_graph_or_physical_system"
+definition = "Another system of interconnected elements, such as a graph in mathematics, a transport or road network, an electrical grid or a biological network"
+example = "Traffic flows through the city's road network."
+cues = ["graph", "road", "transport", "transportation", "gene", "regulatory", "metabolic", "flow", "electrical", "railway", "river"]
 
 [alignment]
 word = "alignment"
