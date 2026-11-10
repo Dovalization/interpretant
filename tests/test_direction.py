@@ -10,11 +10,20 @@ must find the planted move and nothing else; the raw gain is fooled by the share
 from __future__ import annotations
 
 import random
+from pathlib import Path
 
 import pandas as pd
 import pytest
 
-from interpretant.drift.direction import assignment_runs, gain, present, relative_gain
+from interpretant.drift.direction import (
+    NearestLanguageModel,
+    assignment_runs,
+    frame_runs,
+    gain,
+    present,
+    relative_gain,
+)
+from interpretant.drift.separability import decade_samples, split
 
 FIELDS = ("hci", "psychology", "sociology", "compsci", "philosophy", "linguistics")
 OWN = {field: [f"{field}{n}" for n in range(40)] for field in FIELDS}
@@ -72,3 +81,43 @@ def test_presence_needs_every_seed_positive_and_two_standard_deviations() -> Non
     assert present([0.10, 0.11, 0.09, 0.10, 0.12])
     assert not present([0.10, 0.11, -0.01, 0.10, 0.12])
     assert not present([0.01, 0.20, 0.02, 0.15, 0.01])
+
+
+def test_the_nearest_language_model_sends_each_field_home_on_equal_training() -> None:
+    rng = random.Random(1)
+    train = {
+        field: [" ".join(rng.choices(OWN[field] + SHARED[:20], k=30)) for _ in range(size)]
+        for field, size in (("hci", 200), ("psychology", 50))
+    }
+    model = NearestLanguageModel(train)
+
+    held_out = [" ".join(rng.choices(OWN["psychology"] + SHARED[:20], k=30)) for _ in range(20)]
+
+    assert model.classes_ == ["hci", "psychology"]
+    assert model.predict(held_out) == ["psychology"] * 20
+    trained = {field: lm.context_counts.total() for field, lm in model.models.items()}
+    assert abs(trained["hci"] - trained["psychology"]) <= 32
+
+
+def test_frame_runs_replace_only_the_field_text_in_the_stable_cell(tmp_path: Path) -> None:
+    for decade in (1990, 2020):
+        for field in FIELDS:
+            rng = random.Random(f"{field}{decade}")
+            lines = [
+                " ".join(word(rng, field, decade) for _ in range(30)) + f" id{field}{decade}n{n}"
+                for n in range(150)
+            ]
+            (tmp_path / f"{field}_{decade}.txt").write_text("\n".join(lines), encoding="utf-8")
+    train, _ = split(decade_samples(tmp_path, 1990, 1, 100))
+    psychology_line = (tmp_path / "psychology_1990.txt").read_text().splitlines()[0]
+    stable = {1990: [*train["hci"], psychology_line], 2020: [psychology_line]}
+
+    table = frame_runs(tmp_path, 1990, 2020, [1], stable=stable, per_field=100)
+
+    whole, kept = table[table.cell == "whole"], table[table.cell == "stable"]
+    columns = ["test_decade", "text_field", "assigned_field", "share"]
+    others = whole[whole.text_field != "hci"][columns].reset_index(drop=True)
+    assert others.equals(kept[kept.text_field != "hci"][columns].reset_index(drop=True))
+    stable_hci = kept[kept.text_field == "hci"]
+    assert sorted(stable_hci.share.unique()) == [0.0, 1.0]
+    assert whole.groupby(["test_decade", "text_field"]).share.sum().round(9).eq(1).all()

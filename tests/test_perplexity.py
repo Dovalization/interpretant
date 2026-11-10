@@ -114,6 +114,17 @@ def test_word_bits_add_up_to_the_cross_entropy() -> None:
     )
 
 
+def test_known_bits_score_vocabulary_words_and_leave_unknown_ones_out() -> None:
+    model = KneserNeyBigram(set(PHILOSOPHY.split())).fit([PHILOSOPHY] * 10)
+
+    bits, _ = model.word_bits([COMPUTING])
+
+    assert model.known_bits(COMPUTING) == pytest.approx(sum(bits.values()) - bits[UNKNOWN])
+    assert model.known_bits(PHILOSOPHY) == pytest.approx(
+        sum(model.word_bits([PHILOSOPHY])[0].values())
+    )
+
+
 def test_document_cross_entropy_is_the_length_weighted_piece_of_the_corpus_value() -> None:
     documents = [PHILOSOPHY, COMPUTING, "the world model learns"]
     model = KneserNeyBigram(set(PHILOSOPHY.split())).fit([PHILOSOPHY] * 10)

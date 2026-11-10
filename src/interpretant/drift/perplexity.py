@@ -86,6 +86,16 @@ class KneserNeyBigram:
         bits, occurrences = self.word_bits([document])
         return sum(bits.values()) / sum(occurrences.values())
 
+    def known_bits(self, document: str) -> float:
+        """Bits of one document's vocabulary words and end token. Unknown words are not scored,
+        but still serve as the next word's context."""
+        tokens = self._tokens(document)
+        return -sum(
+            math.log2(self.probability(word, previous))
+            for previous, word in zip(tokens, tokens[1:], strict=False)
+            if word != UNKNOWN
+        )
+
     def word_bits(self, documents: Iterable[str]) -> tuple[dict[str, float], Counter[str]]:
         """Total bits and occurrences per predicted word (unknown words pooled as <unk>)."""
         bits: defaultdict[str, float] = defaultdict(float)
