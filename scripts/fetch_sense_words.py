@@ -1,7 +1,7 @@
 """Find the sense rounds' data gaps and download word-targeted cells where the grid is thin.
 
-The plan is every word, field and decade the redesigned calibration (*hallucination*, the
-held-out known answer) and round D's open questions need. *attention*, the redesign's
+The plan is every word, field and decade the redesigned calibrations (*hallucination* and
+*prompt*, the held-out known answers) and round D's open questions need. *attention*, the redesign's
 development data, is not in it: it is read from round C's grid design as encoded. A word whose
 planned cells all have at least ``MIN_USES`` abstracts containing it in the equal-size grid is
 read from the grid. Any other word has all its planned cells downloaded by word, a seeded
@@ -30,6 +30,7 @@ TARGET = 1_000
 DECADES = (1990, 2000, 2010, 2020)
 PLAN: dict[str, tuple[tuple[str, ...], tuple[int, ...]]] = {
     "hallucination": (("ai", "compsci", "psychology", "neuroscience"), (2000, 2010, 2020)),
+    "prompt": (("ai", "psychology"), (2000, 2020)),
     "information": (("psychology", "cogpsych", "compsci", "ai", "hci"), DECADES),
     "consciousness": (("philosophy", "psychology", "neuroscience", "ai"), DECADES),
     "embodiment": (("hci", "philosophy", "cogpsych"), DECADES),
