@@ -476,3 +476,29 @@ as comparison points. If it fails, a language model labeller is the fallback, an
 reported as the cost of leaving generative models out.
 
 Scored by `scripts/score_labels_classifier.py`, committed before it is run.
+
+### Round E results (2026-11-10, `scripts/score_labels_classifier.py`)
+
+Scored as written. XL-LEXEME encoded 8,935 usages and examples; 148 of the 149 senses' examples
+contain a form of the lemma (one sense trained on cue seeds alone); 1,109 cue seeds were found in
+half A.
+
+| | Verdict | Numbers |
+|---|---|---|
+| E1 | **Falsified** | Spearman 0.669 on half B (needed 0.70) |
+| E2 | **Passed** | 0.669, needed 0.593 (Sonnet's 0.693 minus 0.10) |
+| E3 | **Passed** | partial Spearman 0.509 (needed 0.40; gold 0.849) |
+| E4 | Descriptive | same label as Sonnet on 75.2% of half B (82.2% where Sonnet chose a listed sense), as JEV on 76.0% (82.9%) |
+| E5 | Descriptive | 1,109 cue seeds over 149 senses; 62% of senses with three or more; median 5 |
+| E6 | Descriptive | examples alone: Spearman 0.628 |
+| | Descriptive | mean ARI on half B 0.266 |
+
+By the reading rule the classifier passes rung 1 (E3, and E2): it goes to rung 2 on this corpus
+with lists and cue words drafted by Claude and approved by the author, Sonnet and JEV as comparison
+points.
+
+Exploratory, after scoring, for context: with the same lists on the same half B, Sonnet's round Y
+labels have Spearman 0.693, partial 0.646 and ARI 0.330; JEV's 0.800, 0.667 and 0.302. The
+classifier, with no generative model and no labelling by a person, ranks the changes 0.02 below
+Sonnet and 0.13 below JEV, and tracks change beyond variety less well than either (0.509 against
+0.646 and 0.667). The invented example sentences alone already reach 0.628; the cue seeds add 0.04.
