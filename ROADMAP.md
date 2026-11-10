@@ -81,10 +81,10 @@ Each item that produces results gets its predictions committed first.
    HCI; since the 1990s HCI moved towards the behavioural and social sciences no more than every
    field did, and towards computing more than any field. The README was restated on
    2026-11-10: HCI's change, and no direction.
-6c. **Round W, the closing round on HCI's direction**: the language models in round N's design
-   (same abstracts, 1990s reference, relative gain), and both instruments on the venue-stable
-   cell. The language-model assignment is calibrated on synthetic fields first, with a field
-   that changes more than the rest added to the settings. No direction rounds follow it.
+6c. **Round W, the closing round on HCI's direction**: both instruments in one frame (the same
+   1990s abstracts, measure and baseline), on whole cells and on the venue-stable cell,
+   calibrated on synthetic fields first, including a field that changes more than the rest.
+   No direction rounds follow it.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
 8. **Sense-level drift** with contextual embeddings for *consciousness* and *information*:
    encode occurrences, cluster into senses, track each sense's share by field and decade
