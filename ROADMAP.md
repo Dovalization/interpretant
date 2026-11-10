@@ -122,8 +122,12 @@ Each item that produces results gets its predictions committed first.
       shuffled APD keeps 0.842, so on this benchmark it mostly measures a word's variety of
       uses, and the across-minus-within measure (0.539, noise when shuffled) carries the
       change signal (`docs/predictions_pairs.md`);
-   2. this project's known answers over time (*attention, hallucination, prompt, alignment,
-      platform, network*, and quiet transitions), configuration frozen from rung 1;
+   2. ~~this project's known answers over time~~ Round X (2026-11-10), 3 of 5: APD found 1 of
+      4 documented changes; J found all 4 and *alignment* but also flagged the quiet *attention*
+      in AI's 1990s → 2000s. Neither measure's pair passed, so **the design stopped here**; rungs
+      3 and 4 were not run. The diagnostics that followed (`docs/diagnostics.md`) put the
+      failure on the measure, not the data or the encoder: the changes are in the cells (check
+      1a), and J responds to a change of source without a change of sense (check 1b);
    3. known answers between fields: *embodiment* between HCI and philosophy diverges, random
       controls do not, and Wiktionary's field-labelled senses as a larger set;
    4. only then open questions: a survey of field-specific meanings, and one-sided changes
