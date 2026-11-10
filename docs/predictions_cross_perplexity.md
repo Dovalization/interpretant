@@ -837,3 +837,49 @@ V1 or V2 failing means other fields really did come to write more like 1990s HCI
 one-sidedness of round J belongs to the language models alone. V3 failing means HCI's move, as
 a classifier sees it, was technology vocabulary too. Scored by `scripts/score_technology_terms.py`,
 committed before it is run.
+
+### Round V results (2026-11-09, `scripts/score_technology_terms.py`)
+
+Scored as written. 2 passed, 2 falsified.
+
+| | Verdict | Numbers |
+|---|---|---|
+| V0 | **Passed** | Lowest mean pair accuracy without the terms: 0.848 in the 1990s (cognitive psychology–psychology), 0.826 in the 2020s (AI–computer science) |
+| V1 | **Falsified** | Without the terms, the drift towards HCI is still positive in every seed: psychology +0.013 to +0.035, sociology +0.002 to +0.022 |
+| V2 | **Falsified** | 9 of 10 non-HCI fields still drift towards HCI (needed at most 5); the largest are computer science +0.026, psychology +0.024 and history and philosophy of science +0.015; only cognitive psychology does not (−0.001) |
+| V3 | **Passed** | Without the terms, the 1990s classifier sends more of HCI's 2020s abstracts than of its 1990s ones to the behavioural and social fields in 5 of 5 seeds: 0.055–0.082 → 0.120–0.158 |
+
+### Reading
+
+Round S's exploratory reading was wrong. **Technology vocabulary does not explain why other
+fields' 2020s abstracts look more like 1990s HCI**: removing 29 technology terms changes the
+drift towards HCI very little (psychology's mean drift is +0.024 without them, against +0.014
+with them; sociology's +0.010 against +0.012). **HCI's own move towards the behavioural and
+social sciences is not technology vocabulary either**: it survives the removal in every seed and
+grows slightly. So the classifier's picture from round S stands, now without the easy
+explanation: HCI moved a long way towards the behavioural and social sciences, and some of those
+fields, psychology above all, moved a shorter way towards 1990s HCI. The movement is mutual and
+lopsided in size (HCI's shares change by 0.06–0.10, psychology's by about 0.02), not one-sided.
+The language models' asymmetry (round J) stays what it was: a statement about which models gained
+on which texts, which a classifier does not reproduce.
+
+### Exploratory, after scoring: where drifted abstracts land
+
+Not predicted; read from both rounds' assignment tables after the scorer ran. For every text
+field, the gain in the share of its abstracts the 1990s classifier sends to each other field
+(2020s minus 1990s, means over five seeds).
+
+- **HCI is not a general sink.** Summed over the other ten fields, the drifted share received is
+  largest for psychology (0.26 without the terms), then sociology (0.19), AI (0.16) and computer
+  science (0.13); HCI is fifth (0.11). Philosophy and history and philosophy of science lose
+  share. 2020s prose of most fields lands, when it leaves home, in psychology's, sociology's and
+  AI's registers.
+- **Psychology's largest gain is towards HCI**, with and without the terms (+0.014 and +0.023),
+  the only field whose top destination is HCI.
+- **HCI's largest gain depends on the technology words**: towards AI with them (+0.038), towards
+  psychology without them (+0.039). HCI's technology vocabulary pulls its 2020s abstracts towards
+  AI; the rest of its prose pulls them towards psychology.
+
+The pair that converged, by a classifier's account, is HCI and psychology, from both sides; what
+round J saw as HCI leaving computing for the behavioural sciences is, here, HCI and psychology
+meeting, with HCI travelling further.
