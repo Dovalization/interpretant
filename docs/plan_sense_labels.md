@@ -152,6 +152,29 @@ cell's meaning is the share of the word's occurrences in each sense, never a cou
   those: no known answer, gold judgement or result is looked at while the cues are tuned. The lists
   and cues are frozen and committed before the classifier labels anything that is scored.
 
+## The method in NLP terms (added 2026-11-10)
+
+In NLP terms, the instrument on this corpus is weakly supervised word sense disambiguation, used to
+estimate sense prevalence per field and decade and to detect changes in it.
+
+| Step | What it does here | NLP name |
+|---|---|---|
+| Sense lists | a fixed, coarse list of senses per word, approved by the author | sense inventory (WordNet-style, curated for this corpus) |
+| Cue words | position-aware collocation rules that label some occurrences | labelling functions; weak or distant supervision (Ratner et al. 2017) |
+| Example sentence per sense | one gloss example per sense, added to the training data | gloss-based supervision |
+| XL-LEXEME vectors | the target word's meaning in context, from an encoder trained on same-meaning judgements | contextual embeddings from a word-in-context model (Pilehvar and Camacho-Collados 2019; Cassotti et al. 2023) |
+| Classifier | a logistic regression per word on frozen embeddings | supervised WSD with a linear probe |
+| Out-of-fold doubt | flags training labels that a model which never saw them disagrees with | label-noise detection, confident learning (Northcutt et al. 2021) |
+| Leave-one-cue-out | scores each cue by whether a model trained without its sentences agrees | labelling-function analysis |
+| Author's review | cues refined with the checks as a guide | human-in-the-loop weak supervision |
+| Shares per cell | sense proportions, corrected for the classifier's confusions | quantification: adjusted classify and count, under prior shift (Forman 2008) |
+| Change measure | Jensen-Shannon divergence between two cells' sense distributions, against shuffles and control words | sense-prevalence-based lexical semantic change detection; DWUG's graded change (Schlechtweg et al. 2021) |
+| Placebo | same-sense occurrences from another field must not register as a change | a test of the context-for-meaning confound |
+| DWUG EN | rung 1 against expert scores | benchmark validation (SemEval-2020 Task 1) |
+
+Sonnet 5.5 and JEV, as labellers, are zero-shot WSD with generative or decision models; from round E
+on they are comparison baselines, not the method.
+
 ## The ladder
 
 Each rung has its own pre-registration and stopping rule. A failed rung 1 or 2 stops the

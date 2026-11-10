@@ -124,3 +124,11 @@ the direction of HCI's change.
   Induction. ACL. <https://aclanthology.org/2022.acl-long.325>
 - Rao and Callison-Burch (2026). JEV vs. LLMs as Rubric Judges: Cheaper, Faster, and Wrong in the
   Same Places. <https://arxiv.org/abs/2609.29769>
+- Forman (2008). Quantifying counts and costs via classification. Data Mining and Knowledge
+  Discovery 17(2).
+- Northcutt, Jiang and Chuang (2021). Confident Learning: Estimating Uncertainty in Dataset Labels.
+  Journal of Artificial Intelligence Research 70. <https://arxiv.org/abs/1911.00068>
+- Pilehvar and Camacho-Collados (2019). WiC: the Word-in-Context Dataset for Evaluating
+  Context-Sensitive Meaning Representations. NAACL. <https://arxiv.org/abs/1808.09121>
+- Ratner, Bach, Ehrenberg, Fries, Wu and Ré (2017). Snorkel: Rapid Training Data Creation with Weak
+  Supervision. VLDB. <https://arxiv.org/abs/1711.10160>
