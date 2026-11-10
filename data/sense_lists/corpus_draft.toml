@@ -13,13 +13,13 @@ word = "attention"
 key = "cognitive_attention"
 definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience"
 example = "Sleep loss impairs sustained attention in older adults."
-cues = ["sustained", "divided", "deficit", "deficits", "adhd", "cognitive", "vigilance", "distraction", "executive", "bias", "biases", "orienting"]
+cues = ["<<sustained", "<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting"]
 
 [[attention.senses]]
 key = "notice_or_consideration"
 definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing, including authors directing it, as in we focus our attention on"
 example = "The issue has received growing attention from policymakers."
-cues = ["received", "receive", "receiving", "drawn", "draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "increasing", "growing", "considerable", "little", "special", "deserves", "public", "media", "scholarly", "widespread"]
+cues = ["received", "receive", "receiving", "drawn", "draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "increasing", "growing", "considerable", "little", "special", "deserves", "public", "media", "scholarly", "widespread", ">given"]
 
 [[attention.senses]]
 key = "attention_mechanism"
@@ -160,11 +160,11 @@ word = "component"
 key = "part_of_a_system"
 definition = "A separable physical or software part of a machine, device or system, including a module of a model's architecture"
 example = "Each software component exposes a well-defined interface."
-cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module", "modules", "integration", "architecture", "based", "device", "devices", "interface", "interfaces", "system", "systems", "pipeline", "integrates", "integrated"]
+cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module", "modules", "architecture", "device", "devices", "interface", "interfaces", "<<system", "<<systems", "pipeline"]
 
 [[component.senses]]
 key = "mathematical_or_measured_component"
-definition = "A constituent of a quantity, signal, vector or data set in mathematical or statistical analysis"
+definition = "A constituent of a quantity, signal, vector, data set, mixture or substance, as measured or analysed in mathematics, statistics or the sciences"
 example = "The first principal component explains most of the variance."
 cues = ["principal", "<<independent", "analysis", "frequency", "vector", "signal", "variance", "connected", "harmonic", "spectral", "factor", "orthogonal"]
 
