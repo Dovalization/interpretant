@@ -251,3 +251,40 @@ Reading rule:
 - Every sense set is printed with its top context words and nearest examples (seed 1).
 
 Scored by `scripts/score_senses_finer.py`, committed before the runs.
+
+### Round C′ results (2026-11-10, `scripts/score_senses_finer.py`)
+
+Scored as written. 2 passed, 2 falsified. The first launch of the run script failed before
+encoding anything (a shell variable named `options`, which zsh reserves); it was renamed and the
+runs were made once. *attention* had 1,681 occurrences per seed and *hallucination* 2,323,
+eight senses each.
+
+| | Verdict | Numbers |
+|---|---|---|
+| C′1 | **Passed** | One mechanism sense in every seed (159–183 marked uses); its share of AI's 1990s occurrences 0.005–0.048, of AI's 2020s 0.550–0.608, of psychology's 1990s 0.000–0.008 and 2020s 0.006–0.020 |
+| C′2 | **Falsified** | The language-model set holds 0.810–0.882 of AI's 2020s occurrences in every seed. Psychology's and neuroscience's 2000s shares are 0.003–0.028 and 0.002–0.006 in seeds 2–4, but 0.115 and 0.058 in seed 1, 0.211 and 0.150 in seed 5 |
+| C′3 | **Falsified** | The language-model set's mean share of psychology's 2020s occurrences 0.137 (seeds 0.038–0.266), neuroscience's 0.060 |
+| C′4 | **Passed** | Its share of psychology's occurrences rises from the 2000s to the 2020s by +0.062 (sd 0.020), positive in every seed (+0.035 to +0.089), present |
+
+### Reading
+
+C′2 failed, so by the reading rule the fix is taken to have been fitted to *attention*: the
+sense instrument is not used on open questions, and sense-level drift is recorded as not
+achieved with this design. C′1 shows the finer instrument separating the attention mechanism
+from cognitive attention in every seed; C′3 and C′4 describe *hallucination* and decide
+nothing about the instrument.
+
+### Exploratory, after scoring: what failed in seeds 1 and 5
+
+Not predicted; read from the table, sense by sense.
+
+In every seed the instrument found senses that are the language-model meaning and nothing
+else: together they hold 0.66–0.85 of AI's 2020s occurrences and 0.000–0.012 of psychology's
+2000s ones, with context words such as *retrieval-augmented, reasoning, prompting* and examples
+about language models prone to hallucination. The perceptual senses separated too (auditory
+verbal hallucinations, sleep paralysis, psychoanalytic readings). In seeds 1 and 5 one further
+sense mixed the two: it held 15–17% of AI's 2020s occurrences and about 12% of the marked uses,
+but also 10–22% of psychology's 2000s occurrences. The sense-set rule (the fewest senses holding
+80% of the marked uses) needed it to reach 80%, and took it. In seeds 2–4 the pure senses
+reached 80% alone. The failure is in the rule that groups senses into a meaning, which admits a
+sense without regard to what else it holds, not in the number of senses.
