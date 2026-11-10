@@ -200,10 +200,9 @@ instrument; a failed rung 3 stops it before open questions. No repair rounds, as
    transitions, and 10 control words drawn at random (seed 2026) from round C's 30, among those
    with at least 100 abstracts in every transition's cells. Plus check 1b's planting design on
    psychology's 2020s *attention*: mechanism usages (check 1a's markers) planted at the same five
-   shares, and a placebo of 2020s *attention* usages from a field other than AI. Check 1b's
-   unmarked AI pool cannot serve as the placebo for labels: check 1a read 60% of AI's 2020s
-   *attention* as the mechanism against 31% marked, so many unmarked usages are mechanism usages.
-   The placebo is the test the pair measure failed, and it carries the most weight.
+   shares; and, decided with the author on 2026-11-10, a placebo that keeps the sense mix fixed:
+   sociology's 2020s *years* planted into psychology's (check 1b's own placebo also changed the
+   sense mix; see the correction in `diagnostics.md`). Round A pre-registers it. The placebo is the test the pair measure failed, and it carries the most weight.
 4. **Between fields, then open questions.** *embodiment* between HCI and philosophy, and only
    after that the questions the project started from: field-specific meanings, and one-sided
    changes such as the language-model sense of *hallucination* reaching psychology.

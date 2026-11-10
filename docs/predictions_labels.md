@@ -550,3 +550,86 @@ lists and the control words' lists (frozen after their own review). If it fails,
 reported and a language model labeller is the fallback for rung 3, as round E's rule says.
 
 Scored by `scripts/score_labels_corpus.py`, committed before it is run.
+
+## Round A: known changes over time, with a planted change and a placebo (committed 2026-11-10, before any corpus list was frozen or any usage of these cells was labelled by the classifier)
+
+Rung 3. The classifier, trained from the frozen corpus lists and cue words, labels round X's
+transitions; a cell's meaning is its sense shares, corrected by adjusted classify and count; and a
+change is judged against shuffles and control words, as round X judged J. A planted change must be
+found, and a placebo that changes a word's source but not its senses must not be.
+
+### Method (fixed now; the lists and cues are fixed at their freezing commits)
+
+- **Lists.** `data/sense_lists/corpus.toml` (the approved targets and check 2b's two controls) and
+  the control words' lists from `corpus_draft_controls.toml`, each frozen after the author's review.
+- **Transitions and usages.** Round X's transitions and cells: *attention* in AI, 2010s → 2020s;
+  *prompt* in AI, 2000s → 2020s (word-targeted cells); *platform* in communication, 2000s →
+  2010s; *network* in AI, 1980s → 1990s; *alignment* in AI, 2010s → 2020s (the weak case); and the
+  quiet transitions, *attention* in AI, 1990s → 2000s, and in psychology, 2010s → 2020s. Usages
+  as round X drew them (round C′'s quality rules, abstracts in both cells dropped, the word with
+  its regular plural, one occurrence per abstract, at most 150 abstracts per cell), with seed 2 in
+  place of round X's seed 1, so the usages check 1a and check 2b read are not reused as such.
+- **Controls.** The 10 words of `data/control_words_rung3.txt` on each transition's grid cells (for
+  *prompt*, AI's 2000s and 2020s grid cells), each where it has at least 100 usages in both cells.
+- **Classifier.** One logistic regression per word on XL-LEXEME vectors (C = 1, balanced class
+  weights), trained on every usage of the word in the whole-corpus sample (every field and decade,
+  at most 150 abstracts per cell, seed 1) whose cues name one sense, each distinct sentence once,
+  plus each sense's example sentence. Training sentences are not removed from the cells measured:
+  their labels come from the cue rules, not from any result.
+- **Shares.** Each cell's raw shares (the classifier's labels counted) and adjusted shares
+  (adjusted classify and count, with the word's confusion matrix from five-fold out-of-fold
+  predictions on its training sentences). Adjusted shares are primary; raw shares are reported.
+- **Change, and when it is found.** The Jensen-Shannon divergence between the two cells' adjusted
+  shares, in bits. A change is found when it is above (a) the 95th percentile of the same
+  divergence over 200 shuffles of the word's labelled usages between the two cells, keeping each
+  cell's size, and (b) the 90th percentile of the control words' divergence on that transition.
+- **Planted change.** Psychology's *attention*, 2010s → 2020s (a quiet transition): a share of the
+  2020s usages (10%, 20%, 30%, 40%, 60%; five draws each, seeded) is replaced by AI 2020s usages that
+  carry check 1a's attention-mechanism markers, and the change is judged with the transition's own
+  shuffles and controls.
+- **Placebo.** Psychology's *years*, 2010s → 2020s: 40% of the 2020s usages are replaced by
+  sociology's 2020s usages of *years* (five draws, seeded). *years* is a control word whose senses
+  (a duration or age; a period of life or history) are used much alike across fields, so the
+  replacement changes the source and leaves the sense mix close to unchanged. Judged with the
+  transition's own shuffles and controls (the other nine control words).
+- **Comparison labellers.** Claude Sonnet 5.5 and JEV label the target words' transitions (not the
+  controls) with the same lists; the same divergence and shuffle bar, reported beside the
+  classifier's.
+- Already seen: round X's results on these transitions, checks 1a, 1b and 2b, rounds Y to T, and
+  the review page's whole-corpus cue matches and checks. Not computed: any classifier label of these
+  cells' seed-2 usages.
+
+### Predictions
+
+**A1 — The classifier finds the documented changes.** It finds at least three of *attention*,
+*prompt*, *platform* and *network*. *Falsified* with two or fewer.
+
+**A2 — It stays quiet where nothing documented changed.** It finds neither quiet transition.
+*Falsified* if it finds either.
+
+**A3 — In the right direction.** In each of the four documented changes, the documented sense's
+adjusted share rises from the earlier cell to the later: the attention mechanism, language-model
+input, the digital or social-media platform, the artificial neural network. *Falsified* if any
+falls or stays within 0.05.
+
+**A4 — It sees a planted change of a third or less.** The planted mechanism is found in at least
+four of five draws at some share of 30% or less, and at every larger share. *Falsified* otherwise.
+
+**A5 — It does not see a change of source alone.** The *years* placebo is found in at most one of
+five draws. *Falsified* in two or more.
+
+**A6 — Every word drifts a little.** The share of control-word transitions found under bar (a)
+alone. Descriptive, as round X's X5.
+
+**A7 — The weak case.** *alignment* in AI, 2010s → 2020s, with the AI-alignment share in each
+cell. Descriptive.
+
+**A8 — The comparison labellers.** Which documented changes and quiet transitions Sonnet and JEV
+find under bar (a). Descriptive.
+
+Reading rule: the instrument passes rung 3 if A1, A2, A3, A4 and A5 pass, and goes on to rung 4
+(between fields, then open questions). If any fails, it stops before open questions, and the
+failure is reported against round X's (J found the four documented changes but also a quiet one)
+and round 5's (the grid found one of four).
+
+Scored by `scripts/score_labels_known.py`, committed before it is run.
