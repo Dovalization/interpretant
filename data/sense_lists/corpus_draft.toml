@@ -106,19 +106,19 @@ cues = ["neural", "trained", "training", "layer", "layers", "hidden", "backpropa
 key = "computer_or_communication_network"
 definition = "A computer, telephone or other communication network linking machines or devices, including the interconnection network of a multiprocessor"
 example = "Messages are routed through the local area network."
-cues = ["computer", "communication", "communications", "telephone", "local", "area", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "distributed", "traffic", "bandwidth"]
+cues = ["computer", "communication", "communications", "telephone", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "traffic", "bandwidth", "<<area"]
 
 [[network.senses]]
 key = "social_network"
 definition = "A network of people, groups or organisations and their relations"
 example = "Migrants rely on kinship networks to find work."
-cues = ["social", "personal", "support", "kinship", "friendship", "professional", "ties", "actors", "organizations", "informal"]
+cues = ["social", "personal", "kinship", "friendship", "professional", "ties", "actors", "organizations", "informal"]
 
 [[network.senses]]
 key = "abstract_or_physical_system"
 definition = "Another system of interconnected elements, such as a graph, a semantic or Bayesian network, a transport network or a biological network"
 example = "Concepts are represented as nodes in a semantic network."
-cues = ["semantic", "conceptual", "bayesian", "belief", "petri", "graph", "road", "transport", "gene", "regulatory", "metabolic", "flow", "causal", "associative", "inheritance"]
+cues = ["semantic", "conceptual", "bayesian", "belief", "petri", "graph", "road", "transport", "gene", "regulatory", "metabolic", "flow", "causal", "inheritance"]
 
 [alignment]
 word = "alignment"
