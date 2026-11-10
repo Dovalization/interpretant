@@ -23,7 +23,7 @@ cues = [">>group", ">>groups", ">>condition", ">>conditions", "<<healthy", "<<ma
 key = "power_or_authority"
 definition = "Power, authority or restraint over people, organisations, territory or resources"
 example = "The state tightened its control over the press."
-cues = ["<<social", "<<political", ">>over", "<<state", "<<government", "<<territorial", "<<parental", "<<gun", "<<crime"]
+cues = ["<<social", "<<political", "<<state", "<<government", "<<territorial", "<<parental", "<<gun", "<<crime"]
 
 [[control.senses]]
 key = "self_or_cognitive_control"
@@ -116,7 +116,7 @@ cues = ["<<basic", "<<fundamental", "<<design", "<<general", "<<first", "<<under
 key = "moral_standards"
 definition = "Moral, ethical or legal standards of conduct, as in ethical principles or principles of justice"
 example = "The guidelines set out ethical principles for research with children."
-cues = ["<<ethical", "<<moral", "<<democratic", "<<legal", "<<normative", "<<guiding", "justice", "fairness", "rights"]
+cues = ["<<ethical", "<<moral", "<<democratic", "<<legal", "<<normative", "justice", "fairness", "rights"]
 
 [quality]
 word = "quality"
