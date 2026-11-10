@@ -1,0 +1,15 @@
+# Rung 3 control words (docs/plan_sense_labels.md): 10 drawn at random (seed 2026,
+# random.Random(2026).sample over the eligible list in round C's order) from round C's 30
+# (data/control_words_senses.txt), among the 26 with at least 100 usages in both cells of every
+# grid transition round X measured (data/drift/pairs_known.npz). Not eligible: abstract and weight
+# (communication 2000s-2010s), activity (AI 1990s-2000s, 2000s-2020s), life (AI 1980s-1990s).
+control
+generally
+increasing
+paper
+planning
+principles
+quality
+series
+theoretical
+years
