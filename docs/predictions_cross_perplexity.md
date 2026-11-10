@@ -654,3 +654,72 @@ register into the behavioural and social sciences' inside its own venues, and Op
 label also widened to take in work from adjacent fields, which made the whole-cell measurement
 larger than the field's own move. Both are findings about the corpus; the second is also a
 warning about any claim that rests on a subfield label held fixed across seventy years.
+
+## Round S: can a classifier tell the fields apart? (committed 2026-11-09, before any classifier was trained)
+
+Every result about HCI so far comes from one family of instrument: bigram and unigram language
+models scoring each other's text. Round S asks the same questions of a method that shares
+nothing with them but the corpus: a classifier that guesses an abstract's field from its words.
+If two fields' language converges, the classifier finds them harder to tell apart; if HCI's
+language moved into the behavioural and social sciences' register (J, K′), HCI's abstracts get
+harder to tell from theirs and no harder to tell from computing's, and a classifier trained on
+the 1990s sends more of HCI's 2020s abstracts to those fields. A classifier is symmetric
+between two fields, so the direction of the move is tested only through S4's cross-decade
+design. Nothing below has been computed; the classifier code does not exist yet.
+
+### Method (fixed before any classifier is trained)
+
+- **Corpus.** The lemmatised, phrased main grid (`data/phrased/openalex/texts`). In each decade,
+  abstracts that appear in more than one cell are removed first, as in the corrected
+  cross-perplexity design. Decades 1980s–2020s, where all eleven fields keep at least 2,000
+  abstracts.
+- **Samples.** For each seed 1–5 and each decade, 2,000 abstracts per field, drawn at random.
+- **Features and model.** TF-IDF over the abstracts' tokens (unigrams, sublinear term frequency,
+  words in at least 2 training abstracts), then logistic regression (L2, C = 1). Fitted on the
+  training part only.
+- **Pairwise separability.** For every pair of fields in a decade, the mean accuracy of stratified
+  5-fold cross-validation on the two samples (chance is 0.5).
+- **Multiclass assignments.** For each decade, one classifier over all eleven fields, trained on
+  1,600 abstracts per field and applied to the other 400 of each field; for each field, the share
+  of its held-out abstracts assigned to every field.
+- **Cross-decade assignments.** The 1990s multiclass classifier is also applied to 400 abstracts
+  from each field's 2020s sample.
+- **Groups.** The *behavioural and social* fields are psychology, cognitive psychology,
+  neuroscience, sociology and communication; the *computing* fields are computer science and AI.
+  "Mean" is the mean over the five seeds.
+
+### Predictions
+
+**S0 — The classifier sees the fields.** In both the 1990s and the 2020s, every pair's mean
+accuracy is at least 0.75, and the three parent–subfield pairs (computer science–AI, computer
+science–HCI, psychology–cognitive psychology) are among the five least separable pairs of the
+decade. *Falsified* if any pair falls below 0.75 or any parent–subfield pair is outside the
+bottom five in either decade.
+
+**S1 — HCI becomes harder to tell from the behavioural and social sciences.** For at least 4 of
+the 5 behavioural and social fields X, the HCI–X accuracy is lower in the 2020s than in the
+1990s in every seed comparison (all five 2020s values below all five 1990s values). *Falsified*
+if fewer than 4.
+
+**S2 — but not from computing.** For both computer science and AI, the mean HCI–X accuracy in the
+2020s is at least the 1990s mean minus 0.01. *Falsified* if either falls by more than 0.01.
+
+**S3 — Where each decade's classifier sends HCI's abstracts.** Comparing the 1990s and the 2020s
+multiclass classifiers, the share of HCI's held-out abstracts assigned to the behavioural and
+social fields rises in at least 4 of 5 seeds, and the share assigned to the computing fields
+falls in at least 4 of 5 seeds. *Falsified* if either part fails.
+
+**S4 — HCI moved; nobody moved towards HCI.** The 1990s classifier assigns a larger share of
+HCI's 2020s abstracts than of its 1990s held-out abstracts to the behavioural and social fields,
+in at least 4 of 5 seeds; and it assigns no larger share of psychology's 2020s abstracts to HCI
+than of psychology's 1990s held-out abstracts, in at least 4 of 5 seeds, and the same for
+sociology. *Falsified* if any of the three parts fails.
+
+**S5 — Fields converged.** Over all field pairs, the mean pairwise accuracy is lower in the 2010s
+than in the 1980s in all 5 seeds (the classifier's version of D5 and L9). *Falsified* otherwise.
+
+Reading rule: S1–S4 passing replicates round J's finding with an independent instrument, and S4
+gives the direction without the language models' asymmetry. S1 passing with S4 failing would
+mean HCI and those fields converged without HCI being the one that moved. S0 failing would make
+the classifier too blunt for the rest to mean much. Scored by `scripts/score_separability.py`,
+committed before it is run.
