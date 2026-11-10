@@ -80,3 +80,6 @@ data/external/books/**/*.azw3
 
 # uv
 .uv/
+
+# Raw labeller responses
+data/labels/**/raw/
