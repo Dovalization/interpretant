@@ -74,3 +74,42 @@ Reading rule, per labeller:
   round, and stops.
 
 Scored by `scripts/score_labels_benchmark.py`, committed before it is run.
+
+### Round Y results for JEV (2026-11-10, `scripts/score_labels_benchmark.py`)
+
+Scored as written, before Sonnet's labels were back. JEV labelled all 9,666 requests (8,787
+usages and 879 repeats) with none failed or refused; *other* 1.5%, *unclear* 7.1%.
+
+| | Verdict | Numbers |
+|---|---|---|
+| Y1 | **Passed** | Spearman 0.821 over 46 words (needed 0.70; BERT 0.563, XL-LEXEME 0.864) |
+| Y2 | **Falsified** | mean ARI 0.267 over 42 words with two or more clusters (needed 0.273) |
+| Y3 | **Falsified** | mean Spearman with periods shuffled 0.363 (at most 0.20; range 0.160 to 0.632) |
+| Y4 | **Passed** | 96.8% of 879 repeats labelled the same (needed 85%) |
+
+By the reading rule, Y3's failure stops JEV at rung 1.
+
+### Correction: Y3's bar fails the gold standard (2026-11-10, after scoring JEV, before scoring Sonnet)
+
+Y3 was meant to show that the labels measure change, not a word's variety, as round U showed APD
+does. The bar was not checked against DWUG's own human clusters before it was committed. Checked
+now, by the scorer's shuffle procedure applied to the clusters themselves: the clusters'
+divergence matches DWUG's graded change exactly (Spearman 1.0, as it is the same computation),
+and with the periods shuffled it keeps a mean Spearman of 0.855 (range 0.812 to 0.885) over the
+same 20 shuffles. The gold standard fails Y3 by more than JEV does.
+
+The reason: shuffling a word whose senses changed mixes two different distributions, so the
+shuffled divergence is the sampling noise of a varied pooled distribution, which is larger the
+more senses the word has in use; a word with one sense gives almost none. Words that changed
+have, pooled, more senses in use, so the shuffled divergence correlates with the change for any
+labeller that reads senses correctly, and more strongly the better it reads them. Y3 as written
+cannot separate change from variety; it penalises accuracy. Round U's version of the check worked
+for J because J subtracts the within-period distances; the divergence of label distributions does
+not.
+
+What this changes: nothing in the verdicts above, which stand as scored, including JEV's stop at
+rung 1 under the rule as written. What it means: Y3's falsification is not evidence that JEV
+measures variety, and Sonnet's Y3, when scored, will be read the same way. Whether a labeller
+stopped only by Y3 may continue is the author's decision, and if it does, it continues under a
+new pre-registered round with a variety check calibrated on the gold first, not by reinterpreting
+round Y.
