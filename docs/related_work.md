@@ -67,6 +67,22 @@ the direction of HCI's change.
 - McMahan and Evans (2018), on ambiguity of scientific terms, may be relevant; its method could
   not be read (paywalled) and nothing here relies on it.
 
+## 4. Added with the sense-label instrument (2026-11-10)
+
+- **Substitution-based sense induction.** A masked language model's fillers for a target in
+  context, grouped into senses, induce a word's senses without a fixed inventory. Amrami and
+  Goldberg (2018) used dynamic symmetric patterns ("X and Y") with a recurrent language model;
+  their 2019 follow-up moved to BERT with the pattern "target (or even [MASK])". Eyal et al.
+  (2022) scaled the approach with community detection over substitute co-occurrence, giving a
+  variable number of senses each named by its representative substitutes. Round Q's step A uses
+  this, with ModernBERT-large because BERT, trained on older text, does not offer the attention
+  mechanism's substitutes.
+- **Decision models.** JEV (TypeSafe AI) answers typed questions with probabilities and no free
+  text. Rao and Callison-Burch (2026) compare decision models with language-model judges on
+  evaluation benchmarks: comparable on binary criteria, weaker on graded ones, much cheaper, and
+  wrong in many of the same places. No published use for word senses was found; this project's
+  comparison is in [`labellers.md`](labellers.md).
+
 ## Sources
 
 - Cassotti, Siciliani, de Gemmis, Semeraro and Basile (2023). XL-LEXEME: WiC Pretrained Model
@@ -100,3 +116,11 @@ the direction of HCI's change.
   Meaning Tasks. <https://arxiv.org/abs/2404.00176>
 - Liu, Hu and Liu (2024). An entry to the CoMeDi shared task (2025), which evaluates models as
   annotators of usage pairs. <https://arxiv.org/abs/2411.12147>
+- Amrami and Goldberg (2018). Word Sense Induction with Neural biLM and Symmetric Patterns.
+  EMNLP. <https://arxiv.org/abs/1808.08518>
+- Amrami and Goldberg (2019). Towards better substitution-based word sense induction.
+  <https://arxiv.org/abs/1905.12598>
+- Eyal, Sadde, Taub-Tabib and Goldberg (2022). Large Scale Substitution-based Word Sense
+  Induction. ACL. <https://aclanthology.org/2022.acl-long.325>
+- Rao and Callison-Burch (2026). JEV vs. LLMs as Rubric Judges: Cheaper, Faster, and Wrong in the
+  Same Places. <https://arxiv.org/abs/2609.29769>

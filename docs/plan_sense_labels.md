@@ -5,6 +5,11 @@ in [`diagnostics.md`](diagnostics.md). This is a plan, not a pre-registration: e
 gets its predictions committed in `docs/predictions_labels.md` before it is run, as every earlier
 round did.
 
+**State (2026-11-10, end of day).** Rung 1 ran as rounds Y and Z, and runs again as round Q with
+sense lists induced from the texts (see `predictions_labels.md`); the two labellers are compared in
+[`labellers.md`](labellers.md). Rungs 2 to 4 below are unchanged, except that their lists are to be
+induced by round Q's pipeline and reviewed by the author before they are frozen.
+
 ## Why this instrument
 
 The diagnostics left one problem standing. The dataset holds the documented changes (check 1a),

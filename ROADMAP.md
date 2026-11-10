@@ -135,13 +135,21 @@ Each item that produces results gets its predictions committed first.
 
    Not part of it: clustering usages into senses, repairing the grid, the direction of HCI's
    change.
-8d. **Meaning by sense labels** (planned 2026-11-10, not started;
-   [`docs/plan_sense_labels.md`](docs/plan_sense_labels.md)). A language model labels each
-   usage with one sense from a fixed list per word, and a cell's meaning is its distribution
-   over the list, so a change of context without a change of sense should not register. Ladder:
-   DWUG EN, the author's gold labels, known answers over time with check 1b's placebo, then
-   between fields and open questions. Labelled by Claude Sonnet 5.5 (Batch API) and JEV, each its own
-   instrument, their agreement documented. Waits on the author's review of the sense lists.
+8d. **Meaning by sense labels** (started 2026-11-10;
+   [`docs/plan_sense_labels.md`](docs/plan_sense_labels.md),
+   [`docs/predictions_labels.md`](docs/predictions_labels.md),
+   [`docs/labellers.md`](docs/labellers.md)). A language model labels each usage with one sense
+   from a fixed list per word, and a cell's meaning is its distribution over the list. Two
+   labellers, Claude Sonnet 5.5 (Batch API) and JEV (TypeSafe AI), run as separate instruments.
+   - Round Y (DWUG EN, lists written by Claude): both rank the benchmark's changes well (Sonnet
+     0.767, JEV 0.821; XL-LEXEME 0.864) and consistently, and both stopped on a variety check
+     that DWUG's own clusters fail (recorded as a correction).
+   - Round Z (lists from WordNet): both dropped by about 0.18; the result depends on the lists.
+   - Round Q (running): lists induced from half the texts with substitutes, neighbours and
+     dictionaries, consolidated by Opus 5.5, three labellers (Sonnet, JEV and a substitute
+     labeller with no generative model) on the other half, and a variety check calibrated on the
+     gold.
+   Next: rung 2, the author's gold labels on this corpus, with lists induced the same way.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
