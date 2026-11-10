@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from interpretant.drift.classifier import classify, cue_sense, example_usage
 from interpretant.drift.pairs import Usage
@@ -69,3 +70,26 @@ def test_a_cue_can_be_held_to_the_word_right_next_to_the_target() -> None:
     assert cue_sense(usage("reservoirs having short memory to project", "having"), cues) is None
     assert cue_sense(usage("we use prompt engineering here", "prompt"), {"llm": ["<<we"]}) is None
     assert cue_sense(usage("a novel prompt tuning method", "prompt"), {"llm": ["<<novel"]}) == "llm"
+
+
+def test_the_confusion_matrix_is_normalised_per_true_label() -> None:
+    from interpretant.drift.classifier import confusion
+
+    matrix = confusion(["a", "a", "a", "a", "b"], ["a", "a", "a", "b", "b"], ["a", "b", "c"])
+    assert matrix.tolist() == [[0.75, 0.25, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+
+
+def test_adjusted_shares_undo_a_known_confusion() -> None:
+    from interpretant.drift.classifier import adjusted_shares
+
+    # true shares 0.2 a / 0.8 b; the classifier calls 30% of b "a" and 10% of a "b"
+    matrix = np.array([[0.9, 0.1], [0.3, 0.7]])
+    predicted = ["a"] * 42 + ["b"] * 58  # 0.2*0.9 + 0.8*0.3 = 0.42 observed as a
+    assert adjusted_shares(predicted, matrix, ["a", "b"]).tolist() == pytest.approx([0.2, 0.8])
+
+
+def test_adjusted_shares_never_go_negative() -> None:
+    from interpretant.drift.classifier import adjusted_shares
+
+    shares = adjusted_shares(["a"] * 5 + ["b"] * 95, np.array([[0.9, 0.1], [0.3, 0.7]]), ["a", "b"])
+    assert (shares >= 0).all() and shares.sum() == pytest.approx(1.0)

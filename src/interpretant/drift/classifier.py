@@ -65,3 +65,36 @@ def classify(
     model = LogisticRegression(C=1.0, class_weight="balanced", max_iter=1000)
     model.fit(normalised(seed_vectors), list(seed_senses))
     return [str(label) for label in model.predict(normalised(vectors))]
+
+
+def confusion(truth: Sequence[str], predicted: Sequence[str], labels: Sequence[str]) -> np.ndarray:
+    """Row-normalised confusion matrix: entry (i, j) is the share of items whose true label is
+    ``labels[i]`` that were predicted as ``labels[j]``. A label never seen as true gets an
+    identity row (assumed always predicted correctly)."""
+    index = {label: i for i, label in enumerate(labels)}
+    counts = np.zeros((len(labels), len(labels)))
+    for true, guess in zip(truth, predicted, strict=True):
+        counts[index[true], index[guess]] += 1
+    rows = counts.sum(axis=1, keepdims=True)
+    matrix = np.divide(counts, rows, out=np.zeros_like(counts), where=rows > 0)
+    for i in range(len(labels)):
+        if rows[i, 0] == 0:
+            matrix[i, i] = 1.0
+    return np.asarray(matrix)
+
+
+def adjusted_shares(
+    predicted: Sequence[str], matrix: np.ndarray, labels: Sequence[str]
+) -> np.ndarray:
+    """Adjusted classify and count: the true label shares that, passed through the confusion
+    ``matrix`` (see :func:`confusion`), best reproduce the observed shares of ``predicted``.
+    Solved by non-negative least squares and normalised to sum to 1; with no predictions, zeros."""
+    from scipy.optimize import nnls  # noqa: PLC0415
+
+    observed = np.array([sum(p == label for p in predicted) for label in labels], dtype=float)
+    if observed.sum() == 0:
+        return observed
+    observed /= observed.sum()
+    solution, _ = nnls(matrix.T, observed)
+    total = solution.sum()
+    return np.asarray(solution / total) if total > 0 else observed
