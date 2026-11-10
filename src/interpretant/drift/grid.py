@@ -19,12 +19,14 @@ from __future__ import annotations
 import itertools
 import re
 from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from gensim.models import KeyedVectors
+from tqdm import tqdm
 
 from interpretant.drift.metrics import batch_neighborhood_shift
 
@@ -185,3 +187,60 @@ def add_noise_floor(
     threshold = quantile * 100
     result["candidate"] = (result["cosine_rank"] > threshold) & (result["shift_rank"] > threshold)
     return result
+
+
+def measure_grid(  # noqa: PLR0913
+    model_dir: Path,
+    targets: Iterable[str],
+    controls: Iterable[str],
+    measure_min: int = MEASURE_MIN,
+    neighbour_min: int = NEIGHBOUR_MIN,
+    neighbours: int = NEIGHBOURS,
+) -> dict[str, pd.DataFrame]:
+    """Compare every within-field and cross-field pair of cell models under ``model_dir``.
+
+    Returns two tables keyed ``within_field`` (each field's consecutive decades in the books,
+    OpenAlex and full OpenAlex layers) and ``cross_field`` (every two OpenAlex fields in the
+    same decade): one row per word measured in a pair, ranked against the pair's noise
+    floor, with ``is_target`` and ``is_control`` flags.
+    """
+    target_set, control_set = set(targets), set(controls)
+    loaded: dict[Path, KeyedVectors] = {}
+
+    def vectors(path: Path) -> KeyedVectors:
+        if path not in loaded:
+            loaded[path] = KeyedVectors.load(str(path))
+        return loaded[path]
+
+    pairs_by_table = {
+        "within_field": within_field_pairs(
+            discover_models(model_dir, ("books", "openalex", "openalex_full"))
+        ),
+        "cross_field": cross_field_pairs(discover_models(model_dir, ("openalex",))),
+    }
+    tables = {}
+    for name, pairs in pairs_by_table.items():
+        if not pairs:
+            raise ValueError(f"no {name} pairs of cell models under {model_dir}")
+        frames = []
+        for cell_a, cell_b in tqdm(pairs, desc=f"  {name}", unit="pair"):
+            pair = add_noise_floor(
+                compare_cells(
+                    vectors(cell_a.path),
+                    vectors(cell_b.path),
+                    measure_min,
+                    neighbour_min,
+                    neighbours,
+                )
+            )
+            pair.insert(0, "layer", cell_a.layer)
+            pair.insert(1, "field_a", cell_a.name)
+            pair.insert(2, "decade_a", cell_a.decade)
+            pair.insert(3, "field_b", cell_b.name)
+            pair.insert(4, "decade_b", cell_b.decade)
+            frames.append(pair)
+        table = pd.concat(frames, ignore_index=True)
+        table["is_target"] = table["word"].isin(target_set)
+        table["is_control"] = table["word"].isin(control_set)
+        tables[name] = table
+    return tables

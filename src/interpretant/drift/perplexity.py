@@ -16,11 +16,12 @@ from __future__ import annotations
 import math
 import random
 from collections import Counter, defaultdict
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
+from tqdm import tqdm
 
 DISCOUNT = 0.75
 HELD_OUT = 1_000
@@ -342,3 +343,69 @@ def decompose_decades(
         for d in [decompose_fall(early, late, model_field, text_field)]
     ]
     return pd.DataFrame(rows, columns=["model_field", "text_field", "fall", "mix", "rate"])
+
+
+def cells_by_decade(texts_dir: Path) -> dict[int, list[Path]]:
+    """Group the ``<field>_<decade>.txt`` cells in ``texts_dir`` by decade, in order."""
+    by_decade: dict[int, list[Path]] = {}
+    for path in sorted(texts_dir.glob("*_*.txt")):
+        by_decade.setdefault(int(path.stem.rsplit("_", 1)[1]), []).append(path)
+    return dict(sorted(by_decade.items()))
+
+
+def _ignore(message: str) -> None:
+    del message
+
+
+def cross_entropy_runs(  # noqa: PLR0913
+    texts_dir: Path,
+    seeds: Iterable[int],
+    fixed_budget: int | None = None,
+    drop_shared: bool = False,
+    order: int = 2,
+    log: Callable[[str], None] = _ignore,
+) -> pd.DataFrame:
+    """Score every decade's fields against each other once per seed, with excess added.
+
+    One row per seed, decade, model field and text field (see :func:`decade_cross_entropy`).
+    """
+    frames = []
+    for seed in seeds:
+        for decade, cells in tqdm(cells_by_decade(texts_dir).items(), desc=f"  seed {seed}"):
+            table = decade_cross_entropy(cells, seed, fixed_budget, drop_shared, order)
+            table.insert(0, "decade", decade)
+            table.insert(0, "seed", seed)
+            frames.append(table)
+            if len(table):
+                log(
+                    f"  seed {seed} {decade}s: {table.text_field.nunique()} fields, "
+                    f"{table.training_tokens.max():,} tokens each"
+                )
+    return add_excess(pd.concat(frames, ignore_index=True))
+
+
+def decompose_runs(  # noqa: PLR0913
+    texts_dir: Path,
+    early: int,
+    late: int,
+    seeds: Iterable[int],
+    fixed_budget: int,
+    order: int = 2,
+    text_fields: Iterable[str] | None = None,
+) -> pd.DataFrame:
+    """Decompose every pair's fall from ``early`` to ``late`` once per seed, with shared
+    abstracts removed. Raises ValueError if a decade has fewer than two qualifying fields."""
+    frames = []
+    for seed in tqdm(list(seeds), desc="  seeds", unit="seed"):
+        early_models, late_models = (
+            build_decade(sorted(texts_dir.glob(f"*_{decade}.txt")), seed, fixed_budget, True, order)
+            for decade in (early, late)
+        )
+        if early_models is None or late_models is None:
+            raise ValueError("a decade has fewer than two qualifying fields")
+        table = decompose_decades(early_models, late_models, text_fields)
+        table.insert(0, "late", late)
+        table.insert(0, "early", early)
+        table.insert(0, "seed", seed)
+        frames.append(table)
+    return pd.concat(frames, ignore_index=True)

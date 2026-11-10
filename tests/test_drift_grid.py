@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 from gensim.models import KeyedVectors
 
 from interpretant.drift.grid import (
@@ -14,6 +15,7 @@ from interpretant.drift.grid import (
     cell_neighbours,
     compare_cells,
     cross_field_pairs,
+    measure_grid,
     within_field_pairs,
 )
 
@@ -112,3 +114,32 @@ def test_cell_neighbours_come_from_the_pool_and_need_a_measurable_word() -> None
     assert "w0" not in neighbours
     assert len(neighbours) == 3
     assert cell_neighbours(keyed, "rare") == []
+
+
+def test_measure_grid_compares_trajectories_and_fields_and_flags_words(tmp_path: Path) -> None:
+    counts = dict.fromkeys(BASE, 500)
+    for field in ("ai", "hci"):
+        for decade in (1990, 2000):
+            path = tmp_path / "openalex" / f"{field}_{decade}.kv"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            make_vectors(BASE, counts).save(str(path))
+
+    tables = measure_grid(tmp_path, targets=["w0"], controls=["w1", "w2"], neighbours=5)
+
+    within, cross = tables["within_field"], tables["cross_field"]
+    assert set(zip(within.field_a, within.decade_a, within.decade_b, strict=True)) == {
+        ("ai", 1990, 2000),
+        ("hci", 1990, 2000),
+    }
+    assert set(zip(cross.field_a, cross.field_b, cross.decade_a, strict=True)) == {
+        ("ai", "hci", 1990),
+        ("ai", "hci", 2000),
+    }
+    assert len(within) == len(cross) == 2 * len(BASE)
+    assert within.is_target.sum() == 2
+    assert within.is_control.sum() == 4
+
+
+def test_measure_grid_needs_pairs(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="no within_field pairs"):
+        measure_grid(tmp_path, targets=[], controls=[])

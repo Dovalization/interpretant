@@ -14,8 +14,11 @@ from interpretant.drift.perplexity import (
     KneserNeyBigram,
     UnigramModel,
     add_excess,
+    cells_by_decade,
+    cross_entropy_runs,
     decade_cross_entropy,
     decompose_fall,
+    decompose_runs,
     training_sample,
 )
 
@@ -152,3 +155,49 @@ def test_fall_decomposes_into_mix_and_rate_and_pure_mix_changes_leave_rate_at_ze
     assert decomposition.fall == pytest.approx(decomposition.mix + decomposition.rate)
     assert decomposition.rate == pytest.approx(0.0)
     assert decomposition.fall > 0
+
+
+def write_grid(root: Path, decades: tuple[int, ...]) -> None:
+    for decade in decades:
+        for field, sentence in (("philosophy", PHILOSOPHY), ("compsci", COMPUTING)):
+            (root / f"{field}_{decade}.txt").write_text("\n".join([sentence] * 6_000))
+
+
+def test_cells_by_decade_groups_cells_in_decade_order(tmp_path: Path) -> None:
+    write_grid(tmp_path, (2020, 1990))
+
+    grouped = cells_by_decade(tmp_path)
+
+    assert list(grouped) == [1990, 2020]
+    assert [path.name for path in grouped[1990]] == ["compsci_1990.txt", "philosophy_1990.txt"]
+
+
+def test_cross_entropy_runs_scores_every_seed_and_decade_with_excess(tmp_path: Path) -> None:
+    write_grid(tmp_path, (1990, 2020))
+    logged: list[str] = []
+
+    table = cross_entropy_runs(tmp_path, seeds=(1, 2), fixed_budget=50_000, log=logged.append)
+
+    assert len(table) == 2 * 2 * 4
+    assert set(table.seed) == {1, 2}
+    assert set(table.decade) == {1990, 2020}
+    own = table[table.model_field == table.text_field]
+    assert (own.excess == 0).all()
+    assert len(logged) == 4
+
+
+def test_decompose_runs_splits_each_seed_fall_into_mix_and_rate(tmp_path: Path) -> None:
+    write_grid(tmp_path, (1990, 2020))
+
+    table = decompose_runs(tmp_path, 1990, 2020, seeds=(1, 2), fixed_budget=50_000)
+
+    assert len(table) == 2 * 2
+    assert set(table.early) == {1990}
+    assert list(table.fall) == pytest.approx(list(table.mix + table.rate))
+
+
+def test_decompose_runs_needs_two_fields_in_both_decades(tmp_path: Path) -> None:
+    write_grid(tmp_path, (1990,))
+
+    with pytest.raises(ValueError, match="fewer than two qualifying fields"):
+        decompose_runs(tmp_path, 1990, 2020, seeds=(1,), fixed_budget=50_000)

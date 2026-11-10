@@ -915,11 +915,6 @@ def drift() -> None:
     """Drift computation commands."""
 
 
-# ---------------------------------------------------------------------------
-# pdf
-# ---------------------------------------------------------------------------
-
-
 @drift.command("perplexity")
 @click.option(
     "--texts-dir",
@@ -962,27 +957,11 @@ def drift_perplexity(  # noqa: PLR0913
 
     Method and predictions: docs/predictions_cross_perplexity.md.
     """
-    import pandas as pd  # noqa: PLC0415
+    from interpretant.drift.perplexity import cross_entropy_runs  # noqa: PLC0415
 
-    from interpretant.drift.perplexity import add_excess, decade_cross_entropy  # noqa: PLC0415
-
-    by_decade: dict[int, list[Path]] = {}
-    for path in sorted(texts_dir.glob("*_*.txt")):
-        by_decade.setdefault(int(path.stem.rsplit("_", 1)[1]), []).append(path)
-    frames = []
-    for seed in seeds:
-        for decade, cells in tqdm(sorted(by_decade.items()), desc=f"  seed {seed}", unit="decade"):
-            table = decade_cross_entropy(cells, seed, fixed_budget or None, drop_shared, order)
-            table.insert(0, "decade", decade)
-            table.insert(0, "seed", seed)
-            frames.append(table)
-            fields = table.text_field.nunique()
-            if fields:
-                console.print(
-                    f"  seed {seed} {decade}s: {fields} fields, "
-                    f"{table.training_tokens.max():,} tokens each"
-                )
-    result = add_excess(pd.concat(frames, ignore_index=True))
+    result = cross_entropy_runs(
+        texts_dir, seeds, fixed_budget or None, drop_shared, order, console.print
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     result.to_parquet(output, index=False)
     console.print(f"[green]{len(result):,} rows[/green] → {output}")
@@ -1020,24 +999,12 @@ def drift_decompose(  # noqa: PLR0913
     """Split every pair's fall in excess cross-entropy between two decades into a word-mix
     effect (the text's word frequencies changed) and a rate effect (the model's per-word
     skill changed). A fall that is all mix says the text moved; the model learned nothing."""
-    import pandas as pd  # noqa: PLC0415
+    from interpretant.drift.perplexity import decompose_runs  # noqa: PLC0415
 
-    from interpretant.drift.perplexity import build_decade, decompose_decades  # noqa: PLC0415
-
-    frames = []
-    for seed in tqdm(seeds, desc="  seeds", unit="seed"):
-        decades = [
-            build_decade(sorted(texts_dir.glob(f"*_{decade}.txt")), seed, fixed_budget, True, order)
-            for decade in (early, late)
-        ]
-        if decades[0] is None or decades[1] is None:
-            raise click.ClickException("a decade has fewer than two qualifying fields")
-        table = decompose_decades(decades[0], decades[1], texts or None)
-        table.insert(0, "late", late)
-        table.insert(0, "early", early)
-        table.insert(0, "seed", seed)
-        frames.append(table)
-    result = pd.concat(frames, ignore_index=True)
+    try:
+        result = decompose_runs(texts_dir, early, late, seeds, fixed_budget, order, texts or None)
+    except ValueError as error:
+        raise click.ClickException(str(error)) from error
     output.parent.mkdir(parents=True, exist_ok=True)
     result.to_parquet(output, index=False)
     summary = result.groupby(["model_field", "text_field"])[["fall", "mix", "rate"]].mean()
@@ -1089,59 +1056,27 @@ def drift_grid(  # noqa: PLR0913
     one row per word measured in a pair, with percentile ranks against the pair's
     whole-vocabulary noise floor and a candidate flag.
     """
-    import pandas as pd  # noqa: PLC0415
-    from gensim.models import KeyedVectors  # noqa: PLC0415
-
     from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
-    from interpretant.drift.grid import (  # noqa: PLC0415
-        add_noise_floor,
-        compare_cells,
-        cross_field_pairs,
-        discover_models,
-        within_field_pairs,
-    )
+    from interpretant.drift.grid import measure_grid  # noqa: PLC0415
 
-    targets = set(load_target_words(words_file))
-    controls = set(load_target_words(controls_file))
-    loaded: dict[Path, KeyedVectors] = {}
-
-    def vectors(path: Path) -> KeyedVectors:
-        if path not in loaded:
-            loaded[path] = KeyedVectors.load(str(path))
-        return loaded[path]
-
-    tables = {
-        "within_field": within_field_pairs(
-            discover_models(model_dir, ("books", "openalex", "openalex_full"))
-        ),
-        "cross_field": cross_field_pairs(discover_models(model_dir, ("openalex",))),
-    }
+    try:
+        tables = measure_grid(
+            model_dir,
+            load_target_words(words_file),
+            load_target_words(controls_file),
+            measure_min,
+            neighbour_min,
+            neighbours,
+        )
+    except ValueError as error:
+        raise click.ClickException(str(error)) from error
     output_dir.mkdir(parents=True, exist_ok=True)
-    for name, pairs in tables.items():
-        frames = []
-        for cell_a, cell_b in tqdm(pairs, desc=f"  {name}", unit="pair"):
-            pair = add_noise_floor(
-                compare_cells(
-                    vectors(cell_a.path),
-                    vectors(cell_b.path),
-                    measure_min,
-                    neighbour_min,
-                    neighbours,
-                )
-            )
-            pair.insert(0, "layer", cell_a.layer)
-            pair.insert(1, "field_a", cell_a.name)
-            pair.insert(2, "decade_a", cell_a.decade)
-            pair.insert(3, "field_b", cell_b.name)
-            pair.insert(4, "decade_b", cell_b.decade)
-            frames.append(pair)
-        table = pd.concat(frames, ignore_index=True)
-        table["is_target"] = table["word"].isin(targets)
-        table["is_control"] = table["word"].isin(controls)
+    for name, table in tables.items():
         table.to_parquet(output_dir / f"{name}.parquet", index=False)
+        pairs = table.groupby(["layer", "field_a", "decade_a", "field_b", "decade_b"]).ngroups
         control_rate = table.loc[table["is_control"], "candidate"].mean()
         console.print(
-            f"  {name}: {len(pairs)} pairs, {len(table):,} rows, "
+            f"  {name}: {pairs} pairs, {len(table):,} rows, "
             f"{int(table.loc[table['is_target'], 'candidate'].sum())} target candidates, "
             f"controls flagged {control_rate:.1%} (expected under ~5%)"
         )
