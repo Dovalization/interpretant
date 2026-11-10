@@ -142,8 +142,10 @@ amid new topics looks changed.
 **Test or removal.** Net out variety (J); compare against control words on the same transition;
 validate against human judgements of usage pairs (the author's gold set in item 8c).
 
-**Since the audit (2026-11-10).** Check 1b confirmed it for the usage-pair measure: J flagged a
-change of source with no change of sense. The sense-label instrument (ROADMAP item 8d) is built to
+**Since the audit (2026-11-10).** Check 2b and round X's X5 confirmed it for the usage-pair
+measures: XL-LEXEME's similarity follows context within a sense, and ordinary words' contexts drift
+between decades (check 1b's placebo, first read as a change of source alone, also shifted the sense
+mix; see the correction in `diagnostics.md`). The sense-label instrument (ROADMAP item 8d) is built to
 step around it: meaning there is the share of a word's occurrences in each sense of an approved
 list, so a new topic with the same sense should leave the shares where they were. Its placebo test
 in rung 3 checks exactly that. The classifier still reads contexts (XL-LEXEME vectors), so A7
