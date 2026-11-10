@@ -177,3 +177,48 @@ Reading rule:
   and decides nothing about the instrument.
 
 Scored by `scripts/score_pairs_known.py`, committed before it is run.
+
+### Round X results (2026-11-10, `scripts/score_pairs_known.py`)
+
+Scored as written. 3 passed, 2 falsified. Values are APD and J with their two bars (the
+95th percentile of 200 shuffles, the 90th percentile of the transition's 28–30 control words).
+
+| Case | APD (shuffles, controls) | J (shuffles, controls) |
+|---|---|---|
+| *attention*, AI, 2010s → 2020s | 0.2708 (0.2547, 0.2941) | 0.0355 (0.0032, 0.0030), found |
+| *prompt*, AI, 2000s → 2020s | 0.3969 (0.3932, 0.2863), found | 0.0101 (0.0026, 0.0100), found |
+| *platform*, communication, 2000s → 2010s | 0.2026 (0.1975, 0.2790) | 0.0107 (0.0021, 0.0008), found |
+| *network*, AI, 1980s → 1990s | 0.1987 (0.1974, 0.2912) | 0.0045 (0.0020, 0.0014), found |
+| *alignment*, AI, 2010s → 2020s (weak) | 0.2169 (0.2117, 0.2941) | 0.0261 (0.0021, 0.0030), found |
+| *attention*, AI, 1990s → 2000s (quiet) | 0.1411 (0.1408, 0.2855) | 0.0019 (0.0014, 0.0015), found |
+| *attention*, psychology, 2010s → 2020s (quiet) | 0.2249 (0.2261, 0.2669) | −0.0000 (0.0024, 0.0012) |
+
+| | Verdict | Numbers |
+|---|---|---|
+| X1 | **Falsified** | APD found 1 of 4 documented changes (*prompt*) |
+| X2 | **Passed** | APD found neither quiet transition |
+| X3 | **Passed** | J found 4 of 4: *attention, prompt, platform, network* |
+| X4 | **Falsified** | J found the quiet *attention* in AI, 1990s → 2000s |
+| X5 | **Passed** | J above its shuffles' 95th percentile in 56 of 175 control transitions (32%) |
+
+### Reading
+
+Neither measure's pair passed, so by the reading rule the usage-pair instrument does not proceed
+to rung 3, and the design stops at this rung.
+
+APD missed three of four documented changes because it is compared with the controls' APD, which
+measures how varied each word is: every known word's APD sat under the controls' 90th percentile
+except *prompt*'s. J found all four documented changes and the weak case, including *network* and
+*platform*, which every earlier instrument missed and check 1a found present in the cells. Its one
+false alarm, *attention* in AI's 1990s → 2000s, where check 1a read no mechanism use in either
+cell, was narrow (0.0019 against bars of 0.0014 and 0.0015) and came on the smallest cells in the
+round (about 180 usages each).
+
+### Exploratory, after scoring
+
+Not predicted. Compared with earlier instruments on the same documented changes, J is the first
+to find all of them: the grid found one of four (round 5), and the sense instrument's meaning
+shares failed calibration (rounds C–C″). X5 confirms that ordinary words' contexts drift between
+decades often enough (a third of control transitions) that the controls bar is necessary; J's
+false alarm cleared that bar by 0.0004. Whether such margins are noise could be tested by
+resampling the cells, which this round did not do.

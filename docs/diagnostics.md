@@ -173,3 +173,43 @@ fails, those changes may simply be too small for it. If P2 fails, the instrument
 where usages come from, not only to what they mean.
 
 Scored by `scripts/check_planted_pairs.py`, committed before it is run.
+
+### Check 2b results (2026-11-10, `scripts/gold_pairs.py score`)
+
+Scored as written. G1 falsified. The judgements were made interactively, one pair at a time,
+with contexts longer than 30 words either side of the marked word shown trimmed; they were
+committed before any XL-LEXEME score of the pairs was computed (commit f2e4260).
+
+| | Verdict | Numbers |
+|---|---|---|
+| G1 | **Falsified** | Spearman 0.431 between XL-LEXEME's similarity and the author's judgement over 96 pairs (needed 0.5) |
+
+The author's four repeated pairs received the same judgement both times. Mean judgement and mean
+similarity by kind of pair: within the earlier cell 2.63 and 0.726, within the later 3.07 and
+0.772, across 2.67 and 0.737.
+
+### Reading
+
+XL-LEXEME reads this corpus's sentences less as the author does than its published agreement on
+DWUG EN (about 0.63) suggests. By the check's own terms, the instrument misreads this genre to a
+degree (A6, A7), whatever the cells.
+
+### Exploratory, after scoring: where the agreement sits
+
+Not predicted; per word, Spearman over 16 pairs:
+
+| Word | Agreement | The author's judgements |
+|---|---|---|
+| *attention* | 0.70 | ten 1s, six 4s |
+| *prompt* | 0.66 | spread across 1–4 |
+| *having* | 0.54 | five 1s, eleven 4s |
+| *platform* | 0.43 | seven 1s, nine 3s and 4s |
+| *network* | 0.10 | mostly 4s |
+| *component* | 0.00 | mostly 4s |
+
+Where a word's uses fall into clearly different senses (*attention*, *prompt*), XL-LEXEME agrees
+with the author well. Where the author judged one meaning throughout (*network*, *component*), its
+similarity still spreads from about 0.45 to 0.97: it responds to the context around a word as well
+as to its meaning, the confound Kutuzov et al. (2022) describe. Part of the disagreement is sense
+granularity: the author judged telephone, computer and neural networks as one meaning of *network*
+in several pairs, where XL-LEXEME separates them.
