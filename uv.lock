@@ -830,7 +830,9 @@ dependencies = [
     { name = "scipy" },
     { name = "simplemma" },
     { name = "streamlit" },
+    { name = "torch" },
     { name = "tqdm" },
+    { name = "transformers" },
 ]
 
 [package.optional-dependencies]
@@ -863,7 +865,9 @@ requires-dist = [
     { name = "scipy", specifier = ">=1.11" },
     { name = "simplemma", specifier = ">=2.0" },
     { name = "streamlit", specifier = ">=1.30" },
+    { name = "torch", specifier = ">=2.4" },
     { name = "tqdm", specifier = ">=4.65" },
+    { name = "transformers", specifier = ">=4.48" },
 ]
 provides-extras = ["dev"]
 
