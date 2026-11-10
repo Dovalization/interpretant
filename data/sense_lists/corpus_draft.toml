@@ -19,7 +19,7 @@ cues = ["<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", 
 key = "notice_or_consideration"
 definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing, including authors directing it, as in we focus our attention on"
 example = "The issue has received growing attention from policymakers."
-cues = ["received", "receive", "receiving", "drawn", "draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "increasing", "growing", "considerable", "little", "special", "deserves", "public", "media", "scholarly", "widespread", ">given"]
+cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "<<increasing", "growing", "<<considerable", "little", "special", "deserves", "public", "<<media", "scholarly", "widespread", ">given"]
 
 [[attention.senses]]
 key = "attention_mechanism"
