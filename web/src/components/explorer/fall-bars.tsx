@@ -45,17 +45,18 @@ export function FallBars({ rows, highlight }: FallBarsProps) {
           <div
             key={row.model}
             className={cn(
-              "grid grid-cols-[9rem_1fr_5.5rem] items-center gap-3 text-sm",
+              "grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1 text-sm sm:grid-cols-[9rem_1fr_5.5rem] sm:gap-y-0",
               highlight === row.model && "font-semibold",
             )}
           >
             <span
-              className="truncate text-right text-muted-foreground"
+              className="truncate text-muted-foreground sm:text-right"
               title={fieldLabel(row.model)}
             >
               {fieldShortLabel(row.model)}
             </span>
-            <div className="relative h-7">
+            {/* On phones the bar takes its own full-width row under the label and total. */}
+            <div className="relative order-last col-span-2 h-7 sm:order-none sm:col-span-1">
               <div className="absolute inset-y-0 left-1/2 w-px bg-border" />
               <div
                 className="absolute top-0.5 h-2.5 rounded-sm"

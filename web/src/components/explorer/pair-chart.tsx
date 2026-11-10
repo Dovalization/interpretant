@@ -44,7 +44,7 @@ export function PairChart({ a, b, points }: PairChartProps) {
   };
 
   return (
-    <ChartContainer config={config} className="aspect-[2/1] w-full">
+    <ChartContainer config={config} className="aspect-[4/3] w-full sm:aspect-[2/1]">
       <ComposedChart data={data} margin={{ top: 12, right: 16, bottom: 0, left: -8 }}>
         <CartesianGrid vertical={false} />
         <XAxis
