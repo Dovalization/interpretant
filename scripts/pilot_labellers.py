@@ -5,6 +5,8 @@ Committed before either labeller was run. Three steps:
     uv run python scripts/pilot_labellers.py sonnet    # labels through the Claude Code CLI
     uv run --extra labels python scripts/pilot_labellers.py jev   # TYPESAFE_API_KEY in .env
     uv run python scripts/pilot_labellers.py compare
+    uv run --extra labels python scripts/pilot_labellers.py sonnet_api   # ANTHROPIC_API_KEY in .env
+    uv run python scripts/pilot_labellers.py recheck
 
 Labels and each labeller's usage figures are written to data/labels/pilot/ (identifiers and labels
 only); raw responses stay under data/labels/pilot/raw/, which is not committed.
@@ -15,6 +17,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import random
 import statistics
 import sys
 import time
@@ -27,6 +30,7 @@ from interpretant.drift.labels import (
     OTHER,
     REPEAT_SUFFIX,
     UNCLEAR,
+    BatchLabeller,
     Item,
     Labeller,
     SenseList,
@@ -44,6 +48,7 @@ CORRECTIONS = Path("data/diagnostics/gold_pairs_author_corrections.tsv")
 LISTS = Path("data/sense_lists/pilot_check_2b.toml")
 OUT = Path("data/labels/pilot")
 SONNET = Labeller(model="claude-sonnet-5-5", effort="low")
+SONNET_API = BatchLabeller(model="claude-sonnet-5-5", effort="low")
 JEV_MODEL = "jev-1.14.0"
 BLOCK = 20
 REPEATS = 0.1
@@ -167,6 +172,72 @@ def jev(limit: int | None = None) -> None:
     )
 
 
+def sonnet_api() -> None:
+    """The plan's API recheck: Sonnet 5.5 through the Batch API, one usage per request."""
+    lists = load_sense_lists(LISTS)
+    found = sorted(usages().items())
+    items = [Item(key, usage) for key, (_, usage) in found]
+    word_of = {key: word for key, (word, _) in found}
+    rng = random.Random(f"{SEED}:api")
+    repeats = [
+        Item(i.key + REPEAT_SUFFIX, i.usage) for i in rng.sample(items, round(REPEATS * len(items)))
+    ]
+    work = [(lists[word_of[i.key.removesuffix(REPEAT_SUFFIX)]], i) for i in items + repeats]
+    started = time.monotonic()
+    labels = SONNET_API.label(work, OUT / "raw" / "sonnet_api")
+    write_labels("sonnet_api", labels)
+    results = [
+        json.loads(line)
+        for line in (OUT / "raw" / "sonnet_api" / "results.jsonl").read_text().splitlines()
+    ]
+    input_tokens = sum(int(r.get("input_tokens", 0)) for r in results)
+    output_tokens = sum(int(r.get("output_tokens", 0)) for r in results)
+    cost = (input_tokens * 1.0 + output_tokens * 5.0) / 1_000_000
+    print(
+        f"{len(labels)} labels in {time.monotonic() - started:.0f}s; input {input_tokens}, "
+        f"output {output_tokens} tokens (about ${cost:.3f} at batch prices); "
+        f"types {sorted({str(r['type']) for r in results})}"
+    )
+
+
+def recheck() -> None:
+    """Sonnet through the API against the pilot's CLI blocks, JEV and the author."""
+    lists = load_sense_lists(LISTS)
+    api, cli, jev_labels = read_labels("sonnet_api"), read_labels("sonnet"), read_labels("jev")
+    originals = [k for k in api if not k.endswith(REPEAT_SUFFIX)]
+    for name, other in (("the pilot's CLI blocks", cli), ("JEV", jev_labels)):
+        first, second = [api[k] for k in originals], [other[k] for k in originals]
+        exact = statistics.mean(a == b for a, b in zip(first, second, strict=True))
+        print(
+            f"API labels and {name}: agree on {exact:.0%}, "
+            f"kappa {cohen_kappa_score(first, second):.3f}"
+        )
+    repeats = [k for k in api if k.endswith(REPEAT_SUFFIX)]
+    agreement = statistics.mean(api[k] == api[k.removesuffix(REPEAT_SUFFIX)] for k in repeats)
+    shares = {
+        label: statistics.mean(api[k] == label for k in originals) for label in (OTHER, UNCLEAR)
+    }
+    print(
+        f"consistency on {len(repeats)} repeats {agreement:.0%}; "
+        f"other {shares[OTHER]:.0%}, unclear {shares[UNCLEAR]:.0%}"
+    )
+    rows = [r for r in key_rows() if not r["repeat_of"]]
+    for corrected in (False, True):
+        judged = judgements(corrected)
+        pairs = [r for r in rows if judged[r["item"]] > 0]
+        scores = []
+        for r in pairs:
+            a, b = (
+                usage_id(r["word"], Usage(r[f"text_{s}"], int(r[f"start_{s}"]), int(r[f"end_{s}"])))
+                for s in ("a", "b")
+            )
+            listed = {s.key for s in lists[r["word"]].senses}
+            scores.append(float(api[a] == api[b] and api[a] in listed))
+        rho = float(spearmanr(scores, [judged[r["item"]] for r in pairs]).statistic)
+        label = "with the correction pass" if corrected else "original judgements"
+        print(f"API labels against the author ({label}, {len(pairs)} pairs): Spearman {rho:.3f}")
+
+
 def judgements(corrected: bool) -> dict[str, int]:
     import re  # noqa: PLC0415
 
@@ -250,4 +321,6 @@ if __name__ == "__main__":
     if sys.argv[1] == "jev":
         jev(int(sys.argv[2]) if len(sys.argv) > 2 else None)
     else:
-        {"sonnet": sonnet, "compare": compare}[sys.argv[1]]()
+        {"sonnet": sonnet, "compare": compare, "sonnet_api": sonnet_api, "recheck": recheck}[
+            sys.argv[1]
+        ]()
