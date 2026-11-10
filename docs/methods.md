@@ -96,6 +96,19 @@ pair-level number alone cannot show. Two tools therefore accompany every reading
   a text uses; what the bigram models add beyond it is phrase structure. Output:
   `data/drift/cross_perplexity_unigram.parquet`.
 
+What the two tools say about the runs so far (November 2026, lemmatised corpus, 1990s to
+2020s): the unigram models reproduce the bigram falls on HCI's text almost entirely
+(neuroscience 0.48 against 0.64 bits, sociology 0.23 against 0.26, psychology 0.19 against
+0.25; AI and computer science at or below zero under both), so the change is lexical
+composition first. The decomposition agrees for every non-computing model except
+neuroscience's, whose fall is two thirds rate effect: its 1990s model was far from HCI's
+words and its 2020s model is not, a change in neuroscience's own vocabulary that the
+decomposition attributes to the model side. Across all 110 ordered pairs, the mean fall is
+0.058 bits, of which the mix effect is +0.091 and the rate effect −0.033: the convergence of
+fields measured in L9 is a convergence of word mixes, with the models' per-word skill at each
+other's texts slightly worse than before, not better. "Fields converged" means the fields came
+to use more of the same words, not that any field's model learned another's language.
+
 Whole-cell comparisons across decades also rest on OpenAlex's subfield labels holding their
 scope; round K′ showed the HCI label widening from 915 to 3,601 sources between the 1990s and
 the 2020s. A venue-stable check (`corpus openalex sources`, then the cell restricted to the
