@@ -19,6 +19,7 @@ from interpretant.drift.labels import (
     blocks,
     distribution,
     divergence,
+    jev_label,
     load_sense_lists,
     parsed,
     prompt,
@@ -169,3 +170,18 @@ def test_stored_batch_results_are_reused_without_calling_the_api(tmp_path: Path)
     work = [(SENSES, item) for item in items(3)]
     labels = BatchLabeller(model="m", effort="low").label(work, tmp_path)
     assert labels == {"u0": "other", "u1": "failed", "u2": "failed"}
+
+
+@pytest.mark.parametrize(
+    ("answer", "label"),
+    [
+        ({"listed": 0.9, "probabilities": {"cognitive": 0.2, "mechanism": 0.8}}, "mechanism"),
+        ({"listed": 0.2, "probabilities": {"cognitive": 0.9, "mechanism": 0.1}}, "other"),
+        ({"listed": 0.5, "probabilities": {"cognitive": 0.9, "mechanism": 0.1}}, "unclear"),
+        ({"error": "TypeSafeAPITimeoutError()"}, "failed"),
+    ],
+)
+def test_a_jev_answer_reads_by_the_companion_question_then_the_top_sense(
+    answer: dict[str, object], label: str
+) -> None:
+    assert jev_label(answer, SENSES) == label

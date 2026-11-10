@@ -379,3 +379,105 @@ class BatchLabeller:
         ]
         found = {r["custom_id"]: single_label(r, senses_of[r["custom_id"]]) for r in stored_results}
         return {key_of[custom_id]: found.get(custom_id, FAILED) for custom_id in key_of}
+
+
+JEV_YES, JEV_NO = 0.7, 0.3
+
+
+def jev_label(answer: dict[str, object], senses: SenseList) -> str:
+    """A stored JEV answer as a label: the top listed sense when the companion question says a
+    listed sense fits (above 0.7), ``other`` when it says none does (below 0.3), else
+    ``unclear``; ``failed`` when the request failed."""
+    if "error" in answer:
+        return FAILED
+    listed = float(answer["listed"])  # type: ignore[arg-type]
+    probabilities: dict[str, float] = answer["probabilities"]  # type: ignore[assignment]
+    if listed < JEV_NO:
+        return OTHER
+    if listed <= JEV_YES:
+        return UNCLEAR
+    top = max(probabilities, key=lambda key: probabilities[key])
+    return top if top in senses.labels else FAILED
+
+
+@dataclass(frozen=True)
+class JevLabeller:
+    """One usage per request to TypeSafe's JEV: a Choice among the listed senses, each described
+    by its definition and example, and a companion yes-or-no question on whether any listed
+    sense fits, as TypeSafe's guidance recommends over a "none of these" option.
+
+    Each answer is stored as it arrives, so an interrupted run resumes. Transient failures that
+    outlast the SDK's retries are stored as errors and read as ``failed``; authentication and
+    request errors are raised.
+    """
+
+    model: str
+    workers: int = 8
+
+    def questions(self, senses: SenseList) -> dict[str, object]:
+        from typesafe_sdk import Choice, Noul  # noqa: PLC0415
+
+        listed = "; ".join(f"{s.key}: {s.definition}" for s in senses.senses)
+        return {
+            "sense": Choice(
+                instructions="Which sense does the word marked with ⟦ and ⟧ in `usage` have?",
+                criteria={s.key: f"{s.definition}. Example: {s.example}" for s in senses.senses},
+            ),
+            "listed": Noul(
+                instructions=(
+                    "Does the word marked with ⟦ and ⟧ in `usage` have one of these senses: "
+                    f"{listed}?"
+                ),
+                criteria={
+                    "true": "The marked word is used in one of the listed senses.",
+                    "false": (
+                        "The marked word is used in a sense that none of the listed senses "
+                        "describes."
+                    ),
+                },
+            ),
+        }
+
+    def label(self, work: Sequence[tuple[SenseList, Item]], record: Path) -> dict[str, str]:
+        """Labels by item key; ``record`` is a directory with one stored answer per item."""
+        import hashlib  # noqa: PLC0415
+
+        import typesafe_sdk  # noqa: PLC0415
+
+        transient = (
+            typesafe_sdk.TypeSafeAPIConnectionError,
+            typesafe_sdk.TypeSafeAPITimeoutError,
+            typesafe_sdk.TypeSafeInternalServerError,
+            typesafe_sdk.TypeSafeRateLimitError,
+        )
+        client = typesafe_sdk.TypeSafeClient(
+            api_key=TypeSafeSettings().typesafe_api_key,  # type: ignore[call-arg]
+            model=self.model,
+        )
+        record.mkdir(parents=True, exist_ok=True)
+
+        def one(job: tuple[SenseList, Item]) -> tuple[str, str]:
+            senses, item = job
+            path = record / f"{hashlib.sha256(item.key.encode()).hexdigest()[:16]}.json"
+            if path.exists():
+                return item.key, jev_label(json.loads(path.read_text(encoding="utf-8")), senses)
+            try:
+                response = client.system_one(
+                    {"word": senses.word, "usage": shown(item.usage)},
+                    self.questions(senses),  # type: ignore[arg-type]
+                    model=self.model,
+                )
+                answer: dict[str, object] = {
+                    "key": item.key,
+                    "model": response.model,
+                    "listed": response.nouls["listed"].noul,
+                    "probabilities": response.choices["sense"].probabilities,
+                    "input_tokens": response.usage.input_tokens,
+                }
+            except transient as error:
+                answer = {"key": item.key, "error": repr(error)}
+            path.write_text(json.dumps(answer), encoding="utf-8")
+            return item.key, jev_label(answer, senses)
+
+        with ThreadPoolExecutor(max_workers=self.workers) as pool:
+            return dict(pool.map(one, work))
