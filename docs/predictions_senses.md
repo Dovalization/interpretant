@@ -288,3 +288,67 @@ but also 10–22% of psychology's 2000s occurrences. The sense-set rule (the few
 80% of the marked uses) needed it to reach 80%, and took it. In seeds 2–4 the pure senses
 reached 80% alone. The failure is in the rule that groups senses into a meaning, which admits a
 sense without regard to what else it holds, not in the number of senses.
+
+## Round C″: the sense-set rule repaired, tested on a third known answer (committed 2026-11-10, before any *prompt* occurrence was encoded)
+
+Round C′ located its failure in the rule that groups senses into a meaning. This round repairs
+that rule on the data already seen and tests it on *prompt*, which no sense run has touched. In
+psychology a prompt is a cue or a prompting intervention; in AI's 2020s abstracts it is the
+instruction given to a language model, a sense that spread from about 2021. **This is the last
+calibration round: if it fails, sense-level drift ends here.**
+
+### Development on round C′'s tables (seen data, no new encoding)
+
+The *meaning set* is now every sense whose share of marked uses, counted over all of its
+occurrences in every cell, is at least half that of the sense with the highest share. A mixed
+sense holds many unmarked occurrences from other cells, so its share is low whatever it holds in
+AI. On round C′'s tables:
+
+| | Marked share of senses that join | Of senses left out | Meaning set's share of AI's 2020s | Of the reference cells |
+|---|---|---|---|---|
+| *attention* | 0.54–0.58 (one sense) | at most 0.02 | 0.550–0.608 | AI 1990s 0.005–0.048, psychology at most 0.020 |
+| *hallucination* | 0.44–0.93 (two senses) | at most 0.15 | 0.662–0.882 | psychology 2000s at most 0.028, neuroscience 2000s at most 0.008 |
+
+With this rule both words meet round C′'s C′1 and C′2 thresholds in every seed. That is a
+property of the rule on the data it was chosen on, not a result.
+
+### Method (fixed before any *prompt* occurrence is encoded)
+
+Round C′'s method (SciBERT, eight senses, sampling with replacement, plurals, the quality rules,
+the nested-field rule), with the meaning set above in place of round C′'s sense sets.
+
+- **Run.** *prompt* on its word-targeted cells (`data/raw/openalex_words/prompt/`): AI and
+  psychology in the 2000s and the 2020s. Abstracts containing *prompt* or *prompts*: AI 298 and
+  756, psychology 466 and 554. AI and psychology are not nested.
+- **Marked uses**, as the language-model sense: the context contains one of *language model,
+  large language, LLM, ChatGPT, GPT, generative AI, chatbot, few-shot, zero-shot, in-context,
+  prompt engineering, prompt tuning, prompt learning*.
+- **Sizes.** A cell with fewer than 40 occurrences, or fewer than 20 marked uses in AI's 2020s
+  cell, makes the predictions untestable.
+- Already seen: the four cells' sizes and how many abstracts contain the word. Not computed:
+  any encoding of a *prompt* occurrence.
+
+### Predictions
+
+**C″1 — The repaired instrument finds a third known sense.** In every seed, the meaning set
+holds at least 50% of AI's 2020s occurrences of *prompt*, at most 5% of AI's 2000s occurrences
+and less than 5% of psychology's 2000s occurrences. *Falsified* if any fails in any seed.
+
+**C″2 — The language-model prompt has reached psychology.** The meaning set's share of
+psychology's occurrences rises from the 2000s to the 2020s, present. *Falsified* if absent. Not a
+known answer: an open question asked because the cells exist.
+
+Reading rule:
+
+- **C″1 passes:** the instrument is used on round D's open questions with this method unchanged
+  (round C′'s method and this meaning set). Round D's predictions are written before any of its
+  words is encoded, and each finding is also computed without the abstracts flagged by
+  `scripts/measure_label_noise.py`.
+- **C″1 fails:** sense-level drift ends. Rounds C, C′ and C″ stand as scored, every sense result
+  is reported as exploratory only, round D is not run, and the README says the instrument did
+  not pass calibration.
+- C″2 describes *prompt*; it does not decide the instrument's use.
+- The meaning set is printed with its top context words and its nearest distinct examples
+  (seed 1).
+
+Scored by `scripts/score_senses_final.py`, committed before the run.
