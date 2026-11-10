@@ -38,7 +38,7 @@ word = "prompt"
 key = "language_model_input"
 definition = "An instruction or input text given to a language model or other generative AI system"
 example = "We design prompts that ask the model to explain its answer step by step."
-cues = ["language", "llm", "llms", "gpt", "chatgpt", "engineering", "tuning", "shot", "zero", "few", "generative", "chain", "thought", "templates", "template", "soft", "injection", "diffusion", "instruction", "instructions", "context"]
+cues = ["language", "llm", "llms", "gpt", "chatgpt", "engineering", "tuning", "shot", "zero", "few", "generative", "chain", "thought", "templates", "template", "soft", "injection", "diffusion", "context"]
 
 [[prompt.senses]]
 key = "cue_to_a_person"
@@ -50,13 +50,13 @@ cues = ["written", "essay", "verbal", "spoken", "dialogue", "dialog", "interface
 key = "quick_or_immediate"
 definition = "The adjective: done or happening quickly, without delay"
 example = "Prompt treatment reduces the risk of complications."
-cues = ["treatment", "diagnosis", "response", "action", "payment", "delivery", "recognition", "intervention", "detection", "repair", "medical", "notification"]
+cues = ["treatment", "diagnosis", "payment", "delivery", "intervention", "repair", "medical", "notification"]
 
 [[prompt.senses]]
 key = "to_cause_or_provoke"
 definition = "The verb: to cause, motivate or bring about something"
 example = "These findings prompt a re-examination of the model."
-cues = ["findings", "concerns", "led", "prompted", "prompting", "us", "researchers", "calls"]
+cues = ["concerns", "led", "prompted", "prompting", "us", "researchers", "calls"]
 
 [platform]
 word = "platform"
