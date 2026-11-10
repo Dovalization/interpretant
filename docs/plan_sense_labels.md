@@ -32,10 +32,15 @@ way it can see a sense nobody wrote down, and that is weaker than discovery.
   by Claude before any usage they will label is read. For this corpus the author reviews and
   approves them, then they are committed and frozen; for the benchmark they are not reviewed.
   Writing a fixed list answers the granularity problem the check 2b correction pass found.
-- **Labelling.** One request per usage. The request shows the word, its sense list and the
-  usage's sentence (cut to 100 words, the word marked as in check 2b), and nothing about field,
-  decade or cell. The answer is constrained by structured outputs to one label from the list.
-  The same instructions and list for every usage of a word, so the shared prefix can be cached.
+- **Labelling.** Through the Claude Code CLI in headless mode (`claude -p` with a fixed system
+  prompt, no tools, no settings or MCP servers, no session persistence, a pinned model and
+  effort, and a JSON schema for the answer), called by a committed script. Each call labels a
+  block of about 40 usages of one word: the word, its sense list, and the numbered usages'
+  sentences (cut to 100 words, the word marked as in check 2b), with nothing about field, decade
+  or cell. A block mixes the word's usages from every cell of the run, planted items included, in
+  a seeded random order, so its position in a block tells the model nothing about a usage's cell;
+  check 1a was labelled the same way. The schema allows one label from the list per item, and a
+  block whose answer does not cover every item exactly once is sent again.
 - **Measures.** A cell's distribution is its share of each listed sense plus *other*; *unclear*
   is reported and left out. The change between two cells is the Jensen-Shannon divergence of
   their distributions, in bits. It is the measure DWUG's own graded change uses on its human
@@ -46,10 +51,12 @@ way it can see a sense nobody wrote down, and that is weaker than discovery.
   90th percentile of the control words' divergence on the same transition (every word's drift).
 - **Model.** One model for every rung, chosen before rung 1 and never changed after it, so that a
   failed rung cannot be repaired by changing model. Current models take no sampling temperature,
-  so labels are not deterministic: 10% of every run is labelled twice and the agreement is
-  reported as the instrument's self-consistency. A refused request is recorded as *refused* and
-  counted with *unclear*; it is not sent to a fallback model, which would mix two instruments.
-  The model ID and the date are recorded with every run.
+  so labels are not deterministic: 10% of every run is labelled twice, in a different block and
+  position, and the agreement is reported as the instrument's self-consistency, which also
+  measures any effect of a usage's neighbours in its block. A refused block is recorded as
+  *refused* and its items counted with *unclear*; it is not sent to another model, which would
+  mix two instruments. The model ID, the CLI version, the date and each call's reported token
+  usage are recorded with every run.
 - **Records.** Raw responses stay local. Labels are committed as identifiers and labels only; no
   DWUG text is committed (its licence forbids redistribution).
 
@@ -90,29 +97,24 @@ Labels: rung 1 about 10,000 (with the 10% repeats); rung 3 at most about 26,500 
 target words, at most 21,000 for the controls, about 900 planting usages, plus repeats); rung 2
 is negligible. About 36,500 in all.
 
-Upper estimate per label, Message Batches API (50% of the standard price), about 900 input
-tokens and 200 output tokens (the label plus thinking at low effort), no caching assumed:
+In blocks of 40 that is about 900 CLI calls. A smoke test on 2026-11-10 (three invented
+sentences, Claude Opus 5.5 at low effort) answered in about 6 seconds with a valid labelled
+object, using about 1,300 input tokens of fixed overhead and 377 output tokens, 122 of them
+thinking. A block of 40 should take well under a minute, so the whole ladder is a few hours with
+a handful of calls in parallel. On a subscription login the calls count against the plan's usage
+limits, not a bill; the CLI's reported cost for the smoke test was $0.018, which as an API
+figure puts the whole ladder at roughly $20–40 for Opus 5.5. A pilot of 5 blocks from rung 1's
+benchmark comes first, and the time and usage are re-estimated from it before the full run.
 
-| Model | Batch price per million tokens, input / output | Per label | Rung 1 | Rung 3 | All |
-|---|---|---|---|---|---|
-| Claude Opus 5.5 | $2 / $10 | $0.0038 | about $38 | about $100 | about $140 |
-| Claude Sonnet 5.5 | $1 / $5 | $0.0019 | about $19 | about $50 | about $70 |
-| Claude Haiku 5.5 | $0.05 / $0.25 | $0.0001 | about $1 | about $3 | about $4 |
-
-Prices from Anthropic's API reference as of 3 November 2026; checked again before any batch is
-sent. Thinking tokens are the uncertain part, so a 200-label pilot on rung 1's benchmark is run
-first and the estimate is redone from its measured usage before the full batch. Caching the
-shared prefix would lower the input share, but caching in batches is best-effort and short
-prefixes are not cached, so it is left out of the estimate.
+The Message Batches API remains the alternative if usage limits get in the way: the same
+prompts at half the standard price, about $140 for Opus 5.5 one usage per request (prices from
+Anthropic's API reference as of 3 November 2026). It needs an API key, which is not set.
 
 ## Decisions for the author
 
-1. **An API key.** None is set in the environment or in `.env`. Calls go through the official
-   `anthropic` Python SDK, a new dependency.
-2. **The model**, fixed before rung 1. The default is Claude Opus 5.5, the most capable model at
-   these prices; Sonnet 5.5 halves the cost and Haiku 5.5 makes it negligible, at a risk to
-   label quality that rung 1 would measure but not repair.
-3. **The author's time:** approving about 15 sense lists (5 target words, 10 controls) and
+1. **The model**, fixed before rung 1. The default is Claude Opus 5.5 at low effort; through
+   the CLI a cheaper model saves usage, not money, so there is little reason to take one.
+2. **The author's time:** approving about 15 sense lists (5 target words, 10 controls) and
    labelling about 130 usages, roughly as long as check 2b's 100 pairs.
 
 ## Not part of it

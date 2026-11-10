@@ -140,8 +140,8 @@ Each item that produces results gets its predictions committed first.
    usage with one sense from a fixed list per word, and a cell's meaning is its distribution
    over the list, so a change of context without a change of sense should not register. Ladder:
    DWUG EN, the author's gold labels, known answers over time with check 1b's placebo, then
-   between fields and open questions. Waits on an API key, the choice of model and the
-   author's review of the sense lists.
+   between fields and open questions. Labelled through the Claude Code CLI in blocks. Waits on
+   the choice of model and the author's review of the sense lists.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
