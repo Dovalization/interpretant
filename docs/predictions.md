@@ -462,3 +462,43 @@ Reading rule:
 - Whatever the outcome, no round follows to repair the grid.
 
 Scored by `scripts/score_grid_calibration.py`, committed before it is run.
+
+## Round 5 results (2026-11-10, `scripts/score_grid_calibration.py`)
+
+Scored as written. 2 passed, 4 falsified.
+
+| | Verdict | Numbers (cosine rank, neighbour rank) |
+|---|---|---|
+| E1 | **Falsified** | *attention* in AI, 2010s → 2020s: seed 42 92 and 98, seed 43 90 and 97; not a candidate in either |
+| E2 | **Falsified** | *platform* in communication, 2000s → 2010s: 61 and 13, 61 and 31 |
+| E3 | **Falsified** | *network* in AI, 1980s → 1990s: 86 and 23, 82 and 47 |
+| E4 | **Passed** | *alignment* in AI, 2010s → 2020s: 100 and 100, 100 and 98; a candidate in both |
+| E5 | **Passed** | Quiet transitions, none a candidate: *attention* in AI 1990s → 2000s 17 and 41, 47 and 69; in psychology 2010s → 2020s 17 and 42, 27 and 42 |
+| E6 | **Falsified** | *attention*'s cross-field cosine rank, 1990s → 2020s, rises in all six comparisons but stays under 90: AI × psychology 2 → 53 and 2 → 73, AI × cognitive psychology 32 → 61 and 32 → 75, AI × neuroscience 24 → 29 and 33 → 51 |
+
+### Reading
+
+Fewer than two of E1–E3 passed, so by the reading rule the grid misses documented changes. Its
+candidates remain evidence: E5 passed, and the control words have stayed quiet in every round.
+Its nulls are not evidence of stability, so *intentionality*'s "stability" (P7, R2, T7, L3) is
+restated in the README as no change detected. No survey of field-specific meanings is built on
+the grid, and, as committed, no round follows to repair it.
+
+The grid is conservative rather than noisy: it flagged one documented change, the case judged
+weakest beforehand, and none of the quiet transitions. E6 shows the cross-field ranks moving
+the right way for a new sense without reaching a high rank, which bears on the cross-field
+results of rounds 1–4 (P8, P9, R6, T6, L6): a modest cross-field rank does not mean two fields
+use a word alike. Round 5 tested the main grid's 10,000-abstract cells; the full cells behind
+*embodiment*, *intentionality* and *affordance* are larger and may be more sensitive, which is
+untested.
+
+### Exploratory, after scoring: near misses and decade boundaries
+
+Not predicted, and not a reason to revise any verdict.
+
+- *attention* in AI was a near miss: its neighbourhood changed more than 97–98% of words of
+  its frequency, but its cosine drift ranked 90–92, under the 95 a candidate needs on both.
+- *platform* and *network* did not register at all. Two explanations come to mind after the
+  fact, and both are untested: communication's 2000s cell (2000–2009) may already hold the
+  digital-platform sense, and AI's 1980s cell (1980–1989) straddles the revival of neural
+  networks in 1986. Decade cells can place a change inside a cell instead of between two.
