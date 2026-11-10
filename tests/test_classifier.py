@@ -61,3 +61,11 @@ def test_a_cue_can_be_held_to_one_side_of_the_target() -> None:
         cue_sense(usage("having to retrain without data", "having"), {"obligation": ["<without"]})
         is None
     )
+
+
+def test_a_cue_can_be_held_to_the_word_right_next_to_the_target() -> None:
+    cues = {"obligation": [">>to"]}
+    assert cue_sense(usage("without having to use resources", "having"), cues) == "obligation"
+    assert cue_sense(usage("reservoirs having short memory to project", "having"), cues) is None
+    assert cue_sense(usage("we use prompt engineering here", "prompt"), {"llm": ["<<we"]}) is None
+    assert cue_sense(usage("a novel prompt tuning method", "prompt"), {"llm": ["<<novel"]}) == "llm"

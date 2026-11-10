@@ -21,11 +21,17 @@ TOKEN = re.compile(r"[a-z']+")
 def cue_sense(usage: Usage, cues: Mapping[str, Sequence[str]], window: int = 5) -> str | None:
     """The one sense whose cues appear within ``window`` words of the target, or None when no
     sense's cues do or more than one sense's do. A cue written ``<word`` counts only before the
-    target and ``>word`` only after it; a plain cue counts on either side."""
-    before = set(TOKEN.findall(usage.text[: usage.start].lower())[-window:])
-    after = set(TOKEN.findall(usage.text[usage.end :].lower())[:window])
+    target and ``>word`` only after it; ``<<word`` only as the word just before and ``>>word``
+    only as the word just after; a plain cue counts on either side."""
+    left = TOKEN.findall(usage.text[: usage.start].lower())[-window:]
+    right = TOKEN.findall(usage.text[usage.end :].lower())[:window]
+    before, after = set(left), set(right)
 
     def present(cue: str) -> bool:
+        if cue.startswith("<<"):
+            return bool(left) and left[-1] == cue[2:]
+        if cue.startswith(">>"):
+            return bool(right) and right[0] == cue[2:]
         if cue.startswith("<"):
             return cue[1:] in before
         if cue.startswith(">"):
