@@ -30,7 +30,13 @@ from scipy.stats import spearmanr
 sys.path.insert(0, str(Path(__file__).parent))
 import pilot_labellers as pilot  # noqa: E402
 
-from interpretant.drift.classifier import cue_sense, example_usage, normalised, tidy  # noqa: E402
+from interpretant.drift.classifier import (  # noqa: E402
+    boilerplate,
+    cue_sense,
+    example_usage,
+    normalised,
+    tidy_usage,
+)
 from interpretant.drift.labels import (  # noqa: E402
     BatchLabeller,
     Item,
@@ -84,13 +90,24 @@ def collect() -> None:
 
 
 def corpus_rows() -> list[dict[str, object]]:
-    rows = [json.loads(line) for line in USAGES.read_text(encoding="utf-8").splitlines()]
-    return [{**row, "text": tidy(str(row["text"]))} for row in rows]
+    """The sample's usages, tidied (tidy_usage), without boilerplate sentences (found in five or
+    more usages of the same word)."""
+    rows = []
+    for line in USAGES.read_text(encoding="utf-8").splitlines():
+        row = json.loads(line)
+        usage = tidy_usage(Usage(row["text"], row["start"], row["end"]))
+        rows.append({**row, "text": usage.text, "start": usage.start, "end": usage.end})
+    repeated = {
+        (word, text)
+        for word in WORDS
+        for text in boilerplate([str(r["text"]) for r in rows if r["word"] == word])
+    }
+    return [r for r in rows if (r["word"], r["text"]) not in repeated]
 
 
 def gold_usages() -> dict[str, tuple[str, Usage]]:
     """Check 2b's 186 usages, by the pilot's identifiers, their text tidied."""
-    return {uid: (w, Usage(tidy(u.text), u.start, u.end)) for uid, (w, u) in pilot.usages().items()}
+    return {uid: (w, tidy_usage(u)) for uid, (w, u) in pilot.usages().items()}
 
 
 def encode() -> None:

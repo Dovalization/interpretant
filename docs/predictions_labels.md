@@ -633,3 +633,17 @@ failure is reported against round X's (J found the four documented changes but a
 and round 5's (the grid found one of four).
 
 Scored by `scripts/score_labels_known.py`, committed before it is run.
+
+### Amendment to rounds T and A: text artefacts and boilerplate (committed 2026-11-10, before either round was run)
+
+Found while the author reviewed the corpus lists. Neither changes a prediction or a bar.
+
+- **Text artefacts.** Every corpus usage is tidied before it is encoded or labelled
+  (`interpretant.drift.classifier.tidy_usage`): literal `\n` sequences, line breaks, tabs, control
+  and invisible characters and the replacement character become spaces, soft hyphens rejoin the word
+  they split, common mojibake is repaired, runs of spaces collapse, and the target's span is rebuilt.
+  In the review sample these affected under 1% of usages. LaTeX is left as it is.
+- **Boilerplate.** A sentence found in five or more usages of the same word in a sample is not an
+  abstract's own text (a publisher's notice, an affiliation, a journal series line: in the review
+  sample, seven sentences carried 264 usages, one alone 174). Such sentences are left out of the
+  training sentences and, in round A, out of the cells measured.

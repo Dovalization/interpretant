@@ -100,7 +100,50 @@ def adjusted_shares(
     return np.asarray(solution / total) if total > 0 else observed
 
 
-def tidy(text: str) -> str:
-    """The text with literal ``\\n`` sequences and line breaks turned into spaces, keeping every
-    character's position, so a usage's span stays valid."""
-    return text.replace("\\n", "  ").replace("\n", " ").replace("\r", " ")
+MOJIBAKE = {
+    "â€œ": "\u201c",
+    "â€\x9d": "\u201d",
+    "â€•": "\u201d",
+    "â€™": "\u2019",
+    "â€˜": "\u2018",
+    "â€“": "\u2013",
+    "â€”": "\u2014",
+    "â€¦": "\u2026",
+    "Ã©": "\u00e9",
+    "Ã¨": "\u00e8",
+    "Ã¶": "\u00f6",
+    "Ã¼": "\u00fc",
+    "Ã¤": "\u00e4",
+    "Â ": " ",
+}
+BREAKS = re.compile(
+    r"\\n|[\n\r\t\x00-\x08\x0b\x0c\x0e-\x1f\u00a0\u200b\u200c\u200d\ufeff\u2060\ufffd]"
+)
+SPACES = re.compile(r" {2,}")
+
+
+def tidy_text(text: str) -> str:
+    """Abstract text without extraction artefacts: literal ``\\n`` sequences, line breaks, tabs,
+    control and invisible characters and the replacement character become spaces, soft hyphens
+    rejoin the word they split, common mojibake is repaired, and runs of spaces collapse."""
+    for broken, fixed in MOJIBAKE.items():
+        text = text.replace(broken, fixed)
+    text = re.sub(r"\u00ad\s?", "", text)
+    return SPACES.sub(" ", BREAKS.sub(" ", text))
+
+
+def tidy_usage(usage: Usage) -> Usage:
+    """The usage with :func:`tidy_text` applied before and after the target, its span rebuilt."""
+    left = tidy_text(usage.text[: usage.start])
+    target = usage.text[usage.start : usage.end]
+    right = tidy_text(usage.text[usage.end :])
+    return Usage(left + target + right, len(left), len(left) + len(target))
+
+
+def boilerplate(texts: Sequence[str], min_abstracts: int = 5) -> set[str]:
+    """Sentences found in at least ``min_abstracts`` usages of a sample: publisher notices,
+    affiliations and other text that is not an abstract's own."""
+    from collections import Counter  # noqa: PLC0415
+
+    counts = Counter(texts)
+    return {text for text, count in counts.items() if count >= min_abstracts}

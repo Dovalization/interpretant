@@ -95,11 +95,20 @@ def test_adjusted_shares_never_go_negative() -> None:
     assert (shares >= 0).all() and shares.sum() == pytest.approx(1.0)
 
 
-def test_tidy_removes_line_breaks_and_keeps_positions() -> None:
-    from interpretant.drift.classifier import tidy
+def test_tidy_usage_cleans_artefacts_and_rebuilds_the_span() -> None:
+    from interpretant.drift.classifier import tidy_usage
 
-    text = "one of the \\nrequired\ncomponents"
-    cleaned = tidy(text)
-    assert "\\n" not in cleaned and "\n" not in cleaned
-    assert len(cleaned) == len(text)
-    assert cleaned.index("components") == text.index("components")
+    text = (
+        "the quan\u00ad titative \\nrequired  \u00e2\u20ac\u0153components\u00e2\u20ac\u009d of\tit"
+    )
+    start = text.index("components")
+    tidied = tidy_usage(Usage(text, start, start + len("components")))
+    assert tidied.text == "the quantitative required \u201ccomponents\u201d of it"
+    assert tidied.text[tidied.start : tidied.end] == "components"
+
+
+def test_sentences_repeated_across_abstracts_are_boilerplate() -> None:
+    from interpretant.drift.classifier import boilerplate
+
+    texts = ["Published by Frontiers."] * 5 + ["A real sentence."] * 2
+    assert boilerplate(texts) == {"Published by Frontiers."}
