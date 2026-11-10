@@ -607,10 +607,14 @@ def measures(labels: dict[str, str], lists: dict[str, SenseList]) -> tuple[float
             moved = {k: (word, p, found[k][2]) for k, p in zip(keys_of[word], periods, strict=True)}
             values.append(round_y.divergences(labels, moved, lists)[word])
         noise.append(statistics.mean(values))
-    x = [real[w] for w in words]
-    target = [graded[w] for w in words]
+    defined = [i for i, w in enumerate(words) if np.isfinite(real[w]) and np.isfinite(noise[i])]
+    if len(defined) < len(words):
+        left_out = [words[i] for i in range(len(words)) if i not in defined]
+        print(f"  left out, divergence undefined (no usable label in a period): {left_out}")
+    x = [real[words[i]] for i in defined]
+    target = [graded[words[i]] for i in defined]
     rho = float(spearmanr(x, target).statistic)
-    partial = partial_spearman(x, target, noise)
+    partial = partial_spearman(x, target, [noise[i] for i in defined])
     cluster_of = round_y.clusters()
     rand = [
         adjusted_rand_score([cluster_of[k] for k in keys_of[w]], [labels[k] for k in keys_of[w]])

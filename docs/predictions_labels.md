@@ -357,3 +357,12 @@ lists matters. Nothing above changes.
 - Cost: about $3.50 for Sonnet and $0.12 for JEV on half B; the substitute labeller runs locally.
 
 Scored by `scripts/score_labels_induced.py score_rules`, added with this amendment.
+
+### Round Q scorer correction (2026-11-10, after the induced arm and Sonnet's rule-built results were printed, before JEV's and the substitute labeller's rule-built results were)
+
+`score_rules` stopped with an error after Sonnet: with the rule-built lists, JEV left every half-B
+usage of *afternoon* in one period *unclear*, so that word's divergence is undefined, and the
+correlations cannot be computed with it. The scorer now leaves out a word whose divergence (or mean
+shuffled divergence) is undefined, prints which, and computes every correlation over the rest. No
+word was left out for any labeller in the induced arm or for Sonnet in the rule-built arm, so their
+printed results are unchanged; for JEV on the rule-built lists the correlations are over 45 words.
