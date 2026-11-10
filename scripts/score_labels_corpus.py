@@ -140,9 +140,11 @@ def classify() -> None:
     seeds_used: dict[str, int] = {}
     for word in WORDS:
         x, y = [], []
+        seen: set[str] = set()
         for row in corpus_rows():
-            if row["word"] != word or row["text"] in gold_texts:
+            if row["word"] != word or row["text"] in gold_texts or row["text"] in seen:
                 continue
+            seen.add(str(row["text"]))
             usage = Usage(str(row["text"]), int(row["start"]), int(row["end"]))  # type: ignore[call-overload]
             sense = cue_sense(usage, cues[word])
             key = key_of(usage.text, usage.start, usage.end)

@@ -25,7 +25,7 @@ cues = ["received", "receive", "receiving", "drawn", "draw", "drew", "attracted"
 key = "attention_mechanism"
 definition = "The attention mechanism of artificial neural networks, which weights parts of the input, as in self-attention and transformers"
 example = "A multi-head attention layer is added on top of the encoder."
-cues = ["self", "multi", "head", "heads", "mechanism", "mechanisms", "layer", "layers", "transformer", "transformers", "module", "modules", "encoder", "decoder", "neural", "lstm", "convolutional", "embedding", "embeddings", "softmax", "scaled", "graph"]
+cues = ["<<self", "multi", "head", "heads", "mechanism", "mechanisms", "layer", "layers", "transformer", "transformers", "module", "modules", "encoder", "decoder", "neural", "lstm", "convolutional", "embedding", "embeddings", "softmax", "scaled", "graph"]
 
 [[attention.senses]]
 key = "computational_selection"
@@ -67,7 +67,7 @@ word = "platform"
 key = "digital_or_social_media_platform"
 definition = "An online service through which people interact, publish, share or trade, such as social media, video sites, apps and online marketplaces"
 example = "Misinformation spreads quickly on social media platforms."
-cues = ["social", "online", "digital", "internet", "web", "facebook", "twitter", "youtube", "instagram", "tiktok", "weibo", "wechat", "users", "sharing", "streaming", "networking", "commerce", "gig", "economy", "content"]
+cues = ["social", "online", "digital", "internet", "facebook", "twitter", "youtube", "instagram", "tiktok", "weibo", "wechat", "users", "sharing", "streaming", "networking", "commerce", "gig", "economy", "content"]
 
 [[platform.senses]]
 key = "technical_base"
@@ -79,7 +79,7 @@ cues = ["hardware", "software", "computing", "robot", "robotic", "experimental",
 key = "delivery_channel"
 definition = "A medium or channel through which content is distributed, such as print, broadcast, television or the web, as in multi-platform publishing"
 example = "The newspaper now publishes across print, broadcast and online platforms."
-cues = ["multi", "print", "broadcast", "television", "tv", "radio", "delivery", "distribution", "channels", "newspaper", "outlets", "publishing", "cross"]
+cues = ["print", "broadcast", "television", "tv", "radio", "delivery", "distribution", "channels", "newspaper", "outlets"]
 
 [[platform.senses]]
 key = "physical_structure"
@@ -133,7 +133,7 @@ word = "alignment"
 key = "ai_alignment"
 definition = "Making an AI system's behaviour match human intentions, preferences or values"
 example = "We study the alignment of large language models with human preferences."
-cues = ["human", "values", "value", "preference", "preferences", "rlhf", "feedback", "safety", "llm", "llms", "ai", "harmless", "helpful"]
+cues = ["human", "preference", "preferences", "rlhf", "feedback", "safety", "llm", "llms", "ai", "harmless", "helpful"]
 
 [[alignment.senses]]
 key = "matching_or_correspondence"
