@@ -12,12 +12,11 @@ One finding has survived a second training seed, a second method, a lemmatised r
 
 ## Findings
 
-Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed), seven rounds on cross-perplexity, three with a field classifier, one with both instruments, a held-out check on every cell's model, and three calibration rounds for a sense-level instrument, which it did not pass. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md), [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md) and [`docs/predictions_senses.md`](docs/predictions_senses.md); the story is in [devlog 04](devlogs/04.md) (the grid), [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus) and [devlog 06](devlogs/06.md) (senses, and when to stop).
+Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed), seven rounds on cross-perplexity, three with a field classifier, one with both instruments, a held-out check on every cell's model, three calibration rounds for a sense-level instrument, which it did not pass, and one for the embedding grid on documented changes. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md), [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md) and [`docs/predictions_senses.md`](docs/predictions_senses.md); the story is in [devlog 04](devlogs/04.md) (the grid), [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus) and [devlog 06](devlogs/06.md) (senses, and when to stop).
 
 **Robust across seeds and methods**
 
 - **_Embodiment_ means two different things.** In HCI it is virtual reality's sense of body ownership and presence (neighbours: _ownership, presence, illusion, immersion, self-location_); in philosophy it is phenomenological corporeality (_corporeality, intersubjectivity, temporality, spatiality, affectivity_). It passed every test it faced: unseen decades, a second seed, a second method, and the lemmatised corpus in both seeds. The word is now about three times as frequent in HCI as in philosophy.
-- **_Intentionality_ is stable** in philosophy from the 1980s to the 2020s, under both methods and in both seeds of the lemmatised corpus.
 - **A subfield's model predicts its parent field better than the reverse** (AI → computer science, cognitive psychology → psychology): first seen as a reversed prediction, then predicted and confirmed on the lemmatised corpus.
 
 **Depends on the instrument**
@@ -37,6 +36,7 @@ Results are tested against predictions committed before the evidence: four round
 
 **Robust in part**
 
+- **No change detected in _intentionality_** in philosophy from the 1980s to the 2020s, under both methods and in both seeds of the lemmatised corpus. This was listed as stability; a calibration on documented changes (round 5) showed the grid misses most of them, so the absence of a change is no longer read as evidence that nothing changed.
 - _Representation_ in AI moves towards learned representations (_embedding, latent, encoder, learned_) in every run including the lemmatised one; its symbolic 1980s (_knowledge, reasoning, declarative_) holds in TWEC only.
 - HCI's _affordance_ is about experiential qualities (_physicality, experiential, interactivity, materiality_) in the 2010s in every run; the 2020s depend on the method.
 - Philosophy's 2020s _consciousness_ moves (a candidate under TWEC in both corpora); the lemmatised neighbours carry both earlier readings at once, computational vocabulary (_computational, substrate, information_processing_) and theories of consciousness (_qualia, sentience_).
@@ -188,6 +188,8 @@ uv run python scripts/score_predictions.py
 
 **Senses are not measured.** A word's vector mixes its senses. An instrument that clusters contextual embeddings (SciBERT) of each occurrence was calibrated on three changes with a known history, _attention_'s mechanism sense in AI, the language-model sense of _hallucination_ and of _prompt_, and did not pass: the encoder placed each change where its history puts it, but no rule for turning clusters into one meaning's share held on a case it was not chosen on. By a rule committed before the last round, sense-level drift was stopped. Its readings, such as AI's sense of _intelligence_ spreading into other fields in the 2020s, are exploratory only.
 
+**The grid is cautious.** Asked to find documented sense changes (round 5), it flagged one of four, _alignment_ in AI's 2020s, and missed _attention_'s mechanism sense in AI (a near miss), _platform_ in communication and _network_ at AI's connectionist turn; it flagged none of the transitions where nothing documented happened, and control words stay quiet throughout. Its candidates are evidence of change; its silences are not evidence of stability.
+
 **Decade granularity is coarse.** Training on ten-year windows smooths over within-decade shifts and may misattribute the timing of changes that happened rapidly at decade boundaries.
 
 **Equal cells trade volume for comparability.** A 10,000-abstract cell cannot measure late-arriving words such as _affordance_ or _intentionality_; full cells can, but only within their field. Cross-field comparisons also rest on few control words, and one of them (_food_) genuinely differs across fields.
@@ -196,7 +198,7 @@ uv run python scripts/score_predictions.py
 
 ## Roadmap
 
-The plan is in [`ROADMAP.md`](ROADMAP.md). Next: the web explorer online.
+The plan is in [`ROADMAP.md`](ROADMAP.md). Next: a write-up of what the instruments did against known answers and what that taught about measuring movement between fields, and the web explorer online.
 
 ---
 

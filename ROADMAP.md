@@ -34,8 +34,9 @@ Target words: `data/words_of_interest.txt` (fixed before retraining). Controls:
 Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
 [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md) (C, D, F, H, L8–L10).
 
-- Robust: *embodiment*'s two senses (HCI, philosophy); *intentionality* stable in
-  philosophy; the subfield → parent asymmetry.
+- Robust: *embodiment*'s two senses (HCI, philosophy); the subfield → parent asymmetry.
+- No change detected: *intentionality* in philosophy, listed as stable until round 5 showed
+  the grid misses most documented changes.
 - Depends on the instrument: HCI's change between the 1990s and the 2020s. Both instruments
   see its GUI-engineering vocabulary recede; each decade's own language models read the change
   as a move towards the behavioural and social sciences (J, K′), the classifier held at the
@@ -101,6 +102,14 @@ Each item that produces results gets its predictions committed first.
    known change correctly; no rule for turning clusters into a meaning's share held on unseen
    data. By the rule committed with round C″, round D was not run (`docs/predictions_senses.md`,
    devlog 06). Word-targeted OpenAlex cells and a label-noise measurement remain on disk.
+8a. ~~Calibrate the grid on documented changes~~ Round 5 (2026-11-10), 2 of 6: the grid
+   flagged *alignment* in AI's 2020s and stayed quiet on undocumented transitions, but missed
+   *attention*'s mechanism sense (a near miss), *platform* in communication and *network* at
+   AI's connectionist turn. Its candidates stand; its nulls do not show stability. No survey
+   of field-specific meanings is built on it, and no round repairs it.
+8b. **A methods write-up**: what each instrument did against known answers (the direction
+   measures, the sense instrument, the grid) and what that taught about measuring movement
+   between fields and meaning within them.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
