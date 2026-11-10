@@ -96,8 +96,8 @@ def batch_neighborhood_shift(
         chunk_matrix_t1 = matrix_t1[[idx_t1[w] for w in chunk]]  # (chunk × dim)
         chunk_matrix_t2 = matrix_t2[[idx_t2[w] for w in chunk]]
 
-        sim_t1 = chunk_matrix_t1 @ matrix_t1.T  # type: ignore[operator]  # (chunk × n_vocab)
-        sim_t2 = chunk_matrix_t2 @ matrix_t2.T  # type: ignore[operator]
+        sim_t1 = chunk_matrix_t1 @ matrix_t1.T  # (chunk × n_vocab)
+        sim_t2 = chunk_matrix_t2 @ matrix_t2.T
 
         for j, word in enumerate(chunk):
             i1 = idx_t1[word]

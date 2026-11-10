@@ -9,7 +9,7 @@ uv sync --all-extras         # install, with dev extras
 
 make lint                    # ruff check + ruff format --check (src/, tests/)
 make fmt                     # ruff format + ruff check --fix
-make type-check              # mypy src/ (strict; the remaining errors are missing pandas/sklearn stubs)
+make type-check              # mypy src/ (strict, zero errors; CI enforces it)
 make test                    # pytest with coverage
 uv run pytest tests/test_drift_grid.py -v     # one file
 uv run pytest tests/ -k "neighbour" -v        # one test by name

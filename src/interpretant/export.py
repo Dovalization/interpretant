@@ -125,7 +125,7 @@ def parse_predictions(paths: Iterable[Path]) -> dict[str, Any]:
 def _rows(table: pd.DataFrame, rename: dict[str, str]) -> list[dict[str, Any]]:
     selected = table[list(rename)].rename(columns=rename)
     return [
-        {key: (value.item() if hasattr(value, "item") else value) for key, value in row.items()}
+        {str(key): value.item() if hasattr(value, "item") else value for key, value in row.items()}
         for row in selected.to_dict(orient="records")
     ]
 
@@ -272,12 +272,12 @@ def export_web(  # noqa: PLR0913
             "decades": sorted(int(decade) for decade in set(perplexity.decade)),
             "rows": [
                 {
-                    "decade": int(row.decade),
-                    "model": row.model_field,
-                    "text": row.text_field,
-                    "excess": [round(float(value), 4) for value in row.excess],
+                    "decade": int(row["decade"]),
+                    "model": row["model_field"],
+                    "text": row["text_field"],
+                    "excess": [round(float(value), 4) for value in row["excess"]],
                 }
-                for row in grouped.itertuples()
+                for row in grouped.to_dict(orient="records")
             ],
         },
     )
@@ -300,16 +300,16 @@ def export_web(  # noqa: PLR0913
             {
                 "rows": [
                     {
-                        "model": row.model_field,
-                        "text": row.text_field,
-                        "early": int(row.early),
-                        "late": int(row.late),
-                        "fall": round(float(row.fall), 4),
-                        "mix": round(float(row.mix), 4),
-                        "rate": round(float(row.rate), 4),
-                        "seeds": [round(float(value), 4) for value in row.seeds],
+                        "model": row["model_field"],
+                        "text": row["text_field"],
+                        "early": int(row["early"]),
+                        "late": int(row["late"]),
+                        "fall": round(float(row["fall"]), 4),
+                        "mix": round(float(row["mix"]), 4),
+                        "rate": round(float(row["rate"]), 4),
+                        "seeds": [round(float(value), 4) for value in row["seeds"]],
                     }
-                    for row in grouped_falls.itertuples()
+                    for row in grouped_falls.to_dict(orient="records")
                 ]
             },
         )

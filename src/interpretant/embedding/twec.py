@@ -25,7 +25,7 @@ from interpretant.embedding.base import training_sentences
 logger = logging.getLogger(__name__)
 
 
-class EpochProgress(CallbackAny2Vec):
+class EpochProgress(CallbackAny2Vec):  # type: ignore[misc]  # gensim is untyped
     """Calls bar.update(1) after every training epoch.
 
     Designed to work with any object that has an ``update(int)`` method,
@@ -57,7 +57,7 @@ class _FileSentences:
                     yield from training_sentences(line)
 
 
-class _FreezeContextCallback(CallbackAny2Vec):
+class _FreezeContextCallback(CallbackAny2Vec):  # type: ignore[misc]
     """Restores compass context vectors (syn1neg) after every training epoch.
 
     This implements the TWEC "frozen compass" constraint without requiring a

@@ -35,6 +35,7 @@ dev = [
     "pytest-cov>=4.1",
     "mypy>=1.7",
     "ruff>=0.1",
+    "pandas-stubs>=3.1.0.261029",
 ]
 
 [project.scripts]
@@ -56,3 +57,7 @@ strict = true
 mypy_path = "src"
 namespace_packages = true
 explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["gensim.*", "scipy.*", "sklearn.*", "streamlit.*", "plotly.*", "tqdm.*"]
+ignore_missing_imports = true

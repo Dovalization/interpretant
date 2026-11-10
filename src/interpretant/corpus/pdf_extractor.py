@@ -105,7 +105,7 @@ class PyMuPDFBackend(PDFBackend):
 
     def is_available(self) -> bool:
         try:
-            import fitz  # type: ignore[import-untyped]  # noqa: F401
+            import fitz  # noqa: F401
 
             return True
         except ImportError:

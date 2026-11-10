@@ -18,8 +18,8 @@ jobs:
           uv run ruff format --check src tests
       - name: Tests
         run: uv run pytest -q
-      - name: Type check (report only until the pandas and gensim stubs are settled)
-        run: uv run mypy src || true
+      - name: Type check
+        run: uv run mypy src
 
   web:
     runs-on: ubuntu-latest
