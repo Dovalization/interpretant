@@ -312,3 +312,19 @@ sensitivity check, not a result, and check 2b's verdict is unchanged.
 The guidelines did not say how fine a sense should be; the five pairs show that leaving it to the
 judge moves agreement noticeably for a word with many technical kinds. A fixed sense list per
 word, which the next instrument would need, removes that ambiguity.
+
+### Correction to check 1b's reading: the placebo changed the sense mix (2026-11-10, after round E)
+
+The exploratory note on how clean check 1b's placebo was considered one contamination, mechanism
+usages among the unmarked AI usages. It missed a second. The unmarked AI 2020s usages of
+*attention* are mostly not cognitive attention: they are notice or consideration ("we turn our
+attention to"), computational selection, and unmarked mechanism usages. Psychology's 2020s
+usages, which they replaced, are mostly cognitive attention. A 40% placebo therefore moved the
+cell's mix of senses, not only its source, and the sense-label instrument's lists now name the
+senses it moved between. P2's verdict stands as scored; its reading changes: check 1b shows that
+J registered a change that was partly a change of sense mix, and it does not on its own isolate a
+response to source with the sense held fixed. The conclusion that J follows context within a sense
+rests on check 2b and round X's X5, not on P2.
+
+Rung 3 of the sense-label instrument uses a placebo built to hold the sense mix fixed (see
+`predictions_labels.md` when it is pre-registered).
