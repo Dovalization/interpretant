@@ -107,7 +107,7 @@ Each item that produces results gets its predictions committed first.
    *attention*'s mechanism sense (a near miss), *platform* in communication and *network* at
    AI's connectionist turn. Its candidates stand; its nulls do not show stability. No survey
    of field-specific meanings is built on it, and no round repairs it.
-8b. **A methods write-up**: what each instrument did against known answers (the direction
+8b. ~~A methods write-up~~ Drafted 2026-11-10 as `docs/known_answers.md`: what each instrument did against known answers (the direction
    measures, the sense instrument, the grid) and what that taught about measuring movement
    between fields and meaning within them.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
