@@ -82,6 +82,16 @@ Both labellers stopped at rung 1 in round Y, on a variety check that DWUG's own 
 (see the correction in [`predictions_labels.md`](predictions_labels.md)); round Q re-tests them
 with sense lists induced from the texts and a variety check calibrated on the gold first.
 
+## A third labeller with no generative model (round E)
+
+A logistic regression on XL-LEXEME's vectors, trained per word from cue-word seeds and the lists'
+example sentences, labelled round Q's half B with round Y's lists: Spearman 0.669 (Sonnet 0.693,
+JEV 0.800 on the same usages), partial 0.509 (Sonnet 0.646, JEV 0.667), adjusted Rand index 0.266
+(Sonnet 0.330, JEV 0.302). It gives the same label as Sonnet on 75% of usages and as JEV on 76%.
+It costs nothing to run, needs no labelling by a person, and every label traces back to a cue
+word or an example sentence; it passed rung 1 and is the labeller for this corpus, with the two
+language models as comparison points.
+
 ## Practical notes
 
 - JEV needs the senses' definitions in the Choice's criteria; option names alone are not enough

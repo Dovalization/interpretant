@@ -145,11 +145,14 @@ Each item that produces results gets its predictions committed first.
      0.767, JEV 0.821; XL-LEXEME 0.864) and consistently, and both stopped on a variety check
      that DWUG's own clusters fail (recorded as a correction).
    - Round Z (lists from WordNet): both dropped by about 0.18; the result depends on the lists.
-   - Round Q (running): lists induced from half the texts with substitutes, neighbours and
-     dictionaries, consolidated by Opus 5.5, three labellers (Sonnet, JEV and a substitute
-     labeller with no generative model) on the other half, and a variety check calibrated on the
-     gold.
-   Next: rung 2, the author's gold labels on this corpus, with lists induced the same way.
+   - Round Q: lists induced from the texts (substitutes, neighbours, dictionaries; tidied by Opus
+     5.5 or built by rule) rank the changes far worse than hand-written lists (0.39–0.59 against
+     0.69–0.80 on the same half), whoever labels; Opus's tidying adds little over rules.
+   - Round E: a logistic regression on XL-LEXEME, trained from cue words and the lists' example
+     sentences, with no generative model and no labelling by a person, passes rung 1 (0.669, within
+     0.10 of Sonnet's 0.693; JEV 0.800).
+   Next: rung 2 on this corpus with that classifier: lists and cue words drafted by Claude,
+   approved by the author on one review page, Sonnet and JEV as comparison points.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
