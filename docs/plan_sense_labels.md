@@ -116,6 +116,16 @@ labellers' correlations is within noise; both sit near XL-LEXEME and below the s
 this proxy, which scores whether two usages share a label, not whether a label is right. Rung 2's
 gold labels test that directly.
 
+### API recheck (2026-11-10, `scripts/pilot_labellers.py sonnet_api` and `recheck`)
+
+The pilot's 186 usages, plus 19 repeats, labelled by Sonnet 5.5 through the Batch API, one usage
+per request: all 205 requests succeeded in about 3 minutes, 141,061 input and 3,547 output tokens
+(about $0.16 at batch prices, 688 input tokens a request). The labels agree with the pilot's CLI
+blocks on 95% of usages (kappa 0.942) and with JEV on 90% (kappa 0.895); all 19 repeats got the
+same label; *other* 4%, *unclear* 1%. Spearman with the author 0.510 (original judgements) and
+0.552 (with the correction pass), against the CLI blocks' 0.501 and 0.545. One usage per request
+changes the labels little. At the measured tokens the ladder costs about $28 on Sonnet.
+
 ## The ladder
 
 Each rung has its own pre-registration and stopping rule. A failed rung 1 or 2 stops the
