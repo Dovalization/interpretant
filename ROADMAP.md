@@ -127,7 +127,8 @@ Each item that produces results gets its predictions committed first.
       in AI's 1990s → 2000s. Neither measure's pair passed, so **the design stopped here**; rungs
       3 and 4 were not run. The diagnostics that followed (`docs/diagnostics.md`) put the
       failure on the measure, not the data or the encoder: the changes are in the cells (check
-      1a), and J responds to a change of source without a change of sense (check 1b);
+      1a), and J follows a word's contexts within a sense (check 2b, round X's X5; check 1b's
+      placebo also shifted the sense mix, see the correction in the diagnostics);
    3. known answers between fields: *embodiment* between HCI and philosophy diverges, random
       controls do not, and Wiktionary's field-labelled senses as a larger set;
    4. only then open questions: a survey of field-specific meanings, and one-sided changes

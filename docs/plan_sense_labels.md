@@ -15,7 +15,7 @@ induced by round Q's pipeline and reviewed by the author before they are frozen.
 The diagnostics left one problem standing. The dataset holds the documented changes (check 1a),
 the grid's embeddings work on clean data (round 6), and XL-LEXEME reads this corpus's sentences
 about as well as two judges agree with each other (check 2b′). But the usage-pair measure answers
-"did the contexts change?", not "did the meaning change?" (check 1b's placebo, assumption A7),
+"did the contexts change?", not "did the meaning change?" (check 2b and round X's X5; A7),
 and this corpus's contexts change a great deal between decades (A2). Every measure built on
 context similarity inherits that.
 
@@ -24,7 +24,8 @@ One reading in the diagnostics did not: check 1a's blind categorical labels, one
 transition right. This plan turns that reading into an instrument: a language model labels each
 usage with one sense from a fixed list written for that word, and a cell's meaning is its
 distribution over that list. A change of context without a change of sense should then leave the
-distribution where it was, which is the property check 1b's placebo showed the pair measure lacks.
+distribution where it was, which is the property the pair measure lacks (check 1b's placebo was
+first read as showing this directly; see the correction in `diagnostics.md`).
 
 What it gives up: it finds only the senses on the list. A rise in the *other* label is the only
 way it can see a sense nobody wrote down, and that is weaker than discovery.
