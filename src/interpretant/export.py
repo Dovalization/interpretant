@@ -42,6 +42,7 @@ ROUNDS: dict[str, tuple[str, str]] = {
     "J": ("Mechanism", "is the philosophy → HCI effect HCI's own word mix"),
     "K": ("Venues", "the field's move or OpenAlex's label (scored as round K′)"),
     "S": ("Separability", "a classifier that guesses each abstract's field"),
+    "V": ("Technology vocabulary", "round S's classifier without 29 technology terms"),
 }
 _TITLE = re.compile(r"^\*\*([A-Z]\d+) — ([\s\S]*?)\*\*", re.MULTILINE)
 _VERDICT = re.compile(

@@ -983,24 +983,33 @@ def drift_decompose(  # noqa: PLR0913
 @click.option("--seed", "seeds", multiple=True, default=(1, 2, 3, 4, 5), show_default=True)
 @click.option("--per-field", default=2_000, show_default=True, help="Abstracts per field.")
 @click.option(
+    "--remove-terms",
+    "terms_file",
+    type=click.Path(exists=True, path_type=Path),
+    help="Strip these terms (one per line) from the samples first (round V).",
+)
+@click.option(
     "--output-dir",
     type=click.Path(path_type=Path),
     default=Path("data/drift"),
     show_default=True,
 )
-def drift_separability(
+def drift_separability(  # noqa: PLR0913
     texts_dir: Path,
     decades: tuple[int, ...],
     seeds: tuple[int, ...],
     per_field: int,
+    terms_file: Path | None,
     output_dir: Path,
 ) -> None:
     """How well a classifier tells every two fields apart, per decade, and where a classifier
     over all fields sends each field's abstracts (round S)."""
+    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
     from interpretant.drift.separability import separability_runs  # noqa: PLC0415
 
+    terms = frozenset(load_target_words(terms_file)) if terms_file else frozenset()
     pairs, assignments = separability_runs(
-        texts_dir, decades, seeds, per_field=per_field, log=console.print
+        texts_dir, decades, seeds, per_field=per_field, removed_terms=terms, log=console.print
     )
     output_dir.mkdir(parents=True, exist_ok=True)
     pairs.to_parquet(output_dir / "separability_pairs.parquet", index=False)

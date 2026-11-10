@@ -54,6 +54,11 @@ def decade_samples(
     }
 
 
+def strip_terms(text: str, terms: frozenset[str]) -> str:
+    """Drop every token that is one of ``terms`` or a phrase with one as a component."""
+    return " ".join(token for token in text.split() if terms.isdisjoint(token.split("_")))
+
+
 def classifier() -> Pipeline:
     """TF-IDF over whitespace tokens (in at least 2 training abstracts), then L2 logistic
     regression with C = 1."""
@@ -116,9 +121,13 @@ def separability_runs(  # noqa: PLR0913
     seeds: Iterable[int],
     cross: tuple[int, int] = (1990, 2020),
     per_field: int = PER_FIELD,
+    removed_terms: frozenset[str] = frozenset(),
     log: Callable[[str], None] = _ignore,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Pairwise accuracies and assignment shares for every seed and decade.
+
+    With ``removed_terms``, the same samples are drawn and those terms are stripped from them
+    (see :func:`strip_terms`) before any classifier sees them.
 
     Returns ``(pairs, assignments)``. ``pairs`` has one row per seed, decade and field pair.
     ``assignments`` has one row per seed, training decade, test decade, text field and
@@ -132,7 +141,10 @@ def separability_runs(  # noqa: PLR0913
         held_out: dict[int, dict[str, list[str]]] = {}
         models: dict[int, Pipeline] = {}
         for decade in decades:
-            samples = decade_samples(texts_dir, decade, seed, per_field)
+            samples = {
+                field: [strip_terms(text, removed_terms) for text in texts]
+                for field, texts in decade_samples(texts_dir, decade, seed, per_field).items()
+            }
             pairs = list(itertools.combinations(samples, 2))
             for field_a, field_b in tqdm(pairs, desc=f"  seed {seed} {decade}s", unit="pair"):
                 accuracy = pair_accuracy(samples[field_a], samples[field_b], seed)

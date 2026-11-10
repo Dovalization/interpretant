@@ -12,6 +12,7 @@ from interpretant.drift.separability import (
     pair_accuracy,
     separability_runs,
     split,
+    strip_terms,
 )
 
 VOCABULARY = {
@@ -89,3 +90,26 @@ def test_runs_cover_every_pair_and_the_cross_decade_classifier_sees_a_move(tmp_p
     assert share(cross, "mind", "society") > share(within, "mind", "society")
     accuracy = pairs.set_index(["decade", "field_a", "field_b"]).accuracy
     assert accuracy[(2020, "mind", "society")] < accuracy[(1990, "mind", "society")]
+
+
+def test_strip_terms_drops_listed_words_and_phrases_built_on_them() -> None:
+    terms = frozenset({"user", "machine"})
+
+    stripped = strip_terms("the user_interface and machine_learning help a user study", terms)
+
+    assert stripped == "the and help a study"
+
+
+def test_removed_terms_reach_every_classifier(tmp_path: Path) -> None:
+    write_decade(tmp_path, 1990)
+    terms = frozenset(VOCABULARY["mind"] + VOCABULARY["machine"])
+
+    kept, _ = separability_runs(tmp_path, [1990], seeds=[1], per_field=100)
+    stripped, _ = separability_runs(tmp_path, [1990], seeds=[1], per_field=100, removed_terms=terms)
+
+    def accuracy(pairs: object) -> float:
+        rows = pairs[(pairs.field_a == "machine") & (pairs.field_b == "mind")]  # type: ignore[index]
+        return float(rows.accuracy.iloc[0])
+
+    assert accuracy(kept) > 0.95
+    assert accuracy(stripped) < 0.75
