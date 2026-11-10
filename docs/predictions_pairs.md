@@ -110,3 +110,70 @@ when the periods are shuffled; its 0.539 is the agreement that remains attributa
 between the periods. A reproduction of 0.864 therefore validates the pipeline, not APD as a
 measure of change. Rung 2's predictions should carry the shuffled control and J beside APD, or
 APD would mostly rank the corpus's words by their number of senses.
+
+## Round X: does the pipeline find this project's known changes over time? (committed 2026-11-10, before any corpus usage was encoded with XL-LEXEME)
+
+Rung 2 of the calibration ladder. Round U validated the pipeline on a human benchmark and showed
+that APD mostly measures a word's variety of usages. This round gives the frozen configuration
+the documented changes the earlier instruments were tested on, and the quiet transitions where
+nothing documented happened. Round U's reading rule makes APD the primary measure; this round
+scores APD and the across-minus-within measure J side by side, each against two baselines that
+round U showed are needed.
+
+### Method (fixed before any corpus usage is encoded)
+
+- **Configuration, frozen from round U.** XL-LEXEME at revision c9f85c6f through
+  `interpretant.drift.pairs.XLLexeme`; APD and J as round U defines them.
+- **Usages.** From the cased abstracts behind each cell (round C′'s quality rules: abstracts
+  more than 20% outside the Latin script skipped, URLs and DOIs removed), abstracts found in both
+  cells of a transition removed, the word matched with its regular plural, one occurrence per
+  abstract, at most 150 abstracts per cell, drawn in a seeded random order (seed 1), the
+  sentence cut to 100 words around the occurrence (`interpretant.drift.senses`).
+- **Transitions.**
+  - Documented changes: *attention* in AI, 2010s → 2020s (328 and 899 abstracts available);
+    *prompt* in AI, 2000s → 2020s, word-targeted cells (298 and 756); *platform* in
+    communication, 2000s → 2010s (142 and 560); *network* in AI, 1980s → 1990s (1,230 and
+    2,513); *alignment* in AI, 2010s → 2020s (105 and 320), the weak case, as in round 5.
+  - Quiet transitions: *attention* in AI, 1990s → 2000s (186 and 174), and in psychology,
+    2010s → 2020s (623 and 658).
+  - Controls: round C's 30 random control words, on each transition's grid cells (for *prompt*,
+    AI's 2000s and 2020s grid cells), every one with at least 100 abstracts in both cells.
+- **Found.** A measure finds a change in a word on a transition when its value is (a) above
+  the 95th percentile of the same measure over 200 shuffles of the word's usages between the two
+  cells, keeping each cell's size, and (b) above the 90th percentile of the same measure over
+  the transition's control words. (a) rules out variety alone; (b) rules out the drift every
+  word shows between decades.
+- **Sizes.** A word with fewer than 100 usages in either cell is not measured.
+- Already seen: the counts above, round U's results, and every earlier instrument's verdict on
+  these transitions (round 5's grid, rounds C–C″ for *attention* and *prompt*). Not computed:
+  any XL-LEXEME vector of a corpus usage.
+
+### Predictions
+
+**X1 — APD finds the documented changes.** APD finds at least three of *attention*, *prompt*,
+*platform* and *network*. *Falsified* if it finds two or fewer.
+
+**X2 — APD stays quiet where nothing documented changed.** APD finds neither quiet transition.
+*Falsified* if it finds either.
+
+**X3 — J finds the documented changes.** As X1, for J.
+
+**X4 — J stays quiet.** As X2, for J.
+
+**X5 — Every word drifts between decades.** Under baseline (a) alone, J finds a change in more
+than 30% of the control words' transitions, pooled over all transitions: contexts shift between
+decades for ordinary words too, which is why baseline (b) is needed. *Falsified* if 30% or
+fewer.
+
+Reading rule:
+
+- **APD's pair (X1 and X2) passes:** rung 3 uses APD, as round U's rule requires, with J
+  reported beside it.
+- **Only J's pair (X3 and X4) passes:** J replaces APD as the primary measure from rung 3 on,
+  and the README says why: on this corpus, APD did not separate change from variety and drift.
+- **Neither pair passes:** the usage-pair instrument does not proceed to rung 3, and the design
+  stops at this rung.
+- *alignment* is reported for each measure and counts towards nothing. X5 describes the corpus
+  and decides nothing about the instrument.
+
+Scored by `scripts/score_pairs_known.py`, committed before it is run.
