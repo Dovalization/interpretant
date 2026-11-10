@@ -237,3 +237,33 @@ It is another instrument, not gold, and is reported as such.
 
 Nothing here changes check 2b's verdict. Scored by `scripts/gold_pairs.py` (the `second` step),
 committed before the second judge runs.
+
+### Check 1b results (2026-11-10, `scripts/check_planted_pairs.py`)
+
+Scored as written. P1 passed, P2 falsified. Base: 150 usages per cell; 30 controls (90th
+percentile of J 0.0012); a pool of 291 marked and 608 unmarked AI 2020s usages.
+
+| | Verdict | Numbers |
+|---|---|---|
+| P1 | **Passed** | Found in 0 of 5 draws at 10% and 20%, 5 of 5 at 30%, 40% and 60%: smallest detected share 30% |
+| P2 | **Falsified** | The placebo (unmarked AI usages at 40%) was found in 5 of 5 draws |
+
+### Reading
+
+The instrument detects a planted change of a third of a word's usages and not a fifth, with a
+sharp threshold between them. It also detects a change of source without a change of sense: by
+the check's own terms, it responds to where usages come from, not only to what they mean.
+
+### Exploratory, after scoring: how clean the placebo was
+
+Not predicted. The placebo was meant to carry no mechanism uses, but check 1a's reading of AI's
+2020s cell shows the markers catch about half of them (marked share 0.31, read share 0.60), so
+about two in five unmarked usages are still the mechanism, and a 40% placebo plants roughly 17%
+mechanism usages. A 20% plant of marked mechanism usages was found in none of five draws, so that
+contamination alone is unlikely to account for the placebo being found in all five. Together with
+check 2b (XL-LEXEME's similarity follows context within a sense) and round X's X5 (a third of
+control words' contexts drift between decades), the result says J measures a change in the
+contexts a word is used in, of which a change of sense is one source and a change of topic,
+field mix or phrasing another (assumption A7). Round X's hits on *platform* and *network*, whose
+read changes (+0.27, +0.30) sit at the 30% threshold, and its false alarm are open to that
+reading.
