@@ -159,3 +159,95 @@ Not predicted; read from the tables and the scorer's examples.
   than 500 occurrences, so every seed draws all of them and only the clustering's start
   differs; standard deviations near zero make the presence rule almost automatic there. The
   redesign should draw occurrences with replacement, so seeds vary in small cells too.
+
+## Round C′: a finer instrument, tested on a known answer it has not seen (committed 2026-11-10, before any *hallucination* occurrence was encoded)
+
+Round C's reading rule requires a redesign calibrated on *attention* again before the sense
+instrument is used on open questions. *attention* is no longer unseen: the redesign was chosen
+on its round C data, so passing on it again shows only that the fix does what it was chosen to
+do. The test is a second known answer the instrument has not met. *hallucination* in
+psychology and neuroscience is a perception without a stimulus; in AI's 2020s abstracts it is
+a language model's fabricated output, a sense that did not exist before about 2020.
+
+### Development on *attention* (round C's data, after scoring)
+
+Re-encoding round C's seed-1 *attention* sample with SciBERT and clustering it into a fixed
+number of senses k, the senses holding 80% of the marked uses (taken greedily, largest first)
+hold this share of each cell's occurrences:
+
+| k | AI 1990s | AI 2020s | Psychology 1990s | Psychology 2020s |
+|---|---|---|---|---|
+| 2–4 | 0.147 | 0.586–0.588 | 0.303–0.370 | 0.322–0.384 |
+| 6–16 | 0.027–0.033 | 0.554–0.558 | 0.004–0.014 | 0.012–0.022 |
+| 20 | 0.027 | 0.396 | 0.014 | 0.026 |
+
+From six senses up, the attention mechanism separates from cognitive attention, and the
+result holds from 6 to 16. The redesign fixes k at 8, the middle of that range, instead of
+choosing it by silhouette, which chose two in round C. A sense is then a fine-grained usage
+type, and a meaning such as "the attention mechanism" can span several of them, so a meaning
+is measured as a *sense set*: the fewest senses that hold 80% of its marked uses.
+
+### Method (fixed before any *hallucination* occurrence is encoded)
+
+As round C, with these changes:
+
+- **Senses.** k-means with k = 8 for every word, on length-normalised vectors.
+- **Encoder.** SciBERT only. In round C the two encoders agreed to within a few hundredths on
+  every measure.
+- **Sampling with replacement.** For each word, cell and seed (1–5), as many occurrences as
+  the cell has, up to 500, drawn with replacement from the abstracts containing the word, so
+  the seeds differ in cells under the cap too.
+- **Quality rules.** Abstracts with more than 20% of their letters outside the Latin script
+  are skipped, and URLs and DOIs are removed before the context is taken. A word matches with
+  its regular plural (*hallucination, hallucinations*).
+- **Nested fields.** Two cells are compared as different communities only if neither field
+  contains the other in OpenAlex's hierarchy (AI and HCI lie inside computer science,
+  cognitive psychology inside psychology). Computer science is therefore left out of this
+  round: AI carries the new sense.
+- **Runs.** *attention* on AI's and psychology's 1990s and 2020s grid cells, as in round C.
+  *hallucination* on the word-targeted cells (`data/raw/openalex_words/hallucination/`) of AI
+  in the 2020s and of psychology and neuroscience in the 2000s and the 2020s (AI before the
+  2020s has 1 and 16 works).
+- **Marked uses.** *attention*: round C's list. *hallucination*, marked as the language-model
+  sense when the context contains one of: *language model, LLM, ChatGPT, GPT, generative AI,
+  chatbot, factual, fabricat*. The marks identify the sense; the clustering never sees them.
+  The *mechanism set* and the *language-model set*, per seed, are the fewest senses that hold
+  80% of the marked uses among AI's 2020s occurrences, taken greedily by marked count.
+- **Sizes.** A cell with fewer than 40 occurrences makes the predictions that use it
+  untestable, and so do fewer than 20 marked uses in AI's 2020s cell.
+- Already seen: round C's tables and the development above (*attention*, seed 1, SciBERT);
+  the *hallucination* cells' sizes, how many of their abstracts contain the exact word, and
+  the label-noise shares (`scripts/measure_label_noise.py`). Not computed: any encoding of a
+  *hallucination* occurrence.
+
+### Predictions
+
+**C′1 — The fix works where it was chosen.** In every seed, the mechanism set holds at most 5%
+of AI's 1990s occurrences, at least 30% of AI's 2020s occurrences, and less than 5% of
+psychology's occurrences in each decade. *Falsified* if any fails in any seed.
+
+**C′2 — The finer instrument finds a sense it has not seen.** In every seed, the language-model
+set holds at least 50% of AI's 2020s occurrences of *hallucination* and less than 5% of
+psychology's and of neuroscience's 2000s occurrences. *Falsified* if any fails in any seed.
+
+**C′3 — The perceptual sense still dominates where it lives.** In psychology and in
+neuroscience, the language-model set holds less than 10% of the 2020s occurrences (mean over
+seeds). *Falsified* if either holds 10% or more.
+
+**C′4 — But the new sense has reached psychology.** The language-model set's share of
+psychology's occurrences rises from the 2000s to the 2020s, present. *Falsified* if absent.
+This one is not a known answer; it is the round's first open question, asked only because the
+cell already exists.
+
+Reading rule:
+
+- C′1 and C′2 passing: the redesigned instrument is used on round D's open questions, with
+  its method unchanged.
+- C′2 failing: the fix was fitted to *attention*. The sense instrument is not used on open
+  questions, and the project records sense-level drift as not achieved with this design.
+- C′1 failing: the fix does not hold even where it was chosen, and the instrument is not used
+  on open questions either.
+- C′3 and C′4 describe *hallucination*; they do not decide the instrument's use.
+- Every sense set is printed with its top context words and nearest examples (seed 1).
+
+Scored by `scripts/score_senses_finer.py`, committed before the runs.
