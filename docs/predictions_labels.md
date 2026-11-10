@@ -502,3 +502,51 @@ labels have Spearman 0.693, partial 0.646 and ARI 0.330; JEV's 0.800, 0.667 and 
 classifier, with no generative model and no labelling by a person, ranks the changes 0.02 below
 Sonnet and 0.13 below JEV, and tracks change beyond variety less well than either (0.509 against
 0.646 and 0.667). The invented example sentences alone already reach 0.628; the cue seeds add 0.04.
+
+## Round T: does the classifier read this corpus as the author does? (committed 2026-11-10, before the corpus lists were frozen or any check 2b usage was labelled with them)
+
+Rung 2. The classifier of round E, with sense lists and cue words for this corpus that Claude
+drafted and the author refined on a review page (`data/sense_lists/corpus_draft.toml`, frozen and
+committed after the author's approval and before this round is run), labels the 186 distinct
+usages of check 2b, whose 100 pairs the author judged (*attention, prompt, platform, network,
+component, having*).
+
+### Method (fixed now; the lists and cues are fixed at their freezing commit)
+
+- **Training sentences.** Every usage of the six words in the whole-corpus sample (every field and
+  decade of the grid, at most 150 abstracts per cell, seed 1, round C′'s quality rules) whose cues
+  name one sense, plus each sense's example sentence, with check 2b's 186 usages left out.
+- **Classifier.** As round E: XL-LEXEME vectors, one logistic regression per word (C = 1, balanced
+  class weights, 1,000 iterations), giving each of the 186 usages a listed sense and a probability
+  for each sense.
+- **Measures, over the author's judged pairs.** (a) Spearman between "the pair's two usages get the
+  same sense" and the author's judgement; (b) Spearman between the overlap of the two usages' sense
+  probabilities (the sum over senses of their product) and the judgement. Both with the original
+  judgements and with the correction pass; per word, descriptively.
+- **Comparison labellers.** Claude Sonnet 5.5 (Batch API, low effort) and JEV (`jev-1.14.0`) label
+  the same 186 usages with the same frozen lists, as in round Y; measure (a) for each.
+- **Reference figures on the same pairs.** XL-LEXEME's raw similarity 0.456 (0.494 with the
+  correction pass); the second judge 0.616 (0.657).
+- Disclosed: the labeller pilot showed Claude these 186 usages, and three choices in the drafts
+  came from it (platform's delivery channel, having's obligation, component's boundary); the
+  review page samples the same corpus sample check 2b drew from, so the author may have seen some of
+  these sentences there as cue matches. The round is therefore partly in-sample for the lists;
+  leaving the usages out of the training sentences keeps it out of sample for the classifier.
+
+### Predictions
+
+**T1 — Labels keep the encoder's agreement with the author.** Measure (b) for the classifier is
+at least 0.456, XL-LEXEME's raw similarity on the same pairs. *Falsified* below.
+
+**T2 — The classifier reads the corpus about as well as a language model labeller.** Measure (a)
+for the classifier is at least Sonnet's measure (a) with the same lists, minus 0.10. *Falsified*
+below.
+
+**T3 — Agreement with the language models.** The share of the 186 usages on which the classifier
+gives the same sense as Sonnet and as JEV. Descriptive.
+
+Reading rule: the classifier passes rung 2 if T1 and T2 pass, and goes on to rung 3 with the same
+lists and the control words' lists (frozen after their own review). If it fails, the gap is
+reported and a language model labeller is the fallback for rung 3, as round E's rule says.
+
+Scored by `scripts/score_labels_corpus.py`, committed before it is run.
