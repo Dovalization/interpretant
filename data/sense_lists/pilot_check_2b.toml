@@ -1,0 +1,125 @@
+# Draft sense lists for the labeller pilot (docs/plan_sense_labels.md), written by Claude on
+# 2026-11-10 and not reviewed by the author. Every list also gets "other" and "unclear".
+
+[attention]
+word = "attention"
+
+[[attention.senses]]
+key = "cognitive_attention"
+definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience"
+example = "Sleep deprivation impairs sustained attention in older adults."
+
+[[attention.senses]]
+key = "notice_or_consideration"
+definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing"
+example = "The issue has received growing attention from policymakers."
+
+[[attention.senses]]
+key = "attention_mechanism"
+definition = "The attention mechanism of artificial neural networks, which weights parts of the input (self-attention, transformers)"
+example = "A multi-head attention layer is added on top of the encoder."
+
+[prompt]
+word = "prompt"
+
+[[prompt.senses]]
+key = "language_model_input"
+definition = "An instruction or input text given to a language model or other generative AI system"
+example = "We design prompts that ask the model to explain its answer step by step."
+
+[[prompt.senses]]
+key = "cue_to_a_person"
+definition = "A cue, question or message that invites a person to respond or act, as in experiments, teaching, writing tasks or user interfaces"
+example = "Participants answered a written prompt about their daily routine."
+
+[[prompt.senses]]
+key = "quick_or_immediate"
+definition = "The adjective: done or happening quickly, without delay"
+example = "Prompt treatment reduces the risk of complications."
+
+[[prompt.senses]]
+key = "to_cause_or_provoke"
+definition = "The verb: to cause, motivate or bring about something"
+example = "These findings prompt a re-examination of the model."
+
+[platform]
+word = "platform"
+
+[[platform.senses]]
+key = "digital_or_social_media_platform"
+definition = "An online service through which users interact, publish or trade, such as social media, apps and marketplaces"
+example = "Misinformation spreads quickly on social media platforms."
+
+[[platform.senses]]
+key = "technical_base"
+definition = "A hardware, software or technical system on which other systems, applications or experiments are built or run"
+example = "The algorithm was implemented on a mobile robot platform."
+
+[[platform.senses]]
+key = "physical_structure"
+definition = "A raised physical structure or surface, such as a stage, a station platform or an offshore platform"
+example = "The speaker stood on a wooden platform."
+
+[[platform.senses]]
+key = "stance_or_forum"
+definition = "A set of declared aims, as of a political party, or a forum or opportunity for presenting views"
+example = "The conference offers a platform for debate between researchers and practitioners."
+
+[network]
+word = "network"
+
+[[network.senses]]
+key = "artificial_neural_network"
+definition = "An artificial neural network: a computational model of connected units trained on data"
+example = "A three-layer network was trained with backpropagation."
+
+[[network.senses]]
+key = "computer_or_communication_network"
+definition = "A computer, telephone or other communication network linking machines or devices"
+example = "Messages are routed through the local area network."
+
+[[network.senses]]
+key = "social_network"
+definition = "A network of people, groups or organisations and their relations"
+example = "Migrants rely on kinship networks to find work."
+
+[[network.senses]]
+key = "abstract_or_physical_system"
+definition = "Another system of interconnected elements, such as a graph, a conceptual or semantic network, or a road, river or biological network"
+example = "Concepts are represented as nodes in a semantic network."
+
+[component]
+word = "component"
+
+[[component.senses]]
+key = "part_of_a_system"
+definition = "A physical or software part of a machine, device or system"
+example = "Each software component exposes a well-defined interface."
+
+[[component.senses]]
+key = "mathematical_or_measured_component"
+definition = "A constituent of a quantity, signal, vector or data set in mathematical or statistical analysis"
+example = "The first principal component explains most of the variance."
+
+[[component.senses]]
+key = "element_of_an_abstract_whole"
+definition = "An element or aspect of an abstract whole, such as a theory, a skill, a process or a programme"
+example = "Feedback is a key component of effective teaching."
+
+[having]
+word = "having"
+
+[[having.senses]]
+key = "perfect_auxiliary"
+definition = "The auxiliary before a past participle, marking a completed action"
+example = "Having trained the model, we evaluate it on held-out data."
+
+[[having.senses]]
+key = "possessing_or_containing"
+definition = "Possessing, containing or being characterised by something"
+example = "Patients having a history of stroke were excluded."
+
+[[having.senses]]
+key = "experiencing_or_causing"
+definition = "Experiencing, undergoing or causing something, as in having difficulty or having someone do something"
+example = "Students reported having trouble with the final task."

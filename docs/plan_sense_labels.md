@@ -49,7 +49,8 @@ way it can see a sense nobody wrote down, and that is weaker than discovery.
 - **Bars.** As round X: a change is found when the divergence is above the 95th percentile of
   200 shuffles of the word's labelled usages between the two cells (sampling noise) and above the
   90th percentile of the control words' divergence on the same transition (every word's drift).
-- **Model.** One model for every rung, chosen before rung 1 and never changed after it, so that a
+- **Model.** Claude Sonnet 5.5 at low effort, unless the pilot below leads the author to choose
+  JEV. One model for every rung, chosen before rung 1 and never changed after it, so that a
   failed rung cannot be repaired by changing model. Current models take no sampling temperature,
   so labels are not deterministic: 10% of every run is labelled twice, in a different block and
   position, and the agreement is reported as the instrument's self-consistency, which also
@@ -59,6 +60,34 @@ way it can see a sense nobody wrote down, and that is weaker than discovery.
   usage are recorded with every run.
 - **Records.** Raw responses stay local. Labels are committed as identifiers and labels only; no
   DWUG text is committed (its licence forbids redistribution).
+
+## Pilot: Sonnet 5.5 and JEV on check 2b's usages (before rung 1)
+
+A small comparison of two labellers, run before any rung, on usages whose judgements already
+exist and which no rung uses as evidence: the 186 distinct usages in check 2b's 100 pairs
+(*attention, prompt, platform, network, component, having*), which the author judged pair by pair.
+
+- **Labellers.** Claude Sonnet 5.5 at low effort through the CLI, as above, in blocks of 20 with
+  10% repeats. JEV (TypeSafe AI's decision model, pinned at `jev-1.14.0`), one request per usage:
+  the usage as state, a Choice among the listed senses with each sense's definition and example as
+  its criterion, and, as TypeSafe's guidance recommends instead of a "none of these" option, a
+  companion yes-or-no question asking whether the marked word has one of the listed senses. JEV's
+  label is its top choice when that probability is above 0.7, *other* below 0.3, and *unclear*
+  between, the guidance's starting thresholds.
+- **Sense lists.** Drafts by Claude for the six words, not reviewed by the author; the pilot
+  compares labellers, not lists. The lists the ladder uses are written and reviewed afterwards.
+- **What is compared.** Agreement between the two labellers (Cohen's kappa, exact share). For each
+  labeller, Spearman between "the pair's two usages share a listed sense" and the author's
+  judgement over check 2b's 95 distinct judged pairs, with the original judgements and with the
+  correction pass, beside XL-LEXEME (0.456 and 0.494) and the second judge (0.616 and 0.657); for
+  JEV also the overlap of the two usages' sense probabilities. Sonnet's self-consistency on the
+  repeats. Time and tokens per usage for each.
+- **What it decides.** Nothing is predicted. The numbers go to the author, who chooses the ladder's
+  labeller before rung 1. If Sonnet is kept, JEV also labels rung 2's gold usages, reported beside
+  Sonnet and deciding nothing.
+- **Data sent.** Short excerpts of public OpenAlex abstracts, to Anthropic through the CLI and to
+  TypeSafe through its API; no personal data. TypeSafe's privacy policy says it does not train on
+  user data; its retention period is not stated in its public documentation.
 
 ## The ladder
 
@@ -102,9 +131,11 @@ sentences, Claude Opus 5.5 at low effort) answered in about 6 seconds with a val
 object, using about 1,300 input tokens of fixed overhead and 377 output tokens, 122 of them
 thinking. A block of 40 should take well under a minute, so the whole ladder is a few hours with
 a handful of calls in parallel. On a subscription login the calls count against the plan's usage
-limits, not a bill; the CLI's reported cost for the smoke test was $0.018, which as an API
-figure puts the whole ladder at roughly $20–40 for Opus 5.5. A pilot of 5 blocks from rung 1's
-benchmark comes first, and the time and usage are re-estimated from it before the full run.
+limits, not a bill; the CLI's reported cost for the smoke test was $0.018 on Opus 5.5 and
+$0.006 on Sonnet 5.5 (2 seconds, no thinking tokens), which as API figures put the whole ladder at
+roughly $7–12 for Sonnet 5.5. The pilot's measured time and tokens re-estimate this before rung 1.
+JEV is priced at $0.042 per million input tokens with output free, so the whole ladder on JEV
+would cost well under a dollar.
 
 The Message Batches API remains the alternative if usage limits get in the way: the same
 prompts at half the standard price, about $140 for Opus 5.5 one usage per request (prices from
@@ -112,8 +143,8 @@ Anthropic's API reference as of 3 November 2026). It needs an API key, which is 
 
 ## Decisions for the author
 
-1. **The model**, fixed before rung 1. The default is Claude Opus 5.5 at low effort; through
-   the CLI a cheaper model saves usage, not money, so there is little reason to take one.
+1. **The labeller**, fixed before rung 1, after the pilot: Claude Sonnet 5.5 at low effort (chosen
+   2026-11-10 over Opus 5.5 to save usage) or JEV. JEV needs a TypeSafe API key.
 2. **The author's time:** approving about 15 sense lists (5 target words, 10 controls) and
    labelling about 130 usages, roughly as long as check 2b's 100 pairs.
 
