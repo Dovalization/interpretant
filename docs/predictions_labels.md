@@ -157,3 +157,24 @@ labeller, every citation of that labeller's round Y result says that it depends 
 lists. If both pass, round Y's result is reported as not depending on who wrote the lists.
 
 Scored by `scripts/score_labels_wordnet.py`, committed before it is run.
+
+### Round Y results for Sonnet, and Y5 (2026-11-10, `scripts/score_labels_benchmark.py`)
+
+Scored as written, after the Y3 correction above was committed and after round Z was
+pre-registered. Sonnet labelled all 9,666 requests with none failed or refused; *other* 8.4%,
+*unclear* 0.5%.
+
+| | Verdict | Numbers |
+|---|---|---|
+| Y1 | **Passed** | Spearman 0.767 over 46 words (needed 0.70; BERT 0.563, XL-LEXEME 0.864) |
+| Y2 | **Passed** | mean ARI 0.287 over 42 words with two or more clusters (needed 0.273; GPT-4 0.340) |
+| Y3 | **Falsified** | mean Spearman with periods shuffled 0.265 (at most 0.20; range −0.079 to 0.489) |
+| Y4 | **Passed** | 98.9% of 879 repeats labelled the same (needed 85%) |
+| Y5 | **Passed** | the labellers gave the same label to 84.5% of 8,787 usages (at least 80%; descriptive) |
+
+By the reading rule, Y3's failure stops Sonnet at rung 1 too. Read with the correction above:
+both labellers rank the benchmark's changes well (JEV 0.821, Sonnet 0.767, between BERT's 0.563
+and XL-LEXEME's 0.864), both are consistent, and Sonnet groups usages slightly better than
+XL-LEXEME's clustering (0.287 against 0.273, below GPT-4's 0.340). Neither has been shown to
+measure variety, because the test meant to show it fails the gold standard itself (0.855). Both
+stopped on that test alone.
