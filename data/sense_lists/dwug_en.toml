@@ -1,0 +1,739 @@
+# Sense lists for rung 1, DWUG EN 2.0.1 (docs/plan_sense_labels.md), written by Claude on
+# 2026-11-10 from general knowledge, before any DWUG cluster file, usage file or change score was
+# opened for writing them, and not reviewed by the author. Every list also gets "other" and
+# "unclear". Seen earlier while checking file formats: the change scores of afternoon and attack,
+# and one usage of plane.
+
+[afternoon_nn]
+word = "afternoon"
+[[afternoon_nn.senses]]
+key = "part_of_the_day"
+definition = "The part of the day between noon and evening"
+example = "We walked by the river in the afternoon."
+[[afternoon_nn.senses]]
+key = "late_period"
+definition = "A late period of something, such as a life or an era"
+example = "In the afternoon of his career he turned to teaching."
+
+[attack_nn]
+word = "attack"
+[[attack_nn.senses]]
+key = "violent_assault"
+definition = "A violent assault on a person, place or force, in a fight or war"
+example = "The enemy launched an attack at dawn."
+[[attack_nn.senses]]
+key = "verbal_criticism"
+definition = "Strong criticism or opposition in words"
+example = "The speech was a fierce attack on the government."
+[[attack_nn.senses]]
+key = "onset_of_illness"
+definition = "A sudden episode of an illness or condition"
+example = "She had an attack of fever that night."
+[[attack_nn.senses]]
+key = "offensive_play"
+definition = "Offensive play or players in a sport or game, or a determined attempt to tackle a task"
+example = "Their attack scored twice in the first half."
+
+[bag_nn]
+word = "bag"
+[[bag_nn.senses]]
+key = "container"
+definition = "A flexible container of cloth, paper, leather or plastic"
+example = "He packed his clothes in a canvas bag."
+[[bag_nn.senses]]
+key = "game_taken"
+definition = "The amount of game shot or caught by a hunter"
+example = "The party returned with a good bag of grouse."
+[[bag_nn.senses]]
+key = "fold_of_skin"
+definition = "A puffy fold of skin, especially under the eyes"
+example = "He had dark bags under his eyes."
+[[bag_nn.senses]]
+key = "slang_use"
+definition = "Slang: one's particular interest or style, or a derogatory word for a woman"
+example = "Jazz isn't really my bag."
+
+[ball_nn]
+word = "ball"
+[[ball_nn.senses]]
+key = "round_object"
+definition = "A round object, especially one used in a game, or any spherical mass"
+example = "The boy kicked the ball over the fence."
+[[ball_nn.senses]]
+key = "formal_dance"
+definition = "A formal social gathering for dancing"
+example = "She wore a silk gown to the ball."
+[[ball_nn.senses]]
+key = "projectile"
+definition = "A solid projectile fired from a gun or cannon"
+example = "A musket ball struck the wall."
+[[ball_nn.senses]]
+key = "rounded_body_part"
+definition = "A rounded part of the body, such as the ball of the foot or thumb"
+example = "He balanced on the balls of his feet."
+
+[bar_nn]
+word = "bar"
+[[bar_nn.senses]]
+key = "rod_or_block"
+definition = "A long rigid piece of metal or wood, or a solid block of a substance"
+example = "The window was fitted with iron bars."
+[[bar_nn.senses]]
+key = "drinking_place"
+definition = "A counter or room where drinks are served"
+example = "They met at the hotel bar."
+[[bar_nn.senses]]
+key = "legal_profession"
+definition = "The legal profession, or the railing or place in a court where cases are heard"
+example = "He was called to the bar in 1850."
+[[bar_nn.senses]]
+key = "barrier"
+definition = "A barrier or obstacle, including a sandbank across a harbour or river mouth"
+example = "The ship ran aground on the bar."
+
+[bit_nn]
+word = "bit"
+[[bit_nn.senses]]
+key = "small_piece_or_amount"
+definition = "A small piece, portion or amount of something, or a short time"
+example = "Give the dog a bit of bread."
+[[bit_nn.senses]]
+key = "horse_mouthpiece"
+definition = "The metal mouthpiece of a horse's bridle"
+example = "The horse champed at the bit."
+[[bit_nn.senses]]
+key = "tool_part"
+definition = "The cutting or boring part of a tool, such as a drill bit"
+example = "He changed the bit on the drill."
+[[bit_nn.senses]]
+key = "binary_digit"
+definition = "A binary digit, the smallest unit of information in computing"
+example = "Each character is stored in eight bits."
+
+[chairman_nn]
+word = "chairman"
+[[chairman_nn.senses]]
+key = "presiding_person"
+definition = "A person who presides over a meeting, committee, board or company"
+example = "The chairman opened the meeting."
+[[chairman_nn.senses]]
+key = "chair_carrier"
+definition = "A person who carries a sedan chair"
+example = "The chairmen set the sedan down at the door."
+
+[chef_nn]
+word = "chef"
+[[chef_nn.senses]]
+key = "professional_cook"
+definition = "A professional cook, especially the head cook of a restaurant or household"
+example = "The chef prepared a special menu."
+[[chef_nn.senses]]
+key = "chief_or_leader"
+definition = "A chief or head of a group, from the French chef"
+example = "He was chef of the battalion."
+
+[circle_vb]
+word = "circle"
+[[circle_vb.senses]]
+key = "move_around"
+definition = "To move around something in a circular path"
+example = "Hawks circled overhead."
+[[circle_vb.senses]]
+key = "surround"
+definition = "To surround or encircle something"
+example = "A low wall circles the garden."
+[[circle_vb.senses]]
+key = "draw_a_circle"
+definition = "To draw a circle around something"
+example = "Circle the correct answer."
+
+[contemplation_nn]
+word = "contemplation"
+[[contemplation_nn.senses]]
+key = "thoughtful_observation"
+definition = "Looking at or thinking about something thoughtfully for a long time"
+example = "She stood in silent contemplation of the sea."
+[[contemplation_nn.senses]]
+key = "religious_meditation"
+definition = "Religious or spiritual meditation"
+example = "The monks devoted their lives to prayer and contemplation."
+[[contemplation_nn.senses]]
+key = "intention"
+definition = "Consideration of a future action, an intention or expectation"
+example = "The house was bought in contemplation of their marriage."
+
+[donkey_nn]
+word = "donkey"
+[[donkey_nn.senses]]
+key = "animal"
+definition = "The domesticated animal of the horse family"
+example = "The donkey carried the baskets to market."
+[[donkey_nn.senses]]
+key = "foolish_person"
+definition = "A foolish or stubborn person"
+example = "Don't be such a donkey."
+[[donkey_nn.senses]]
+key = "auxiliary_engine"
+definition = "An auxiliary engine or pump (a donkey engine)"
+example = "The donkey was used to hoist the cargo."
+
+[edge_nn]
+word = "edge"
+[[edge_nn.senses]]
+key = "cutting_side"
+definition = "The sharp cutting side of a blade"
+example = "He tested the edge of the knife."
+[[edge_nn.senses]]
+key = "border_or_rim"
+definition = "The outer limit, border or rim of a surface, area or object"
+example = "They camped at the edge of the forest."
+[[edge_nn.senses]]
+key = "advantage"
+definition = "An advantage over others"
+example = "The new design gives them a competitive edge."
+[[edge_nn.senses]]
+key = "sharpness_of_tone"
+definition = "A sharp or intense quality, as of a voice, feeling or style"
+example = "There was an edge to her voice."
+
+[face_nn]
+word = "face"
+[[face_nn.senses]]
+key = "front_of_head"
+definition = "The front part of the head"
+example = "She washed her face."
+[[face_nn.senses]]
+key = "expression"
+definition = "A facial expression or look"
+example = "He made a face at the taste."
+[[face_nn.senses]]
+key = "surface_or_front"
+definition = "The surface or front side of a thing, such as a cliff, a clock or a coin"
+example = "The climbers scaled the north face."
+[[face_nn.senses]]
+key = "appearance_or_standing"
+definition = "Outward appearance, presence or reputation, as in losing face or in the face of danger"
+example = "He refused to back down for fear of losing face."
+
+[fiction_nn]
+word = "fiction"
+[[fiction_nn.senses]]
+key = "invented_narrative_literature"
+definition = "Literature in the form of invented prose narrative, such as novels and stories"
+example = "She reads mostly fiction."
+[[fiction_nn.senses]]
+key = "invention_or_falsehood"
+definition = "Something invented or untrue"
+example = "His account of the journey was pure fiction."
+[[fiction_nn.senses]]
+key = "convenient_assumption"
+definition = "An assumption accepted as true for convenience, as a legal fiction"
+example = "The company is treated as a person by a legal fiction."
+
+[gas_nn]
+word = "gas"
+[[gas_nn.senses]]
+key = "gaseous_substance"
+definition = "A substance in the gaseous state, as in physics and chemistry"
+example = "Heating the liquid releases a gas."
+[[gas_nn.senses]]
+key = "fuel_gas"
+definition = "Gas used as fuel for lighting, heating or cooking"
+example = "The streets were lit by gas."
+[[gas_nn.senses]]
+key = "gasoline"
+definition = "Gasoline or petrol"
+example = "We stopped to fill up with gas."
+[[gas_nn.senses]]
+key = "poison_or_anaesthetic_gas"
+definition = "A gas used as a weapon or as an anaesthetic"
+example = "The soldiers were attacked with poison gas."
+
+[graft_nn]
+word = "graft"
+[[graft_nn.senses]]
+key = "plant_graft"
+definition = "A shoot or bud inserted into another plant to grow there"
+example = "The gardener made a graft on the old apple tree."
+[[graft_nn.senses]]
+key = "tissue_transplant"
+definition = "A piece of living tissue transplanted surgically"
+example = "The burns were treated with a skin graft."
+[[graft_nn.senses]]
+key = "corruption"
+definition = "Gaining money or advantage dishonestly, especially by bribery in politics"
+example = "The mayor was accused of graft."
+[[graft_nn.senses]]
+key = "hard_work"
+definition = "Hard work"
+example = "Success came only after years of graft."
+
+[grain_nn]
+word = "grain"
+[[grain_nn.senses]]
+key = "cereal"
+definition = "The seeds of cereal plants, or cereal crops collectively"
+example = "The barns were full of grain."
+[[grain_nn.senses]]
+key = "small_particle"
+definition = "A single small hard particle, or a very small amount of something"
+example = "There is not a grain of truth in it."
+[[grain_nn.senses]]
+key = "texture_or_fibre"
+definition = "The arrangement or direction of fibres or particles in wood, stone, cloth or film"
+example = "Cut along the grain of the wood."
+[[grain_nn.senses]]
+key = "unit_of_weight"
+definition = "A small unit of weight"
+example = "Take two grains of quinine."
+
+[head_nn]
+word = "head"
+[[head_nn.senses]]
+key = "body_part"
+definition = "The upper part of the body containing the brain, eyes and mouth"
+example = "He shook his head."
+[[head_nn.senses]]
+key = "mind"
+definition = "The mind or intellect"
+example = "The idea never entered her head."
+[[head_nn.senses]]
+key = "leader"
+definition = "A person in charge, a leader or chief"
+example = "She is head of the department."
+[[head_nn.senses]]
+key = "top_or_front"
+definition = "The top, front or upper end of something, such as a table, a river or a page"
+example = "He sat at the head of the table."
+
+[heel_nn]
+word = "heel"
+[[heel_nn.senses]]
+key = "back_of_foot"
+definition = "The back part of the human foot"
+example = "The shoe rubbed against her heel."
+[[heel_nn.senses]]
+key = "shoe_heel"
+definition = "The part of a shoe or boot under the back of the foot"
+example = "She wore shoes with high heels."
+[[heel_nn.senses]]
+key = "contemptible_person"
+definition = "A contemptible or dishonourable person"
+example = "He behaved like a real heel."
+[[heel_nn.senses]]
+key = "end_or_rear_part"
+definition = "The end or rear part of something, such as a loaf, a mast or a tool"
+example = "The heel of the mast was set in the keel."
+
+[include_vb]
+word = "include"
+[[include_vb.senses]]
+key = "contain_as_part"
+definition = "To contain something as part of a whole"
+example = "The price includes breakfast."
+[[include_vb.senses]]
+key = "make_part_of"
+definition = "To make someone or something part of a group or set, to add them"
+example = "Please include me on the list."
+
+[land_nn]
+word = "land"
+[[land_nn.senses]]
+key = "solid_ground"
+definition = "The solid surface of the earth, as opposed to sea or air"
+example = "After weeks at sea they sighted land."
+[[land_nn.senses]]
+key = "property_or_farmland"
+definition = "Ground owned as property or used for farming"
+example = "He inherited land in the valley."
+[[land_nn.senses]]
+key = "country_or_realm"
+definition = "A country, nation or realm"
+example = "They longed to return to their native land."
+
+[lane_nn]
+word = "lane"
+[[lane_nn.senses]]
+key = "narrow_road"
+definition = "A narrow road or path, in the country or between buildings"
+example = "A winding lane led to the farm."
+[[lane_nn.senses]]
+key = "traffic_division"
+definition = "A division of a road, track, pool or sea route for a single line of traffic or competitors"
+example = "Stay in the left lane."
+
+[lass_nn]
+word = "lass"
+[[lass_nn.senses]]
+key = "girl"
+definition = "A girl or young woman"
+example = "She was a cheerful country lass."
+[[lass_nn.senses]]
+key = "sweetheart"
+definition = "A man's sweetheart or girlfriend"
+example = "He went to see his lass on Sunday."
+
+[maxim_nn]
+word = "maxim"
+[[maxim_nn.senses]]
+key = "saying"
+definition = "A short statement of a general truth or rule of conduct"
+example = "His maxim was to waste nothing."
+[[maxim_nn.senses]]
+key = "machine_gun"
+definition = "The Maxim gun, an early machine gun"
+example = "The Maxims opened fire."
+
+[multitude_nn]
+word = "multitude"
+[[multitude_nn.senses]]
+key = "great_number"
+definition = "A great number of things or people"
+example = "The plan raised a multitude of problems."
+[[multitude_nn.senses]]
+key = "crowd_or_masses"
+definition = "A crowd, or the common people as a mass"
+example = "He preached to the multitude."
+
+[ounce_nn]
+word = "ounce"
+[[ounce_nn.senses]]
+key = "unit_of_weight"
+definition = "A unit of weight"
+example = "Add four ounces of sugar."
+[[ounce_nn.senses]]
+key = "tiny_amount"
+definition = "A very small amount of a quality"
+example = "He hasn't an ounce of sense."
+[[ounce_nn.senses]]
+key = "wild_cat"
+definition = "The snow leopard or another wild cat"
+example = "The ounce lives in the high mountains."
+
+[part_nn]
+word = "part"
+[[part_nn.senses]]
+key = "portion"
+definition = "A piece, portion or section of a whole"
+example = "The first part of the book is the best."
+[[part_nn.senses]]
+key = "role_or_share"
+definition = "A role in a play, or a person's share or function in an activity"
+example = "She played a large part in the negotiations."
+[[part_nn.senses]]
+key = "component"
+definition = "A component of a machine or device"
+example = "Spare parts are hard to find."
+[[part_nn.senses]]
+key = "side_or_region"
+definition = "A side in a dispute or relationship, or a region, as in these parts or on my part"
+example = "There was no ill will on his part."
+
+[pick_vb]
+word = "pick"
+[[pick_vb.senses]]
+key = "choose"
+definition = "To choose or select"
+example = "Pick a card."
+[[pick_vb.senses]]
+key = "pluck_or_gather"
+definition = "To pluck or gather flowers, fruit or crops"
+example = "They picked apples all afternoon."
+[[pick_vb.senses]]
+key = "remove_or_pry"
+definition = "To remove bits from something with the fingers or a pointed tool, or to open a lock without a key"
+example = "He picked the lock with a hairpin."
+[[pick_vb.senses]]
+key = "pick_up"
+definition = "To lift, collect or acquire something, as in pick up"
+example = "She picked up the child."
+
+[pin_vb]
+word = "pin"
+[[pin_vb.senses]]
+key = "fasten"
+definition = "To fasten or attach with a pin"
+example = "She pinned the note to the door."
+[[pin_vb.senses]]
+key = "hold_down"
+definition = "To hold someone or something firmly so they cannot move"
+example = "He was pinned under the fallen beam."
+[[pin_vb.senses]]
+key = "attach_or_fix_on"
+definition = "To fix blame, hope or a definition on someone or something, as in pin down"
+example = "They pinned their hopes on the new drug."
+
+[plane_nn]
+word = "plane"
+[[plane_nn.senses]]
+key = "flat_surface_or_level"
+definition = "A flat surface, as in geometry, or a level of thought or existence"
+example = "The ball rolls down an inclined plane."
+[[plane_nn.senses]]
+key = "aircraft"
+definition = "An aeroplane"
+example = "The plane landed in Chicago."
+[[plane_nn.senses]]
+key = "woodworking_tool"
+definition = "A tool for smoothing wood"
+example = "He smoothed the board with a plane."
+[[plane_nn.senses]]
+key = "plane_tree"
+definition = "A plane tree"
+example = "The square was shaded by old planes."
+
+[player_nn]
+word = "player"
+[[player_nn.senses]]
+key = "game_participant"
+definition = "A person taking part in a sport or game"
+example = "Each player draws seven tiles."
+[[player_nn.senses]]
+key = "performer"
+definition = "A musician or an actor"
+example = "The players took their bows."
+[[player_nn.senses]]
+key = "influential_party"
+definition = "A person, company or country with influence in a field such as business or politics"
+example = "The firm is a major player in the market."
+[[player_nn.senses]]
+key = "playback_device"
+definition = "A device that plays recordings"
+example = "He bought a new record player."
+
+[prop_nn]
+word = "prop"
+[[prop_nn.senses]]
+key = "physical_support"
+definition = "A pole, beam or other object used to hold something up"
+example = "Props held up the roof of the mine."
+[[prop_nn.senses]]
+key = "supporting_person_or_thing"
+definition = "A person or thing that gives support, figuratively"
+example = "Her son was the prop of her old age."
+[[prop_nn.senses]]
+key = "theatre_property"
+definition = "An object used on stage or in a film"
+example = "The props were stored backstage."
+[[prop_nn.senses]]
+key = "propeller"
+definition = "A propeller"
+example = "The prop began to turn."
+
+[quilt_nn]
+word = "quilt"
+[[quilt_nn.senses]]
+key = "bed_covering"
+definition = "A padded bed covering"
+example = "She pulled the quilt over her shoulders."
+[[quilt_nn.senses]]
+key = "patchwork_or_artwork"
+definition = "A patchwork textile made as craft or art, or something resembling one"
+example = "The museum displayed quilts made by the community."
+
+[rag_nn]
+word = "rag"
+[[rag_nn.senses]]
+key = "piece_of_cloth"
+definition = "A piece of old cloth"
+example = "He wiped his hands on a rag."
+[[rag_nn.senses]]
+key = "ragged_clothes"
+definition = "Old, torn clothing, usually in the plural"
+example = "The beggar was dressed in rags."
+[[rag_nn.senses]]
+key = "poor_newspaper"
+definition = "A newspaper of low quality"
+example = "I don't believe anything in that rag."
+[[rag_nn.senses]]
+key = "ragtime_piece"
+definition = "A piece of ragtime music"
+example = "She played a Joplin rag."
+
+[rally_nn]
+word = "rally"
+[[rally_nn.senses]]
+key = "mass_meeting"
+definition = "A mass meeting held in support of a cause"
+example = "Thousands attended the rally."
+[[rally_nn.senses]]
+key = "recovery_or_regrouping"
+definition = "A recovery of strength or prices, or a regrouping of troops"
+example = "The market staged a late rally."
+[[rally_nn.senses]]
+key = "exchange_of_strokes"
+definition = "An exchange of strokes in tennis or a similar game"
+example = "The rally lasted twenty shots."
+[[rally_nn.senses]]
+key = "motor_race"
+definition = "A motor race over public roads or rough terrain"
+example = "He drove in the Monte Carlo rally."
+
+[record_nn]
+word = "record"
+[[record_nn.senses]]
+key = "account_or_document"
+definition = "A written or stored account of facts or events"
+example = "The parish kept records of births and deaths."
+[[record_nn.senses]]
+key = "sound_recording_disc"
+definition = "A disc carrying recorded sound"
+example = "She put on a jazz record."
+[[record_nn.senses]]
+key = "best_performance"
+definition = "The best performance or most remarkable event of its kind"
+example = "He broke the world record."
+[[record_nn.senses]]
+key = "persons_history"
+definition = "A person's or organisation's past conduct or achievements, as a criminal or voting record"
+example = "The senator has a strong record on education."
+
+[relationship_nn]
+word = "relationship"
+[[relationship_nn.senses]]
+key = "connection_between_things"
+definition = "A connection or correspondence between things, ideas or quantities"
+example = "There is a close relationship between diet and health."
+[[relationship_nn.senses]]
+key = "connection_between_people"
+definition = "The way people, groups or nations are connected or behave towards each other, including kinship"
+example = "Relationships between the two countries improved."
+[[relationship_nn.senses]]
+key = "romantic_relationship"
+definition = "A romantic or sexual relationship"
+example = "They have been in a relationship for two years."
+
+[risk_nn]
+word = "risk"
+[[risk_nn.senses]]
+key = "possibility_of_harm"
+definition = "The possibility of loss, harm or danger"
+example = "Smoking increases the risk of disease."
+[[risk_nn.senses]]
+key = "insured_or_financial_risk"
+definition = "In insurance or finance, a person or thing insured, or a measured exposure to loss"
+example = "The company considered him a poor risk."
+
+[savage_nn]
+word = "savage"
+[[savage_nn.senses]]
+key = "supposedly_uncivilised_person"
+definition = "A person regarded, often offensively, as primitive or uncivilised"
+example = "The explorers wrote of the savages they met."
+[[savage_nn.senses]]
+key = "brutal_person"
+definition = "A fierce, brutal or cruel person"
+example = "The attackers were savages."
+
+[stab_nn]
+word = "stab"
+[[stab_nn.senses]]
+key = "thrust_or_wound"
+definition = "A thrust with a knife or pointed weapon, or the wound it makes"
+example = "He died of a stab to the chest."
+[[stab_nn.senses]]
+key = "sudden_feeling"
+definition = "A sudden sharp feeling or pain"
+example = "She felt a stab of guilt."
+[[stab_nn.senses]]
+key = "attempt"
+definition = "An attempt to do something"
+example = "Let me have a stab at it."
+
+[stroke_vb]
+word = "stroke"
+[[stroke_vb.senses]]
+key = "caress"
+definition = "To move the hand gently over something"
+example = "She stroked the cat."
+[[stroke_vb.senses]]
+key = "flatter_or_soothe"
+definition = "To flatter or soothe someone"
+example = "The manager knew how to stroke his ego."
+[[stroke_vb.senses]]
+key = "hit_or_row"
+definition = "To hit a ball smoothly, or to row as the stroke of a boat"
+example = "He stroked the ball into the net."
+
+[thump_nn]
+word = "thump"
+[[thump_nn.senses]]
+key = "heavy_blow"
+definition = "A heavy blow with the fist or a blunt object"
+example = "He gave the door a thump."
+[[thump_nn.senses]]
+key = "dull_sound"
+definition = "A dull, heavy sound"
+example = "We heard a thump on the stairs."
+
+[tip_vb]
+word = "tip"
+[[tip_vb.senses]]
+key = "tilt_or_overturn"
+definition = "To tilt, overturn or empty something by tilting"
+example = "He tipped his chair back."
+[[tip_vb.senses]]
+key = "give_gratuity"
+definition = "To give a small sum of money for a service"
+example = "They tipped the waiter well."
+[[tip_vb.senses]]
+key = "give_information"
+definition = "To give a hint or inside information, or to predict as likely to win"
+example = "She was tipped as the next director."
+[[tip_vb.senses]]
+key = "cover_the_end"
+definition = "To cover or provide the end or point of something"
+example = "The arrows were tipped with poison."
+
+[tree_nn]
+word = "tree"
+[[tree_nn.senses]]
+key = "plant"
+definition = "A woody perennial plant with a trunk"
+example = "An oak tree grew by the gate."
+[[tree_nn.senses]]
+key = "branching_diagram"
+definition = "A diagram or structure with branches, such as a family tree or a tree in computing"
+example = "She traced her family tree back four centuries."
+[[tree_nn.senses]]
+key = "wooden_frame"
+definition = "A wooden frame or structure, such as a shoe tree, a saddle tree or the gallows"
+example = "Keep your boots on shoe trees."
+
+[twist_nn]
+word = "twist"
+[[twist_nn.senses]]
+key = "turning_or_spiral"
+definition = "An act of turning or wringing, or a spiral shape"
+example = "With a twist of the wrist he opened the jar."
+[[twist_nn.senses]]
+key = "unexpected_development"
+definition = "An unexpected development"
+example = "The story has a twist at the end."
+[[twist_nn.senses]]
+key = "dance"
+definition = "The twist, a dance"
+example = "They danced the twist all night."
+[[twist_nn.senses]]
+key = "small_rolled_piece"
+definition = "A small rolled or twisted piece of something, such as tobacco, paper or lemon peel"
+example = "He bought a twist of tobacco."
+
+[word_nn]
+word = "word"
+[[word_nn.senses]]
+key = "unit_of_language"
+definition = "A single unit of language"
+example = "The word has three syllables."
+[[word_nn.senses]]
+key = "remark_or_talk"
+definition = "A remark, statement or brief conversation"
+example = "Could I have a word with you?"
+[[word_nn.senses]]
+key = "promise"
+definition = "A promise or assurance"
+example = "He gave his word that he would return."
+[[word_nn.senses]]
+key = "news_or_message"
+definition = "News or a message"
+example = "Word came that the army had crossed the river."
