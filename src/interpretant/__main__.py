@@ -965,6 +965,49 @@ def drift_decompose(  # noqa: PLR0913
     console.print(f"[green]{len(result):,} rows[/green] → {output}")
 
 
+@drift.command("separability")
+@click.option(
+    "--texts-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/phrased/openalex/texts"),
+    show_default=True,
+)
+@click.option(
+    "--decade",
+    "decades",
+    multiple=True,
+    type=int,
+    default=(1980, 1990, 2000, 2010, 2020),
+    show_default=True,
+)
+@click.option("--seed", "seeds", multiple=True, default=(1, 2, 3, 4, 5), show_default=True)
+@click.option("--per-field", default=2_000, show_default=True, help="Abstracts per field.")
+@click.option(
+    "--output-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/drift"),
+    show_default=True,
+)
+def drift_separability(
+    texts_dir: Path,
+    decades: tuple[int, ...],
+    seeds: tuple[int, ...],
+    per_field: int,
+    output_dir: Path,
+) -> None:
+    """How well a classifier tells every two fields apart, per decade, and where a classifier
+    over all fields sends each field's abstracts (round S)."""
+    from interpretant.drift.separability import separability_runs  # noqa: PLC0415
+
+    pairs, assignments = separability_runs(
+        texts_dir, decades, seeds, per_field=per_field, log=console.print
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
+    pairs.to_parquet(output_dir / "separability_pairs.parquet", index=False)
+    assignments.to_parquet(output_dir / "separability_assignments.parquet", index=False)
+    console.print(f"[green]{len(pairs):,} pair rows, {len(assignments):,} assignment rows[/green]")
+
+
 @drift.command("grid")
 @click.option(
     "--model-dir",
