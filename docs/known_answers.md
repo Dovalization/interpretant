@@ -152,7 +152,8 @@ exposed something a change in the measure could mean other than the change it wa
   reversed: a subfield's model predicts its parent better than the reverse, in every decade.
 - **Training size.** The first run trained the 1980s models on 205,731 tokens and the 2010s
   models on 1,000,000, and found fields growing more specialised. With one training size, the
-  same comparison came out the other way in every seed (−0.040 to −0.061 bits): fields converged.
+  same comparison came out the other way in every seed (−0.040 to −0.061 bits): fields
+  converged.
 - **Predictable is not borrowed.** Philosophy's model came to predict HCI's abstracts better, in
   every seed (falls of 0.056–0.103 bits), and HCI's model did not come to predict philosophy's.
   It read as HCI borrowing philosophy's language. But the excess E(A → B) falls when B moves
