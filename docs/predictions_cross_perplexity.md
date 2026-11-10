@@ -982,3 +982,72 @@ Not predicted; read from `data/drift/heldout.parquet` after the scorer ran.
 - **Above the reference size the gap saturates** at 1.2–1.8 bits (the full cells sit at the low
   end): past about 10,000 abstracts, more text no longer reduces the gap much, so ranks among
   large cells are mostly field differences, which is part of why ρ falls short.
+
+## Round N: who moved towards whom, net of everyone's drift (committed 2026-11-09, before any relative gain was computed on the corpus)
+
+The language models say HCI moved towards the behavioural and social sciences and nobody moved
+towards HCI (rounds J, K′); the classifier says HCI and psychology met, HCI travelling further
+(rounds S, V). Rounds S and V also showed why the classifier's raw shares mislead: every field's
+2020s abstracts leave home more often under a 1990s classifier, and some fields receive more of
+those departures than others. Round N measures movement net of both effects, decade by decade,
+with the seed-noise thresholds the review of all rounds called for.
+
+### Calibration (synthetic, before these predictions)
+
+`tests/test_direction.py` and the runs recorded here: six synthetic fields that share 95% of
+their words, so a classifier sends about a fifth of each field's held-out abstracts elsewhere,
+as in the corpus (home shares 0.65–0.87 in round S). By the 2020s every field replaces 30% of
+its own words with new ones, every field but HCI may borrow from HCI (a target everyone drifts
+towards), and HCI alone may borrow from psychology (a planted move). At the corpus's sample size
+(2,000 per field, five seeds):
+
+- the **relative gain** (a field's gain in the share sent to a target, minus the median gain
+  towards that target of every other field) found planted moves of 5% and 10% of HCI's field
+  words (+0.041 and +0.085, standard deviations 0.013 and 0.014) and reported no move in any
+  setting without one, including when every field borrowed 10% or 20% from HCI;
+- the **raw gain** (round S's measure) reported psychology moving towards HCI whenever every
+  field borrowed from HCI (+0.092 and +0.197), a false positive in every such setting;
+- a third measure considered, the change in where a field's departures go, was too noisy to
+  decide anything (standard deviations near 0.1) and was dropped.
+
+The relative gain is the measure. It cannot tell a field that moved towards a target from a
+target that moved towards that field alone; it removes only what is common to all fields.
+
+### Method (fixed before any corpus run)
+
+- Round S's samples and classifier (2,000 abstracts per field, shared abstracts removed, 1,600
+  train and 400 held out, TF-IDF and logistic regression, seeds 1–5).
+- Classifiers trained on the **1980s** and on the **1990s**, each applied to its own decade's
+  held-out abstracts and to every later decade's through the 2020s.
+- The **relative gain** of text field A towards target B: A's share of held-out abstracts sent
+  to B in the test decade minus in the training decade, minus the median of the same change for
+  every other field (neither A nor in B). Targets are single fields or the groups of round S
+  (*behavioural and social*: psychology, cognitive psychology, neuroscience, sociology,
+  communication; *computing*: computer science, AI).
+- An effect is **present** when it is positive in all five seeds and its mean is at least twice
+  its standard deviation across seeds.
+- Already seen: the raw 2020s shares under the 1990s classifier (rounds S and V). Not computed:
+  any relative gain, anything from the 1980s classifier, and the 2000s and 2010s decades.
+
+### Predictions
+
+**N1 — HCI moved towards the behavioural and social sciences, net of drift.** HCI's relative
+gain towards that group is present at the 2020s under both the 1980s and the 1990s classifier.
+*Falsified* if absent under either.
+
+**N2 — It was under way by the 2000s.** Under the 1990s classifier, HCI's relative gain towards
+that group is already present at the 2000s. *Falsified* if absent.
+
+**N3 — Not towards computing.** HCI's relative gain towards the computing group is not present at
+the 2020s under either classifier. *Falsified* if present under either.
+
+**N4 — Psychology's half of the meeting is real.** Psychology's relative gain towards HCI is
+present at the 2020s under the 1980s classifier. *Falsified* if absent.
+
+**N5 — Psychology moved later than HCI.** Under the 1990s classifier, psychology's relative gain
+towards HCI is not present at the 2000s. *Falsified* if present.
+
+Reading rule: N1–N3 passing confirm, net of everyone's drift, the direction both instruments
+agree on and date it to the 2000s. N4 passing makes the meeting with psychology a finding, not a
+by-product of drift; N4 failing returns the claim to the language models' one-sided picture.
+N5 dates psychology's half. Scored by `scripts/score_direction.py`, committed before it is run.
