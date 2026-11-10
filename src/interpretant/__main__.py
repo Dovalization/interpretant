@@ -1097,6 +1097,53 @@ def drift_direction(  # noqa: PLR0913
     console.print(f"[green]{len(table):,} rows[/green] → {output}")
 
 
+@drift.command("senses")
+@click.option(
+    "--raw-dir",
+    type=click.Path(path_type=Path),
+    default=Path("data/raw/openalex"),
+    show_default=True,
+)
+@click.option("--word", "words", multiple=True, required=True)
+@click.option("--field", "fields", multiple=True, required=True)
+@click.option(
+    "--decade", "decades", multiple=True, type=int, default=(1990, 2020), show_default=True
+)
+@click.option("--seed", "seeds", multiple=True, default=(1, 2, 3, 4, 5), show_default=True)
+@click.option(
+    "--encoder", "model_name", default="allenai/scibert_scivocab_uncased", show_default=True
+)
+@click.option("--cap", type=int, default=500, show_default=True)
+@click.option("--output", type=click.Path(path_type=Path), required=True)
+def drift_senses(  # noqa: PLR0913
+    raw_dir: Path,
+    words: tuple[str, ...],
+    fields: tuple[str, ...],
+    decades: tuple[int, ...],
+    seeds: tuple[int, ...],
+    model_name: str,
+    cap: int,
+    output: Path,
+) -> None:
+    """Senses of words by field and decade, from one contextual encoder (round C)."""
+    from interpretant.drift.senses import (  # noqa: PLC0415
+        TransformerEncoder,
+        cased_abstracts,
+        sense_runs,
+    )
+
+    abstracts = {
+        (field, decade): cased_abstracts(raw_dir, field, decade)
+        for field in fields
+        for decade in decades
+    }
+    encoder = TransformerEncoder(model_name)
+    table = sense_runs(abstracts, words, seeds, encoder, cap, log=console.print)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    table.to_parquet(output, index=False)
+    console.print(f"[green]{len(table):,} rows[/green] → {output}")
+
+
 @drift.command("grid")
 @click.option(
     "--model-dir",

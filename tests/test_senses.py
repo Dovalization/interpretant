@@ -1,0 +1,204 @@
+"""Sense induction on synthetic occurrences with planted senses and a fake encoder.
+
+The fake encoder places a context by its cue words: the attention mechanism's (*transformer,
+layer, weights*) on one axis, selective attention's (*visual, task, participants*) on another.
+AI's 2020s abstracts use the mechanism sense, AI's 1990s abstracts and psychology's use the
+other, so the clustering must find two senses and the measures must place the change in AI.
+"""
+
+from __future__ import annotations
+
+import gzip
+import json
+import random
+from collections.abc import Sequence
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from interpretant.drift.senses import (
+    Occurrence,
+    cased_abstracts,
+    context_around,
+    context_words,
+    distribution,
+    examples,
+    induce_senses,
+    jensen_shannon,
+    sample_occurrences,
+    sense_runs,
+    sense_shares,
+    span_mask,
+    word_pattern,
+)
+
+MECHANISM = ("transformer", "layer", "weights", "encoder")
+SELECTIVE = ("visual", "task", "participants", "selective")
+
+
+class CueEncoder:
+    """A context's vector counts its mechanism and selective-attention cues, plus noise."""
+
+    def __init__(self) -> None:
+        self.calls = 0
+        self.rng = np.random.default_rng(0)
+
+    def encode(self, occurrences: Sequence[Occurrence]) -> np.ndarray:
+        self.calls += 1
+        rows = []
+        for occurrence in occurrences:
+            words = occurrence.context.lower().split()
+            rows.append(
+                [
+                    sum(word in MECHANISM for word in words),
+                    sum(word in SELECTIVE for word in words),
+                    0.1,
+                ]
+            )
+        return np.array(rows, dtype=float) + self.rng.normal(0, 0.05, (len(rows), 3))
+
+
+def abstract(rng: random.Random, cues: Sequence[str], number: int) -> tuple[str, str]:
+    filler = " ".join(rng.choices(["the", "study", "results", "show", "we", "data"], k=8))
+    sentence = f"We report {' '.join(rng.sample(list(cues), 3))} attention in {filler}."
+    return f"W{number}", f"Background matters here. {sentence} Further work follows."
+
+
+@pytest.fixture(scope="module")
+def abstracts() -> dict[tuple[str, int], list[tuple[str, str]]]:
+    rng = random.Random(1)
+    plan = {
+        ("ai", 1990): SELECTIVE,
+        ("ai", 2020): MECHANISM,
+        ("psychology", 1990): SELECTIVE,
+        ("psychology", 2020): SELECTIVE,
+    }
+    cells: dict[tuple[str, int], list[tuple[str, str]]] = {}
+    for index, (cell, cues) in enumerate(plan.items()):
+        documents = [abstract(rng, cues, index * 1_000 + n) for n in range(60)]
+        documents += [(f"X{index}{n}", "No target word in this one at all.") for n in range(20)]
+        cells[cell] = documents
+    return cells
+
+
+def test_the_word_matches_in_any_case_and_inside_compounds_only_as_a_whole_word() -> None:
+    pattern = word_pattern("attention")
+
+    assert pattern.search("Self-attention layers")
+    assert pattern.search("ATTENTION was paid")
+    assert not pattern.search("attentional control")
+
+
+def test_the_context_is_the_sentence_and_keeps_the_occurrence_offsets() -> None:
+    text = "First sentence here. Selective attention (SA) matters! Last one."
+    start = text.index("attention")
+
+    context, begin, end = context_around(text, start, start + len("attention"))
+
+    assert context == "Selective attention (SA) matters!"
+    assert context[begin:end] == "attention"
+
+
+def test_a_long_sentence_is_cut_to_a_window_around_the_occurrence() -> None:
+    words = [f"w{n}" for n in range(300)]
+    words[200] = "attention"
+    text = " ".join(words) + "."
+    start = text.index("attention")
+
+    context, begin, end = context_around(text, start, start + 9, max_words=20)
+
+    assert len(context.split()) == 20
+    assert context[begin:end] == "attention"
+
+
+def test_sampling_takes_one_occurrence_per_abstract_up_to_the_cap_and_repeats_by_seed(
+    abstracts: dict[tuple[str, int], list[tuple[str, str]]],
+) -> None:
+    first = sample_occurrences(abstracts, "attention", seed=1, cap=25)
+    again = sample_occurrences(abstracts, "attention", seed=1, cap=25)
+    other = sample_occurrences(abstracts, "attention", seed=2, cap=25)
+
+    assert first == again
+    assert {occurrence.work_id for occurrence in first} != {o.work_id for o in other}
+    assert len(first) == 4 * 25
+    assert len({(o.field, o.decade, o.work_id) for o in first}) == len(first)
+    assert all(o.context[o.start : o.end].lower() == "attention" for o in first)
+
+
+def test_the_span_mask_keeps_overlapping_tokens_and_drops_special_ones() -> None:
+    offsets = np.array([[0, 0], [0, 4], [4, 13], [13, 14], [15, 20], [0, 0]])
+
+    assert span_mask(offsets, 4, 13).tolist() == [False, False, True, False, False, False]
+    assert span_mask(offsets, 2, 14).tolist() == [False, True, True, True, False, False]
+
+
+def test_the_silhouette_picks_the_number_of_planted_clusters() -> None:
+    rng = np.random.default_rng(3)
+    centres = np.eye(3) * 5
+    vectors = np.vstack([centre + rng.normal(0, 0.3, (40, 3)) for centre in centres])
+
+    labels, found = induce_senses(vectors, seed=1)
+
+    assert len(found) == 3
+    assert all(len(set(labels[n * 40 : (n + 1) * 40])) == 1 for n in range(3))
+
+
+def test_the_new_sense_is_found_in_ai_and_psychology_does_not_change(
+    abstracts: dict[tuple[str, int], list[tuple[str, str]]],
+) -> None:
+    encoder = CueEncoder()
+
+    table = sense_runs(abstracts, ["attention"], [1, 2], encoder, cap=30, log=lambda _: None)
+
+    rows = table[table.seed == 1]
+    shares = sense_shares(rows)
+    assert set(table.senses) == {2}
+    assert jensen_shannon(distribution(shares, "ai", 1990), distribution(shares, "ai", 2020)) > 0.9
+    psychology = [distribution(shares, "psychology", decade) for decade in (1990, 2020)]
+    assert jensen_shannon(*psychology) < 0.01
+    mechanism = int(rows[(rows.field == "ai") & (rows.decade == 2020)].sense.mode()[0])
+    assert set(context_words(rows, mechanism, top=4)) == set(MECHANISM)
+    assert all(
+        any(cue in context for cue in MECHANISM) for context in examples(rows, mechanism, top=5)
+    )
+
+
+def test_an_occurrence_drawn_in_several_seeds_is_encoded_once(
+    abstracts: dict[tuple[str, int], list[tuple[str, str]]],
+) -> None:
+    encoder = CueEncoder()
+
+    table = sense_runs(abstracts, ["attention"], [1, 2, 3], encoder, cap=60, log=lambda _: None)
+
+    assert encoder.calls == 1
+    assert len(table) == 3 * 4 * 60
+
+
+def test_shares_fill_unused_senses_with_zero_and_sum_to_one() -> None:
+    occurrences = [("ai", 1990, 0), ("ai", 1990, 0), ("ai", 2020, 1), ("ai", 2020, 2)]
+    rows = pd.DataFrame(
+        [{"field": f, "decade": d, "sense": s, "senses": 3} for f, d, s in occurrences]
+    )
+
+    shares = sense_shares(rows)
+
+    assert distribution(shares, "ai", 1990).tolist() == [1.0, 0.0, 0.0]
+    assert distribution(shares, "ai", 2020).tolist() == [0.0, 0.5, 0.5]
+    assert jensen_shannon(np.array([1.0, 0.0]), np.array([0.0, 1.0])) == pytest.approx(1.0)
+
+
+def test_cased_abstracts_keep_case_and_punctuation_and_drop_the_label(tmp_path: Path) -> None:
+    text = (
+        "Abstract: We studied how People direct their attention. The results, which were "
+        "clear, show that attention follows the task and that the effect is large."
+    )
+    records = [{"id": "W1", "year": 1995, "type": "article", "authors": [], "abstract": text}]
+    (tmp_path / "psychology").mkdir()
+    with gzip.open(tmp_path / "psychology" / "1990.jsonl.gz", "wt", encoding="utf-8") as cell:
+        cell.write("\n".join(json.dumps(record) for record in records))
+
+    found = cased_abstracts(tmp_path, "psychology", 1990)
+
+    assert found == [("W1", text.removeprefix("Abstract: "))]

@@ -53,6 +53,7 @@ drift perplexity --drop-shared --fixed-budget 200000 --seed 1 ... --seed 5
 drift separability                                      data/drift/separability_{pairs,assignments}.parquet
 drift heldout                                           data/drift/heldout.parquet
 drift direction                                         data/drift/direction_assignments.parquet
+drift senses --word attention --field ai ... --output data/drift/senses_<encoder>.parquet
 figures                                                 figures/*.png
 ```
 
@@ -97,7 +98,10 @@ analysis: predictions first, in their own commit.
   pairwise accuracy and assignment shares per decade; `separability_runs`, rounds S and V),
   `heldout.py` (held-out minus training cross-entropy of every cell's bigram model;
   `heldout_runs`, round M), `direction.py` (each decade's classifier on later decades; the
-  relative gain net of every field's drift and the seed-noise `present` rule; round N).
+  relative gain net of every field's drift and the seed-noise `present` rule; round N; the
+  two-target contrast and the planted check, round W), `senses.py` (contextual embeddings of
+  a word's occurrences from the cased abstracts, clustered into senses shared by every cell;
+  sense shares, Jensen-Shannon divergence, context words and examples; round C).
 - `predictions.py`: helpers the scorers share (`report`, `load_vectors`, `word_count`,
   `overlap`). Scorers are frozen, so a change here must leave every scorer's output
   byte-identical: rerun them all and diff.
