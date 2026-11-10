@@ -89,6 +89,35 @@ exist and which no rung uses as evidence: the 186 distinct usages in check 2b's 
   TypeSafe through its API; no personal data. TypeSafe's privacy policy says it does not train on
   user data; its retention period is not stated in its public documentation.
 
+### Pilot results (2026-11-10, `scripts/pilot_labellers.py`)
+
+Run as written, except that JEV first labelled 10 usages as a test of the calls (the same usages
+were labelled again in the full run). The author's judgements count 96 pairs here, not 95: check
+2b′ also left out a pair the second judge could not decide.
+
+| | Sonnet 5.5 | JEV 1.14 |
+|---|---|---|
+| Spearman with the author, original judgements (96 pairs) | 0.501 | 0.429 (probabilities 0.479) |
+| Spearman with the author, with the correction pass | 0.545 | 0.474 (probabilities 0.548) |
+| *other* / *unclear* | 2% / 1% | 1% / 4% |
+| Consistency on repeats | 94% (17 of 18) | not measured |
+| Time and tokens | 15 s, 37,180 input and 4,698 output tokens (CLI-reported $0.196) | 36 s, 125,184 input tokens (about $0.005) |
+
+Reference figures over the same pairs: XL-LEXEME 0.456 and 0.494, the second judge 0.616 and
+0.657. The labellers agreed on 89% of the 186 usages (kappa 0.883), on every *attention* usage
+and on 24 to 28 of each other word's 30 to 32.
+
+Read from the 21 disagreements: most fall on boundaries the draft lists drew badly (*component*
+as a part of a system or of an abstract whole; *platform* for media delivery channels, which no
+listed sense describes; *having to*, obligation, not listed). Where one labeller was plainly
+wrong, it was more often JEV (a *neural network* read as an abstract system, a 2000s dialogue
+system's *prompts* read as language-model input, *prompt health tracking* and *without having
+access* left unclear); Sonnet left unclear a *network* "studied by Amit et al." that JEV read
+correctly as a neural network. With 96 pairs and a two-valued measure, the difference between the
+labellers' correlations is within noise; both sit near XL-LEXEME and below the second judge on
+this proxy, which scores whether two usages share a label, not whether a label is right. Rung 2's
+gold labels test that directly.
+
 ## The ladder
 
 Each rung has its own pre-registration and stopping rule. A failed rung 1 or 2 stops the
