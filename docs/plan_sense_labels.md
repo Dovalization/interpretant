@@ -131,6 +131,27 @@ same label; *other* 4%, *unclear* 1%. Spearman with the author 0.510 (original j
 0.552 (with the correction pass), against the CLI blocks' 0.501 and 0.545. One usage per request
 changes the labels little. At the measured tokens the ladder costs about $28 on Sonnet.
 
+## Measuring shares on this corpus (added 2026-11-10, with the author)
+
+From round E on, a word's senses on this corpus are labelled by the cue-seeded classifier, and a
+cell's meaning is the share of the word's occurrences in each sense, never a count of cue matches
+(cue vocabulary changes over time on its own, and cells differ in size).
+
+- **Labels.** The classifier labels every sampled occurrence, with or without a cue word; the cue
+  matches are only its training material.
+- **Adjusted classify and count.** Raw shares from a classifier are biased towards the senses it
+  over-predicts. Each word's confusion matrix is estimated from the out-of-fold predictions on its
+  cue-labelled training sentences (the review page's check), and a cell's shares are corrected by
+  non-negative least squares (`interpretant.drift.classifier.adjusted_shares`). Assumptions,
+  stated with every result: the classifier confuses senses the same way in every field and decade,
+  and the cue labels the matrix is estimated from are close to correct once the author's review
+  has cleaned them. Raw and adjusted shares are both reported; which one a prediction uses is fixed
+  in its round.
+- **Review loop.** Cue words are refined with the author on the review page, guided by the
+  leave-one-cue-out agreement and the out-of-fold doubt of each training sentence, and only by
+  those: no known answer, gold judgement or result is looked at while the cues are tuned. The lists
+  and cues are frozen and committed before the classifier labels anything that is scored.
+
 ## The ladder
 
 Each rung has its own pre-registration and stopping rule. A failed rung 1 or 2 stops the
