@@ -93,3 +93,13 @@ def test_adjusted_shares_never_go_negative() -> None:
 
     shares = adjusted_shares(["a"] * 5 + ["b"] * 95, np.array([[0.9, 0.1], [0.3, 0.7]]), ["a", "b"])
     assert (shares >= 0).all() and shares.sum() == pytest.approx(1.0)
+
+
+def test_tidy_removes_line_breaks_and_keeps_positions() -> None:
+    from interpretant.drift.classifier import tidy
+
+    text = "one of the \\nrequired\ncomponents"
+    cleaned = tidy(text)
+    assert "\\n" not in cleaned and "\n" not in cleaned
+    assert len(cleaned) == len(text)
+    assert cleaned.index("components") == text.index("components")

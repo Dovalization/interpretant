@@ -98,3 +98,9 @@ def adjusted_shares(
     solution, _ = nnls(matrix.T, observed)
     total = solution.sum()
     return np.asarray(solution / total) if total > 0 else observed
+
+
+def tidy(text: str) -> str:
+    """The text with literal ``\\n`` sequences and line breaks turned into spaces, keeping every
+    character's position, so a usage's span stays valid."""
+    return text.replace("\\n", "  ").replace("\n", " ").replace("\r", " ")

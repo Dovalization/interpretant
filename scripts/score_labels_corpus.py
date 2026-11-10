@@ -30,7 +30,7 @@ from scipy.stats import spearmanr
 sys.path.insert(0, str(Path(__file__).parent))
 import pilot_labellers as pilot  # noqa: E402
 
-from interpretant.drift.classifier import cue_sense, example_usage, normalised  # noqa: E402
+from interpretant.drift.classifier import cue_sense, example_usage, normalised, tidy  # noqa: E402
 from interpretant.drift.labels import (  # noqa: E402
     BatchLabeller,
     Item,
@@ -84,12 +84,13 @@ def collect() -> None:
 
 
 def corpus_rows() -> list[dict[str, object]]:
-    return [json.loads(line) for line in USAGES.read_text(encoding="utf-8").splitlines()]
+    rows = [json.loads(line) for line in USAGES.read_text(encoding="utf-8").splitlines()]
+    return [{**row, "text": tidy(str(row["text"]))} for row in rows]
 
 
 def gold_usages() -> dict[str, tuple[str, Usage]]:
-    """Check 2b's 186 usages, by the pilot's identifiers."""
-    return pilot.usages()
+    """Check 2b's 186 usages, by the pilot's identifiers, their text tidied."""
+    return {uid: (w, Usage(tidy(u.text), u.start, u.end)) for uid, (w, u) in pilot.usages().items()}
 
 
 def encode() -> None:
