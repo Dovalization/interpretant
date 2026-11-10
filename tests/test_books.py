@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from interpretant.corpus.books import BooksSource
+from interpretant.corpus.books import BooksSource, ingest_books
 
 FAKE_TEXT_A = "the quick brown fox jumps over the lazy dog " * 20
 FAKE_TEXT_B = "consciousness embodiment perception affordance representation " * 20
@@ -137,3 +137,26 @@ def test_decade_documents_pairs_each_present_book_with_its_author(books_dir: Pat
 
     assert [author for author, _ in documents] == ["Author A"]
     assert documents[0][1].startswith("the quick brown fox")
+
+
+def test_ingest_books_writes_one_file_per_decade_with_books(
+    books_dir: Path, tmp_path: Path
+) -> None:
+    texts = tmp_path / "texts"
+
+    ingested = ingest_books(BooksSource(books_dir), texts, range(1960, 1990, 10), 250_000)
+
+    assert [(d.decade, d.books, d.largest_author) for d in ingested] == [
+        (1960, 1, "Author A"),
+        (1970, 1, "Author B"),
+    ]
+    assert sorted(path.name for path in texts.iterdir()) == ["books_1960.txt", "books_1970.txt"]
+    assert ingested[0].tokens == len((texts / "books_1960.txt").read_text().split())
+
+
+def test_ingest_books_can_leave_out_the_largest_author(books_dir: Path, tmp_path: Path) -> None:
+    ingested = ingest_books(
+        BooksSource(books_dir), tmp_path, [1960], 250_000, leave_out_largest_author=True
+    )
+
+    assert [(d.books, d.tokens, d.largest_author) for d in ingested] == [(0, 0, "Author A")]

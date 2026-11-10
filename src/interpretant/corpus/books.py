@@ -10,8 +10,11 @@ A manifest file (``manifest.json``) tracks metadata for each book.
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
+from dataclasses import dataclass
 from pathlib import Path
 
+from interpretant.corpus.caps import cap_author_tokens, largest_author
 from interpretant.corpus.preprocessing import preprocess_text
 
 
@@ -127,3 +130,42 @@ class BooksSource:
             "manifest_entries": len(manifest_entries),
             "missing": len(missing),
         }
+
+
+@dataclass(frozen=True)
+class IngestedDecade:
+    """One decade written by :func:`ingest_books`."""
+
+    decade: int
+    books: int
+    tokens: int
+    largest_author: str
+
+
+def ingest_books(
+    source: BooksSource,
+    texts_dir: Path,
+    decades: Iterable[int],
+    author_cap: int,
+    leave_out_largest_author: bool = False,
+) -> list[IngestedDecade]:
+    """Write ``books_<decade>.txt`` for every decade with books, each author capped at
+    ``author_cap`` tokens.
+
+    With ``leave_out_largest_author`` each decade's largest author is dropped first (the
+    leave-one-author-out check); ``largest_author`` then names the author left out.
+    """
+    texts_dir.mkdir(parents=True, exist_ok=True)
+    ingested = []
+    for decade in decades:
+        books = source.decade_documents(decade)
+        if not books:
+            continue
+        top = largest_author(books)
+        if leave_out_largest_author:
+            books = [(author, text) for author, text in books if author != top]
+        documents = cap_author_tokens(books, author_cap)
+        (texts_dir / f"books_{decade}.txt").write_text("\n".join(documents), encoding="utf-8")
+        tokens = sum(len(document.split()) for document in documents)
+        ingested.append(IngestedDecade(decade, len(books), tokens, top))
+    return ingested

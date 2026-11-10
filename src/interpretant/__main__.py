@@ -65,37 +65,30 @@ def corpus_books_ingest(  # noqa: PLR0913
     leave_out_largest_author: bool,
 ) -> None:
     """Preprocess extracted book texts into decade-sliced token files, capping authors."""
-    from interpretant.corpus.books import BooksSource
-    from interpretant.corpus.caps import cap_author_tokens, largest_author
+    from interpretant.corpus.books import BooksSource, ingest_books  # noqa: PLC0415
 
-    source = BooksSource(books_dir=books_dir)
     texts_dir = output_dir or Path("data/processed/books/texts")
-    texts_dir.mkdir(parents=True, exist_ok=True)
-
     console.print("[bold]Ingesting books corpus[/bold]")
     console.print(f"  books dir  : {books_dir}")
     console.print(f"  output dir : {texts_dir}")
     console.print(f"  decades    : {start}–{end - 1}")
     console.print(f"  author cap : {author_cap:,} tokens")
-
+    ingested = ingest_books(
+        BooksSource(books_dir),
+        texts_dir,
+        range(start, end, 10),
+        author_cap,
+        leave_out_largest_author,
+    )
     table = Table(title="Books ingest results", show_lines=True)
     table.add_column("Decade", style="cyan")
     table.add_column("Books", justify="right")
     table.add_column("Tokens", justify="right")
     table.add_column("Left out" if leave_out_largest_author else "Largest author")
-
-    for decade in range(start, end, 10):
-        books = source.decade_documents(decade)
-        if not books:
-            continue
-        top = largest_author(books)
-        if leave_out_largest_author:
-            books = [(author, text) for author, text in books if author != top]
-        documents = cap_author_tokens(books, author_cap)
-        (texts_dir / f"books_{decade}.txt").write_text("\n".join(documents), encoding="utf-8")
-        tokens = sum(len(document.split()) for document in documents)
-        table.add_row(str(decade), str(len(books)), f"{tokens:,}", top)
-
+    for decade in ingested:
+        table.add_row(
+            str(decade.decade), str(decade.books), f"{decade.tokens:,}", decade.largest_author
+        )
     console.print(table)
     console.print("[green]Done.[/green]")
 
@@ -291,34 +284,24 @@ def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int
     as duplicates, archive catalogue or citation records, scraped web pages, or by the 1% author
     cap.
     """
-    from interpretant.corpus.openalex import FIELDS, OpenAlexSource
+    from interpretant.corpus.openalex import ingest_fields  # noqa: PLC0415
 
-    output_dir.mkdir(parents=True, exist_ok=True)
+    decades = list(range(start, end, 10))
+    cleaned = ingest_fields(raw_dir, output_dir, decades)
     table = Table(title="OpenAlex ingest (kept −dropped per cell)", show_lines=False)
     table.add_column("Field", style="cyan")
-    decades = list(range(start, end, 10))
     for decade in decades:
         table.add_column(str(decade), justify="right")
-    for field in FIELDS:
-        source = OpenAlexSource(raw_dir, field)
-        counts = []
-        for decade in decades:
-            cell = source.cell(decade)
-            if cell.documents:
-                (output_dir / f"{field}_{decade}.txt").write_text(
-                    "\n".join(cell.documents), "utf-8"
-                )
-            dropped = (
-                cell.duplicates
-                + cell.catalogue_records
-                + cell.web_pages
-                + cell.non_english
-                + cell.author_capped
-            )
-            counts.append(
-                f"{len(cell.documents):,} −{dropped:,}" if dropped else f"{len(cell.documents):,}"
-            )
-        table.add_row(field, *counts)
+    for field, cells in cleaned.items():
+        table.add_row(
+            field,
+            *(
+                f"{len(cell.documents):,} −{cell.dropped:,}"
+                if cell.dropped
+                else f"{len(cell.documents):,}"
+                for cell in cells.values()
+            ),
+        )
     console.print(table)
 
 
@@ -375,12 +358,15 @@ def corpus_phrases_learn(  # noqa: PLR0913
 
     Also writes ``<output>.tsv``, the phrases sorted by score, for review.
     """
-    from interpretant.corpus.audit import load_target_words
-    from interpretant.corpus.phrases import learn_phrases, sample_chunks, split_targets
-
-    paths = sorted(
-        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
+    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
+    from interpretant.corpus.files import source_texts  # noqa: PLC0415
+    from interpretant.corpus.phrases import (  # noqa: PLC0415
+        learn_phrases,
+        sample_chunks,
+        split_targets,
     )
+
+    paths = source_texts(processed_dir, sources)
     protected, forced = split_targets(load_target_words(words_file))
     console.print(f"  files     : {len(paths)} (≤{tokens_per_file:,} tokens each)")
     console.print(f"  protected : {len(protected)} targets   forced : {sorted(forced)}")
@@ -430,19 +416,13 @@ def corpus_phrases_apply(
     processed_dir: Path, sources: tuple[str, ...], model_path: Path, output_dir: Path
 ) -> None:
     """Rewrite every processed file with phrases merged, mirroring the directory layout."""
-    from interpretant.corpus.phrases import PhraseModel
+    from interpretant.corpus.files import rewrite_texts, source_texts  # noqa: PLC0415
+    from interpretant.corpus.phrases import PhraseModel  # noqa: PLC0415
 
     model = PhraseModel.load(model_path)
-    paths = sorted(
-        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
-    )
-    for path in paths:
-        target = output_dir / path.relative_to(processed_dir)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with path.open(encoding="utf-8") as source, target.open("w", encoding="utf-8") as out:
-            for line in source:
-                out.write(model.apply(line) + "\n")
-        console.print(f"  {target}")
+    paths = source_texts(processed_dir, sources)
+    written = rewrite_texts(paths, processed_dir, output_dir, model.apply)
+    console.print(f"[green]{len(written)} files[/green] → {output_dir}")
 
 
 @corpus.group("lemmas")
@@ -496,15 +476,14 @@ def corpus_lemmas_learn(  # noqa: PLR0913
     from collections import Counter  # noqa: PLC0415
 
     from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
+    from interpretant.corpus.files import source_texts  # noqa: PLC0415
     from interpretant.corpus.lemmas import (  # noqa: PLC0415
         count_types,
         learn_lemma_map,
         read_overrides,
     )
 
-    paths = sorted(
-        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
-    )
+    paths = source_texts(processed_dir, sources)
     console.print(f"  counting types in {len(paths)} files")
     counts = count_types(tqdm(paths, unit="file"))
     protected = set(load_target_words(words_file))
@@ -564,19 +543,13 @@ def corpus_lemmas_apply(
     processed_dir: Path, sources: tuple[str, ...], map_path: Path, output_dir: Path
 ) -> None:
     """Rewrite every processed file with the lemma map applied, mirroring the layout."""
+    from interpretant.corpus.files import rewrite_texts, source_texts  # noqa: PLC0415
     from interpretant.corpus.lemmas import LemmaMap  # noqa: PLC0415
 
     lemma_map = LemmaMap.load(map_path)
-    paths = sorted(
-        path for source in sources for path in processed_dir.glob(f"{source}/texts/*.txt")
-    )
-    for path in tqdm(paths, unit="file"):
-        target = output_dir / path.relative_to(processed_dir)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with path.open(encoding="utf-8") as source, target.open("w", encoding="utf-8") as out:
-            for line in source:
-                out.write(lemma_map.apply(line) + "\n")
-    console.print(f"[green]{len(paths)} files[/green] → {output_dir}")
+    paths = source_texts(processed_dir, sources)
+    written = rewrite_texts(paths, processed_dir, output_dir, lemma_map.apply)
+    console.print(f"[green]{len(written)} files[/green] → {output_dir}")
 
 
 @corpus.command("audit")
@@ -613,32 +586,27 @@ def corpus_audit(
     output: Path | None,
 ) -> None:
     """Report cell volume, target-word coverage and books-manifest risks."""
-    import json
-    from dataclasses import asdict
+    import json  # noqa: PLC0415
 
-    from interpretant.corpus.audit import (
-        author_concentration,
-        flag_manifest_entries,
+    from interpretant.corpus.audit import (  # noqa: PLC0415
+        audit_corpus,
         format_decade_ranges,
         load_target_words,
-        merge_by_decade,
-        reliable_transitions,
-        scan_processed,
     )
-    from interpretant.corpus.books import BooksSource
+    from interpretant.corpus.books import BooksSource  # noqa: PLC0415
 
-    targets = load_target_words(words_file)
-    cells = scan_processed(processed_dir, set(targets))
-    merged = merge_by_decade(cells)
-    sources = sorted({cell.source for cell in cells})
-    tokens_by_cell = {(cell.source, cell.decade): cell.tokens for cell in cells}
+    audit = audit_corpus(
+        processed_dir, load_target_words(words_file), BooksSource(books_dir), min_occurrences
+    )
+    sources = sorted({cell.source for cell in audit.cells})
+    tokens_by_cell = {(cell.source, cell.decade): cell.tokens for cell in audit.cells}
 
     volume_table = Table(title="Tokens per cell (millions)", show_lines=False)
     volume_table.add_column("Decade", style="cyan")
     for source in sources:
         volume_table.add_column(source, justify="right")
     volume_table.add_column("merged", justify="right", style="bold")
-    for decade, total in merged.items():
+    for decade, total in audit.merged.items():
         cells_row = [
             f"{tokens_by_cell[(source, decade)] / 1e6:.2f}"
             if (source, decade) in tokens_by_cell
@@ -648,10 +616,7 @@ def corpus_audit(
         volume_table.add_row(str(decade), *cells_row, f"{total.tokens / 1e6:.2f}")
     console.print(volume_table)
 
-    transitions_total = max(len(merged) - 1, 0)
-    transitions_by_word = {
-        word: reliable_transitions(merged, word, min_occurrences) for word in targets
-    }
+    transitions_total = max(len(audit.merged) - 1, 0)
     coverage_table = Table(
         title=f"Target coverage (merged, ≥{min_occurrences} occurrences)", show_lines=False
     )
@@ -659,37 +624,30 @@ def corpus_audit(
     coverage_table.add_column("Reliable transitions", justify="right")
     coverage_table.add_column("Decades at threshold")
     coverage_table.add_column("Min–max count", justify="right")
-    for word in targets:
-        counts = [cell.target_counts[word] for cell in merged.values()]
-        covered = [d for d, cell in merged.items() if cell.target_counts[word] >= min_occurrences]
-        reliable = f"{len(transitions_by_word[word])}/{transitions_total}"
+    for word in audit.targets:
+        counts = [cell.target_counts[word] for cell in audit.merged.values()]
+        covered = [
+            decade
+            for decade, cell in audit.merged.items()
+            if cell.target_counts[word] >= min_occurrences
+        ]
+        transitions = audit.reliable_transitions[word]
+        reliable = f"{len(transitions)}/{transitions_total}"
         coverage_table.add_row(
             word,
-            reliable if transitions_by_word[word] else f"[red]{reliable}[/red]",
+            reliable if transitions else f"[red]{reliable}[/red]",
             format_decade_ranges(covered) or "—",
             f"{min(counts, default=0):,}–{max(counts, default=0):,}",
         )
     console.print(coverage_table)
 
-    books = BooksSource(books_dir=books_dir)
-    present, missing = books.validate()
-    book_words = [
-        (
-            str(entry.get("decade", "")),
-            str(entry.get("author", "")),
-            len(books.entry_path(entry).read_text(encoding="utf-8", errors="replace").split()),
-        )
-        for entry in present
-        if str(entry.get("decade", "")).endswith("0s")
-    ]
-    concentration = author_concentration(book_words)
     concentration_table = Table(title="Books: largest author per decade", show_lines=False)
     concentration_table.add_column("Decade", style="cyan")
     concentration_table.add_column("Books", justify="right")
     concentration_table.add_column("Words (M)", justify="right")
     concentration_table.add_column("Top author")
     concentration_table.add_column("Share", justify="right")
-    for summary in concentration:
+    for summary in audit.author_concentration:
         share = f"{summary.top_share:.0%}"
         concentration_table.add_row(
             summary.decade,
@@ -700,30 +658,23 @@ def corpus_audit(
         )
     console.print(concentration_table)
 
-    flags = sorted(flag_manifest_entries(books.manifest()), key=lambda flag: flag.decade)
-    flag_table = Table(title=f"Books: dating risks ({len(flags)} entries)", show_lines=False)
+    flag_table = Table(
+        title=f"Books: dating risks ({len(audit.book_flags)} entries)", show_lines=False
+    )
     flag_table.add_column("Decade", style="cyan")
     flag_table.add_column("Author")
     flag_table.add_column("Title")
     flag_table.add_column("Reasons")
-    for flag in flags:
+    for flag in audit.book_flags:
         flag_table.add_row(flag.decade, flag.author, flag.title[:50], "; ".join(flag.reasons))
     console.print(flag_table)
-    console.print(f"Manifest entries without a file on disk: {len(missing)}")
+    console.print(f"Manifest entries without a file on disk: {len(audit.missing_books)}")
 
     if output is not None:
-        report = {
-            "min_occurrences": min_occurrences,
-            "cells": [
-                {**asdict(cell), "target_counts": dict(cell.target_counts)} for cell in cells
-            ],
-            "reliable_transitions": transitions_by_word,
-            "author_concentration": [asdict(summary) for summary in concentration],
-            "book_flags": [asdict(flag) for flag in flags],
-            "missing_books": [str(books.entry_path(entry)) for entry in missing],
-        }
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+        output.write_text(
+            json.dumps(audit.to_json(), indent=2, ensure_ascii=False), encoding="utf-8"
+        )
         console.print(f"[green]Wrote {output}[/green]")
 
 

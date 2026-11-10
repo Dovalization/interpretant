@@ -13,6 +13,7 @@ from interpretant.corpus.openalex import (
     cell_path,
     clean_cell,
     download_cell,
+    ingest_fields,
     work_record,
 )
 
@@ -260,3 +261,19 @@ def test_sources_for_batches_ids_and_fills_missing_works() -> None:
     assert sources[ids[0]] == ("S1", "CHI")
     assert sources[ids[IDS_PER_REQUEST - 1]] == (None, None)
     assert sources[ids[IDS_PER_REQUEST]] == (None, None)
+
+
+def test_ingest_fields_writes_non_empty_cells_and_counts_what_was_dropped(tmp_path: Path) -> None:
+    write_cell(
+        tmp_path / "raw",
+        "hci",
+        1990,
+        ["Mental models of user interfaces", "Mental models of user interfaces"],
+    )
+
+    cleaned = ingest_fields(tmp_path / "raw", tmp_path / "texts", [1990, 2000])
+
+    assert cleaned["hci"][1990].documents == ["mental model of user interface"]
+    assert cleaned["hci"][1990].dropped == 1
+    assert cleaned["hci"][2000].documents == []
+    assert [path.name for path in (tmp_path / "texts").iterdir()] == ["hci_1990.txt"]

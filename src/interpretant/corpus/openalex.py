@@ -255,6 +255,17 @@ class CleanedCell:
     non_english: int = 0
     author_capped: int = 0
 
+    @property
+    def dropped(self) -> int:
+        """Documents removed by the cleaning rules (abstracts too short to count are not)."""
+        return (
+            self.duplicates
+            + self.catalogue_records
+            + self.web_pages
+            + self.non_english
+            + self.author_capped
+        )
+
 
 def clean_cell(
     records: Iterable[dict[str, Any]], max_author_share: float = MAX_AUTHOR_SHARE, seed: int = 42
@@ -475,3 +486,23 @@ class OpenAlexSource:
 
     def cell(self, decade: int) -> CleanedCell:
         return clean_cell(self._records(decade))
+
+
+def ingest_fields(
+    raw_dir: Path, output_dir: Path, decades: Iterable[int]
+) -> dict[str, dict[int, CleanedCell]]:
+    """Clean every field's downloaded cells and write the non-empty ones to
+    ``<output_dir>/<field>_<decade>.txt``; return the cleaned cells by field and decade."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    cleaned: dict[str, dict[int, CleanedCell]] = {}
+    for field in FIELDS:
+        source = OpenAlexSource(raw_dir, field)
+        cleaned[field] = {}
+        for decade in decades:
+            cell = source.cell(decade)
+            if cell.documents:
+                (output_dir / f"{field}_{decade}.txt").write_text(
+                    "\n".join(cell.documents), "utf-8"
+                )
+            cleaned[field][decade] = cell
+    return cleaned

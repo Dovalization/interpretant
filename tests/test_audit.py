@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from interpretant.corpus.audit import (
+    audit_corpus,
     author_concentration,
     flag_manifest_entries,
     format_decade_ranges,
@@ -13,6 +14,7 @@ from interpretant.corpus.audit import (
     reliable_transitions,
     scan_processed,
 )
+from interpretant.corpus.books import BooksSource
 
 TARGETS = {"network", "affordance"}
 
@@ -130,3 +132,31 @@ def test_author_concentration_reports_top_share_per_decade() -> None:
     assert summaries[0].top_share == 0.9
     assert summaries[0].books == 2
     assert summaries[1].top_share == 1.0
+
+
+def test_audit_corpus_counts_cells_and_reports_json(tmp_path: Path) -> None:
+    _write_cell(tmp_path, "hci", 1990, ["network network affordance"])
+    _write_cell(tmp_path, "hci", 2000, ["network affordance"])
+
+    audit = audit_corpus(tmp_path, ["network"], BooksSource(tmp_path / "no_books"), 1)
+    report = audit.to_json()
+
+    assert audit.reliable_transitions == {"network": [(1990, 2000)]}
+    assert audit.merged[1990].target_counts["network"] == 2
+    assert report["cells"] == [
+        {
+            "source": "hci",
+            "decade": 1990,
+            "documents": 1,
+            "tokens": 3,
+            "target_counts": {"network": 2},
+        },
+        {
+            "source": "hci",
+            "decade": 2000,
+            "documents": 1,
+            "tokens": 2,
+            "target_counts": {"network": 1},
+        },
+    ]
+    assert report["missing_books"] == []

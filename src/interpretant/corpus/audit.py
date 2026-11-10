@@ -10,8 +10,10 @@ from __future__ import annotations
 import re
 from collections import Counter
 from collections.abc import Iterable
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
+
+from interpretant.corpus.books import BooksSource
 
 _CELL_FILENAME = re.compile(r"^(?P<source>[a-z0-9]+)_(?P<decade>\d{4})\.txt$")
 # "Zimmern translation", "English translation (Baskin, 1959)"; not "inscription, translation".
@@ -187,3 +189,60 @@ def author_concentration(
             )
         )
     return summaries
+
+
+@dataclass
+class CorpusAudit:
+    """Everything ``corpus audit`` reports, built by :func:`audit_corpus`."""
+
+    min_occurrences: int
+    targets: list[str]
+    cells: list[CellStats]
+    merged: dict[int, CellStats]
+    reliable_transitions: dict[str, list[tuple[int, int]]]
+    author_concentration: list[AuthorConcentration]
+    book_flags: list[BookFlag]
+    missing_books: list[Path]
+
+    def to_json(self) -> dict[str, object]:
+        """The audit as JSON-ready data (the file ``figures`` and ``export web`` read)."""
+        return {
+            "min_occurrences": self.min_occurrences,
+            "cells": [
+                {**asdict(cell), "target_counts": dict(cell.target_counts)} for cell in self.cells
+            ],
+            "reliable_transitions": self.reliable_transitions,
+            "author_concentration": [asdict(summary) for summary in self.author_concentration],
+            "book_flags": [asdict(flag) for flag in self.book_flags],
+            "missing_books": [str(path) for path in self.missing_books],
+        }
+
+
+def audit_corpus(
+    processed_dir: Path, targets: list[str], books: BooksSource, min_occurrences: int
+) -> CorpusAudit:
+    """Count every cell under ``processed_dir`` and check the books manifest."""
+    cells = scan_processed(processed_dir, set(targets))
+    merged = merge_by_decade(cells)
+    present, missing = books.validate()
+    book_words = [
+        (
+            str(entry.get("decade", "")),
+            str(entry.get("author", "")),
+            len(books.entry_path(entry).read_text(encoding="utf-8", errors="replace").split()),
+        )
+        for entry in present
+        if str(entry.get("decade", "")).endswith("0s")
+    ]
+    return CorpusAudit(
+        min_occurrences=min_occurrences,
+        targets=targets,
+        cells=cells,
+        merged=merged,
+        reliable_transitions={
+            word: reliable_transitions(merged, word, min_occurrences) for word in targets
+        },
+        author_concentration=author_concentration(book_words),
+        book_flags=sorted(flag_manifest_entries(books.manifest()), key=lambda flag: flag.decade),
+        missing_books=[books.entry_path(entry) for entry in missing],
+    )
