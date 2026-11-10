@@ -70,8 +70,9 @@ Each item that produces results gets its predictions committed first.
    confirms HCI's prose moved away from its 1990s self, partly towards the behavioural and
    social sciences, but the move is small, not one-sided (psychology's and sociology's 2020s
    abstracts drift towards 1990s HCI too) and HCI leaks towards computing as much; fields did
-   not become harder to tell apart (S5). Open: whether technology vocabulary spreading into
-   every field explains the drift towards HCI (remove a fixed term list and reclassify).
+   not become harder to tell apart (S5). Round V (2 of 4): removing 29 technology terms leaves
+   both the drift towards HCI and HCI's own move in place; HCI and psychology converged from
+   both sides, HCI travelling further.
 6. **Held-out check per cell**: hold out 10% of each cell's text and measure how well its
    model predicts it, flagging cells whose model memorised a small corpus.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
