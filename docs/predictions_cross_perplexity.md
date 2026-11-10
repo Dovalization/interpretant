@@ -1306,3 +1306,70 @@ for the instrument whose movement is absent.
 
 Under every outcome, no further round is run on the direction of HCI's change. Scored by
 `scripts/score_reference_frame.py`, committed before it is run.
+
+### Round W results (2026-11-10, `scripts/score_reference_frame.py`)
+
+Scored as written. 1 passed, 4 untestable. HCI_v held 1,421 abstracts in the 1990s and 828 in
+the 2020s from round K′'s nine venues, and the refitted 1990s classifier reproduced every
+assignment share of round N's table. Movements are relative movements in bits, means over five
+seeds; positive is towards the named group.
+
+| | Verdict | Numbers |
+|---|---|---|
+| Planted check, classifier | **Failed** | Computer science planted, towards computing: +0.066 (sd 0.183), absent. Psychology planted, towards the behavioural and social sciences: +0.566 (sd 0.160), present. Unplanted halves: +0.173 (sd 0.148) towards the behavioural and social sciences, absent |
+| Planted check, language models | **Failed** | Computer science planted: +0.013 (sd 0.067), absent. Psychology planted: +0.214 (sd 0.060), present. Unplanted halves: +0.066 (sd 0.062) towards the behavioural and social sciences, absent |
+| W1 | **Passed** | Every field's own 1990s model gives its 1990s held-out abstracts the lowest cost, in every seed, under both instruments |
+| W2 | **Untestable** | Classifier, whole cell, towards computing: −0.867 (sd 0.139), every seed negative |
+| W3 | **Untestable** | Language models, whole cell, towards the behavioural and social sciences: +0.343 (sd 0.035), present |
+| W4 | **Untestable** | Classifier, HCI_v, towards computing: −1.059 (sd 0.074), every seed negative |
+| W5 | **Untestable** | Language models, HCI_v, towards the behavioural and social sciences: +0.383 (sd 0.012), present |
+
+### Reading
+
+Both instruments see the fields at this size (W1). Neither passed the planted check, so by the
+reading rule W2–W5 are untestable, and the round does not decide the direction of HCI's change.
+The README keeps "no direction is claimed", and no further round on the direction is run.
+
+The check failed on its design, not on the instruments. Both found the psychology plant and
+neither found the computer science plant, and the unplanted halves of one decade moved apart by
+chance far more than the synthetic halves had (seed sd 0.15 for the classifier, 0.06 for the
+language models; on synthetic fields 0.04 and 0.01). The rule tested each planted run against
+zero, not against the same seed's unplanted halves, and it used half-size samples. A move of
+10% of a field's abstracts is smaller than that noise. The exploratory section below shows both
+instruments responding to both plants once each planted run is compared with its own seed's
+unplanted halves; that comparison was not committed, and the verdicts stand.
+
+For the record against the bets: had the check passed, W3 and W5 would have passed, and W2 and
+W4 would have been falsified with the classifier's movement present in the other direction. On
+the outcomes the bets were placed on, the bet that the instruments disagree was wrong.
+
+### Exploratory, after scoring: the planted check by seed, and what the instruments agree on
+
+Not predicted; computed from the cost tables the scorer wrote to `data/drift/`.
+
+Each planted run's movement minus the same seed's unplanted movement, towards the planted
+field's group:
+
+| Planted | Classifier | Language models |
+|---|---|---|
+| Computer science | +0.239 (sd 0.071), every seed positive | +0.079 (sd 0.021), every seed positive |
+| Psychology | +0.393 (sd 0.034), every seed positive | +0.148 (sd 0.008), every seed positive |
+
+All four are present. Both instruments respond to a 10% change in which abstracts HCI holds, in
+the right direction and in every seed. The responses are a fraction of the movements measured
+on the corpus: the classifier's whole-cell movement is about 3.6 times its response to the
+computer science plant, the language models' about 4.3 times.
+
+In the round W frame the two instruments point the same way. On the whole cell and on HCI_v,
+under the classifier and under the language models, HCI moved towards the behavioural and
+social sciences over computing, net of the other fields, with every seed of the same sign and
+each mean at least six standard deviations from zero. Round N found HCI moving towards computing
+under the same classifier, fitted on the same samples (its shares were reproduced exactly). The
+two rounds differ only in the measure: round N counted hard assignments and netted a field's
+gain towards a target against other fields' gains towards it; round W reads the probabilities
+and contrasts two targets. Round N's correction section shows that its measure misreads a field
+that changes more than the rest; whether that is what happened here is untested. A reading that
+fits both, also untested: most of HCI's 2020s abstracts gained a little probability for the
+behavioural and social sciences, while a minority, the machine-learning ones, crossed into
+computing outright. A mean of log-probabilities registers the first; a count of assignments
+registers the second.
