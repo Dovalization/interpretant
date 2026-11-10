@@ -384,9 +384,9 @@ def readme_figures(model_dir: Path, drift_dir: Path, audit_path: Path) -> dict[s
         "hci",
         1990,
         2020,
-        title="HCI's language moved towards the behavioural and social sciences'",
+        title="Every model but computing's gained on HCI's abstracts",
         subtitle="How much better each field's model predicts HCI's abstracts in the 2020s than in the 1990s",  # noqa: E501
-        footnote="Bars: mean over five resampled runs; points: the runs. Corrected design (200,000 training tokens, shared abstracts removed, 1,000 held-out abstracts). AI's and computer science's models are the two that did not gain.",  # noqa: E501
+        footnote="Bars: mean of five resampled runs; points: the runs. Each decade's own models, 200,000 training tokens, shared abstracts removed. A classifier held at the 1990s reads HCI's change differently (round N).",  # noqa: E501
     )
     report = json.loads(audit_path.read_text(encoding="utf-8"))
     audited = pd.DataFrame(report["cells"])
