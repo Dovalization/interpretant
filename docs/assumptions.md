@@ -142,6 +142,13 @@ amid new topics looks changed.
 **Test or removal.** Net out variety (J); compare against control words on the same transition;
 validate against human judgements of usage pairs (the author's gold set in item 8c).
 
+**Since the audit (2026-11-10).** Check 1b confirmed it for the usage-pair measure: J flagged a
+change of source with no change of sense. The sense-label instrument (ROADMAP item 8d) is built to
+step around it: meaning there is the share of a word's occurrences in each sense of an approved
+list, so a new topic with the same sense should leave the shares where they were. Its placebo test
+in rung 3 checks exactly that. The classifier still reads contexts (XL-LEXEME vectors), so A7
+returns for it as a question of how far those vectors separate sense from topic.
+
 ## A8. Five resamples measure the uncertainty
 
 **Where it enters.** The presence rule (same sign in five seeds, mean at least twice the standard

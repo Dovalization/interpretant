@@ -151,8 +151,10 @@ Each item that produces results gets its predictions committed first.
    - Round E: a logistic regression on XL-LEXEME, trained from cue words and the lists' example
      sentences, with no generative model and no labelling by a person, passes rung 1 (0.669, within
      0.10 of Sonnet's 0.693; JEV 0.800).
-   Next: rung 2 on this corpus with that classifier: lists and cue words drafted by Claude,
-   approved by the author on one review page, Sonnet and JEV as comparison points.
+   Next: rung 2 on this corpus with that classifier. Lists and cue words drafted by Claude and
+   refined with the author on a review page, guided by leave-one-cue-out agreement and
+   out-of-fold doubt, then frozen; shares corrected by adjusted classify and count; Sonnet and JEV
+   as comparison points (`docs/plan_sense_labels.md`, which also gives the method in NLP terms).
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before

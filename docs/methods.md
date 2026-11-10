@@ -114,6 +114,20 @@ scope; round K′ showed the HCI label widening from 915 to 3,601 sources betwee
 the 2020s. A venue-stable check (`corpus openalex sources`, then the cell restricted to the
 venues present in both decades) should accompany any such claim.
 
+## Sense labels: weakly supervised word sense disambiguation
+
+Context-based measures, the grid included, respond to a change of topic as well as of meaning
+(`assumptions.md`, A7). The sense-label instrument measures meaning as the share of a word's
+occurrences in each sense of a fixed list: lists approved by the author; cue words (position-aware
+collocation rules, also approved) that label some occurrences; a logistic regression per word on
+XL-LEXEME's contextual vectors, trained on those labels and each sense's example sentence, that
+labels every occurrence; shares corrected for the classifier's confusions (adjusted classify and
+count); and the Jensen-Shannon divergence between two cells' shares, judged against shuffles,
+control words and a placebo. It passed its benchmark rung on DWUG EN (round E) with no generative
+model; Claude Sonnet 5.5 and JEV are comparison labellers. The design, its calibration ladder and
+the method in NLP terms are in [`plan_sense_labels.md`](plan_sense_labels.md); the rounds are in
+[`predictions_labels.md`](predictions_labels.md).
+
 ## Pre-registration
 
 Every analysis is scored against predictions written and committed before its evidence
