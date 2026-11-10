@@ -47,6 +47,8 @@ Abstracts = Mapping[tuple[str, int], Sequence[tuple[str, str]]]
 _LABEL = re.compile(r"^\s*(?:abstract|summary)\b[\s:.\-–—]*", re.IGNORECASE)
 _SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9(\"“])")
 _TOKEN = re.compile(r"[a-z][a-z-]{2,}")
+_URL = re.compile(r"https?://\S+|www\.\S+|\bdoi:\s*\S+|\b10\.\d{4,9}/\S+", re.IGNORECASE)
+MAX_FOREIGN_SHARE = 0.2
 
 
 @dataclass(frozen=True)
@@ -59,6 +61,27 @@ class Occurrence:
     context: str
     start: int
     end: int
+
+
+@dataclass(frozen=True)
+class Sampling:
+    """How occurrences are drawn: up to ``cap`` per cell, with or without replacement, the
+    word alone or with its regular plural, and with or without round C′'s quality rules
+    (abstracts mostly outside the Latin script skipped, URLs and DOIs removed)."""
+
+    cap: int = CAP
+    replace: bool = False
+    plural: bool = False
+    quality: bool = False
+
+
+ROUND_C = Sampling()
+
+
+def foreign_share(text: str) -> float:
+    """The share of a text's letters outside the Latin script."""
+    letters = [character for character in text if character.isalpha()]
+    return sum(ord(character) > 0x024F for character in letters) / max(len(letters), 1)
 
 
 def cased_abstracts(raw_dir: Path, field: str, decade: int) -> list[tuple[str, str]]:
@@ -89,9 +112,11 @@ def drop_shared(abstracts: Abstracts) -> dict[tuple[str, int], list[tuple[str, s
     }
 
 
-def word_pattern(word: str) -> re.Pattern[str]:
-    """The word as a whole word, in any case; a hyphenated compound (*self-attention*) counts."""
-    return re.compile(rf"\b{re.escape(word)}\b", re.IGNORECASE)
+def word_pattern(word: str, plural: bool = False) -> re.Pattern[str]:
+    """The word as a whole word, in any case, and with ``plural`` its regular plural too; a
+    hyphenated compound (*self-attention*) counts."""
+    suffix = "s?" if plural else ""
+    return re.compile(rf"\b{re.escape(word)}{suffix}\b", re.IGNORECASE)
 
 
 def context_around(
@@ -119,25 +144,31 @@ def context_around(
 
 
 def sample_occurrences(
-    abstracts: Abstracts, word: str, seed: int, cap: int = CAP
+    abstracts: Abstracts, word: str, seed: int, sampling: Sampling = ROUND_C
 ) -> list[Occurrence]:
-    """Up to ``cap`` abstracts per cell that contain ``word``, in a seeded random order, and the
-    first occurrence in each."""
-    pattern = word_pattern(word)
+    """The first occurrence of ``word`` in each of up to ``sampling.cap`` abstracts per cell
+    that contain it: the first in a seeded random order, or, with ``sampling.replace``, as many
+    as the cell has (up to the cap) drawn with replacement, so seeds differ in small cells."""
+    pattern = word_pattern(word, sampling.plural)
     occurrences: list[Occurrence] = []
     for (field, decade), documents in sorted(abstracts.items()):
         order = list(documents)
-        random.Random(f"{seed}:{word}:{field}:{decade}").shuffle(order)
-        taken = 0
-        for work_id, text in order:
+        rng = random.Random(f"{seed}:{word}:{field}:{decade}")
+        rng.shuffle(order)
+        found: list[Occurrence] = []
+        for work_id, raw in order:
+            text = _URL.sub(" ", raw) if sampling.quality else raw
+            if sampling.quality and foreign_share(text) > MAX_FOREIGN_SHARE:
+                continue
             match = pattern.search(text)
             if match is None:
                 continue
             context, start, end = context_around(text, match.start(), match.end())
-            occurrences.append(Occurrence(field, decade, work_id, context, start, end))
-            taken += 1
-            if taken == cap:
+            found.append(Occurrence(field, decade, work_id, context, start, end))
+            if not sampling.replace and len(found) == sampling.cap:
                 break
+        size = min(len(found), sampling.cap)
+        occurrences.extend(rng.choices(found, k=size) if sampling.replace else found)
     return occurrences
 
 
@@ -221,11 +252,16 @@ def induce_senses(
     vectors: np.ndarray, seed: int, sense_range: Iterable[int] = SENSE_RANGE
 ) -> tuple[np.ndarray, np.ndarray]:
     """K-means on the length-normalised vectors for every k in ``sense_range``; the labels and
-    centres of the k with the best silhouette (cosine, on a seeded sample)."""
+    centres of the k with the best silhouette (cosine, on a seeded sample), or of the one k
+    when the range holds one."""
     normalised = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
+    candidates = list(sense_range)
+    if len(candidates) == 1:
+        model = KMeans(n_clusters=candidates[0], n_init=10, random_state=seed).fit(normalised)
+        return model.labels_, model.cluster_centers_
     sample = min(len(normalised), SILHOUETTE_SAMPLE)
     best: tuple[float, np.ndarray, np.ndarray] | None = None
-    for senses in sense_range:
+    for senses in candidates:
         if senses >= len(normalised):
             break
         model = KMeans(n_clusters=senses, n_init=10, random_state=seed).fit(normalised)
@@ -246,7 +282,8 @@ def sense_runs(
     words: Iterable[str],
     seeds: Iterable[int],
     encoder: Encoder,
-    cap: int = CAP,
+    sampling: Sampling = ROUND_C,
+    sense_range: Iterable[int] = SENSE_RANGE,
     log: Callable[[str], None] = print,
 ) -> pd.DataFrame:
     """Sample, encode and cluster every word's occurrences in every seed.
@@ -259,12 +296,12 @@ def sense_runs(
     cache: dict[Occurrence, np.ndarray] = {}
     for word in words:
         for seed in seeds:
-            occurrences = sample_occurrences(abstracts, word, seed, cap)
-            new = [occurrence for occurrence in occurrences if occurrence not in cache]
+            occurrences = sample_occurrences(abstracts, word, seed, sampling)
+            new = list(dict.fromkeys(o for o in occurrences if o not in cache))
             if new:
                 cache.update(zip(new, encoder.encode(new), strict=True))
             vectors = np.vstack([cache[occurrence] for occurrence in occurrences])
-            labels, centres = induce_senses(vectors, seed)
+            labels, centres = induce_senses(vectors, seed, sense_range)
             normalised = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
             centre_norms = np.linalg.norm(centres, axis=1)
             distances = (

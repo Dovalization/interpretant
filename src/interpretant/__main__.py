@@ -1111,7 +1111,7 @@ def drift_direction(  # noqa: PLR0913
     show_default=True,
 )
 @click.option("--word", "words", multiple=True, required=True)
-@click.option("--field", "fields", multiple=True, required=True)
+@click.option("--field", "fields", multiple=True)
 @click.option(
     "--decade", "decades", multiple=True, type=int, default=(1990, 2020), show_default=True
 )
@@ -1120,6 +1120,16 @@ def drift_direction(  # noqa: PLR0913
     "--encoder", "model_name", default="allenai/scibert_scivocab_uncased", show_default=True
 )
 @click.option("--cap", type=int, default=500, show_default=True)
+@click.option(
+    "--cell",
+    "cells",
+    multiple=True,
+    help="field:decade; repeat it. Replaces the --field × --decade grid.",
+)
+@click.option("--senses", type=int, default=None, help="Fixed number of senses (round C′).")
+@click.option("--replace", is_flag=True, help="Draw occurrences with replacement (round C′).")
+@click.option("--plural", is_flag=True, help="Match the word's regular plural too (round C′).")
+@click.option("--quality", is_flag=True, help="Round C′'s quality rules.")
 @click.option("--output", type=click.Path(path_type=Path), required=True)
 def drift_senses(  # noqa: PLR0913
     raw_dir: Path,
@@ -1129,25 +1139,35 @@ def drift_senses(  # noqa: PLR0913
     seeds: tuple[int, ...],
     model_name: str,
     cap: int,
+    cells: tuple[str, ...],
+    senses: int | None,
+    replace: bool,
+    plural: bool,
+    quality: bool,
     output: Path,
 ) -> None:
     """Senses of words by field and decade, from one contextual encoder (round C)."""
     from interpretant.drift.senses import (  # noqa: PLC0415
+        SENSE_RANGE,
+        Sampling,
         TransformerEncoder,
         cased_abstracts,
         drop_shared,
         sense_runs,
     )
 
+    chosen = (
+        [(field, int(decade)) for field, decade in (cell.split(":") for cell in cells)]
+        if cells
+        else [(field, decade) for field in fields for decade in decades]
+    )
     abstracts = drop_shared(
-        {
-            (field, decade): cased_abstracts(raw_dir, field, decade)
-            for field in fields
-            for decade in decades
-        }
+        {(field, decade): cased_abstracts(raw_dir, field, decade) for field, decade in chosen}
     )
     encoder = TransformerEncoder(model_name)
-    table = sense_runs(abstracts, words, seeds, encoder, cap, log=console.print)
+    sampling = Sampling(cap, replace, plural, quality)
+    sense_range = (senses,) if senses else SENSE_RANGE
+    table = sense_runs(abstracts, words, seeds, encoder, sampling, sense_range, log=console.print)
     output.parent.mkdir(parents=True, exist_ok=True)
     table.to_parquet(output, index=False)
     console.print(f"[green]{len(table):,} rows[/green] → {output}")

@@ -20,12 +20,14 @@ import pytest
 
 from interpretant.drift.senses import (
     Occurrence,
+    Sampling,
     cased_abstracts,
     context_around,
     context_words,
     distribution,
     drop_shared,
     examples,
+    foreign_share,
     induce_senses,
     jensen_shannon,
     narrowed,
@@ -118,9 +120,9 @@ def test_a_long_sentence_is_cut_to_a_window_around_the_occurrence() -> None:
 def test_sampling_takes_one_occurrence_per_abstract_up_to_the_cap_and_repeats_by_seed(
     abstracts: dict[tuple[str, int], list[tuple[str, str]]],
 ) -> None:
-    first = sample_occurrences(abstracts, "attention", seed=1, cap=25)
-    again = sample_occurrences(abstracts, "attention", seed=1, cap=25)
-    other = sample_occurrences(abstracts, "attention", seed=2, cap=25)
+    first = sample_occurrences(abstracts, "attention", seed=1, sampling=Sampling(cap=25))
+    again = sample_occurrences(abstracts, "attention", seed=1, sampling=Sampling(cap=25))
+    other = sample_occurrences(abstracts, "attention", seed=2, sampling=Sampling(cap=25))
 
     assert first == again
     assert {occurrence.work_id for occurrence in first} != {o.work_id for o in other}
@@ -152,7 +154,9 @@ def test_the_new_sense_is_found_in_ai_and_psychology_does_not_change(
 ) -> None:
     encoder = CueEncoder()
 
-    table = sense_runs(abstracts, ["attention"], [1, 2], encoder, cap=30, log=lambda _: None)
+    table = sense_runs(
+        abstracts, ["attention"], [1, 2], encoder, sampling=Sampling(cap=30), log=lambda _: None
+    )
 
     rows = table[table.seed == 1]
     shares = sense_shares(rows)
@@ -172,7 +176,9 @@ def test_an_occurrence_drawn_in_several_seeds_is_encoded_once(
 ) -> None:
     encoder = CueEncoder()
 
-    table = sense_runs(abstracts, ["attention"], [1, 2, 3], encoder, cap=60, log=lambda _: None)
+    table = sense_runs(
+        abstracts, ["attention"], [1, 2, 3], encoder, sampling=Sampling(cap=60), log=lambda _: None
+    )
 
     assert encoder.calls == 1
     assert len(table) == 3 * 4 * 60
@@ -231,3 +237,48 @@ def test_a_narrowed_context_keeps_the_occurrence_and_its_offsets() -> None:
     assert len(narrow.context) == 50 + 12 + 50
     assert narrow.context[narrow.start : narrow.end] == "intelligence"
     assert narrowed(Occurrence("ai", 2020, "W1", "intelligence here", 0, 12), 50).start == 0
+
+
+def test_drawing_with_replacement_varies_a_small_cell_between_seeds() -> None:
+    cell = {("ai", 2020): [(f"W{n}", f"Some attention here, number {n}.") for n in range(20)]}
+    sampling = Sampling(cap=500, replace=True)
+
+    first = sample_occurrences(cell, "attention", seed=1, sampling=sampling)
+    second = sample_occurrences(cell, "attention", seed=2, sampling=sampling)
+
+    assert len(first) == len(second) == 20
+    assert sorted(o.work_id for o in first) != sorted(o.work_id for o in second)
+    assert len({o.work_id for o in first}) < 20
+
+
+def test_the_plural_counts_only_when_asked() -> None:
+    cell = {("psychology", 2000): [("W1", "Patients reported auditory hallucinations at night.")]}
+
+    assert sample_occurrences(cell, "hallucination", seed=1) == []
+    plural = sample_occurrences(cell, "hallucination", 1, Sampling(plural=True))
+    assert plural[0].context[plural[0].start : plural[0].end] == "hallucinations"
+
+
+def test_the_quality_rules_skip_foreign_script_and_drop_urls() -> None:
+    cell = {
+        ("ai", 2020): [
+            ("W1", "目的 在图像分类领域小样本学习旨在利用知识 attention 处理任务。"),
+            ("W2", "See https://example.org/x for attention maps in vision models."),
+        ]
+    }
+
+    found = sample_occurrences(cell, "attention", 1, Sampling(quality=True))
+
+    assert foreign_share(cell[("ai", 2020)][0][1]) > 0.2
+    assert [o.work_id for o in found] == ["W2"]
+    assert "https" not in found[0].context
+    assert found[0].context[found[0].start : found[0].end] == "attention"
+
+
+def test_a_single_number_of_senses_is_used_as_given() -> None:
+    rng = np.random.default_rng(3)
+    vectors = np.vstack([centre + rng.normal(0, 0.3, (40, 3)) for centre in np.eye(3) * 5])
+
+    _, centres = induce_senses(vectors, seed=1, sense_range=(5,))
+
+    assert len(centres) == 5
