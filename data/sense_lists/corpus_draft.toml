@@ -25,7 +25,7 @@ cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attrac
 key = "attention_mechanism"
 definition = "The attention mechanism of artificial neural networks, which weights parts of the input, as in self-attention and transformers"
 example = "A multi-head attention layer is added on top of the encoder."
-cues = ["<<self", "multi", "head", "heads", "mechanism", "mechanisms", "layer", "layers", "transformer", "transformers", "module", "modules", "encoder", "decoder", "neural", "lstm", "convolutional", "embedding", "embeddings", "softmax", "scaled", "graph"]
+cues = ["<<self", "<<head", ">>heads", ">>mechanism", ">>mechanisms", ">>layer", ">>layers", "transformer", "transformers", ">>module", ">>modules", "encoder", "decoder", "lstm", "convolutional", "embedding", "embeddings", "softmax", "scaled", "<<graph"]
 
 [[attention.senses]]
 key = "computational_selection"
