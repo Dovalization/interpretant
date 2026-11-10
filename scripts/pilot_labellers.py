@@ -135,7 +135,7 @@ def jev_questions(senses: SenseList) -> dict[str, object]:
     }
 
 
-def jev() -> None:
+def jev(limit: int | None = None) -> None:
     from typesafe_sdk import TypeSafeClient  # noqa: PLC0415
 
     lists = load_sense_lists(LISTS)
@@ -146,7 +146,7 @@ def jev() -> None:
     raw.mkdir(parents=True, exist_ok=True)
     tokens = 0
     started = time.monotonic()
-    for key, (word, usage) in sorted(usages().items()):
+    for key, (word, usage) in sorted(usages().items())[:limit]:
         state = {"word": word, "usage": shown(usage)}
         response = client.system_one(state, jev_questions(lists[word]), model=JEV_MODEL)
         choice = response.choices["sense"]
@@ -247,4 +247,7 @@ def compare() -> None:
 
 
 if __name__ == "__main__":
-    {"sonnet": sonnet, "jev": jev, "compare": compare}[sys.argv[1]]()
+    if sys.argv[1] == "jev":
+        jev(int(sys.argv[2]) if len(sys.argv) > 2 else None)
+    else:
+        {"sonnet": sonnet, "compare": compare}[sys.argv[1]]()
