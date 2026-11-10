@@ -11,7 +11,7 @@ word = "attention"
 key = "cognitive_attention"
 definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience"
 example = "Sleep loss impairs sustained attention in older adults."
-cues = ["sustained", "divided", "deficit", "deficits", "adhd", "cognitive", "participants", "children", "vigilance", "distraction", "executive", "bias", "biases", "orienting", "control"]
+cues = ["sustained", "divided", "deficit", "deficits", "adhd", "cognitive", "vigilance", "distraction", "executive", "bias", "biases", "orienting"]
 
 [[attention.senses]]
 key = "notice_or_consideration"
@@ -44,7 +44,7 @@ cues = ["language", "llm", "llms", "gpt", "chatgpt", "engineering", "tuning", "s
 key = "cue_to_a_person"
 definition = "A cue, question or message that invites a person to respond or act, as in experiments, teaching, writing tasks, surveys or the messages of an interactive system"
 example = "Participants answered a written prompt about their daily routine."
-cues = ["participants", "students", "writing", "written", "essay", "verbal", "spoken", "dialogue", "dialog", "interface", "screen", "survey", "questionnaire", "children", "teacher", "therapist", "cue", "cues", "reminder", "reminders"]
+cues = ["written", "essay", "verbal", "spoken", "dialogue", "dialog", "interface", "screen", "survey", "questionnaire", "teacher", "therapist", "cue", "cues", "reminder", "reminders"]
 
 [[prompt.senses]]
 key = "quick_or_immediate"
@@ -110,7 +110,7 @@ cues = ["computer", "communication", "communications", "telephone", "local", "ar
 key = "social_network"
 definition = "A network of people, groups or organisations and their relations"
 example = "Migrants rely on kinship networks to find work."
-cues = ["social", "personal", "support", "kinship", "friendship", "professional", "ties", "actors", "organizations", "informal", "community"]
+cues = ["social", "personal", "support", "kinship", "friendship", "professional", "ties", "actors", "organizations", "informal"]
 
 [[network.senses]]
 key = "abstract_or_physical_system"
