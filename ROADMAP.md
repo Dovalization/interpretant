@@ -35,17 +35,18 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
 [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md) (C, D, F, H, L8–L10).
 
 - Robust: *embodiment*'s two senses (HCI, philosophy); *intentionality* stable in
-  philosophy; HCI's language moving out of computing's register into the behavioural and
-  social sciences' under the language models (every non-computing model gains on HCI,
-  one-sided, a word-mix effect; a classifier, round S, sees the move away from 1990s HCI but
-  not its one-sidedness);
-  fields converging between the 1980s and the 2010s; the subfield → parent asymmetry.
+  philosophy; the subfield → parent asymmetry.
+- Depends on the instrument: HCI's change between the 1990s and the 2020s. Both instruments
+  see its GUI-engineering vocabulary recede; each decade's own language models read the change
+  as a move towards the behavioural and social sciences (J, K′), the classifier held at the
+  1990s, net of every field's drift, as a move towards computing (N). No direction is claimed.
+  Fields converging between the 1980s and the 2010s is the language models' finding only.
 - Robust in part: *representation* in AI towards learned representations; HCI's
   experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
   under TWEC in both corpora, described differently by each method).
 - Not robust: *information* converging between psychology and computer science.
-- Open: the cause of HCI's move (CHI's turn to user studies is the obvious candidate; the
-  corpus can date it decade by decade). Label scope over time is now a known hazard: a
+- Open: whether the instruments disagree on HCI's direction because of the frame of reference
+  or because of what each weighs (round W, below). Label scope over time is a known hazard: a
   venue-stable check should accompany any whole-cell claim that spans decades.
 
 ---
@@ -78,9 +79,12 @@ Each item that produces results gets its predictions committed first.
    2020s). Next: mark the flagged cells in the explorer's neighbour lists.
 6b. **Direction net of drift** (round N, 2026-11-10, 1 of 5): psychology did not move towards
    HCI; since the 1990s HCI moved towards the behavioural and social sciences no more than every
-   field did, and towards computing more than any field. The relative gain needs a text-side
-   correction for a field that changes more than the rest (calibrate it first). The README's
-   "out of computing's register" claim no longer holds as stated.
+   field did, and towards computing more than any field. The README was restated on
+   2026-11-10: HCI's change, and no direction.
+6c. **Round W, the closing round on HCI's direction**: the language models in round N's design
+   (same abstracts, 1990s reference, relative gain), and both instruments on the venue-stable
+   cell. The language-model assignment is calibrated on synthetic fields first, with a field
+   that changes more than the rest added to the settings. No direction rounds follow it.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
 8. **Sense-level drift** with contextual embeddings for *consciousness* and *information*:
    encode occurrences, cluster into senses, track each sense's share by field and decade
