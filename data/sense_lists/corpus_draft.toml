@@ -1,0 +1,188 @@
+# Draft sense lists and cue words for rung 2 on this corpus (docs/plan_sense_labels.md), written by
+# Claude on 2026-11-10 for the author's approval. Not frozen until approved. Three choices come
+# from the labeller pilot, which showed check 2b's usages: platform's delivery_channel sense,
+# having's obligation sense, and the boundary between component's first and third senses.
+# Cue words: lowercase whole words that signal the sense within five words of the target.
+
+[attention]
+word = "attention"
+
+[[attention.senses]]
+key = "cognitive_attention"
+definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience"
+example = "Sleep loss impairs sustained attention in older adults."
+cues = ["sustained", "selective", "divided", "deficit", "deficits", "adhd", "cognitive", "participants", "children", "vigilance", "distraction", "executive", "focus", "focused", "focusing", "bias", "biases", "orienting", "control"]
+
+[[attention.senses]]
+key = "notice_or_consideration"
+definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing"
+example = "The issue has received growing attention from policymakers."
+cues = ["received", "receive", "receiving", "drawn", "draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "increasing", "growing", "considerable", "little", "special", "deserves", "public", "media", "scholarly", "widespread"]
+
+[[attention.senses]]
+key = "attention_mechanism"
+definition = "The attention mechanism of artificial neural networks, which weights parts of the input, as in self-attention and transformers"
+example = "A multi-head attention layer is added on top of the encoder."
+cues = ["self", "multi", "head", "heads", "mechanism", "mechanisms", "layer", "layers", "transformer", "transformers", "module", "modules", "encoder", "decoder", "neural", "lstm", "convolutional", "embedding", "embeddings", "softmax", "scaled", "graph"]
+
+[prompt]
+word = "prompt"
+
+[[prompt.senses]]
+key = "language_model_input"
+definition = "An instruction or input text given to a language model or other generative AI system"
+example = "We design prompts that ask the model to explain its answer step by step."
+cues = ["language", "llm", "llms", "gpt", "chatgpt", "engineering", "tuning", "shot", "zero", "few", "generative", "chain", "thought", "templates", "template", "soft", "injection", "diffusion", "instruction", "instructions", "context"]
+
+[[prompt.senses]]
+key = "cue_to_a_person"
+definition = "A cue, question or message that invites a person to respond or act, as in experiments, teaching, writing tasks, surveys or the messages of an interactive system"
+example = "Participants answered a written prompt about their daily routine."
+cues = ["participants", "students", "writing", "written", "essay", "verbal", "spoken", "dialogue", "dialog", "interface", "screen", "survey", "questionnaire", "children", "teacher", "therapist", "cue", "cues", "reminder", "reminders"]
+
+[[prompt.senses]]
+key = "quick_or_immediate"
+definition = "The adjective: done or happening quickly, without delay"
+example = "Prompt treatment reduces the risk of complications."
+cues = ["treatment", "diagnosis", "response", "action", "payment", "delivery", "recognition", "intervention", "detection", "repair", "medical", "notification"]
+
+[[prompt.senses]]
+key = "to_cause_or_provoke"
+definition = "The verb: to cause, motivate or bring about something"
+example = "These findings prompt a re-examination of the model."
+cues = ["findings", "concerns", "led", "prompted", "prompting", "us", "researchers", "calls"]
+
+[platform]
+word = "platform"
+
+[[platform.senses]]
+key = "digital_or_social_media_platform"
+definition = "An online service through which people interact, publish, share or trade, such as social media, video sites, apps and online marketplaces"
+example = "Misinformation spreads quickly on social media platforms."
+cues = ["social", "online", "digital", "internet", "web", "facebook", "twitter", "youtube", "instagram", "tiktok", "weibo", "wechat", "users", "sharing", "streaming", "networking", "commerce", "gig", "economy", "content"]
+
+[[platform.senses]]
+key = "technical_base"
+definition = "A hardware, software or technical system on which other systems, applications or experiments are built or run"
+example = "The algorithm was implemented on a robot platform."
+cues = ["hardware", "software", "computing", "robot", "robotic", "experimental", "testbed", "simulation", "cloud", "sensor", "embedded", "implemented", "development", "programming", "operating"]
+
+[[platform.senses]]
+key = "delivery_channel"
+definition = "A medium or channel through which content is distributed, such as print, broadcast, television or the web, as in multi-platform publishing"
+example = "The newspaper now publishes across print, broadcast and online platforms."
+cues = ["multi", "print", "broadcast", "television", "tv", "radio", "delivery", "distribution", "channels", "newspaper", "outlets", "publishing", "cross"]
+
+[[platform.senses]]
+key = "physical_structure"
+definition = "A raised physical structure or surface, such as a stage, a station platform or an offshore platform"
+example = "The speaker stood on a wooden platform."
+cues = ["oil", "offshore", "drilling", "railway", "station", "train", "stage", "wooden", "raised", "floating", "concrete"]
+
+[[platform.senses]]
+key = "stance_or_forum"
+definition = "A set of declared aims, as of a political party, or a forum or opportunity for presenting views"
+example = "The conference offers a platform for debate between researchers and practitioners."
+cues = ["political", "party", "electoral", "campaign", "debate", "dialogue", "discussion", "voice", "voices", "forum", "exchange", "provides", "offers", "provide", "offer"]
+
+[network]
+word = "network"
+
+[[network.senses]]
+key = "artificial_neural_network"
+definition = "An artificial neural network: a computational model of connected units whose weights are learned from data"
+example = "A three-layer network was trained with backpropagation."
+cues = ["neural", "trained", "training", "layer", "layers", "hidden", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", "weights", "units", "boltzmann"]
+
+[[network.senses]]
+key = "computer_or_communication_network"
+definition = "A computer, telephone or other communication network linking machines or devices, including the interconnection network of a multiprocessor"
+example = "Messages are routed through the local area network."
+cues = ["computer", "communication", "communications", "telephone", "local", "area", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "distributed", "traffic", "bandwidth"]
+
+[[network.senses]]
+key = "social_network"
+definition = "A network of people, groups or organisations and their relations"
+example = "Migrants rely on kinship networks to find work."
+cues = ["social", "personal", "support", "kinship", "friendship", "professional", "ties", "actors", "organizations", "informal", "community"]
+
+[[network.senses]]
+key = "abstract_or_physical_system"
+definition = "Another system of interconnected elements, such as a graph, a semantic or Bayesian network, a transport network or a biological network"
+example = "Concepts are represented as nodes in a semantic network."
+cues = ["semantic", "conceptual", "bayesian", "belief", "petri", "graph", "road", "transport", "gene", "regulatory", "metabolic", "flow", "causal", "associative", "inheritance"]
+
+[alignment]
+word = "alignment"
+
+[[alignment.senses]]
+key = "ai_alignment"
+definition = "Making an AI system's behaviour match human intentions, preferences or values"
+example = "We study the alignment of large language models with human preferences."
+cues = ["human", "values", "value", "preference", "preferences", "rlhf", "feedback", "safety", "llm", "llms", "ai", "harmless", "helpful"]
+
+[[alignment.senses]]
+key = "matching_or_correspondence"
+definition = "Bringing two structures into correspondence, such as aligning sequences, texts, images, ontologies, modalities or coordinate frames"
+example = "The system computes the alignment between source and target sentences."
+cues = ["sequence", "sequences", "word", "sentence", "image", "ontology", "ontologies", "multiple", "pairwise", "registration", "point", "cross", "modal", "temporal", "feature", "features", "structural", "protein", "entity", "graph"]
+
+[[alignment.senses]]
+key = "strategic_agreement"
+definition = "Agreement or consistency between goals, strategies, organisations or parties"
+example = "The alignment of business and IT strategy improves performance."
+cues = ["strategic", "strategy", "business", "organizational", "goals", "policy", "interests", "political", "stakeholders", "objectives", "incentive", "incentives"]
+
+[[alignment.senses]]
+key = "physical_arrangement"
+definition = "Arrangement in a straight line or in correct relative positions, as of mechanical, optical or other physical parts"
+example = "Wheel alignment affects the car's handling."
+cues = ["wheel", "axis", "mechanical", "optical", "laser", "beam", "mirror", "precise", "mounting", "vertical", "horizontal", "camera"]
+
+[component]
+word = "component"
+
+[[component.senses]]
+key = "part_of_a_system"
+definition = "A separable physical or software part of a machine, device or system, including a module of a model's architecture"
+example = "Each software component exposes a well-defined interface."
+cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module", "modules", "integration", "architecture", "based", "device", "devices", "interface", "interfaces"]
+
+[[component.senses]]
+key = "mathematical_or_measured_component"
+definition = "A constituent of a quantity, signal, vector or data set in mathematical or statistical analysis"
+example = "The first principal component explains most of the variance."
+cues = ["principal", "independent", "analysis", "frequency", "vector", "signal", "variance", "connected", "harmonic", "spectral", "factor", "orthogonal"]
+
+[[component.senses]]
+key = "element_of_an_abstract_whole"
+definition = "An element or aspect of an abstract whole, such as a theory, a skill, a process or a programme, that is not a separable module"
+example = "Feedback is a key component of effective teaching."
+cues = ["key", "important", "essential", "critical", "core", "central", "major", "main", "integral", "crucial", "fundamental"]
+
+[having]
+word = "having"
+
+[[having.senses]]
+key = "perfect_auxiliary"
+definition = "The auxiliary before a past participle, marking a completed action"
+example = "Having trained the model, we evaluate it on held-out data."
+cues = ["been", "shown", "proved", "proven", "demonstrated", "found", "completed", "received", "obtained", "established", "achieved", "reached", "made", "observed"]
+
+[[having.senses]]
+key = "possessing_or_containing"
+definition = "Possessing, containing or being characterised by something"
+example = "Patients having a history of stroke were excluded."
+cues = ["property", "properties", "value", "values", "number", "high", "low", "same", "different", "access", "similar", "large", "small", "higher", "lower"]
+
+[[having.senses]]
+key = "experiencing_or_causing"
+definition = "Experiencing, undergoing or causing something, as in having difficulty or having something done"
+example = "Students reported having trouble with the final task."
+cues = ["difficulty", "difficulties", "trouble", "problems", "fun", "experience", "experienced"]
+
+[[having.senses]]
+key = "obligation"
+definition = "Being required to do something, as in having to"
+example = "The design avoids having to retrain the whole model."
+cues = ["avoid", "avoids", "avoiding", "without", "instead"]
