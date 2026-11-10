@@ -267,3 +267,28 @@ contexts a word is used in, of which a change of sense is one source and a chang
 field mix or phrasing another (assumption A7). Round X's hits on *platform* and *network*, whose
 read changes (+0.27, +0.30) sit at the 30% threshold, and its false alarm are open to that
 reading.
+
+### Check 2b′ results (2026-11-10, `scripts/gold_pairs.py second`)
+
+Reported, not predicted. The second judge's 100 judgements were committed before scoring (commit
+1642c0e); it gave 29 fours, 28 threes, 33 twos, 9 ones and one 0 (item 70, "garbled, apparently
+machine-paraphrased text"). 95 distinct pairs were judged by both.
+
+| Comparison | Spearman |
+|---|---|
+| Author and second judge | 0.616 (exact agreement 46%, within one point 81%) |
+| XL-LEXEME and the author | 0.456 |
+| XL-LEXEME and the second judge | 0.662 |
+| XL-LEXEME and the judges' mean | 0.610 |
+
+Both judges gave each of the four repeated pairs the same judgement twice.
+
+### Reading
+
+The two judges agree at 0.616, within the range human annotators reach with each other on usage
+pairs, and XL-LEXEME agrees with their mean at 0.610, about its published level on DWUG EN (0.63).
+Check 2b's 0.431 therefore reflects a difference in judging as much as the instrument: the author
+judged categorically (mostly 1 and 4, one meaning or not), the second judge and XL-LEXEME in
+grades that move with context. Check 2b's verdict stands as scored. The second judge is a
+language model and may share XL-LEXEME's sensitivity to context, so part of their agreement may
+be a shared bias rather than shared accuracy; a human second judge would settle it.
