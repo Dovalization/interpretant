@@ -51,6 +51,7 @@ ppmi grid                                               models/ppmi_grid/...
 drift grid                                              data/drift/within_field.parquet, cross_field.parquet
 drift perplexity --drop-shared --fixed-budget 200000 --seed 1 ... --seed 5
 drift separability                                      data/drift/separability_{pairs,assignments}.parquet
+drift heldout                                           data/drift/heldout.parquet
 figures                                                 figures/*.png
 ```
 
@@ -92,7 +93,9 @@ analysis: predictions first, in their own commit.
   `perplexity.py` (Kneser-Ney bigrams and the unigram control, shared-abstract removal, fixed
   training budget, excess cross-entropy, the mix/rate decomposition; `cross_entropy_runs`,
   `decompose_runs`), `separability.py` (TF-IDF and logistic-regression field classifiers:
-  pairwise accuracy and assignment shares per decade; `separability_runs`, round S).
+  pairwise accuracy and assignment shares per decade; `separability_runs`, rounds S and V),
+  `heldout.py` (held-out minus training cross-entropy of every cell's bigram model;
+  `heldout_runs`, round M).
 - `predictions.py`: helpers the scorers share (`report`, `load_vectors`, `word_count`,
   `overlap`). Scorers are frozen, so a change here must leave every scorer's output
   byte-identical: rerun them all and diff.

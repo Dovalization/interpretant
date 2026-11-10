@@ -12,7 +12,7 @@ Two findings have survived a second training seed, a second method, a lemmatised
 
 ## Findings
 
-Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed), seven rounds on cross-perplexity and two with a field classifier. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md) and [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md); the story is in [devlog 04](devlogs/04.md) (the grid) and [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus).
+Results are tested against predictions committed before the evidence: four rounds on the embedding models (the trained models; a second seed with unseen decades and field pairs; a second, count-based method; the corpus rebuilt with plurals and British spellings collapsed), seven rounds on cross-perplexity, two with a field classifier, and a held-out check on every cell's model. Every prediction and every miss is in [`docs/predictions.md`](docs/predictions.md) and [`docs/predictions_cross_perplexity.md`](docs/predictions_cross_perplexity.md); the story is in [devlog 04](devlogs/04.md) (the grid) and [devlog 05](devlogs/05.md) (cross-perplexity and the lemmatised corpus).
 
 **Robust across seeds and methods**
 

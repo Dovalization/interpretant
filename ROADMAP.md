@@ -73,8 +73,9 @@ Each item that produces results gets its predictions committed first.
    not become harder to tell apart (S5). Round V (2 of 4): removing 29 technology terms leaves
    both the drift towards HCI and HCI's own move in place; HCI and psychology converged from
    both sides, HCI travelling further.
-6. **Held-out check per cell**: hold out 10% of each cell's text and measure how well its
-   model predicts it, flagging cells whose model memorised a small corpus.
+6. ~~Held-out check per cell~~ Round M (2026-11-09), 2 of 3: no cell a robust finding uses is
+   flagged; 11 small cells are (main grid 1950s–1960s, HCI before 1980, books 2000s and
+   2020s). Next: mark the flagged cells in the explorer's neighbour lists.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
 8. **Sense-level drift** with contextual embeddings for *consciousness* and *information*:
    encode occurrences, cluster into senses, track each sense's share by field and decade

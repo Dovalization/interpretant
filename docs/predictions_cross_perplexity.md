@@ -940,3 +940,45 @@ what they should and the gap falls steadily with size (uniform: 5.10, 4.20, 1.61
 4.41, 3.78, 2.65, 1.23). The measure is amended accordingly: **the vocabulary is every word of
 the training part**. Nothing else changes, the predictions stand as written, and no corpus cell
 had been scored when this was found.
+
+### Round M results (2026-11-09, `scripts/score_heldout.py`)
+
+Scored as written, with the method amendment. 2 passed, 1 falsified. The reference median gap
+(main grid, 2000s–2020s) is 1.787 bits, so a cell is flagged above 2.681 bits.
+
+| | Verdict | Numbers |
+|---|---|---|
+| M0 | **Falsified** | Spearman ρ between training tokens and mean gap is −0.604 over 117 cells (needed −0.8 or stronger) |
+| M1 | **Passed** | All four flagged: HCI 1950s gap 4.80, HCI 1960s 3.91, HCI 1970s 3.21, AI 1950s 3.72 |
+| M2 | **Passed** | None of the 53 cells the robust findings use is flagged |
+
+Flagged cells (11): books 2000s (3.16, 21 documents) and 2020s (4.00, 5 documents); the main
+grid's AI 1950s (3.72), cognitive psychology 1950s (2.94), communication 1950s (3.32) and 1960s
+(3.01), HCI 1950s (4.80), 1960s (3.91) and 1970s (3.21), and linguistics 1950s (3.32) and 1960s
+(2.83).
+
+### Reading
+
+**The robust findings rest on cells that generalise**: every cell behind *embodiment*,
+*intentionality*, *consciousness*, *representation*, the HCI rounds and the convergence of
+fields has a gap under the flag, and the measure does see small cells, flagging all four it was
+expected to. What failed is the claim that size alone drives the gap. It drives it among small
+cells, but cells of the reference size differ by field, and the books behave differently: their
+documents are often whole books, so holding out 10% means holding out one or two books, and a
+cell's gap then depends on which books those are. Eleven cells are flagged, all from the 1950s and
+1960s main grid, HCI before 1980 and the two thinnest books decades; none carries a finding, but
+the explorer shows neighbour lists from several of them and should mark them.
+
+### Exploratory, after scoring: what else drives the gap
+
+Not predicted; read from `data/drift/heldout.parquet` after the scorer ran.
+
+- **Documents predict the gap better than tokens** outside the main grid: without the books,
+  ρ(documents, gap) is −0.70 against −0.63 for tokens; within the books, −0.79 against −0.52.
+  How many independent documents a model sees matters more than how many words.
+- **The books are unstable.** The largest seed-to-seed spreads are all books cells (2010s 2.45
+  bits, 2020s 2.41, 1840s 1.96, 1820s 1.46): one held-out book can be a different author, era or
+  genre from the rest. The 1940s books cell (10 documents, gap 2.67) sits just under the flag.
+- **Above the reference size the gap saturates** at 1.2–1.8 bits (the full cells sit at the low
+  end): past about 10,000 abstracts, more text no longer reduces the gap much, so ranks among
+  large cells are mostly field differences, which is part of why ρ falls short.
