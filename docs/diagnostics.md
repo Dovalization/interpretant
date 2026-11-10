@@ -292,3 +292,23 @@ judged categorically (mostly 1 and 4, one meaning or not), the second judge and 
 grades that move with context. Check 2b's verdict stands as scored. The second judge is a
 language model and may share XL-LEXEME's sensitivity to context, so part of their agreement may
 be a shared bias rather than shared accuracy; a human second judge would settle it.
+
+### Correction pass on check 2b (2026-11-10, after check 2b′)
+
+After the results were discussed, the author re-judged five *network* pairs whose original
+judgement (4, identical) treated conceptual, telephone, transputer and neural networks as one
+meaning: items 4, 12, 17, 22 and 74, each now judged 2 (distantly related). The original
+judgements stand in `data/diagnostics/gold_pairs.md`; the corrections are in
+`gold_pairs_author_corrections.tsv`. They were made after the discussion, so they are a
+sensitivity check, not a result, and check 2b's verdict is unchanged.
+
+| Agreement (95 pairs) | Original | With the corrections |
+|---|---|---|
+| XL-LEXEME and the author | 0.456 | 0.494 |
+| Author and second judge | 0.616 | 0.657 |
+| XL-LEXEME and the judges' mean | 0.610 | 0.622 |
+| XL-LEXEME and the author, *network* only (16 pairs) | 0.10 | 0.60 |
+
+The guidelines did not say how fine a sense should be; the five pairs show that leaving it to the
+judge moves agreement noticeably for a word with many technical kinds. A fixed sense list per
+word, which the next instrument would need, removes that ambiguity.
