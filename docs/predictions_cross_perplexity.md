@@ -927,3 +927,16 @@ Reading rule: M0 and M1 passing mean the measure sees what it should; M2 passing
 README's robust findings rest on cells that generalise. A flagged cell under M2 names a finding
 whose evidence needs a second look, and every flagged cell is a cell whose neighbour lists the
 explorer should mark. Scored by `scripts/score_heldout.py`, committed before it is run.
+
+### Method amendment (2026-11-09, before any corpus score was computed)
+
+The synthetic tests written for the scorer showed the committed measure fails on its own
+terms: with the vocabulary restricted to training words with at least 5 occurrences, a small
+cell maps most of its words to the unknown token, which makes both its training and held-out
+text cheap, so its gap comes out *smaller* than a large cell's (on uniform synthetic text:
+−0.40 bits for 20 documents, 0.75 for 4,000; on Zipf-distributed text: 0.28 for 20, 1.23 for
+20,000). With every training word in the vocabulary, held-out words the model never saw cost
+what they should and the gap falls steadily with size (uniform: 5.10, 4.20, 1.61, 0.75; Zipf:
+4.41, 3.78, 2.65, 1.23). The measure is amended accordingly: **the vocabulary is every word of
+the training part**. Nothing else changes, the predictions stand as written, and no corpus cell
+had been scored when this was found.
