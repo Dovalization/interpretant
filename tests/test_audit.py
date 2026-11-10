@@ -19,8 +19,10 @@ from interpretant.corpus.books import BooksSource
 TARGETS = {"network", "affordance"}
 
 
-def _write_cell(processed_dir: Path, source: str, decade: int, lines: list[str]) -> None:
-    texts_dir = processed_dir / source / "texts"
+def _write_cell(
+    processed_dir: Path, source: str, decade: int, lines: list[str], layer: str = ""
+) -> None:
+    texts_dir = processed_dir / (layer or source) / "texts"
     texts_dir.mkdir(parents=True, exist_ok=True)
     (texts_dir / f"{source}_{decade}.txt").write_text("\n".join(lines), encoding="utf-8")
 
@@ -37,7 +39,7 @@ def test_scan_processed_counts_documents_tokens_and_targets(tmp_path: Path) -> N
 
     [cell] = scan_processed(tmp_path, TARGETS)
 
-    assert (cell.source, cell.decade) == ("acl", 1990)
+    assert (cell.layer, cell.source, cell.decade) == ("acl", "acl", 1990)
     assert cell.documents == 2
     assert cell.tokens == 6
     assert cell.target_counts["network"] == 2
@@ -145,6 +147,7 @@ def test_audit_corpus_counts_cells_and_reports_json(tmp_path: Path) -> None:
     assert audit.merged[1990].target_counts["network"] == 2
     assert report["cells"] == [
         {
+            "layer": "hci",
             "source": "hci",
             "decade": 1990,
             "documents": 1,
@@ -152,6 +155,7 @@ def test_audit_corpus_counts_cells_and_reports_json(tmp_path: Path) -> None:
             "target_counts": {"network": 2},
         },
         {
+            "layer": "hci",
             "source": "hci",
             "decade": 2000,
             "documents": 1,
@@ -160,3 +164,16 @@ def test_audit_corpus_counts_cells_and_reports_json(tmp_path: Path) -> None:
         },
     ]
     assert report["missing_books"] == []
+
+
+def test_audit_keeps_a_sample_and_its_full_cell_apart_and_counts_the_decade_once(
+    tmp_path: Path,
+) -> None:
+    _write_cell(tmp_path, "hci", 2010, ["network"] * 2, layer="openalex")
+    _write_cell(tmp_path, "hci", 2010, ["network"] * 7, layer="openalex_full")
+
+    audit = audit_corpus(tmp_path, ["network"], BooksSource(tmp_path / "no_books"), 1)
+
+    documents = {(cell.layer, cell.source): cell.documents for cell in audit.cells}
+    assert documents == {("openalex", "hci"): 2, ("openalex_full", "hci"): 7}
+    assert audit.merged[2010].documents == 2

@@ -389,13 +389,14 @@ def readme_figures(model_dir: Path, drift_dir: Path, audit_path: Path) -> dict[s
         footnote="Bars: mean over five resampled runs; points: the runs. Corrected design (200,000 training tokens, shared abstracts removed, 1,000 held-out abstracts). AI's and computer science's models are the two that did not gain.",  # noqa: E501
     )
     report = json.loads(audit_path.read_text(encoding="utf-8"))
-    cells = pd.DataFrame(report["cells"])[["source", "decade", "documents"]]
+    audited = pd.DataFrame(report["cells"])
+    cells = audited.loc[audited["layer"] == "openalex", ["source", "decade", "documents"]]
     fields = sorted(
-        {str(source) for source in cells["source"] if source != "books"},
+        {str(source) for source in cells["source"]},
         key=lambda field: field_label(field).lower(),
     )
     drawn["corpus_grid"] = corpus_grid(
-        cells[cells["source"] != "books"],
+        cells,
         title="The corpus is a grid",
         subtitle="Research abstracts per field × decade cell after cleaning (sampled to 10,000 per cell)",  # noqa: E501
         footnote="OpenAlex, seeded sample of English research prose; duplicates, catalogue records, scraped pages and non-English text removed; no author above 1% of a cell.",  # noqa: E501

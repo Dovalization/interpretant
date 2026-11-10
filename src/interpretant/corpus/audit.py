@@ -1,8 +1,10 @@
 """Corpus audit: per-cell volume, target-word frequency and books-manifest risks.
 
-A cell is one ``(source, decade)`` processed text file. Drift between two decades is
-reliable only when a word occurs often enough in both: a vector trained on a handful of
-occurrences stays close to its initialisation, and its nearest neighbours are noise.
+A cell is one ``(layer, source, decade)`` processed text file: the same field and decade can
+exist in two layers (a main-grid sample and its full cell), so the layer is part of the key.
+Drift between two decades is reliable only when a word occurs often enough in both: a vector
+trained on a handful of occurrences stays close to its initialisation, and its nearest
+neighbours are noise.
 """
 
 from __future__ import annotations
@@ -15,6 +17,7 @@ from pathlib import Path
 
 from interpretant.corpus.books import BooksSource
 
+FULL_LAYER = "openalex_full"
 _CELL_FILENAME = re.compile(r"^(?P<source>[a-z0-9]+)_(?P<decade>\d{4})\.txt$")
 # "Zimmern translation", "English translation (Baskin, 1959)"; not "inscription, translation".
 _TRANSLATION_NOTE = re.compile(r"\w+ translation\b", re.IGNORECASE)
@@ -22,8 +25,9 @@ _TRANSLATION_NOTE = re.compile(r"\w+ translation\b", re.IGNORECASE)
 
 @dataclass
 class CellStats:
-    """Volume and target-word counts for one (source, decade) cell."""
+    """Volume and target-word counts for one (layer, source, decade) cell."""
 
+    layer: str
     source: str
     decade: int
     documents: int = 0
@@ -63,9 +67,9 @@ def load_target_words(path: Path) -> list[str]:
     return words
 
 
-def count_cell(path: Path, source: str, decade: int, targets: set[str]) -> CellStats:
+def count_cell(path: Path, layer: str, source: str, decade: int, targets: set[str]) -> CellStats:
     """Stream a processed text file (one document per line) and count its contents."""
-    stats = CellStats(source=source, decade=decade)
+    stats = CellStats(layer=layer, source=source, decade=decade)
     with path.open(encoding="utf-8", errors="replace") as handle:
         for line in handle:
             tokens = line.split()
@@ -78,13 +82,14 @@ def count_cell(path: Path, source: str, decade: int, targets: set[str]) -> CellS
 
 
 def scan_processed(processed_dir: Path, targets: set[str]) -> list[CellStats]:
-    """Count every ``<source>/texts/<source>_<decade>.txt`` file under ``processed_dir``."""
+    """Count every ``<layer>/texts/<source>_<decade>.txt`` file under ``processed_dir``."""
     cells: list[CellStats] = []
     for path in sorted(processed_dir.glob("*/texts/*.txt")):
         match = _CELL_FILENAME.match(path.name)
         if match is None:
             continue
-        cells.append(count_cell(path, match["source"], int(match["decade"]), targets))
+        layer = path.parent.parent.name
+        cells.append(count_cell(path, layer, match["source"], int(match["decade"]), targets))
     return cells
 
 
@@ -92,7 +97,9 @@ def merge_by_decade(cells: Iterable[CellStats]) -> dict[int, CellStats]:
     """Sum cells across sources, giving one merged cell per decade."""
     merged: dict[int, CellStats] = {}
     for cell in cells:
-        total = merged.setdefault(cell.decade, CellStats(source="merged", decade=cell.decade))
+        total = merged.setdefault(
+            cell.decade, CellStats(layer="merged", source="merged", decade=cell.decade)
+        )
         total.documents += cell.documents
         total.tokens += cell.tokens
         total.target_counts.update(cell.target_counts)
@@ -223,7 +230,8 @@ def audit_corpus(
 ) -> CorpusAudit:
     """Count every cell under ``processed_dir`` and check the books manifest."""
     cells = scan_processed(processed_dir, set(targets))
-    merged = merge_by_decade(cells)
+    # A full cell contains its main-grid sample, so counting both would count it twice.
+    merged = merge_by_decade(cell for cell in cells if cell.layer != FULL_LAYER)
     present, missing = books.validate()
     book_words = [
         (

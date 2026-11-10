@@ -598,20 +598,22 @@ def corpus_audit(
     audit = audit_corpus(
         processed_dir, load_target_words(words_file), BooksSource(books_dir), min_occurrences
     )
-    sources = sorted({cell.source for cell in audit.cells})
-    tokens_by_cell = {(cell.source, cell.decade): cell.tokens for cell in audit.cells}
+    columns = sorted({(cell.layer, cell.source) for cell in audit.cells})
+    tokens_by_cell = {(cell.layer, cell.source, cell.decade): cell.tokens for cell in audit.cells}
 
     volume_table = Table(title="Tokens per cell (millions)", show_lines=False)
     volume_table.add_column("Decade", style="cyan")
-    for source in sources:
-        volume_table.add_column(source, justify="right")
+    for layer, source in columns:
+        volume_table.add_column(
+            f"{source} (full)" if layer == "openalex_full" else source, justify="right"
+        )
     volume_table.add_column("merged", justify="right", style="bold")
     for decade, total in audit.merged.items():
         cells_row = [
-            f"{tokens_by_cell[(source, decade)] / 1e6:.2f}"
-            if (source, decade) in tokens_by_cell
+            f"{tokens_by_cell[(layer, source, decade)] / 1e6:.2f}"
+            if (layer, source, decade) in tokens_by_cell
             else "—"
-            for source in sources
+            for layer, source in columns
         ]
         volume_table.add_row(str(decade), *cells_row, f"{total.tokens / 1e6:.2f}")
     console.print(volume_table)

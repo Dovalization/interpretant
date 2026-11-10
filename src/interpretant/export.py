@@ -169,7 +169,7 @@ def export_web(  # noqa: PLR0913
     tiers = read_tiers(words_file)
     targets = load_target_words(words_file)
     audit = {
-        (cell["source"], cell["decade"]): cell
+        (cell["layer"], cell["source"], cell["decade"]): cell
         for cell in json.loads(audit_path.read_text(encoding="utf-8"))["cells"]
     }
     (output_dir / "words").mkdir(parents=True, exist_ok=True)
@@ -182,7 +182,7 @@ def export_web(  # noqa: PLR0913
             index = NeighbourIndex.build(KeyedVectors.load(str(cell.path)))
             tokens = sum(index.counts.values())
             if method == "twec":
-                audited = audit.get((cell.name, cell.decade), {})
+                audited = audit.get((cell.layer, cell.name, cell.decade), {})
                 cells.append(
                     {
                         "layer": cell.layer,
