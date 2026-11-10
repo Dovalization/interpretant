@@ -203,3 +203,22 @@ they were better because they were written for these words and WordNet's first f
 many of the uses (the cap, modern frequency order and single-sense words). Either way, the
 result depends on the list, which for this corpus is the reason the author's review of the lists
 matters.
+
+### Round Z results for Sonnet (2026-11-10, `scripts/score_labels_wordnet.py`)
+
+Scored as written. Sonnet labelled all 9,666 requests with none failed or refused.
+
+| | Verdict | Numbers |
+|---|---|---|
+| Z1 | **Falsified** | Spearman 0.588 over 46 words (needed 0.70) |
+| Z2 | **Falsified** | round Z 0.588, round Y 0.767, difference −0.180 (at most 0.10) |
+| Z3 | **Passed** | 98.1% of 879 repeats labelled the same (needed 85%) |
+| Z4 | Descriptive | mean ARI 0.235 with WordNet lists, 0.287 with round Y's |
+
+By the reading rule, every citation of either labeller's round Y result says that it depends on
+the sense lists. The two labellers dropped by almost the same amount (−0.180 and −0.187), so the
+dependence belongs to the lists, not to one labeller.
+
+Exploratory, after scoring: Sonnet found no fitting listed sense for 19.4% and 17.4% of the two
+periods' usages with WordNet's lists, against 8.8% and 9.0% with round Y's, the same pattern as
+JEV's. The two readings recorded for JEV stand, and this round cannot separate them.
