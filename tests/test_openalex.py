@@ -135,9 +135,10 @@ def test_source_yields_cleaned_abstracts_per_decade(tmp_path: Path) -> None:
         ],
     )
 
-    slices = dict(OpenAlexSource(tmp_path, "hci").iter_decade_slices(1980, 2000, 10))
+    source = OpenAlexSource(tmp_path, "hci")
 
-    assert slices == {1980: [], 1990: ["user interface revisited for older adults"]}
+    assert source.cell(1980).documents == []
+    assert source.cell(1990).documents == ["user interface revisited for older adults"]
 
 
 def test_clean_cell_caps_an_author_who_dominates_the_cell() -> None:

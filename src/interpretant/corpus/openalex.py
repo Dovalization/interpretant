@@ -29,9 +29,8 @@ from typing import Any
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from interpretant.corpus.base import CorpusSource
 from interpretant.corpus.caps import MAX_AUTHOR_SHARE, cap_author_works
-from interpretant.corpus.preprocessing import is_long_enough, preprocess_text
+from interpretant.corpus.preprocessing import preprocess_text
 
 API_URL = "https://api.openalex.org/works"
 PAGE_SIZE = 200
@@ -459,7 +458,7 @@ def _cell_works(
         yield from client.sample_page(filters, sample, seed, page)
 
 
-class OpenAlexSource(CorpusSource):
+class OpenAlexSource:
     """Loads one field's downloaded abstract samples, one document per abstract."""
 
     def __init__(self, raw_dir: Path, field: str) -> None:
@@ -474,31 +473,5 @@ class OpenAlexSource(CorpusSource):
             for line in cell:
                 yield json.loads(line)
 
-    def _decades(self) -> list[int]:
-        return sorted(
-            int(path.name.split(".")[0]) for path in (self.raw_dir / self.field).glob("*.jsonl.gz")
-        )
-
     def cell(self, decade: int) -> CleanedCell:
         return clean_cell(self._records(decade))
-
-    def iter_documents(self) -> Iterator[str]:
-        for decade in self._decades():
-            yield from self.cell(decade).documents
-
-    def iter_decade_slices(
-        self,
-        start: int,
-        end: int,
-        step: int,
-        min_tokens: int = 0,
-        workers: int = 1,
-    ) -> Iterator[tuple[int, list[str]]]:
-        for decade in range(start, end, step):
-            documents = self.cell(decade).documents
-            if min_tokens:
-                documents = [text for text in documents if is_long_enough(text, min_tokens)]
-            yield decade, documents
-
-    def document_count(self) -> int:
-        return sum(sum(1 for _ in self._records(decade)) for decade in self._decades())

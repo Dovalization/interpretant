@@ -78,28 +78,3 @@ def preprocess_text(text: str) -> str:
     # Collapse whitespace
     text = re.sub(r"\s+", " ", text).strip()
     return _VARIANT_RE.sub(lambda match: TARGET_VARIANTS[match.group(1)], text)
-
-
-def is_long_enough(text: str, min_tokens: int = 20) -> bool:
-    """Return True if text contains at least min_tokens whitespace-separated tokens.
-
-    Args:
-        text: Preprocessed document string.
-        min_tokens: Minimum number of tokens required.
-
-    Returns:
-        True if the token count meets or exceeds min_tokens.
-    """
-    return len(text.split()) >= min_tokens
-
-
-def filter_empty(texts: list[str]) -> list[str]:
-    """Remove empty or whitespace-only strings from a list.
-
-    Args:
-        texts: List of text strings, possibly containing empty entries.
-
-    Returns:
-        New list with blank entries removed.
-    """
-    return [t for t in texts if t.strip()]

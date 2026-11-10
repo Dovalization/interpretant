@@ -77,24 +77,6 @@ def test_manifest_loads_required_keys(books_dir: Path) -> None:
         assert required <= entry.keys()
 
 
-def test_iter_decade_slices_groups_by_decade(books_dir: Path) -> None:
-    source = BooksSource(books_dir=books_dir)
-    slices = list(source.iter_decade_slices(start=1960, end=1990, step=10))
-    non_empty = [(decade, docs) for decade, docs in slices if docs]
-    assert len(non_empty) == 2
-    decades = [d for d, _ in non_empty]
-    assert 1960 in decades
-    assert 1970 in decades
-
-
-def test_iter_decade_slices_min_tokens_filter(books_dir: Path) -> None:
-    source = BooksSource(books_dir=books_dir)
-    # FAKE_TEXT_A has ~180 tokens; use a threshold above that to exclude it
-    slices = list(source.iter_decade_slices(start=1960, end=1990, step=10, min_tokens=10_000))
-    total_docs = sum(len(docs) for _, docs in slices)
-    assert total_docs == 0
-
-
 def test_validate_identifies_missing(books_dir: Path) -> None:
     source = BooksSource(books_dir=books_dir)
     _present, missing = source.validate()
@@ -148,11 +130,6 @@ def test_stats_per_field(books_dir: Path) -> None:
     assert per_field.get("philosophy_of_mind") == 1
     assert per_field.get("ai_cs") == 1
     assert per_field.get("arts") == 1
-
-
-def test_document_count(books_dir: Path) -> None:
-    source = BooksSource(books_dir=books_dir)
-    assert source.document_count() == 2
 
 
 def test_decade_documents_pairs_each_present_book_with_its_author(books_dir: Path) -> None:

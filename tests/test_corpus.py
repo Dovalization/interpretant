@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from interpretant.corpus.preprocessing import filter_empty, preprocess_text
+from interpretant.corpus.preprocessing import preprocess_text
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -57,21 +57,3 @@ class TestPreprocessText:
         assert preprocess_text("the media controls the networking") == (
             "the media controls the networking"
         )
-
-
-class TestFilterEmpty:
-    def test_removes_empty_strings(self) -> None:
-        assert filter_empty(["a", "", "b"]) == ["a", "b"]
-
-    def test_removes_whitespace_only(self) -> None:
-        assert filter_empty(["a", "   ", "\t", "b"]) == ["a", "b"]
-
-    def test_empty_list(self) -> None:
-        assert filter_empty([]) == []
-
-    def test_all_empty(self) -> None:
-        assert filter_empty(["", " ", "\n"]) == []
-
-    def test_preserves_order(self) -> None:
-        texts = ["c", "a", "b"]
-        assert filter_empty(texts) == texts
