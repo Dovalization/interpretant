@@ -829,8 +829,8 @@ def twec_grid(  # noqa: PLR0913
     is then trained with the compass's context vectors frozen, so every cell shares one
     space. Finished cells are skipped, so an interrupted run resumes.
     """
-    from interpretant.embedding.grid import discover_cells, write_compass_sample  # noqa: PLC0415
-    from interpretant.embedding.twec import TWECTrainer, _EpochProgressCallback  # noqa: PLC0415
+    from interpretant.embedding.grid import discover_cells, train_twec_grid  # noqa: PLC0415
+    from interpretant.embedding.twec import TWECTrainer  # noqa: PLC0415
 
     _configure_gensim_logging()
     main_cells = discover_cells(input_dir, layers)
@@ -849,32 +849,10 @@ def twec_grid(  # noqa: PLR0913
         f"  dims {vector_size}  window {window}  epochs {epochs}  negative {negative}"
         f"  min_count {min_count}"
     )
-
-    compass_path = output_dir / "compass.model"
-    if compass_path.exists():
-        trainer.load_compass(compass_path)
-        console.print(f"  compass loaded from {compass_path}")
-    else:
-        sample_path = output_dir / "compass_sample.txt"
-        tokens = write_compass_sample(main_cells, compass_tokens_per_cell, sample_path)
-        console.print(f"  compass sample: {tokens:,} tokens → training compass …")
-        with tqdm(total=epochs, desc="  compass", unit="epoch", leave=True) as bar:
-            trainer.train_compass([sample_path], extra_callbacks=[_EpochProgressCallback(bar)])
-        trainer.save_compass(output_dir)
-        sample_path.unlink()
-    console.print(f"  compass vocab: [cyan]{trainer.compass_vocab_size:,}[/cyan] words")
-
-    for cell in tqdm(main_cells + extra_cells, desc="  cells", unit="cell"):
-        target = output_dir / cell.layer / f"{cell.name}_{cell.decade}.kv"
-        if target.exists():
-            continue
-        with tqdm(total=epochs, desc=f"    {cell.label}", unit="epoch", leave=False) as bar:
-            kv = trainer.train_decade(
-                [cell.path], cell.decade, extra_callbacks=[_EpochProgressCallback(bar)]
-            )
-        target.parent.mkdir(parents=True, exist_ok=True)
-        kv.save(str(target))
-    console.print(f"[green]Done.[/green] Models in {output_dir}")
+    written = train_twec_grid(
+        trainer, main_cells, extra_cells, output_dir, compass_tokens_per_cell, console.print
+    )
+    console.print(f"[green]Done.[/green] {len(written)} new models in {output_dir}")
 
 
 @cli.group()
@@ -917,21 +895,14 @@ def ppmi_grid(
 
     Each cell is factorised on its own, so compare PPMI cells by neighbourhood shift only.
     """
-    from interpretant.embedding.grid import discover_cells  # noqa: PLC0415
-    from interpretant.embedding.ppmi import train_cell  # noqa: PLC0415
+    from interpretant.embedding.grid import build_ppmi_grid, discover_cells  # noqa: PLC0415
 
     cells = discover_cells(input_dir, layers)
     console.print(
         f"[bold]PPMI-SVD grid[/bold]: {len(cells)} cells, window {window}, {dimensions} dims"
     )
-    for cell in tqdm(cells, desc="  cells", unit="cell"):
-        target = output_dir / cell.layer / f"{cell.name}_{cell.decade}.kv"
-        if target.exists():
-            continue
-        vectors = train_cell(cell.path, window, dimensions, min_count)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        vectors.save(str(target))
-    console.print(f"[green]Done.[/green] Models in {output_dir}")
+    written = build_ppmi_grid(cells, output_dir, window, dimensions, min_count)
+    console.print(f"[green]Done.[/green] {len(written)} new models in {output_dir}")
 
 
 # ---------------------------------------------------------------------------

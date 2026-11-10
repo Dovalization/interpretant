@@ -5,10 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
-from click.testing import CliRunner
 from gensim.models import KeyedVectors
 
-from interpretant.__main__ import cli
+from interpretant.embedding.grid import build_ppmi_grid, discover_cells
 from interpretant.embedding.ppmi import cooccurrence, ppmi, train_cell, vocabulary
 
 
@@ -61,15 +60,15 @@ def test_ppmi_grid_builds_every_cell_and_resumes(tmp_path: Path) -> None:
     texts.mkdir(parents=True)
     for stem in ("hci_2000", "hci_2010"):
         (texts / f"{stem}.txt").write_text("\n".join(["the user sees the interface"] * 300))
-    args = ["ppmi", "grid", "--input-dir", str(tmp_path / "phrased"), "--layer", "openalex"]
-    args += ["--output-dir", str(tmp_path / "m"), "--dimensions", "2", "--min-count", "1"]
+    cells = discover_cells(tmp_path / "phrased", ("openalex",))
+    output = tmp_path / "m"
 
-    first = CliRunner().invoke(cli, args)
-    second = CliRunner().invoke(cli, args)
+    first = build_ppmi_grid(cells, output, window=5, dimensions=2, min_count=1)
+    second = build_ppmi_grid(cells, output, window=5, dimensions=2, min_count=1)
 
-    assert first.exit_code == 0, first.output
-    assert second.exit_code == 0, second.output
-    loaded = KeyedVectors.load(str(tmp_path / "m" / "openalex" / "hci_2000.kv"))
+    assert [path.name for path in first] == ["hci_2000.kv", "hci_2010.kv"]
+    assert second == []
+    loaded = KeyedVectors.load(str(output / "openalex" / "hci_2000.kv"))
     assert loaded.get_vecattr("interface", "count") == 300
 
 

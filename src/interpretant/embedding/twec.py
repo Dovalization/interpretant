@@ -25,7 +25,7 @@ from interpretant.embedding.base import training_sentences
 logger = logging.getLogger(__name__)
 
 
-class _EpochProgressCallback(CallbackAny2Vec):
+class EpochProgress(CallbackAny2Vec):
     """Calls bar.update(1) after every training epoch.
 
     Designed to work with any object that has an ``update(int)`` method,

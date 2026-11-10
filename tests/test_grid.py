@@ -4,11 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from click.testing import CliRunner
 from gensim.models import KeyedVectors
 
-from interpretant.__main__ import cli
-from interpretant.embedding.grid import discover_cells, write_compass_sample
+from interpretant.embedding.grid import discover_cells, train_twec_grid, write_compass_sample
+from interpretant.embedding.twec import TWECTrainer
 
 SENTENCE = "the mind forms a representation of the world through perception and memory "
 
@@ -45,16 +44,23 @@ def test_twec_grid_trains_every_cell_in_one_space_and_resumes(tmp_path: Path) ->
     write_cell(tmp_path, "books", "books_1890", 30)
     write_cell(tmp_path, "openalex", "philosophy_1990", 30)
     write_cell(tmp_path, "openalex_full", "hci_2010", 30)
-    args = ["twec", "grid", "--input-dir", str(tmp_path), "--output-dir", str(tmp_path / "m")]
-    args += ["--vector-size", "8", "--epochs", "1", "--workers", "1", "--min-count", "1"]
+    main_cells = discover_cells(tmp_path, ("books", "openalex"))
+    extra_cells = discover_cells(tmp_path, ("openalex_full",))
+    output = tmp_path / "m"
 
-    first = CliRunner().invoke(cli, args)
-    second = CliRunner().invoke(cli, args)
+    def train() -> list[Path]:
+        trainer = TWECTrainer(vector_size=8, epochs=1, workers=1, min_count=1)
+        return train_twec_grid(trainer, main_cells, extra_cells, output, 2_000)
 
-    assert first.exit_code == 0, first.output
-    assert second.exit_code == 0, second.output
-    assert (tmp_path / "m" / "compass.model").exists()
+    first, second = train(), train()
+
+    assert len(first) == 3
+    assert second == []
+    assert (output / "compass.model").exists()
+    assert not (output / "compass_sample.txt").exists()
+    reference = KeyedVectors.load(str(output / "books" / "books_1890.kv"))
     for label in ["books/books_1890", "openalex/philosophy_1990", "openalex_full/hci_2010"]:
-        kv = KeyedVectors.load(str(tmp_path / "m" / f"{label}.kv"))
-        assert kv.vector_size == 8
-        assert "representation" in kv.key_to_index
+        vectors = KeyedVectors.load(str(output / f"{label}.kv"))
+        assert vectors.vector_size == 8
+        assert "representation" in vectors.key_to_index
+        assert set(vectors.key_to_index) == set(reference.key_to_index)
