@@ -52,6 +52,7 @@ drift grid                                              data/drift/within_field.
 drift perplexity --drop-shared --fixed-budget 200000 --seed 1 ... --seed 5
 drift separability                                      data/drift/separability_{pairs,assignments}.parquet
 drift heldout                                           data/drift/heldout.parquet
+drift direction                                         data/drift/direction_assignments.parquet
 figures                                                 figures/*.png
 ```
 
@@ -95,7 +96,8 @@ analysis: predictions first, in their own commit.
   `decompose_runs`), `separability.py` (TF-IDF and logistic-regression field classifiers:
   pairwise accuracy and assignment shares per decade; `separability_runs`, rounds S and V),
   `heldout.py` (held-out minus training cross-entropy of every cell's bigram model;
-  `heldout_runs`, round M).
+  `heldout_runs`, round M), `direction.py` (each decade's classifier on later decades; the
+  relative gain net of every field's drift and the seed-noise `present` rule; round N).
 - `predictions.py`: helpers the scorers share (`report`, `load_vectors`, `word_count`,
   `overlap`). Scorers are frozen, so a change here must leave every scorer's output
   byte-identical: rerun them all and diff.

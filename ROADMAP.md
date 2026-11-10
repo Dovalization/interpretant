@@ -76,6 +76,11 @@ Each item that produces results gets its predictions committed first.
 6. ~~Held-out check per cell~~ Round M (2026-11-09), 2 of 3: no cell a robust finding uses is
    flagged; 11 small cells are (main grid 1950s–1960s, HCI before 1980, books 2000s and
    2020s). Next: mark the flagged cells in the explorer's neighbour lists.
+6b. **Direction net of drift** (round N, 2026-11-10, 1 of 5): psychology did not move towards
+   HCI; since the 1990s HCI moved towards the behavioural and social sciences no more than every
+   field did, and towards computing more than any field. The relative gain needs a text-side
+   correction for a field that changes more than the rest (calibrate it first). The README's
+   "out of computing's register" claim no longer holds as stated.
 7. ~~Devlog 05~~ Written 2026-11-09 (`devlogs/05.md`).
 8. **Sense-level drift** with contextual embeddings for *consciousness* and *information*:
    encode occurrences, cluster into senses, track each sense's share by field and decade

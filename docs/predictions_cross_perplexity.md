@@ -1051,3 +1051,64 @@ Reading rule: N1–N3 passing confirm, net of everyone's drift, the direction bo
 agree on and date it to the 2000s. N4 passing makes the meeting with psychology a finding, not a
 by-product of drift; N4 failing returns the claim to the language models' one-sided picture.
 N5 dates psychology's half. Scored by `scripts/score_direction.py`, committed before it is run.
+
+### Round N results (2026-11-10, `scripts/score_direction.py`)
+
+Scored as written. 1 passed, 4 falsified. Relative gains are means over five seeds; "present"
+follows the seed-noise rule.
+
+| | Verdict | Numbers |
+|---|---|---|
+| N1 | **Falsified** | HCI's relative gain towards the behavioural and social fields at the 2020s: present under the 1980s classifier (+0.100, sd 0.036), absent under the 1990s classifier (−0.001, sd 0.013) |
+| N2 | **Falsified** | Under the 1990s classifier at the 2000s: +0.001, sd 0.013, absent |
+| N3 | **Falsified** | HCI's relative gain towards computing at the 2020s is present under both classifiers: +0.110 (sd 0.017) from the 1980s, +0.046 (sd 0.018) from the 1990s |
+| N4 | **Falsified** | Psychology's relative gain towards HCI under the 1980s classifier: +0.001, sd 0.010, absent |
+| N5 | **Passed** | Psychology's relative gain towards HCI under the 1990s classifier at the 2000s: +0.009, sd 0.006, absent (one seed at exactly zero) |
+
+### Reading
+
+Net of every field's drift, the classifier does not see what rounds J, K′, S and V were read as
+showing. **Psychology did not move towards HCI** (N4): round S's "meeting" was the drift every
+field shares, which is what the raw shares could not separate. **Since the 1990s, HCI moved
+towards the behavioural and social sciences no more than other fields did** (N1's 1990s part,
+N2): under the 1990s classifier HCI's raw gain towards that group (+0.055) sits among AI's
+(+0.067), computer science's (+0.054) and history and philosophy of science's (+0.077); every
+field's prose drifted towards those fields' register. **HCI did move towards computing** (N3),
+more than any other field, from the 2010s under the 1990s classifier.
+
+The two classifiers disagree because the relative gain has a blind spot the calibration did not
+plant: it removes drift that every field shares, not one field changing more than the rest.
+HCI's home share under the 1980s classifier falls from 0.87 to 0.56 by the 2020s (0.87 to 0.75
+under the 1990s one), so against the 1980s baseline HCI gains towards every target at once,
+the behavioural and social group (+0.100) and computing (+0.110) alike. The 1990s classifier,
+where HCI changed less, is the cleaner reading, and there HCI's gains differ by target: towards
+computing, not towards the behavioural and social sciences.
+
+The language models and the classifier now disagree on direction outright. The language models
+found every non-computing field's model gaining on HCI's text and computing's not (J, K′), a
+word-mix effect; the classifier finds HCI's abstracts mistaken for computing's more often than
+other fields' are. A reading that fits both, untested: the language models weigh every word by
+its frequency, so they register HCI's bulk prose turning to the generic vocabulary of empirical
+studies (*participant, study, experience*), which every field's model handles and the social
+sciences' handle best; the classifier weighs the words that tell fields apart, and HCI's
+distinctive words moved towards computing's (machine learning, data, models). Neither
+instrument supports "HCI's language moved out of computing's register" as stated.
+
+### Exploratory, after scoring: the decade-by-decade paths
+
+Not predicted; computed from `data/drift/direction_assignments.parquet` after the scorer ran.
+HCI's relative gain by test decade (* present):
+
+| Target | Classifier | 1990s | 2000s | 2010s | 2020s |
+|---|---|---|---|---|---|
+| Behavioural and social | 1980s | +0.011 | +0.028* | +0.035* | +0.100* |
+| Behavioural and social | 1990s | | +0.000 | −0.007 | −0.000 |
+| Computing | 1980s | +0.040 | +0.080* | +0.089* | +0.110* |
+| Computing | 1990s | | +0.022 | +0.037* | +0.046* |
+
+Under the 1990s classifier, HCI's move towards computing builds through the 2000s and is present
+from the 2010s, the decade of deep learning; its move towards the behavioural and social group
+never departs from the other fields'. A next round should give the relative gain a text-side
+correction (a field's gain towards a target relative to its gain towards every target) and
+calibrate it on a synthetic field that changes more than the rest, before asking the 1980s
+classifier anything.
