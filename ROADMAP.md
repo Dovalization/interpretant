@@ -107,9 +107,26 @@ Each item that produces results gets its predictions committed first.
    *attention*'s mechanism sense (a near miss), *platform* in communication and *network* at
    AI's connectionist turn. Its candidates stand; its nulls do not show stability. No survey
    of field-specific meanings is built on it, and no round repairs it.
-8b. ~~A methods write-up~~ Drafted 2026-11-10 as `docs/known_answers.md`: what each instrument did against known answers (the direction
-   measures, the sense instrument, the grid) and what that taught about measuring movement
-   between fields and meaning within them.
+8b. ~~A methods write-up~~ Drafted 2026-11-10 as `docs/known_answers.md`: what each instrument
+   did against known answers (the direction measures, the sense instrument, the grid) and what
+   that taught about measuring movement between fields and meaning within them.
+8c. **Meaning by usage pairs** (planned 2026-11-10; literature and design in
+   [`docs/related_work.md`](docs/related_work.md)). The sense rounds used the configuration the
+   literature ranks weakest, a general encoder and clustering, with no external benchmark. The
+   redesign measures how much more distant a word's usages are across two cells than within
+   each, with no clustering, judged by XL-LEXEME (an encoder trained on word-in-context
+   judgements), by a language model on a subsample, and by the author on a small gold set. A
+   calibration ladder, each rung pre-registered with its own stopping rule:
+   1. reproduce XL-LEXEME's published result on DWUG EN, a human-annotated benchmark;
+   2. this project's known answers over time (*attention, hallucination, prompt, alignment,
+      platform, network*, and quiet transitions), configuration frozen from rung 1;
+   3. known answers between fields: *embodiment* between HCI and philosophy diverges, random
+      controls do not, and Wiktionary's field-labelled senses as a larger set;
+   4. only then open questions: a survey of field-specific meanings, and one-sided changes
+      such as the language-model sense of *hallucination* reaching psychology.
+
+   Not part of it: clustering usages into senses, repairing the grid, the direction of HCI's
+   change.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
