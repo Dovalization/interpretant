@@ -1,9 +1,10 @@
 # Calibrate before you measure
 
-*Three instruments against known answers in a pre-registered study of meaning across fields.*
+*Five instruments against known answers in a pre-registered study of meaning across fields.*
 
-*Draft. Every number below is from `docs/predictions.md`, `docs/predictions_cross_perplexity.md`
-or `docs/predictions_senses.md`, where the predictions, scorers and verdicts are recorded.*
+*Draft. Every number below is from `docs/predictions.md`, `docs/predictions_cross_perplexity.md`,
+`docs/predictions_senses.md`, `docs/predictions_pairs.md`, `docs/predictions_labels.md` or
+`docs/diagnostics.md`, where the predictions, checks, scorers and verdicts are recorded.*
 
 ---
 
@@ -27,12 +28,13 @@ which are never edited. A falsified prediction stays falsified, a corrected inte
 in a new section, and a scorer is frozen once it has run. Exploratory readings made after a
 result are labelled as such and count for nothing until a later round predicts them.
 
-**The ledger.** Twenty-two rounds have been scored, with 118 verdicts: 57 passed, 53 falsified
-and 8 untestable as written. The appendix lists every round. Roughly half the predictions
-failing is not a sign of a broken method; most of them were bets on open questions, and several
-misses, restated as predictions, passed on unseen evidence in the next round.
+**The ledger.** Thirty-one rounds and two diagnostic checks have been scored, with 183 verdicts:
+91 passed, 84 falsified and 8 untestable as written. The appendix lists every round. Roughly
+half the predictions failing is not a sign of a broken method; most of them were bets on open
+questions, and several misses, restated as predictions, passed on unseen evidence in the next
+round.
 
-## 2. Three instruments
+## 2. Five instruments
 
 **The embedding grid.** One word2vec model per field and decade, trained with TWEC (Di Carlo et
 al. 2019): a compass trained first on an equal token budget from every cell, then each cell's
@@ -55,6 +57,19 @@ model (SciBERT, and ModernBERT for comparison), all fields' and decades' occurre
 clustered together, and each cell's share of each sense is read (Giulianelli et al. 2020).
 Question: how is a word's meaning divided among its senses in each field, and how does that
 change?
+
+**The usage-pair instrument.** Each occurrence of a word is encoded in its sentence by XL-LEXEME,
+with the target marked, and two cells are compared by the cosine distances between their usages:
+APD, the mean distance over every pair of one usage from each cell, and J, APD minus the mean
+distance within each cell, which nets out how varied a word's usages are (Kutuzov et al. 2022).
+Question: did a word's meaning change between two cells?
+
+**The sense-label instrument.** Each occurrence of a word is given one sense from a short list
+written for that word in advance, and a cell's meaning is its share of each sense; a change is the
+Jensen-Shannon divergence between two cells' shares. The labellers were two language models
+(Claude Sonnet 5.5 and JEV) and, from round E, a logistic-regression classifier on XL-LEXEME
+vectors, trained on usages whose cue words name one sense, with no generative model in the
+pipeline. Question: how is a word's use divided among listed senses, and how does that change?
 
 ## 3. Checks that were not enough
 
@@ -90,7 +105,8 @@ The embedding grid flagged under 1% of control words and separated every flagged
 retraining noise; the language models scored every field's text best under its own model; the
 two contextual encoders agreed with each other to within a few hundredths. None of those checks
 asks whether the instrument finds a change that is known to have happened. When that question
-was finally asked, each instrument answered it differently.
+was finally asked, each instrument answered it differently. The last two instruments were built
+after that lesson and were given known answers before any open question.
 
 ### 4.1 The embedding grid is cautious
 
@@ -219,13 +235,174 @@ C″ the result depended on them: *prompt engineering*, one of the markers, form
 that the threshold it set excluded the other language-model senses. The instrument was partly
 supervised without saying so. A rule committed before round C″ stopped the work there.
 
-### 4.4 The three instruments side by side
+### 4.4 The usage-pair instrument measured contexts
+
+The fourth instrument was calibrated in the order the grid was not: a published benchmark first,
+then this project's known changes, then open questions, each rung pre-registered with a rule for
+stopping. It compares usages directly. XL-LEXEME encodes each occurrence of a word with the target
+marked; APD is the mean distance between a usage from one cell and a usage from the other, and J
+subtracts from it the mean distance within each cell.
+
+Rung 1, round U, used DWUG EN: about 9,000 English usages of 46 words from two periods, with a
+graded change score per word from human judgements of usage pairs (Schlechtweg et al. 2021). APD
+agreed with that score at 0.864 (Spearman), against 0.886 published (Periti and Tahmasebi 2024),
+so the pipeline was reproduced. A control showed what the agreement was made of. With every
+word's usages shuffled between the two periods, so that no difference between periods could be
+measured, APD still agreed at 0.842: words with more senses also have higher change scores, and
+APD ranks words by how varied their usages are. J fell to noise under the shuffle (mean −0.124)
+and agreed with the real score at 0.539, under its bar of 0.75.
+
+Rung 2, round X, gave the frozen configuration round 5's documented changes and quiet
+transitions, with *prompt* in AI, 2000s → 2020s, added. A measure found a change when it beat both
+the 95th percentile of 200 shuffles of the word's usages between the two cells, which rules out
+variety alone, and the 90th percentile of the transition's control words, which rules out the
+drift every word shows between decades.
+
+| Case | APD | J |
+|---|---|---|
+| *attention* in AI, 2010s → 2020s | not found | found |
+| *prompt* in AI, 2000s → 2020s | found | found |
+| *platform* in communication, 2000s → 2010s | not found | found |
+| *network* in AI, 1980s → 1990s | not found | found |
+| *alignment* in AI, 2010s → 2020s (weak case) | not found | found |
+| *attention* in AI, 1990s → 2000s (nothing documented) | not found | found |
+| *attention* in psychology, 2010s → 2020s (nothing documented) | not found | not found |
+
+APD found one documented change in four, because the controls' APD measures how varied each word
+is. J found all four and the weak case, including *network* and *platform*, which every earlier
+instrument had missed. It also found the quiet transition of *attention* in AI, narrowly (0.0019
+against bars of 0.0014 and 0.0015) and on the smallest cells in the round, about 180 usages each.
+The reading rule asked one measure both to find the documented changes and to stay quiet on both
+quiet transitions. Neither did both, and the instrument stopped at this rung, as the rule
+required.
+
+Four diagnostic checks then asked where the problem lay, each committed before anything it
+counted was looked at.
+
+- **Are the changes in the cells?** Check 1a counted marker phrases for each documented sense in
+  round X's usages and read 20 usages per cell blind to cell and case (the reading done by Claude,
+  open to the author's correction). All five documented changes were present and both quiet
+  transitions quiet. A change an instrument misses on these cells is the instrument's miss, not
+  the data's, and that includes round 5's grid, whose cells are the same samples. Read from the
+  table, not predicted: about two thirds of the 1980s *network* uses and of the 2000s *platform*
+  uses were already the later sense, so the decade cells catch the end of those changes; and only
+  about one in seven of *alignment*'s 2020s uses is about aligning AI systems, so the grid's one
+  hit is unlikely to be the documented change.
+- **How large a change can it see?** Check 1b replaced a share of psychology's 2020s *attention*
+  usages, a quiet cell, with AI's 2020s usages that carry attention-mechanism markers. J found the
+  plant in none of five draws at 10% and 20%, and in all five at 30%, 40% and 60%. A placebo, 40%
+  of AI's usages without the markers, was meant to change the usages' source and not their sense;
+  J found it in all five draws. A correction recorded later showed the placebo was not clean: AI's
+  unmarked uses of *attention* are mostly notice or consideration, computational selection and
+  unmarked mechanism uses, not the cognitive attention they replaced, so it moved the cell's mix
+  of senses too. The verdict stands; check 1b does not on its own show a response to source with
+  the sense held fixed.
+- **Does it read abstracts as a person does?** Check 2b compared XL-LEXEME's similarity for 96
+  pairs of usages with the author's judgements on the DURel scale: Spearman 0.431, under the bar
+  of 0.5. By word it was 0.70 for *attention* and 0.66 for *prompt*, whose uses fall into clearly
+  different senses, and 0.10 for *network* and 0.00 for *component*, which the author judged mostly
+  one meaning throughout while XL-LEXEME's similarity spread from about 0.45 to 0.97. Check 2b′
+  added a second judge, a fresh instance of Claude: it agreed with the author at 0.616, and
+  XL-LEXEME agreed with the two judges' mean at 0.610, about its published level. The author judged
+  categorically, the second judge and XL-LEXEME in grades that move with context; a second judge
+  that is a language model may share XL-LEXEME's sensitivity to context.
+
+Together the checks say what J measures. XL-LEXEME's similarity follows the context around a word
+within one sense (check 2b), and ordinary words' contexts drift between decades: J beat its
+shuffles in 56 of 175 control-word transitions, 32% (round X's X5). J measures a change in the
+contexts a word is used in, of which a change of sense is one source and a change of topic, field
+mix or phrasing another. It answers "did the contexts change?", not "did the meaning change?".
+Round X's hits on *platform* and *network*, whose read changes (+0.27 and +0.30) sit at check 1b's
+threshold of about a third, and its false alarm are open to that reading. The conclusion rests on
+check 2b and X5, not on check 1b's placebo.
+
+### 4.5 The sense-label instrument passed the placebo and missed two changes
+
+The fifth instrument asks the question the usage pairs could not separate from context: each usage
+gets one sense from a list written for the word, and a cell's meaning is its share of each sense.
+It climbed a ladder of three rungs: a human benchmark, then this corpus's sentences as the author
+reads them, then the known changes. A labeller that failed a rung stopped there.
+
+**Rung 1: the benchmark.** Rounds Y, Z and Q used DWUG EN, whose graded change score is the
+Jensen-Shannon divergence between the two periods' human clusters, so the labels could be scored
+by the same divergence. Round E brought in the labeller later used on the corpus.
+
+| Round | What was tested | What happened |
+|---|---|---|
+| Y | Lists of 2–4 senses per word written by Claude; Sonnet and JEV label every usage | Both ranked the changes above the bar of 0.70 (JEV 0.821, Sonnet 0.767; BERT 0.563, XL-LEXEME 0.864) and gave 96.8% and 98.9% of repeated usages the same label. Both stopped on Y3, a variety check that DWUG's own clusters fail by more (0.855, against at most 0.20) |
+| Z | WordNet's first four senses in place of the written lists | Both fell by about 0.18 (JEV 0.635, Sonnet 0.588): the result depends on the lists |
+| Q | Lists induced from half the usages, from substitutes, neighbours and dictionaries, consolidated by Claude Opus 5.5 or built by rule; a third labeller with no generative model | No labeller passed. Induced lists ranked the changes 0.25 (Sonnet) and 0.30 (JEV) below the written lists on the same half, while leaving only 6–7% of usages unfitted |
+| E | A logistic regression on XL-LEXEME vectors, trained on usages whose cue words name one sense, with round Y's lists | Spearman 0.669, within 0.10 of Sonnet's 0.693 on the same half; change beyond variety 0.509 (bar 0.40; DWUG's clusters 0.849). Passed rung 1 |
+
+Round Q replaced Y3 with a variety check tried on DWUG's clusters before any labeller: the partial
+Spearman of the divergence with the change score, controlling for the divergence that remains when
+the periods are shuffled. The clusters reach 0.849; a measure of variety alone would sit near 0.
+Whether the written lists win because their writer knew which words changed, or because they draw
+the lines a reader draws, rounds Z and Q could not say. They show that neither WordNet nor lists
+built from the texts recovers those lines.
+
+**Rung 2: this corpus.** Round T gave the classifier sense lists for check 2b's six words, drafted
+by Claude and refined by the author, and scored it on check 2b's 186 usages against the author's
+judged pairs. It fell just short on both predictions: the overlap of its sense probabilities agreed
+with the author at 0.449, against the encoder's own 0.456, and whether a pair got the same sense
+agreed at 0.397, against a bar of 0.414 (Sonnet's 0.514 minus 0.10). The author judged the
+classifier worth one more attempt and amended the rule against repair rounds for this case alone.
+The head-to-head round tested a revised classifier, with cue words added to six senses, square-root
+class weights and cue-first labelling, against Sonnet on 240 fresh usages; the predictions file
+heads it "Round U". The author judged each of the 48 usages where the two disagreed, without knowing
+which labeller gave which label. The classifier's label was chosen in 18 of 41 decided
+disagreements, 43.9% against a bar of 40%: a narrow pass, with an interval of roughly 30% to 60%. On
+*prompt*, Sonnet's label was chosen in 7 of 8.
+
+**Rung 3: the known changes.** Round A gave the revised classifier round X's transitions, on a
+fresh draw of usages, and judged a change as round X did: the Jensen-Shannon divergence between
+two cells' sense shares, corrected for the classifier's confusions (adjusted classify and count),
+had to beat both the 95th percentile of 200 shuffles and the 90th percentile of ten control words
+on the same transition. It added check 1b's planted change and a placebo built to hold the sense
+mix fixed: 40% of psychology's 2020s usages of *years* replaced with sociology's, a word whose
+senses the two fields use much alike.
+
+| Prediction | Verdict | Numbers |
+|---|---|---|
+| A1: at least three of the four documented changes found | Falsified | *attention* (0.108 bits; bars 0.025 and 0.054) and *platform* (0.024; 0.024 and 0.008) found; *prompt* (0.097; 0.036 and 0.107) and *network* (0.048; 0.027 and 0.059) beat their shuffles, not their controls |
+| A2: neither quiet transition found | Passed | 0.018 and 0.001 bits |
+| A3: each documented sense's share rises by more than 0.05 | Passed | attention mechanism 0.175 → 0.518, language-model input 0.456 → 0.802, digital platform 0.673 → 0.783, artificial neural network 0.610 → 0.811 |
+| A4: a planted change of a third or less found | Passed | 3 of 5 draws at 10%; 5 of 5 at 20%, 30%, 40% and 60% |
+| A5: the placebo found in at most one of five draws | Passed | 0 of 5 |
+
+A1 failed, so by its rule the instrument stopped before open questions, with no repair round.
+What it passed goes further than the usage pairs went. With the same plant, J needed a third of
+the usages changed; the labels found a fifth in every draw. J was found by its placebo in every
+draw, a placebo that also moved the sense mix; the labels' placebo, which moved the source and
+held the senses, was found in none. Under the shuffle bar alone the classifier found all four
+documented changes and neither quiet transition, as Sonnet and JEV did with raw shares (they did
+not label the control words, so the control bar was not applied to them). The two misses on the
+control bar are of different kinds.
+
+- ***prompt* was a labelling error**, the first of the risks an amendment named before the run. The
+  classifier labelled 66 of AI's 150 2000s *prompt* usages language-model input, 63 of them by the
+  regression; Sonnet labelled 5 of the 150 so. Read, they are spoken-dialogue system prompts ("the
+  system prompts for information") and the ontology tool PROMPT. The error inflates the earlier
+  share (0.456 adjusted) and shrinks the change below the control bar, which was highest on this
+  transition (0.107), the only one spanning two decades.
+- ***network* changed inside a decade.** This is an exploratory reading made after scoring, and
+  untested. The neural-network sense already held 0.610 of AI's 1980s usages, and check 1a read
+  about two thirds of that cell's uses as neural networks. AI's 1980s cell spans the revival of
+  neural networks in 1986, so much of the change happened inside the earlier decade, and decade
+  cells blur it. The rise that remained beat the shuffles and not the controls.
+
+One miss is the labeller's, named as a risk before the run; the other may be the cells', as the
+grid's miss on *network* may be. Neither was repaired.
+
+### 4.6 The five instruments side by side
 
 | Instrument | Checks against itself | Against known answers | What follows |
 |---|---|---|---|
 | Embedding grid | Controls 0.3–0.9% flagged; every flagged change above retraining noise; two seeds, two methods | 1 of 4 documented changes flagged, 0 of 2 quiet transitions | Its flags are evidence; its silences are not |
 | Field-level measures | Each field's own model best in 100% of cells; classifier separates every pair | No known answer exists for direction; synthetic plants misjudged real noise | Direction not claimed; the lessons are about the measures |
 | Sense instrument | Two encoders agree within a few hundredths | Every new sense found; its share unstable on each unseen case | Stopped by its own rule; readings exploratory |
+| Usage pairs | Published benchmark result reproduced (0.864 against 0.886); J falls to noise with the periods shuffled | J: 4 of 4 documented changes found, 1 of 2 quiet transitions; APD: 1 of 4. A planted change seen from a third; a placebo that also moved the sense mix found in 5 of 5. Agreement with the author 0.431, with two judges' mean 0.610 | J measures change in contexts, of which sense is one source; stopped at rung 2 by its rule |
+| Sense labels | Repeated usages labelled the same 95.7–98.9% of the time; benchmark ranking about 0.18 lower with WordNet's lists | Benchmark changes ranked at 0.767–0.821 with written lists. On this corpus, 2 of 4 documented changes against the control bar (4 of 4 against shuffles alone), 0 of 2 quiet transitions; a planted change seen from a fifth; a placebo holding the senses found in 0 of 5 | Passed the placebo and saw a smaller plant than the usage pairs; stopped at rung 3 by its rule |
 
 Agreement across seeds, methods and encoders measured reliability. Known answers measured
 validity, and they were the only tests that changed what the project claims.
@@ -238,7 +415,10 @@ came last for the grid, after every finding had been built on it, and it changed
 project claims: *intentionality*'s stability became an absence of evidence. For the sense
 instrument it came first, and it stopped the instrument before it said anything about an open
 question. A known-answer test needs a few cases with a clear date and field, measurable in the
-cells, and chosen before their results are seen; the grid's round 5 took an hour.
+cells, and chosen before their results are seen; the grid's round 5 took an hour. The last two
+instruments climbed a ladder from a published benchmark to the known changes before any open
+question, and both stopped on it: one because it measured contexts, the other because it missed
+two documented changes against its control bar.
 
 **Keep development and test apart.** A fix chosen on one known case shows only that it does
 what it was chosen to do. The sense rounds tuned on *attention*, tested on *hallucination*, and,
@@ -251,15 +431,19 @@ redesign is fitted to data already seen; repeated, that is a search for a design
 The direction question ran for thirteen rounds without such a rule, each round repairing the
 last one's measure. The sense instrument had one, committed with its final calibration round,
 and stopped after three. The grid's calibration was committed with the sentence that no round
-would follow to repair it.
+would follow to repair it. The usage-pair and sense-label instruments had a stopping rule at every
+rung; the one exception, a single repair round for the classifier, was committed as an amendment
+before it ran, with the fallback stated.
 
 **Know what a change in a measure can mean.** A fall in cross-entropy can be one field moving
 towards another or the other broadening; splitting it into a change in word mix and a change in
 per-word skill tells them apart. A widening category label mixes a field's change with the
 label's; a cell of venues present in both decades separates them. Netting out a general trend
 (every field drifting from its old self) removes one artefact and can introduce another (a field
-that changes more than the rest looks as if it moved towards whatever is largest). Each of these
-was found by a failed prediction; a known-answer test would have found several sooner.
+that changes more than the rest looks as if it moved towards whatever is largest). A distance
+between usages can be a change of sense or a change of topic around an unchanged sense; a placebo
+that changes the source and holds the senses tells them apart, if it really holds them. Each of
+these was found by a failed prediction; a known-answer test would have found several sooner.
 
 **Read the data source's structure.** OpenAlex nests subfields inside fields: AI and HCI inside
 computer science, cognitive psychology inside psychology. Cells built from those labels share
@@ -304,15 +488,19 @@ hypotheses, and it is the only reason the lessons above can be stated with numbe
 - **Exploratory only:** both instruments pointing towards the behavioural and social sciences in
   round W's frame; AI's sense of *intelligence* spreading into other fields; the language-model
   sense of *hallucination* appearing in psychology.
+- **Nothing from the last two instruments.** The usage-pair and sense-label instruments both
+  stopped before open questions; their results are about the instruments.
 
 ## 7. Limits
 
 The corpus is research abstracts as OpenAlex classifies them: noisy labels in small early cells,
 labels whose scope widens over time, English only, and fields defined by a taxonomy rather than
 by their members. Decade cells can place a change inside a cell instead of between two. The
-known answers were few, four for the grid and three for the sense instrument, chosen by the
-author with approximate dates, so the grid's sensitivity is estimated, not measured; the larger
-whole-field cells behind *embodiment* and *intentionality* were not calibrated at all. The
+known answers were few, four for the grid, three for the sense instrument and four for the last
+two (*prompt* in place of *alignment*, which was kept as a weak case), chosen by the author with
+approximate dates, so the grid's sensitivity is estimated, not measured; the larger whole-field
+cells behind *embodiment* and *intentionality* were not calibrated at all. Judgements of this
+corpus's sentences came from one person, and the only second judge was a language model. The
 predictions are one person's bets, and the lessons come from one project. They are offered as
 what this project found when it checked its instruments, not as general laws.
 
@@ -342,3 +530,14 @@ what this project found when it checked its instruments, not as general laws.
 | C (C1–C5) | Sense instrument | Known answers, two encoders | 2 passed, 3 falsified under each |
 | C′ (C′1–C′4) | Sense instrument | A finer instrument on *hallucination* | 2 passed, 2 falsified |
 | C″ (C″1–C″2) | Sense instrument | A repaired rule on *prompt* | 2 falsified |
+| U (U1–U4) | Usage pairs | Does the pipeline reproduce a published benchmark result? | 3 passed, 1 falsified |
+| X (X1–X5) | Usage pairs | Documented changes and quiet transitions | 3 passed, 2 falsified |
+| Check 1b (P1–P2) | Usage pairs | How large a planted change can it see? | 1 passed, 1 falsified |
+| Check 2b (G1) | Usage pairs | Does XL-LEXEME read this corpus as the author does? | 1 falsified |
+| Y (Y1–Y5) | Sense labels | Do written lists rank a benchmark's changes? | JEV 2 passed, 2 falsified; Sonnet 3 passed, 1 falsified; agreement (Y5) passed |
+| Z (Z1–Z4) | Sense labels | The same with WordNet's lists | 1 passed, 2 falsified for each labeller |
+| Q (Q1–Q7, R1–R7) | Sense labels | Lists induced from the texts or built by rule, three labellers | 12 passed, 15 falsified |
+| E (E1–E6) | Sense labels | A cue-seeded classifier on the benchmark | 2 passed, 1 falsified |
+| T (T1–T3) | Sense labels | Does the classifier read this corpus as the author does? | 2 falsified |
+| Head-to-head (U1–U4) | Sense labels | The revised classifier against Sonnet, judged blind | 1 passed |
+| A (A1–A8) | Sense labels | Documented changes, quiet transitions, a planted change and a placebo | 4 passed, 1 falsified |
