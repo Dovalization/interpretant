@@ -126,6 +126,7 @@ def excluded_texts() -> set[str]:
 def draw() -> None:
     """40 distinct usages per word, uniformly from the sample's distinct sentences."""
     skip = excluded_texts()
+    RAW.mkdir(parents=True, exist_ok=True)
     with TEST.open("w", encoding="utf-8") as out:
         for word in WORDS:
             distinct: dict[str, dict[str, object]] = {}
