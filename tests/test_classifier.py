@@ -5,7 +5,14 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from interpretant.drift.classifier import classify, cue_sense, example_usage, out_of_scope
+from interpretant.drift.classifier import (
+    classify,
+    cue_first,
+    cue_sense,
+    example_usage,
+    out_of_scope,
+    sqrt_balanced,
+)
 from interpretant.drift.pairs import Usage
 
 CUES = {"aircraft": ["pilot", "landed"], "surface": ["inclined", "horizontal"]}
@@ -128,3 +135,20 @@ def test_a_scope_word_near_the_target_puts_the_usage_out_of_scope() -> None:
     assert not out_of_scope(usage("word alignment between two languages", "alignment"), words)
     far = "ergative one two three four five six alignment"
     assert not out_of_scope(usage(far, "alignment"), words)
+
+
+def test_square_root_weights_favour_thin_senses_less_than_balanced_ones() -> None:
+    weights = sqrt_balanced(["common"] * 9 + ["rare"])
+    assert weights["rare"] == pytest.approx(5**0.5)
+    assert weights["common"] == pytest.approx((10 / 18) ** 0.5)
+    assert weights["rare"] / weights["common"] == pytest.approx(3.0)
+
+
+def test_cues_decide_where_they_fire_and_the_classifier_elsewhere() -> None:
+    usages = [
+        usage("The pilot landed the plane safely."),
+        usage("The plane was inclined at ten degrees."),
+        usage("We saw the plane from the hill."),
+    ]
+    labels = cue_first(usages, CUES, ["surface", "aircraft", "aircraft"])
+    assert labels == ["aircraft", "surface", "aircraft"]

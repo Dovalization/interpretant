@@ -82,6 +82,25 @@ def classify(
     return [str(label) for label in model.predict(normalised(vectors))]
 
 
+def sqrt_balanced(senses: Sequence[str]) -> dict[str, float]:
+    """Class weights halfway, on a log scale, between none and balanced: the square root of the
+    balanced weight. Thin senses still count for more, but uncertain usages are pulled to them
+    less than under balanced weights (round U)."""
+    counts: dict[str, int] = {}
+    for sense in senses:
+        counts[sense] = counts.get(sense, 0) + 1
+    total, kinds = len(senses), len(counts)
+    return {sense: float((total / (kinds * n)) ** 0.5) for sense, n in counts.items()}
+
+
+def cue_first(
+    usages: Sequence[Usage], cues: Mapping[str, Sequence[str]], predicted: Sequence[str]
+) -> list[str]:
+    """Each usage's label: the sense its cues name, where they name exactly one, and otherwise
+    the classifier's prediction (round U)."""
+    return [cue_sense(usage, cues) or guess for usage, guess in zip(usages, predicted, strict=True)]
+
+
 def confusion(truth: Sequence[str], predicted: Sequence[str], labels: Sequence[str]) -> np.ndarray:
     """Row-normalised confusion matrix: entry (i, j) is the share of items whose true label is
     ``labels[i]`` that were predicted as ``labels[j]``. A label never seen as true gets an
