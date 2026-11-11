@@ -897,3 +897,17 @@ Exploratory, after scoring:
   not apply bar (b) to the language models, because they did not label the control words.
 - **The placebo and the planted change**, the tests the usage-pair measure failed, both pass: a
   change of source alone is never found, and a planted change of a fifth always is.
+
+### Note on names and file paths (2026-11-11, after round A was scored)
+
+Two corrections to how this file names things. Neither changes a prediction, a verdict or what was
+run.
+
+- **Two rounds U.** The heading "Round U: the revised classifier against Sonnet, judged blind by the
+  author" reuses a letter: `predictions_pairs.md` already has a round U, the usage-pair
+  instrument's first rung. Elsewhere this round is called the head-to-head round (H). The heading
+  above is left as committed.
+- **Draft names for frozen lists.** Round T names `data/sense_lists/corpus_draft.toml` and round A's
+  amendment names `corpus_draft_controls.toml`. Both rounds read the frozen copies:
+  `corpus.toml` (`9332d86`, then `corpus_v2.toml`, `0b3bfa3`, after round T) and
+  `corpus_controls.toml` (`359c858`), as their scorers show.
