@@ -46,7 +46,7 @@ cues = ["<<written", "<<essay", "<<verbal", "<<spoken", "<<dialogue", "<<dialog"
 key = "quick_or_immediate"
 definition = "The adjective: done or happening quickly, without delay"
 example = "Prompt treatment reduces the risk of complications."
-cues = [">treatment", ">diagnosis", ">payment", ">delivery", ">intervention", ">repair", ">medical", ">notification"]
+cues = [">>treatment", ">>diagnosis", ">>payment", ">>delivery", ">>intervention", ">>repair", ">>notification", ">>attention", ">>action", ">>recovery", ">>reporting"]
 
 [[prompt.senses]]
 key = "to_cause_or_provoke"
