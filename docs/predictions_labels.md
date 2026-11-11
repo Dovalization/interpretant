@@ -679,3 +679,11 @@ Found in the second review pass. Neither changes a prediction or a bar.
   rule applies the same way in every decade, so it cannot make or hide a change over time. None of
   check 2b's 186 usages is out of scope, so round T's test set is unchanged; in round A the rule
   applies to the cells measured as boilerplate does.
+
+### Note on a renamed sense (2026-11-11, before rounds T and A were run)
+
+In the review of what the classifier does with usages no cue names, *network*'s
+`knowledge_or_probabilistic_model` was widened to networks of concepts, beliefs, rules or signs
+(an AI knowledge representation or an abstract structure of ideas) and renamed
+`knowledge_or_conceptual_network`; the amendment above refers to it by its old name. No
+prediction names it.
