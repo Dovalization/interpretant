@@ -94,7 +94,7 @@ cues = ["neural", "<<trained", ">>training", "<<layer", "<<layers", "backpropaga
 key = "biological_neural_network"
 definition = "A network of neurons or brain regions in a living nervous system, as studied in neuroscience"
 example = "Memory consolidation depends on a hippocampal-cortical network."
-cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortical", "connectivity", "fmri", "synaptic", "<<mode"]
+cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortical", "fmri", "synaptic", "<default"]
 
 [[network.senses]]
 key = "computer_or_communication_network"
