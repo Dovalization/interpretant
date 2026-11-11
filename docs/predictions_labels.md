@@ -916,3 +916,47 @@ run.
 
 The note above calls the head-to-head round "(H)", but H already names a cross-perplexity round
 (`predictions_cross_perplexity.md`). It is called the head-to-head round, without a letter.
+
+## Round A′: the test set, fixed before its data (committed 2026-11-11, before any of its cells was fetched)
+
+Round A is spent as a test: its cells are development data from here on (see its results). Round
+A′ is the fresh test of the improved labeller. This section fixes what it tests, before any cell
+below is downloaded and before the labeller is revised; its predictions and scorer are committed
+later, before it is run, with the frozen labeller and the four words' approved sense lists.
+
+**Documented changes**, each window placed either side of a documented date:
+
+| Word, field | Earlier → later window | The documented change |
+|---|---|---|
+| *transformer*, AI | 2010–2016 → 2019–2023 | a device or a generic transformation → the neural architecture of Vaswani et al. (2017) |
+| *embedding*, AI | 2005–2009 → 2015–2019 | a mathematical or graph embedding → learned vector representations of words and items, after Mikolov et al. (2013) |
+| *cloud*, computer science | 2000–2004 → 2010–2014 | clouds of points or data, weather clouds → cloud computing, popularised from 2006 (Armbrust et al. 2009) |
+| *hallucination*, computer science | 2005–2014 → 2021–2025 | "face hallucination", image super-resolution (Baker and Kanade 2000) → a language model's unfaithful or invented output (Maynez et al. 2020; Ji et al. 2023) |
+
+The earlier windows of *transformer* and *hallucination* are seven and ten years long because
+OpenAlex holds about 100 works in five (a dry run on 2026-11-11; see below).
+
+**Quiet transitions:** *hallucination* in psychology, 2010–2014 → 2015–2019, and in neuroscience,
+2000–2004 → 2005–2009. The clinical sense is stable there; the language-model sense reaching
+psychology is an open question of the 2020s, outside these windows.
+
+**Planted change:** psychology's 2015–2019 *hallucination* usages, a share (10%, 20%, 30%, 40%,
+60%; five draws each, seeded) replaced by computer science's 2021–2025 usages whose context names
+a language model ("language model", "LLM", "GPT", "chatbot").
+
+**Placebo:** psychology's 2015–2019 *hallucination* usages, 40% replaced by neuroscience's
+2015–2019 usages (the same clinical sense, another source), five draws.
+
+**Controls and sampling:** the 10 control words of rung 3 in the same fields and windows, each
+where it has at least 100 usages in both windows; at most 150 abstracts per window, seed 3; quality
+rules version 2 (`docs/corpus.md`) applied to every cell. **Bars:** as round A, the shuffles' 95th
+percentile and the controls' 90th.
+
+**Sources of the cells.** *transformer* (AI 2010s, 2020s), *embedding* (AI 2000s, 2010s) and *cloud*
+(computer science 2000s, 2010s) are downloaded by word, as round X did for *prompt*: a seeded sample
+of up to 1,000 works per decade whose abstract matches OpenAlex's stemmed search, with the grid's
+field filters. *hallucination* uses the word cells already downloaded, which hold nearly every work
+OpenAlex has for these windows. Each word's cells come from one source. The dry run's counts of
+works OpenAlex holds per window: *transformer* 104 → 10,218; *embedding* 2,471 → 9,669; *cloud*
+940 → 38,170; *hallucination* 113 (2010–2014) → 3,979. Stemming inflates these (*embedding* also
+matches *embedded*), so the usable counts are reported when the round is pre-registered.
