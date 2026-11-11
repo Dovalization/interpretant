@@ -37,7 +37,7 @@ word = "prompt"
 key = "language_model_input"
 definition = "An instruction or input text given to a language model or other generative AI system"
 example = "We design prompts that ask the model to explain its answer step by step."
-cues = ["llm", "llms", "gpt", "chatgpt", "engineering", ">>tuning", "shot", "zero", "few", "generative", "chain", "<<thought", "templates", "template", "soft", ">>injection", "<<context"]
+cues = ["llm", "llms", "gpt", "chatgpt", "engineering", ">>tuning", "shot", "generative", "chain", "<<thought", "templates", "template", "soft", ">>injection", "<<context"]
 
 [[prompt.senses]]
 key = "cue_to_a_person"
@@ -91,13 +91,13 @@ word = "network"
 key = "artificial_neural_network"
 definition = "An artificial neural network: a computational model of connected units whose weights are learned from data"
 example = "A three-layer network was trained with backpropagation."
-cues = ["neural", "<<trained", ">>training", "<<layer", "<<layers", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", ">>weights", "boltzmann"]
+cues = ["neural", "<<trained", ">>training", "<<layer", "<<layers", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", ">>weights", "boltzmann", "!brain", "!brains", "!biological", "!cortex", "!cortical", "!neuronal", "!dysfunction"]
 
 [[network.senses]]
 key = "biological_neural_network"
 definition = "A network of neurons or brain regions in a living nervous system, as studied in neuroscience"
 example = "Memory consolidation depends on a hippocampal-cortical network."
-cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortical", "fmri", "synaptic", "<default"]
+cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortical", "fmri", "synaptic", "<default", "!artificial", "!connectionist", "!recurrent"]
 
 [[network.senses]]
 key = "computer_or_communication_network"
@@ -175,7 +175,7 @@ word = "having"
 key = "perfect_auxiliary"
 definition = "The auxiliary before a past participle, marking a completed action"
 example = "Having trained the model, we evaluate it on held-out data."
-cues = [">been", ">shown", ">proved", ">proven", ">demonstrated", ">found", ">completed", ">received", ">obtained", ">established", ">achieved", ">reached", ">made", ">observed"]
+cues = [">been", ">shown", ">proved", ">proven", ">demonstrated", ">found", ">completed", ">received", ">obtained", ">established", ">achieved", ">reached", ">made", ">observed", ">>seen", ">>had", ">>done", ">>taken", ">>become", ">>come", ">>given", ">>spent", ">>lived", ">>worked", ">>studied", ">>examined", ">>lost", ">>used", ">>left", ">>heard", ">>written", ">>provided", ">>presented", ">>served", ">>gained", ">>decided", ">>failed", ">>bought", ">>won", ">>gone", ">>identified", ">>learned", ">>developed", ">>analyzed", ">>undergone", ">>chosen", ">>acquired", ">>discovered", ">>published", ">>taught", ">>met", ">>passed", ">>tried"]
 
 [[having.senses]]
 key = "possessing_or_containing"
