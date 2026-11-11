@@ -1,0 +1,142 @@
+<title>Round U judging</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one sentence per screen, the two candidate meanings as large choice cards, and a slim progress bar; keyboard keys 1-4 choose, arrows move. */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --ink: #1b2330; --muted: #5d6878; --rule: #dde2ea;
+  --accent: #2f5aa8; --accent-soft: #e6edf9; --mark: #fff1b8; --ok: #2c7a4b; --ok-soft: #e3f3e9;
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12; --ok: #7fd3a1; --ok-soft: #173426; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12; --ok: #7fd3a1; --ok-soft: #173426; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); margin: 0; }
+.page { max-width: 760px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 20px; }
+h1 { font: 650 1.6rem/1.2 var(--display); margin: 0; }
+.lede { margin: 4px 0 0; color: var(--muted); max-width: 62ch; font-size: 0.95rem; }
+.status { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--muted); }
+.status strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.bar { flex: 1; height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; }
+.word { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
+.sentence { font: 500 1.15rem/1.6 var(--display); overflow-wrap: anywhere; }
+mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3px; font-weight: 650; }
+.question { margin: 0; font-weight: 600; }
+.options { display: grid; gap: 10px; }
+.opt { display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%; font: inherit; color: inherit;
+  background: var(--surface); border: 2px solid var(--rule); border-radius: 10px; padding: 14px 16px; cursor: pointer; }
+.opt:hover { border-color: var(--accent); }
+.opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.opt.chosen { border-color: var(--ok); background: var(--ok-soft); }
+.opt kbd { flex: none; font: 600 0.85rem/1 var(--body); border: 1px solid var(--rule); border-radius: 5px; padding: 5px 8px; background: var(--bg); }
+.minor { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.minor .opt { padding: 10px 14px; font-size: 0.95rem; }
+.nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.nav button { font: inherit; font-size: 0.9rem; color: var(--accent); background: none; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.nav button:disabled { color: var(--muted); cursor: default; opacity: .6; }
+.note { color: var(--muted); font-size: 0.85rem; min-height: 1.2em; }
+.done { text-align: center; padding: 32px 20px; }
+.done h2 { font: 650 1.4rem/1.3 var(--display); margin: 0 0 6px; }
+@media (max-width: 480px) { .minor { grid-template-columns: 1fr; } .sentence { font-size: 1.05rem; } }
+</style>
+<div class="page">
+  <header>
+    <h1>Which meaning fits?</h1>
+    <p class="lede">Two labellers gave different meanings to the highlighted word. Pick the one that fits the sentence. You aren't told which labeller gave which. Keys: 1 and 2 choose, 3 both fit, 4 neither, arrows move.</p>
+  </header>
+  <div class="status"><strong id="count">0 / 0</strong><div class="bar"><span id="bar"></span></div></div>
+  <main id="main"></main>
+  <div class="nav">
+    <button id="prev" type="button">← Previous</button>
+    <button id="skip" type="button">Next unjudged</button>
+    <button id="next" type="button">Next →</button>
+  </div>
+  <p class="note" id="note">Connecting…</p>
+</div>
+<script>
+const ITEMS = __ITEMS__;
+const LABEL = { first: "1", second: "2", both: "3", neither: "4" };
+const state = {};
+let db = null, at = 0;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const judged = () => ITEMS.filter(i => state[i.id]).length;
+const firstOpen = from => { for (let k = 0; k < ITEMS.length; k++) { const n = (from + k) % ITEMS.length; if (!state[ITEMS[n].id]) return n; } return -1; };
+
+function render() {
+  const main = document.getElementById("main");
+  const n = judged();
+  document.getElementById("count").textContent = `${n} / ${ITEMS.length}`;
+  document.getElementById("bar").style.width = ITEMS.length ? `${100 * n / ITEMS.length}%` : "0";
+  if (!ITEMS.length) { main.innerHTML = `<div class="card done"><h2>Nothing to judge</h2><p>The labellers agreed everywhere.</p></div>`; return; }
+  if (n === ITEMS.length && at === -1) {
+    main.innerHTML = `<div class="card done"><h2>All ${ITEMS.length} judged</h2><p>Thank you. Tell Claude you're done. You can still go back and change any answer.</p></div>`;
+    return;
+  }
+  const item = ITEMS[at], chosen = state[item.id];
+  const opt = (value, text) => `<button class="opt${chosen === value ? " chosen" : ""}" data-choice="${value}" type="button"><kbd>${LABEL[value]}</kbd><span>${text}</span></button>`;
+  main.innerHTML = `
+    <div class="card"><div class="word">${esc(item.word)} · ${at + 1} of ${ITEMS.length}</div>
+      <div class="sentence">${esc(item.before)}<mark>${esc(item.target)}</mark>${esc(item.after)}</div></div>
+    <p class="question">Which meaning of <em>${esc(item.word)}</em> fits here?</p>
+    <div class="options">${opt("first", esc(item.options[0]))}${opt("second", esc(item.options[1]))}</div>
+    <div class="minor">${opt("both", "Both fit")}${opt("neither", "Neither fits")}</div>`;
+  document.getElementById("prev").disabled = at <= 0;
+  document.getElementById("next").disabled = at >= ITEMS.length - 1;
+}
+
+async function choose(value) {
+  if (at < 0) return;
+  const id = ITEMS[at].id;
+  state[id] = value;
+  const next = firstOpen(at + 1);
+  at = next;
+  render();
+  if (!db) return;
+  try {
+    await db.collection("judgements").doc(id).set({ choice: value, updated: new Date().toISOString() });
+    document.getElementById("note").textContent = "Saved.";
+  } catch (e) {
+    document.getElementById("note").textContent = "Not saved: " + (e && e.message ? e.message : "try again");
+  }
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.dataset.choice) choose(b.dataset.choice);
+  else if (b.id === "prev" && at > 0) { at -= 1; render(); }
+  else if (b.id === "next") { at = at < 0 ? ITEMS.length - 1 : Math.min(ITEMS.length - 1, at + 1); render(); }
+  else if (b.id === "skip") { const n = firstOpen(Math.max(at, 0)); at = n; render(); }
+});
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const map = { "1": "first", "2": "second", "3": "both", "4": "neither" };
+  if (map[e.key]) { e.preventDefault(); choose(map[e.key]); }
+  else if (e.key === "ArrowLeft" && at > 0) { at -= 1; render(); }
+  else if (e.key === "ArrowRight") { at = at < 0 ? ITEMS.length - 1 : Math.min(ITEMS.length - 1, at + 1); render(); }
+});
+
+render();
+(async () => {
+  const note = document.getElementById("note");
+  db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+  if (!db) { note.textContent = "Answers can't be saved in this view. Open the page on claude.ai while signed in."; return; }
+  const timer = setTimeout(() => { note.textContent = "Saved answers can't be reached yet; answers may not save."; }, 10000);
+  let first = true;
+  db.collection("judgements").onSnapshot(snap => {
+    snap.docs.forEach(d => { if (d.exists && d.data().choice) state[d.id] = d.data().choice; });
+    if (!snap.metadata.fromCache) { clearTimeout(timer); note.textContent = "Answers save as you go."; }
+    if (first) { first = false; const n = firstOpen(0); at = n; }
+    render();
+  }, err => { clearTimeout(timer); note.textContent = "Saved answers are unavailable (" + err.code + ")."; });
+})();
+</script>
