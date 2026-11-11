@@ -48,7 +48,9 @@ Scored in [`docs/predictions.md`](docs/predictions.md) (rounds 1–3) and
   experiential *affordance* in the 2010s; philosophy's 2020s *consciousness* (a candidate
   under TWEC in both corpora, described differently by each method).
 - Not robust: *information* converging between psychology and computer science.
-- Not achieved: senses by field and decade (item 8); its readings are exploratory only.
+- Not achieved: senses by field and decade (item 8); its readings are exploratory only. The
+  sense-label instrument (item 8d) passes its placebo and planted-change tests but stopped at
+  rung 3 (2 of 4 documented changes), so it has no reading on open questions yet.
 - Open: whether round N's computing reading is its measure's artefact (counting assignments
   misreads a field that changes more than the rest), as round W suggests without testing it. No
   further direction round is planned. Label scope over time is a known hazard: a
@@ -139,9 +141,10 @@ Each item that produces results gets its predictions committed first.
 8d. **Meaning by sense labels** (started 2026-11-10;
    [`docs/plan_sense_labels.md`](docs/plan_sense_labels.md),
    [`docs/predictions_labels.md`](docs/predictions_labels.md),
-   [`docs/labellers.md`](docs/labellers.md)). A language model labels each usage with one sense
-   from a fixed list per word, and a cell's meaning is its distribution over the list. Two
-   labellers, Claude Sonnet 5.5 (Batch API) and JEV (TypeSafe AI), run as separate instruments.
+   [`docs/labellers.md`](docs/labellers.md)). Each usage gets one sense from a fixed list per
+   word, and a cell's meaning is its distribution over the list. On the benchmark two language
+   models labelled, Claude Sonnet 5.5 (Batch API) and JEV (TypeSafe AI); from round E a
+   cue-seeded classifier labels this corpus, with the two as comparisons. Stopped at rung 3.
    - Round Y (DWUG EN, lists written by Claude): both rank the benchmark's changes well (Sonnet
      0.767, JEV 0.821; XL-LEXEME 0.864) and consistently, and both stopped on a variety check
      that DWUG's own clusters fail (recorded as a correction).
@@ -152,10 +155,23 @@ Each item that produces results gets its predictions committed first.
    - Round E: a logistic regression on XL-LEXEME, trained from cue words and the lists' example
      sentences, with no generative model and no labelling by a person, passes rung 1 (0.669, within
      0.10 of Sonnet's 0.693; JEV 0.800).
-   Next: rung 2 on this corpus with that classifier. Lists and cue words drafted by Claude and
-   refined with the author on a review page, guided by leave-one-cue-out agreement and
-   out-of-fold doubt, then frozen; shares corrected by adjusted classify and count; Sonnet and JEV
-   as comparison points (`docs/plan_sense_labels.md`, which also gives the method in NLP terms).
+   - Lists for this corpus: drafted by Claude, reviewed and approved by the author on review
+     pages (cue matches, leave-one-cue-out agreement, out-of-fold doubt, the classifier on usages
+     no cue names), then frozen: `corpus.toml`, `corpus_v2.toml`, `corpus_controls.toml`.
+   - Round T (rung 2, against the author's check 2b judgements): falsified narrowly (0.449
+     against 0.456; 0.397 against 0.414).
+   - The head-to-head round (a one-off second attempt on fresh sentences; headed "Round U" in the
+     predictions file): the revised classifier (square-root class weights, cue-first labelling)
+     against Sonnet, the author judging 48 disagreements blind; passed narrowly (43.9% against
+     40%), losing 7 of 8 on *prompt*.
+   - Round A (rung 3, round X's transitions): 2 of 4 documented changes found against the
+     control-word bar (A1 falsified; all 4 against shuffles alone), neither quiet transition, a
+     planted change from 20%, and the *years* placebo in none of 5 draws. The miss on *prompt* is
+     a labelling error written down as a risk before the run; the miss on *network* is a change
+     inside the 1980s that decade cells blur (exploratory).
+   Not run: rung 4 (open questions). Next, with the author: improve the classifier on the spent
+   rounds as development data, then one new pre-registered set of known changes at half-decade
+   windows (*hallucination*, *transformer*, *cloud*, *embedding*), encoded once for the whole grid.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
