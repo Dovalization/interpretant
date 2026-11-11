@@ -127,7 +127,7 @@ word = "alignment"
 key = "ai_alignment"
 definition = "Making an AI system's behaviour match human intentions, preferences or values"
 example = "We study the alignment of large language models with human preferences."
-cues = ["human", "preference", "preferences", "rlhf", "feedback", "safety", "llm", "llms", "ai", "harmless", "helpful"]
+cues = [">human", ">preference", ">preferences", "rlhf", "<<safety", "llm", "llms", "<<ai", "harmless", "helpful"]
 
 [[alignment.senses]]
 key = "matching_or_correspondence"
@@ -146,6 +146,12 @@ key = "physical_arrangement"
 definition = "Arrangement in a straight line or in correct relative positions, as of mechanical, optical or other physical parts"
 example = "Wheel alignment affects the car's handling."
 cues = ["wheel", "axis", "mechanical", "optical", "laser", "beam", "mirror", "mounting", "vertical", "horizontal", "camera"]
+
+[[alignment.senses]]
+key = "grammatical_alignment"
+definition = "In linguistics, how a language marks the subject and object of verbs, as in ergative or accusative alignment"
+example = "The language shows split-ergative alignment in the past tense."
+cues = ["<<ergative", "<<accusative", "<<morphosyntactic", "<<case", "ergativity"]
 
 [component]
 word = "component"
