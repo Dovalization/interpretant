@@ -137,30 +137,63 @@ def merge() -> None:
     print(f"{total:,} usages, {len(seen):,} distinct to encode")
 
 
+TOKENIZER_WORKERS = 4
+_TOKENIZER: object = None
+
+
+def _start_tokenizer() -> None:
+    """Load XL-LEXEME's tokenizer once in a worker process."""
+    global _TOKENIZER  # noqa: PLW0603
+    from transformers import AutoTokenizer  # noqa: PLC0415
+
+    from interpretant.drift.pairs import XL_LEXEME, XL_LEXEME_REVISION  # noqa: PLC0415
+
+    _TOKENIZER = AutoTokenizer.from_pretrained(XL_LEXEME, revision=XL_LEXEME_REVISION)  # type: ignore[no-untyped-call]
+
+
+def _input_ids(rows: list[tuple[str, int, int]]) -> list[list[int]]:
+    from interpretant.drift.pairs import usage_input_ids  # noqa: PLC0415
+
+    return [usage_input_ids(_TOKENIZER, Usage(text, start, end)) for text, start, end in rows]
+
+
 def encode() -> None:
-    """Encode every distinct usage in shards of ``SHARD_SIZE``; finished shards are kept."""
+    """Encode every distinct usage in shards of ``SHARD_SIZE``; finished shards are kept. While
+    the GPU encodes one shard, worker processes build the next shard's token ids."""
+    from concurrent.futures import Future, ProcessPoolExecutor  # noqa: PLC0415
+
     from interpretant.drift.pairs import XLLexeme  # noqa: PLC0415
 
     with gzip.open(MANIFEST, "rt", encoding="utf-8") as manifest:
         todo = [row for row in map(json.loads, manifest) if row["encode"]]
     SHARDS.mkdir(parents=True, exist_ok=True)
-    encoder = XLLexeme(batch_size=128)
-    for first in range(0, len(todo), SHARD_SIZE):
-        path = SHARDS / f"shard_{first // SHARD_SIZE:04d}.npz"
-        if path.exists():
-            continue
-        rows = todo[first : first + SHARD_SIZE]
-        vectors = encoder.encode(
-            [Usage(r["text"], r["start"], r["end"]) for r in rows], by_length=True
-        )
-        if not np.isfinite(vectors.astype(np.float16)).all():
-            raise ValueError(f"{path.name}: vectors overflow float16")
-        partial = path.with_name(path.stem + ".partial.npz")
-        np.savez(
-            partial, keys=np.array([r["key"] for r in rows]), vectors=vectors.astype(np.float16)
-        )
-        partial.rename(path)
-        print(f"{path.name}: {first + len(rows):,} of {len(todo):,}", flush=True)
+    pending = [
+        (first, SHARDS / f"shard_{first // SHARD_SIZE:04d}.npz")
+        for first in range(0, len(todo), SHARD_SIZE)
+    ]
+    pending = [(first, path) for first, path in pending if not path.exists()]
+    with ProcessPoolExecutor(TOKENIZER_WORKERS, initializer=_start_tokenizer) as pool:
+
+        def submit(first: int) -> list[Future[list[list[int]]]]:
+            rows = [(r["text"], r["start"], r["end"]) for r in todo[first : first + SHARD_SIZE]]
+            size = -(-len(rows) // TOKENIZER_WORKERS)
+            return [pool.submit(_input_ids, rows[k : k + size]) for k in range(0, len(rows), size)]
+
+        upcoming = submit(pending[0][0]) if pending else []
+        encoder = XLLexeme(batch_size=128)
+        for position, (first, path) in enumerate(pending):
+            current = upcoming
+            if position + 1 < len(pending):
+                upcoming = submit(pending[position + 1][0])
+            ids = [row for future in current for row in future.result()]
+            vectors = encoder.encode_ids(ids, by_length=True)
+            if not np.isfinite(vectors.astype(np.float16)).all():
+                raise ValueError(f"{path.name}: vectors overflow float16")
+            keys = np.array([r["key"] for r in todo[first : first + SHARD_SIZE]])
+            partial = path.with_name(path.stem + ".partial.npz")
+            np.savez(partial, keys=keys, vectors=vectors.astype(np.float16))
+            partial.rename(path)
+            print(f"{path.name}: {first + len(keys):,} of {len(todo):,}", flush=True)
 
 
 def index() -> None:

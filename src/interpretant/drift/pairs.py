@@ -18,6 +18,7 @@ import csv
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -65,6 +66,17 @@ def centred(tokens: list[str], first: int, last: int, limit: int) -> list[str]:
     return left + middle + right
 
 
+def usage_input_ids(tokenizer: Any, usage: Usage) -> list[int]:
+    """XL-LEXEME's input ids for one usage: the target marked, centred and cut to
+    ``MAX_SEQUENCE`` tokens with its special tokens. A function, so worker processes can build
+    ids with their own tokenizer while the GPU encodes."""
+    tokens, first, last = marked_tokens(usage, tokenizer.tokenize)
+    if len(tokens) + 2 > MAX_SEQUENCE:
+        tokens = centred(tokens, first, last, MAX_SEQUENCE - 2)
+    tokens = [tokenizer.cls_token, *tokens, tokenizer.sep_token]
+    return list(tokenizer.convert_tokens_to_ids(tokens))
+
+
 class XLLexeme:
     """XL-LEXEME on the published weights: one 1,024-dimensional vector per usage."""
 
@@ -89,17 +101,16 @@ class XLLexeme:
         self.batch_size = batch_size
 
     def input_ids(self, usage: Usage) -> list[int]:
-        tokens, first, last = marked_tokens(usage, self.tokenizer.tokenize)
-        if len(tokens) + 2 > MAX_SEQUENCE:
-            tokens = centred(tokens, first, last, MAX_SEQUENCE - 2)
-        tokens = [self.tokenizer.cls_token, *tokens, self.tokenizer.sep_token]
-        return list(self.tokenizer.convert_tokens_to_ids(tokens))
+        return usage_input_ids(self.tokenizer, usage)
 
     def encode(self, usages: Sequence[Usage], by_length: bool = False) -> np.ndarray:
         """One vector per usage, in the order given. With ``by_length``, batches are formed from
         usages of similar token length, which wastes less padding; the vectors come back in the
         original order."""
-        all_ids = [self.input_ids(usage) for usage in usages]
+        return self.encode_ids([self.input_ids(usage) for usage in usages], by_length)
+
+    def encode_ids(self, all_ids: Sequence[list[int]], by_length: bool = False) -> np.ndarray:
+        """:meth:`encode` from token ids already built by :func:`usage_input_ids`."""
         order = (
             sorted(range(len(all_ids)), key=lambda i: len(all_ids[i]))
             if by_length
