@@ -273,6 +273,8 @@ def page() -> None:
             {
                 "id": uid,
                 "word": word,
+                "field": str(row["field"]),
+                "decade": int(row["decade"]),  # type: ignore[call-overload]
                 "before": usage.text[: usage.start],
                 "target": usage.text[usage.start : usage.end],
                 "after": usage.text[usage.end :],

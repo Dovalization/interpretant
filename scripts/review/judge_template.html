@@ -28,6 +28,7 @@ h1 { font: 650 1.6rem/1.2 var(--display); margin: 0; }
 .bar span { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
 .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; }
 .word { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
+.source { color: var(--muted); font-size: 0.9rem; margin: -4px 0 10px; }
 .sentence { font: 500 1.15rem/1.6 var(--display); overflow-wrap: anywhere; }
 mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3px; font-weight: 650; }
 .question { margin: 0; font-weight: 600; }
@@ -66,6 +67,7 @@ mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3
 const ITEMS = __ITEMS__;
 const LABEL = { first: "1", second: "2", both: "3", neither: "4" };
 const STORE = "round-u-judgements";
+const FIELD = { ai: "AI", hci: "HCI", compsci: "computer science", cogpsych: "cognitive psychology", histphilsci: "history and philosophy of science" };
 const state = {};
 let db = null, at = 0;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -85,7 +87,7 @@ function render() {
   const item = ITEMS[at], chosen = state[item.id];
   const opt = (value, text) => `<button class="opt${chosen === value ? " chosen" : ""}" data-choice="${value}" type="button"><kbd>${LABEL[value]}</kbd><span>${text}</span></button>`;
   main.innerHTML = `
-    <div class="card"><div class="word">${esc(item.word)} · ${at + 1} of ${ITEMS.length}</div>
+    <div class="card"><div class="word">${esc(item.word)} · ${at + 1} of ${ITEMS.length}</div><div class="source">${esc(FIELD[item.field] || item.field)} · ${esc(item.decade)}s</div>
       <div class="sentence">${esc(item.before)}<mark>${esc(item.target)}</mark>${esc(item.after)}</div></div>
     <p class="question">Which meaning of <em>${esc(item.word)}</em> fits here?</p>
     <div class="options">${opt("first", esc(item.options[0]))}${opt("second", esc(item.options[1]))}</div>
