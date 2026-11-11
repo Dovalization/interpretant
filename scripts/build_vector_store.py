@@ -196,20 +196,15 @@ def save_shard(path: Path, keys: np.ndarray, vectors: np.ndarray, done: int, tot
 
 def encode(kind: str = "xl-lexeme", which: str = "main") -> None:
     """Encode every distinct usage in shards of ``SHARD_SIZE``; finished shards are kept. While
-    the GPU encodes one shard, worker processes build the next shard's token ids. DeBERTa on
-    the main manifest encodes the full words only (round A′ and the dev data need no more)."""
+    the GPU encodes one shard, worker processes build the next shard's token ids. Both encoders
+    cover every usage of the manifest, so each store is complete and built in one pass."""
     from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor  # noqa: PLC0415
 
     from interpretant.drift.pairs import TargetTokenEncoder, XLLexeme  # noqa: PLC0415
 
     manifest, shards, _ = store_paths(kind, which)
-    full = set(FULL_WORDS)
     with gzip.open(manifest, "rt", encoding="utf-8") as source:
-        todo = [
-            row
-            for row in map(json.loads, source)
-            if row["encode"] and (kind == "xl-lexeme" or which == "dev" or row["word"] in full)
-        ]
+        todo = [row for row in map(json.loads, source) if row["encode"]]
     shards.mkdir(parents=True, exist_ok=True)
     pending = [
         (first, shards / f"shard_{first // SHARD_SIZE:04d}.npz")
