@@ -124,7 +124,12 @@ XL-LEXEME's contextual vectors, trained on those labels and each sense's example
 labels every occurrence; shares corrected for the classifier's confusions (adjusted classify and
 count); and the Jensen-Shannon divergence between two cells' shares, judged against shuffles,
 control words and a placebo. It passed its benchmark rung on DWUG EN (round E) with no generative
-model; Claude Sonnet 5.5 and JEV are comparison labellers. The design, its calibration ladder and
+model; Claude Sonnet 5.5 and JEV are comparison labellers. On this corpus it failed rung 2 as
+round T and passed a second attempt on fresh sentences (the head-to-head round), after which class
+weights became square-root balanced and labelling cue first (a usage whose cues name one sense
+takes it). At rung 3 (round A) it found 2 of 4 documented changes against the control-word bar,
+neither quiet transition, a planted change from 20%, and a placebo of changed source in none of 5
+draws; it stops there, before open questions. The design, its calibration ladder and
 the method in NLP terms are in [`plan_sense_labels.md`](plan_sense_labels.md); the rounds are in
 [`predictions_labels.md`](predictions_labels.md).
 

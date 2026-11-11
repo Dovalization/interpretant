@@ -148,7 +148,8 @@ between decades (check 1b's placebo, first read as a change of source alone, als
 mix; see the correction in `diagnostics.md`). The sense-label instrument (ROADMAP item 8d) is built to
 step around it: meaning there is the share of a word's occurrences in each sense of an approved
 list, so a new topic with the same sense should leave the shares where they were. Its placebo test
-in rung 3 checks exactly that. The classifier still reads contexts (XL-LEXEME vectors), so A7
+in rung 3 checked exactly that, and passed: a change of source with the sense mix held fixed was
+found in none of 5 draws (round A, A5). The classifier still reads contexts (XL-LEXEME vectors), so A7
 returns for it as a question of how far those vectors separate sense from topic.
 
 ## A8. Five resamples measure the uncertainty

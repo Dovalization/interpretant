@@ -326,5 +326,6 @@ J registered a change that was partly a change of sense mix, and it does not on 
 response to source with the sense held fixed. The conclusion that J follows context within a sense
 rests on check 2b and round X's X5, not on P2.
 
-Rung 3 of the sense-label instrument uses a placebo built to hold the sense mix fixed (see
-`predictions_labels.md` when it is pre-registered).
+Rung 3 of the sense-label instrument used a placebo built to hold the sense mix fixed:
+sociology's 2020s *years* planted into psychology's at 40%. Round A found it in none of 5 draws
+(A5; see "Round A results" in `predictions_labels.md`).
