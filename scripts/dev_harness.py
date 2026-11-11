@@ -23,6 +23,7 @@ import tomllib
 from collections import Counter, defaultdict
 from functools import cache
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from scipy.stats import spearmanr
@@ -125,6 +126,9 @@ def run(variant: dict[str, object], list_path: Path) -> dict[str, object]:
     encoder = str(variant.get("encoder", "xl-lexeme"))
     table = tomllib.loads(list_path.read_text(encoding="utf-8"))
     references = gold()
+    external: dict[str, dict[str, Any]] = {}
+    if "predictions" in variant:
+        external = json.loads(Path(str(variant["predictions"])).read_text())["predictions"]
     results: dict[str, Counter[str]] = defaultdict(Counter)
     probabilities: dict[str, dict[str, float]] = {}
     labels_t: dict[str, str] = {}
@@ -136,27 +140,35 @@ def run(variant: dict[str, object], list_path: Path) -> dict[str, object]:
             for r in training_rows(word)
             if not out_of_scope(usage(r), scope) and (s := cue_sense(usage(r), cues))
         ]
-        x = vectors(encoder, "main", [str(r["key"]) for r, _ in seeds])
-        y = [s for _, s in seeds]
-        weights = {"balanced": "balanced", "none": None}.get(str(variant.get("weight")))
-        class_weight = sqrt_balanced(y) if variant.get("weight") == "sqrt" else weights
-        model = LogisticRegression(
-            C=float(str(variant.get("C", 1.0))), class_weight=class_weight, max_iter=2000
-        )
-        model.fit(normalised(x), y)
         items = [r for r in dev_rows() if r["word"] == word and not out_of_scope(usage(r), scope)]
-        dx = vectors(encoder, "dev", [str(r["key"]) for r in items])
-        proba = model.predict_proba(normalised(dx))
-        predicted = [str(model.classes_[int(p.argmax())]) for p in proba]
+        if "predictions" in variant:
+            chosen = [external[f"{r['set']}|{r['id']}"] for r in items]
+            senses_order = [s["key"] for s in table[word]["senses"]]
+            classes = np.array(senses_order)
+            proba = np.array(
+                [[c["probabilities"].get(s, 0.0) for s in senses_order] for c in chosen]
+            )
+            predicted = [str(c["label"]) for c in chosen]
+        else:
+            x = vectors(encoder, "main", [str(r["key"]) for r, _ in seeds])
+            y = [s for _, s in seeds]
+            weights = {"balanced": "balanced", "none": None}.get(str(variant.get("weight")))
+            class_weight = sqrt_balanced(y) if variant.get("weight") == "sqrt" else weights
+            model = LogisticRegression(
+                C=float(str(variant.get("C", 1.0))), class_weight=class_weight, max_iter=2000
+            )
+            model.fit(normalised(x), y)
+            dx = vectors(encoder, "dev", [str(r["key"]) for r in items])
+            proba = model.predict_proba(normalised(dx))
+            classes = model.classes_
+            predicted = [str(classes[int(p.argmax())]) for p in proba]
         if variant.get("cue_first", True):
             predicted = cue_first([usage(r) for r in items], cues, predicted)
         for r, label, p in zip(items, predicted, proba, strict=True):
             dataset, uid = str(r["set"]), str(r["id"])
             if dataset == "T":
                 labels_t[uid] = label
-                probabilities[uid] = {
-                    str(c): float(v) for c, v in zip(model.classes_, p, strict=True)
-                }
+                probabilities[uid] = {str(c): float(v) for c, v in zip(classes, p, strict=True)}
                 continue
             truth = references[dataset].get(uid)
             if truth is None:
