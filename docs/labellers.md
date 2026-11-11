@@ -1,12 +1,13 @@
 # Two labellers compared: Claude Sonnet 5.5 and JEV
 
-The sense-label instrument ([`plan_sense_labels.md`](plan_sense_labels.md)) has a language model
-give each usage of a word one sense from a fixed list. Two labellers ran on every round so far, as
-separate instruments: a result counts only for the labeller that produced it, and how far they
-agree is a finding of its own. This document gathers what the runs of 2026-11-10 showed about the
-two, from the records in [`plan_sense_labels.md`](plan_sense_labels.md) (pilot, API recheck) and
-[`predictions_labels.md`](predictions_labels.md) (rounds Y and Z). Numbers marked *descriptive*
-were computed after scoring and decide nothing.
+The sense-label instrument ([`plan_sense_labels.md`](plan_sense_labels.md)) gives each usage of a
+word one sense from a fixed list. On the benchmark two language models did the labelling, as
+separate instruments; from round E a cue-seeded classifier with no generative model labels this
+corpus and the two language models run beside it as comparisons. This document gathers what the
+runs showed about all three, from the records in [`plan_sense_labels.md`](plan_sense_labels.md)
+(pilot, API recheck) and [`predictions_labels.md`](predictions_labels.md) (rounds Y, Z, Q, E, T, the
+head-to-head round and A). Numbers marked *descriptive* were computed after scoring and decide
+nothing.
 
 ## The two labellers
 
@@ -79,8 +80,9 @@ a common use.
   the corpus, that difference matters more than the small differences in accuracy.
 
 Both labellers stopped at rung 1 in round Y, on a variety check that DWUG's own clusters fail
-(see the correction in [`predictions_labels.md`](predictions_labels.md)); round Q re-tests them
-with sense lists induced from the texts and a variety check calibrated on the gold first.
+(see the correction in [`predictions_labels.md`](predictions_labels.md)). Round Q re-tested them
+with sense lists induced from the texts: both fell short of its bars (Spearman 0.443 for Sonnet and
+0.502 for JEV, needed 0.70), well below the same labellers with round Y's hand-written lists.
 
 ## A third labeller with no generative model (round E)
 
@@ -89,8 +91,25 @@ example sentences, labelled round Q's half B with round Y's lists: Spearman 0.66
 JEV 0.800 on the same usages), partial 0.509 (Sonnet 0.646, JEV 0.667), adjusted Rand index 0.266
 (Sonnet 0.330, JEV 0.302). It gives the same label as Sonnet on 75% of usages and as JEV on 76%.
 It costs nothing to run, needs no labelling by a person, and every label traces back to a cue
-word or an example sentence; it passed rung 1 and is the labeller for this corpus, with the two
-language models as comparison points.
+word or an example sentence; it passed rung 1 and became the labeller for this corpus, with the
+two language models as comparison points.
+
+## On this corpus (rounds T, H and A)
+
+- **Round T (rung 2).** Scored against the author's 100 pair judgements, the classifier fell just
+  short of both bars: 0.449 for probability overlap (needed 0.456) and 0.397 for same sense against
+  Sonnet's 0.514 (needed 0.414); JEV scored 0.451. It gave the same label as Sonnet and as JEV on
+  76.3% of the 186 usages. By the reading rule a language model became the fallback.
+- **The head-to-head round (H; headed "Round U" in the predictions file).** A revised classifier
+  (square-root class weights, cue-first labelling, list version 2) and Sonnet labelled 240 fresh
+  usages and agreed on 192 (80%). The author judged the 48 disagreements blind and chose the
+  classifier's label in 18 of the 41 decided (43.9%, needed 40%): narrowly enough to go on. It lost
+  7 of 8 on *prompt*.
+- **Round A (rung 3).** On round X's transitions, the classifier found 2 of 4 documented changes
+  against the control-word bar. Against shuffles alone it found all four and neither quiet
+  transition, as Sonnet and JEV did with raw shares (A8). The clearest gap is *prompt*: the
+  classifier labels 44% of AI's 2000s usages language-model input, mostly spoken-dialogue system
+  prompts, where Sonnet labels 3%.
 
 ## Practical notes
 
@@ -99,4 +118,5 @@ language models as comparison points.
 - Sonnet through the Claude Code CLI, in blocks of 20 to 40 usages, gave nearly the same labels
   as one usage per request through the API (95% agreement, kappa 0.942), but counts against a
   subscription's usage limits; the Batch API does not.
-- Both ran without a failed or refused request in about 39,000 labels.
+- Both ran without a failed or refused request in about 39,000 labels to round Q, and again in
+  rounds T, H and A (4,692 more).
