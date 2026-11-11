@@ -140,6 +140,10 @@ key = "physical_arrangement"
 definition = "Arrangement in a straight line or in correct relative positions, as of mechanical, optical or other physical parts"
 example = "Wheel alignment affects the car's handling."
 cues = ["wheel", "axis", "mechanical", "optical", "laser", "beam", "mirror", "mounting", "vertical", "horizontal", "camera"]
+# Known gap: grammatical alignment (ergative, accusative) has no meaning of its own. It is 8 of
+# 2,197 sampled usages, all in linguistics (5% of that field's). Tried as a fourth meaning on
+# 2026-11-10: from 6 seeds the classifier learned "language context" and took 17 word-alignment
+# sentences from matching_or_correspondence, so it was dropped.
 
 [component]
 word = "component"
