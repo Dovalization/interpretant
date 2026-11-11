@@ -71,9 +71,9 @@ cues = ["hardware", "software", "computing", "<<robot", "<<robotic", "<<experime
 
 [[platform.senses]]
 key = "physical_structure"
-definition = "A raised physical structure or surface, such as a stage, a station platform or an offshore platform"
+definition = "A raised physical structure or surface, or a vehicle or structure that carries equipment, such as a stage, a station or offshore platform, or an airborne, space or observation platform"
 example = "The speaker stood on a wooden platform."
-cues = ["oil", "offshore", "drilling", "railway", "station", "train", "stage", "wooden", "raised", "floating", "concrete"]
+cues = ["oil", "offshore", "drilling", "railway", "station", "train", "<<wooden", "<<raised", "<<floating", "<<concrete", "<<airborne", "<<observation", "<<space", "<<satellite", "<mounted"]
 
 [[platform.senses]]
 key = "stance_or_forum"
