@@ -124,22 +124,16 @@ cues = ["<<road", "<<railway", "transportation", "<<transport", "<<electrical", 
 word = "alignment"
 
 [[alignment.senses]]
-key = "ai_alignment"
-definition = "Making an AI system's behaviour match human intentions, preferences or values"
-example = "We study the alignment of large language models with human preferences."
-cues = [">human", ">preference", ">preferences", "rlhf", "<<safety", "llm", "llms", "<<ai", "harmless", "helpful"]
-
-[[alignment.senses]]
 key = "matching_or_correspondence"
 definition = "Bringing two structures into correspondence, such as aligning sequences, texts, images, ontologies, modalities or coordinate frames"
 example = "The system computes the alignment between source and target sentences."
 cues = ["sequence", "sequences", "<<word", "<<sentence", "<<image", "ontology", "ontologies", "multiple", "pairwise", "registration", "<<point", "<<modal", "<<temporal", "<<feature", "<<features", "<<structural", "protein", "entity", "graph", "<<visual", "modality", "modalities", "contrastive", "patch"]
 
 [[alignment.senses]]
-key = "strategic_agreement"
-definition = "Agreement or consistency between goals, strategies, organisations or parties"
+key = "goal_or_value_alignment"
+definition = "Bringing goals, strategies, behaviour or values into agreement, of people and organisations, or of AI systems with human intentions and values"
 example = "The alignment of business and IT strategy improves performance."
-cues = ["<<strategic", "business", "organizational", "interests", "political", "stakeholders", "incentive", "incentives"]
+cues = ["<<strategic", "business", "organizational", "interests", "political", "stakeholders", "incentive", "incentives", ">human", ">preference", ">preferences", "rlhf", "<<safety", "llm", "llms", "<<ai", "harmless", "helpful"]
 
 [[alignment.senses]]
 key = "physical_arrangement"
