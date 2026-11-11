@@ -821,3 +821,44 @@ In the review of what the classifier does with usages no cue names, *network*'s
 (an AI knowledge representation or an abstract structure of ideas) and renamed
 `knowledge_or_conceptual_network`; the amendment above refers to it by its old name. No
 prediction names it.
+
+### Amendment to round A: the labeller after round U (committed 2026-11-11, before round A is run)
+
+Round T falsified the classifier's two predictions and round U passed the revised one (U1, 43.9%
+against 40%), so by round U's reading rule the revised classifier labels rung 3. This amendment
+says what that changes in round A. No prediction, bar, transition, cell or seed changes.
+
+- **Lists.** `data/sense_lists/corpus_v2.toml` for the target words and check 2b's two controls,
+  in place of `corpus.toml`. The control words' lists come from `corpus_draft_controls.toml`,
+  frozen after the author's review, as before.
+- **Classifier.** For every word, targets and controls alike: XL-LEXEME and one logistic regression
+  with C = 1 and square-root balanced class weights (`classifier.sqrt_balanced`), trained as round
+  A says, plus *prompt* without the cap in AI's and computer science's 2020s cells, as in round U.
+  Each usage is labelled cue first (`classifier.cue_first`): a usage whose cues name exactly one
+  sense takes that sense, and the regression labels the rest.
+- **Adjusted shares.** A cell's cue-decided usages are counted as labelled. Its regression-decided
+  usages are corrected by adjusted classify and count, with the word's confusion matrix from
+  five-fold out-of-fold predictions on its training sentences, as before. The cell's adjusted
+  shares are the two parts added and divided by the cell's usages. Raw shares are reported beside.
+- **Comparison labellers.** Unchanged: Sonnet and JEV label the target words' transitions with the
+  same lists. Version 2 changes cue words only, so their definitions are version 1's.
+
+Known risks, stated before the run so the results cannot be explained by them afterwards:
+
+1. ***prompt*.** In round U the author preferred Sonnet in 7 of 8 *prompt* disagreements. Two were
+   1980s interface prompts ("menus and prompts", "prompt cards") that the classifier labelled
+   language-model input, three confused the noun, the verb and the adjective, and one missed a
+   language-model prompt whose cue was too far away. In AI's 2000s cell, interface or dialogue
+   prompts read as language-model input would raise the earlier share and shrink the rise A3
+   predicts. Adjusted shares do not undo this, because the confusion matrix comes from cue-labelled
+   sentences.
+2. **Version 2's adjective cues for *prompt*.** `>>recognition`, `>>identification`,
+   `>>detection` and `>>access` also fire on the verb with an object ("situations which prompt
+   recognition of"). Cue-first labelling then labels those usages *quick or immediate*.
+3. **Thin senses.** Square-root weights still favour thin senses somewhat, and the confusion matrix
+   comes from cue-labelled sentences, which are easier than the usages measured. Thin senses'
+   levels are therefore likely overstated. Changes are less affected where both cells have similar
+   text quality.
+4. ***network*.** Usages that fit none of its six senses, such as vascular, flow, gene and
+   citation networks, are forced into one. About 40 of the whole-corpus sample's AI usages are of
+   this kind, across all decades.
