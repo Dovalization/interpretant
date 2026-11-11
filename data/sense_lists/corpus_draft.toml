@@ -52,7 +52,7 @@ cues = [">>treatment", ">>diagnosis", ">>payment", ">>delivery", ">>intervention
 key = "to_cause_or_provoke"
 definition = "The verb: to cause, motivate or bring about something"
 example = "These findings prompt a re-examination of the model."
-cues = ["concerns", "led", "prompted", "prompting", "us", "researchers", "calls"]
+cues = [">>us", ">>them", ">>me", ">>researchers", ">>users", "<<concerns", "<<may", "<<might", "<<could"]
 
 [platform]
 word = "platform"
