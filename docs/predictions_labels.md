@@ -647,3 +647,13 @@ Found while the author reviewed the corpus lists. Neither changes a prediction o
   abstract's own text (a publisher's notice, an affiliation, a journal series line: in the review
   sample, seven sentences carried 264 usages, one alone 174). Such sentences are left out of the
   training sentences and, in round A, out of the cells measured.
+
+### Amendment to round A: the alignment senses (committed 2026-11-10, before round A was run)
+
+In the second review pass the author merged *alignment*'s AI-alignment sense into strategic
+agreement, as `goal_or_value_alignment` ("bringing goals, strategies, behaviour or values into
+agreement, of people and organisations, or of AI systems with human intentions and values"): the
+classifier could not separate the two (the AI sense had 33 training sentences, 55% of them
+doubtful), and merged they reach 14% doubtful. A7 therefore reports the merged sense's share in
+AI's 2010s and 2020s cells, not an AI-alignment share; it remains descriptive and decides nothing.
+The AI-alignment sense on its own is not measured by this instrument.
