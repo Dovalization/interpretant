@@ -16,13 +16,13 @@ word = "attention"
 key = "cognitive_attention"
 definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience, including attention drawn or captured by a stimulus in studies of perception and behaviour"
 example = "Sleep loss impairs sustained attention in older adults."
-cues = ["<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting"]
+cues = ["<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting", "<<visual", "<<selective", "<<spatial", "<<sustained", "<<voluntary", "<<auditory", "<<joint", "<<covert", "<<focused", "<<visuospatial", "<<attentional", "capture", "captured"]
 
 [[attention.senses]]
 key = "notice_or_consideration"
 definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing, including authors directing it, as in we focus our attention on; attention captured by a stimulus belongs to cognitive attention"
 example = "The issue has received growing attention from policymakers."
-cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "<<increasing", "growing", "<<considerable", "little", "special", "deserves", "public", "<<media", "scholarly", "widespread", ">given"]
+cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "<<increasing", "growing", "<<considerable", "little", "special", "deserves", "public", "<<media", "scholarly", "widespread", ">given", "<focus", "<focuses", "<focusing", "<direct", "<directs", "<directed", "<directing", "<turn", "<turns", "<turned", "<turning", "<confine", "<restrict", "<restricting", "<devote", "<devoted", "<devotes", "<<our", "<<my", "!gaze", "!eye", "!eyes", "!visual", "!driver"]
 
 [[attention.senses]]
 key = "attention_mechanism"
@@ -43,7 +43,7 @@ cues = ["llm", "llms", "gpt", "chatgpt", "engineering", ">>tuning", "shot", "gen
 key = "cue_to_a_person"
 definition = "A cue, question or message that invites a person to respond or act, as in experiments, teaching, writing tasks, surveys or the messages of an interactive system"
 example = "Participants answered a written prompt about their daily routine."
-cues = ["<<written", "<<essay", "<<verbal", "<<spoken", "<<dialogue", "<<dialog", "<<interface", "<<screen", "<<survey", "<<questionnaire", "teacher", "therapist", "<<visual", "<<auditory", "<<writing"]
+cues = ["<<written", "<<essay", "<<verbal", "<<spoken", "<<dialogue", "<<dialog", "<<interface", "<<screen", "<<survey", "<<questionnaire", "teacher", "therapist", "<<visual", "<<auditory", "<<writing", "<<command", "<<navigational", "<<voice", "<<speech", "<<audio", "<<menu"]
 
 [[prompt.senses]]
 key = "quick_or_immediate"
@@ -91,7 +91,7 @@ word = "network"
 key = "artificial_neural_network"
 definition = "An artificial neural network: a computational model of connected units whose weights are learned from data, including artificial networks that model the brain or cognition, such as connectionist models"
 example = "A three-layer network was trained with backpropagation."
-cues = ["neural", "<<trained", ">>training", "<<layer", "<<layers", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", ">>weights", "boltzmann", "!brain", "!brains", "!biological", "!cortex", "!cortical", "!neuronal", "!dysfunction"]
+cues = ["neural", "<<trained", ">>training", "<<layer", "<<layers", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", ">>weights", "boltzmann", "cnn", "cnns", "rnn", "rnns", "dnn", "dnns", "lstm", "gru", "gan", "gans", "encoder", "decoder", "<<policy", "siamese", "adversarial", "transformer", "!brain", "!brains", "!biological", "!cortex", "!cortical", "!neuronal", "!dysfunction"]
 
 [[network.senses]]
 key = "biological_neural_network"
@@ -101,9 +101,9 @@ cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortic
 
 [[network.senses]]
 key = "computer_or_communication_network"
-definition = "A computer, telephone or other communication network linking machines or devices, or a broadcasting network of television or radio stations, including sensor and wireless networks"
+definition = "A computer, telephone or other communication network linking machines or devices, or a broadcasting network of television or radio stations, including sensor, wireless and switching networks"
 example = "Messages are routed through the local area network."
-cues = ["<<computer", "<<telephone", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "traffic", "bandwidth", "<<area", "telecommunication", "telecommunications", "<<mobile", "<<cellular", "<<sensor", "<<optical", ">>television", ">>tv", ">>news", "<<television", "<<broadcast", "<<cable"]
+cues = ["<<computer", "<<telephone", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "traffic", "bandwidth", "<<area", "telecommunication", "telecommunications", "<<mobile", "<<cellular", "<<sensor", "<<optical", ">>television", ">>tv", ">>news", "<<television", "<<broadcast", "<<cable", "<<switching"]
 
 [[network.senses]]
 key = "social_network"
@@ -112,10 +112,10 @@ example = "Migrants rely on kinship networks to find work."
 cues = ["social", "<<personal", "kinship", "friendship", "<<professional", "ties", "actors", "organizations", "informal"]
 
 [[network.senses]]
-key = "knowledge_or_probabilistic_model"
-definition = "A network that AI uses to represent knowledge or uncertainty, such as a semantic network, a Bayesian or belief network, an inference network or a Petri net"
+key = "knowledge_or_conceptual_network"
+definition = "A network of concepts, beliefs, rules or signs: as a knowledge representation in AI, such as a semantic network, a Bayesian or belief network, an inference network or a Petri net, or as an abstract structure of ideas"
 example = "The diagnosis is computed by propagating evidence through a Bayesian network."
-cues = ["<<semantic", "<<conceptual", "<<bayesian", "<<belief", "petri", "<<inheritance", "<<inference", "causal", "probabilistic", "!regions", "!circuits"]
+cues = ["<<semantic", "<<conceptual", "<<bayesian", "<<belief", "petri", "<<inheritance", "<<inference", "causal", "probabilistic", "concepts", "ideas", "meanings", "signs", "symbols", "rules", "beliefs", "metaphors", "narratives", "!regions", "!circuits", "!neurons", "!cells", "!gene", "!genes", "!axons", "!brain", "!queueing"]
 
 [[network.senses]]
 key = "physical_infrastructure"
