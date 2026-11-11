@@ -112,7 +112,7 @@ cues = ["social", "<<personal", "kinship", "friendship", "<<professional", "ties
 key = "knowledge_or_probabilistic_model"
 definition = "A network that AI uses to represent knowledge or uncertainty, such as a semantic network, a Bayesian or belief network, an inference network or a Petri net"
 example = "The diagnosis is computed by propagating evidence through a Bayesian network."
-cues = ["semantic", "conceptual", "bayesian", "belief", "petri", "inheritance", "inference", "causal", "probabilistic"]
+cues = ["<<semantic", "<<conceptual", "<<bayesian", "<<belief", "petri", "<<inheritance", "<<inference", "causal", "probabilistic"]
 
 [[network.senses]]
 key = "other_graph_or_physical_system"
