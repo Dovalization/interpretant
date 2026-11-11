@@ -138,6 +138,7 @@ def merge() -> None:
 
 
 TOKENIZER_WORKERS = 4
+MAX_BATCH_TOKENS = 16_384  # padded tokens per GPU batch: 128 sentences of 128 tokens
 HALF = True  # float16 autocast on CUDA; every shard of one store uses the same setting
 _TOKENIZER: object = None
 
@@ -158,10 +159,21 @@ def _input_ids(rows: list[tuple[str, int, int]]) -> list[list[int]]:
     return [usage_input_ids(_TOKENIZER, Usage(text, start, end)) for text, start, end in rows]
 
 
+def save_shard(path: Path, keys: np.ndarray, vectors: np.ndarray, done: int, total: int) -> None:
+    """Check and write one shard (on a background thread, while the GPU encodes the next)."""
+    half = vectors.astype(np.float16)
+    if not np.isfinite(half).all():
+        raise ValueError(f"{path.name}: vectors overflow float16")
+    partial = path.with_name(path.stem + ".partial.npz")
+    np.savez(partial, keys=keys, vectors=half)
+    partial.rename(path)
+    print(f"{path.name}: {done:,} of {total:,}", flush=True)
+
+
 def encode() -> None:
     """Encode every distinct usage in shards of ``SHARD_SIZE``; finished shards are kept. While
     the GPU encodes one shard, worker processes build the next shard's token ids."""
-    from concurrent.futures import Future, ProcessPoolExecutor  # noqa: PLC0415
+    from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor  # noqa: PLC0415
 
     from interpretant.drift.pairs import XLLexeme  # noqa: PLC0415
 
@@ -181,20 +193,22 @@ def encode() -> None:
             return [pool.submit(_input_ids, rows[k : k + size]) for k in range(0, len(rows), size)]
 
         upcoming = submit(pending[0][0]) if pending else []
+        writer = ThreadPoolExecutor(1)
+        saving: Future[None] | None = None
         encoder = XLLexeme(batch_size=128, half=HALF)
         for position, (first, path) in enumerate(pending):
             current = upcoming
             if position + 1 < len(pending):
                 upcoming = submit(pending[position + 1][0])
             ids = [row for future in current for row in future.result()]
-            vectors = encoder.encode_ids(ids, by_length=True)
-            if not np.isfinite(vectors.astype(np.float16)).all():
-                raise ValueError(f"{path.name}: vectors overflow float16")
+            vectors = encoder.encode_ids(ids, by_length=True, max_tokens=MAX_BATCH_TOKENS)
             keys = np.array([r["key"] for r in todo[first : first + SHARD_SIZE]])
-            partial = path.with_name(path.stem + ".partial.npz")
-            np.savez(partial, keys=keys, vectors=vectors.astype(np.float16))
-            partial.rename(path)
-            print(f"{path.name}: {first + len(keys):,} of {len(todo):,}", flush=True)
+            if saving is not None:
+                saving.result()
+            saving = writer.submit(save_shard, path, keys, vectors, first + len(keys), len(todo))
+        if saving is not None:
+            saving.result()
+        writer.shutdown(wait=True)
 
 
 def index() -> None:

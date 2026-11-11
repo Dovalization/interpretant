@@ -15,6 +15,7 @@ from interpretant.drift.pairs import (
     centred,
     dwug_graded_change,
     dwug_usages,
+    length_batches,
     marked_tokens,
     prototype_distance,
     within_pairwise_distance,
@@ -111,3 +112,21 @@ def test_across_minus_within_separates_variety_from_change() -> None:
     assert average_pairwise_distance(varied_early, varied_late) == pytest.approx(0.5, abs=0.05)
     assert across_minus_within(varied_early, varied_late) == pytest.approx(0.0, abs=0.02)
     assert across_minus_within(stable_early, moved_late) == pytest.approx(1.0, abs=0.02)
+
+
+def test_length_batches_cover_every_index_once_shortest_first() -> None:
+    lengths = [5, 50, 12, 128, 7, 30, 128, 9]
+    batches = length_batches(lengths, batch_size=3)
+    assert sorted(i for b in batches for i in b) == list(range(len(lengths)))
+    flat = [lengths[i] for b in batches for i in b]
+    assert flat == sorted(flat)
+    assert all(len(b) <= 3 for b in batches)
+
+
+def test_token_budget_puts_more_short_sequences_in_a_batch() -> None:
+    lengths = [10] * 40 + [100] * 4
+    batches = length_batches(lengths, batch_size=8, max_tokens=200)
+    assert sorted(i for b in batches for i in b) == list(range(len(lengths)))
+    assert all(max(lengths[i] for i in b) * len(b) <= 200 for b in batches)
+    assert len(batches[0]) == 20
+    assert len(batches[-1]) == 2

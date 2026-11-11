@@ -66,6 +66,28 @@ def centred(tokens: list[str], first: int, last: int, limit: int) -> list[str]:
     return left + middle + right
 
 
+def length_batches(
+    lengths: Sequence[int], batch_size: int, max_tokens: int | None = None
+) -> list[list[int]]:
+    """Indices grouped into batches of similar length, shortest first. With ``max_tokens``, a
+    batch grows while its padded size (longest length times count) stays within the budget, so
+    short sequences come in large batches and long ones in small; without it, every batch holds
+    ``batch_size`` indices."""
+    order = sorted(range(len(lengths)), key=lambda i: lengths[i])
+    if max_tokens is None:
+        return [order[k : k + batch_size] for k in range(0, len(order), batch_size)]
+    batches: list[list[int]] = []
+    current: list[int] = []
+    for index in order:
+        if current and lengths[index] * (len(current) + 1) > max_tokens:
+            batches.append(current)
+            current = []
+        current.append(index)
+    if current:
+        batches.append(current)
+    return batches
+
+
 def usage_input_ids(tokenizer: Any, usage: Usage) -> list[int]:
     """XL-LEXEME's input ids for one usage: the target marked, centred and cut to
     ``MAX_SEQUENCE`` tokens with its special tokens. A function, so worker processes can build
@@ -113,17 +135,27 @@ class XLLexeme:
         original order."""
         return self.encode_ids([self.input_ids(usage) for usage in usages], by_length)
 
-    def encode_ids(self, all_ids: Sequence[list[int]], by_length: bool = False) -> np.ndarray:
-        """:meth:`encode` from token ids already built by :func:`usage_input_ids`."""
-        order = (
-            sorted(range(len(all_ids)), key=lambda i: len(all_ids[i]))
-            if by_length
-            else list(range(len(all_ids)))
-        )
+    def encode_ids(
+        self,
+        all_ids: Sequence[list[int]],
+        by_length: bool = False,
+        max_tokens: int | None = None,
+    ) -> np.ndarray:
+        """:meth:`encode` from token ids already built by :func:`usage_input_ids`. With
+        ``max_tokens`` (and ``by_length``), batches are sized by tokens rather than by count, so
+        every batch gives the GPU about the same work."""
+        if by_length:
+            groups = length_batches([len(ids) for ids in all_ids], self.batch_size, max_tokens)
+        else:
+            groups = [
+                list(range(k, min(k + self.batch_size, len(all_ids))))
+                for k in range(0, len(all_ids), self.batch_size)
+            ]
+        order = [index for group in groups for index in group]
         vectors: list[np.ndarray] = []
         pad = int(self.tokenizer.pad_token_id)
-        for first in range(0, len(order), self.batch_size):
-            batch = [all_ids[i] for i in order[first : first + self.batch_size]]
+        for group in groups:
+            batch = [all_ids[i] for i in group]
             width = max(len(ids) for ids in batch)
             ids = self.torch.tensor([row + [pad] * (width - len(row)) for row in batch])
             mask = self.torch.tensor([[1] * len(row) + [0] * (width - len(row)) for row in batch])
