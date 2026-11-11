@@ -1,0 +1,194 @@
+{
+ "attention-11": [
+  "classifier",
+  "sonnet"
+ ],
+ "attention-13": [
+  "classifier",
+  "sonnet"
+ ],
+ "attention-14": [
+  "classifier",
+  "sonnet"
+ ],
+ "attention-15": [
+  "sonnet",
+  "classifier"
+ ],
+ "attention-31": [
+  "sonnet",
+  "classifier"
+ ],
+ "attention-32": [
+  "sonnet",
+  "classifier"
+ ],
+ "attention-36": [
+  "sonnet",
+  "classifier"
+ ],
+ "prompt-05": [
+  "classifier",
+  "sonnet"
+ ],
+ "prompt-06": [
+  "sonnet",
+  "classifier"
+ ],
+ "prompt-17": [
+  "classifier",
+  "sonnet"
+ ],
+ "prompt-19": [
+  "classifier",
+  "sonnet"
+ ],
+ "prompt-24": [
+  "classifier",
+  "sonnet"
+ ],
+ "prompt-29": [
+  "classifier",
+  "sonnet"
+ ],
+ "prompt-35": [
+  "sonnet",
+  "classifier"
+ ],
+ "prompt-38": [
+  "classifier",
+  "sonnet"
+ ],
+ "platform-01": [
+  "sonnet",
+  "classifier"
+ ],
+ "platform-06": [
+  "sonnet",
+  "classifier"
+ ],
+ "platform-10": [
+  "classifier",
+  "sonnet"
+ ],
+ "platform-16": [
+  "classifier",
+  "sonnet"
+ ],
+ "platform-21": [
+  "sonnet",
+  "classifier"
+ ],
+ "platform-35": [
+  "sonnet",
+  "classifier"
+ ],
+ "network-01": [
+  "classifier",
+  "sonnet"
+ ],
+ "network-02": [
+  "classifier",
+  "sonnet"
+ ],
+ "network-05": [
+  "classifier",
+  "sonnet"
+ ],
+ "network-06": [
+  "classifier",
+  "sonnet"
+ ],
+ "network-10": [
+  "sonnet",
+  "classifier"
+ ],
+ "network-12": [
+  "classifier",
+  "sonnet"
+ ],
+ "network-17": [
+  "sonnet",
+  "classifier"
+ ],
+ "network-18": [
+  "sonnet",
+  "classifier"
+ ],
+ "network-28": [
+  "sonnet",
+  "classifier"
+ ],
+ "network-30": [
+  "classifier",
+  "sonnet"
+ ],
+ "network-32": [
+  "sonnet",
+  "classifier"
+ ],
+ "network-37": [
+  "classifier",
+  "sonnet"
+ ],
+ "network-39": [
+  "sonnet",
+  "classifier"
+ ],
+ "component-03": [
+  "classifier",
+  "sonnet"
+ ],
+ "component-07": [
+  "sonnet",
+  "classifier"
+ ],
+ "component-18": [
+  "classifier",
+  "sonnet"
+ ],
+ "component-24": [
+  "classifier",
+  "sonnet"
+ ],
+ "component-29": [
+  "sonnet",
+  "classifier"
+ ],
+ "component-37": [
+  "classifier",
+  "sonnet"
+ ],
+ "component-39": [
+  "sonnet",
+  "classifier"
+ ],
+ "having-01": [
+  "classifier",
+  "sonnet"
+ ],
+ "having-16": [
+  "classifier",
+  "sonnet"
+ ],
+ "having-18": [
+  "sonnet",
+  "classifier"
+ ],
+ "having-21": [
+  "classifier",
+  "sonnet"
+ ],
+ "having-27": [
+  "sonnet",
+  "classifier"
+ ],
+ "having-33": [
+  "sonnet",
+  "classifier"
+ ],
+ "having-35": [
+  "sonnet",
+  "classifier"
+ ]
+}

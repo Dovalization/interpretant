@@ -657,6 +657,34 @@ test sentences may have been shown as cue matches or non-seed samples before.
 
 Scored by `scripts/score_labels_head_to_head.py`, committed before it is run.
 
+### Round U results (2026-11-11, `scripts/score_labels_head_to_head.py`)
+
+Scored as written. The classifier trained on 6,691 (*attention*), 356 (*prompt*), 1,102
+(*platform*), 3,391 (*network*), 1,310 (*component*) and 3,519 (*having*) cue-seeded usages. The
+two labellers disagreed on 48 of the 240 test usages, and the author judged all 48.
+
+| | Verdict | Numbers |
+|---|---|---|
+| U1 | **Passed** | classifier chosen in 18 of 41 decided disagreements (43.9%; needed 40%); both fit 3, neither 4 |
+| U2 | Descriptive | agreement on 192 of 240 (80.0%): *attention* 33/40, *prompt* 32, *platform* 34, *network* 27, *component* 33, *having* 33 |
+| U3 | Descriptive | rough accuracy, agreements counted right: classifier 88.8%, Sonnet 90.8% |
+| U4 | Descriptive | classifier chosen per word: *attention* 2/7, *prompt* 1/8, *platform* 2/6, *network* 6/11, *component* 3/3, *having* 4/6 |
+
+By the reading rule the classifier, with `corpus_v2.toml` and square-root weights and cue-first
+labelling, is the labeller for rung 3. Round A needs an amendment, committed before it is run, for
+the lists, the weights and cue-first labelling.
+
+Not as pre-registered, before the author judged: the page was given to the author as a local file
+rather than a published page, because publishing it would have meant Claude reading the test
+sentences. Its answers were kept in the browser and pasted back. The page also gained each
+sentence's field and decade at the author's request, and a UTF-8 declaration after the author saw
+garbled characters. The draw's first run stopped before writing anything, because its folder did not
+exist (`2f1b491`). None of these touches the labels or the order-to-labeller key.
+
+Read with care: 41 decided disagreements give a wide interval around 43.9% (roughly 30% to 60%),
+so the pass is narrow. U4 shows where the classifier still loses: *prompt*, where Sonnet was chosen
+in 7 of 8, which matters for round A's language-model-input prediction (A3).
+
 ## Round A: known changes over time, with a planted change and a placebo (committed 2026-11-10, before any corpus list was frozen or any usage of these cells was labelled by the classifier)
 
 Rung 3. The classifier, trained from the frozen corpus lists and cue words, labels round X's
