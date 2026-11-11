@@ -1,0 +1,80 @@
+# Draft sense lists and cue words for round A′'s four words (docs/predictions_labels.md, "Round A′:
+# the test set"), written by Claude on 2026-11-11 for the author's approval. Not frozen until
+# approved. Written from the words' documented histories; Claude had read two sample sentences per
+# newly downloaded cell (the post-fetch check) and no labelled usage.
+# Cue words: lowercase whole words that signal the sense within five words of the target;
+# "<word" counts only before the target, ">word" only after it; "<<word" and ">>word" only
+# as the word right next to it. "!word" is an exclusion: when it appears within five words,
+# that sense's cues do not count.
+
+[transformer]
+word = "transformer"
+
+[[transformer.senses]]
+key = "electrical_or_measuring_device"
+definition = "An electrical device that changes voltage or current between circuits, or a sensor built on one, as in a power, distribution or differential transformer"
+example = "The substation's power transformer failed during the storm."
+cues = ["<<power", "<<distribution", "<<current", "<<voltage", "voltage", "substation", "substations", "winding", "windings", "insulation", "kv", "kva", "mva", "oil", "<<differential", "<<step", "electrical", "grid", "magnetic", "fault", "faults"]
+
+[[transformer.senses]]
+key = "neural_architecture"
+definition = "The Transformer neural network architecture built on self-attention, or a model based on it, as in BERT, GPT or a vision transformer"
+example = "We fine-tune a pre-trained transformer on the sentiment dataset."
+cues = ["attention", "<<self", "encoder", "encoders", "decoder", "decoders", "bert", "gpt", "<<vision", "vit", "<<swin", ">>based", "pretrained", "pre", "tokens", "token", "llm", "llms", "<<language", "<<multimodal", "<<graph", "!voltage", "!substation", "!winding"]
+
+[embedding]
+word = "embedding"
+
+[[embedding.senses]]
+key = "learned_vector_representation"
+definition = "A learned vector representation of words, sentences, nodes, users or other objects, fitted from data so that similar objects lie close together, as in word or network embeddings"
+example = "Each word is represented by a 300-dimensional embedding learned from the corpus."
+cues = ["<<word", "<<sentence", "<<node", "<<knowledge", "<<contextual", "<<user", "<<item", "<<entity", "<<positional", ">>vectors", ">>vector", ">>space", ">>layer", ">>layers", ">>model", ">>models", "learned", "pretrained", "word2vec", "glove", "bert", "!by", "!within", "!into"]
+
+[[embedding.senses]]
+key = "placing_or_mapping"
+definition = "Placing or mapping one thing into another, without learned vectors: inserting data, a watermark or code into a carrier, a system, agent or practice situated in a physical, social or cultural setting, or a mathematical mapping of one structure into another, as in metric or graph embeddings"
+example = "The watermark embedding leaves the image's quality unchanged."
+cues = ["metric", "metrics", "isometric", "topological", "manifold", "theorem", "distortion", "planar", "lipschitz", "polynomial", "homomorphism", "subgraph", "watermark", "watermarking", "steganography", "hiding", "carrier", "<<social", "<<cultural", "<<institutional", "<<organizational", "environment", "situated", "!learn", "!learned", "!learning", "!neural", "!word2vec", "!glove", "!bert", "!model", "!models", "!cnn", "!cnns", "!network", "!networks", "!representation", "!representations", "!vector", "!vectors", "!space", "!contextual", "!aware"]
+
+[cloud]
+word = "cloud"
+
+[[cloud.senses]]
+key = "cloud_computing"
+definition = "Computing resources, storage or services delivered over the internet, as in cloud computing, cloud storage or a cloud service"
+example = "The application stores its data in the cloud and scales with demand."
+cues = [">>computing", ">>services", ">>service", ">>storage", ">>server", ">>servers", ">>provider", ">>providers", ">>platform", ">>platforms", ">>infrastructure", ">>environment", ">>environments", ">>resources", ">>based", "<<public", "<<private", "<<hybrid", "<<mobile", "aws", "saas", "iaas", "paas", "virtualization", "virtual", "datacenter"]
+
+[[cloud.senses]]
+key = "set_of_points_or_values"
+definition = "A set of points, values or items treated together, as in a point cloud from a 3D scanner, a cloud of data points or a word cloud"
+example = "The scanner produces a point cloud of the building's facade."
+cues = ["<<point", "points", "<<word", "<<tag", "<<electron", ">>of", "lidar", "scanner", "scanning", "scattered", "registration", "3d", "!computing", "!services", "!smoke", "!dust", "!gas", "!chemical"]
+
+[[cloud.senses]]
+key = "atmospheric_or_physical_cloud"
+definition = "A cloud in the sky, or of gas, dust or particles, as in weather, climate, satellite imagery or astronomy"
+example = "Thick cloud cover hid the region from the satellite."
+cues = [">>cover", "rain", "weather", "sky", "satellite", "precipitation", "atmospheric", "climate", "aerosol", "aerosols", "cumulus", "<<dust", "<<gas", "<<molecular", "<<thick", "<<dark", "!computing", "!storage"]
+
+[hallucination]
+word = "hallucination"
+
+[[hallucination.senses]]
+key = "perceptual_hallucination"
+definition = "Perceiving something that is not there, in a person or animal, as in the auditory or visual hallucinations of psychosis or drug states"
+example = "Many patients reported hearing voices, the most common auditory hallucination."
+cues = ["<<auditory", "<<visual", "<<verbal", "<<olfactory", "<<musical", "<<tactile", "<<hypnagogic", "voices", "psychosis", "psychotic", "schizophrenia", "delusions", "delusion", "patients", "perceptual", "hallucinogen", "hallucinogens", "dementia", "parkinson", "!multimodal", "!model", "!models", "!lvlms", "!vlms", "!agents"]
+
+[[hallucination.senses]]
+key = "model_output_hallucination"
+definition = "Output of an AI model, especially a language or vision-language model, that is invented or unfaithful to its input or to facts"
+example = "Retrieval reduces hallucination in the model's answers to factual questions."
+cues = ["llm", "llms", "<<language", "gpt", "chatgpt", "factual", "factuality", "faithfulness", "faithful", "generated", "generation", "answers", "rag", "retrieval", "mitigate", "mitigating", "mitigation", "<<object", "lvlms", "vlms", "!patients", "!psychosis"]
+
+[[hallucination.senses]]
+key = "image_detail_inference"
+definition = "In image processing: inferring missing high-resolution detail from a low-resolution image, as in face hallucination for super-resolution"
+example = "Face hallucination recovers a sharp face from a few pixels."
+cues = ["<<face", "resolution", "superresolution", "super", "patch", "patches", "eigenface", "eigenfaces", "pixels", "!llm", "!language"]
