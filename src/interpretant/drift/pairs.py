@@ -175,6 +175,103 @@ class XLLexeme:
         return result
 
 
+DEBERTA = "microsoft/deberta-v3-large"
+DEBERTA_REVISION = "64a8c8eab3e352a784c658aef62be1662607476f"
+TARGET_WINDOW = 256
+
+
+def target_window(
+    offsets: Sequence[tuple[int, int]], start: int, end: int, size: int
+) -> tuple[int, int, int, int]:
+    """The token slice ``[first, last)`` of at most ``size`` tokens centred on the target, and the
+    target's tokens ``[target_first, target_last)`` within the whole sequence: every token whose
+    character span overlaps ``[start, end)``."""
+    hits = [i for i, (a, b) in enumerate(offsets) if a < end and b > start and b > a]
+    if not hits:
+        raise ValueError("the target overlaps no token")
+    target_first, target_last = hits[0], hits[-1] + 1
+    if len(offsets) <= size:
+        return 0, len(offsets), target_first, target_last
+    middle = (target_first + target_last) // 2
+    first = max(0, min(middle - size // 2, len(offsets) - size))
+    return first, first + size, target_first, target_last
+
+
+class TargetTokenEncoder:
+    """A general pre-trained encoder (DeBERTa-v3-large by default) read at the target word: the
+    mean of the last layer over the word's own subword tokens, the sentence cut to
+    ``TARGET_WINDOW`` tokens around it. Unlike XL-LEXEME, it was never tuned on same-meaning
+    judgements; it is round A′'s second encoder."""
+
+    def __init__(
+        self,
+        model_name: str = DEBERTA,
+        revision: str = DEBERTA_REVISION,
+        batch_size: int = 64,
+        half: bool = False,
+    ) -> None:
+        import torch  # noqa: PLC0415
+        from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
+
+        self.torch = torch
+        self.device = (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)  # type: ignore[no-untyped-call]
+        self.model = AutoModel.from_pretrained(model_name, revision=revision).to(self.device).eval()
+        self.batch_size = batch_size
+        self.half = half and self.device == "cuda"
+
+    def prepared(self, usage: Usage) -> tuple[list[int], int, int]:
+        """Input ids with special tokens, and the target's token span within them."""
+        encoded = self.tokenizer(usage.text, add_special_tokens=False, return_offsets_mapping=True)
+        ids, offsets = encoded["input_ids"], encoded["offset_mapping"]
+        first, last, t_first, t_last = target_window(
+            offsets, usage.start, usage.end, TARGET_WINDOW - 2
+        )
+        window = [self.tokenizer.cls_token_id, *ids[first:last], self.tokenizer.sep_token_id]
+        return window, t_first - first + 1, t_last - first + 1
+
+    def encode_prepared(
+        self, items: Sequence[tuple[list[int], int, int]], max_tokens: int | None = None
+    ) -> np.ndarray:
+        """One vector per prepared usage, in the order given, batched by length."""
+        groups = length_batches([len(ids) for ids, _, _ in items], self.batch_size, max_tokens)
+        order = [index for group in groups for index in group]
+        pad = int(self.tokenizer.pad_token_id)
+        vectors: list[np.ndarray] = []
+        for group in groups:
+            batch = [items[i] for i in group]
+            width = max(len(ids) for ids, _, _ in batch)
+            ids = self.torch.tensor([row + [pad] * (width - len(row)) for row, _, _ in batch])
+            mask = self.torch.tensor(
+                [[1] * len(row) + [0] * (width - len(row)) for row, _, _ in batch]
+            )
+            target = self.torch.zeros((len(batch), width))
+            for row, (_, a, b) in enumerate(batch):
+                target[row, a:b] = 1.0
+            with (
+                self.torch.no_grad(),
+                self.torch.autocast("cuda", dtype=self.torch.float16, enabled=self.half),
+            ):
+                hidden = self.model(
+                    input_ids=ids.to(self.device), attention_mask=mask.to(self.device)
+                ).last_hidden_state.float()
+            weights = target.to(self.device).unsqueeze(-1)
+            vectors.append(((hidden * weights).sum(1) / weights.sum(1)).cpu().numpy())
+        stacked = np.vstack(vectors)
+        result = np.empty_like(stacked)
+        result[order] = stacked
+        return result
+
+    def encode(self, usages: Sequence[Usage]) -> np.ndarray:
+        return self.encode_prepared([self.prepared(usage) for usage in usages])
+
+
 def average_pairwise_distance(first: np.ndarray, second: np.ndarray) -> float:
     """The mean cosine distance over every pair of one vector from ``first`` and one from
     ``second``."""

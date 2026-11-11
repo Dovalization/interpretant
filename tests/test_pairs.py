@@ -18,6 +18,7 @@ from interpretant.drift.pairs import (
     length_batches,
     marked_tokens,
     prototype_distance,
+    target_window,
     within_pairwise_distance,
 )
 
@@ -130,3 +131,13 @@ def test_token_budget_puts_more_short_sequences_in_a_batch() -> None:
     assert all(max(lengths[i] for i in b) * len(b) <= 200 for b in batches)
     assert len(batches[0]) == 20
     assert len(batches[-1]) == 2
+
+
+def test_the_target_window_covers_the_word_and_centres_long_sequences() -> None:
+    offsets = [(i * 5, i * 5 + 4) for i in range(100)]
+    assert target_window(offsets[:10], 20, 24, 50) == (0, 10, 4, 5)
+    first, last, t_first, t_last = target_window(offsets, 250, 259, 20)
+    assert (t_first, t_last) == (50, 52)
+    assert last - first == 20 and first <= t_first and t_last <= last
+    with pytest.raises(ValueError):
+        target_window(offsets, 1000, 1004, 20)

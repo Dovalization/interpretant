@@ -140,23 +140,47 @@ def merge() -> None:
 TOKENIZER_WORKERS = 4
 MAX_BATCH_TOKENS = 16_384  # padded tokens per GPU batch: 128 sentences of 128 tokens
 HALF = True  # float16 autocast on CUDA; every shard of one store uses the same setting
+ENCODERS = ("xl-lexeme", "deberta")
+DEV_MANIFEST = STORE / "dev_usages.jsonl.gz"
 _TOKENIZER: object = None
+_KIND = ""
 
 
-def _start_tokenizer() -> None:
-    """Load XL-LEXEME's tokenizer once in a worker process."""
-    global _TOKENIZER  # noqa: PLW0603
+def store_paths(kind: str, which: str) -> tuple[Path, Path, Path]:
+    """Manifest, shard folder and index for an encoder ("xl-lexeme" or "deberta") and a
+    manifest ("main" or "dev"); the first store keeps its original names."""
+    manifest = MANIFEST if which == "main" else DEV_MANIFEST
+    if (kind, which) == ("xl-lexeme", "main"):
+        return manifest, SHARDS, INDEX
+    return manifest, STORE / f"vectors_{kind}_{which}", STORE / f"index_{kind}_{which}.json"
+
+
+def _start_tokenizer(kind: str) -> None:
+    """Load the encoder's tokenizer once in a worker process."""
+    global _TOKENIZER, _KIND  # noqa: PLW0603
     from transformers import AutoTokenizer  # noqa: PLC0415
 
-    from interpretant.drift.pairs import XL_LEXEME, XL_LEXEME_REVISION  # noqa: PLC0415
+    from interpretant.drift import pairs  # noqa: PLC0415
 
-    _TOKENIZER = AutoTokenizer.from_pretrained(XL_LEXEME, revision=XL_LEXEME_REVISION)  # type: ignore[no-untyped-call]
+    name, revision = (
+        (pairs.XL_LEXEME, pairs.XL_LEXEME_REVISION)
+        if kind == "xl-lexeme"
+        else (pairs.DEBERTA, pairs.DEBERTA_REVISION)
+    )
+    _TOKENIZER = AutoTokenizer.from_pretrained(name, revision=revision)  # type: ignore[no-untyped-call]
+    _KIND = kind
 
 
-def _input_ids(rows: list[tuple[str, int, int]]) -> list[list[int]]:
-    from interpretant.drift.pairs import usage_input_ids  # noqa: PLC0415
+def _prepare(rows: list[tuple[str, int, int]]) -> list[object]:
+    """Token ids (XL-LEXEME) or ids with the target's token span (DeBERTa) for each row."""
+    from interpretant.drift import pairs  # noqa: PLC0415
 
-    return [usage_input_ids(_TOKENIZER, Usage(text, start, end)) for text, start, end in rows]
+    usages = [Usage(text, start, end) for text, start, end in rows]
+    if _KIND == "xl-lexeme":
+        return [pairs.usage_input_ids(_TOKENIZER, usage) for usage in usages]
+    prepare = pairs.TargetTokenEncoder.prepared
+    holder = type("Holder", (), {"tokenizer": _TOKENIZER})()
+    return [prepare(holder, usage) for usage in usages]  # type: ignore[arg-type]
 
 
 def save_shard(path: Path, keys: np.ndarray, vectors: np.ndarray, done: int, total: int) -> None:
@@ -170,38 +194,52 @@ def save_shard(path: Path, keys: np.ndarray, vectors: np.ndarray, done: int, tot
     print(f"{path.name}: {done:,} of {total:,}", flush=True)
 
 
-def encode() -> None:
+def encode(kind: str = "xl-lexeme", which: str = "main") -> None:
     """Encode every distinct usage in shards of ``SHARD_SIZE``; finished shards are kept. While
-    the GPU encodes one shard, worker processes build the next shard's token ids."""
+    the GPU encodes one shard, worker processes build the next shard's token ids. DeBERTa on
+    the main manifest encodes the full words only (round A′ and the dev data need no more)."""
     from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor  # noqa: PLC0415
 
-    from interpretant.drift.pairs import XLLexeme  # noqa: PLC0415
+    from interpretant.drift.pairs import TargetTokenEncoder, XLLexeme  # noqa: PLC0415
 
-    with gzip.open(MANIFEST, "rt", encoding="utf-8") as manifest:
-        todo = [row for row in map(json.loads, manifest) if row["encode"]]
-    SHARDS.mkdir(parents=True, exist_ok=True)
+    manifest, shards, _ = store_paths(kind, which)
+    full = set(FULL_WORDS)
+    with gzip.open(manifest, "rt", encoding="utf-8") as source:
+        todo = [
+            row
+            for row in map(json.loads, source)
+            if row["encode"] and (kind == "xl-lexeme" or which == "dev" or row["word"] in full)
+        ]
+    shards.mkdir(parents=True, exist_ok=True)
     pending = [
-        (first, SHARDS / f"shard_{first // SHARD_SIZE:04d}.npz")
+        (first, shards / f"shard_{first // SHARD_SIZE:04d}.npz")
         for first in range(0, len(todo), SHARD_SIZE)
     ]
     pending = [(first, path) for first, path in pending if not path.exists()]
-    with ProcessPoolExecutor(TOKENIZER_WORKERS, initializer=_start_tokenizer) as pool:
+    with ProcessPoolExecutor(
+        TOKENIZER_WORKERS, initializer=_start_tokenizer, initargs=(kind,)
+    ) as pool:
 
-        def submit(first: int) -> list[Future[list[list[int]]]]:
+        def submit(first: int) -> list[Future[list[object]]]:
             rows = [(r["text"], r["start"], r["end"]) for r in todo[first : first + SHARD_SIZE]]
             size = -(-len(rows) // TOKENIZER_WORKERS)
-            return [pool.submit(_input_ids, rows[k : k + size]) for k in range(0, len(rows), size)]
+            return [pool.submit(_prepare, rows[k : k + size]) for k in range(0, len(rows), size)]
 
         upcoming = submit(pending[0][0]) if pending else []
         writer = ThreadPoolExecutor(1)
         saving: Future[None] | None = None
-        encoder = XLLexeme(batch_size=128, half=HALF)
+        xl = XLLexeme(batch_size=128, half=HALF) if kind == "xl-lexeme" else None
+        deberta = TargetTokenEncoder(batch_size=64, half=HALF) if kind == "deberta" else None
         for position, (first, path) in enumerate(pending):
             current = upcoming
             if position + 1 < len(pending):
                 upcoming = submit(pending[position + 1][0])
-            ids = [row for future in current for row in future.result()]
-            vectors = encoder.encode_ids(ids, by_length=True, max_tokens=MAX_BATCH_TOKENS)
+            items = [row for future in current for row in future.result()]
+            if xl is not None:
+                vectors = xl.encode_ids(items, by_length=True, max_tokens=MAX_BATCH_TOKENS)  # type: ignore[arg-type]
+            else:
+                assert deberta is not None
+                vectors = deberta.encode_prepared(items, max_tokens=MAX_BATCH_TOKENS)  # type: ignore[arg-type]
             keys = np.array([r["key"] for r in todo[first : first + SHARD_SIZE]])
             if saving is not None:
                 saving.result()
@@ -211,20 +249,86 @@ def encode() -> None:
         writer.shutdown(wait=True)
 
 
-def index() -> None:
+def index(kind: str = "xl-lexeme", which: str = "main") -> None:
     """Map every key to its shard and row."""
+    _, shards, index_path = store_paths(kind, which)
     found: dict[str, list[object]] = {}
-    for path in sorted(SHARDS.glob("shard_*.npz")):
+    for path in sorted(shards.glob("shard_*.npz")):
         for row, key in enumerate(np.load(path)["keys"]):
             found[str(key)] = [path.name, row]
-    INDEX.write_text(json.dumps(found), encoding="utf-8")
+    index_path.write_text(json.dumps(found), encoding="utf-8")
     print(f"{len(found):,} vectors indexed")
 
 
+def dev() -> None:
+    """Write the dev manifest: every usage the development data scores, tidied: check 2b's 186
+    (round T), round U's 240, Claude's 300 development labels and round A's target-word cells."""
+    sys.path.insert(0, str(Path(__file__).parent))
+    import pilot_labellers as pilot  # type: ignore[import-not-found]  # noqa: PLC0415
+
+    rows: list[dict[str, object]] = []
+    for uid, (word, usage) in pilot.usages().items():
+        rows.append({"set": "T", "id": uid, "word": word, **_usage_row(usage)})
+    for line in Path("data/labels/round_u/raw/test.jsonl").read_text(encoding="utf-8").splitlines():
+        r = json.loads(line)
+        rows.append(
+            {
+                "set": "U",
+                "id": r["id"],
+                "word": r["word"],
+                **_usage_row(Usage(r["text"], r["start"], r["end"])),
+            }
+        )
+    for r in json.loads(Path("data/labels/round_u/raw/dev_set.json").read_text(encoding="utf-8")):
+        rows.append(
+            {
+                "set": "mine",
+                "id": r["id"],
+                "word": r["word"],
+                **_usage_row(Usage(r["text"], r["start"], r["end"])),
+            }
+        )
+    for line in (
+        Path("data/labels/known/raw/measured.jsonl").read_text(encoding="utf-8").splitlines()
+    ):
+        r = json.loads(line)
+        if r["set"] == "case":
+            rows.append(
+                {
+                    "set": "A",
+                    "id": r["id"],
+                    "word": r["word"],
+                    **_usage_row(Usage(r["text"], r["start"], r["end"])),
+                }
+            )
+    seen: set[str] = set()
+    with gzip.open(DEV_MANIFEST, "wt", encoding="utf-8") as out:
+        for row in rows:
+            row["encode"] = row["key"] not in seen
+            seen.add(str(row["key"]))
+            out.write(json.dumps(row, ensure_ascii=False) + "\n")
+    print(f"{len(rows):,} dev usages, {len(seen):,} distinct")
+
+
+def _usage_row(usage: Usage) -> dict[str, object]:
+    tidied = tidy_usage(usage)
+    return {
+        "key": key_of(tidied.text, tidied.start, tidied.end),
+        "text": tidied.text,
+        "start": tidied.start,
+        "end": tidied.end,
+    }
+
+
 if __name__ == "__main__":
-    if sys.argv[1] == "export":
+    command = sys.argv[1]
+    if command == "export":
         export(sys.argv[2])
-    elif sys.argv[1] == "parts":
+    elif command == "parts":
         print("\n".join(parts()))
+    elif command in ("encode", "index"):
+        kind = sys.argv[2] if len(sys.argv) > 2 else "xl-lexeme"
+        which = sys.argv[3] if len(sys.argv) > 3 else "main"
+        {"encode": encode, "index": index}[command](kind, which)
     else:
-        {"merge": merge, "encode": encode, "index": index}[sys.argv[1]]()
+        {"merge": merge, "dev": dev}[command]()
