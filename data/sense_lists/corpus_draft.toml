@@ -88,7 +88,13 @@ word = "network"
 key = "artificial_neural_network"
 definition = "An artificial neural network: a computational model of connected units whose weights are learned from data"
 example = "A three-layer network was trained with backpropagation."
-cues = ["neural", "trained", "training", "layer", "layers", "hidden", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", "weights", "units", "boltzmann"]
+cues = ["neural", "<<trained", ">>training", "<<layer", "<<layers", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", ">>weights", "boltzmann"]
+
+[[network.senses]]
+key = "biological_neural_network"
+definition = "A network of neurons or brain regions in a living nervous system, as studied in neuroscience"
+example = "Memory consolidation depends on a hippocampal-cortical network."
+cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortical", "connectivity", "fmri", "synaptic", "<<mode"]
 
 [[network.senses]]
 key = "computer_or_communication_network"
