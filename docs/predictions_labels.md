@@ -657,3 +657,25 @@ classifier could not separate the two (the AI sense had 33 training sentences, 5
 doubtful), and merged they reach 14% doubtful. A7 therefore reports the merged sense's share in
 AI's 2010s and 2020s cells, not an AI-alignment share; it remains descriptive and decides nothing.
 The AI-alignment sense on its own is not measured by this instrument.
+
+### Amendment to rounds T and A: exclusion cues and out-of-scope usages (committed 2026-11-10, before either round was run)
+
+Found in the second review pass. Neither changes a prediction or a bar.
+
+- **Exclusion cues.** A cue written `!word` silences its sense: when `word` appears within five
+  words of the target, that sense's cues do not count, so the usage trains no sense through them
+  (`interpretant.drift.classifier.cue_sense`). The lists use four: `!class` and `!tv` under
+  *platform*'s `physical_structure` (a work-station class platform, a satellite TV service) and
+  `!regions` and `!circuits` under *network*'s `knowledge_or_probabilistic_model` (two
+  neuroscience usages where "the semantic network" is a set of brain regions). In the review sample
+  they remove exactly these four training sentences and no other.
+- **Out-of-scope usages.** A word's list may name `out_of_scope` words; a usage with one of them
+  within five words of the target is not trained on, labelled or counted
+  (`interpretant.drift.classifier.out_of_scope`). *Alignment* names the terms of grammatical
+  alignment (ergative, accusative, absolutive, nominative, morphosyntactic, ergativity). In the
+  review sample this is 8 of 2,197 *alignment* usages, all in linguistics (5% of that field's 164).
+  Tried first as a fourth sense, it was dropped: from six training sentences the classifier learned
+  "language context" and took 17 word-alignment sentences from `matching_or_correspondence`. The
+  rule applies the same way in every decade, so it cannot make or hide a change over time. None of
+  check 2b's 186 usages is out of scope, so round T's test set is unchanged; in round A the rule
+  applies to the cells measured as boilerplate does.
