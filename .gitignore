@@ -83,3 +83,6 @@ data/external/books/**/*.azw3
 
 # Raw labeller responses
 data/labels/**/raw/
+
+# The shared vector store (scripts/build_vector_store.py): large, local only
+data/store/
