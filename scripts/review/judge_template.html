@@ -65,6 +65,7 @@ mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3
 <script>
 const ITEMS = __ITEMS__;
 const LABEL = { first: "1", second: "2", both: "3", neither: "4" };
+const STORE = "round-u-judgements";
 const state = {};
 let db = null, at = 0;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -78,7 +79,7 @@ function render() {
   document.getElementById("bar").style.width = ITEMS.length ? `${100 * n / ITEMS.length}%` : "0";
   if (!ITEMS.length) { main.innerHTML = `<div class="card done"><h2>Nothing to judge</h2><p>The labellers agreed everywhere.</p></div>`; return; }
   if (n === ITEMS.length && at === -1) {
-    main.innerHTML = `<div class="card done"><h2>All ${ITEMS.length} judged</h2><p>Thank you. Tell Claude you're done. You can still go back and change any answer.</p></div>`;
+    main.innerHTML = `<div class="card done"><h2>All ${ITEMS.length} judged</h2><p>Thank you. ${db ? "Tell Claude you're done." : "Copy your answers and paste them to Claude."} You can still go back and change any answer.</p>${db ? "" : `<p><button class="copy" type="button">Copy answers</button></p><textarea readonly rows="4" style="width:100%;font:12px/1.4 monospace">${esc(JSON.stringify(state))}</textarea>`}</div>`;
     return;
   }
   const item = ITEMS[at], chosen = state[item.id];
@@ -100,7 +101,11 @@ async function choose(value) {
   const next = firstOpen(at + 1);
   at = next;
   render();
-  if (!db) return;
+  if (!db) {
+    try { localStorage.setItem(STORE, JSON.stringify(state)); document.getElementById("note").textContent = "Kept in this browser."; }
+    catch (e) { document.getElementById("note").textContent = "Answers can't be kept in this browser; finish in one sitting and copy them at the end."; }
+    return;
+  }
   try {
     await db.collection("judgements").doc(id).set({ choice: value, updated: new Date().toISOString() });
     document.getElementById("note").textContent = "Saved.";
@@ -112,6 +117,7 @@ async function choose(value) {
 document.addEventListener("click", e => {
   const b = e.target.closest("button");
   if (!b) return;
+  if (b.classList.contains("copy")) { const text = JSON.stringify(state); (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => { b.textContent = "Copied"; }, () => { b.textContent = "Select the text below and copy it"; }); return; }
   if (b.dataset.choice) choose(b.dataset.choice);
   else if (b.id === "prev" && at > 0) { at -= 1; render(); }
   else if (b.id === "next") { at = at < 0 ? ITEMS.length - 1 : Math.min(ITEMS.length - 1, at + 1); render(); }
@@ -129,7 +135,12 @@ render();
 (async () => {
   const note = document.getElementById("note");
   db = window.claude && window.claude.use ? await window.claude.use("db") : null;
-  if (!db) { note.textContent = "Answers can't be saved in this view. Open the page on claude.ai while signed in."; return; }
+  if (!db) {
+    try { Object.assign(state, JSON.parse(localStorage.getItem(STORE) || "{}")); } catch (e) { /* nothing kept */ }
+    const n = firstOpen(0); at = n; render();
+    note.textContent = "Answers are kept in this browser; copy them at the end.";
+    return;
+  }
   const timer = setTimeout(() => { note.textContent = "Saved answers can't be reached yet; answers may not save."; }, 10000);
   let first = true;
   db.collection("judgements").onSnapshot(snap => {
