@@ -160,7 +160,7 @@ cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module"
 key = "mathematical_or_measured_component"
 definition = "A constituent of a quantity, signal, vector, data set, mixture or substance, as measured or analysed in mathematics, statistics or the sciences"
 example = "The first principal component explains most of the variance."
-cues = ["principal", "<<independent", "analysis", "frequency", "vector", "signal", "variance", "connected", "harmonic", "spectral", "factor", "orthogonal"]
+cues = ["<<principal", "<<independent", ">>analysis", "<<frequency", "vector", "<<signal", "<<variance", "<<connected", "harmonic", "<<spectral", "orthogonal", "<<chemical", "<<blood", "<<mixture", "<<active"]
 
 [[component.senses]]
 key = "element_of_an_abstract_whole"
