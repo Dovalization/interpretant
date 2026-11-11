@@ -30,7 +30,15 @@ TARGET = 1_000
 DECADES = (1990, 2000, 2010, 2020)
 PLAN: dict[str, tuple[tuple[str, ...], tuple[int, ...]]] = {
     "hallucination": (("ai", "compsci", "psychology", "neuroscience"), (2000, 2010, 2020)),
-    "prompt": (("ai", "psychology"), (2000, 2020)),
+    "prompt": (("ai", "psychology", "compsci", "hci"), DECADES),
+    # Round A′'s test set and the shortlist's half-decades (docs/predictions_labels.md,
+    # 2026-11-11); prompt above widened for training data where its senses live.
+    "transformer": (("ai",), (2010, 2020)),
+    "embedding": (("ai",), (2000, 2010)),
+    "cloud": (("compsci",), (2000, 2010)),
+    "strength": (("cogpsych",), (2010, 2020)),
+    "fusion": (("neuroscience",), (2010, 2020)),
+    "agency": (("communication",), (1990, 2000)),
     "information": (("psychology", "cogpsych", "compsci", "ai", "hci"), DECADES),
     "consciousness": (("philosophy", "psychology", "neuroscience", "ai"), DECADES),
     "embodiment": (("hci", "philosophy", "cogpsych"), DECADES),
