@@ -133,7 +133,7 @@ cues = [">human", ">preference", ">preferences", "rlhf", "<<safety", "llm", "llm
 key = "matching_or_correspondence"
 definition = "Bringing two structures into correspondence, such as aligning sequences, texts, images, ontologies, modalities or coordinate frames"
 example = "The system computes the alignment between source and target sentences."
-cues = ["sequence", "sequences", "word", "sentence", "image", "ontology", "ontologies", "multiple", "pairwise", "registration", "point", "cross", "modal", "temporal", "feature", "features", "structural", "protein", "entity", "graph", "vision", "visual", "modality", "modalities", "contrastive", "patch"]
+cues = ["sequence", "sequences", "<<word", "<<sentence", "<<image", "ontology", "ontologies", "multiple", "pairwise", "registration", "<<point", "<<modal", "<<temporal", "<<feature", "<<features", "<<structural", "protein", "entity", "graph", "<<visual", "modality", "modalities", "contrastive", "patch"]
 
 [[alignment.senses]]
 key = "strategic_agreement"
