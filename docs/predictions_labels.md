@@ -551,6 +551,42 @@ reported and a language model labeller is the fallback for rung 3, as round E's 
 
 Scored by `scripts/score_labels_corpus.py`, committed before it is run.
 
+### Round T results (2026-11-11, `scripts/score_labels_corpus.py`)
+
+Scored as written, with the lists frozen at `9332d86`. XL-LEXEME encoded 16,246 training
+sentences, examples and check 2b usages. Training sentences per word: *attention* 6,713, *prompt*
+273, *platform* 1,110, *network* 3,385, *component* 1,282, *having* 3,268. 96 of the 100 pairs
+carry a judgement.
+
+| | Verdict | Numbers |
+|---|---|---|
+| T1 | **Falsified** | probability overlap 0.449 (needed 0.456, XL-LEXEME's raw similarity) |
+| T2 | **Falsified** | same sense 0.397 (needed 0.414: Sonnet's 0.514 minus 0.10) |
+| T3 | Descriptive | same sense as Sonnet on 76.3% of the 186 usages, as JEV on 76.3% |
+| | Descriptive | with the correction pass: classifier same sense 0.441, overlap 0.522 (XL-LEXEME 0.494); Sonnet 0.563; JEV 0.504 (0.451 on the original judgements) |
+
+By the reading rule the classifier does not pass rung 2. The gap is 0.117 below Sonnet on same
+sense, 0.017 beyond the margin, and 0.007 below the encoder's own agreement. A language model
+labeller is the fallback for rung 3.
+
+Exploratory, after scoring: same-sense Spearman per word, 16 pairs each, so every figure is
+noisy.
+
+| Word | Classifier | Sonnet | JEV |
+|---|---|---|---|
+| *attention* | 0.87 | 0.77 | 0.77 |
+| *having* | 0.54 | 0.71 | 0.59 |
+| *prompt* | 0.46 | 0.75 | 0.87 |
+| *platform* | 0.27 | 0.41 | 0.40 |
+| *network* | 0.27 | 0.25 | -0.05 |
+| *component* | 0.13 | 0.35 | 0.35 |
+
+The classifier leads on *attention*, the word with the most training sentences, and is level on
+*network*. It falls furthest behind on *prompt*, the word with the fewest (273). Round A was
+written for the classifier (its adjusted shares use the classifier's out-of-fold confusion
+matrix), so running it with a language model labeller needs an amendment committed before it is
+run.
+
 ## Round A: known changes over time, with a planted change and a placebo (committed 2026-11-10, before any corpus list was frozen or any usage of these cells was labelled by the classifier)
 
 Rung 3. The classifier, trained from the frozen corpus lists and cue words, labels round X's
