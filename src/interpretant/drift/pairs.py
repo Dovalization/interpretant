@@ -78,13 +78,16 @@ def usage_input_ids(tokenizer: Any, usage: Usage) -> list[int]:
 
 
 class XLLexeme:
-    """XL-LEXEME on the published weights: one 1,024-dimensional vector per usage."""
+    """XL-LEXEME on the published weights: one 1,024-dimensional vector per usage. With ``half``
+    on a CUDA device, the model runs under float16 autocast (tensor cores; layer norms and
+    softmax stay in float32), and pooling is done in float32."""
 
     def __init__(
         self,
         model_name: str = XL_LEXEME,
         revision: str = XL_LEXEME_REVISION,
         batch_size: int = 32,
+        half: bool = False,
     ) -> None:
         import torch  # noqa: PLC0415
         from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
@@ -99,6 +102,7 @@ class XLLexeme:
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)  # type: ignore[no-untyped-call]
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(self.device).eval()
         self.batch_size = batch_size
+        self.half = half and self.device == "cuda"
 
     def input_ids(self, usage: Usage) -> list[int]:
         return usage_input_ids(self.tokenizer, usage)
@@ -123,10 +127,13 @@ class XLLexeme:
             width = max(len(ids) for ids in batch)
             ids = self.torch.tensor([row + [pad] * (width - len(row)) for row in batch])
             mask = self.torch.tensor([[1] * len(row) + [0] * (width - len(row)) for row in batch])
-            with self.torch.no_grad():
+            with (
+                self.torch.no_grad(),
+                self.torch.autocast("cuda", dtype=self.torch.float16, enabled=self.half),
+            ):
                 hidden = self.model(
                     input_ids=ids.to(self.device), attention_mask=mask.to(self.device)
-                ).last_hidden_state
+                ).last_hidden_state.float()
             weights = mask.to(self.device).unsqueeze(-1).to(hidden.dtype)
             pooled = (hidden * weights).sum(1) / weights.sum(1).clamp(min=1e-9)
             vectors.append(pooled.float().cpu().numpy())

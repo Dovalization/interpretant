@@ -138,6 +138,7 @@ def merge() -> None:
 
 
 TOKENIZER_WORKERS = 4
+HALF = True  # float16 autocast on CUDA; every shard of one store uses the same setting
 _TOKENIZER: object = None
 
 
@@ -180,7 +181,7 @@ def encode() -> None:
             return [pool.submit(_input_ids, rows[k : k + size]) for k in range(0, len(rows), size)]
 
         upcoming = submit(pending[0][0]) if pending else []
-        encoder = XLLexeme(batch_size=128)
+        encoder = XLLexeme(batch_size=128, half=HALF)
         for position, (first, path) in enumerate(pending):
             current = upcoming
             if position + 1 < len(pending):
