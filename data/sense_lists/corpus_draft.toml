@@ -59,21 +59,15 @@ word = "platform"
 
 [[platform.senses]]
 key = "digital_or_social_media_platform"
-definition = "An online service through which people interact, publish, share or trade, such as social media, video sites, apps and online marketplaces"
+definition = "A digital or media platform through which people interact, publish, share, trade or receive content, such as social media, video and TV services, apps and online marketplaces"
 example = "Misinformation spreads quickly on social media platforms."
-cues = ["<<social", "online", "<<digital", "<<internet", "facebook", "twitter", "youtube", "instagram", "tiktok", "weibo", "wechat", "<<sharing", "<<streaming", "<<networking", "<<commerce", "<<gig", ">>economy", "content", "<<media"]
+cues = ["<<social", "online", "<<digital", "<<internet", "facebook", "twitter", "youtube", "instagram", "tiktok", "weibo", "wechat", "<<sharing", "<<streaming", "<<networking", "<<commerce", "<<gig", ">>economy", "content", "<<media", "<<tv", "<<television", "<<broadcast", "<<radio"]
 
 [[platform.senses]]
 key = "technical_base"
 definition = "A hardware, software or technical system on which other systems, applications or experiments are built or run"
 example = "The algorithm was implemented on a robot platform."
-cues = ["hardware", "software", "computing", "robot", "robotic", "experimental", "testbed", "simulation", "cloud", "sensor", "embedded", "implemented", "development", "programming", "operating"]
-
-[[platform.senses]]
-key = "delivery_channel"
-definition = "A medium or channel through which content is distributed, such as print, broadcast, television or the web, as in multi-platform publishing"
-example = "The newspaper now publishes across print, broadcast and online platforms."
-cues = ["print", "broadcast", "television", "tv", "radio", "delivery", "distribution", "channels", "newspaper", "outlets"]
+cues = ["hardware", "software", "computing", "<<robot", "<<robotic", "<<experimental", "testbed", "<<simulation", "<<cloud", "<<sensor", "embedded", "implemented", "<<development", "<<programming"]
 
 [[platform.senses]]
 key = "physical_structure"
