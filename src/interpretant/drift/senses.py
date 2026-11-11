@@ -172,6 +172,57 @@ def sample_occurrences(
     return occurrences
 
 
+_WORD_TOKEN = re.compile(r"\w+")
+
+
+def sample_many(
+    abstracts: Abstracts, plan: Sequence[tuple[str, Sampling]], seed: int
+) -> dict[str, list[Occurrence]]:
+    """:func:`sample_occurrences` for many words in one pass over each cell, with the same
+    result for every word: each abstract is cleaned and tokenised once, and each word's seeded
+    order is walked only through the abstracts that contain it. Sampling with replacement is not
+    supported, and each word must be a single run of word characters."""
+    for word, sampling in plan:
+        if sampling.replace or not _WORD_TOKEN.fullmatch(word):
+            raise ValueError(f"sample_many cannot draw {word!r} with {sampling}")
+    result: dict[str, list[Occurrence]] = {word: [] for word, _ in plan}
+    for (field, decade), documents in sorted(abstracts.items()):
+        prepared: dict[bool, list[tuple[str, set[str]] | None]] = {}
+        for quality in {sampling.quality for _, sampling in plan}:
+            rows: list[tuple[str, set[str]] | None] = []
+            for _, raw in documents:
+                text = _URL.sub(" ", raw) if quality else raw
+                if quality and foreign_share(text) > MAX_FOREIGN_SHARE:
+                    rows.append(None)
+                else:
+                    rows.append((text, set(_WORD_TOKEN.findall(text.lower()))))
+            prepared[quality] = rows
+        for word, sampling in plan:
+            rows = prepared[sampling.quality]
+            target = word.lower()
+            order = list(range(len(documents)))
+            random.Random(f"{seed}:{word}:{field}:{decade}").shuffle(order)
+            pattern = word_pattern(word, sampling.plural)
+            found = result[word]
+            taken = 0
+            for index in order:
+                row = rows[index]
+                if row is None:
+                    continue
+                text, tokens = row
+                if target not in tokens and not (sampling.plural and target + "s" in tokens):
+                    continue
+                match = pattern.search(text)
+                if match is None:
+                    continue
+                context, start, end = context_around(text, match.start(), match.end())
+                found.append(Occurrence(field, decade, documents[index][0], context, start, end))
+                taken += 1
+                if taken == sampling.cap:
+                    break
+    return result
+
+
 class Encoder(Protocol):
     """Gives every occurrence a vector."""
 

@@ -33,7 +33,7 @@ import numpy as np
 from interpretant.corpus import quality
 from interpretant.drift.classifier import tidy_usage
 from interpretant.drift.pairs import Usage
-from interpretant.drift.senses import Sampling, cased_abstracts, sample_occurrences
+from interpretant.drift.senses import Sampling, cased_abstracts, sample_many
 
 GRID = Path("data/raw/openalex")
 WORDS = Path("data/raw/openalex_words")
@@ -91,8 +91,9 @@ def export(part: str) -> None:
             documents = cased_abstracts(root, field, decade)
             cleaned = quality.clean_cells({(field, decade): documents}, shared)
             year_of = years(root, field, decade)
-            for word, sampling in plan:
-                for occurrence in sample_occurrences(cleaned, word, seed=1, sampling=sampling):
+            drawn = sample_many(cleaned, plan, seed=1)
+            for word, _ in plan:
+                for occurrence in drawn[word]:
                     usage = tidy_usage(Usage(occurrence.context, occurrence.start, occurrence.end))
                     row = {
                         "key": key_of(usage.text, usage.start, usage.end),

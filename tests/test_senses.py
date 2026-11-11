@@ -31,6 +31,7 @@ from interpretant.drift.senses import (
     induce_senses,
     jensen_shannon,
     narrowed,
+    sample_many,
     sample_occurrences,
     sense_runs,
     sense_shares,
@@ -282,3 +283,28 @@ def test_a_single_number_of_senses_is_used_as_given() -> None:
     _, centres = induce_senses(vectors, seed=1, sense_range=(5,))
 
     assert len(centres) == 5
+
+
+def test_sampling_many_words_in_one_pass_matches_sampling_each_word() -> None:
+    texts = [
+        "The attention mechanism weights tokens. See https://example.org for attention maps.",
+        "Self-attention and Attention heads differ; networks of attention.",
+        "A network of neurons, and two networks of roads, with no attentions here.",
+        "Network effects shape platforms; the platform grows. Ε λ λ η ν ι κ ά κείμενα πολλά.",
+        "Prompts and a prompt: the model prompted users to answer the prompt quickly.",
+        "Nothing relevant in this abstract at all, only filler words and more filler.",
+    ] * 4
+    cells = {
+        ("ai", 2010): [(f"w{i}", text) for i, text in enumerate(texts)],
+        ("hci", 2020): [(f"h{i}", text) for i, text in enumerate(reversed(texts))],
+    }
+    plan = [
+        ("attention", Sampling(cap=3, plural=True, quality=True)),
+        ("network", Sampling(cap=5, plural=True, quality=True)),
+        ("platform", Sampling(cap=2, plural=False, quality=False)),
+        ("prompt", Sampling(cap=10, plural=True, quality=False)),
+        ("absent", Sampling(cap=3, plural=True, quality=True)),
+    ]
+    many = sample_many(cells, plan, seed=7)
+    for word, sampling in plan:
+        assert many[word] == sample_occurrences(cells, word, seed=7, sampling=sampling)
