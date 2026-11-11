@@ -587,6 +587,76 @@ written for the classifier (its adjusted shares use the classifier's out-of-fold
 matrix), so running it with a language model labeller needs an amendment committed before it is
 run.
 
+## Round U: the revised classifier against Sonnet, judged blind by the author (committed 2026-11-11, before any round U sentence was drawn or labelled)
+
+Rung 2, second attempt. Round T's verdict stands: the classifier failed T1 and T2. The author
+judged the classifier worth a second attempt, so the plan's rule of no repair rounds is amended for
+this one case. A revised classifier gets one new round on fresh sentences, never on round T's pairs.
+If it fails, the language model fallback of rounds E and T holds.
+
+### What changed, and from what evidence
+
+- **Lists.** `data/sense_lists/corpus_v2.toml` (`0b3bfa3`): cue words added to six senses
+  (artificial neural network, part of a system, language-model input, cue to a person, quick or
+  immediate, experiencing or causing). Nothing is removed or redefined, so the definitions are
+  version 1's.
+- **Classifier.** XL-LEXEME and one logistic regression per word with C = 1, as in round T, with two
+  changes. The class weights are square-root balanced (`classifier.sqrt_balanced`) instead of
+  balanced. At labelling time a usage whose cues name exactly one sense takes that sense
+  (`classifier.cue_first`), and the regression labels the rest.
+- **Training sentences.** Round T's whole-corpus sample, plus *prompt* without the cap in AI's and
+  computer science's 2020s cells, the only cells where *prompt* reached it.
+- **Evidence used.** Round T's misses, read pair by pair after scoring. A development set of 300
+  random usages from the training sample (50 per word), labelled blind by Claude before any
+  classifier output was seen. Some cue choices were made after seeing the development set's
+  errors. On it, round T's classifier labels 234 of 300 as Claude did and the revised one 252.
+  These figures are optimistic and are not the test.
+- **Tried and dropped.** Lifting the cap for every word (the cells hold little more), C of 0.25 or
+  4 (no difference), and one round of self-training on confident labels (no gain).
+
+### Method
+
+- **Test sentences.** 240 distinct usages, 40 per word (*attention, prompt, platform, network,
+  component, having*), drawn uniformly (seed `round-u`) from the training sample's distinct
+  sentences after removing boilerplate, check 2b's 186 usages and the development set's 300. They
+  are left out of training. Claude reads neither them nor their labels before the author has
+  judged.
+- **Labellers.** The revised classifier, and Claude Sonnet 5.5 (Batch API, low effort) with the same
+  lists.
+- **Disagreements.** The usages where the two labels differ. The author sees each on a page with
+  the two labels' definitions ("none of the listed meanings" for Sonnet's *other*), in an order
+  drawn at random per usage (seeded), without being told which labeller gave which. The author
+  chooses the first, the second, both fit, or neither fits. The key from order to labeller is kept
+  off the page and read only by the scorer.
+
+### Predictions
+
+**U1 — Where they differ, the classifier is about as good as Sonnet.** Of the disagreements where
+the author chooses exactly one label, the classifier's is chosen in at least 40%. *Falsified*
+below 40%. *Untestable* if fewer than 20 disagreements are decided that way.
+
+**U2 — Agreement.** The share of the 240 usages on which the two labellers agree, overall and per
+word. Descriptive.
+
+**U3 — Rough accuracy.** Counting agreements as right, each labeller's estimated accuracy:
+agreements, plus disagreements where its label is chosen or both fit, over 240. Descriptive, and
+an upper estimate.
+
+**U4 — Per word.** U1's share for each word. Descriptive; about eight disagreements per word, so
+each figure is noisy.
+
+Reading rule: if U1 passes, the classifier with version 2 and these settings is the labeller for
+rung 3, and round A gets an amendment, committed before it is run, for the lists, the weights and
+cue-first labelling, including how adjusted shares treat cue-decided usages. If U1 fails, Sonnet is
+the labeller for rung 3, with an amendment for that. U1 judges labels, not pairs, so it is not
+comparable with round T's figures.
+
+Disclosed: the cue additions and the weights were chosen knowing round T's misses. The review pages
+and the development set sample the same training sample the test sentences come from, so a few
+test sentences may have been shown as cue matches or non-seed samples before.
+
+Scored by `scripts/score_labels_head_to_head.py`, committed before it is run.
+
 ## Round A: known changes over time, with a planted change and a placebo (committed 2026-11-10, before any corpus list was frozen or any usage of these cells was labelled by the classifier)
 
 Rung 3. The classifier, trained from the frozen corpus lists and cue words, labels round X's
