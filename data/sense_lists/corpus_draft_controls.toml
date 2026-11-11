@@ -15,9 +15,9 @@ cues = [">>system", ">>systems", ">>theory", "<<feedback", ">>loop", "<<optimal"
 
 [[control.senses]]
 key = "comparison_condition"
-definition = "A comparison group or condition in an experiment or study, against which a treatment is judged"
+definition = "A comparison group or condition in an experiment or study, against which a treatment is judged, or a variable held constant by design or statistical adjustment"
 example = "Patients improved more than the control group."
-cues = [">>group", ">>groups", ">>condition", ">>conditions", "<<healthy", "<<matched", ">>participants", ">>subjects", "<<placebo", ">>sample", ">>arm"]
+cues = [">>group", ">>groups", ">>condition", ">>conditions", "<<healthy", "<<matched", ">>participants", ">>subjects", "<<placebo", ">>sample", ">>arm", "<statistical", "<statistically", "covariates", "covariate"]
 
 [[control.senses]]
 key = "power_or_authority"
@@ -80,28 +80,28 @@ cues = ["<<this", ">>presents", ">>describes", ">>proposes", ">>discusses", ">>e
 key = "material"
 definition = "The material made from pulp, in sheets, as in paper forms, paper-based tests or the paper industry"
 example = "Participants completed a paper questionnaire."
-cues = ["<<recycled", ">>based", ">>pencil", "<<sheet", "<<sheets", ">>mill", ">>industry", "<<pulp", ">>forms", ">>money", "<<printed", ">>documents"]
+cues = ["<<recycled", ">>based", ">pencil", "<<sheet", "<<sheets", ">>mill", ">>industry", "<<pulp", ">>forms", ">>money", "<<printed", ">>documents"]
+
+[[paper.senses]]
+key = "newspaper"
+definition = "A newspaper, as in the local paper or the daily papers"
+example = "The story ran on the front page of the local paper."
+cues = ["<<local", "<<daily", "<<news", "<<morning", "<<evening", "<<sunday", "<<weekly", "<<tabloid", "<<newspaper", "circulation", "readership", "journalists", "headlines"]
 
 [planning]
 word = "planning"
 
 [[planning.senses]]
 key = "making_plans"
-definition = "Making plans for future action by people or organisations, as in strategic, urban or financial planning"
+definition = "Making plans for future action by people or organisations, as in strategic, urban or financial planning, including planning as a mental ability, studied with executive functions"
 example = "Urban planning shapes how residents travel."
-cues = ["<<strategic", "<<urban", "<<financial", "<<regional", "<<land", "<<city", "<<family", "<<career", "<<business", "<<policy", "<<advance", "<<spatial", "<<health"]
+cues = ["<<strategic", "<<urban", "<<financial", "<<regional", "<<land", "<<city", "<<family", "<<career", "<<business", "<<policy", "<<advance", "<<spatial", "<<health", "<<treatment", "<<care", "<<therapy", "<<surgical", "<<discharge", "<<lesson", "<<curriculum", "<<instructional", "<<educational", "<<project", "<<program", "<<programme", "<<event", "<<retirement", "<<transition", "<<participatory", "<<communication", "<<language", "<<preflight", "<<menu", "<<meal", "<<careful", "<<future", "<<long", "<<daily", "inhibition", "flexibility", "executive", "shifting", "neuropsychological", "impaired", "impairment"]
 
 [[planning.senses]]
 key = "automated_planning"
 definition = "In AI and robotics: computing a sequence of actions that reaches a goal, as in path or task planning"
 example = "The robot uses a motion planning algorithm to avoid obstacles."
 cues = ["<<path", "<<motion", "<<trajectory", "<<task", "<<route", ">>algorithm", ">>algorithms", ">>problem", ">>problems", ">>domain", ">>domains", "<<automated", "<<hierarchical", "<<temporal", ">>graph"]
-
-[[planning.senses]]
-key = "cognitive_planning"
-definition = "Planning as a mental ability, studied with executive functions such as inhibition and working memory"
-example = "Patients were impaired on tests of planning and set shifting."
-cues = ["inhibition", "flexibility", "executive", "shifting", "neuropsychological", "impaired", "impairment"]
 
 [principles]
 word = "principles"
