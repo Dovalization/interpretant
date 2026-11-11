@@ -27,13 +27,13 @@ word = "embedding"
 
 [[embedding.senses]]
 key = "learned_vector_representation"
-definition = "A learned vector representation of words, sentences, nodes, users or other objects, fitted from data so that similar objects lie close together, as in word or network embeddings"
+definition = "A learned vector representation of discrete objects (words, sentences, nodes, items, users, entities) or a neural model's embedding layer, fitted from data so that similar objects lie close together, as in word, sentence or network embeddings"
 example = "Each word is represented by a 300-dimensional embedding learned from the corpus."
 cues = ["<<word", "<<sentence", "<<node", "<<knowledge", "<<contextual", "<<user", "<<item", "<<entity", "<<positional", ">>vectors", ">>vector", ">>space", ">>layer", ">>layers", ">>model", ">>models", "learned", "pretrained", "word2vec", "glove", "bert", "!by", "!within", "!into"]
 
 [[embedding.senses]]
 key = "placing_or_mapping"
-definition = "Placing or mapping one thing into another, without learned vectors: inserting data, a watermark or code into a carrier, a system, agent or practice situated in a physical, social or cultural setting, or a mathematical mapping of one structure into another, as in metric or graph embeddings"
+definition = "Placing or mapping one thing into another, without learned vectors of discrete objects: inserting data, a watermark or code into a carrier, a system, agent or practice situated in a physical, social or cultural setting, or a mathematical mapping of one structure into another, as in metric or graph embeddings, including dimensionality reduction of data points such as manifold or spectral embedding"
 example = "The watermark embedding leaves the image's quality unchanged."
 cues = ["metric", "metrics", "isometric", "topological", "manifold", "theorem", "distortion", "planar", "lipschitz", "polynomial", "homomorphism", "subgraph", "watermark", "watermarking", "steganography", "hiding", "carrier", "<<social", "<<cultural", "<<institutional", "<<organizational", "environment", "situated", "!learn", "!learned", "!learning", "!neural", "!word2vec", "!glove", "!bert", "!model", "!models", "!cnn", "!cnns", "!network", "!networks", "!representation", "!representations", "!vector", "!vectors", "!space", "!contextual", "!aware"]
 
@@ -48,9 +48,9 @@ cues = [">>computing", ">>services", ">>service", ">>storage", ">>server", ">>se
 
 [[cloud.senses]]
 key = "set_of_points_or_values"
-definition = "A set of points, values or items treated together, as in a point cloud from a 3D scanner, a cloud of data points or a word cloud"
+definition = "A set of points, values or items treated together, as in a point cloud from a 3D scanner, a cloud of data points, a word cloud, or the cloud model of uncertainty reasoning, which represents a concept by sampled cloud drops"
 example = "The scanner produces a point cloud of the building's facade."
-cues = ["<<point", "points", "<<word", "<<tag", "<<electron", ">>of", "lidar", "scanner", "scanning", "scattered", "registration", "3d", "!computing", "!services", "!smoke", "!dust", "!gas", "!chemical"]
+cues = ["<<point", "points", "<<word", "<<tag", "<<electron", ">>of", "lidar", "scanner", "scanning", "scattered", "registration", "3d", "<<normal", ">>theory", ">>generator", ">>generators", "drops", "!computing", "!services", "!smoke", "!dust", "!gas", "!chemical"]
 
 [[cloud.senses]]
 key = "atmospheric_or_physical_cloud"
