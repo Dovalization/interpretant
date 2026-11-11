@@ -118,7 +118,7 @@ cues = ["<<semantic", "<<conceptual", "<<bayesian", "<<belief", "petri", "<<inhe
 key = "physical_infrastructure"
 definition = "A physical network of infrastructure, such as roads, railways and other transport, power grids, water supply, pipelines or distribution systems; networks that carry communication belong to computer or communication networks"
 example = "Traffic flows through the city's road network."
-cues = ["<<road", "<<railway", "transportation", "<<transport", "<<flow", "<<electrical", "<<power", "<<water", "<<rail", "<<highway", "<<street", "<<sewer", "<<pipeline", "<<irrigation", "<<distribution", "<<supply"]
+cues = ["<<road", "<<railway", "transportation", "<<transport", "<<electrical", "<<water", "<<rail", "<<highway", "<<street", "<<sewer", "<<pipeline", "<<irrigation", "<<distribution", "<<supply"]
 
 [alignment]
 word = "alignment"
