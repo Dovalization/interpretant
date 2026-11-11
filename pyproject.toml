@@ -29,6 +29,7 @@ dependencies = [
     "simplemma>=2.0",
     "torch>=2.4",
     "transformers>=4.48",
+    "sentencepiece>=0.2",
 ]
 
 [project.optional-dependencies]
