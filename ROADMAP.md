@@ -177,6 +177,12 @@ Each item that produces results gets its predictions committed first.
    (`docs/corpus.md`) removed non-English abstracts, template records and spam. Retrain them on
    the cleaned cells, rerun the candidate scan on the new models, and check in a pre-registered
    robustness round that the README's robust findings survive the cleaning.
+8f. **An open LLM as encoder and labeller** (noted 2026-11-11, after round A′). Hidden states of an
+   open-weight 7–8B decoder (Llama 3.1 8B or Qwen2.5-7B, quantised to fit the homelab's 12 GB)
+   as a third encoder beside XL-LEXEME and DeBERTa-v3-large, and the same model as a local
+   comparison labeller beside Sonnet and JEV: free, private and pinned. Exploratory: the layer,
+   pooling and quantisation are chosen on development data, which is why it is not round A′'s
+   robustness check (DeBERTa-v3-large is, with one fixed reading rule).
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
