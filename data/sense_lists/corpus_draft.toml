@@ -16,13 +16,13 @@ word = "attention"
 key = "cognitive_attention"
 definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience, including attention drawn or captured by a stimulus in studies of perception and behaviour"
 example = "Sleep loss impairs sustained attention in older adults."
-cues = ["<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting", "<<visual", "<<selective", "<<spatial", "<<sustained", "<<voluntary", "<<auditory", "<<joint", "<<covert", "<<focused", "<<visuospatial", "<<attentional", "capture", "captured"]
+cues = ["<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting", "<<visual", "<<selective", "<<spatial", "<<sustained", "<<voluntary", "<<auditory", "<<joint", "<<covert", "<<visuospatial", "<<attentional", "capture", ">captured"]
 
 [[attention.senses]]
 key = "notice_or_consideration"
 definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing, including authors directing it, as in we focus our attention on; attention captured by a stimulus belongs to cognitive attention"
 example = "The issue has received growing attention from policymakers."
-cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "<<increasing", "growing", "<<considerable", "little", "special", "deserves", "public", "<<media", "scholarly", "widespread", ">given", "<focus", "<focuses", "<focusing", "<direct", "<directs", "<directed", "<directing", "<turn", "<turns", "<turned", "<turning", "<confine", "<restrict", "<restricting", "<devote", "<devoted", "<devotes", "<<our", "<<my", "!gaze", "!eye", "!eyes", "!visual", "!driver"]
+cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "<<increasing", "growing", "<<considerable", "little", "special", "deserves", "public", "<<media", "scholarly", "widespread", ">given", "<focus", "<focuses", "<focusing", "<direct", "<directs", "<directed", "<directing", "<turn", "<turns", "<turned", "<turning", "<confine", "<restrict", "<restricting", "<devote", "<devoted", "<devotes", "<<our", "<<my", "!gaze", "!eye", "!eyes", "!visual", "!driver", "!stimulus", "!stimuli", "!cues", "!cue"]
 
 [[attention.senses]]
 key = "attention_mechanism"
@@ -181,7 +181,7 @@ cues = [">been", ">shown", ">proved", ">proven", ">demonstrated", ">found", ">co
 key = "possessing_or_containing"
 definition = "Possessing, containing or being characterised by something"
 example = "Patients having a history of stroke were excluded."
-cues = [">property", ">properties", ">value", ">values", ">number", ">high", ">low", ">same", ">different", ">access", ">similar", ">large", ">small", ">higher", ">lower"]
+cues = [">property", ">properties", ">value", ">values", ">number", ">high", ">low", ">same", ">different", ">access", ">similar", ">large", ">small", ">higher", ">lower", "!after"]
 
 [[having.senses]]
 key = "experiencing_or_causing"
