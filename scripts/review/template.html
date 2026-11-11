@@ -56,6 +56,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .cues span.mid { background: var(--warn-soft); }
 .cues span.bad { background: var(--warn-soft); outline: 1px solid var(--warn); }
 .cues span.bad i, .cues span.mid i { color: var(--warn); }
+.scope { margin: 0 0 12px; font-size: 0.85rem; color: var(--muted); }
 .doubt { border-left: 3px solid var(--warn); padding-left: 10px; margin-bottom: 10px; }
 .previews .warnsrc { color: var(--warn); background: var(--warn-soft); }
 .fields { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-bottom: 8px; font-size: 0.8rem; color: var(--muted); }
@@ -103,7 +104,7 @@ let db = null, writable = true;
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const marked = s => esc(s).replace(/⟦(.*?)⟧/g, "<mark>$1</mark>");
 const docId = (w, k) => `${w}__${k}`;
-const cueName = c => c.startsWith("<<") ? "just before: " + c.slice(2) : c.startsWith(">>") ? "just after: " + c.slice(2) : c.startsWith("<") ? "before: " + c.slice(1) : c.startsWith(">") ? "after: " + c.slice(1) : c;
+const cueName = c => c.startsWith("!") ? "not near: " + c.slice(1) : c.startsWith("<<") ? "just before: " + c.slice(2) : c.startsWith(">>") ? "just after: " + c.slice(2) : c.startsWith("<") ? "before: " + c.slice(1) : c.startsWith(">") ? "after: " + c.slice(1) : c;
 const cueChip = (c, score) => {
   if (!score) return `<span>${esc(cueName(c))}</span>`;
   const [n, agree, elsewhere] = score;
@@ -143,6 +144,7 @@ function render() {
     return `<section class="word" aria-labelledby="h-${w}">
       <div class="word-head"><h2 id="h-${w}">${w}</h2><span class="meta">${entry.senses.length} meanings · ${entry.usages} sentences sampled from every field and decade</span>
         <button type="button" class="approve-all" data-word="${w}">Approve all undecided</button></div>
+      ${(entry.out_of_scope || []).length ? `<p class="scope">Out of scope, so not trained on, labelled or counted: sentences with ${entry.out_of_scope.map(esc).join(", ")} within five words of ${w}.</p>` : ""}
       ${senses}
       <div class="word-note"><label class="label" for="note-${w}__word">A meaning missing from ${w}?</label>
         <textarea id="note-${w}__word" data-id="${w}__word" data-word="${w}" data-sense="" placeholder="Describe it, with a cue word or two if you can (optional)"></textarea></div>

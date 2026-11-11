@@ -252,6 +252,10 @@ for word, body in draft.items():
                 "previews": [view(seed) for seed in picked],
             }
         )
-    out[word] = {"usages": sum(1 for row in rows if row["word"] == word), "senses": entries}
+    out[word] = {
+        "usages": sum(1 for row in rows if row["word"] == word),
+        "out_of_scope": body.get("out_of_scope", []),
+        "senses": entries,
+    }
     print(word, {e["key"]: (e["seeds"], len(e["doubtful"])) for e in entries}, flush=True)
 out_path.write_text(json.dumps(out, indent=1))
