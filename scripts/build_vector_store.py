@@ -150,7 +150,11 @@ def encode() -> None:
         if path.exists():
             continue
         rows = todo[first : first + SHARD_SIZE]
-        vectors = encoder.encode([Usage(r["text"], r["start"], r["end"]) for r in rows])
+        vectors = encoder.encode(
+            [Usage(r["text"], r["start"], r["end"]) for r in rows], by_length=True
+        )
+        if not np.isfinite(vectors.astype(np.float16)).all():
+            raise ValueError(f"{path.name}: vectors overflow float16")
         partial = path.with_name(path.stem + ".partial.npz")
         np.savez(
             partial, keys=np.array([r["key"] for r in rows]), vectors=vectors.astype(np.float16)

@@ -95,11 +95,20 @@ class XLLexeme:
         tokens = [self.tokenizer.cls_token, *tokens, self.tokenizer.sep_token]
         return list(self.tokenizer.convert_tokens_to_ids(tokens))
 
-    def encode(self, usages: Sequence[Usage]) -> np.ndarray:
+    def encode(self, usages: Sequence[Usage], by_length: bool = False) -> np.ndarray:
+        """One vector per usage, in the order given. With ``by_length``, batches are formed from
+        usages of similar token length, which wastes less padding; the vectors come back in the
+        original order."""
+        all_ids = [self.input_ids(usage) for usage in usages]
+        order = (
+            sorted(range(len(all_ids)), key=lambda i: len(all_ids[i]))
+            if by_length
+            else list(range(len(all_ids)))
+        )
         vectors: list[np.ndarray] = []
         pad = int(self.tokenizer.pad_token_id)
-        for first in range(0, len(usages), self.batch_size):
-            batch = [self.input_ids(usage) for usage in usages[first : first + self.batch_size]]
+        for first in range(0, len(order), self.batch_size):
+            batch = [all_ids[i] for i in order[first : first + self.batch_size]]
             width = max(len(ids) for ids in batch)
             ids = self.torch.tensor([row + [pad] * (width - len(row)) for row in batch])
             mask = self.torch.tensor([[1] * len(row) + [0] * (width - len(row)) for row in batch])
@@ -110,7 +119,10 @@ class XLLexeme:
             weights = mask.to(self.device).unsqueeze(-1).to(hidden.dtype)
             pooled = (hidden * weights).sum(1) / weights.sum(1).clamp(min=1e-9)
             vectors.append(pooled.float().cpu().numpy())
-        return np.vstack(vectors)
+        stacked = np.vstack(vectors)
+        result = np.empty_like(stacked)
+        result[order] = stacked
+        return result
 
 
 def average_pairwise_distance(first: np.ndarray, second: np.ndarray) -> float:
