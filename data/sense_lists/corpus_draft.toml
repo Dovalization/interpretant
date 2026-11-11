@@ -100,7 +100,7 @@ cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortic
 key = "computer_or_communication_network"
 definition = "A computer, telephone or other communication network linking machines or devices, including the interconnection network of a multiprocessor"
 example = "Messages are routed through the local area network."
-cues = ["computer", "communication", "communications", "telephone", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "traffic", "bandwidth", "<<area"]
+cues = ["<<computer", "<<telephone", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "traffic", "bandwidth", "<<area", "telecommunication", "telecommunications", "<<mobile", "<<cellular", "<<sensor", "<<optical"]
 
 [[network.senses]]
 key = "social_network"
