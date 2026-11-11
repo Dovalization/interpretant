@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from interpretant.drift.classifier import classify, cue_sense, example_usage
+from interpretant.drift.classifier import classify, cue_sense, example_usage, out_of_scope
 from interpretant.drift.pairs import Usage
 
 CUES = {"aircraft": ["pilot", "landed"], "surface": ["inclined", "horizontal"]}
@@ -112,3 +112,19 @@ def test_sentences_repeated_across_abstracts_are_boilerplate() -> None:
 
     texts = ["Published by Frontiers."] * 5 + ["A real sentence."] * 2
     assert boilerplate(texts) == {"Published by Frontiers."}
+
+
+def test_an_exclusion_cue_silences_its_sense_only() -> None:
+    cues = {"structure": ["station", "!work"], "base": ["computer"]}
+    assert cue_sense(usage("trains leave the station platform", "platform"), cues) == "structure"
+    assert cue_sense(usage("a work station class platform", "platform"), cues) is None
+    assert cue_sense(usage("work station and computer platform", "platform"), cues) == "base"
+
+
+def test_a_scope_word_near_the_target_puts_the_usage_out_of_scope() -> None:
+    words = ["ergative", "accusative"]
+    text = "the language has ergative alignment in its case marking"
+    assert out_of_scope(usage(text, "alignment"), words)
+    assert not out_of_scope(usage("word alignment between two languages", "alignment"), words)
+    far = "ergative one two three four five six alignment"
+    assert not out_of_scope(usage(far, "alignment"), words)

@@ -22,7 +22,9 @@ def cue_sense(usage: Usage, cues: Mapping[str, Sequence[str]], window: int = 5) 
     """The one sense whose cues appear within ``window`` words of the target, or None when no
     sense's cues do or more than one sense's do. A cue written ``<word`` counts only before the
     target and ``>word`` only after it; ``<<word`` only as the word just before and ``>>word``
-    only as the word just after; a plain cue counts on either side."""
+    only as the word just after; a plain cue counts on either side. A cue written ``!word`` is an
+    exclusion: when ``word`` appears within the window on either side, that sense's cues do not
+    count, so the usage seeds no sense through them."""
     left = TOKEN.findall(usage.text[: usage.start].lower())[-window:]
     right = TOKEN.findall(usage.text[usage.end :].lower())[:window]
     before, after = set(left), set(right)
@@ -38,8 +40,21 @@ def cue_sense(usage: Usage, cues: Mapping[str, Sequence[str]], window: int = 5) 
             return cue[1:] in after
         return cue in before or cue in after
 
-    found = [sense for sense, words in cues.items() if any(present(c) for c in words)]
+    def fires(words: Sequence[str]) -> bool:
+        if any(w[1:] in before or w[1:] in after for w in words if w.startswith("!")):
+            return False
+        return any(present(c) for c in words if not c.startswith("!"))
+
+    found = [sense for sense, words in cues.items() if fires(words)]
     return found[0] if len(found) == 1 else None
+
+
+def out_of_scope(usage: Usage, words: Sequence[str], window: int = 5) -> bool:
+    """Whether one of ``words`` appears within ``window`` words of the target on either side: a
+    usage outside its sense list's scope, left out of training, labelling and counts."""
+    near = TOKEN.findall(usage.text[: usage.start].lower())[-window:]
+    near += TOKEN.findall(usage.text[usage.end :].lower())[:window]
+    return not set(words).isdisjoint(near)
 
 
 def example_usage(word: str, example: str) -> Usage | None:
