@@ -14,13 +14,13 @@ word = "attention"
 
 [[attention.senses]]
 key = "cognitive_attention"
-definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience"
+definition = "A person's or animal's mental focus on something, as studied in psychology and neuroscience, including attention drawn or captured by a stimulus in studies of perception and behaviour"
 example = "Sleep loss impairs sustained attention in older adults."
 cues = ["<<divided", "deficit", "deficits", "adhd", "vigilance", "distraction", "executive", ">>bias", ">>biases", "<<orienting"]
 
 [[attention.senses]]
 key = "notice_or_consideration"
-definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing, including authors directing it, as in we focus our attention on"
+definition = "Notice, interest or consideration that people, groups or institutions give to a topic, problem or thing, including authors directing it, as in we focus our attention on; attention captured by a stimulus belongs to cognitive attention"
 example = "The issue has received growing attention from policymakers."
 cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attracted", "attract", "attracting", "paid", "pay", "paying", "<<increasing", "growing", "<<considerable", "little", "special", "deserves", "public", "<<media", "scholarly", "widespread", ">given"]
 
@@ -62,13 +62,13 @@ word = "platform"
 
 [[platform.senses]]
 key = "digital_or_social_media_platform"
-definition = "A digital or media platform through which people interact, publish, share, trade or receive content, such as social media, video and TV services, apps and online marketplaces"
+definition = "A digital or media platform through which people interact, publish, share, trade or receive content: an online service people use directly, such as social media, video and TV services, apps, online marketplaces, and online learning, survey or videoconferencing platforms"
 example = "Misinformation spreads quickly on social media platforms."
 cues = ["<<social", "online", "<<digital", "<<internet", "facebook", "twitter", "youtube", "instagram", "tiktok", "weibo", "wechat", "<<sharing", "<<streaming", "<<networking", "<<commerce", "<<gig", ">>economy", "content", "<<media", "<<tv", "<<television", "<<broadcast", "<<radio"]
 
 [[platform.senses]]
 key = "technical_base"
-definition = "A hardware, software or technical system on which other systems, applications or experiments are built or run"
+definition = "A hardware, software or technical system on which other systems, applications or experiments are built or run: a base that developers or researchers build or run systems on, such as hardware, an operating system, a cloud service, a robot or a testbed"
 example = "The algorithm was implemented on a robot platform."
 cues = ["hardware", "software", "computing", "<<robot", "<<robotic", "<<experimental", "testbed", "<<simulation", "<<cloud", "<<sensor", "embedded", "implemented", "<<development", "<<programming"]
 
@@ -89,19 +89,19 @@ word = "network"
 
 [[network.senses]]
 key = "artificial_neural_network"
-definition = "An artificial neural network: a computational model of connected units whose weights are learned from data"
+definition = "An artificial neural network: a computational model of connected units whose weights are learned from data, including artificial networks that model the brain or cognition, such as connectionist models"
 example = "A three-layer network was trained with backpropagation."
 cues = ["neural", "<<trained", ">>training", "<<layer", "<<layers", "backpropagation", "connectionist", "hopfield", "perceptron", "deep", "convolutional", "recurrent", ">>weights", "boltzmann", "!brain", "!brains", "!biological", "!cortex", "!cortical", "!neuronal", "!dysfunction"]
 
 [[network.senses]]
 key = "biological_neural_network"
-definition = "A network of neurons or brain regions in a living nervous system, as studied in neuroscience"
+definition = "A network of neurons or brain regions in a living nervous system, as studied in neuroscience; artificial models of them belong to artificial neural networks"
 example = "Memory consolidation depends on a hippocampal-cortical network."
 cues = ["brain", "cortical", "cortex", "neuronal", "hippocampal", "thalamocortical", "fmri", "synaptic", "<default", "!artificial", "!connectionist", "!recurrent"]
 
 [[network.senses]]
 key = "computer_or_communication_network"
-definition = "A computer, telephone or other communication network linking machines or devices, or a broadcasting network of television or radio stations"
+definition = "A computer, telephone or other communication network linking machines or devices, or a broadcasting network of television or radio stations, including sensor and wireless networks"
 example = "Messages are routed through the local area network."
 cues = ["<<computer", "<<telephone", "packet", "routing", "protocol", "protocols", "wireless", "internet", "transputer", "interconnection", "traffic", "bandwidth", "<<area", "telecommunication", "telecommunications", "<<mobile", "<<cellular", "<<sensor", "<<optical", ">>television", ">>tv", ">>news", "<<television", "<<broadcast", "<<cable"]
 
@@ -143,7 +143,7 @@ cues = ["<<strategic", "business", "organizational", "interests", "political", "
 
 [[alignment.senses]]
 key = "physical_arrangement"
-definition = "Arrangement in a straight line or in correct relative positions, as of mechanical, optical or other physical parts"
+definition = "Arrangement in a straight line or in correct relative positions, as of mechanical, optical or other physical parts; aligning images or point clouds computationally belongs to matching"
 example = "Wheel alignment affects the car's handling."
 cues = ["wheel", "axis", "mechanical", "optical", "laser", "beam", "mirror", "mounting", "vertical", "horizontal", "camera"]
 
@@ -158,7 +158,7 @@ cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module"
 
 [[component.senses]]
 key = "mathematical_or_measured_component"
-definition = "A constituent of a quantity, signal, vector, data set, mixture or substance, as measured or analysed in mathematics, statistics or the sciences"
+definition = "A constituent of a quantity, signal, vector, data set, mixture or substance, as measured or analysed in mathematics, statistics or the sciences, including principal or independent components in any field, such as questionnaire studies"
 example = "The first principal component explains most of the variance."
 cues = ["<<principal", "<<independent", ">>analysis", "<<frequency", "vector", "<<signal", "<<variance", "<<connected", "harmonic", "<<spectral", "orthogonal", "<<chemical", "<<blood", "<<mixture", "<<active"]
 
