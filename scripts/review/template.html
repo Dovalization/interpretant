@@ -1,0 +1,223 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column of dictionary-style entries; each word is a headword block, each sense a numbered definition with its evidence and a decision. */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --ink: #1b2330; --muted: #5d6878; --rule: #dde2ea;
+  --accent: #2f5aa8; --accent-soft: #e6edf9; --mark: #fff1b8;
+  --ok: #2c7a4b; --ok-soft: #e3f3e9; --warn: #a2620b; --warn-soft: #fbefdc;
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12;
+  --ok: #7fd3a1; --ok-soft: #173426; --warn: #f0b867; --warn-soft: #3a2b14; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12;
+  --ok: #7fd3a1; --ok-soft: #173426; --warn: #f0b867; --warn-soft: #3a2b14; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body); }
+.page { max-width: 820px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px; }
+h1 { font: 650 1.9rem/1.2 var(--display); margin: 0; text-wrap: balance; }
+.lede { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
+.status { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg);
+  border-bottom: 1px solid var(--rule); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 0.9rem; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.status strong { font-variant-numeric: tabular-nums; }
+.bar { flex: 1 1 160px; height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden; min-width: 120px; }
+.bar span { display: block; height: 100%; background: var(--ok); width: 0; transition: width .3s; }
+.note-line { color: var(--muted); font-size: 0.85rem; }
+.word { display: flex; flex-direction: column; gap: 14px; }
+.word-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; border-bottom: 2px solid var(--ink); padding-bottom: 6px; }
+.word-head h2 { font: 650 1.6rem/1.2 var(--display); margin: 0; }
+.word-head .meta { color: var(--muted); font-size: 0.85rem; }
+.word-head button { margin-left: auto; }
+.sense { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; grid-template-columns: 2.2rem 1fr; gap: 4px 12px; }
+.sense[data-status="approved"] { border-color: var(--ok); box-shadow: inset 4px 0 0 var(--ok); }
+.sense[data-status="flagged"] { border-color: var(--warn); box-shadow: inset 4px 0 0 var(--warn); }
+.num { font: 650 1.25rem/1.3 var(--display); color: var(--accent); }
+.body { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.key { font: 500 0.82rem var(--mono); color: var(--muted); letter-spacing: 0.02em; }
+.def { font: 500 1.02rem/1.45 var(--display); margin: 0; }
+.ex { margin: 0; color: var(--muted); font-style: italic; }
+.label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+.cues { display: flex; flex-wrap: wrap; gap: 5px; }
+.cues span { font: 400 0.8rem var(--mono); background: var(--accent-soft); color: var(--ink); border-radius: 4px; padding: 1px 6px; }
+.previews { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.previews li { font-size: 0.88rem; color: var(--ink); border-left: 2px solid var(--rule); padding-left: 10px; overflow-wrap: anywhere; }
+.previews .src { display: inline-block; font: 500 0.72rem var(--mono); color: var(--accent); background: var(--accent-soft); border-radius: 3px; padding: 0 5px; margin-right: 6px; }
+.cues span i { font-style: normal; color: var(--muted); font-size: 0.72rem; }
+.cues span.mid { background: var(--warn-soft); }
+.cues span.bad { background: var(--warn-soft); outline: 1px solid var(--warn); }
+.cues span.bad i, .cues span.mid i { color: var(--warn); }
+.doubt { border-left: 3px solid var(--warn); padding-left: 10px; margin-bottom: 10px; }
+.previews .warnsrc { color: var(--warn); background: var(--warn-soft); }
+.fields { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-bottom: 8px; font-size: 0.8rem; color: var(--muted); }
+.fields b { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+details { margin-top: 6px; }
+summary { cursor: pointer; font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+details[open] summary { margin-bottom: 6px; }
+.previews mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 2px; font-weight: 600; }
+.none { font-size: 0.88rem; color: var(--muted); }
+.decide { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+button { font: 500 0.88rem var(--body); border-radius: 6px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); padding: 6px 12px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button[aria-pressed="true"].approve { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+button[aria-pressed="true"].flag { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+textarea { width: 100%; box-sizing: border-box; min-height: 2.6rem; font: 0.88rem/1.4 var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; resize: vertical; }
+.saved { font-size: 0.8rem; color: var(--muted); }
+.sense:not([data-status="approved"]):not([data-status="flagged"]) .saved:not(:empty) { color: var(--warn); }
+.word-note { display: flex; flex-direction: column; gap: 4px; }
+@media (max-width: 480px) { .sense { grid-template-columns: 1fr; } .num { font-size: 1rem; } .word-head button { margin-left: 0; } }
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+</style>
+
+<div class="page">
+  <header>
+    <h1>__TITLE__</h1>
+    <p class="lede">Each word below has a draft list of meanings for the interpretant corpus. For each meaning: approve it if the definition is right and the sample sentences its cue words caught mostly fit; flag it and say why if not. Use the note under a word for a missing meaning. The classifier learns from the cue words and the example sentence, so wrong cues matter more than an imperfect definition. Two automatic checks point at what to look at first: each cue word shows how many sentences it caught and how often a classifier trained without them agrees (amber is low), and each meaning lists its most doubtful sentences at the top.</p>
+  </header>
+  <div class="status" role="status">
+    <span><strong id="done">0</strong> of <strong id="total">0</strong> meanings decided</span>
+    <span class="bar" aria-hidden="true"><span id="bar"></span></span>
+    <span class="note-line" id="store-note">Connecting to saved decisions…</span>
+  </div>
+  <main id="words"></main>
+</div>
+
+<script>
+const DATA = __DATA__;
+const ORDER = Object.keys(DATA);
+const state = {}; // docId -> {status, note, cues_sig}
+const SIG = {};   // docId -> signature of the cues and definition on this version of the page
+let db = null, writable = true;
+
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const marked = s => esc(s).replace(/⟦(.*?)⟧/g, "<mark>$1</mark>");
+const docId = (w, k) => `${w}__${k}`;
+const cueName = c => c.startsWith("<<") ? "just before: " + c.slice(2) : c.startsWith(">>") ? "just after: " + c.slice(2) : c.startsWith("<") ? "before: " + c.slice(1) : c.startsWith(">") ? "after: " + c.slice(1) : c;
+const cueChip = (c, score) => {
+  if (!score) return `<span>${esc(cueName(c))}</span>`;
+  const [n, agree, elsewhere] = score;
+  const cls = agree < 0.5 ? "bad" : agree < 0.75 ? "mid" : "good";
+  const tip = agree < 1 && elsewhere ? ` title="Left out, most of the rest go to ${esc(elsewhere)}"` : "";
+  return `<span class="${cls}"${tip}>${esc(cueName(c))} <i>${n} · ${Math.round(100 * agree)}%</i></span>`;
+};
+const score = p => p.p_own == null ? "" : `<span class="src ${p.p_own < 0.5 ? "warnsrc" : ""}" title="Confidence of a classifier that never saw this sentence${p.p_own < 0.5 && p.predicted ? "; it would choose " + esc(p.predicted) : ""}">${Math.round(100 * p.p_own)}%</span>`;
+const item = p => `<li><span class="src">${esc(p.source)}</span>${score(p)}${marked(p.text)}</li>`;
+
+function render() {
+  const main = document.getElementById("words");
+  main.innerHTML = ORDER.map(w => {
+    const entry = DATA[w];
+    entry.senses.forEach(s => { SIG[docId(w, s.key)] = s.definition + "#" + s.cues.join("|"); });
+    const senses = entry.senses.map((s, i) => `
+      <article class="sense" id="${docId(w, s.key)}">
+        <div class="num">${i + 1}</div>
+        <div class="body">
+          <div><div class="key">${esc(s.key)}</div><p class="def">${esc(s.definition)}</p><p class="ex">${esc(s.example)}</p></div>
+          <div><div class="label">Cue words · agreement when left out</div><div class="cues">${s.cues.map(c => cueChip(c, s.cue_scores[c])).join("")}</div></div>
+          <div><div class="label">Sentences the cues caught · ${s.seeds} of ${entry.usages} sampled across the corpus${s.confidence != null ? ` · average confidence ${Math.round(100 * s.confidence)}%` : ""}</div>
+            ${s.by_field.length ? `<div class="fields">${s.by_field.map(([f, n]) => `<span>${esc(f)} <b>${n}</b></span>`).join("")}</div>` : ""}
+            ${s.doubtful.length ? `<div class="doubt"><div class="label">Most doubtful · a classifier that never saw them would put these elsewhere</div><ul class="previews">${s.doubtful.map(d => `<li><span class="src">${esc(d.source)}</span><span class="src warnsrc">→ ${esc(d.predicted)} · ${Math.round(100 * d.p_own)}% own</span>${marked(d.text)}</li>`).join("")}</ul></div>` : ""}
+            <div class="label">Sample of what the cues caught</div>
+            ${s.previews.length ? `<ul class="previews">${s.previews.slice(0, 6).map(item).join("")}</ul>
+              ${s.previews.length > 6 ? `<details><summary>Show ${s.previews.length - 6} more${s.seeds > s.previews.length ? ` (a sample of ${s.previews.length} drawn across fields)` : ""}</summary><ul class="previews">${s.previews.slice(6).map(item).join("")}</ul></details>` : ""}`
+              : `<p class="none">None in the corpus sample; this meaning would learn from its example sentence only.</p>`}</div>
+          <div class="decide">
+            <button class="approve" type="button" data-id="${docId(w, s.key)}" data-word="${w}" data-sense="${s.key}" data-status="approved" aria-pressed="false">Approve</button>
+            <button class="flag" type="button" data-id="${docId(w, s.key)}" data-word="${w}" data-sense="${s.key}" data-status="flagged" aria-pressed="false">Flag</button>
+            <span class="saved" id="saved-${docId(w, s.key)}"></span>
+          </div>
+          <textarea id="note-${docId(w, s.key)}" data-id="${docId(w, s.key)}" data-word="${w}" data-sense="${s.key}" placeholder="Why flagged, or a cue word to add or drop (optional)" aria-label="Note on ${esc(s.key)}"></textarea>
+        </div>
+      </article>`).join("");
+    return `<section class="word" aria-labelledby="h-${w}">
+      <div class="word-head"><h2 id="h-${w}">${w}</h2><span class="meta">${entry.senses.length} meanings · ${entry.usages} sentences sampled from every field and decade</span>
+        <button type="button" class="approve-all" data-word="${w}">Approve all undecided</button></div>
+      ${senses}
+      <div class="word-note"><label class="label" for="note-${w}__word">A meaning missing from ${w}?</label>
+        <textarea id="note-${w}__word" data-id="${w}__word" data-word="${w}" data-sense="" placeholder="Describe it, with a cue word or two if you can (optional)"></textarea></div>
+    </section>`;
+  }).join("");
+  document.getElementById("total").textContent = ORDER.reduce((n, w) => n + DATA[w].senses.length, 0);
+}
+
+function paint() {
+  const live = id => { const s = state[id]; return s && s.status && s.cues_sig === SIG[id] ? s.status : ""; };
+  document.querySelectorAll(".decide button").forEach(b => {
+    const status = live(b.dataset.id);
+    b.setAttribute("aria-pressed", String(status === b.dataset.status));
+    b.disabled = !writable;
+    b.closest(".sense").dataset.status = status;
+    const s = state[b.dataset.id];
+    const flag = document.getElementById(`saved-${b.dataset.id}`);
+    if (flag && s && s.status && !status) flag.textContent = `You ${s.status} an earlier version; its cues or definition changed since. Check again.`;
+    else if (flag && flag.textContent.startsWith("You ")) flag.textContent = "";
+  });
+  document.querySelectorAll("textarea").forEach(t => {
+    const s = state[t.dataset.id];
+    if (document.activeElement !== t && s && typeof s.note === "string") t.value = s.note;
+    t.disabled = !writable;
+  });
+  document.querySelectorAll(".approve-all").forEach(b => b.disabled = !writable);
+  const ids = ORDER.flatMap(w => DATA[w].senses.map(s => docId(w, s.key)));
+  const done = ids.filter(id => live(id)).length;
+  document.getElementById("done").textContent = done;
+  document.getElementById("bar").style.width = `${(100 * done / ids.length).toFixed(1)}%`;
+}
+
+async function save(id, fields) {
+  if (!db) return;
+  const body = { ...(state[id] || {}), ...fields, updated: new Date().toISOString() };
+  if (fields.status) body.cues_sig = SIG[id];
+  state[id] = body; paint();
+  const flag = document.getElementById(`saved-${id}`);
+  try {
+    await db.collection("decisions").doc(id).set(body);
+    if (flag) flag.textContent = "Saved";
+  } catch (e) {
+    if (e && e.code === "invalid_argument") { writable = false; paint(); }
+    if (flag) flag.textContent = "Not saved: " + (e && e.message ? e.message : "try again");
+  }
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.classList.contains("approve-all")) {
+    const w = b.dataset.word;
+    (async () => { for (const s of DATA[w].senses) { const id = docId(w, s.key); const cur = state[id]; if (!(cur && cur.status && cur.cues_sig === SIG[id])) await save(id, { word: w, sense: s.key, status: "approved" }); } })();
+    return;
+  }
+  if (b.dataset.status) save(b.dataset.id, { word: b.dataset.word, sense: b.dataset.sense, status: b.dataset.status });
+});
+const timers = {};
+document.addEventListener("input", e => {
+  const t = e.target.closest("textarea");
+  if (!t) return;
+  clearTimeout(timers[t.dataset.id]);
+  timers[t.dataset.id] = setTimeout(() => save(t.dataset.id, { word: t.dataset.word, sense: t.dataset.sense, note: t.value }), 700);
+});
+
+render(); paint();
+(async () => {
+  const note = document.getElementById("store-note");
+  db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+  if (!db) { writable = false; paint(); note.textContent = "Decisions can't be saved in this view. Open the page on claude.ai while signed in."; return; }
+  const timer = setTimeout(() => { note.textContent = "Saved decisions can't be reached yet; changes may not save."; }, 10000);
+  db.collection("decisions").onSnapshot(snap => {
+    snap.docs.forEach(d => { if (d.exists) state[d.id] = { ...d.data() }; });
+    if (!snap.metadata.fromCache) { clearTimeout(timer); note.textContent = "Decisions save as you go."; }
+    paint();
+  }, err => { clearTimeout(timer); note.textContent = "Saved decisions are unavailable (" + err.code + ")."; writable = false; paint(); });
+})();
+</script>
