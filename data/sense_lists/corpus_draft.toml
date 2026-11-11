@@ -40,7 +40,7 @@ cues = ["llm", "llms", "gpt", "chatgpt", "engineering", ">>tuning", "shot", "zer
 key = "cue_to_a_person"
 definition = "A cue, question or message that invites a person to respond or act, as in experiments, teaching, writing tasks, surveys or the messages of an interactive system"
 example = "Participants answered a written prompt about their daily routine."
-cues = ["written", "essay", "verbal", "spoken", "dialogue", "dialog", "interface", "screen", "survey", "questionnaire", "teacher", "therapist", "cue", "cues", "reminder", "reminders"]
+cues = ["<<written", "<<essay", "<<verbal", "<<spoken", "<<dialogue", "<<dialog", "<<interface", "<<screen", "<<survey", "<<questionnaire", "teacher", "therapist", "<<visual", "<<auditory", "<<writing"]
 
 [[prompt.senses]]
 key = "quick_or_immediate"
