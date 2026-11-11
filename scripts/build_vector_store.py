@@ -1,9 +1,12 @@
 """The shared vector store: every usage the next rounds and scans need, encoded once with
 XL-LEXEME (ROADMAP item 8d, 2026-11-11).
 
-    uv run python scripts/build_vector_store.py export   # on the Mac: usages to encode
-    uv run python scripts/build_vector_store.py encode   # on the GPU machine: resumable shards
-    uv run python scripts/build_vector_store.py index    # back on the Mac: key -> shard, row
+    uv run python scripts/build_vector_store.py export [PART]  # usages to encode, by part
+    uv run python scripts/build_vector_store.py merge          # one manifest, duplicates marked
+    uv run python scripts/build_vector_store.py encode         # on the GPU: resumable shards
+    uv run python scripts/build_vector_store.py index          # key -> shard, row
+
+A part is a grid field or "words" (the word-targeted cells); parts run in parallel.
 
 Scope (quality rules version 2 applied to every cell; one occurrence per abstract, with the
 regular plural, tidied as every round tidies usages):
@@ -69,15 +72,19 @@ def cells(root: Path) -> list[tuple[str, int]]:
     return sorted((p.parent.name, int(p.name[:4])) for p in root.glob("*/*.jsonl.gz"))
 
 
-def export() -> None:
-    """Write the manifest: every usage in scope, once per (source, word, abstract)."""
+def parts() -> list[str]:
+    return sorted({field for field, _ in cells(GRID)}) + ["words"]
+
+
+def export(part: str) -> None:
+    """Write one part of the manifest: every usage in scope in a grid field or the word cells."""
     shared = quality.grid_shared_sentences(GRID, SHARED_CACHE)
     longlist = json.loads(LONGLIST.read_text(encoding="utf-8"))
     full = sorted(set(FULL_WORDS) | set(longlist["shortlist"]))
     sampled = sorted(set(longlist["all"]) - set(full))
     STORE.mkdir(parents=True, exist_ok=True)
-    written, seen = 0, set()
-    with gzip.open(MANIFEST, "wt", encoding="utf-8") as out:
+    written = 0
+    with gzip.open(STORE / f"part_{part}.jsonl.gz", "wt", encoding="utf-8") as out:
 
         def emit(root: Path, field: str, decade: int, plan: list[tuple[str, Sampling]]) -> None:
             nonlocal written
@@ -87,9 +94,8 @@ def export() -> None:
             for word, sampling in plan:
                 for occurrence in sample_occurrences(cleaned, word, seed=1, sampling=sampling):
                     usage = tidy_usage(Usage(occurrence.context, occurrence.start, occurrence.end))
-                    key = key_of(usage.text, usage.start, usage.end)
                     row = {
-                        "key": key,
+                        "key": key_of(usage.text, usage.start, usage.end),
                         "word": word,
                         "source": "grid" if root == GRID else f"words/{root.name}",
                         "field": field,
@@ -99,21 +105,35 @@ def export() -> None:
                         "text": usage.text,
                         "start": usage.start,
                         "end": usage.end,
-                        "encode": key not in seen,
                     }
-                    seen.add(key)
                     out.write(json.dumps(row, ensure_ascii=False) + "\n")
                     written += 1
 
-        grid_plan = [(w, UNCAPPED) for w in full] + [(w, LONGLIST_SAMPLING) for w in sampled]
-        for field, decade in cells(GRID):
-            emit(GRID, field, decade, grid_plan)
-            print(f"grid {field} {decade}s: {written:,} usages so far", flush=True)
-        for word_dir in sorted(p for p in WORDS.iterdir() if p.is_dir() and p.name in full):
-            for field, decade in cells(word_dir):
-                emit(word_dir, field, decade, [(word_dir.name, UNCAPPED)])
-            print(f"words/{word_dir.name}: {written:,} usages so far", flush=True)
-    print(f"{written:,} usages, {len(seen):,} distinct to encode")
+        if part == "words":
+            for word_dir in sorted(p for p in WORDS.iterdir() if p.is_dir() and p.name in full):
+                for field, decade in cells(word_dir):
+                    emit(word_dir, field, decade, [(word_dir.name, UNCAPPED)])
+        else:
+            plan = [(w, UNCAPPED) for w in full] + [(w, LONGLIST_SAMPLING) for w in sampled]
+            for field, decade in cells(GRID):
+                if field == part:
+                    emit(GRID, field, decade, plan)
+    print(f"part {part}: {written:,} usages", flush=True)
+
+
+def merge() -> None:
+    """Join the parts into one manifest, marking each distinct usage to be encoded once."""
+    seen: set[str] = set()
+    total = 0
+    with gzip.open(MANIFEST, "wt", encoding="utf-8") as out:
+        for part in parts():
+            with gzip.open(STORE / f"part_{part}.jsonl.gz", "rt", encoding="utf-8") as source:
+                for row in map(json.loads, source):
+                    row["encode"] = row["key"] not in seen
+                    seen.add(row["key"])
+                    out.write(json.dumps(row, ensure_ascii=False) + "\n")
+                    total += 1
+    print(f"{total:,} usages, {len(seen):,} distinct to encode")
 
 
 def encode() -> None:
@@ -149,4 +169,9 @@ def index() -> None:
 
 
 if __name__ == "__main__":
-    {"export": export, "encode": encode, "index": index}[sys.argv[1]]()
+    if sys.argv[1] == "export":
+        export(sys.argv[2])
+    elif sys.argv[1] == "parts":
+        print("\n".join(parts()))
+    else:
+        {"merge": merge, "encode": encode, "index": index}[sys.argv[1]]()
