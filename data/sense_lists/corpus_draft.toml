@@ -23,15 +23,9 @@ cues = ["<received", "<receive", "<receiving", "drawn", "<draw", "drew", "attrac
 
 [[attention.senses]]
 key = "attention_mechanism"
-definition = "The attention mechanism of artificial neural networks, which weights parts of the input, as in self-attention and transformers"
+definition = "Attention in computing: a system selecting or weighting parts of its input, from early computational models, saliency maps and robots' focus of attention to the attention mechanism of neural networks, as in self-attention and transformers"
 example = "A multi-head attention layer is added on top of the encoder."
-cues = ["<<self", "<<head", ">>heads", ">>mechanism", ">>mechanisms", ">>layer", ">>layers", "transformer", "transformers", ">>module", ">>modules", "encoder", "decoder", "lstm", "convolutional", "embedding", "embeddings", "softmax", "scaled", "<<graph"]
-
-[[attention.senses]]
-key = "computational_selection"
-definition = "In AI systems other than neural attention mechanisms: a system selecting what to process, as in feature selection, focus-of-attention in robots and agents, or saliency models in computer vision"
-example = "The robot uses a saliency map to direct its attention to moving objects."
-cues = ["saliency", "salient", "robot", "robots", "robotic", "computational", "foveation", "visual-attention"]
+cues = ["<<self", "<<head", ">>heads", ">>mechanism", ">>mechanisms", ">>layer", ">>layers", "transformer", "transformers", ">>module", ">>modules", "encoder", "decoder", "lstm", "convolutional", "embedding", "embeddings", "softmax", "scaled", "<<graph", "robot", "robots", "robotic", "foveation"]
 
 [prompt]
 word = "prompt"
