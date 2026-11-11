@@ -862,3 +862,38 @@ Known risks, stated before the run so the results cannot be explained by them af
 4. ***network*.** Usages that fit none of its six senses, such as vascular, flow, gene and
    citation networks, are forced into one. About 40 of the whole-corpus sample's AI usages are of
    this kind, across all decades.
+
+### Round A results (2026-11-11, `scripts/score_labels_known.py`)
+
+Scored as written, with the amendment for the labeller after round U. 20,356 usages were measured
+(after boilerplate and scope rules, 150 or nearly so per cell). Every one of the six transitions
+had all 10 control words with at least 100 usages in both cells.
+
+| | Verdict | Numbers |
+|---|---|---|
+| A1 | **Falsified** | 2 of 4 documented changes found: *attention* (JSD 0.108 bits; shuffles 0.025, controls 0.054) and *platform* (0.024; 0.024, 0.008). *prompt* (0.097; 0.036, 0.107) and *network* (0.048; 0.027, 0.059) beat their shuffles but not their controls |
+| A2 | **Passed** | neither quiet transition found: *attention* in AI 1990s→2000s 0.018 bits, in psychology 2010s→2020s 0.001 |
+| A3 | **Passed** | adjusted shares rise by more than 0.05 in all four: attention mechanism 0.175 → 0.518, language-model input 0.456 → 0.802, digital platform 0.673 → 0.783, artificial neural network 0.610 → 0.811 |
+| A4 | **Passed** | planted mechanism found in 3/5 draws at 10% and 5/5 at 20%, 30%, 40% and 60% (291 marked usages in the pool) |
+| A5 | **Passed** | the *years* placebo found in 0 of 5 draws |
+| A6 | Descriptive | 12 of 60 control-word transitions (20%) beat their own shuffles |
+| A7 | Descriptive | *alignment* in AI: matching 1.000 → 0.583, goal or value alignment 0.000 → 0.417; found under both bars |
+| A8 | Descriptive | Sonnet and JEV, raw shares under bar (a): each finds all four documented changes and neither quiet transition |
+
+By the reading rule the instrument does not pass rung 3, because A1 fails. By the plan a failed
+rung 3 stops the instrument before open questions, with no repair round.
+
+Exploratory, after scoring:
+
+- **The first known risk happened.** The classifier labels 66 of AI's 150 2000s *prompt* usages
+  language-model input, 63 of them by the regression. Sonnet labels 34 of those 66 a cue to a
+  person and 23 other, and only 5 of all 150 language-model input. Read, they are spoken-dialogue
+  system prompts ("a well-crafted prompt", "the system prompts for information") and the ontology
+  tool PROMPT. The earlier share (0.456 adjusted) is mostly this error, which shrinks the measured
+  change below the controls' bar.
+- **Under bar (a) alone the classifier matches the language models**: all four documented changes
+  and neither quiet transition, as A8 reports for Sonnet and JEV. A1 fails on bar (b). The controls'
+  90th percentile is highest on AI's 2000s→2020s (0.107), the only two-decade transition. A8 does
+  not apply bar (b) to the language models, because they did not label the control words.
+- **The placebo and the planted change**, the tests the usage-pair measure failed, both pass: a
+  change of source alone is never found, and a planted change of a fifth always is.
