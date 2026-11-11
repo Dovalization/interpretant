@@ -1,0 +1,194 @@
+# Frozen sense lists and cue words for rung 3's control words (data/control_words_rung3.txt):
+# corpus_draft_controls.toml as the author approved it on 2026-11-11, after two review passes
+# (cue matches, out-of-fold doubt, and the classifier on usages no cue names). Not edited after
+# this commit; a change is a new list for a new round.
+# Cue words: lowercase whole words that signal the sense within five words of the target;
+# "<word" counts only before the target, ">word" only after it; "<<word" and ">>word" only
+# as the word right next to it.
+# "!word" is an exclusion: when it appears within five words, that sense's cues do not count.
+
+[control]
+word = "control"
+
+[[control.senses]]
+key = "technical_regulation"
+definition = "Regulating or steering a machine, process or system, as in control theory, robot control or traffic control"
+example = "The controller keeps the temperature stable through feedback control."
+cues = [">>system", ">>systems", ">>theory", "<<feedback", ">>loop", "<<optimal", "<<adaptive", "<<process", "<<traffic", "<<motion", ">>law", ">>signal", "<<robot", "<<flight"]
+
+[[control.senses]]
+key = "comparison_condition"
+definition = "A comparison group or condition in an experiment or study, against which a treatment is judged, or a variable held constant by design or statistical adjustment"
+example = "Patients improved more than the control group."
+cues = [">>group", ">>groups", ">>condition", ">>conditions", "<<healthy", "<<matched", ">>participants", ">>subjects", "<<placebo", ">>sample", ">>arm", "<statistical", "<statistically", "covariates", "covariate"]
+
+[[control.senses]]
+key = "power_or_authority"
+definition = "Power, authority or restraint over people, organisations, territory or resources"
+example = "The state tightened its control over the press."
+cues = ["<<social", "<<political", "<<state", "<<government", "<<territorial", "<<parental", "<<gun", "<<crime"]
+
+[[control.senses]]
+key = "self_or_cognitive_control"
+definition = "A person's regulation of their own thoughts, attention, emotions or behaviour, as in self-control or inhibitory control"
+example = "Children with better inhibitory control resisted the distraction."
+cues = ["<<self", "<<inhibitory", "<<cognitive", "<<executive", "<<attentional", "<<impulse", "<<emotional", "<<effortful", "<locus", "<<perceived"]
+
+[generally]
+word = "generally"
+
+[[generally.senses]]
+key = "usually"
+definition = "Usually, in most cases"
+example = "Such systems generally require large amounts of data."
+cues = [">>require", ">>requires", ">>used", ">>not", ">>applied", ">>performed", ">>involve", ">>involves", ">>results"]
+
+[[generally.senses]]
+key = "widely_held"
+definition = "By most people, widely, as in generally accepted or generally believed"
+example = "It is generally accepted that sleep supports memory."
+cues = [">>accepted", ">>agreed", ">>believed", ">>assumed", ">>recognized", ">>recognised", ">>considered", ">>regarded", ">>known", ">>thought", ">>acknowledged"]
+
+[[generally.senses]]
+key = "in_general_terms"
+definition = "In general terms, without detail or in a broader sense, as in more generally or generally speaking"
+example = "More generally, the method applies to any graph."
+cues = ["<<more", ">>speaking", ">>applicable", "<<very", "<<quite"]
+
+[increasing]
+word = "increasing"
+
+[[increasing.senses]]
+key = "growing"
+definition = "Growing in number, amount or intensity, describing something that is becoming larger"
+example = "An increasing number of studies use deep learning."
+cues = ["<<an", ">>number", ">>interest", ">>importance", ">>attention", ">>demand", ">>use", ">>amount", ">>complexity", ">>popularity", ">>availability", ">>levels", ">>rates"]
+
+[[increasing.senses]]
+key = "making_larger"
+definition = "The verb with an object: making something larger or greater"
+example = "Increasing the batch size reduced training time."
+cues = ["<<by", ">>the", "<<while", "<<thereby", "<<without", ">>its", ">>their"]
+
+[paper]
+word = "paper"
+
+[[paper.senses]]
+key = "scholarly_document"
+definition = "A scholarly article, report or other written document, as in this paper or a white paper"
+example = "This paper proposes a new method for sentence alignment."
+cues = ["<<this", ">>presents", ">>describes", ">>proposes", ">>discusses", ">>examines", ">>introduces", ">>reports", ">>argues", ">>explores", ">>investigates", "<<white", "<<working", "<<position", "<<research"]
+
+[[paper.senses]]
+key = "material"
+definition = "The material made from pulp, in sheets, as in paper forms, paper-based tests or the paper industry"
+example = "Participants completed a paper questionnaire."
+cues = ["<<recycled", ">>based", ">pencil", "<<sheet", "<<sheets", ">>mill", ">>industry", "<<pulp", ">>forms", ">>money", "<<printed", ">>documents"]
+
+[[paper.senses]]
+key = "newspaper"
+definition = "A newspaper, as in the local paper or the daily papers"
+example = "The story ran on the front page of the local paper."
+cues = ["<<local", "<<daily", "<<news", "<<morning", "<<evening", "<<sunday", "<<weekly", "<<tabloid", "<<newspaper", "circulation", "readership", "journalists", "headlines"]
+
+[planning]
+word = "planning"
+
+[[planning.senses]]
+key = "general_planning"
+definition = "Making plans for future action, by people, organisations or computer systems, as in strategic or treatment planning, path or task planning, or planning as a mental ability"
+example = "Careful planning helped the team finish the study on time."
+cues = ["<<strategic", "<<financial", "<<family", "<<career", "<<business", "<<policy", "<<advance", "<<health", "<<treatment", "<<care", "<<therapy", "<<surgical", "<<discharge", "<<lesson", "<<curriculum", "<<instructional", "<<educational", "<<project", "<<program", "<<programme", "<<event", "<<retirement", "<<transition", "<<participatory", "<<communication", "<<language", "<<preflight", "<<menu", "<<meal", "<<careful", "<<future", "<<long", "<<daily", "inhibition", "flexibility", "executive", "shifting", "neuropsychological", "impaired", "impairment", "<<path", "<<motion", "<<trajectory", "<<task", "<<route", ">>algorithm", ">>algorithms", ">>problem", ">>problems", ">>domain", ">>domains", "<<automated", "<<hierarchical", "<<temporal", ">>graph", "<<classical", "<<contingent", "<<conformant", "<<probabilistic", "<<reactive", "<<deliberative", "<<multiagent", "<<robot", ">scheduling", "reasoning", "<<partial", "<<htn", "strips"]
+
+[[planning.senses]]
+key = "urban_planning"
+definition = "Planning the development of cities, regions, land and transport, as a discipline or practice, as in urban, regional or transport planning"
+example = "Urban planning shapes how residents travel."
+cues = ["<<urban", "<<regional", "<<land", "<<city", "<<spatial", "<<town", "<<transport", "<<transportation", "<<landscape", "<<metropolitan", "<<rural", "<<environmental", "<<physical", "<<neighborhood", "<<neighbourhood", "<<community"]
+
+[principles]
+word = "principles"
+
+[[principles.senses]]
+key = "fundamental_laws_or_rules"
+definition = "Fundamental truths, laws or rules on which a theory, method or practice rests, as in basic or design principles"
+example = "The design follows basic principles of usability."
+cues = ["<<basic", "<<fundamental", "<<design", "<<general", "<<first", "<<underlying", "<<physical", "<<scientific", "<<engineering", "<<mathematical", "<<key", "<<core"]
+
+[[principles.senses]]
+key = "moral_standards"
+definition = "Moral, ethical or legal standards of conduct, as in ethical principles or principles of justice"
+example = "The guidelines set out ethical principles for research with children."
+cues = ["<<ethical", "<<moral", "<<democratic", "<<legal", "<<normative", "justice", "fairness", "rights"]
+
+[quality]
+word = "quality"
+
+[[quality.senses]]
+key = "standard_or_excellence"
+definition = "How good something is, its standard or degree of excellence, as in high quality, data quality or quality of life"
+example = "The new sensor improves image quality."
+cues = ["<<high", "<<low", "<<better", "<<poor", "<<data", "<<image", "<<service", "<<improve", "<<overall", ">>control", ">>assurance", ">>improvement", ">>assessment", "<<water", "<<sleep", "<<video", "<<excellent", "<<good", "<<higher", "<<lower", "<<superior", "<<inferior", "<<varying", "<<plan", "<<writing", "<<life", "<<care", "<<teaching", "<<product", "<<software", "<<audio", "<<speech", "<<signal", "<<translation", ">>of", "!moral", "!aesthetic", "!intrinsic", "!emotional", "!sensory", "!phenomenal", "!personal", "!secondary", "!primary", "!characteristic"]
+
+[[quality.senses]]
+key = "characteristic_property"
+definition = "A characteristic property or attribute of something or someone, as in personal or sensory qualities"
+example = "The poem's musical quality comes from its rhythm."
+cues = ["<<personal", "<<moral", "<<sensory", "<<phenomenal", "<<aesthetic", "<<intrinsic", "<<secondary", "<<primary", "<<emotional"]
+
+[series]
+word = "series"
+
+[[series.senses]]
+key = "sequence_of_things"
+definition = "A number of related things or events coming one after another, as in a series of experiments"
+example = "We ran a series of experiments with different datasets."
+cues = ["<<a", ">>of"]
+
+[[series.senses]]
+key = "time_series"
+definition = "Data points ordered in time, as in time series analysis or forecasting"
+example = "The model forecasts the time series of daily sales."
+cues = ["<<time", ">>data", ">>analysis", ">>forecasting", ">>prediction", ">>classification", "<<temporal"]
+
+[[series.senses]]
+key = "publication_or_broadcast_series"
+definition = "A set of books, lectures, broadcasts or programmes published or shown as a group"
+example = "The lecture series was broadcast on public television."
+cues = ["<<book", "<<television", "<<tv", "<<lecture", "<<seminar", "<<web", "<<monograph", "<<documentary", "<<drama", "<<podcast", "<<comic"]
+
+[[series.senses]]
+key = "mathematical_or_electrical_series"
+definition = "A sum of terms in mathematics, as in a Fourier or power series, or components connected one after another in a circuit"
+example = "The function is approximated by its Taylor series."
+cues = ["<<fourier", "<<power", "<<taylor", ">>expansion", ">>expansions", "<<infinite", "<<convergent", ">>resistance"]
+
+[theoretical]
+word = "theoretical"
+
+[[theoretical.senses]]
+key = "concerning_theory"
+definition = "Concerning theory rather than practice or experiment, as in theoretical analysis or a theoretical framework"
+example = "The paper offers a theoretical analysis of convergence."
+cues = [">>framework", ">>frameworks", ">>analysis", ">>model", ">>models", ">>results", ">>perspective", ">>perspectives", ">>approach", ">>foundations", ">>foundation", ">>contribution", ">>implications", ">>background", ">>considerations", ">>basis", ">>insights", ">>physics", ">>physicist", ">>physicists", ">>biology", ">>chemistry", ">>linguistics", ">>computer", ">>population", ">>neuroscience", ">>psychology", ">>economics", ">>sociology", ">>ecology", ">>mechanics"]
+
+[[theoretical.senses]]
+key = "hypothetical"
+definition = "Predicted or calculated from theory rather than measured, or possible only in principle, as in a theoretical maximum or theoretical performance"
+example = "The system reaches 90% of its theoretical maximum throughput."
+cues = [">>possibility", ">>maximum", ">>minimum", ">>limit", ">>optimum", ">>capacity", ">>risk", ">>peak", ">>performance", ">>efficiency", ">>yield", ">>throughput", ">>values", ">>curve", ">>curves", ">>distribution", ">>probability"]
+
+[years]
+word = "years"
+
+[[years.senses]]
+key = "duration_or_age"
+definition = "Years as a measure of time or age, as in three years later or ten years old"
+example = "The patients were followed for five years."
+cues = ["<<two", "<<three", "<<four", "<<five", "<<ten", "<<several", "<<many", ">>old", ">>ago", ">>later", "<<recent", "<<past", "<<last", "<<few"]
+
+[[years.senses]]
+key = "period_of_life_or_history"
+definition = "A particular period of a person's life or of history, as in the early years or the war years"
+example = "Her school years shaped her interest in science."
+cues = ["<<early", "<<school", "<<war", "<<formative", "<<teenage", "<<college", "<<golden", "<<interwar", "<<postwar", "<<childhood", "<<adolescent", "<<preschool"]
