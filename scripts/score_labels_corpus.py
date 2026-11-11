@@ -35,6 +35,7 @@ from interpretant.drift.classifier import (  # noqa: E402
     cue_sense,
     example_usage,
     normalised,
+    out_of_scope,
     tidy_usage,
 )
 from interpretant.drift.labels import (  # noqa: E402
@@ -91,7 +92,7 @@ def collect() -> None:
 
 def corpus_rows() -> list[dict[str, object]]:
     """The sample's usages, tidied (tidy_usage), without boilerplate sentences (found in five or
-    more usages of the same word)."""
+    more usages of the same word) or usages outside their list's scope (out_of_scope)."""
     rows = []
     for line in USAGES.read_text(encoding="utf-8").splitlines():
         row = json.loads(line)
@@ -102,7 +103,22 @@ def corpus_rows() -> list[dict[str, object]]:
         for word in WORDS
         for text in boilerplate([str(r["text"]) for r in rows if r["word"] == word])
     }
-    return [r for r in rows if (r["word"], r["text"]) not in repeated]
+    scope = scope_words()
+    return [
+        r
+        for r in rows
+        if (r["word"], r["text"]) not in repeated
+        and not out_of_scope(
+            Usage(str(r["text"]), int(r["start"]), int(r["end"])),
+            scope.get(str(r["word"]), []),
+        )
+    ]
+
+
+def scope_words() -> dict[str, list[str]]:
+    """Each word's out-of-scope words from the frozen lists (empty when it has none)."""
+    table = tomllib.loads(LISTS.read_text(encoding="utf-8"))
+    return {w: list(body.get("out_of_scope", [])) for w, body in table.items()}
 
 
 def gold_usages() -> dict[str, tuple[str, Usage]]:

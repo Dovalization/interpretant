@@ -28,6 +28,7 @@ from interpretant.drift.classifier import (
     cue_sense,
     example_usage,
     normalised,
+    out_of_scope,
     tidy_usage,
 )
 from interpretant.drift.labels import shown
@@ -56,6 +57,15 @@ _repeated = {
 }
 rows = [r for r in rows if (r["word"], r["text"]) not in _repeated]
 print(f"{len(_repeated)} boilerplate sentences dropped", flush=True)
+_before = len(rows)
+rows = [
+    r
+    for r in rows
+    if not out_of_scope(
+        Usage(r["text"], r["start"], r["end"]), draft.get(r["word"], {}).get("out_of_scope", [])
+    )
+]
+print(f"{_before - len(rows)} out-of-scope usages dropped", flush=True)
 
 
 def key_of(text: str, start: int, end: int) -> str:
