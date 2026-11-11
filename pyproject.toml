@@ -30,6 +30,7 @@ dependencies = [
     "torch>=2.4",
     "transformers>=4.48",
     "sentencepiece>=0.2",
+    "protobuf>=7.36.1",
 ]
 
 [project.optional-dependencies]
