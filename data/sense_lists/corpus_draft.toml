@@ -154,7 +154,7 @@ word = "component"
 key = "part_of_a_system"
 definition = "A separable physical or software part of a machine, device or system, including a module of a model's architecture"
 example = "Each software component exposes a well-defined interface."
-cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module", "modules", "architecture", "device", "devices", "interface", "interfaces", "<<system", "<<systems", "pipeline"]
+cues = ["software", "hardware", "electronic", "mechanical", "reusable", "module", "modules", "<<architecture", "device", "devices", "<<interface", "<<system", "<<systems", "pipeline", "<<architectural"]
 
 [[component.senses]]
 key = "mathematical_or_measured_component"
