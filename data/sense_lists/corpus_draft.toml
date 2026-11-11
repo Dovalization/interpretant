@@ -4,7 +4,10 @@
 # having's obligation sense, and the boundary between component's first and third senses.
 # Cue words: lowercase whole words that signal the sense within five words of the target;
 # "<word" counts only before the target, ">word" only after it; "<<word" and ">>word" only
-# as the word right next to it.
+# as the word right next to it. "!word" is an exclusion: when it appears within five words,
+# that sense's cues do not count.
+# A word's "out_of_scope" words put a usage outside the list when one appears within five
+# words of the target.
 
 [attention]
 word = "attention"
@@ -73,7 +76,7 @@ cues = ["hardware", "software", "computing", "<<robot", "<<robotic", "<<experime
 key = "physical_structure"
 definition = "A raised physical structure or surface, or a vehicle or structure that carries equipment, such as a stage, a station or offshore platform, or an airborne, space or observation platform"
 example = "The speaker stood on a wooden platform."
-cues = ["oil", "offshore", "drilling", "railway", "station", "train", "<<wooden", "<<raised", "<<floating", "<<concrete", "<<airborne", "<<observation", "<<space", "<<satellite", "<mounted"]
+cues = ["oil", "offshore", "drilling", "railway", "station", "train", "<<wooden", "<<raised", "<<floating", "<<concrete", "<<airborne", "<<observation", "<<space", "<<satellite", "<mounted", "!class", "!tv"]
 
 [[platform.senses]]
 key = "stance_or_forum"
@@ -112,7 +115,7 @@ cues = ["social", "<<personal", "kinship", "friendship", "<<professional", "ties
 key = "knowledge_or_probabilistic_model"
 definition = "A network that AI uses to represent knowledge or uncertainty, such as a semantic network, a Bayesian or belief network, an inference network or a Petri net"
 example = "The diagnosis is computed by propagating evidence through a Bayesian network."
-cues = ["<<semantic", "<<conceptual", "<<bayesian", "<<belief", "petri", "<<inheritance", "<<inference", "causal", "probabilistic"]
+cues = ["<<semantic", "<<conceptual", "<<bayesian", "<<belief", "petri", "<<inheritance", "<<inference", "causal", "probabilistic", "!regions", "!circuits"]
 
 [[network.senses]]
 key = "physical_infrastructure"
@@ -122,6 +125,9 @@ cues = ["<<road", "<<railway", "transportation", "<<transport", "<<electrical", 
 
 [alignment]
 word = "alignment"
+# Grammatical alignment (ergative, accusative) is outside this list's scope: usages with
+# these words within five words of the target are not trained on, labelled or counted.
+out_of_scope = ["ergative", "accusative", "absolutive", "nominative", "morphosyntactic", "ergativity"]
 
 [[alignment.senses]]
 key = "matching_or_correspondence"
@@ -140,10 +146,6 @@ key = "physical_arrangement"
 definition = "Arrangement in a straight line or in correct relative positions, as of mechanical, optical or other physical parts"
 example = "Wheel alignment affects the car's handling."
 cues = ["wheel", "axis", "mechanical", "optical", "laser", "beam", "mirror", "mounting", "vertical", "horizontal", "camera"]
-# Known gap: grammatical alignment (ergative, accusative) has no meaning of its own. It is 8 of
-# 2,197 sampled usages, all in linguistics (5% of that field's). Tried as a fourth meaning on
-# 2026-11-10: from 6 seeds the classifier learned "language context" and took 17 word-alignment
-# sentences from matching_or_correspondence, so it was dropped.
 
 [component]
 word = "component"
