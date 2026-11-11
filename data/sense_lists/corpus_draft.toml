@@ -34,7 +34,7 @@ word = "prompt"
 key = "language_model_input"
 definition = "An instruction or input text given to a language model or other generative AI system"
 example = "We design prompts that ask the model to explain its answer step by step."
-cues = ["language", "llm", "llms", "gpt", "chatgpt", "engineering", "tuning", "shot", "zero", "few", "generative", "chain", "thought", "templates", "template", "soft", "injection", "diffusion", "context"]
+cues = ["llm", "llms", "gpt", "chatgpt", "engineering", ">>tuning", "shot", "zero", "few", "generative", "chain", "<<thought", "templates", "template", "soft", ">>injection", "<<context"]
 
 [[prompt.senses]]
 key = "cue_to_a_person"
