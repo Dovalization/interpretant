@@ -172,6 +172,11 @@ Each item that produces results gets its predictions committed first.
    Not run: rung 4 (open questions). Next, with the author: improve the classifier on the spent
    rounds as development data, then one new pre-registered set of known changes at half-decade
    windows (*hallucination*, *transformer*, *cloud*, *embedding*), encoded once for the whole grid.
+8e. **Retrain the grid on the cleaned corpus** (added 2026-11-11). The grid's embedding models
+   (TWEC, both seeds, and PPMI-SVD) were trained before quality rules version 2
+   (`docs/corpus.md`) removed non-English abstracts, template records and spam. Retrain them on
+   the cleaned cells, rerun the candidate scan on the new models, and check in a pre-registered
+   robustness round that the README's robust findings survive the cleaning.
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
     cognitive-psychology download on the free OpenAlex budget; public-domain books before
