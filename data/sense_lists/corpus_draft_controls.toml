@@ -125,13 +125,13 @@ word = "quality"
 key = "standard_or_excellence"
 definition = "How good something is, its standard or degree of excellence, as in high quality, data quality or quality of life"
 example = "The new sensor improves image quality."
-cues = ["<<high", "<<low", "<<better", "<<poor", "<<data", "<<image", "<<service", "<<improve", "<<overall", ">>control", ">>assurance", ">>improvement", ">>assessment", "<<water", "<<sleep", "<<video"]
+cues = ["<<high", "<<low", "<<better", "<<poor", "<<data", "<<image", "<<service", "<<improve", "<<overall", ">>control", ">>assurance", ">>improvement", ">>assessment", "<<water", "<<sleep", "<<video", "<<excellent", "<<good", "<<higher", "<<lower", "<<superior", "<<inferior", "<<varying", "<<plan", "<<writing", "<<life", "<<care", "<<teaching", "<<product", "<<software", "<<audio", "<<speech", "<<signal", "<<translation", ">>of", "!moral", "!aesthetic", "!intrinsic", "!emotional", "!sensory", "!phenomenal", "!personal", "!secondary", "!primary", "!characteristic"]
 
 [[quality.senses]]
 key = "characteristic_property"
 definition = "A characteristic property or attribute of something or someone, as in personal or sensory qualities"
 example = "The poem's musical quality comes from its rhythm."
-cues = ["<<personal", "<<moral", "<<sensory", "<<phenomenal", "<<aesthetic", "<<intrinsic", "<<secondary", "<<primary", "<<emotional", "<<voice"]
+cues = ["<<personal", "<<moral", "<<sensory", "<<phenomenal", "<<aesthetic", "<<intrinsic", "<<secondary", "<<primary", "<<emotional"]
 
 [series]
 word = "series"
@@ -167,13 +167,13 @@ word = "theoretical"
 key = "concerning_theory"
 definition = "Concerning theory rather than practice or experiment, as in theoretical analysis or a theoretical framework"
 example = "The paper offers a theoretical analysis of convergence."
-cues = [">>framework", ">>frameworks", ">>analysis", ">>model", ">>models", ">>results", ">>perspective", ">>perspectives", ">>approach", ">>foundations", ">>foundation", ">>contribution", ">>implications", ">>background", ">>considerations", ">>basis", ">>insights"]
+cues = [">>framework", ">>frameworks", ">>analysis", ">>model", ">>models", ">>results", ">>perspective", ">>perspectives", ">>approach", ">>foundations", ">>foundation", ">>contribution", ">>implications", ">>background", ">>considerations", ">>basis", ">>insights", ">>physics", ">>physicist", ">>physicists", ">>biology", ">>chemistry", ">>linguistics", ">>computer", ">>population", ">>neuroscience", ">>psychology", ">>economics", ">>sociology", ">>ecology", ">>mechanics"]
 
 [[theoretical.senses]]
 key = "hypothetical"
-definition = "Existing only in theory, possible in principle but not actual, as in a theoretical maximum"
+definition = "Predicted or calculated from theory rather than measured, or possible only in principle, as in a theoretical maximum or theoretical performance"
 example = "The system reaches 90% of its theoretical maximum throughput."
-cues = [">>possibility", ">>maximum", ">>minimum", ">>limit", ">>optimum", ">>capacity", ">>risk", ">>peak"]
+cues = [">>possibility", ">>maximum", ">>minimum", ">>limit", ">>optimum", ">>capacity", ">>risk", ">>peak", ">>performance", ">>efficiency", ">>yield", ">>throughput", ">>values", ">>curve", ">>curves", ">>distribution", ">>probability"]
 
 [years]
 word = "years"
