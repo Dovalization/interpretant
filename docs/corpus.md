@@ -202,6 +202,38 @@ transitions barely moved (*reasoning* 7 → 12, *behavior* 7 → 10); the rare-w
 a volume problem that re-dating cannot fix. The largest author still exceeds 25% in the
 1820s, 1840s, 1860s, 1890s, 1930s and 2020s.
 
+## Quality rules, version 2 (2026-11-11)
+
+A corpus-wide scan of the grid's embedding models for words worth measuring surfaced records that
+are not English research abstracts. Measured on the cleaned cells that every round reads (677,008
+abstracts), `interpretant.corpus.quality.clean_cells` removes them:
+
+| Rule | Removed |
+|---|---|
+| Not English: 20 or more words, under 15% English function words (*the*, *of*, *and*...) | 2,288 abstracts (0.34%) |
+| Template records: half or more of the text in sentences shared by 20 or more grid records (digitised student newspapers, agency newsletters, archive descriptions) | 1,132 (0.17%) |
+| Exam-dump advertising (a short pattern list) | 83 (69 in computer science's 2020s) |
+| Shared notice sentences stripped, the abstract kept (Springer's "these keywords were added by machine", Altmetric's score text) | from 8,422 abstracts |
+
+English abstracts centre around 43% function words, and 95% of all records score above 27%; the
+non-English ones score near zero, so the 15% cut sits in the gap. The hardest-hit cells are
+linguistics in the 1960s to 1980s and sociology in the 1950s and 1960s (1 to 2% each). The 269
+shared sentences are computed once from the raw grid and cached under `data/processed/`.
+
+The rules are a separate step, applied to a round's cells before sampling, so every round run
+before 2026-11-11 reproduces exactly; each round from then on states whether it applies them. The
+grid's embedding models were trained before this step and keep these records.
+
+Known residue, not filtered:
+
+- **Non-prose metadata.** Some records are reference lists, journal front matter or conference
+  headers with enough English function words to pass (18 to 22%). They are rare and carry few of
+  the words measured.
+- **Changes of source.** In the 2000s, philosophy and cognitive psychology take in many abstracts
+  from Chinese journals on Marxist philosophy and education reform. They are research in English,
+  so they stay, but they move words such as *construction*, *development* and *education* by
+  source rather than by meaning, and a reading of those words says so.
+
 ## Target design: a field × decade grid
 
 Every stated goal compares something specific: one field across decades, or several fields
