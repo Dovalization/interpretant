@@ -122,6 +122,25 @@ def gold() -> dict[str, dict[str, str]]:
     return {"mine": mine, "U": u, "A": a}
 
 
+def features(which: str, keys: list[str], names: list[str]) -> np.ndarray:
+    """Each encoder's vectors, normalised, side by side."""
+    return np.hstack([normalised(vectors(name, which, keys)) for name in names])
+
+
+def probe(
+    names: list[str],
+    train_keys: list[str],
+    y: list[str],
+    dev_keys: list[str],
+    class_weight: object,
+    c: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """A logistic regression on the named encoders' vectors: dev probabilities and classes."""
+    model = LogisticRegression(C=c, class_weight=class_weight, max_iter=3000)  # type: ignore[arg-type]
+    model.fit(normalised(features("main", train_keys, names)), y)
+    return model.predict_proba(normalised(features("dev", dev_keys, names))), model.classes_
+
+
 def run(variant: dict[str, object], list_path: Path) -> dict[str, object]:
     encoder = str(variant.get("encoder", "xl-lexeme"))
     table = tomllib.loads(list_path.read_text(encoding="utf-8"))
@@ -150,17 +169,20 @@ def run(variant: dict[str, object], list_path: Path) -> dict[str, object]:
             )
             predicted = [str(c["label"]) for c in chosen]
         else:
-            x = vectors(encoder, "main", [str(r["key"]) for r, _ in seeds])
             y = [s for _, s in seeds]
             weights = {"balanced": "balanced", "none": None}.get(str(variant.get("weight")))
             class_weight = sqrt_balanced(y) if variant.get("weight") == "sqrt" else weights
-            model = LogisticRegression(
-                C=float(str(variant.get("C", 1.0))), class_weight=class_weight, max_iter=2000
-            )
-            model.fit(normalised(x), y)
-            dx = vectors(encoder, "dev", [str(r["key"]) for r in items])
-            proba = model.predict_proba(normalised(dx))
-            classes = model.classes_
+            train_keys = [str(r["key"]) for r, _ in seeds]
+            dev_keys = [str(r["key"]) for r in items]
+            parts = ["xl-lexeme", "deberta"] if encoder in ("concat", "ensemble") else [encoder]
+
+            c = float(str(variant.get("C", 1.0)))
+            if encoder == "ensemble":
+                first, classes = probe(parts[:1], train_keys, y, dev_keys, class_weight, c)
+                second, _ = probe(parts[1:], train_keys, y, dev_keys, class_weight, c)
+                proba = (first + second) / 2
+            else:
+                proba, classes = probe(parts, train_keys, y, dev_keys, class_weight, c)
             predicted = [str(classes[int(p.argmax())]) for p in proba]
         if variant.get("cue_first", True):
             predicted = cue_first([usage(r) for r in items], cues, predicted)
