@@ -35,6 +35,7 @@ from interpretant.drift.classifier import (  # noqa: E402
     cue_first,
     cue_sense,
     normalised,
+    out_of_scope,
     sqrt_balanced,
 )
 from interpretant.drift.pairs import Usage  # noqa: E402
@@ -129,7 +130,12 @@ def run(variant: dict[str, object], list_path: Path) -> dict[str, object]:
     labels_t: dict[str, str] = {}
     for word in WORDS:
         cues = {s["key"]: s["cues"] for s in table[word]["senses"]}
-        seeds = [(r, s) for r in training_rows(word) if (s := cue_sense(usage(r), cues))]
+        scope = list(table[word].get("out_of_scope", []))
+        seeds = [
+            (r, s)
+            for r in training_rows(word)
+            if not out_of_scope(usage(r), scope) and (s := cue_sense(usage(r), cues))
+        ]
         x = vectors(encoder, "main", [str(r["key"]) for r, _ in seeds])
         y = [s for _, s in seeds]
         weights = {"balanced": "balanced", "none": None}.get(str(variant.get("weight")))
@@ -138,7 +144,7 @@ def run(variant: dict[str, object], list_path: Path) -> dict[str, object]:
             C=float(str(variant.get("C", 1.0))), class_weight=class_weight, max_iter=2000
         )
         model.fit(normalised(x), y)
-        items = [r for r in dev_rows() if r["word"] == word]
+        items = [r for r in dev_rows() if r["word"] == word and not out_of_scope(usage(r), scope)]
         dx = vectors(encoder, "dev", [str(r["key"]) for r in items])
         proba = model.predict_proba(normalised(dx))
         predicted = [str(model.classes_[int(p.argmax())]) for p in proba]
