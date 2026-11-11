@@ -5,10 +5,16 @@ in [`diagnostics.md`](diagnostics.md). This is a plan, not a pre-registration: e
 gets its predictions committed in `docs/predictions_labels.md` before it is run, as every earlier
 round did.
 
-**State (2026-11-10, end of day).** Rung 1 ran as rounds Y and Z, and runs again as round Q with
-sense lists induced from the texts (see `predictions_labels.md`); the two labellers are compared in
-[`labellers.md`](labellers.md). Rungs 2 to 4 below are unchanged, except that their lists are to be
-induced by round Q's pipeline and reviewed by the author before they are frozen.
+**State (2026-11-11).** The instrument stopped at rung 3. Rung 1 passed (rounds Y, Z and Q with the
+language models; round E with the cue-seeded classifier, which became the labeller for this
+corpus). For rungs 2 and 3 Claude drafted the sense lists and cue words and the author reviewed and
+approved them on review pages; they are frozen as `data/sense_lists/corpus.toml`, then
+`corpus_v2.toml` (cue words added after round T), with `corpus_controls.toml` for rung 3's control
+words. Rung 2 failed as round T and passed narrowly on a second attempt with fresh sentences, the
+head-to-head round (headed "Round U" in `predictions_labels.md`). Rung 3, round A, found 2 of the 4
+documented changes against the control-word bar (A1 falsified) and passed A2 to A5, including the
+placebo and the planted change. Rung 4 has not run. Results and every amendment are in
+`predictions_labels.md`; the labellers are compared in [`labellers.md`](labellers.md).
 
 ## Why this instrument
 
@@ -38,7 +44,10 @@ way it can see a sense nobody wrote down, and that is weaker than discovery.
   by Claude before any usage they will label is read. For this corpus the author reviews and
   approves them, then they are committed and frozen; for the benchmark they are not reviewed.
   Writing a fixed list answers the granularity problem the check 2b correction pass found.
-- **Labelling: two labellers, each its own instrument** (decided 2026-11-10, after the pilot).
+- **Labelling: two labellers, each its own instrument** (decided 2026-11-10, after the pilot;
+  superseded from round E, after which the cue-seeded classifier labels this corpus and the two
+  language models are comparison baselines and the pre-registered fallback; see "Measuring shares
+  on this corpus" below).
   Claude Sonnet 5.5 at low effort through the Message Batches API, and JEV (TypeSafe AI,
   pinned at `jev-1.14.0`) through its API. Both label one usage per request: the word, its sense
   list, and the usage's sentence (cut to 100 words, the word marked as in check 2b), with nothing
@@ -152,6 +161,16 @@ cell's meaning is the share of the word's occurrences in each sense, never a cou
   leave-one-cue-out agreement and the out-of-fold doubt of each training sentence, and only by
   those: no known answer, gold judgement or result is looked at while the cues are tuned. The lists
   and cues are frozen and committed before the classifier labels anything that is scored.
+- **Rules added during the review** (amendments in `predictions_labels.md`). Usages are tidied
+  before anything else (`tidy_usage`), and sentences repeated across five or more abstracts are
+  dropped as boilerplate. A cue written `!word` is an exclusion that silences its sense's cues
+  nearby, and a list may name out-of-scope words that remove a usage altogether (*alignment*'s
+  grammatical sense).
+- **The labeller after round T** (from the head-to-head round on). Class weights are square-root
+  balanced (`sqrt_balanced`) instead of balanced, so thin senses pull uncertain usages to
+  themselves less, and labelling is cue first (`cue_first`): a usage whose cues name exactly one
+  sense takes that sense, and the regression labels the rest. In round A, adjusted shares correct
+  only the regression's labels; cue-decided usages are counted as labelled.
 
 ## The method in NLP terms (added 2026-11-10)
 
@@ -180,7 +199,8 @@ on they are comparison baselines, not the method.
 
 Each rung has its own pre-registration and stopping rule. A failed rung 1 or 2 stops the
 instrument; a failed rung 3 stops it before open questions. No repair rounds, as for items 8,
-8a and 8c.
+8a and 8c, with one exception the author made after round T: a revised classifier got one new round
+on fresh sentences, never on round T's pairs (the head-to-head round).
 
 1. **Benchmark (DWUG EN 2.0.1, 46 words, 9,153 usages).** Sense lists written blind to DWUG's
    clusters, change scores and usages. Primary: Spearman between the label divergence and DWUG's
@@ -190,24 +210,33 @@ instrument; a failed rung 3 stops it before open questions. No repair rounds, as
    are public and a model may have seen them. The labeller sees one usage at a time with no
    period, so it can recall senses but not which period a usage came from; the list writer could
    still favour senses it knows changed, and that is stated with the result.
-2. **Gold on this corpus.** The author labels about 130 usages with the frozen lists through the
-   same interactive flow as check 2b: 20 for each of *attention, prompt, platform, network* and
-   *alignment*, 10 for each of 2 of rung 3's control words, and 10 repeats. Agreement is Cohen's
-   kappa between each labeller and the author, beside the author's own consistency on the
-   repeats.
+2. **This corpus, as the author reads it.** Planned as about 130 usages labelled by the author
+   and scored by Cohen's kappa; run instead without new labelling. Round T scored the classifier's
+   labels of check 2b's 186 usages against the author's 100 pair judgements (falsified: 0.449
+   against 0.456, and 0.397 against Sonnet's 0.514 minus 0.10). The head-to-head round then had
+   the revised classifier and Sonnet label 240 fresh usages, and the author judged their 48
+   disagreements blind (passed: the classifier chosen in 18 of 41 decided, 43.9% against 40%).
 3. **Known answers over time, with a placebo.** Round X's transitions, cells and sampling (seed
    changed, so no usage check 1a read is reused): the five documented changes, the two quiet
    transitions, and 10 control words drawn at random (seed 2026) from round C's 30, among those
-   with at least 100 abstracts in every transition's cells. Plus check 1b's planting design on
+   with at least 100 abstracts in every transition's cells (as run: four documented changes, with
+   *alignment* as a descriptive weak case). Plus check 1b's planting design on
    psychology's 2020s *attention*: mechanism usages (check 1a's markers) planted at the same five
    shares; and, decided with the author on 2026-11-10, a placebo that keeps the sense mix fixed:
    sociology's 2020s *years* planted into psychology's (check 1b's own placebo also changed the
-   sense mix; see the correction in `diagnostics.md`). Round A pre-registers it. The placebo is the test the pair measure failed, and it carries the most weight.
+   sense mix; see the correction in `diagnostics.md`). Round A pre-registered and ran it: 2 of 4
+   documented changes found against the control-word bar (all 4 against shuffles alone), neither
+   quiet transition, the planted change from 20%, and the placebo in none of 5 draws. The placebo
+   is the test the pair measure failed, and it carries the most weight.
 4. **Between fields, then open questions.** *embodiment* between HCI and philosophy, and only
    after that the questions the project started from: field-specific meanings, and one-sided
    changes such as the language-model sense of *hallucination* reaching psychology.
 
 ## Volume and cost
+
+Historical: this estimate assumed a language model labels every rung. From round E the classifier
+labels this corpus, and the language models ran as comparisons only: rung 2's 186 and 240 usages,
+and rung 3's 2,040 target-word usages each for Sonnet and JEV.
 
 Labels: rung 1 about 10,000 (with the 10% repeats); rung 3 at most about 26,500 (2,100 for the
 target words, at most 21,000 for the controls, about 900 planting usages, plus repeats); rung 2
@@ -226,7 +255,9 @@ to check that one-usage requests agree with the pilot's blocks.
 1. ~~The labeller~~ Decided 2026-11-10: both, as separate instruments (Sonnet 5.5 over Opus 5.5
    to save usage; JEV as a cheap decision model whose comparison with Sonnet is documented).
 2. **The author's time:** approving about 15 sense lists (5 target words, 10 controls) and
-   labelling about 130 usages, roughly as long as check 2b's 100 pairs.
+   labelling about 130 usages, roughly as long as check 2b's 100 pairs. As it happened: approving
+   17 lists (7 words from check 2b and the targets, 10 controls) on review pages, and judging 48
+   blind disagreements in the head-to-head round; no usage was labelled by the author.
 
 ## Not part of it
 
