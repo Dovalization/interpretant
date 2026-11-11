@@ -911,3 +911,8 @@ run.
   amendment names `corpus_draft_controls.toml`. Both rounds read the frozen copies:
   `corpus.toml` (`9332d86`, then `corpus_v2.toml`, `0b3bfa3`, after round T) and
   `corpus_controls.toml` (`359c858`), as their scorers show.
+
+### Note on the head-to-head round's name (2026-11-11)
+
+The note above calls the head-to-head round "(H)", but H already names a cross-perplexity round
+(`predictions_cross_perplexity.md`). It is called the head-to-head round, without a letter.

@@ -94,13 +94,13 @@ It costs nothing to run, needs no labelling by a person, and every label traces 
 word or an example sentence; it passed rung 1 and became the labeller for this corpus, with the
 two language models as comparison points.
 
-## On this corpus (rounds T, H and A)
+## On this corpus (round T, the head-to-head round and round A)
 
 - **Round T (rung 2).** Scored against the author's 100 pair judgements, the classifier fell just
   short of both bars: 0.449 for probability overlap (needed 0.456) and 0.397 for same sense against
   Sonnet's 0.514 (needed 0.414); JEV scored 0.451. It gave the same label as Sonnet and as JEV on
   76.3% of the 186 usages. By the reading rule a language model became the fallback.
-- **The head-to-head round (H; headed "Round U" in the predictions file).** A revised classifier
+- **The head-to-head round (headed "Round U" in the predictions file).** A revised classifier
   (square-root class weights, cue-first labelling, list version 2) and Sonnet labelled 240 fresh
   usages and agreed on 192 (80%). The author judged the 48 disagreements blind and chose the
   classifier's label in 18 of the 41 decided (43.9%, needed 40%): narrowly enough to go on. It lost
@@ -119,4 +119,4 @@ two language models as comparison points.
   as one usage per request through the API (95% agreement, kappa 0.942), but counts against a
   subscription's usage limits; the Batch API does not.
 - Both ran without a failed or refused request in about 39,000 labels to round Q, and again in
-  rounds T, H and A (4,692 more).
+  round T, the head-to-head round and round A (4,692 more).
