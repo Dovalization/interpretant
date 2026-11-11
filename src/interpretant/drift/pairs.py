@@ -78,7 +78,12 @@ class XLLexeme:
         from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
 
         self.torch = torch
-        self.device = "mps" if torch.backends.mps.is_available() else "cpu"
+        if torch.cuda.is_available():
+            self.device = "cuda"
+        elif torch.backends.mps.is_available():
+            self.device = "mps"
+        else:
+            self.device = "cpu"
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)  # type: ignore[no-untyped-call]
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(self.device).eval()
         self.batch_size = batch_size
