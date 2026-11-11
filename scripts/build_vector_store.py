@@ -180,7 +180,7 @@ def _prepare(rows: list[tuple[str, int, int]]) -> list[object]:
         return [pairs.usage_input_ids(_TOKENIZER, usage) for usage in usages]
     prepare = pairs.TargetTokenEncoder.prepared
     holder = type("Holder", (), {"tokenizer": _TOKENIZER})()
-    return [prepare(holder, usage) for usage in usages]  # type: ignore[arg-type]
+    return [prepare(holder, usage) for usage in usages]
 
 
 def save_shard(path: Path, keys: np.ndarray, vectors: np.ndarray, done: int, total: int) -> None:
