@@ -77,9 +77,9 @@ cues = ["oil", "offshore", "drilling", "railway", "station", "train", "stage", "
 
 [[platform.senses]]
 key = "stance_or_forum"
-definition = "A set of declared aims, as of a political party, or a forum or opportunity for presenting views"
+definition = "A set of declared aims, as of a political party, or a forum, venue or opportunity for presenting views or carrying out an activity"
 example = "The conference offers a platform for debate between researchers and practitioners."
-cues = ["political", "party", "electoral", "campaign", "debate", "dialogue", "discussion", "voice", "voices", "forum", "exchange", "provides", "offers", "provide", "offer"]
+cues = ["political", "party", "electoral", "campaign", "debate", "dialogue", "discussion", "voices", "forum"]
 
 [network]
 word = "network"
