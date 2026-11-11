@@ -92,16 +92,16 @@ cues = ["<<local", "<<daily", "<<news", "<<morning", "<<evening", "<<sunday", "<
 word = "planning"
 
 [[planning.senses]]
-key = "making_plans"
-definition = "Making plans for future action by people or organisations, as in strategic, urban or financial planning, including planning as a mental ability, studied with executive functions"
-example = "Urban planning shapes how residents travel."
-cues = ["<<strategic", "<<urban", "<<financial", "<<regional", "<<land", "<<city", "<<family", "<<career", "<<business", "<<policy", "<<advance", "<<spatial", "<<health", "<<treatment", "<<care", "<<therapy", "<<surgical", "<<discharge", "<<lesson", "<<curriculum", "<<instructional", "<<educational", "<<project", "<<program", "<<programme", "<<event", "<<retirement", "<<transition", "<<participatory", "<<communication", "<<language", "<<preflight", "<<menu", "<<meal", "<<careful", "<<future", "<<long", "<<daily", "inhibition", "flexibility", "executive", "shifting", "neuropsychological", "impaired", "impairment"]
+key = "general_planning"
+definition = "Making plans for future action, by people, organisations or computer systems, as in strategic or treatment planning, path or task planning, or planning as a mental ability"
+example = "Careful planning helped the team finish the study on time."
+cues = ["<<strategic", "<<financial", "<<family", "<<career", "<<business", "<<policy", "<<advance", "<<health", "<<treatment", "<<care", "<<therapy", "<<surgical", "<<discharge", "<<lesson", "<<curriculum", "<<instructional", "<<educational", "<<project", "<<program", "<<programme", "<<event", "<<retirement", "<<transition", "<<participatory", "<<communication", "<<language", "<<preflight", "<<menu", "<<meal", "<<careful", "<<future", "<<long", "<<daily", "inhibition", "flexibility", "executive", "shifting", "neuropsychological", "impaired", "impairment", "<<path", "<<motion", "<<trajectory", "<<task", "<<route", ">>algorithm", ">>algorithms", ">>problem", ">>problems", ">>domain", ">>domains", "<<automated", "<<hierarchical", "<<temporal", ">>graph", "<<classical", "<<contingent", "<<conformant", "<<probabilistic", "<<reactive", "<<deliberative", "<<multiagent", "<<robot", ">scheduling", "reasoning", "<<partial", "<<htn", "strips"]
 
 [[planning.senses]]
-key = "automated_planning"
-definition = "In AI and robotics: computing a sequence of actions that reaches a goal, as in path or task planning"
-example = "The robot uses a motion planning algorithm to avoid obstacles."
-cues = ["<<path", "<<motion", "<<trajectory", "<<task", "<<route", ">>algorithm", ">>algorithms", ">>problem", ">>problems", ">>domain", ">>domains", "<<automated", "<<hierarchical", "<<temporal", ">>graph"]
+key = "urban_planning"
+definition = "Planning the development of cities, regions, land and transport, as a discipline or practice, as in urban, regional or transport planning"
+example = "Urban planning shapes how residents travel."
+cues = ["<<urban", "<<regional", "<<land", "<<city", "<<spatial", "<<town", "<<transport", "<<transportation", "<<landscape", "<<metropolitan", "<<rural", "<<environmental", "<<physical", "<<neighborhood", "<<neighbourhood", "<<community"]
 
 [principles]
 word = "principles"
