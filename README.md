@@ -155,8 +155,9 @@ uv run interpretant drift perplexity --drop-shared --fixed-budget 200000 \
 # Redraw the figures above
 uv run interpretant figures
 
-# Score the predictions against the evidence
-uv run python scripts/score_predictions.py
+# Score a past round: scorers were removed once their verdicts were recorded in
+# docs/predictions*.md; `git log -- scripts/<scorer>.py` finds the commit to check out
+git log --oneline -- scripts/score_predictions.py
 ```
 
 ---
@@ -170,7 +171,7 @@ uv run python scripts/score_predictions.py
 | `gensim`               | Word2Vec training (TWEC compass and cell models), phrase detection |
 | `scipy`                | PPMI-SVD (sparse SVD)                                 |
 | OpenAlex API           | Field × decade abstract samples                        |
-| `pandas` / `pyarrow`   | Drift and cross-perplexity tables (pandas is being replaced by Polars) |
+| `pyarrow`              | Arrow and Parquet support                             |
 | `PyTorch` / `transformers` | Contextual encoders (XL-LEXEME, DeBERTa-v3-large) for the vector store |
 | `scikit-learn`         | Sense classifier, cross-validation                    |
 | `spaCy` (`en_core_web_sm`, `en_core_web_trf`) | Sentences, part of speech, lemmas and named entities of target occurrences |
@@ -192,8 +193,9 @@ The stack was settled on 2026-11-11, before the data audit and the store's rebui
 - **datasketch** finds near-duplicates (a preprint and its published version), which would shrink
   the distance within a period and inflate a change score that compares across with within.
 - **Polars** is the only dataframe library: it reads Parquet lazily and runs queries larger than
-  memory, which the rebuild needs. pandas is being ported out, and the scorers of past rounds
-  that used it stay in git at the commits where they ran.
+  memory, which the rebuild needs. pandas was ported out on 2026-11-12, every module checked
+  against its stored outputs; the scorers of past rounds that used it stay in git at the commits
+  where they ran.
 - **pandera** turns the audit's rules into table-level checks (unique keys, usages inside their
   cell's years, language shares), which per-record validation cannot express.
 - **nltk** was dropped with the WordNet code of rounds Q and Z.

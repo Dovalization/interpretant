@@ -106,7 +106,8 @@ analysis: predictions first, in their own commit.
   five figures), `style.py` (palette, fonts).
 
 `scripts/`: `select_*_controls.py` (control words), `score_*.py` (one per prediction
-round; frozen once run).
+round; frozen once run). The scorers of the grid, cross-perplexity, direction and clustering
+rounds were removed on 2026-11-12 and stay in git at the commits where they ran.
 
 ## Data and models
 
