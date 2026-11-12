@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import polars as pl
 from gensim.models import KeyedVectors
 from tqdm import tqdm
 
@@ -36,6 +36,14 @@ NEIGHBOURS = 25
 FLOOR_QUANTILE = 0.95
 MIN_BIN_WORDS = 100
 MAX_BINS = 10
+
+PAIR_SCHEMA = {
+    "word": pl.String,
+    "count_a": pl.Int64,
+    "count_b": pl.Int64,
+    "cosine_drift": pl.Float32,
+    "neighbour_shift": pl.Float64,
+}
 
 _CELL_MODEL = re.compile(r"^(?P<name>[a-z0-9]+)_(?P<decade>\d{4})$")
 
@@ -100,7 +108,7 @@ def compare_cells(
     measure_min: int = MEASURE_MIN,
     neighbour_min: int = NEIGHBOUR_MIN,
     neighbours: int = NEIGHBOURS,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Measure cosine drift and neighbourhood shift for every word frequent in both cells."""
     counts_a, counts_b = _counts(vectors_a), _counts(vectors_b)
     candidates = [
@@ -113,9 +121,8 @@ def compare_cells(
         for word in candidates
         if counts_a[word] >= measure_min and counts_b[word] >= measure_min
     ]
-    columns = ["word", "count_a", "count_b", "cosine_drift", "neighbour_shift"]
     if not measured or len(candidates) <= neighbours:
-        return pd.DataFrame(columns=columns)
+        return pl.DataFrame(schema=PAIR_SCHEMA)
     matrix_a, matrix_b = _unit_rows(vectors_a, candidates), _unit_rows(vectors_b, candidates)
     index = {word: position for position, word in enumerate(candidates)}
     rows = [index[word] for word in measured]
@@ -123,14 +130,15 @@ def compare_cells(
     shift = batch_neighborhood_shift(
         measured, candidates, matrix_a, candidates, matrix_b, k=neighbours
     )
-    return pd.DataFrame(
+    return pl.DataFrame(
         {
             "word": measured,
             "count_a": [counts_a[word] for word in measured],
             "count_b": [counts_b[word] for word in measured],
             "cosine_drift": cosine,
             "neighbour_shift": [shift[word] for word in measured],
-        }
+        },
+        schema=PAIR_SCHEMA,
     )
 
 
@@ -158,35 +166,63 @@ def cell_neighbours(
     return [pool[position] for position in order]
 
 
+def frequency_bins(frequency: pl.Series, bins: int) -> pl.Series:
+    """Equal-sized bins by frequency: ordinal ranks, then linear percentile edges on the ranks.
+
+    Each bin is closed on the right and the first also on the left. The edges are computed here
+    rather than with Polars' ``qcut``, which its documentation marks unstable and which does not
+    state how it interpolates the edges. They are percentiles (quantile × 100), as pandas'
+    ``qcut`` computed them for the stored drift tables: when an edge falls on a whole rank, the
+    rounding of ``np.quantile`` moves the boundary word to the other bin in 44 of 532 pairs.
+    """
+    ranks = frequency.rank("ordinal").cast(pl.Float64).to_numpy()
+    edges = np.percentile(ranks, np.linspace(0, 1, bins + 1) * 100)
+    codes = np.clip(np.searchsorted(edges, ranks, side="left") - 1, 0, bins - 1)
+    return pl.Series("frequency_bin", codes, dtype=pl.Float64)
+
+
 def add_noise_floor(
-    pair: pd.DataFrame,
+    pair: pl.DataFrame,
     quantile: float = FLOOR_QUANTILE,
     min_bin_words: int = MIN_BIN_WORDS,
     max_bins: int = MAX_BINS,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Rank each word's drift within its frequency bin and flag drift candidates.
 
     Bins hold equal numbers of words by geometric-mean frequency, at least ``min_bin_words``
-    each and at most ``max_bins``. Ranks are percentiles (0-100) within the bin; a candidate
-    is in the top ``1 - quantile`` on both cosine drift and neighbourhood shift.
+    each and at most ``max_bins``. Ranks are percentiles (0-100) within the bin, ties sharing
+    their average rank; a candidate is in the top ``1 - quantile`` on both cosine drift and
+    neighbourhood shift.
     """
-    result = pair.copy()
-    if result.empty:
-        for column in ["frequency_bin", "cosine_rank", "shift_rank"]:
-            result[column] = pd.Series(dtype=float)
-        result["candidate"] = pd.Series(dtype=bool)
-        return result
-    frequency = np.log(result["count_a"].to_numpy() * result["count_b"].to_numpy()) / 2
-    bins = max(1, min(max_bins, len(result) // min_bin_words))
-    result["frequency_bin"] = pd.qcut(
-        pd.Series(frequency).rank(method="first"), bins, labels=False
-    ).to_numpy()
-    grouped = result.groupby("frequency_bin")
-    result["cosine_rank"] = grouped["cosine_drift"].rank(pct=True) * 100
-    result["shift_rank"] = grouped["neighbour_shift"].rank(pct=True) * 100
+    if pair.is_empty():
+        return pair.with_columns(
+            pl.lit(None, pl.Float64).alias("frequency_bin"),
+            pl.lit(None, pl.Float64).alias("cosine_rank"),
+            pl.lit(None, pl.Float64).alias("shift_rank"),
+            pl.lit(None, pl.Boolean).alias("candidate"),
+        )
+    frequency = pl.Series(np.log(pair["count_a"].to_numpy() * pair["count_b"].to_numpy()) / 2)
+    bins = max(1, min(max_bins, len(pair) // min_bin_words))
+
+    def percentile(column: str) -> pl.Expr:
+        # NaN counts as missing, as in pandas: Polars ranks and counts only non-null values.
+        value = pl.col(column).fill_nan(None)
+        return (
+            value.rank("average").over("frequency_bin") / value.count().over("frequency_bin") * 100
+        )
+
     threshold = quantile * 100
-    result["candidate"] = (result["cosine_rank"] > threshold) & (result["shift_rank"] > threshold)
-    return result
+    return (
+        pair.with_columns(frequency_bins(frequency, bins))
+        .with_columns(
+            cosine_rank=percentile("cosine_drift"), shift_rank=percentile("neighbour_shift")
+        )
+        .with_columns(
+            candidate=(
+                (pl.col("cosine_rank") > threshold) & (pl.col("shift_rank") > threshold)
+            ).fill_null(False)
+        )
+    )
 
 
 def measure_grid(  # noqa: PLR0913
@@ -196,7 +232,7 @@ def measure_grid(  # noqa: PLR0913
     measure_min: int = MEASURE_MIN,
     neighbour_min: int = NEIGHBOUR_MIN,
     neighbours: int = NEIGHBOURS,
-) -> dict[str, pd.DataFrame]:
+) -> dict[str, pl.DataFrame]:
     """Compare every within-field and cross-field pair of cell models under ``model_dir``.
 
     Returns two tables keyed ``within_field`` (each field's consecutive decades in the OpenAlex
@@ -233,14 +269,18 @@ def measure_grid(  # noqa: PLR0913
                     neighbours,
                 )
             )
-            pair.insert(0, "layer", cell_a.layer)
-            pair.insert(1, "field_a", cell_a.name)
-            pair.insert(2, "decade_a", cell_a.decade)
-            pair.insert(3, "field_b", cell_b.name)
-            pair.insert(4, "decade_b", cell_b.decade)
-            frames.append(pair)
-        table = pd.concat(frames, ignore_index=True)
-        table["is_target"] = table["word"].isin(target_set)
-        table["is_control"] = table["word"].isin(control_set)
-        tables[name] = table
+            labels = pl.DataFrame(
+                {
+                    "layer": [cell_a.layer],
+                    "field_a": [cell_a.name],
+                    "decade_a": [cell_a.decade],
+                    "field_b": [cell_b.name],
+                    "decade_b": [cell_b.decade],
+                }
+            )
+            frames.append(labels.join(pair, how="cross"))
+        tables[name] = pl.concat(frames).with_columns(
+            is_target=pl.col("word").is_in(list(target_set)),
+            is_control=pl.col("word").is_in(list(control_set)),
+        )
     return tables

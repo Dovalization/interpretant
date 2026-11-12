@@ -1033,6 +1033,8 @@ def drift_grid(  # noqa: PLR0913
     one row per word measured in a pair, with percentile ranks against the pair's
     whole-vocabulary noise floor and a candidate flag.
     """
+    import polars as pl  # noqa: PLC0415
+
     from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
     from interpretant.drift.grid import measure_grid  # noqa: PLC0415
 
@@ -1049,12 +1051,15 @@ def drift_grid(  # noqa: PLR0913
         raise click.ClickException(str(error)) from error
     output_dir.mkdir(parents=True, exist_ok=True)
     for name, table in tables.items():
-        table.to_parquet(output_dir / f"{name}.parquet", index=False)
-        pairs = table.groupby(["layer", "field_a", "decade_a", "field_b", "decade_b"]).ngroups
-        control_rate = table.loc[table["is_control"], "candidate"].mean()
+        table.write_parquet(output_dir / f"{name}.parquet")
+        pairs = table.select("layer", "field_a", "decade_a", "field_b", "decade_b").n_unique()
+        control_rate = table.filter(pl.col("is_control")).select(pl.col("candidate").mean()).item()
+        target_candidates = (
+            table.filter(pl.col("is_target")).select(pl.col("candidate").sum()).item()
+        )
         console.print(
             f"  {name}: {pairs} pairs, {len(table):,} rows, "
-            f"{int(table.loc[table['is_target'], 'candidate'].sum())} target candidates, "
+            f"{target_candidates} target candidates, "
             f"controls flagged {control_rate:.1%} (expected under ~5%)"
         )
 

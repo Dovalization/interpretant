@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 from gensim.models import KeyedVectors
 
@@ -41,28 +41,29 @@ def test_compare_cells_measures_only_frequent_shared_words_and_sees_movement() -
     )
 
     assert "w59" not in set(pair["word"])
-    drift = pair.set_index("word")["cosine_drift"]
+    drift = dict(zip(pair["word"], pair["cosine_drift"], strict=True))
     assert drift["w0"] > 1.5
     assert drift["w1"] < 1e-6
 
 
 def test_noise_floor_ranks_within_frequency_bins_and_needs_both_measures() -> None:
     words = [f"w{n}" for n in range(400)]
-    pair = pd.DataFrame(
+    shift = np.tile(np.linspace(0, 1, 100), 4)
+    shift[399] = 0.0
+    pair = pl.DataFrame(
         {
             "word": words,
             "count_a": np.repeat([200, 2_000, 20_000, 200_000], 100),
             "count_b": np.repeat([200, 2_000, 20_000, 200_000], 100),
             "cosine_drift": np.tile(np.linspace(0, 1, 100), 4),
-            "neighbour_shift": np.tile(np.linspace(0, 1, 100), 4),
+            "neighbour_shift": shift,
         }
     )
-    pair.loc[399, "neighbour_shift"] = 0.0
 
     ranked = add_noise_floor(pair)
 
-    assert ranked["frequency_bin"].nunique() == 4
-    assert set(ranked.loc[ranked["candidate"], "word"]) == {
+    assert ranked["frequency_bin"].n_unique() == 4
+    assert set(ranked.filter(pl.col("candidate"))["word"]) == {
         "w95",
         "w96",
         "w97",
@@ -127,17 +128,17 @@ def test_measure_grid_compares_trajectories_and_fields_and_flags_words(tmp_path:
     tables = measure_grid(tmp_path, targets=["w0"], controls=["w1", "w2"], neighbours=5)
 
     within, cross = tables["within_field"], tables["cross_field"]
-    assert set(zip(within.field_a, within.decade_a, within.decade_b, strict=True)) == {
+    assert set(within.select("field_a", "decade_a", "decade_b").iter_rows()) == {
         ("ai", 1990, 2000),
         ("hci", 1990, 2000),
     }
-    assert set(zip(cross.field_a, cross.field_b, cross.decade_a, strict=True)) == {
+    assert set(cross.select("field_a", "field_b", "decade_a").iter_rows()) == {
         ("ai", "hci", 1990),
         ("ai", "hci", 2000),
     }
     assert len(within) == len(cross) == 2 * len(BASE)
-    assert within.is_target.sum() == 2
-    assert within.is_control.sum() == 4
+    assert within["is_target"].sum() == 2
+    assert within["is_control"].sum() == 4
 
 
 def test_measure_grid_needs_pairs(tmp_path: Path) -> None:
