@@ -264,10 +264,7 @@ def export_web(  # noqa: PLR0913
     perplexity = pl.read_parquet(drift_dir / "cross_perplexity_corrected.parquet")
     keys = ["decade", "model_field", "text_field"]
     grouped = (
-        perplexity.sort("seed", maintain_order=True)
-        .group_by(keys, maintain_order=True)
-        .agg(pl.col("excess"))
-        .sort(keys)
+        perplexity.sort("seed", maintain_order=True).group_by(keys).agg(pl.col("excess")).sort(keys)
     )
     _dump(
         output_dir / "perplexity.json",
@@ -291,7 +288,7 @@ def export_web(  # noqa: PLR0913
         fall_keys = ["model_field", "text_field", "early", "late"]
         grouped_falls = (
             falls.sort("seed", maintain_order=True)
-            .group_by(fall_keys, maintain_order=True)
+            .group_by(fall_keys)
             .agg(
                 pl.col("fall").mean(),
                 pl.col("mix").mean(),
