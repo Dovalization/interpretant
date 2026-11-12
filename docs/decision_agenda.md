@@ -544,14 +544,14 @@ after):**
 
 | Order | Experiment | Standing | Needs |
 |---|---|---|---|
-| 0a | Calibration on the LSCD Benchmark's datasets (Schlechtweg, Virk and Arefyev 2024), not only DWUG English: encoder and measures against human graded change, comparable with published numbers | Standard tooling | Encoders, the benchmark data |
+| 0a | Calibration on the datasets the LSCD Benchmark covers (Schlechtweg, Virk and Arefyev 2024), not only DWUG English: encoder and measures against human graded change, comparable with published numbers. The benchmark's code is not a dependency (Hydra scripts pinned to Python 3.10, no licence stated); its datasets and standard metrics are used with scipy and scikit-learn | Standard practice | Encoders, the published datasets |
 | 0b | A systematic synthetic set as the development set: several planted scenarios (gradual or sudden, a sense gained or lost, a frequency change without a change of meaning) (Shoemark et al. 2019) | Established | The rebuilt store |
 | 1 | J on every usage: bootstrap intervals (resampling abstracts), permutation significance, false discovery rate correction when many words are screened (Liu, Medlar and Glowacka 2021) | Established | The rebuilt store |
 | 2 | Matched controls (step 5) as the bar | Established (SemEval-2020 style) | The word list |
-| 3 | Year-by-year time series of a word's change against a reference period, with change-point detection and a shuffle null, replacing half-decade windows (Kulkarni et al. 2015; Shoemark et al. 2019: the full series beats two points) | Established | Years per usage (4.6); possibly `ruptures`, weighed under the dependency rule |
+| 3 | Year-by-year time series of a word's change against a reference period, with change-point detection and a shuffle null, replacing half-decade windows (Kulkarni et al. 2015; Shoemark et al. 2019: the full series beats two points) | Established | Years per usage (4.6); `ruptures` (1.1.10, September 2025, maintained), added when the experiment starts |
 | 4 | One measure for the static grid instead of the two-threshold rule | The project's own diagnosis | The rebuilt grid |
 | 5 | Same-abstract controls, aimed at topic change | Exploratory: the literature has no method that separates topic shift from semantic change (Montanelli and Periti's survey lists it as open) | The abstracts table |
-| 6 | Removing the era signal from the vectors (concept erasure, LEACE) | Exploratory | Last, since it alters every vector |
+| 6 | Removing the era signal from the vectors (concept erasure, LEACE) | Exploratory | Last, since it alters every vector; `concept-erasure` (EleutherAI, last release January 2024) or LEACE's closed form written with numpy and scipy, decided then |
 
 Checks every experiment reads: the documented changes (*alignment* and *attention* in AI,
 2010s→2020s; *network* in AI, 1980s→1990s; *platform* in communication, 2000s→2010s), the quiet
@@ -639,7 +639,35 @@ on the corpus.
 Decide: which candidates are tried, on which benchmark, and against the hand-written lists.
 Settles the step 1b code marked "decide with step 7a".
 
-Decision:
+Decision (2026-11-12), after checking the literature and the tools:
+
+- Literature: under equal conditions APD predicts graded change best, while sense-based
+  approaches correlate less but explain more, and XL-LEXEME is the best model for sense induction
+  too (Periti and Tahmasebi 2024); DWUG's human clusters come from correlation clustering of a
+  usage-pair graph (Schlechtweg et al. 2021), and filling the missing pairs with a model before
+  clustering improves agreement with human senses (LChange 2024); K-Means and affinity
+  propagation are the most used algorithms, with agglomerative clustering and HDBSCAN also in use
+  (Montanelli and Periti's survey); sense induction is still open. The hand-written lists'
+  0.69–0.80 (rank correlation with human graded change) and clustering's 0.27 (agreement with
+  human clusters) are different measures and are not compared directly.
+- 7a.1: automatic methods serve first as an aid to the hand-written lists (proposing senses,
+  finding usages no listed sense fits, for the author's review), not as a replacement.
+- 7a.2, established first: (1) XL-LEXEME pair scores with correlation clustering, as DWUG built
+  its clusters; (2) XL-LEXEME vectors with affinity propagation, agglomerative clustering
+  (distance threshold) or HDBSCAN; (3) substitutes grouped by community detection at scale (Eyal
+  et al. 2022; Lucy et al. 2023) with **Leiden** (Traag et al. 2019; Louvain's successor, which
+  guarantees well-connected groups; in networkx 3.6 already), label propagation as a quick
+  check; then exploratory (4) hand-written senses as seeds, clustering only the usages no listed
+  sense fits; (5) generated definitions as a comparison arm only.
+- 7a.3: scored by agreement with DWUG's human clusters (adjusted Rand index) on the openly
+  published DWUG datasets (English, German, Swedish and others), by the same measure as the
+  hand-written lists, and on the corpus by the author's labels (step 7).
+- Tools: scikit-learn 1.8 (`AffinityPropagation`, `AgglomerativeClustering`, `HDBSCAN`) and
+  networkx 3.6 (`leiden_communities`, `label_propagation_communities`), both installed;
+  `correlation-clustering` 2.0.0 (April 2026, by the DWUG authors, depending only on networkx,
+  numpy and scipy) is the one new dependency, adopted once its licence is confirmed (PyPI states
+  none). DWUG's `WUGs` scripts (no package, conflicting licences) and `chinese-whispers` (last
+  release July 2024) are references only.
 
 ## Step 7: counting senses
 
