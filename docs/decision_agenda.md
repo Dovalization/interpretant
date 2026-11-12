@@ -507,7 +507,32 @@ files from four scripts today, parsed three ways. Decide one selection method pe
 matched on frequency and part of speech, or drawn from the same abstracts (the detection draft
 argues for the latter).
 
-Decision:
+Decision (2026-11-12), after a critical pass and a check of established practice:
+
+- The four control-word files are retired as sources and kept as data (past rounds used them).
+  They contradict each other (*control* is a target and a rung-3 control) and do not match the
+  targets; round A found 4 of 4 changes against shuffles, 2 of 4 against them.
+- **Shuffles on for every measure** (scipy's `permutation_test`): the established control
+  condition (Dubossarsky et al. 2017, "Outta Control"; Dubossarsky et al. 2019, "Time-Out"). They
+  are the floor, not the bar: a word whose contexts moved only with its field's topics passes
+  them, as round X's quiet transition did.
+- **Matched control words, generated, at least 30 per target** (or pooled by frequency band), so
+  a percentile bar is defined: same part of speech, comparable frequency trajectory between the
+  two periods (SemEval-2020's criterion: "same POS and comparable frequency development"),
+  similar within-period spread (frequency and polysemy both create apparent change: Dubossarsky
+  et al. 2017; Keidar et al. 2022), excluding targets, sense-list words and candidates; stored in
+  the word list with the role "control" and their target.
+- **Controls validated against each other, not against their shuffles** (topic drift moves every
+  word, so that test would reject them all): outliers among the controls are read briefly by
+  hand, a light version of SemEval's manual verification, then replaced.
+- **False discovery rate correction** (`scipy.stats.false_discovery_control`, Benjamini–Hochberg)
+  whenever many words are screened at once (Liu, Medlar and Glowacka 2021), noting their caveats:
+  permutation tests are costly, and the correction assumes independent tests.
+- Same-abstract controls are drawn at experiment time from the abstracts table; the static grid
+  uses its frequency bands; an automatic check forbids a word being both target and control.
+- Which bar decides a change (shuffles, matched or same-abstract controls) is step 6's.
+- To add to `related_work.md`: Schlechtweg et al. 2020 (SemEval-2020 Task 1), Dubossarsky et al.
+  2019 (Time-Out), Liu, Medlar and Glowacka 2021, Keidar et al. 2022.
 
 ## Step 6: detection experiments
 
