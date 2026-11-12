@@ -696,6 +696,20 @@ Decisions (2026-11-12):
   auxiliary); *network* gains its own actor-network sense (Latour, Callon, Law; 214 uses),
   identified by the compound and kept separable, added to `corpus_v4_draft.toml` with the social
   sense excluding its cues (the frozen version 2 is unchanged).
+- 7.2: the author's labels are the calibration set (each counter's error rates for the
+  correction of 7.4) and its test; they must be human, blind, random and spread across periods,
+  since the earlier correction failed on error rates measured from easy cue-labelled usages.
+  About an hour, in sittings of about 15 minutes: refine check 1a (the author's 280 blind,
+  random, cross-period yes/no judgements on *attention*, *network*, *platform*, *alignment*,
+  *prompt*) by answering "which sense?" for its 183 "no" and "unclear" items (the 97 "yes" items
+  are the changing sense already), about 45 minutes; new blind labels for *hallucination*
+  (psychology and AI, both periods, about 30) and the stable checks *component* and *having*
+  (about 30), drawn at random from the rebuilt store; each list's senses plus "other or
+  unclear", on the keystroke judging page of step 4b. Claude's 300 development labels are not
+  ground truth; verifying them (about 30 minutes, with about 30 items labelled blind first to
+  measure anchoring) is held in reserve for words whose results come out uncertain, and doubles
+  as a measure of Claude's labelling. When: after the store rebuild and the consolidation of the
+  sense lists (7.5), before the counters are evaluated.
 
 ## Step 8: code layout (follows from steps 1–7)
 
