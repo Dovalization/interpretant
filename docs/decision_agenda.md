@@ -852,6 +852,24 @@ tests/            mirrors src/
   (Kedro, ZenML, scikit-learn), chosen over `workflows/` (collides with `.github/workflows/`) and
   `stages/` (DVC's term); each module is one stage, the static and contextual flows are sequences
   of stages, and "the spaCy pipeline" is always named so inside `corpus/`.
+- `curated/` changes only through review (the author, 2026-11-12): runs write proposals into
+  `data/` (generated control words from step 5, lemma exceptions from spaCy's errors), and a file
+  enters `curated/` only after the author approves it, as download plans do; the spelling table
+  is committed once after checking and then left alone.
+- Everything a person judged lives in `curated/` and is committed (check 1a's answers, the gold
+  pairs, the head-to-head choices, the coming labels and reviews): human judgements are the one
+  thing that cannot be regenerated. Raw model outputs stay out, as now. The untracked round E and
+  round Q label files are sorted under housekeeping.
+- The `web/` explorer (a Next.js app, 118 tracked files, reading `web/data/`) is deleted with the
+  step 1a deletions, after `docs/experiments.md` records what it showed: good data comes before
+  presenting it. In the meantime, results are shown simply (each experiment runner writes a short
+  report with its tables and figures); a presentation is designed again once there are new
+  results.
+- `docs/` is reorganised into `docs/reference/` (living documentation such as `spacy.md`,
+  `methods.md`, `related_work.md`, `architecture.md`, `datasheet.md`), `docs/records/` (the
+  predictions files, diagnostics, `experiments.md`) and `docs/design/` (drafts and this agenda),
+  after a pass over the 23 documents deciding what to merge, what is no longer relevant, and what
+  moves where (housekeeping; it touches every link, so it pairs with step 10).
 
 ## Step 9: reproducible runs
 
@@ -903,6 +921,8 @@ Decision:
 - [ ] Push: the local commits wait for the author's go.
 - [ ] Devlog 07: waiting for the author's review.
 - [ ] bazzite's copy of the repository: behind the Mac; sync before any GPU run.
+- [ ] Docs pass: go through the 23 documents in `docs/`, merge what overlaps, retire what is no
+  longer relevant, sort the rest into `reference/`, `records/` and `design/` (step 8), with step 10.
 
 ## Reference: what moves to spaCy
 
