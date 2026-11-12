@@ -15,7 +15,7 @@ import re
 import sys
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 
 from interpretant.corpus.lemmas import LemmaMap
 from interpretant.corpus.openalex import OpenAlexSource
@@ -86,14 +86,20 @@ def main() -> None:
                 row.append(f"{decade}s {count / len(kept):>5.1%} of {len(kept):>4}")
             print(f"  {field:14}  " + "   ".join(row), flush=True)
 
-    table = pd.DataFrame(flagged)
-    table.to_parquet(OUTPUT, index=False)
+    table = pl.DataFrame(flagged)
+    table.write_parquet(OUTPUT)
     print(f"\n{len(table):,} flagged abstracts → {OUTPUT}")
-    destinations = table.groupby(["word", "field"]).assigned.agg(
-        lambda column: ", ".join(f"{k} {v}" for k, v in column.value_counts().head(3).items())
+    counts = (
+        table.group_by("word", "field", "assigned")
+        .len()
+        .sort(["word", "field", "len", "assigned"], descending=[False, False, True, False])
     )
     print("\nWhere flagged abstracts go (top three):")
-    print(destinations.to_string())
+    for (word, field), group in counts.group_by("word", "field", maintain_order=True):
+        top = ", ".join(
+            f"{name} {n}" for name, n in group.select("assigned", "len").head(3).iter_rows()
+        )
+        print(f"  {word:14} {field:14} {top}")
 
 
 if __name__ == "__main__":
