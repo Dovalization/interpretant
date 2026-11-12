@@ -24,9 +24,12 @@ against research abstracts mix a change of genre with a change of meaning. The s
 ingest and the PDF tooling were removed. Two traces remain on disk: the grid models
 (`models/twec_grid`, `models/ppmi_grid` and their variants) were trained against a compass
 that included the books, so a retrain without them would give different models; and the drift
-tables in `data/drift/` still hold books rows, which the web export skips. The source texts
-and the manifest are archived locally in `data/retired/books_source.tar.zst`; part of them is
-in copyright, so they are never committed.
+tables in `data/drift/` still hold books rows, which the web export skips. The extracted texts
+and the manifest are archived locally in `data/retired/books_source.tar.zst`, and the original
+files they came from in `data/retired/books_originals.tar` (139 files for 135 books), whose
+`PROVENANCE.csv` maps each file to its book, with how the match was checked by content and its
+score. No original was found for Gibson's *The Ecological Approach to Visual Perception*. Part
+of both archives is in copyright, so they are never committed.
 
 Processed text lives in `data/processed/<source>/texts/<source>_<decade>.txt`, one document
 per line.
