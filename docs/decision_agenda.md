@@ -866,8 +866,13 @@ tests/            mirrors src/
   Markdown report, `reports/<experiment>/report.md`, with its key tables (from Polars, as
   Markdown) and matplotlib figures (`reports/<experiment>/figures/`) and the data and settings
   that produced it (step 9); `reports/` follows the Cookiecutter Data Science convention. For
-  interactive exploration during development, marimo (notebooks stored as plain Python files,
-  re-running dependent cells, maintained) as a development-only extra, added when first needed.
+  interactive exploration during development, the most common setup in data projects (chosen over
+  marimo and plain-Python cell files): plain Jupyter notebooks in a committed `notebooks/` folder,
+  named by order and topic in the Cookiecutter Data Science manner (for example
+  `1.0-gd-attention-usages.ipynb`), with `nbstripout` as a pre-commit hook so no outputs or data
+  reach git; `ipykernel` and `nbstripout` as development-only dependencies. Notebooks are scratch:
+  code needed twice moves into the package, and anything that matters moves into an experiment
+  runner, so no result comes from a notebook.
   A presentation (an explorer, a dashboard, shared pages) is designed again once there are new
   results.
 - `docs/` is reorganised into `docs/reference/` (living documentation such as `spacy.md`,
