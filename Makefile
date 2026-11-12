@@ -1,4 +1,4 @@
-.PHONY: install lint type-check test figures app app-demo clean
+.PHONY: install lint type-check test figures clean
 
 install:
 	uv sync --all-extras
@@ -19,12 +19,6 @@ test:
 
 figures:
 	uv run interpretant figures
-
-app:
-	uv run interpretant app
-
-app-demo:
-	uv run interpretant app --demo
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +

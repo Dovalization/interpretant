@@ -1533,27 +1533,5 @@ def figures(model_dir: Path, drift_dir: Path, audit_path: Path, output_dir: Path
         console.print(f"  wrote {path}")
 
 
-# ---------------------------------------------------------------------------
-# app
-# ---------------------------------------------------------------------------
-
-
-@cli.command("app")
-@click.option("--demo", is_flag=True, default=False, help="Load synthetic demo data.")
-@click.option("--port", default=8501, show_default=True, help="Streamlit server port.")
-def app(demo: bool, port: int) -> None:
-    """Launch the Streamlit dashboard."""
-    import subprocess
-    import sys
-
-    app_path = Path(__file__).parent / "app" / "main.py"
-    cmd = [sys.executable, "-m", "streamlit", "run", str(app_path), f"--server.port={port}"]
-    if demo:
-        cmd += ["--", "--demo"]
-    mode_label = " (demo mode)" if demo else ""
-    console.print(f"[bold]Launching dashboard[/bold] on port {port}{mode_label}")
-    subprocess.run(cmd, check=True)
-
-
 if __name__ == "__main__":
     cli()

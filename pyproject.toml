@@ -19,8 +19,7 @@ dependencies = [
     "numpy>=1.26",
     "scipy>=1.11",
     "pandas>=2.1",
-    "plotly>=5.18",
-    "streamlit>=1.30",
+    "pyarrow>=17",
     "pydantic-settings>=2.1",
     "scikit-learn>=1.4",
     "docling>=2.0",
@@ -68,5 +67,5 @@ namespace_packages = true
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
-module = ["gensim.*", "scipy.*", "sklearn.*", "streamlit.*", "plotly.*", "tqdm.*", "networkx.*", "nltk.*"]
+module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*", "nltk.*"]
 ignore_missing_imports = true

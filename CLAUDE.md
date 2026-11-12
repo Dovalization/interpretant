@@ -15,8 +15,6 @@ uv run pytest tests/test_drift_grid.py -v     # one file
 uv run pytest tests/ -k "neighbour" -v        # one test by name
 
 make figures                 # redraw figures/*.png from the models and drift tables
-make app-demo                # dashboard on synthetic data
-make app                     # dashboard on models/twec_grid
 ```
 
 ## Web explorer (`web/`)
@@ -107,10 +105,7 @@ analysis: predictions first, in their own commit.
   byte-identical: rerun them all and diff.
 - `export.py`: the JSON the web explorer reads.
 - `visualization/`: `figures.py` (the figure functions and `readme_figures`, the README's
-  five figures), `style.py` (palette, fonts),
-  `trajectory.py` and `neighbors.py` (dashboard panels).
-- `app/main.py`: Streamlit dashboard; demo mode is synthetic, real mode reads
-  `models/twec_grid` for one field, restricted to `data/words_of_interest.txt`.
+  five figures), `style.py` (palette, fonts).
 
 `scripts/`: `redate_books.py` (the record of every book edition decision), `fetch_*.py`
 (book acquisition), `select_*_controls.py` (control words), `score_*.py` (one per prediction
