@@ -8,7 +8,6 @@ project's goals require.
 
 | Layer | Content | Coverage | Loader |
 |---|---|---|---|
-| Books | Curated philosophy, cognitive science, AI, design and cultural theory | 1820s–2020s, 358 titles | `BooksSource` (`data/external/books/`, `manifest.json`) |
 | OpenAlex grid | Research abstracts in 11 fields, up to 10,000 per cell | 1950s–2020s | `OpenAlexSource` (`corpus openalex download|ingest`) |
 | OpenAlex full cells | Every abstract of one field, for rare targets | philosophy 1980s–2020s, HCI 2000s–2020s | the same, with `--full` |
 
@@ -16,6 +15,18 @@ Until November 2026 the corpus also drew on PubMed, the ACL Anthology and arXiv,
 the books into one model per decade. The grid covers their fields with one taxonomy and one
 sampling rule, so those loaders were removed; an ACL layer with a language filter remains an
 option in the roadmap.
+
+**Books (retired 2026-11-11).** 358 curated titles in philosophy, cognitive science, AI, design
+and cultural theory, 1820s–2020s, were a third layer that only the aligned grid used: no usage
+store, round or documented change since the grid read them. Their recent decades held 21 and 5
+documents, single authors made up 30–45% of several early decades, and canonical books set
+against research abstracts mix a change of genre with a change of meaning. The source, the
+ingest and the PDF tooling were removed. Two traces remain on disk: the grid models
+(`models/twec_grid`, `models/ppmi_grid` and their variants) were trained against a compass
+that included the books, so a retrain without them would give different models; and the drift
+tables in `data/drift/` still hold books rows, which the web export skips. The source texts
+and the manifest are archived locally in `data/retired/books_source.tar.zst`; part of them is
+in copyright, so they are never committed.
 
 Processed text lives in `data/processed/<source>/texts/<source>_<decade>.txt`, one document
 per line.
@@ -86,7 +97,7 @@ cannot be tuned to results. It has three tiers: a core measurable across most of
 (adding *cognition*, *computation*, *emergence*, *meaning*, *sign*, *system* and
 *control*), late arrivals whose series start where they first reach the threshold
 (*affordance*, *embodiment*, *intentionality*, *interface*, *user*, *agent*,
-*simulation*), and context-only words read in the books and communication cells (*image*,
+*simulation*), and context-only words read in the communication cells (*image*,
 *medium*). *Understanding*, *form*, *pattern* and *signal* were dropped: everyday senses
 outweigh conceptual change. Phrase targets (*neural_network*, *social_network*, ...) wait
 for phrase detection.
@@ -113,7 +124,7 @@ uv run interpretant corpus phrases apply   # data/phrased/<source>/texts/<source
 
 One gensim `Phrases` model (normalised PMI ≥ 0.5, min count 20) is learned from a
 balanced sample, 300,000 tokens from every processed file, so the large modern cells do not
-decide the phrases of the 1850s, and the same model is applied everywhere. Learned phrases
+decide the phrases of the early decades, and the same model is applied everywhere. Learned phrases
 never absorb a single-word target; the phrase targets are always merged. The learning step
 also repairs words broken across lines in OCR'd books: a pair whose halves join into a word
 more frequent than the pair (*lan guage*) is written as that word. A November 2026 trial on
@@ -128,7 +139,7 @@ uv run interpretant corpus audit --output data/processed/audit.json
 uv run interpretant corpus audit --min-occurrences 300 # stricter reliability threshold
 ```
 
-The audit reports four things:
+The audit reports two things:
 
 1. **Tokens per cell**: one cell per `(source, decade)`, plus the merged decade.
 2. **Target coverage**: for each word in `data/words_of_interest.txt`, the decades where it
@@ -136,12 +147,14 @@ The audit reports four things:
    transition is reliable only when the word reaches the threshold in both decades. A
    vector trained on a handful of occurrences stays close to its initialisation (the
    compass, under TWEC), so its drift is near zero and its neighbours are noise.
-3. **Author concentration**: the largest author's share of each decade's book words.
-4. **Dating risks**: books filed outside their publication decade, and translations dated
-   by the original instead of the English edition. Translation detection reads the
-   manifest `notes`, so translations without a note are missed.
+
+Until the books were retired it also reported each decade's largest book author and the
+manifest's dating risks.
 
 ## Findings of the November 2026 audit
+
+These findings and fixes concern the merged corpus and the books, both since retired. They stay
+as the record of why the grid replaced the merged corpus.
 
 - **Target words are too rare in most decades.** *network* occurs 1–29 times per decade
   from the 1820s to the 1950s; *affordance* never reaches 150 occurrences in any decade;
@@ -251,11 +264,12 @@ Rules for every cell:
 - A word counts in a cell only above the occurrence threshold; below it the cell is
   missing for that word, not computed.
 - Each author contributes at most a fixed share of a cell.
-- Each text is dated by the English edition it comes from; the translator and the
-  original language are recorded.
 - The sampling protocol is fixed before results are inspected.
 
 ### Layers
+
+Layers 3 to 5 were the plan for books. The books layer was retired on 2026-11-11, and none of
+the three is planned.
 
 1. **General-English baseline (1800–2000).** HistWords (Hamilton, Leskovec and Jurafsky,
    2016) publishes SGNS, SVD and PPMI embeddings per decade from Google Books and COHA.

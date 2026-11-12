@@ -15,7 +15,6 @@ history of the redesign is in [devlog 04](devlogs/04.md) and [`docs/corpus.md`](
 |---|---|---|---|
 | `openalex` | 11 fields × 1950s–2020s (88 cells) | up to 10,000 abstracts per cell, about 677,000 in all | within-field and cross-field drift, cross-perplexity |
 | `openalex_full` | philosophy 1980s–2020s, HCI 2000s–2020s (8 cells) | every matching abstract | within-field trajectories of rare targets |
-| `books` | 1820s–2020s (21 cells) | 358 titles, 42.3M tokens, 250,000 tokens per author per decade | within-field trajectories; the pre-1950 decades |
 
 Target words: `data/words_of_interest.txt` (fixed before retraining). Controls:
 `data/control_words.txt`, `data/control_words_cross_field.txt`.
@@ -185,5 +184,4 @@ Each item that produces results gets its predictions committed first.
    robustness check (DeBERTa-v3-large is, with one fixed reading rule).
 9. **Changepoint detection** on within-field trajectories once lemmatised models exist.
 10. Optional layers: an ACL Anthology layer with a language filter; a full
-    cognitive-psychology download on the free OpenAlex budget; public-domain books before
-    1930 sampled by Library of Congress class.
+    cognitive-psychology download on the free OpenAlex budget.

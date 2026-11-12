@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Dovalization/interpretant/actions/workflows/ci.yml/badge.svg)](https://github.com/Dovalization/interpretant/actions/workflows/ci.yml)
 
-`interpretant` measures how academic communities change what they do with a word. It trains one word-embedding model per field and decade on a grid of research abstracts (eleven fields, 1950s–2020s) and two centuries of canonical books, puts every model in one coordinate system, and judges each word's movement against the movement of the whole vocabulary. Every claim is tested against predictions committed to git before the evidence existed.
+`interpretant` measures how academic communities change what they do with a word. It trains one word-embedding model per field and decade on a grid of research abstracts (eleven fields, 1950s–2020s), puts every model in one coordinate system, and judges each word's movement against the movement of the whole vocabulary. Every claim is tested against predictions committed to git before the evidence existed.
 
 One finding has survived a second training seed, a second method, a lemmatised rebuild of the corpus and pre-registered tests: **_embodiment_ means two different things**, virtual reality's sense of body ownership in HCI and phenomenological corporeality in philosophy. A second was stated too strongly here and is withdrawn in that form. HCI's abstracts did change between the 1990s and the 2020s, inside the field's own venues too: the GUI-engineering vocabulary of the 1990s receded, and the vocabularies of empirical studies and of machine learning came in. But the earlier headline, that HCI's language moved _towards the behavioural and social sciences'_, held under one instrument and frame of reference and failed under another, so this README claims the change and no direction.
 
@@ -64,7 +64,7 @@ My guesses before each round were worse than the method. Round 1 passed 3 of 9 p
 flowchart TD
     classDef stage fill:#f1f5f9,stroke:#94a3b8,color:#1e293b,rx:8
 
-    C["<b>Corpus</b><br/><i>field&nbsp;×&nbsp;decade&nbsp;cells,&nbsp;cleaned&nbsp;and&nbsp;phrase-merged</i><br/>OpenAlex&nbsp;grid&nbsp;·&nbsp;full&nbsp;cells&nbsp;·&nbsp;Books"]:::stage
+    C["<b>Corpus</b><br/><i>field&nbsp;×&nbsp;decade&nbsp;cells,&nbsp;cleaned&nbsp;and&nbsp;phrase-merged</i><br/>OpenAlex&nbsp;grid&nbsp;·&nbsp;full&nbsp;cells"]:::stage
     E["<b>Embeddings</b><br/><i>one&nbsp;model&nbsp;per&nbsp;cell&nbsp;on&nbsp;a&nbsp;shared&nbsp;compass</i><br/>TWEC&nbsp;(Word2Vec)"]:::stage
     D["<b>Drift</b><br/><i>within&nbsp;fields&nbsp;and&nbsp;across&nbsp;fields</i><br/>cosine&nbsp;drift&nbsp;·&nbsp;neighbourhood&nbsp;shift&nbsp;·&nbsp;corpus-wide&nbsp;noise&nbsp;floor"]:::stage
     L["<b>Language models</b><br/><i>who&nbsp;predicts&nbsp;whom</i><br/>Kneser-Ney&nbsp;bigrams&nbsp;·&nbsp;cross-perplexity"]:::stage
@@ -98,7 +98,7 @@ Regular plurals and British spellings are collapsed before training (`corpus lem
 
 **Full cells**: where a word is too rare for a 10,000-abstract sample, its home field is taken in full, philosophy for the 1980s–2020s and HCI for the 2000s–2020s, for within-field trajectories.
 
-**Books** (358 titles, 1820s–2020s, about 42 million tokens): canonical works in philosophy of mind, AI, design and cultural theory, each dated by the English edition it contains (a translation is the translator's English) and capped at 250,000 tokens per author per decade. Every edition decision is recorded in `scripts/redate_books.py`.
+**Books** (retired 2026-11-11): 358 canonical titles, 1820s–2020s, were a third layer of the grid until no measurement used them any more; `docs/corpus.md` records why and what the grid models on disk still carry from them.
 
 ---
 
@@ -127,10 +127,6 @@ cd web && pnpm install && pnpm dev
 ```bash
 # Install dependencies
 uv sync
-
-# Books: re-date the manifest and ingest (author cap of 250,000 tokens per decade)
-uv run python scripts/redate_books.py
-uv run interpretant corpus books ingest
 
 # OpenAlex grid: download (needs OPENALEX_API_KEY in .env) and clean
 uv run interpretant corpus openalex download
@@ -186,7 +182,7 @@ uv run python scripts/score_predictions.py
 
 **Frequency and training noise.** Rare words look volatile even when the change is noise, and retraining a cell moves an ordinary word's neighbours almost as much as a decade does (a median Jaccard distance of about 0.4 against 0.6). Drift is therefore only read through the corpus-wide noise floor, and words below 150 occurrences in a cell are not measured there.
 
-**The corpus is not the discourse.** The grid captures research abstracts as OpenAlex classifies them; the interpretants measured here are those of academic communities, as their abstracts present them. OpenAlex's topic labels are noisy in small early cells, and a label's scope can widen over time: the HCI cell spans 915 sources in the 1990s and 3,601 in the 2020s, which inflated one whole-cell measurement until a venue-stable check separated the field's move from the label's. Abstracts before the 1970s are often fragments, most fields are thin before the 1980s, and the 1930s–1950s rest mostly on the books.
+**The corpus is not the discourse.** The grid captures research abstracts as OpenAlex classifies them; the interpretants measured here are those of academic communities, as their abstracts present them. OpenAlex's topic labels are noisy in small early cells, and a label's scope can widen over time: the HCI cell spans 915 sources in the 1990s and 3,601 in the 2020s, which inflated one whole-cell measurement until a venue-stable check separated the field's move from the label's. Abstracts before the 1970s are often fragments, and most fields are thin before the 1980s.
 
 **Movement between fields needs a reference.** Whether a field moved towards another depends on whether the other is taken as it was then or as it is now, on what the movement is netted against, and on whether the instrument weighs every word or the words that tell fields apart. The HCI rounds differ on all three, which is why the findings above report HCI's change and no direction.
 

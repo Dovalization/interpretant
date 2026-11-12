@@ -32,9 +32,9 @@ logs/*.log
 data/raw/*
 data/processed/*
 data/external/*
-data/inbox/
+data/retired/
 models/*
-# Source book files (copyrighted, not committed)
+# Loose source files (not committed)
 data/*.pdf
 data/*.epub
 data/*.djvu
@@ -50,14 +50,6 @@ data/*.htm
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/external/.gitkeep
-!data/external/books/
-!data/external/books/**
-data/external/books/**/*.txt
-data/external/books/**/*.pdf
-data/external/books/**/*.epub
-data/external/books/**/*.djvu
-data/external/books/**/*.mobi
-data/external/books/**/*.azw3
 !models/.gitkeep
 
 # Jupyter

@@ -18,7 +18,7 @@ is not fixed. The project measures it in research abstracts, by field and decade
 10,000 per field and decade for eleven fields (philosophy, history and philosophy of science,
 linguistics, psychology, cognitive psychology, neuroscience, computer science, AI, HCI,
 sociology, communication), 1950s–2020s; whole-field cells for philosophy and HCI where a word is
-too rare for a sample; and 358 canonical books, 1820s–2020s. Catalogue records, scraped pages,
+too rare for a sample; and, until 2026-11-11, 358 canonical books, 1820s–2020s. Catalogue records, scraped pages,
 duplicates and non-English text are removed, and no author may exceed 1% of a cell. Plurals and
 British spellings were later collapsed and every model rebuilt.
 

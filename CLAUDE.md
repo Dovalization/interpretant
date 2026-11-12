@@ -40,7 +40,7 @@ cycled (`src/lib/fields.ts`).
 One pipeline, run from the CLI in this order. Every command has `--help`.
 
 ```
-corpus books ingest / corpus openalex download|ingest   data/processed/<layer>/texts/<cell>.txt
+corpus openalex download|ingest                         data/processed/<layer>/texts/<cell>.txt
 corpus lemmas learn|apply                               data/lemmatised/<layer>/texts/<cell>.txt
 corpus phrases learn|apply                              data/phrased/<layer>/texts/<cell>.txt
 corpus audit --processed-dir data/phrased --output data/phrased/audit.json
@@ -56,8 +56,8 @@ figures                                                 figures/*.png
 ```
 
 A cell is one `<field>_<decade>` text file: one document per line, whitespace-tokenised,
-phrases joined with `_`. Layers: `books`, `openalex` (the equal-size grid), `openalex_full`
-(whole fields, within-field trajectories only).
+phrases joined with `_`. Layers: `openalex` (the equal-size grid) and `openalex_full` (whole
+fields, within-field trajectories only). The `books` layer was retired on 2026-11-11.
 
 ## Pre-registration
 
@@ -75,8 +75,7 @@ analysis: predictions first, in their own commit.
 - `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift`, `export`, `figures`).
   Commands parse options, call one library function and print; the loops (ingest,
   grid training, drift, cross-perplexity, figures) live in the library with tests.
-- `corpus/`: `books.py` (manifest + extracted texts, author cap, `ingest_books`),
-  `openalex.py` (API client, sampling, cleaning at ingest, `ingest_fields`), `files.py`
+- `corpus/`: `openalex.py` (API client, sampling, cleaning at ingest, `ingest_fields`), `files.py`
   (`source_texts`, `rewrite_texts`: one stage's cell files into the next),
   `caps.py` (author caps), `lemmas.py` (type-level plural and spelling map), `phrases.py`
   (gensim `Phrases` on a balanced sample),
@@ -106,15 +105,13 @@ analysis: predictions first, in their own commit.
 - `visualization/`: `figures.py` (the figure functions and `readme_figures`, the README's
   five figures), `style.py` (palette, fonts).
 
-`scripts/`: `redate_books.py` (the record of every book edition decision), `fetch_*.py`
-(book acquisition), `select_*_controls.py` (control words), `score_*.py` (one per prediction
+`scripts/`: `select_*_controls.py` (control words), `score_*.py` (one per prediction
 round; frozen once run).
 
 ## Data and models
 
 `data/` and `models/` are local; only `data/words_of_interest.txt`, the control-word files
-and the books manifest are tracked. Book source files are copyrighted and never committed,
-nor are their filenames. `.env` holds `OPENALEX_API_KEY`.
+and the round data under `data/labels/` and `data/diagnostics/` are tracked. `.env` holds `OPENALEX_API_KEY`.
 
 ## Tests
 
