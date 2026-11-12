@@ -862,8 +862,13 @@ tests/            mirrors src/
   round Q label files are sorted under housekeeping.
 - The `web/` explorer (a Next.js app, 118 tracked files, reading `web/data/`) is deleted with the
   step 1a deletions, after `docs/experiments.md` records what it showed: good data comes before
-  presenting it. In the meantime, results are shown simply (each experiment runner writes a short
-  report with its tables and figures); a presentation is designed again once there are new
+  presenting it. In the meantime (the author, 2026-11-12): each experiment runner writes a
+  Markdown report, `reports/<experiment>/report.md`, with its key tables (from Polars, as
+  Markdown) and matplotlib figures (`reports/<experiment>/figures/`) and the data and settings
+  that produced it (step 9); `reports/` follows the Cookiecutter Data Science convention. For
+  interactive exploration during development, marimo (notebooks stored as plain Python files,
+  re-running dependent cells, maintained) as a development-only extra, added when first needed.
+  A presentation (an explorer, a dashboard, shared pages) is designed again once there are new
   results.
 - `docs/` is reorganised into `docs/reference/` (living documentation such as `spacy.md`,
   `methods.md`, `related_work.md`, `architecture.md`, `datasheet.md`), `docs/records/` (the
