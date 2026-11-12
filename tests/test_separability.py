@@ -5,6 +5,8 @@ from __future__ import annotations
 import random
 from pathlib import Path
 
+import polars as pl
+
 from interpretant.drift.separability import (
     assignment_shares,
     decade_samples,
@@ -80,15 +82,20 @@ def test_runs_cover_every_pair_and_the_cross_decade_classifier_sees_a_move(tmp_p
     )
 
     assert len(pairs) == 2 * 3
-    cross = assignments[(assignments.train_decade == 1990) & (assignments.test_decade == 2020)]
-    within = assignments[(assignments.train_decade == 1990) & (assignments.test_decade == 1990)]
+    cross = assignments.filter(pl.col("train_decade") == 1990, pl.col("test_decade") == 2020)
+    within = assignments.filter(pl.col("train_decade") == 1990, pl.col("test_decade") == 1990)
 
-    def share(table: object, text: str, assigned: str) -> float:
-        rows = table[(table.text_field == text) & (table.assigned_field == assigned)]  # type: ignore[index]
-        return float(rows.share.iloc[0])
+    def share(table: pl.DataFrame, text: str, assigned: str) -> float:
+        rows = table.filter(pl.col("text_field") == text, pl.col("assigned_field") == assigned)
+        return float(rows["share"][0])
 
     assert share(cross, "mind", "society") > share(within, "mind", "society")
-    accuracy = pairs.set_index(["decade", "field_a", "field_b"]).accuracy
+    accuracy = {
+        (decade, first, second): value
+        for decade, first, second, value in pairs.select(
+            "decade", "field_a", "field_b", "accuracy"
+        ).iter_rows()
+    }
     assert accuracy[(2020, "mind", "society")] < accuracy[(1990, "mind", "society")]
 
 
@@ -107,9 +114,9 @@ def test_removed_terms_reach_every_classifier(tmp_path: Path) -> None:
     kept, _ = separability_runs(tmp_path, [1990], seeds=[1], per_field=100)
     stripped, _ = separability_runs(tmp_path, [1990], seeds=[1], per_field=100, removed_terms=terms)
 
-    def accuracy(pairs: object) -> float:
-        rows = pairs[(pairs.field_a == "machine") & (pairs.field_b == "mind")]  # type: ignore[index]
-        return float(rows.accuracy.iloc[0])
+    def accuracy(pairs: pl.DataFrame) -> float:
+        rows = pairs.filter(pl.col("field_a") == "machine", pl.col("field_b") == "mind")
+        return float(rows["accuracy"][0])
 
     assert accuracy(kept) > 0.95
     assert accuracy(stripped) < 0.75

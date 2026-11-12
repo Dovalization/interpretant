@@ -5,6 +5,7 @@ from __future__ import annotations
 import random
 from pathlib import Path
 
+import polars as pl
 import pytest
 
 from interpretant.drift.heldout import cell_gap, heldout_runs
@@ -47,6 +48,6 @@ def test_runs_score_every_cell_for_every_seed(tmp_path: Path) -> None:
     table = heldout_runs(tmp_path, ("openalex",), seeds=[1, 2], workers=1)
 
     assert len(table) == 4
-    assert set(table.decade) == {1990, 2000}
-    gaps = table.groupby("decade").gap.mean()
+    assert set(table["decade"]) == {1990, 2000}
+    gaps = dict(table.group_by("decade").agg(pl.col("gap").mean()).iter_rows())
     assert gaps[1990] > gaps[2000]

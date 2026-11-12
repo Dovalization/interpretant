@@ -840,8 +840,8 @@ def drift_separability(  # noqa: PLR0913
         texts_dir, decades, seeds, per_field=per_field, removed_terms=terms, log=console.print
     )
     output_dir.mkdir(parents=True, exist_ok=True)
-    pairs.to_parquet(output_dir / "separability_pairs.parquet", index=False)
-    assignments.to_parquet(output_dir / "separability_assignments.parquet", index=False)
+    pairs.write_parquet(output_dir / "separability_pairs.parquet")
+    assignments.write_parquet(output_dir / "separability_assignments.parquet")
     console.print(f"[green]{len(pairs):,} pair rows, {len(assignments):,} assignment rows[/green]")
 
 
@@ -875,7 +875,7 @@ def drift_heldout(
 
     table = heldout_runs(input_dir, layers, seeds, workers, console.print)
     output.parent.mkdir(parents=True, exist_ok=True)
-    table.to_parquet(output, index=False)
+    table.write_parquet(output)
     console.print(f"[green]{len(table):,} rows[/green] → {output}")
 
 
@@ -921,7 +921,7 @@ def drift_direction(  # noqa: PLR0913
 
     table = assignment_runs(texts_dir, train_decades, test_decades, seeds, log=console.print)
     output.parent.mkdir(parents=True, exist_ok=True)
-    table.to_parquet(output, index=False)
+    table.write_parquet(output)
     console.print(f"[green]{len(table):,} rows[/green] → {output}")
 
 

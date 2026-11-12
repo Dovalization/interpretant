@@ -38,7 +38,7 @@ from pathlib import Path
 from typing import Protocol
 
 import numpy as np
-import pandas as pd
+import polars as pl
 
 from interpretant.drift.perplexity import MIN_VOCABULARY_COUNT, KneserNeyBigram, training_sample
 from interpretant.drift.separability import (
@@ -66,7 +66,7 @@ def assignment_runs(  # noqa: PLR0913
     seeds: Iterable[int],
     per_field: int = PER_FIELD,
     log: Callable[[str], None] = _ignore,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Train one classifier per seed and training decade, and apply it to the held-out
     abstracts of that decade and of every later test decade.
 
@@ -88,7 +88,7 @@ def assignment_runs(  # noqa: PLR0913
                     for row in assignment_shares(model, held_out[test_decade])
                 )
             log(f"  seed {seed}: {train_decade}s classifier applied")
-    return pd.DataFrame(rows)
+    return pl.DataFrame(rows)
 
 
 class FieldCosts(Protocol):
@@ -163,7 +163,7 @@ def frame_runs(  # noqa: PLR0913
     field: str = "hci",
     per_field: int = PER_FIELD,
     log: Callable[[str], None] = _ignore,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Fit one instrument per seed on ``early``'s training abstracts and score the held-out
     abstracts of ``early`` and ``late`` under every field's model: round N's samples, with the
     instrument as a parameter (:class:`ClassifierCosts` or :class:`LanguageModelCosts`).
@@ -193,7 +193,7 @@ def frame_runs(  # noqa: PLR0913
                 for row in others + cost_rows(instrument, {field: texts})
             )
         log(f"  seed {seed}: {early}s instrument scored the {early}s and {late}s")
-    return pd.DataFrame(rows)
+    return pl.DataFrame(rows)
 
 
 def planted_runs(  # noqa: PLR0913
@@ -206,7 +206,7 @@ def planted_runs(  # noqa: PLR0913
     planted_share: float = PLANTED_SHARE,
     per_field: int = PER_FIELD,
     log: Callable[[str], None] = _ignore,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """A move planted in real abstracts, all from one decade, for an instrument to find.
 
     Each seed's held-out abstracts are halved: the first half stands for the early decade, the
@@ -239,13 +239,13 @@ def planted_runs(  # noqa: PLR0913
             )
             rows.extend({"seed": seed, "cell": cell, "half": "late", **row} for row in late_rows)
         log(f"  seed {seed}: {decade}s instrument scored the planted halves")
-    return pd.DataFrame(rows)
+    return pl.DataFrame(rows)
 
 
-def cost_matrix(rows: pd.DataFrame) -> Costs:
+def cost_matrix(rows: pl.DataFrame) -> Costs:
     """Text field to model field to cost, from the rows of one seed, cell and test decade."""
     matrix: Costs = {}
-    for text, model, cost in zip(rows.text_field, rows.model_field, rows.cost, strict=True):
+    for text, model, cost in rows.select("text_field", "model_field", "cost").iter_rows():
         matrix.setdefault(str(text), {})[str(model)] = float(cost)
     return matrix
 
@@ -281,22 +281,22 @@ def relative_movement(
 
 
 def share(  # noqa: PLR0913
-    table: pd.DataFrame, seed: int, train: int, test: int, text: str, targets: tuple[str, ...]
+    table: pl.DataFrame, seed: int, train: int, test: int, text: str, targets: tuple[str, ...]
 ) -> float:
     """Share of ``text``'s held-out abstracts in ``test`` that the ``train`` classifier sends to
     any of ``targets``."""
-    rows = table[
-        (table.seed == seed)
-        & (table.train_decade == train)
-        & (table.test_decade == test)
-        & (table.text_field == text)
-        & (table.assigned_field.isin(targets))
-    ]
-    return float(rows.share.sum())
+    rows = table.filter(
+        pl.col("seed") == seed,
+        pl.col("train_decade") == train,
+        pl.col("test_decade") == test,
+        pl.col("text_field") == text,
+        pl.col("assigned_field").is_in(targets),
+    )
+    return float(rows.select(pl.col("share").sum()).item())
 
 
 def gain(  # noqa: PLR0913
-    table: pd.DataFrame, seed: int, train: int, test: int, text: str, targets: tuple[str, ...]
+    table: pl.DataFrame, seed: int, train: int, test: int, text: str, targets: tuple[str, ...]
 ) -> float:
     """Change in the share of ``text``'s abstracts sent to ``targets``, training to test decade."""
     return share(table, seed, train, test, text, targets) - share(
@@ -305,11 +305,11 @@ def gain(  # noqa: PLR0913
 
 
 def relative_gain(  # noqa: PLR0913
-    table: pd.DataFrame, seed: int, train: int, test: int, text: str, targets: tuple[str, ...]
+    table: pl.DataFrame, seed: int, train: int, test: int, text: str, targets: tuple[str, ...]
 ) -> float:
     """``text``'s gain towards ``targets`` minus the median gain towards them of every other
     field (neither ``text`` nor one of ``targets``)."""
-    fields = set(table.text_field.unique())
+    fields = set(table["text_field"].unique())
     others = sorted(fields - {text} - set(targets))
     baseline = statistics.median(gain(table, seed, train, test, other, targets) for other in others)
     return gain(table, seed, train, test, text, targets) - baseline

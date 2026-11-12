@@ -15,7 +15,7 @@ import random
 from collections.abc import Callable
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 import pytest
 
 from interpretant.drift.direction import (
@@ -92,27 +92,27 @@ def changing(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 
 @pytest.fixture(scope="module")
-def table(texts: Path) -> pd.DataFrame:
+def table(texts: Path) -> pl.DataFrame:
     return assignment_runs(texts, [1990], [2020], SEEDS, per_field=1_000)
 
 
 @pytest.fixture(scope="module")
-def costs(texts: Path) -> dict[str, pd.DataFrame]:
+def costs(texts: Path) -> dict[str, pl.DataFrame]:
     return {
         name: frame_runs(texts, 1990, 2020, SEEDS, fit=fit, per_field=1_000)
         for name, fit in INSTRUMENTS.items()
     }
 
 
-def values(table: pd.DataFrame, measure: object, text: str, target: str) -> list[float]:
+def values(table: pl.DataFrame, measure: object, text: str, target: str) -> list[float]:
     return [measure(table, seed, 1990, 2020, text, (target,)) for seed in SEEDS]  # type: ignore[operator]
 
 
 def movements(
-    table: pd.DataFrame, text: str, towards: tuple[str, ...], over: tuple[str, ...]
+    table: pl.DataFrame, text: str, towards: tuple[str, ...], over: tuple[str, ...]
 ) -> list[float]:
     def matrix(seed: int, decade: int) -> dict[str, dict[str, float]]:
-        return cost_matrix(table[(table.seed == seed) & (table.test_decade == decade)])
+        return cost_matrix(table.filter(pl.col("seed") == seed, pl.col("test_decade") == decade))
 
     return [
         relative_movement(matrix(seed, 1990), matrix(seed, 2020), text, towards, over)
@@ -120,16 +120,16 @@ def movements(
     ]
 
 
-def test_the_planted_move_is_present(table: pd.DataFrame) -> None:
+def test_the_planted_move_is_present(table: pl.DataFrame) -> None:
     assert present(values(table, relative_gain, "hci", "psychology"))
 
 
-def test_a_target_everyone_drifts_towards_fools_the_raw_gain_only(table: pd.DataFrame) -> None:
+def test_a_target_everyone_drifts_towards_fools_the_raw_gain_only(table: pl.DataFrame) -> None:
     assert present(values(table, gain, "psychology", "hci"))
     assert not present(values(table, relative_gain, "psychology", "hci"))
 
 
-def test_general_drift_moves_no_field_towards_another(table: pd.DataFrame) -> None:
+def test_general_drift_moves_no_field_towards_another(table: pl.DataFrame) -> None:
     for field in ("sociology", "philosophy", "linguistics"):
         assert not present(values(table, relative_gain, field, "psychology"))
 
@@ -142,14 +142,14 @@ def test_presence_needs_every_seed_positive_and_two_standard_deviations() -> Non
 
 @pytest.mark.parametrize("instrument", INSTRUMENTS)
 def test_the_contrast_finds_the_planted_move(
-    costs: dict[str, pd.DataFrame], instrument: str
+    costs: dict[str, pl.DataFrame], instrument: str
 ) -> None:
     assert present(movements(costs[instrument], "hci", ("psychology",), ("compsci",)))
 
 
 @pytest.mark.parametrize("instrument", INSTRUMENTS)
 def test_the_contrast_ignores_a_target_everyone_drifts_towards(
-    costs: dict[str, pd.DataFrame], instrument: str
+    costs: dict[str, pl.DataFrame], instrument: str
 ) -> None:
     for towards, over in ((("hci",), ("compsci",)), (("compsci",), ("hci",))):
         assert not present(movements(costs[instrument], "psychology", towards, over))
@@ -157,7 +157,7 @@ def test_the_contrast_ignores_a_target_everyone_drifts_towards(
 
 @pytest.mark.parametrize("instrument", INSTRUMENTS)
 def test_the_contrast_sees_no_move_in_general_drift(
-    costs: dict[str, pd.DataFrame], instrument: str
+    costs: dict[str, pl.DataFrame], instrument: str
 ) -> None:
     for text, towards, over in (
         ("sociology", ("psychology",), ("compsci",)),
@@ -217,12 +217,12 @@ def test_a_move_planted_in_one_decade_is_found_and_the_unplanted_halves_show_non
     )
 
     def found(cell: str, towards: tuple[str, ...], over: tuple[str, ...]) -> bool:
-        rows = table[table.cell == cell]
+        rows = table.filter(pl.col("cell") == cell)
         return present(
             [
                 relative_movement(
-                    cost_matrix(rows[(rows.seed == seed) & (rows.half == "early")]),
-                    cost_matrix(rows[(rows.seed == seed) & (rows.half == "late")]),
+                    cost_matrix(rows.filter(pl.col("seed") == seed, pl.col("half") == "early")),
+                    cost_matrix(rows.filter(pl.col("seed") == seed, pl.col("half") == "late")),
                     "hci",
                     towards,
                     over,
@@ -245,15 +245,19 @@ def test_frame_runs_replace_only_the_field_text_in_the_stable_cell(tmp_path: Pat
 
     table = frame_runs(tmp_path, 1990, 2020, [1], stable=stable, per_field=100)
 
-    whole, kept = table[table.cell == "whole"], table[table.cell == "stable"]
+    whole, kept = table.filter(pl.col("cell") == "whole"), table.filter(pl.col("cell") == "stable")
     columns = ["test_decade", "text_field", "model_field", "cost"]
-    others = whole[whole.text_field != "hci"][columns].reset_index(drop=True)
-    assert others.equals(kept[kept.text_field != "hci"][columns].reset_index(drop=True))
-    stable_hci = kept[kept.text_field == "hci"].groupby("test_decade").cost.apply(list)
-    psychology = kept[(kept.text_field == "psychology") & (kept.test_decade == 1990)]
+    others = whole.filter(pl.col("text_field") != "hci").select(columns)
+    assert others.equals(kept.filter(pl.col("text_field") != "hci").select(columns))
+    hci = kept.filter(pl.col("text_field") == "hci")
+    stable_hci = {
+        decade: hci.filter(pl.col("test_decade") == decade)["cost"].to_list()
+        for decade in (1990, 2020)
+    }
+    psychology = kept.filter(pl.col("text_field") == "psychology", pl.col("test_decade") == 1990)
     assert stable_hci[1990] == stable_hci[2020]
     assert len(stable_hci[1990]) == len(FIELDS)
-    assert psychology.model_field.tolist() == sorted(FIELDS)
+    assert psychology["model_field"].to_list() == sorted(FIELDS)
 
 
 def test_the_language_models_train_on_equal_budgets_and_send_each_field_home() -> None:

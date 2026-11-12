@@ -22,7 +22,7 @@ from collections import Counter
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_val_score
@@ -123,7 +123,7 @@ def separability_runs(  # noqa: PLR0913
     per_field: int = PER_FIELD,
     removed_terms: frozenset[str] = frozenset(),
     log: Callable[[str], None] = _ignore,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Pairwise accuracies and assignment shares for every seed and decade.
 
     With ``removed_terms``, the same samples are drawn and those terms are stripped from them
@@ -170,4 +170,4 @@ def separability_runs(  # noqa: PLR0913
                 {"seed": seed, "train_decade": early, "test_decade": late, **row}
                 for row in assignment_shares(models[early], held_out[late])
             )
-    return pd.DataFrame(pair_rows), pd.DataFrame(assignment_rows)
+    return pl.DataFrame(pair_rows), pl.DataFrame(assignment_rows)

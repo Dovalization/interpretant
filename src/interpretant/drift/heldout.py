@@ -16,7 +16,7 @@ from concurrent.futures import ProcessPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 
 from interpretant.drift.perplexity import KneserNeyBigram, read_cell, training_sample
 from interpretant.embedding.grid import discover_cells
@@ -94,7 +94,7 @@ def heldout_runs(
     seeds: Iterable[int],
     workers: int = WORKERS,
     log: Callable[[str], None] = _ignore,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Score every cell of the given layers once per seed; one row per seed and cell."""
     jobs = [
         (cell.layer, cell.name, cell.decade, cell.path, seed)
@@ -107,4 +107,4 @@ def heldout_runs(
             rows.append(row)
             cell = f"{row['layer']}/{row['field']}_{row['decade']}"
             log(f"  seed {row['seed']} {cell}: gap {row['gap']:.3f}")
-    return pd.DataFrame(rows)
+    return pl.DataFrame(rows)
