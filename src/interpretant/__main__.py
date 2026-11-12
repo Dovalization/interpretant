@@ -291,6 +291,67 @@ def corpus_lemmas() -> None:
     """Lemma map: collapse plurals and British spellings before phrase detection."""
 
 
+@corpus_lemmas.command("votes")
+@click.option(
+    "--raw-dir",
+    "raw_dirs",
+    type=click.Path(path_type=Path),
+    multiple=True,
+    default=(Path("data/raw/openalex"), Path("data/raw/openalex_full")),
+    show_default=True,
+)
+@click.option(
+    "--output",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed/lemma_votes.parquet"),
+    show_default=True,
+)
+@click.option("--workers", default=1, show_default=True, help="Processes running spaCy.")
+@click.option("--model", default="en_core_web_sm", show_default=True, help="spaCy pipeline.")
+@click.option("--gpu", is_flag=True, help="Run the pipeline on the GPU, in one process.")
+def corpus_lemmas_votes(
+    raw_dirs: tuple[Path, ...], output: Path, workers: int, model: str, gpu: bool
+) -> None:
+    """Tag every cleaned abstract once with spaCy and count each word type's readings and lemmas.
+
+    An abstract in several cells (a full cell holds its sample cell; a work can sit in two
+    fields) is tagged once, the first time its work id is seen.
+    """
+    from collections.abc import Iterator  # noqa: PLC0415
+
+    from interpretant.corpus.lemmas import lemma_votes, save_votes  # noqa: PLC0415
+    from interpretant.drift.senses import cased_abstracts  # noqa: PLC0415
+
+    cells = [
+        (raw_dir, path.parent.name, int(path.name.split(".")[0]))
+        for raw_dir in raw_dirs
+        for path in sorted(raw_dir.glob("*/*.jsonl.gz"))
+    ]
+    device = "the GPU" if gpu else f"{workers} CPU processes"
+    console.print(f"  {len(cells)} raw cells, {model} on {device}")
+    seen: set[str] = set()
+    repeats = 0
+
+    def texts() -> Iterator[str]:
+        nonlocal repeats
+        for raw_dir, field, decade in tqdm(cells, unit="cell"):
+            for work_id, abstract in cased_abstracts(raw_dir, field, decade):
+                if work_id in seen:
+                    repeats += 1
+                    continue
+                seen.add(work_id)
+                yield abstract
+
+    votes = lemma_votes(texts(), workers, model, gpu)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    save_votes(votes, output)
+    console.print(f"  {len(seen):,} abstracts tagged, {repeats:,} repeats skipped")
+    console.print(
+        f"[green]{sum(votes.values()):,} tokens, {len({key[0] for key in votes}):,} types[/green]"
+        f" → {output}"
+    )
+
+
 @corpus_lemmas.command("learn")
 @click.option(
     "--processed-dir",
@@ -319,10 +380,19 @@ def corpus_lemmas() -> None:
     show_default=True,
 )
 @click.option(
+    "--votes",
+    "votes_path",
+    type=click.Path(path_type=Path),
+    default=Path("data/processed/lemma_votes.parquet"),
+    show_default=True,
+    help="Output of `corpus lemmas votes`.",
+)
+@click.option(
     "--output",
     type=click.Path(path_type=Path),
-    default=Path("data/processed/lemmas.tsv"),
+    default=Path("data/processed/lemmas_voted.tsv"),
     show_default=True,
+    help="Kept apart from data/processed/lemmas.tsv, the map the frozen grid was built with.",
 )
 @click.option("--review", default=150, show_default=True, help="Most frequent mappings to print.")
 def corpus_lemmas_learn(  # noqa: PLR0913
@@ -330,10 +400,11 @@ def corpus_lemmas_learn(  # noqa: PLR0913
     sources: tuple[str, ...],
     words_file: Path,
     overrides_path: Path,
+    votes_path: Path,
     output: Path,
     review: int,
 ) -> None:
-    """Learn the type-level lemma map from every processed file and write it for review."""
+    """Learn the type-level lemma map from the processed files and spaCy's votes."""
     from collections import Counter  # noqa: PLC0415
 
     from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
@@ -341,6 +412,7 @@ def corpus_lemmas_learn(  # noqa: PLR0913
     from interpretant.corpus.lemmas import (  # noqa: PLC0415
         count_types,
         learn_lemma_map,
+        load_votes,
         read_overrides,
     )
 
@@ -348,7 +420,8 @@ def corpus_lemmas_learn(  # noqa: PLR0913
     console.print(f"  counting types in {len(paths)} files")
     counts = count_types(tqdm(paths, unit="file"))
     protected = set(load_target_words(words_file))
-    lemma_map = learn_lemma_map(counts, protected, read_overrides(overrides_path))
+    votes = load_votes(votes_path)
+    lemma_map = learn_lemma_map(counts, votes, protected, read_overrides(overrides_path))
     output.parent.mkdir(parents=True, exist_ok=True)
     lemma_map.save(output, counts)
     by_rule: Counter[str] = Counter()

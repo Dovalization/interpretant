@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import random
+from collections import Counter
 from pathlib import Path
 
 import polars as pl
@@ -15,6 +16,7 @@ from click.testing import CliRunner
 from gensim.models import KeyedVectors
 
 from interpretant.__main__ import cli
+from interpretant.corpus.lemmas import save_votes
 
 SHARED = ["the", "of", "and", "in", "a", "study", "model", "user", "system", "theory"]
 FIELD_WORDS = {
@@ -52,8 +54,11 @@ def test_pipeline_runs_from_processed_text_to_drift_tables(tmp_path: Path) -> No
     overrides.write_text("# none\n")
     texts = phrased / "openalex" / "texts"
 
+    votes = tmp_path / "votes.parquet"
+    save_votes(Counter({("interfaces", "NNS", "interface"): 9}), votes)
+
     run("corpus", "lemmas", "learn", "--processed-dir", processed, "--source", "openalex",
-        "--words-file", words, "--overrides", overrides,
+        "--words-file", words, "--overrides", overrides, "--votes", votes,
         "--output", processed / "lemmas.tsv")  # fmt: skip
     run("corpus", "lemmas", "apply", "--processed-dir", processed, "--source", "openalex",
         "--map", processed / "lemmas.tsv", "--output-dir", lemmatised)  # fmt: skip
