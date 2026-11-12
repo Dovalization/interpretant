@@ -16,7 +16,7 @@ against the past results.*
 4. **Checking the answers.** How do we know any of the above is right?
 
 Locating *when* a change happened, and in which field first, reuses the first three jobs on finer
-time windows.
+time windows. Where spaCy's features fit these jobs is in `docs/spacy.md`.
 
 ## The traps every method must survive
 
