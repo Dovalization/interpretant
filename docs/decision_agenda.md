@@ -470,11 +470,35 @@ the "Datasheets for Datasets" template (Gebru et al. 2018).
 | 3. Human review of samples | The author reads about 20 random abstracts per cell and records judgements (a real abstract? the right field? clean? did cleaning remove the right things?), plus samples of what each cleaning rule dropped | Curated |
 | 4. Sign-off | No rebuilt corpus is used for experiments until the datasheet and the review are read and approved, with the decision recorded | Curated |
 
-Decide: the review's sample size and form (a page of abstracts with a judgement per item, as in
-the earlier blind judging), and whether layer 3 runs on every rebuild or only when cleaning
-rules change.
+Decision (2026-11-12): layer 3 is sized to about an hour, as automatic as possible without
+losing quality, built on established audit methods: sampled audits of corpora with a fixed set
+of categories (Kreutzer et al. 2022, "Quality at a Glance"), auditing what filters removed as
+well as what they kept (Dodge et al. 2021, on C4), stratified random samples, the rule of three
+for zero-error samples, Wilson intervals, a codebook written before reading, blind repeats for a
+single reviewer, and Data Statements for NLP (Bender and Friedman 2018) beside the datasheet
+(these sources to be added to `related_work.md`).
 
-Decision:
+- **Automatic first:** language (lingua confidence), duplicates (MinHash), boilerplate (the
+  `SpanRuler` and template counts), malformed or cut-off abstracts (length, missing sentence
+  punctuation), and likely wrong-field abstracts (a scikit-learn field classifier trained on the
+  corpus flags abstracts it confidently assigns elsewhere; OpenAlex's field score fetched for
+  those if useful).
+- **Codebook, six categories:** valid abstract; wrong field (defined as clearly another
+  discipline, not merely interdisciplinary, since the fields overlap by design); not English or
+  mixed; boilerplate or junk; duplicate; truncated or malformed.
+- **First rebuild, about 350 judgements (about an hour, in sittings of about 15 minutes):** 130
+  random kept abstracts, about 12 per field; about 10 dropped items per removal rule (about
+  120); 80 automatically flagged abstracts (finding problems fast and testing whether the flags
+  can be trusted); 20 blind repeats. Later rebuilds drop to about 250 (no flagged items, no
+  repeats) or lower if the flags proved reliable.
+- **Thresholds set before reading:** junk or non-abstracts under 2% overall; wrong field under 5%
+  in every field; any removal rule with 2 or more good texts among its 10 dropped items gets a
+  closer look. Results are reported automatically (proportions with Wilson intervals) into the
+  datasheet; the author reads one summary.
+- **Judging page:** field, decade and the first 60 words of each abstract, the six categories on
+  keys 1–6, progress saved; adapted from `scripts/review/judge_template.html`.
+- **When:** the first rebuild, and again only when cleaning rules or sources change; otherwise
+  layers 1 and 2 only.
 
 ## Step 5: control words
 
