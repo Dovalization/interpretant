@@ -1,4 +1,4 @@
-"""Corpus audit: per-cell volume, target-word frequency and books-manifest risks.
+"""Corpus audit: per-cell volume and target-word frequency.
 
 A cell is one ``(layer, source, decade)`` processed text file: the same field and decade can
 exist in two layers (a main-grid sample and its full cell), so the layer is part of the key.
@@ -15,12 +15,8 @@ from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
-from interpretant.corpus.books import BooksSource
-
 FULL_LAYER = "openalex_full"
 _CELL_FILENAME = re.compile(r"^(?P<source>[a-z0-9]+)_(?P<decade>\d{4})\.txt$")
-# "Zimmern translation", "English translation (Baskin, 1959)"; not "inscription, translation".
-_TRANSLATION_NOTE = re.compile(r"\w+ translation\b", re.IGNORECASE)
 
 
 @dataclass
@@ -33,28 +29,6 @@ class CellStats:
     documents: int = 0
     tokens: int = 0
     target_counts: Counter[str] = field(default_factory=Counter)
-
-
-@dataclass(frozen=True)
-class BookFlag:
-    """A manifest entry whose dating misrepresents the English text it contributes."""
-
-    author: str
-    title: str
-    decade: str
-    year: int | None
-    reasons: tuple[str, ...]
-
-
-@dataclass(frozen=True)
-class AuthorConcentration:
-    """The single largest author's share of a decade's book words."""
-
-    decade: str
-    books: int
-    words: int
-    top_author: str
-    top_share: float
 
 
 def load_target_words(path: Path) -> list[str]:
@@ -130,74 +104,6 @@ def format_decade_ranges(decades: Iterable[int], step: int = 10) -> str:
     return ", ".join(str(run[0]) if len(run) == 1 else f"{run[0]}–{run[-1]}" for run in ranges)
 
 
-def _decade_start(label: str) -> int | None:
-    try:
-        return int(label.rstrip("s"))
-    except ValueError:
-        return None
-
-
-def flag_manifest_entries(entries: Iterable[dict[str, object]]) -> list[BookFlag]:
-    """Flag books filed outside their publication decade or dated by an untranslated original.
-
-    A translation contributes the translator's English, so dating it by the original's
-    year places that vocabulary in the wrong decade. An entry with a ``translator`` field
-    is already dated by its English edition.
-    """
-    flags: list[BookFlag] = []
-    for entry in entries:
-        decade_label = str(entry.get("decade", ""))
-        raw_year = entry.get("year")
-        year = raw_year if isinstance(raw_year, int) else None
-        reasons: list[str] = []
-
-        decade = _decade_start(decade_label)
-        if decade is None:
-            continue
-        if year is not None and year // 10 * 10 != decade:
-            reasons.append(f"filed in {decade_label} but dated {year}")
-        if "translator" not in entry and _TRANSLATION_NOTE.search(str(entry.get("notes", ""))):
-            reasons.append("translation dated by the original, not the English edition")
-
-        if reasons:
-            flags.append(
-                BookFlag(
-                    author=str(entry.get("author", "")),
-                    title=str(entry.get("title", "")),
-                    decade=decade_label,
-                    year=year,
-                    reasons=tuple(reasons),
-                )
-            )
-    return flags
-
-
-def author_concentration(
-    book_words: Iterable[tuple[str, str, int]],
-) -> list[AuthorConcentration]:
-    """Summarise each decade's largest author share from ``(decade, author, words)`` rows."""
-    words_by_decade: dict[str, Counter[str]] = {}
-    books_by_decade: Counter[str] = Counter()
-    for decade, author, words in book_words:
-        words_by_decade.setdefault(decade, Counter())[author] += words
-        books_by_decade[decade] += 1
-
-    summaries: list[AuthorConcentration] = []
-    for decade, author_words in sorted(words_by_decade.items()):
-        total = sum(author_words.values())
-        top_author, top_words = author_words.most_common(1)[0]
-        summaries.append(
-            AuthorConcentration(
-                decade=decade,
-                books=books_by_decade[decade],
-                words=total,
-                top_author=top_author,
-                top_share=top_words / total if total else 0.0,
-            )
-        )
-    return summaries
-
-
 @dataclass
 class CorpusAudit:
     """Everything ``corpus audit`` reports, built by :func:`audit_corpus`."""
@@ -207,9 +113,6 @@ class CorpusAudit:
     cells: list[CellStats]
     merged: dict[int, CellStats]
     reliable_transitions: dict[str, list[tuple[int, int]]]
-    author_concentration: list[AuthorConcentration]
-    book_flags: list[BookFlag]
-    missing_books: list[Path]
 
     def to_json(self) -> dict[str, object]:
         """The audit as JSON-ready data (the file ``figures`` and ``export web`` read)."""
@@ -219,29 +122,14 @@ class CorpusAudit:
                 {**asdict(cell), "target_counts": dict(cell.target_counts)} for cell in self.cells
             ],
             "reliable_transitions": self.reliable_transitions,
-            "author_concentration": [asdict(summary) for summary in self.author_concentration],
-            "book_flags": [asdict(flag) for flag in self.book_flags],
-            "missing_books": [str(path) for path in self.missing_books],
         }
 
 
-def audit_corpus(
-    processed_dir: Path, targets: list[str], books: BooksSource, min_occurrences: int
-) -> CorpusAudit:
-    """Count every cell under ``processed_dir`` and check the books manifest."""
+def audit_corpus(processed_dir: Path, targets: list[str], min_occurrences: int) -> CorpusAudit:
+    """Count every cell under ``processed_dir``."""
     cells = scan_processed(processed_dir, set(targets))
     # A full cell contains its main-grid sample, so counting both would count it twice.
     merged = merge_by_decade(cell for cell in cells if cell.layer != FULL_LAYER)
-    present, missing = books.validate()
-    book_words = [
-        (
-            str(entry.get("decade", "")),
-            str(entry.get("author", "")),
-            len(books.entry_path(entry).read_text(encoding="utf-8", errors="replace").split()),
-        )
-        for entry in present
-        if str(entry.get("decade", "")).endswith("0s")
-    ]
     return CorpusAudit(
         min_occurrences=min_occurrences,
         targets=targets,
@@ -250,7 +138,4 @@ def audit_corpus(
         reliable_transitions={
             word: reliable_transitions(merged, word, min_occurrences) for word in targets
         },
-        author_concentration=author_concentration(book_words),
-        book_flags=sorted(flag_manifest_entries(books.manifest()), key=lambda flag: flag.decade),
-        missing_books=[books.entry_path(entry) for entry in missing],
     )

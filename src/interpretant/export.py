@@ -24,7 +24,7 @@ from interpretant.corpus.audit import load_target_words
 from interpretant.drift.grid import MEASURE_MIN, NEIGHBOUR_MIN, NEIGHBOURS, discover_models
 from interpretant.visualization.figures import FIELD_LABELS
 
-LAYERS = ("books", "openalex", "openalex_full")
+LAYERS = ("openalex", "openalex_full")
 METHODS = {"twec": "model_dir", "ppmi": "ppmi_dir"}
 ROUNDS: dict[str, tuple[str, str]] = {
     "P": ("Round 1", "the trained models"),
@@ -225,7 +225,7 @@ def export_web(  # noqa: PLR0913
 
     within = pd.read_parquet(drift_dir / "within_field.parquet")
     cross = pd.read_parquet(drift_dir / "cross_field.parquet")
-    fields = sorted({cell["field"] for cell in cells if cell["layer"] != "books"})
+    fields = sorted({cell["field"] for cell in cells})
     _dump(
         output_dir / "corpus.json",
         {

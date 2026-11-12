@@ -28,151 +28,6 @@ def corpus() -> None:
     """Corpus loading and preprocessing commands."""
 
 
-@corpus.group("books")
-def corpus_books() -> None:
-    """Books corpus commands (PDF-extracted texts)."""
-
-
-@corpus_books.command("ingest")
-@click.option(
-    "--books-dir",
-    type=click.Path(path_type=Path),
-    default=Path("data/external/books"),
-    show_default=True,
-)  # noqa: E501
-@click.option(
-    "--output-dir", type=click.Path(path_type=Path), help="Override processed output dir."
-)  # noqa: E501
-@click.option("--start", default=1820, show_default=True, help="First decade (inclusive).")
-@click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
-@click.option(
-    "--author-cap",
-    default=250_000,
-    show_default=True,
-    help="Tokens per author per decade; larger authors contribute a seeded sample of chunks.",
-)
-@click.option(
-    "--leave-out-largest-author",
-    is_flag=True,
-    help="Drop each decade's largest author (leave-one-author-out check; use --output-dir).",
-)
-def corpus_books_ingest(  # noqa: PLR0913
-    books_dir: Path,
-    output_dir: Path | None,
-    start: int,
-    end: int,
-    author_cap: int,
-    leave_out_largest_author: bool,
-) -> None:
-    """Preprocess extracted book texts into decade-sliced token files, capping authors."""
-    from interpretant.corpus.books import BooksSource, ingest_books  # noqa: PLC0415
-
-    texts_dir = output_dir or Path("data/processed/books/texts")
-    console.print("[bold]Ingesting books corpus[/bold]")
-    console.print(f"  books dir  : {books_dir}")
-    console.print(f"  output dir : {texts_dir}")
-    console.print(f"  decades    : {start}–{end - 1}")
-    console.print(f"  author cap : {author_cap:,} tokens")
-    ingested = ingest_books(
-        BooksSource(books_dir),
-        texts_dir,
-        range(start, end, 10),
-        author_cap,
-        leave_out_largest_author,
-    )
-    table = Table(title="Books ingest results", show_lines=True)
-    table.add_column("Decade", style="cyan")
-    table.add_column("Books", justify="right")
-    table.add_column("Tokens", justify="right")
-    table.add_column("Left out" if leave_out_largest_author else "Largest author")
-    for decade in ingested:
-        table.add_row(
-            str(decade.decade), str(decade.books), f"{decade.tokens:,}", decade.largest_author
-        )
-    console.print(table)
-    console.print("[green]Done.[/green]")
-
-
-@corpus_books.command("validate")
-@click.option(
-    "--books-dir",
-    type=click.Path(path_type=Path),
-    default=Path("data/external/books"),
-    show_default=True,
-)  # noqa: E501
-def corpus_books_validate(books_dir: Path) -> None:
-    """Check all manifest entries are present on disk."""
-    from interpretant.corpus.books import BooksSource
-
-    source = BooksSource(books_dir=books_dir)
-    present, missing = source.validate()
-
-    table = Table(title="Books manifest validation", show_lines=True)
-    table.add_column("Status", style="green")
-    table.add_column("Author")
-    table.add_column("Title")
-    table.add_column("Decade", style="cyan")
-    table.add_column("File")
-    for entry in present:
-        table.add_row(
-            "✓",
-            str(entry["author"]),
-            str(entry["title"]),
-            str(entry["decade"]),
-            str(entry["filename"]),
-        )  # noqa: E501
-    for entry in missing:
-        table.add_row(
-            "[red]✗[/red]",
-            str(entry["author"]),
-            str(entry["title"]),
-            str(entry["decade"]),
-            str(entry["filename"]),
-        )  # noqa: E501
-    console.print(table)
-    console.print(f"[green]{len(present)} present[/green]  [red]{len(missing)} missing[/red]")
-
-
-@corpus_books.command("stats")
-@click.option(
-    "--books-dir",
-    type=click.Path(path_type=Path),
-    default=Path("data/external/books"),
-    show_default=True,
-)  # noqa: E501
-def corpus_books_stats(books_dir: Path) -> None:
-    """Show book counts per decade and manifest status."""
-    from interpretant.corpus.books import BooksSource
-
-    source = BooksSource(books_dir=books_dir)
-    stats = source.stats()
-
-    decade_table = Table(title="Books per decade (present files)", show_lines=True)
-    decade_table.add_column("Decade", style="cyan")
-    decade_table.add_column("Books (present/total)", justify="right")
-    decade_table.add_column("Words", justify="right")
-    manifest_entries = stats["manifest_entries"]
-    total_present = stats["total_books"]
-    per_decade: dict[str, dict[str, int]] = stats["per_decade"]  # type: ignore[assignment]
-    for label, counts in sorted(per_decade.items()):
-        decade_table.add_row(label, str(counts["books"]), f"{counts['words']:,}")
-    decade_table.add_row(
-        "[bold]Total[/bold]",
-        f"[bold]{total_present}/{manifest_entries}[/bold]",
-        "",
-    )
-    console.print(decade_table)
-
-    field_table = Table(title="Books per field (all manifest entries)", show_lines=True)
-    field_table.add_column("Field", style="magenta")
-    field_table.add_column("Books", justify="right")
-    per_field: dict[str, int] = stats["per_field"]  # type: ignore[assignment]
-    for field, count in sorted(per_field.items()):
-        field_table.add_row(field, str(count))
-    console.print(field_table)
-    console.print(f"Manifest entries: {manifest_entries}  Missing: {stats['missing']}")
-
-
 @corpus.group("openalex")
 def corpus_openalex() -> None:
     """OpenAlex abstract samples per field and decade (the field × decade grid)."""
@@ -333,9 +188,9 @@ def corpus_phrases() -> None:
     "--source",
     "sources",
     multiple=True,
-    default=("books", "openalex"),
+    default=("openalex",),
     show_default=True,
-    help="Processed sources to include (the main corpus is books and the OpenAlex grid).",
+    help="Processed sources to include (the main corpus is the OpenAlex grid).",
 )
 @click.option(
     "--tokens-per-file",
@@ -401,9 +256,9 @@ def corpus_phrases_learn(  # noqa: PLR0913
     "--source",
     "sources",
     multiple=True,
-    default=("books", "openalex"),
+    default=("openalex",),
     show_default=True,
-    help="Processed sources to include (the main corpus is books and the OpenAlex grid).",
+    help="Processed sources to include (the main corpus is the OpenAlex grid).",
 )
 @click.option(
     "--model",
@@ -447,7 +302,7 @@ def corpus_lemmas() -> None:
     "--source",
     "sources",
     multiple=True,
-    default=("books", "openalex", "openalex_full"),
+    default=("openalex", "openalex_full"),
     show_default=True,
 )
 @click.option(
@@ -529,7 +384,7 @@ def corpus_lemmas_learn(  # noqa: PLR0913
     "--source",
     "sources",
     multiple=True,
-    default=("books", "openalex", "openalex_full"),
+    default=("openalex", "openalex_full"),
     show_default=True,
 )
 @click.option(
@@ -572,12 +427,6 @@ def corpus_lemmas_apply(
     show_default=True,
 )  # noqa: E501
 @click.option(
-    "--books-dir",
-    type=click.Path(path_type=Path),
-    default=Path("data/external/books"),
-    show_default=True,
-)  # noqa: E501
-@click.option(
     "--min-occurrences",
     default=150,
     show_default=True,
@@ -587,11 +436,10 @@ def corpus_lemmas_apply(
 def corpus_audit(
     processed_dir: Path,
     words_file: Path,
-    books_dir: Path,
     min_occurrences: int,
     output: Path | None,
 ) -> None:
-    """Report cell volume, target-word coverage and books-manifest risks."""
+    """Report cell volume and target-word coverage."""
     import json  # noqa: PLC0415
 
     from interpretant.corpus.audit import (  # noqa: PLC0415
@@ -599,11 +447,8 @@ def corpus_audit(
         format_decade_ranges,
         load_target_words,
     )
-    from interpretant.corpus.books import BooksSource  # noqa: PLC0415
 
-    audit = audit_corpus(
-        processed_dir, load_target_words(words_file), BooksSource(books_dir), min_occurrences
-    )
+    audit = audit_corpus(processed_dir, load_target_words(words_file), min_occurrences)
     columns = sorted({(cell.layer, cell.source) for cell in audit.cells})
     tokens_by_cell = {(cell.layer, cell.source, cell.decade): cell.tokens for cell in audit.cells}
 
@@ -648,35 +493,6 @@ def corpus_audit(
             f"{min(counts, default=0):,}–{max(counts, default=0):,}",
         )
     console.print(coverage_table)
-
-    concentration_table = Table(title="Books: largest author per decade", show_lines=False)
-    concentration_table.add_column("Decade", style="cyan")
-    concentration_table.add_column("Books", justify="right")
-    concentration_table.add_column("Words (M)", justify="right")
-    concentration_table.add_column("Top author")
-    concentration_table.add_column("Share", justify="right")
-    for summary in audit.author_concentration:
-        share = f"{summary.top_share:.0%}"
-        concentration_table.add_row(
-            summary.decade,
-            str(summary.books),
-            f"{summary.words / 1e6:.2f}",
-            summary.top_author,
-            f"[red]{share}[/red]" if summary.top_share >= 0.25 else share,
-        )
-    console.print(concentration_table)
-
-    flag_table = Table(
-        title=f"Books: dating risks ({len(audit.book_flags)} entries)", show_lines=False
-    )
-    flag_table.add_column("Decade", style="cyan")
-    flag_table.add_column("Author")
-    flag_table.add_column("Title")
-    flag_table.add_column("Reasons")
-    for flag in audit.book_flags:
-        flag_table.add_row(flag.decade, flag.author, flag.title[:50], "; ".join(flag.reasons))
-    console.print(flag_table)
-    console.print(f"Manifest entries without a file on disk: {len(audit.missing_books)}")
 
     if output is not None:
         output.parent.mkdir(parents=True, exist_ok=True)
@@ -742,7 +558,7 @@ def twec() -> None:
     "--layer",
     "layers",
     multiple=True,
-    default=("books", "openalex"),
+    default=("openalex",),
     show_default=True,
     help="Main layers: they define the compass and the comparable grid.",
 )
@@ -830,7 +646,7 @@ def ppmi() -> None:
     "--layer",
     "layers",
     multiple=True,
-    default=("books", "openalex", "openalex_full"),
+    default=("openalex", "openalex_full"),
     show_default=True,
 )
 @click.option(
@@ -1034,7 +850,7 @@ def drift_separability(  # noqa: PLR0913
     "--layer",
     "layers",
     multiple=True,
-    default=("books", "openalex", "openalex_full"),
+    default=("openalex", "openalex_full"),
     show_default=True,
 )
 @click.option("--seed", "seeds", multiple=True, default=(1, 2, 3), show_default=True)
@@ -1212,8 +1028,8 @@ def drift_grid(  # noqa: PLR0913
 ) -> None:
     """Measure drift on the grid: within-field trajectories and cross-field divergence.
 
-    Writes within_field.parquet (each field's consecutive decades, including the books and
-    the full cells) and cross_field.parquet (every two OpenAlex fields in the same decade),
+    Writes within_field.parquet (each field's consecutive decades, including the full
+    cells) and cross_field.parquet (every two OpenAlex fields in the same decade),
     one row per word measured in a pair, with percentile ranks against the pair's
     whole-vocabulary noise floor and a candidate flag.
     """

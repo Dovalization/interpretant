@@ -6,15 +6,12 @@ from pathlib import Path
 
 from interpretant.corpus.audit import (
     audit_corpus,
-    author_concentration,
-    flag_manifest_entries,
     format_decade_ranges,
     load_target_words,
     merge_by_decade,
     reliable_transitions,
     scan_processed,
 )
-from interpretant.corpus.books import BooksSource
 
 TARGETS = {"network", "affordance"}
 
@@ -55,8 +52,8 @@ def test_scan_processed_ignores_files_outside_the_naming_scheme(tmp_path: Path) 
 
 def test_merge_by_decade_sums_sources(tmp_path: Path) -> None:
     _write_cell(tmp_path, "acl", 1990, ["network network"])
-    _write_cell(tmp_path, "books", 1990, ["network affordance"])
-    _write_cell(tmp_path, "books", 2000, ["affordance"])
+    _write_cell(tmp_path, "hci", 1990, ["network affordance"])
+    _write_cell(tmp_path, "hci", 2000, ["affordance"])
 
     merged = merge_by_decade(scan_processed(tmp_path, TARGETS))
 
@@ -66,9 +63,9 @@ def test_merge_by_decade_sums_sources(tmp_path: Path) -> None:
 
 
 def test_reliable_transitions_require_threshold_in_both_decades(tmp_path: Path) -> None:
-    _write_cell(tmp_path, "books", 1950, ["network " * 2])
-    _write_cell(tmp_path, "books", 1960, ["network " * 5])
-    _write_cell(tmp_path, "books", 1970, ["network " * 6])
+    _write_cell(tmp_path, "hci", 1950, ["network " * 2])
+    _write_cell(tmp_path, "hci", 1960, ["network " * 5])
+    _write_cell(tmp_path, "hci", 1970, ["network " * 6])
     merged = merge_by_decade(scan_processed(tmp_path, TARGETS))
 
     assert reliable_transitions(merged, "network", min_occurrences=5) == [(1960, 1970)]
@@ -80,67 +77,11 @@ def test_format_decade_ranges_compresses_consecutive_runs() -> None:
     assert format_decade_ranges([]) == ""
 
 
-def test_flag_manifest_entries_catches_misfiled_and_translated_books() -> None:
-    entries: list[dict[str, object]] = [
-        {"author": "Kant", "title": "Critique", "year": 1781, "decade": "1890s", "notes": ""},
-        {
-            "author": "Heidegger",
-            "title": "Being and Time",
-            "year": 1927,
-            "decade": "1920s",
-            "notes": "Macquarrie & Robinson translation.",
-        },
-        {"author": "James", "title": "Principles", "year": 1890, "decade": "1890s", "notes": ""},
-    ]
-
-    flags = flag_manifest_entries(entries)
-
-    assert [flag.author for flag in flags] == ["Kant", "Heidegger"]
-    assert flags[0].reasons == ("filed in 1890s but dated 1781",)
-    assert "translation" in flags[1].reasons[0]
-
-
-def test_flag_manifest_entries_accepts_translations_dated_by_english_edition() -> None:
-    entries: list[dict[str, object]] = [
-        {
-            "author": "Heidegger",
-            "title": "Being and Time",
-            "year": 1962,
-            "original_year": 1927,
-            "translator": "John Macquarrie and Edward Robinson",
-            "decade": "1960s",
-            "notes": "Macquarrie & Robinson translation.",
-        },
-        {"author": "Coleridge", "title": "Biographia", "year": 1817, "decade": "canon"},
-        {
-            "author": "Latour",
-            "title": "Science in Action",
-            "year": 1987,
-            "decade": "1980s",
-            "notes": "Black box, inscription, translation, obligatory passage points.",
-        },
-    ]
-
-    assert flag_manifest_entries(entries) == []
-
-
-def test_author_concentration_reports_top_share_per_decade() -> None:
-    rows = [("1890s", "James", 900), ("1890s", "Peirce", 100), ("1900s", "Bergson", 50)]
-
-    summaries = author_concentration(rows)
-
-    assert [summary.decade for summary in summaries] == ["1890s", "1900s"]
-    assert summaries[0].top_author == "James"
-    assert summaries[0].top_share == 0.9
-    assert summaries[0].books == 2
-    assert summaries[1].top_share == 1.0
-
-
 def test_audit_corpus_counts_cells_and_reports_json(tmp_path: Path) -> None:
     _write_cell(tmp_path, "hci", 1990, ["network network affordance"])
     _write_cell(tmp_path, "hci", 2000, ["network affordance"])
 
-    audit = audit_corpus(tmp_path, ["network"], BooksSource(tmp_path / "no_books"), 1)
+    audit = audit_corpus(tmp_path, ["network"], 1)
     report = audit.to_json()
 
     assert audit.reliable_transitions == {"network": [(1990, 2000)]}
@@ -163,7 +104,6 @@ def test_audit_corpus_counts_cells_and_reports_json(tmp_path: Path) -> None:
             "target_counts": {"network": 1},
         },
     ]
-    assert report["missing_books"] == []
 
 
 def test_audit_keeps_a_sample_and_its_full_cell_apart_and_counts_the_decade_once(
@@ -172,7 +112,7 @@ def test_audit_keeps_a_sample_and_its_full_cell_apart_and_counts_the_decade_once
     _write_cell(tmp_path, "hci", 2010, ["network"] * 2, layer="openalex")
     _write_cell(tmp_path, "hci", 2010, ["network"] * 7, layer="openalex_full")
 
-    audit = audit_corpus(tmp_path, ["network"], BooksSource(tmp_path / "no_books"), 1)
+    audit = audit_corpus(tmp_path, ["network"], 1)
 
     documents = {(cell.layer, cell.source): cell.documents for cell in audit.cells}
     assert documents == {("openalex", "hci"): 2, ("openalex_full", "hci"): 7}

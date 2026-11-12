@@ -199,8 +199,8 @@ def measure_grid(  # noqa: PLR0913
 ) -> dict[str, pd.DataFrame]:
     """Compare every within-field and cross-field pair of cell models under ``model_dir``.
 
-    Returns two tables keyed ``within_field`` (each field's consecutive decades in the books,
-    OpenAlex and full OpenAlex layers) and ``cross_field`` (every two OpenAlex fields in the
+    Returns two tables keyed ``within_field`` (each field's consecutive decades in the OpenAlex
+    and full OpenAlex layers) and ``cross_field`` (every two OpenAlex fields in the
     same decade): one row per word measured in a pair, ranked against the pair's noise
     floor, with ``is_target`` and ``is_control`` flags.
     """
@@ -214,7 +214,7 @@ def measure_grid(  # noqa: PLR0913
 
     pairs_by_table = {
         "within_field": within_field_pairs(
-            discover_models(model_dir, ("books", "openalex", "openalex_full"))
+            discover_models(model_dir, ("openalex", "openalex_full"))
         ),
         "cross_field": cross_field_pairs(discover_models(model_dir, ("openalex",))),
     }

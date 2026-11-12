@@ -1,13 +1,12 @@
 """Field × decade grid for TWEC: find the cells and build the compass's balanced sample.
 
-A cell is one phrased text file, ``<input_dir>/<layer>/texts/<name>_<decade>.txt``: a books
-decade (``books/texts/books_1890.txt``), an OpenAlex field and decade
-(``openalex/texts/philosophy_1990.txt``) or a full OpenAlex cell
+A cell is one phrased text file, ``<input_dir>/<layer>/texts/<name>_<decade>.txt``: an OpenAlex
+field and decade (``openalex/texts/philosophy_1990.txt``) or a full OpenAlex cell
 (``openalex_full/texts/hci_2010.txt``). Every cell gets its own model, trained against one
 shared compass, so any two cells are comparable.
 
 The compass is trained on the same token budget from every main cell, so the large
-2010s–2020s cells do not define the shared space for the 1850s or for philosophy.
+2010s–2020s cells do not define the shared space for the 1950s or for philosophy.
 """
 
 from __future__ import annotations

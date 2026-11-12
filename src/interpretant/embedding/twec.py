@@ -88,8 +88,9 @@ class TWECTrainer:
     Usage::
 
         trainer = TWECTrainer(vector_size=300, window=10, min_count=5, epochs=10)
-        trainer.train_compass([Path("data/processed/books/texts/books_1960.txt")])
-        kv = trainer.train_decade([Path("data/processed/books/texts/books_1960.txt")], decade=1960)
+        cell = Path("data/phrased/openalex/texts/philosophy_1960.txt")
+        trainer.train_compass([cell])
+        kv = trainer.train_decade([cell], decade=1960)
         kv.save("models/twec/1960.kv")
 
     The compass must be trained before any decade model.

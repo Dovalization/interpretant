@@ -14,14 +14,14 @@ def write(path: Path, text: str) -> None:
 
 def test_source_texts_lists_only_the_requested_sources(tmp_path: Path) -> None:
     write(tmp_path / "openalex" / "texts" / "hci_1990.txt", "a")
-    write(tmp_path / "books" / "texts" / "books_1890.txt", "b")
+    write(tmp_path / "acl" / "texts" / "acl_1990.txt", "b")
     write(tmp_path / "openalex_full" / "texts" / "hci_1990.txt", "c")
 
-    paths = source_texts(tmp_path, ("openalex", "books"))
+    paths = source_texts(tmp_path, ("openalex_full", "openalex"))
 
     assert [path.relative_to(tmp_path).as_posix() for path in paths] == [
-        "books/texts/books_1890.txt",
         "openalex/texts/hci_1990.txt",
+        "openalex_full/texts/hci_1990.txt",
     ]
 
 

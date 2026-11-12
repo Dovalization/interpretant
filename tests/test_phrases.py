@@ -40,7 +40,7 @@ def test_forced_phrase_targets_merge_even_when_never_seen() -> None:
 
 
 def test_sample_chunks_respects_the_token_budget(tmp_path: Path) -> None:
-    path = tmp_path / "books_1900.txt"
+    path = tmp_path / "hci_1990.txt"
     path.write_text(" ".join(["word"] * 2_500) + "\n" + " ".join(["other"] * 500) + "\n")
 
     chunks = sample_chunks(path, token_budget=1_200)

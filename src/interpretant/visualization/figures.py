@@ -38,7 +38,6 @@ from interpretant.visualization.style import (
 
 FIELD_LABELS: dict[str, str] = {
     "ai": "AI",
-    "books": "Books",
     "cogpsych": "Cognitive psychology",
     "communication": "Communication",
     "compsci": "Computer science",

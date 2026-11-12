@@ -63,7 +63,7 @@ def test_pipeline_runs_from_processed_text_to_drift_tables(tmp_path: Path) -> No
     run("corpus", "phrases", "apply", "--processed-dir", lemmatised, "--source", "openalex",
         "--model", lemmatised / "p.model", "--output-dir", phrased)  # fmt: skip
     run("corpus", "audit", "--processed-dir", phrased, "--words-file", words,
-        "--books-dir", tmp_path / "no_books", "--output", phrased / "audit.json")  # fmt: skip
+        "--output", phrased / "audit.json")  # fmt: skip
     run("twec", "grid", "--input-dir", phrased, "--output-dir", models, "--vector-size", "8",
         "--epochs", "1", "--workers", "1", "--min-count", "1",
         "--compass-tokens-per-cell", "2000")  # fmt: skip

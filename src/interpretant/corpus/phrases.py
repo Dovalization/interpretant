@@ -1,7 +1,7 @@
 """Phrase detection — merge multi-word terms into single tokens before training.
 
 One phrase model is learned from a balanced sample (the same token budget from every
-processed file, so the large modern cells do not decide the phrases of the 1850s) and
+processed file, so the large modern cells do not decide the phrases of the 1950s) and
 applied to every file, so a token means the same thing in every slice.
 
 Two rules protect the targets in ``data/words_of_interest.txt``:
@@ -11,7 +11,7 @@ Two rules protect the targets in ``data/words_of_interest.txt``:
 - phrase targets (``neural_network``) are always merged, even in cells where they are too
   rare to be learned.
 
-Learning also repairs words broken across lines in OCR'd books: a learned pair whose halves
+Learning also repairs words broken across lines in OCR'd text: a learned pair whose halves
 join into a frequent word (``lan guage``) is written as that word (``language``).
 """
 
@@ -39,8 +39,8 @@ def split_targets(targets: Iterable[str]) -> tuple[set[str], set[str]]:
 def sample_chunks(path: Path, token_budget: int, seed: int = 42) -> list[list[str]]:
     """Return random chunks of ``CHUNK_TOKENS`` tokens from a file, up to ``token_budget``.
 
-    Chunking makes books (one book per line) and abstracts (one abstract per line) comparable
-    units, so every file contributes the same amount of text.
+    Chunking makes long documents and short abstracts (one per line) comparable units, so
+    every file contributes the same amount of text.
     """
     chunks = [
         tokens[start : start + CHUNK_TOKENS]
