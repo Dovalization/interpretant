@@ -427,8 +427,9 @@ Decisions (2026-11-12):
   comparisons. The static outputs record the word-list version (the phrase rule of 3.5 makes the
   normalised text depend on it; step 9). Same-abstract controls (detection experiment 2) are
   drawn from the abstracts table when needed, not listed. `longlist.json` is kept as data and
-  `scripts/discovery/` deleted, the long list regenerated from the rebuilt grid. *component*,
-  *having* and the six-word shortlist get roles after checking their history. Cap values are set
+  `scripts/discovery/` deleted, the long list regenerated from the rebuilt grid. *component*
+  and *having* are stable checks (check 2b's author-judged words, 7.1); the six-word shortlist
+  gets a role after checking its history. Cap values are set
   after steps 5 and 6.
 - 4.8: downloads are a curated decision, not a pipeline step. The pipeline reports gaps (word,
   field, decade, usable usages, OpenAlex's total of abstracts containing the word, estimated
@@ -679,7 +680,22 @@ Decision (2026-11-12), after checking the literature and the tools:
 - Cue words move to the spaCy `Matcher`.
 - Settles the step 1b scripts marked "decide with step 7".
 
-Decision:
+Decisions (2026-11-12):
+
+- 7.1: the first set is eight words with reviewed lists: documented changes *attention*,
+  *network*, *platform*, *alignment* (`corpus_v2.toml` and its working draft); arriving senses
+  *prompt* (the anachronism test) and *hallucination* (`round_a_prime.toml`); stable checks
+  *component* and *having*, the check 2b words whose pairs the author judged, with no documented
+  change. Second wave: *transformer*, *embedding*, *cloud*, and the held-out set of step 6, where
+  counting is confirmed (the documented changes are development material here too). Fixes from
+  checking the lists against steps 2–4: cues written for split hyphens (*attention*'s `<<self`,
+  `<<head`) stop working when hyphenated words stay whole, so compounds recorded in 4.2 become
+  cues when cues move to spaCy's `Matcher`; counting uses every reading a list covers (*prompt*'s
+  adjective and verb senses), while the intended-reading flag of 4.1 serves detection; the word
+  list gains a match-by-form option, since *having* is a form, not a lemma (its reading: verb or
+  auxiliary); *network* gains its own actor-network sense (Latour, Callon, Law; 214 uses),
+  identified by the compound and kept separable, added to `corpus_v4_draft.toml` with the social
+  sense excluding its cues (the frozen version 2 is unchanged).
 
 ## Step 8: code layout (follows from steps 1–7)
 

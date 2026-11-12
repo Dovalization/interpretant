@@ -2,6 +2,8 @@
 # prompt's fixes (faulty adjective cues removed, interface and dialogue prompts seeded as cues
 # to a person, modal verb cues, and the PROMPT ontology tool out of scope), plus cues mined from pre-2020
 # computing contexts for prompt's cue-to-a-person and adjective senses.
+# Added 2026-11-12 (the author's decision): network's actor-network sense, with social
+# networks excluding its cues.
 # Cue words: lowercase whole words that signal the sense within five words of the target;
 # "<word" counts only before the target, ">word" only after it; "<<word" and ">>word" only
 # as the word right next to it. "!word" is an exclusion: when it appears within five words,
@@ -110,7 +112,13 @@ cues = ["<<computer", "<<telephone", "packet", "routing", "protocol", "protocols
 key = "social_network"
 definition = "A network of people, groups or organisations and their relations"
 example = "Migrants rely on kinship networks to find work."
-cues = ["social", "<<personal", "kinship", "friendship", "<<professional", "ties", "actors", "organizations", "informal"]
+cues = ["social", "<<personal", "kinship", "friendship", "<<professional", "ties", "actors", "organizations", "informal", "!actor", "!latour", "!callon"]
+
+[[network.senses]]
+key = "actor_network"
+definition = "An actor-network: the networks of human and non-human actors (people, technologies, documents, organisms) described by actor-network theory, after Latour, Callon and Law"
+example = "Following actor-network theory, we trace how the platform enrols developers and users."
+cues = ["<<actor", "latour", "callon"]
 
 [[network.senses]]
 key = "knowledge_or_conceptual_network"
