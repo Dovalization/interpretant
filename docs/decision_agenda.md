@@ -896,7 +896,31 @@ tests/            mirrors src/
 - Outputs that depend on the word list (the static normalised text, through 3.5's phrase rule)
   record its version.
 
-Decision:
+Decision (2026-11-12): **DVC** for pipelines and provenance, after comparing it with Snakemake
+(runs steps, no data versioning or lock file), Kedro (a full framework to restructure around),
+Hydra (configuration only; pydantic settings already exist), MLflow (experiment tracking at a
+scale the Markdown reports cover) and a manifest of the project's own (a re-implementation).
+
+- `dvc.yaml` lists the stages, one per module in `pipelines/`: each stage's command is the CLI
+  (`interpretant build-corpus`, …), its dependencies the data, the `curated/` files and the code,
+  its outputs what it writes.
+- Settings live in parameter files DVC tracks (`params.yaml` or TOML), loaded by the pipelines'
+  pydantic settings objects, so a changed seed or cap reruns exactly the stages that use it.
+- `dvc repro` replaces every "skip if the file exists" check (downloads, the compass, cells,
+  shards, caches).
+- `dvc.lock`, committed, is the provenance record: hashes of each output's inputs, settings and
+  code; reports cite the commit and the lock entry they came from; it records the word-list
+  version, since `curated/word_list.tsv` is a dependency of the stages that read it (replacing
+  `storage/provenance.py`'s planned role, which shrinks to reading the lock for reports).
+- Raw downloads are versioned with DVC.
+- Large data: the cache links outputs with reflinks (copy-on-write; APFS on the Mac and btrfs on
+  bazzite support them), so it does not double disk use; huge regenerable outputs may be
+  `cache: false`.
+- No remote at first; an SSH remote (`dvc-ssh`) to move data between the Mac and bazzite is added
+  when the rebuild needs the GPU.
+- Caveats noted: stewardship moved from Iterative to lakeFS, releases have slowed (last March
+  2026); if DVC were abandoned, the pipelines still run as CLI commands and only the rerun logic
+  and lock file would need replacing.
 
 ## Step 10: terminology pass (later)
 
