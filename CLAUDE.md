@@ -72,8 +72,8 @@ analysis: predictions first, in their own commit.
 
 `src/interpretant/`
 
-- `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift`, `export`, `figures`, `pdf`,
-  `app`). Commands parse options, call one library function and print; the loops (ingest,
+- `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift`, `export`, `figures`).
+  Commands parse options, call one library function and print; the loops (ingest,
   grid training, drift, cross-perplexity, figures) live in the library with tests.
 - `corpus/`: `books.py` (manifest + extracted texts, author cap, `ingest_books`),
   `openalex.py` (API client, sampling, cleaning at ingest, `ingest_fields`), `files.py`
@@ -81,8 +81,7 @@ analysis: predictions first, in their own commit.
   `caps.py` (author caps), `lemmas.py` (type-level plural and spelling map), `phrases.py`
   (gensim `Phrases` on a balanced sample),
   `preprocessing.py` (`preprocess_text`, target variant map), `audit.py` (cell counts, target
-  coverage, manifest risks; `audit_corpus`), `pdf_extractor.py` (Docling with PyMuPDF
-  fallback).
+  coverage, manifest risks; `audit_corpus`).
 - `embedding/`: `base.py` (`training_sentences`: splits lines at 10,000 tokens, gensim's
   silent truncation limit), `twec.py` (`TWECTrainer`: balanced compass, frozen context
   vectors per cell), `grid.py` (cell discovery, compass sample, `train_twec_grid`,

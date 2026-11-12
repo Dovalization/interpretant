@@ -176,7 +176,6 @@ uv run python scripts/score_predictions.py
 | OpenAlex API           | Field × decade abstract samples                        |
 | `pandas` / `pyarrow`   | Drift and cross-perplexity tables                     |
 | `matplotlib`           | Figures                                               |
-| `Docling` / `PyMuPDF`  | PDF extraction for the books corpus                   |
 | `Ruff`, `mypy` (strict), `pytest` | Linting, type checking, tests (synthetic fixtures, no real NLP in the suite) |
 
 ---
