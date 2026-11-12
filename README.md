@@ -172,7 +172,6 @@ git log --oneline -- scripts/score_predictions.py
 | `gensim`               | Word2Vec training (TWEC compass and cell models), phrase detection |
 | `scipy`                | PPMI-SVD (sparse SVD)                                 |
 | OpenAlex API           | Field × decade abstract samples                        |
-| `pyarrow`              | Arrow and Parquet support                             |
 | `PyTorch` / `transformers` | Contextual encoders (XL-LEXEME, DeBERTa-v3-large) for the vector store |
 | `scikit-learn`         | Sense classifier, cross-validation                    |
 | `spaCy` (`en_core_web_sm`, `en_core_web_trf`) | Sentences, part of speech, lemmas and named entities of target occurrences |
