@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Protocol
 
 import numpy as np
-import pandas as pd
+import polars as pl
 from scipy.spatial.distance import jensenshannon
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
@@ -336,7 +336,7 @@ def sense_runs(
     sampling: Sampling = ROUND_C,
     sense_range: Iterable[int] = SENSE_RANGE,
     log: Callable[[str], None] = print,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Sample, encode and cluster every word's occurrences in every seed.
 
     An occurrence drawn in several seeds is encoded once. One row per seed, word and
@@ -375,24 +375,32 @@ def sense_runs(
                 for occurrence, label, distance in zip(occurrences, labels, distances, strict=True)
             )
             log(f"  {word}, seed {seed}: {len(occurrences):,} occurrences, {len(centres)} senses")
-    return pd.DataFrame(rows)
+    return pl.DataFrame(rows)
 
 
-def sense_shares(rows: pd.DataFrame) -> pd.DataFrame:
+def sense_shares(rows: pl.DataFrame) -> pl.DataFrame:
     """Each cell's share of its occurrences in every sense, from one seed and word's rows;
-    senses a cell never uses get a zero."""
-    counts = rows.groupby(["field", "decade", "sense"]).size().unstack(fill_value=0)
-    counts = counts.reindex(columns=range(int(rows.senses.iloc[0])), fill_value=0)
-    shares = counts.div(counts.sum(axis=1), axis=0)
-    return shares.reset_index().melt(
-        id_vars=["field", "decade"], var_name="sense", value_name="share"
+    senses a cell never uses get a zero. Rows run sense by sense, cells in order within each."""
+    cell = ["field", "decade"]
+    grid = (
+        rows.select(cell)
+        .unique()
+        .join(pl.DataFrame({"sense": range(int(rows["senses"][0]))}), how="cross")
+    )
+    counts = rows.group_by(*cell, "sense").len("count")
+    return (
+        grid.join(counts, on=[*cell, "sense"], how="left")
+        .with_columns(pl.col("count").fill_null(0))
+        .with_columns(share=pl.col("count") / pl.col("count").sum().over(cell))
+        .sort("sense", *cell)
+        .select(*cell, "sense", "share")
     )
 
 
-def distribution(shares: pd.DataFrame, field: str, decade: int) -> np.ndarray:
+def distribution(shares: pl.DataFrame, field: str, decade: int) -> np.ndarray:
     """One cell's sense distribution, ordered by sense."""
-    cell = shares[(shares.field == field) & (shares.decade == decade)].sort_values("sense")
-    return cell.share.to_numpy()
+    cell = shares.filter(pl.col("field") == field, pl.col("decade") == decade).sort("sense")
+    return cell["share"].to_numpy()
 
 
 def jensen_shannon(first: np.ndarray, second: np.ndarray) -> float:
@@ -400,11 +408,11 @@ def jensen_shannon(first: np.ndarray, second: np.ndarray) -> float:
     return float(jensenshannon(first, second, base=2) ** 2)
 
 
-def context_words(rows: pd.DataFrame, sense: int, top: int = 10, min_count: int = 5) -> list[str]:
+def context_words(rows: pl.DataFrame, sense: int, top: int = 10, min_count: int = 5) -> list[str]:
     """The words most over-represented in one sense's contexts against the other senses',
     by smoothed log ratio of relative frequencies, among words seen at least ``min_count``
     times in the sense. The word itself is left out."""
-    word = str(rows.word.iloc[0]).lower()
+    word = str(rows["word"][0]).lower()
 
     def counts(contexts: Iterable[str]) -> Counter[str]:
         found: Counter[str] = Counter()
@@ -412,8 +420,8 @@ def context_words(rows: pd.DataFrame, sense: int, top: int = 10, min_count: int 
             found.update(token for token in _TOKEN.findall(context.lower()) if token != word)
         return found
 
-    inside = counts(rows[rows.sense == sense].context)
-    outside = counts(rows[rows.sense != sense].context)
+    inside = counts(rows.filter(pl.col("sense") == sense)["context"])
+    outside = counts(rows.filter(pl.col("sense") != sense)["context"])
     inside_total, outside_total = sum(inside.values()) + 1, sum(outside.values()) + 1
     scores = {
         token: math.log((count + 1) / inside_total) - math.log((outside[token] + 1) / outside_total)
@@ -423,7 +431,8 @@ def context_words(rows: pd.DataFrame, sense: int, top: int = 10, min_count: int 
     return sorted(scores, key=lambda token: (-scores[token], token))[:top]
 
 
-def examples(rows: pd.DataFrame, sense: int, top: int = 10) -> list[str]:
-    """The contexts nearest one sense's centre, from one seed and word's rows."""
-    nearest = rows[rows.sense == sense].nsmallest(top, "distance")
-    return nearest.context.tolist()
+def examples(rows: pl.DataFrame, sense: int, top: int = 10) -> list[str]:
+    """The contexts nearest one sense's centre, from one seed and word's rows; among equal
+    distances the earlier row comes first."""
+    nearest = rows.filter(pl.col("sense") == sense).sort("distance", maintain_order=True)
+    return nearest.head(top)["context"].to_list()

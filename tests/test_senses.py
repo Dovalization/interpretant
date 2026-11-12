@@ -15,7 +15,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 
 from interpretant.drift.senses import (
@@ -159,13 +159,14 @@ def test_the_new_sense_is_found_in_ai_and_psychology_does_not_change(
         abstracts, ["attention"], [1, 2], encoder, sampling=Sampling(cap=30), log=lambda _: None
     )
 
-    rows = table[table.seed == 1]
+    rows = table.filter(pl.col("seed") == 1)
     shares = sense_shares(rows)
-    assert set(table.senses) == {2}
+    assert set(table["senses"]) == {2}
     assert jensen_shannon(distribution(shares, "ai", 1990), distribution(shares, "ai", 2020)) > 0.9
     psychology = [distribution(shares, "psychology", decade) for decade in (1990, 2020)]
     assert jensen_shannon(*psychology) < 0.01
-    mechanism = int(rows[(rows.field == "ai") & (rows.decade == 2020)].sense.mode()[0])
+    ai_2020 = rows.filter(pl.col("field") == "ai", pl.col("decade") == 2020)
+    mechanism = int(ai_2020["sense"].mode().sort()[0])
     assert set(context_words(rows, mechanism, top=4)) == set(MECHANISM)
     assert all(
         any(cue in context for cue in MECHANISM) for context in examples(rows, mechanism, top=5)
@@ -187,7 +188,7 @@ def test_an_occurrence_drawn_in_several_seeds_is_encoded_once(
 
 def test_shares_fill_unused_senses_with_zero_and_sum_to_one() -> None:
     occurrences = [("ai", 1990, 0), ("ai", 1990, 0), ("ai", 2020, 1), ("ai", 2020, 2)]
-    rows = pd.DataFrame(
+    rows = pl.DataFrame(
         [{"field": f, "decade": d, "sense": s, "senses": 3} for f, d, s in occurrences]
     )
 

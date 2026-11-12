@@ -991,7 +991,7 @@ def drift_senses(  # noqa: PLR0913
     sense_range = (senses,) if senses else SENSE_RANGE
     table = sense_runs(abstracts, words, seeds, encoder, sampling, sense_range, log=console.print)
     output.parent.mkdir(parents=True, exist_ok=True)
-    table.to_parquet(output, index=False)
+    table.write_parquet(output)
     console.print(f"[green]{len(table):,} rows[/green] → {output}")
 
 
