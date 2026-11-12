@@ -747,6 +747,20 @@ Decisions (2026-11-12):
   *attention*), error rates are estimated per period (guarded by 7.3's per-period scoring).
   Reference for intervals: *Learning to Quantify* (Esuli, Fabris, Moreo and Sebastiani 2023, open
   access). To add to `related_work.md`: these sources.
+- 7.5: one Claude labelling path (the Message Batches API `BatchLabeller`; the command-line
+  `Labeller` is deleted); one divergence function (scipy's Jensen-Shannon); one sense-list
+  format (the corpus format: keys, definitions, examples, cues, exclusions), into which the
+  final lists are written before the author labels (7.2). The step 1b scripts left for step 7
+  are superseded and go once their results are in `docs/experiments.md`:
+  `score_labels_classifier`, `score_labels_corpus`, `score_labels_head_to_head`,
+  `score_labels_known`, `finetune_classifier` and `dev_harness` (its last experiment, decade-
+  balanced weights and temperature scaling, committed first as a record); `scripts/review/` goes
+  once the keystroke judging page (4b, 7.2) exists, adapted from its template.
+- 7.6: the counters are used as they are first; fine-tuning (XL-LEXEME's top layers, or a
+  trained bi-encoder) only if they fall short on the author's labels, since labels are few and
+  fine-tuning risks learning the era again.
+
+Step 7 decided (2026-11-12).
 
 ## Step 8: code layout (follows from steps 1–7)
 
