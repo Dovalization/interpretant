@@ -9,7 +9,7 @@ export interface NeighbourColumn {
   words: string[];
 }
 
-export const LAYERS: readonly Layer[] = ["openalex", "openalex_full", "books"];
+export const LAYERS: readonly Layer[] = ["openalex", "openalex_full"];
 export const METHODS: readonly Method[] = ["twec", "ppmi"];
 export const NEIGHBOUR_COUNTS = [12, 25] as const;
 
@@ -23,16 +23,11 @@ export const fieldsInLayer = (data: WordData, layer: Layer, method: Method): str
       .map((entry) => entry.field),
   ).sort();
 
-/**
- * The research layer (main grid or full cells) with the most neighbour lists for the word.
- * Books open first only when no research cell measures the word: the findings live in the
- * research layers, and the books' long series would otherwise win on count alone.
- */
+/** The layer (main grid or full cells) with the most neighbour lists for the word. */
 export const defaultLayer = (data: WordData): Layer => {
   const lists = (layer: Layer): number =>
     data.neighbours.filter((entry) => entry.layer === layer && entry.method === "twec").length;
-  const research: Layer = lists("openalex_full") > lists("openalex") ? "openalex_full" : "openalex";
-  return lists(research) === 0 && lists("books") > 0 ? "books" : research;
+  return lists("openalex_full") > lists("openalex") ? "openalex_full" : "openalex";
 };
 
 /** Up to two fields: the ones with the most candidate transitions, then the most cells. */

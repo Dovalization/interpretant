@@ -6,7 +6,6 @@
 
 export const FIELD_LABELS: Record<string, string> = {
   ai: "AI",
-  books: "Books",
   cogpsych: "Cognitive psychology",
   communication: "Communication",
   compsci: "Computer science",
@@ -52,7 +51,6 @@ export const decadeLabel = (decade: number): string => `${decade}s`;
 export const LAYER_LABELS = {
   openalex: "Main grid",
   openalex_full: "Full cells",
-  books: "Books",
 } as const;
 
 export const METHOD_LABELS = {

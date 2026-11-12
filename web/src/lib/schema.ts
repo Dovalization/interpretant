@@ -2,7 +2,7 @@ import { z } from "zod";
 
 /** Mirrors the shapes written by `interpretant export web` (src/interpretant/export.py). */
 
-export const LayerSchema = z.enum(["books", "openalex", "openalex_full"]);
+export const LayerSchema = z.enum(["openalex", "openalex_full"]);
 export type Layer = z.infer<typeof LayerSchema>;
 
 export const MethodSchema = z.enum(["twec", "ppmi"]);

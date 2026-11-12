@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const TIER_NOTES: Record<string, string> = {
   core: "Measurable across most of the field × decade grid.",
   "late arrivals": "Each series starts in the first decade where the word reaches 150 occurrences.",
-  "context only": "Everyday senses dominate; read in the books and communication cells.",
+  "context only": "Everyday senses dominate; read in the communication cells.",
   "phrase targets": "Always merged by phrase detection, so the phrase gets its own vectors.",
 };
 

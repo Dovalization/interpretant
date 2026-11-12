@@ -224,6 +224,8 @@ def export_web(  # noqa: PLR0913
             log(f"  {method} {cell.layer}/{cell.name}_{cell.decade}")
 
     within = pd.read_parquet(drift_dir / "within_field.parquet")
+    # Drift tables measured before the books layer was retired still hold its rows.
+    within = within[within.layer.isin(LAYERS)]
     cross = pd.read_parquet(drift_dir / "cross_field.parquet")
     fields = sorted({cell["field"] for cell in cells})
     _dump(

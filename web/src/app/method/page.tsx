@@ -52,8 +52,7 @@ export default function MethodPage() {
           eleven fields that share one topic taxonomy, 1950s to 2020s. Only research prose is kept;
           duplicates, catalogue records, scraped pages and non-English text are removed, and no
           author may exceed 1% of a cell. Where a word is too rare for a sample, its home field is
-          taken in full (philosophy, HCI). Books, 358 canonical titles dated by their English
-          edition, carry the decades before 1950.
+          taken in full (philosophy, HCI).
         </p>
         <p>
           Regular plurals and British spellings are collapsed before training; verbs, participles
@@ -66,7 +65,7 @@ export default function MethodPage() {
         <p>
           Word2Vec models trained separately share no coordinate system. TWEC trains a compass
           first, here on the same token budget from every cell so that large recent cells do not
-          define the space for the 1850s, and then trains each cell&apos;s model with the
+          define the space for the 1950s, and then trains each cell&apos;s model with the
           compass&apos;s context vectors frozen. Every cell lands in one space, so a word can be
           compared across decades within a field and across fields within a decade. A count-based
           PPMI-SVD model per cell is the second method.

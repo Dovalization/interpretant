@@ -33,9 +33,6 @@ export default function HomePage() {
   const predictions = getPredictions();
   const grid = corpus.cells.filter((cell) => cell.layer === "openalex");
   const abstracts = grid.reduce((sum, cell) => sum + (cell.documents ?? 0), 0);
-  const bookTokens = corpus.cells
-    .filter((cell) => cell.layer === "books")
-    .reduce((sum, cell) => sum + cell.tokens, 0);
   const scored = predictions.predictions.filter((prediction) => prediction.verdict);
   const passed = scored.filter((prediction) => prediction.verdict === "passed").length;
   const fields = corpus.fields.map((field) => field.slug);
@@ -45,10 +42,10 @@ export default function HomePage() {
       <div className="flex flex-col gap-6">
         <ArticleMeta title="How fields change what they do with a word" />
         <p className="max-w-prose text-lg text-muted-foreground">
-          One word-embedding model per field and decade, trained on a grid of research abstracts and
-          two centuries of canonical books, in one shared space. Every word&apos;s movement is
-          judged against the movement of the whole vocabulary, and every claim is tested against
-          predictions committed to git before the evidence existed.
+          One word-embedding model per field and decade, trained on a grid of research abstracts, in
+          one shared space. Every word&apos;s movement is judged against the movement of the whole
+          vocabulary, and every claim is tested against predictions committed to git before the
+          evidence existed.
         </p>
       </div>
 
@@ -56,7 +53,7 @@ export default function HomePage() {
         stats={[
           { label: "Fields", value: fields.length, detail: "one OpenAlex taxonomy" },
           { label: "Abstracts", value: compact.format(abstracts), detail: "1950s to 2020s" },
-          { label: "Book tokens", value: compact.format(bookTokens), detail: "1820s to 2020s" },
+          { label: "Target words", value: words.length, detail: "fixed before training" },
           {
             label: "Predictions",
             value: `${passed} / ${scored.length}`,
@@ -131,7 +128,7 @@ export default function HomePage() {
       <FigurePanel
         heading="The corpus is a grid"
         subheading="Research abstracts per field and decade cell after cleaning, sampled to 10,000 per cell"
-        legend="OpenAlex, a seeded sample of English research prose; duplicates, catalogue records, scraped pages and non-English text removed; no author above 1% of a cell. Philosophy and HCI also have full cells, and the books carry the decades before 1950."
+        legend="OpenAlex, a seeded sample of English research prose; duplicates, catalogue records, scraped pages and non-English text removed; no author above 1% of a cell. Philosophy and HCI also have full cells."
       >
         <CorpusGrid
           cells={grid}

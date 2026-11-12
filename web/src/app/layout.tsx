@@ -23,7 +23,7 @@ const newsreader = Newsreader({
 });
 
 const description =
-  "How academic fields change what they do with a word: per-field, per-decade embeddings and cross-perplexity on research abstracts and canonical books, tested against pre-registered predictions.";
+  "How academic fields change what they do with a word: per-field, per-decade embeddings and cross-perplexity on research abstracts, tested against pre-registered predictions.";
 
 export const metadata: Metadata = {
   title: { default: "interpretant", template: "%s · interpretant" },
