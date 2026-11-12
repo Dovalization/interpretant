@@ -829,9 +829,9 @@ Decision:
 ## Housekeeping (outside the steps)
 
 - [x] pyarrow: nothing imported it and nothing else depended on it; removed (2026-11-12).
-- [ ] Uncommitted loose files: the earlier changes to `scripts/dev_harness.py` (its fate is step
-  7), `data/sense_lists/round_a_prime_v2_draft.toml`, the untracked round E and round Q label
-  files.
+- [ ] Uncommitted loose files: `data/sense_lists/round_a_prime_v2_draft.toml`, the untracked
+  round E and round Q label files. (`scripts/dev_harness.py`'s changes were committed as a record,
+  `fdf83cc`.)
 - [x] Commit this agenda, `pipeline_map.md`, the four design drafts and the code review
   (2026-11-12).
 - [ ] Push: the local commits wait for the author's go.
