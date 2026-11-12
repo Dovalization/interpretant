@@ -111,8 +111,8 @@ class XLLexeme:
         batch_size: int = 32,
         half: bool = False,
     ) -> None:
-        import torch  # noqa: PLC0415
-        from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
+        import torch
+        from transformers import AutoModel, AutoTokenizer
 
         self.torch = torch
         if torch.cuda.is_available():
@@ -210,8 +210,8 @@ class TargetTokenEncoder:
         batch_size: int = 64,
         half: bool = False,
     ) -> None:
-        import torch  # noqa: PLC0415
-        from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
+        import torch
+        from transformers import AutoModel, AutoTokenizer
 
         self.torch = torch
         self.device = (

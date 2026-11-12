@@ -31,9 +31,9 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
-import pilot_labellers as pilot  # noqa: E402
+import pilot_labellers as pilot
 
-from interpretant.drift.classifier import (  # noqa: E402
+from interpretant.drift.classifier import (
     boilerplate,
     cue_first,
     cue_sense,
@@ -43,10 +43,10 @@ from interpretant.drift.classifier import (  # noqa: E402
     sqrt_balanced,
     tidy_usage,
 )
-from interpretant.drift.labels import BatchLabeller, Item, load_sense_lists  # noqa: E402
-from interpretant.drift.pairs import Usage, XLLexeme  # noqa: E402
-from interpretant.drift.senses import Sampling, cased_abstracts, sample_occurrences  # noqa: E402
-from interpretant.predictions import report  # noqa: E402
+from interpretant.drift.labels import BatchLabeller, Item, load_sense_lists
+from interpretant.drift.pairs import Usage, XLLexeme
+from interpretant.drift.senses import Sampling, cased_abstracts, sample_occurrences
+from interpretant.predictions import report
 
 GRID = Path("data/raw/openalex")
 LISTS = Path("data/sense_lists/corpus_v2.toml")
@@ -198,7 +198,7 @@ def encode() -> None:
 
 def classify() -> None:
     """Square-root balanced logistic regression per word; cue-first labels for the test usages."""
-    from sklearn.linear_model import LogisticRegression  # noqa: PLC0415
+    from sklearn.linear_model import LogisticRegression
 
     lists, cues = load_sense_lists(LISTS), cue_lists()
     stored = np.load(VECTORS)

@@ -69,7 +69,7 @@ def _ignore(message: str) -> None:
     del message
 
 
-def train_twec_grid(  # noqa: PLR0913
+def train_twec_grid(
     trainer: TWECTrainer,
     main_cells: list[Cell],
     extra_cells: list[Cell],

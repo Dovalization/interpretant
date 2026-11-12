@@ -118,7 +118,7 @@ def sonnet() -> None:
 
 
 def jev_questions(senses: SenseList) -> dict[str, object]:
-    from typesafe_sdk import Choice, Noul  # noqa: PLC0415
+    from typesafe_sdk import Choice, Noul
 
     listed = "; ".join(f"{s.key}: {s.definition}" for s in senses.senses)
     return {
@@ -141,7 +141,7 @@ def jev_questions(senses: SenseList) -> dict[str, object]:
 
 
 def jev(limit: int | None = None) -> None:
-    from typesafe_sdk import TypeSafeClient  # noqa: PLC0415
+    from typesafe_sdk import TypeSafeClient
 
     lists = load_sense_lists(LISTS)
     client = TypeSafeClient(api_key=TypeSafeSettings().typesafe_api_key, model=JEV_MODEL)  # type: ignore[call-arg]
@@ -239,7 +239,7 @@ def recheck() -> None:
 
 
 def judgements(corrected: bool) -> dict[str, int]:
-    import re  # noqa: PLC0415
+    import re
 
     text = JUDGED.read_text(encoding="utf-8")
     found = {

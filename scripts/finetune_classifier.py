@@ -58,9 +58,9 @@ def load(list_path: Path) -> tuple[dict, list, list]:  # type: ignore[type-arg]
 
 
 def main() -> None:
-    import torch  # noqa: PLC0415
-    from torch import nn  # noqa: PLC0415
-    from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
+    import torch
+    from torch import nn
+    from transformers import AutoModel, AutoTokenizer
 
     parser = argparse.ArgumentParser()
     parser.add_argument("list_path", type=Path)

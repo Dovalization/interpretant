@@ -24,9 +24,9 @@ from scipy.stats import spearmanr
 from sklearn.metrics import adjusted_rand_score
 
 sys.path.insert(0, str(Path(__file__).parent))
-import score_labels_benchmark as round_y  # noqa: E402
+import score_labels_benchmark as round_y
 
-from interpretant.drift.labels import (  # noqa: E402
+from interpretant.drift.labels import (
     FAILED,
     REFUSED,
     REPEAT_SUFFIX,
@@ -34,8 +34,8 @@ from interpretant.drift.labels import (  # noqa: E402
     SenseList,
     load_sense_lists,
 )
-from interpretant.drift.pairs import dwug_graded_change  # noqa: E402
-from interpretant.predictions import report  # noqa: E402
+from interpretant.drift.pairs import dwug_graded_change
+from interpretant.predictions import report
 
 LISTS = Path("data/sense_lists/dwug_en_wordnet.toml")
 OUT = Path("data/labels/round_z")

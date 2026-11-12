@@ -25,7 +25,6 @@ from interpretant.drift.grid import MEASURE_MIN, NEIGHBOUR_MIN, NEIGHBOURS, disc
 from interpretant.visualization.figures import FIELD_LABELS
 
 LAYERS = ("openalex", "openalex_full")
-METHODS = {"twec": "model_dir", "ppmi": "ppmi_dir"}
 ROUNDS: dict[str, tuple[str, str]] = {
     "P": ("Round 1", "the trained models"),
     "R": ("Round 2", "a second seed, unseen decades and field pairs"),
@@ -155,7 +154,7 @@ CROSS_COLUMNS = {
 }
 
 
-def export_web(  # noqa: PLR0913
+def export_web(
     model_dir: Path,
     ppmi_dir: Path,
     drift_dir: Path,
@@ -324,17 +323,3 @@ def _dump(path: Path, payload: dict[str, Any]) -> None:
 
 
 PREDICTIONS_PATHS = (Path("docs/predictions.md"), Path("docs/predictions_cross_perplexity.md"))
-
-
-if __name__ == "__main__":
-    import sys
-
-    export_web(
-        model_dir=Path("models/twec_grid"),
-        ppmi_dir=Path("models/ppmi_grid"),
-        drift_dir=Path("data/drift"),
-        audit_path=Path("data/phrased/audit.json"),
-        predictions_paths=PREDICTIONS_PATHS,
-        words_file=Path("data/words_of_interest.txt"),
-        output_dir=Path(sys.argv[1]) if len(sys.argv) > 1 else Path("web/data"),
-    )

@@ -22,38 +22,6 @@ def cosine_distance(vector_a: np.ndarray, vector_b: np.ndarray) -> float:
     return 1.0 - similarity
 
 
-def _top_k_neighbors(word: str, vectors: dict[str, np.ndarray], k: int) -> list[str]:
-    """Return the k nearest neighbours of word, ranked by cosine similarity."""
-    target = vectors[word]
-    scores = {
-        candidate: float(
-            np.dot(target, vector) / (np.linalg.norm(target) * np.linalg.norm(vector) + 1e-10)
-        )
-        for candidate, vector in vectors.items()
-        if candidate != word
-    }
-    return sorted(scores, key=scores.__getitem__, reverse=True)[:k]
-
-
-def build_decade_index(
-    vectors: dict[str, np.ndarray],
-) -> tuple[list[str], np.ndarray]:
-    """Build a normalised matrix and word list from a vector dict.
-
-    Args:
-        vectors: Mapping of word → vector.
-
-    Returns:
-        Tuple of (word_list, normalised_matrix) where matrix[i] is the unit
-        vector for word_list[i]. Words with zero norm are left as zero vectors.
-    """
-    words = list(vectors.keys())
-    matrix = np.array([vectors[w] for w in words], dtype=np.float32)
-    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
-    norms = np.where(norms == 0, 1.0, norms)
-    return words, (matrix / norms)
-
-
 def batch_neighborhood_shift(
     target_words: list[str],
     words_t1: list[str],

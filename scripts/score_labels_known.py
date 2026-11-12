@@ -34,9 +34,9 @@ import numpy as np
 from scipy.spatial.distance import jensenshannon
 
 sys.path.insert(0, str(Path(__file__).parent))
-import check_known_presence as check_1a  # noqa: E402
+import check_known_presence as check_1a
 
-from interpretant.drift.classifier import (  # noqa: E402
+from interpretant.drift.classifier import (
     adjusted_shares,
     boilerplate,
     confusion,
@@ -48,21 +48,21 @@ from interpretant.drift.classifier import (  # noqa: E402
     sqrt_balanced,
     tidy_usage,
 )
-from interpretant.drift.labels import (  # noqa: E402
+from interpretant.drift.labels import (
     BatchLabeller,
     Item,
     JevLabeller,
     SenseList,
     load_sense_lists,
 )
-from interpretant.drift.pairs import Usage, XLLexeme  # noqa: E402
-from interpretant.drift.senses import (  # noqa: E402
+from interpretant.drift.pairs import Usage, XLLexeme
+from interpretant.drift.senses import (
     Sampling,
     cased_abstracts,
     drop_shared,
     sample_occurrences,
 )
-from interpretant.predictions import report  # noqa: E402
+from interpretant.predictions import report
 
 GRID = Path("data/raw/openalex")
 WORDS_ROOT = Path("data/raw/openalex_words")
@@ -358,7 +358,7 @@ def classify() -> None:
     """Per word: a square-root balanced logistic regression on the seeds and examples, cue-first
     labels for every measured usage, and the confusion matrix from five-fold out-of-fold
     predictions on the seeds."""
-    from sklearn.linear_model import LogisticRegression  # noqa: PLC0415
+    from sklearn.linear_model import LogisticRegression
 
     stored = np.load(VECTORS)
     vectors: dict[str, np.ndarray] = {

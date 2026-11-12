@@ -73,7 +73,7 @@ def classify(
 ) -> list[str]:
     """Each row of ``vectors`` labelled by a logistic regression trained on the seeds; with seeds
     of a single sense, every row takes that sense."""
-    from sklearn.linear_model import LogisticRegression  # noqa: PLC0415
+    from sklearn.linear_model import LogisticRegression
 
     if len(set(seed_senses)) == 1:
         return [seed_senses[0]] * len(vectors)
@@ -123,7 +123,7 @@ def adjusted_shares(
     """Adjusted classify and count: the true label shares that, passed through the confusion
     ``matrix`` (see :func:`confusion`), best reproduce the observed shares of ``predicted``.
     Solved by non-negative least squares and normalised to sum to 1; with no predictions, zeros."""
-    from scipy.optimize import nnls  # noqa: PLC0415
+    from scipy.optimize import nnls
 
     observed = np.array([sum(p == label for p in predicted) for label in labels], dtype=float)
     if observed.sum() == 0:
@@ -177,7 +177,7 @@ def tidy_usage(usage: Usage) -> Usage:
 def boilerplate(texts: Sequence[str], min_abstracts: int = 5) -> set[str]:
     """Sentences found in at least ``min_abstracts`` usages of a sample: publisher notices,
     affiliations and other text that is not an abstract's own."""
-    from collections import Counter  # noqa: PLC0415
+    from collections import Counter
 
     counts = Counter(texts)
     return {text for text, count in counts.items() if count >= min_abstracts}

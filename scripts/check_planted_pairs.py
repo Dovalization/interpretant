@@ -16,12 +16,12 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
-import check_known_presence as check_1a  # noqa: E402
-import score_pairs_known as round_x  # noqa: E402
+import check_known_presence as check_1a
+import score_pairs_known as round_x
 
-from interpretant.drift.pairs import Usage, XLLexeme, across_minus_within  # noqa: E402
-from interpretant.drift.senses import Sampling, cased_abstracts, sample_occurrences  # noqa: E402
-from interpretant.predictions import report  # noqa: E402
+from interpretant.drift.pairs import Usage, XLLexeme, across_minus_within
+from interpretant.drift.senses import Sampling, cased_abstracts, sample_occurrences
+from interpretant.predictions import report
 
 CACHE = Path("data/drift/planted_attention.npz")
 SHARES = (0.1, 0.2, 0.3, 0.4, 0.6)

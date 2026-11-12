@@ -389,7 +389,7 @@ def _labelled(table: pl.DataFrame, **labels: int) -> pl.DataFrame:
     return table.select(*columns, pl.all())
 
 
-def cross_entropy_runs(  # noqa: PLR0913
+def cross_entropy_runs(
     texts_dir: Path,
     seeds: Iterable[int],
     fixed_budget: int | None = None,
@@ -414,7 +414,7 @@ def cross_entropy_runs(  # noqa: PLR0913
     return add_excess(pl.concat(frames))
 
 
-def decompose_runs(  # noqa: PLR0913
+def decompose_runs(
     texts_dir: Path,
     early: int,
     late: int,

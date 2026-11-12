@@ -225,7 +225,7 @@ def add_noise_floor(
     )
 
 
-def measure_grid(  # noqa: PLR0913
+def measure_grid(
     model_dir: Path,
     targets: Iterable[str],
     controls: Iterable[str],

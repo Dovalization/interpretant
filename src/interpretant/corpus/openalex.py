@@ -368,7 +368,7 @@ class OpenAlexClient:
         for attempt in range(self.max_attempts):
             time.sleep(self.pause_seconds)
             try:
-                with urllib.request.urlopen(url, timeout=60) as response:  # noqa: S310
+                with urllib.request.urlopen(url, timeout=60) as response:
                     return json.load(response)  # type: ignore[no-any-return]
             except urllib.error.HTTPError as error:
                 if error.code in (401, 403):

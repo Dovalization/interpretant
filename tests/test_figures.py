@@ -1,4 +1,4 @@
-"""Tests for the README and essay figures, on synthetic inputs."""
+"""Tests for the README figures, on synthetic inputs."""
 
 from __future__ import annotations
 
@@ -11,13 +11,10 @@ import pytest
 
 from interpretant.visualization.figures import (
     NeighbourColumn,
-    ReadingPanel,
     corpus_grid,
     distinct_neighbours,
     excess_by_decade,
-    known_answer_ranks,
     neighbour_panel,
-    readings,
     same_family,
 )
 
@@ -101,49 +98,3 @@ def test_variants_of_the_word_and_of_earlier_neighbours_are_collapsed() -> None:
         "knowledge",
         "declarative",
     ]
-
-
-def test_known_answer_ranks_label_every_case_and_colour_by_documentation() -> None:
-    ranks = pl.DataFrame(
-        [
-            {
-                "case": case,
-                "documented": documented,
-                "seed": seed,
-                "cosine_rank": x,
-                "shift_rank": y,
-            }
-            for case, documented, points in (
-                ("alignment", True, ((100, 100), (100, 98))),
-                ("quiet", False, ((17, 41), (47, 69))),
-            )
-            for seed, (x, y) in zip((42, 43), points, strict=True)
-        ]
-    )
-
-    figure = known_answer_ranks(ranks, title="Known answers")
-    axes = figure.axes[0]
-
-    assert {"alignment", "quiet"} <= texts(figure)
-    assert len(axes.lines) == 2
-    assert [text.get_text() for text in axes.get_legend().get_texts()] == [
-        "documented change",
-        "nothing documented",
-        "flagged as a change (top 5% on both)",
-    ]
-
-
-def test_readings_draw_one_panel_per_reading_with_a_bar_per_row() -> None:
-    panels = [
-        ReadingPanel(
-            "Counting", "share", [("towards A", [0.04, 0.05]), ("towards B", [0.0, -0.01])]
-        ),
-        ReadingPanel("Reading", "bits", [("model", [-0.8, -0.9])], "towards B", "towards A"),
-    ]
-
-    figure = readings(panels, title="Two readings")
-
-    assert len(figure.axes) == 2
-    assert [len(axes.patches) for axes in figure.axes] == [2, 1]
-    assert [axes.get_title(loc="left") for axes in figure.axes] == ["Counting", "Reading"]
-    assert {"towards A", "towards B"} <= texts(figure)

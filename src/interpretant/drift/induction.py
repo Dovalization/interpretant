@@ -33,7 +33,7 @@ WORD = re.compile(r"[A-Za-z]+")
 
 
 def stop_words() -> frozenset[str]:
-    from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS  # noqa: PLC0415
+    from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 
     return frozenset(ENGLISH_STOP_WORDS)
 
@@ -69,8 +69,8 @@ class Substituter:
     """ModernBERT-large at a pinned revision: the most likely fillers of the pattern's mask."""
 
     def __init__(self, batch_size: int = 16) -> None:
-        import torch  # noqa: PLC0415
-        from transformers import AutoModelForMaskedLM, AutoTokenizer  # noqa: PLC0415
+        import torch
+        from transformers import AutoModelForMaskedLM, AutoTokenizer
 
         self.torch = torch
         self.device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -115,7 +115,7 @@ def communities(
 ) -> list[Community]:
     """Louvain communities of the graph whose nodes are substitutes in at least ``min_usages``
     usages and whose edges count the usages two substitutes share; largest first, named C1, C2…"""
-    import networkx as nx  # noqa: PLC0415
+    import networkx as nx
 
     frequency = Counter(token for found in substitutes for token in set(found))
     nodes = {token for token, count in frequency.items() if count >= min_usages}

@@ -23,7 +23,7 @@ from interpretant.corpus.phrases import PhraseModel
 from interpretant.drift.separability import decade_samples, fit_fields, split
 
 sys.path.insert(0, str(Path(__file__).parent))
-from fetch_sense_words import PLAN, WORDS_DIR  # noqa: E402
+from fetch_sense_words import PLAN, WORDS_DIR
 
 TEXTS = Path("data/phrased/openalex/texts")
 GRID = Path("data/raw/openalex")

@@ -37,9 +37,9 @@ from scipy.stats import rankdata, spearmanr
 from sklearn.metrics import adjusted_rand_score
 
 sys.path.insert(0, str(Path(__file__).parent))
-import score_labels_benchmark as round_y  # noqa: E402
+import score_labels_benchmark as round_y
 
-from interpretant.drift.induction import (  # noqa: E402
+from interpretant.drift.induction import (
     Community,
     Substituter,
     cleaned,
@@ -50,7 +50,7 @@ from interpretant.drift.induction import (  # noqa: E402
     stop_words,
     wiktionary_entries,
 )
-from interpretant.drift.labels import (  # noqa: E402
+from interpretant.drift.labels import (
     FAILED,
     OTHER,
     REFUSED,
@@ -65,8 +65,8 @@ from interpretant.drift.labels import (  # noqa: E402
     run_batch,
     shown,
 )
-from interpretant.drift.pairs import dwug_graded_change  # noqa: E402
-from interpretant.predictions import report  # noqa: E402
+from interpretant.drift.pairs import dwug_graded_change
+from interpretant.predictions import report
 
 OUT = Path("data/labels/round_q")
 KAIKKI = Path("data/external/kaikki")
@@ -187,7 +187,7 @@ def kaikki(word: str) -> Path:
     if not path.exists():
         KAIKKI.mkdir(parents=True, exist_ok=True)
         url = f"https://kaikki.org/dictionary/English/meaning/{word[0]}/{word[:2]}/{word}.jsonl"
-        with urllib.request.urlopen(url, timeout=60) as response:  # noqa: S310
+        with urllib.request.urlopen(url, timeout=60) as response:
             path.write_bytes(response.read())
         with (KAIKKI / "downloaded.tsv").open("a", encoding="utf-8") as log:
             log.write(f"{word}\t{date.today().isoformat()}\t{url}\n")

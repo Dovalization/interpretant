@@ -21,13 +21,13 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
-import score_labels_benchmark as round_y  # noqa: E402
-import score_labels_induced as round_q  # noqa: E402
+import score_labels_benchmark as round_y
+import score_labels_induced as round_q
 
-from interpretant.drift.classifier import classify, cue_sense, example_usage  # noqa: E402
-from interpretant.drift.labels import OTHER, UNCLEAR, load_sense_lists  # noqa: E402
-from interpretant.drift.pairs import Usage, XLLexeme  # noqa: E402
-from interpretant.predictions import report  # noqa: E402
+from interpretant.drift.classifier import classify, cue_sense, example_usage
+from interpretant.drift.labels import OTHER, UNCLEAR, load_sense_lists
+from interpretant.drift.pairs import Usage, XLLexeme
+from interpretant.predictions import report
 
 OUT = Path("data/labels/round_e")
 CUES = Path("data/sense_lists/dwug_en_cues.toml")

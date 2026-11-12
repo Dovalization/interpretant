@@ -115,7 +115,7 @@ def _ignore(message: str) -> None:
     del message
 
 
-def separability_runs(  # noqa: PLR0913
+def separability_runs(
     texts_dir: Path,
     decades: Iterable[int],
     seeds: Iterable[int],

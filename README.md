@@ -115,7 +115,7 @@ Word vectors are a natural instrument for this. The distributional hypothesis be
 `web/` is a static Next.js explorer of the same data: a word's neighbour columns per field and
 decade, its drift ranks and frequency, the cross-field divergence matrix, the who-predicts-whom
 matrix with each pair over time, and the full prediction ledger. It reads JSON exported from the
-models and tables (`uv run python -m interpretant.export web/data`), so it needs no Python to
+models and tables (`uv run interpretant export web`), so it needs no Python to
 build:
 
 ```bash

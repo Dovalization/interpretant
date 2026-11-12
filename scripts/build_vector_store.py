@@ -157,10 +157,10 @@ def store_paths(kind: str, which: str) -> tuple[Path, Path, Path]:
 
 def _start_tokenizer(kind: str) -> None:
     """Load the encoder's tokenizer once in a worker process."""
-    global _TOKENIZER, _KIND  # noqa: PLW0603
-    from transformers import AutoTokenizer  # noqa: PLC0415
+    global _TOKENIZER, _KIND
+    from transformers import AutoTokenizer
 
-    from interpretant.drift import pairs  # noqa: PLC0415
+    from interpretant.drift import pairs
 
     name, revision = (
         (pairs.XL_LEXEME, pairs.XL_LEXEME_REVISION)
@@ -173,7 +173,7 @@ def _start_tokenizer(kind: str) -> None:
 
 def _prepare(rows: list[tuple[str, int, int]]) -> list[object]:
     """Token ids (XL-LEXEME) or ids with the target's token span (DeBERTa) for each row."""
-    from interpretant.drift import pairs  # noqa: PLC0415
+    from interpretant.drift import pairs
 
     usages = [Usage(text, start, end) for text, start, end in rows]
     if _KIND == "xl-lexeme":
@@ -198,9 +198,9 @@ def encode(kind: str = "xl-lexeme", which: str = "main") -> None:
     """Encode every distinct usage in shards of ``SHARD_SIZE``; finished shards are kept. While
     the GPU encodes one shard, worker processes build the next shard's token ids. Both encoders
     cover every usage of the manifest, so each store is complete and built in one pass."""
-    from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor  # noqa: PLC0415
+    from concurrent.futures import Future, ProcessPoolExecutor, ThreadPoolExecutor
 
-    from interpretant.drift.pairs import TargetTokenEncoder, XLLexeme  # noqa: PLC0415
+    from interpretant.drift.pairs import TargetTokenEncoder, XLLexeme
 
     manifest, shards, _ = store_paths(kind, which)
     with gzip.open(manifest, "rt", encoding="utf-8") as source:
@@ -259,7 +259,7 @@ def dev() -> None:
     """Write the dev manifest: every usage the development data scores, tidied: check 2b's 186
     (round T), round U's 240, Claude's 300 development labels and round A's target-word cells."""
     sys.path.insert(0, str(Path(__file__).parent))
-    import pilot_labellers as pilot  # type: ignore[import-not-found]  # noqa: PLC0415
+    import pilot_labellers as pilot  # type: ignore[import-not-found]
 
     rows: list[dict[str, object]] = []
     for uid, (word, usage) in pilot.usages().items():

@@ -139,7 +139,7 @@ abstracts, and only *people* reaches 150 occurrences in most cells.
 ### Phrase detection
 
 ```bash
-uv run interpretant corpus phrases learn   # data/processed/phrases.model + phrases.tsv for review
+uv run interpretant corpus phrases learn   # data/lemmatised/phrases.model + phrases.tsv for review
 uv run interpretant corpus phrases apply   # data/phrased/<source>/texts/<source>_<decade>.txt
 ```
 

@@ -28,9 +28,9 @@ import numpy as np
 from scipy.stats import spearmanr
 
 sys.path.insert(0, str(Path(__file__).parent))
-import pilot_labellers as pilot  # noqa: E402
+import pilot_labellers as pilot
 
-from interpretant.drift.classifier import (  # noqa: E402
+from interpretant.drift.classifier import (
     boilerplate,
     cue_sense,
     example_usage,
@@ -38,15 +38,15 @@ from interpretant.drift.classifier import (  # noqa: E402
     out_of_scope,
     tidy_usage,
 )
-from interpretant.drift.labels import (  # noqa: E402
+from interpretant.drift.labels import (
     BatchLabeller,
     Item,
     JevLabeller,
     load_sense_lists,
 )
-from interpretant.drift.pairs import Usage, XLLexeme  # noqa: E402
-from interpretant.drift.senses import Sampling, cased_abstracts, sample_occurrences  # noqa: E402
-from interpretant.predictions import report  # noqa: E402
+from interpretant.drift.pairs import Usage, XLLexeme
+from interpretant.drift.senses import Sampling, cased_abstracts, sample_occurrences
+from interpretant.predictions import report
 
 GRID = Path("data/raw/openalex")
 LISTS = Path("data/sense_lists/corpus.toml")
@@ -160,7 +160,7 @@ def cue_lists() -> dict[str, dict[str, list[str]]]:
 
 def classify() -> None:
     """Train each word's classifier without check 2b's usages; label and score those usages."""
-    from sklearn.linear_model import LogisticRegression  # noqa: PLC0415
+    from sklearn.linear_model import LogisticRegression
 
     lists = load_sense_lists(LISTS)
     cues = cue_lists()

@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import gzip
 import json
-import math
 import random
 import re
 from collections import Counter
@@ -29,7 +28,6 @@ from typing import Protocol
 
 import numpy as np
 import polars as pl
-from scipy.spatial.distance import jensenshannon
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
@@ -46,7 +44,6 @@ Abstracts = Mapping[tuple[str, int], Sequence[tuple[str, str]]]
 
 _LABEL = re.compile(r"^\s*(?:abstract|summary)\b[\s:.\-–—]*", re.IGNORECASE)
 _SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9(\"“])")
-_TOKEN = re.compile(r"[a-z][a-z-]{2,}")
 _URL = re.compile(r"https?://\S+|www\.\S+|\bdoi:\s*\S+|\b10\.\d{4,9}/\S+", re.IGNORECASE)
 MAX_FOREIGN_SHARE = 0.2
 
@@ -255,8 +252,8 @@ class TransformerEncoder:
     layers over the subword tokens that overlap it."""
 
     def __init__(self, model_name: str, layers: int = LAYERS, batch_size: int = 32) -> None:
-        import torch  # noqa: PLC0415
-        from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
+        import torch
+        from transformers import AutoModel, AutoTokenizer
 
         self.torch = torch
         self.device = "mps" if torch.backends.mps.is_available() else "cpu"
@@ -376,63 +373,3 @@ def sense_runs(
             )
             log(f"  {word}, seed {seed}: {len(occurrences):,} occurrences, {len(centres)} senses")
     return pl.DataFrame(rows)
-
-
-def sense_shares(rows: pl.DataFrame) -> pl.DataFrame:
-    """Each cell's share of its occurrences in every sense, from one seed and word's rows;
-    senses a cell never uses get a zero. Rows run sense by sense, cells in order within each."""
-    cell = ["field", "decade"]
-    grid = (
-        rows.select(cell)
-        .unique()
-        .join(pl.DataFrame({"sense": range(int(rows["senses"][0]))}), how="cross")
-    )
-    counts = rows.group_by(*cell, "sense").len("count")
-    return (
-        grid.join(counts, on=[*cell, "sense"], how="left")
-        .with_columns(pl.col("count").fill_null(0))
-        .with_columns(share=pl.col("count") / pl.col("count").sum().over(cell))
-        .sort("sense", *cell)
-        .select(*cell, "sense", "share")
-    )
-
-
-def distribution(shares: pl.DataFrame, field: str, decade: int) -> np.ndarray:
-    """One cell's sense distribution, ordered by sense."""
-    cell = shares.filter(pl.col("field") == field, pl.col("decade") == decade).sort("sense")
-    return cell["share"].to_numpy()
-
-
-def jensen_shannon(first: np.ndarray, second: np.ndarray) -> float:
-    """Jensen-Shannon divergence in bits, from 0 (the same distribution) to 1 (disjoint)."""
-    return float(jensenshannon(first, second, base=2) ** 2)
-
-
-def context_words(rows: pl.DataFrame, sense: int, top: int = 10, min_count: int = 5) -> list[str]:
-    """The words most over-represented in one sense's contexts against the other senses',
-    by smoothed log ratio of relative frequencies, among words seen at least ``min_count``
-    times in the sense. The word itself is left out."""
-    word = str(rows["word"][0]).lower()
-
-    def counts(contexts: Iterable[str]) -> Counter[str]:
-        found: Counter[str] = Counter()
-        for context in contexts:
-            found.update(token for token in _TOKEN.findall(context.lower()) if token != word)
-        return found
-
-    inside = counts(rows.filter(pl.col("sense") == sense)["context"])
-    outside = counts(rows.filter(pl.col("sense") != sense)["context"])
-    inside_total, outside_total = sum(inside.values()) + 1, sum(outside.values()) + 1
-    scores = {
-        token: math.log((count + 1) / inside_total) - math.log((outside[token] + 1) / outside_total)
-        for token, count in inside.items()
-        if count >= min_count
-    }
-    return sorted(scores, key=lambda token: (-scores[token], token))[:top]
-
-
-def examples(rows: pl.DataFrame, sense: int, top: int = 10) -> list[str]:
-    """The contexts nearest one sense's centre, from one seed and word's rows; among equal
-    distances the earlier row comes first."""
-    nearest = rows.filter(pl.col("sense") == sense).sort("distance", maintain_order=True)
-    return nearest.head(top)["context"].to_list()

@@ -57,7 +57,7 @@ def corpus_openalex() -> None:
     default=None,
     help="Only works whose abstract contains this word (use a separate --raw-dir).",
 )
-def corpus_openalex_download(  # noqa: PLR0913
+def corpus_openalex_download(
     raw_dir: Path,
     fields: tuple[str, ...],
     start: int,
@@ -105,12 +105,12 @@ def corpus_openalex_download(  # noqa: PLR0913
 @click.option("--field", "fields", multiple=True, default=("hci",), show_default=True)
 @click.option(
     "--decade", "decades", multiple=True, type=int, default=(1990, 2020), show_default=True
-)  # noqa: E501
+)
 def corpus_openalex_sources(
     raw_dir: Path, fields: tuple[str, ...], decades: tuple[int, ...]
 ) -> None:
     """Look up the primary source (venue) of every work in the given cells (needs the API key)."""
-    from interpretant.corpus.openalex import (  # noqa: PLC0415
+    from interpretant.corpus.openalex import (
         OpenAlexClient,
         OpenAlexSettings,
         fetch_sources,
@@ -145,7 +145,7 @@ def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int
     as duplicates, archive catalogue or citation records, scraped web pages, or by the 1% author
     cap.
     """
-    from interpretant.corpus.openalex import ingest_fields  # noqa: PLC0415
+    from interpretant.corpus.openalex import ingest_fields
 
     decades = list(range(start, end, 10))
     cleaned = ingest_fields(raw_dir, output_dir, decades)
@@ -206,7 +206,7 @@ def corpus_phrases() -> None:
     default=Path("data/lemmatised/phrases.model"),
     show_default=True,
 )
-def corpus_phrases_learn(  # noqa: PLR0913
+def corpus_phrases_learn(
     processed_dir: Path,
     sources: tuple[str, ...],
     words_file: Path,
@@ -219,9 +219,9 @@ def corpus_phrases_learn(  # noqa: PLR0913
 
     Also writes ``<output>.tsv``, the phrases sorted by score, for review.
     """
-    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
-    from interpretant.corpus.files import source_texts  # noqa: PLC0415
-    from interpretant.corpus.phrases import (  # noqa: PLC0415
+    from interpretant.corpus.audit import load_target_words
+    from interpretant.corpus.files import source_texts
+    from interpretant.corpus.phrases import (
         learn_phrases,
         sample_chunks,
         split_targets,
@@ -277,8 +277,8 @@ def corpus_phrases_apply(
     processed_dir: Path, sources: tuple[str, ...], model_path: Path, output_dir: Path
 ) -> None:
     """Rewrite every processed file with phrases merged, mirroring the directory layout."""
-    from interpretant.corpus.files import rewrite_texts, source_texts  # noqa: PLC0415
-    from interpretant.corpus.phrases import PhraseModel  # noqa: PLC0415
+    from interpretant.corpus.files import rewrite_texts, source_texts
+    from interpretant.corpus.phrases import PhraseModel
 
     model = PhraseModel.load(model_path)
     paths = source_texts(processed_dir, sources)
@@ -317,10 +317,10 @@ def corpus_lemmas_votes(
     An abstract in several cells (a full cell holds its sample cell; a work can sit in two
     fields) is tagged once, the first time its work id is seen.
     """
-    from collections.abc import Iterator  # noqa: PLC0415
+    from collections.abc import Iterator
 
-    from interpretant.corpus.lemmas import lemma_votes, save_votes  # noqa: PLC0415
-    from interpretant.drift.senses import cased_abstracts  # noqa: PLC0415
+    from interpretant.corpus.lemmas import lemma_votes, save_votes
+    from interpretant.drift.senses import cased_abstracts
 
     cells = [
         (raw_dir, path.parent.name, int(path.name.split(".")[0]))
@@ -395,7 +395,7 @@ def corpus_lemmas_votes(
     help="Kept apart from data/processed/lemmas.tsv, the map the frozen grid was built with.",
 )
 @click.option("--review", default=150, show_default=True, help="Most frequent mappings to print.")
-def corpus_lemmas_learn(  # noqa: PLR0913
+def corpus_lemmas_learn(
     processed_dir: Path,
     sources: tuple[str, ...],
     words_file: Path,
@@ -405,11 +405,11 @@ def corpus_lemmas_learn(  # noqa: PLR0913
     review: int,
 ) -> None:
     """Learn the type-level lemma map from the processed files and spaCy's votes."""
-    from collections import Counter  # noqa: PLC0415
+    from collections import Counter
 
-    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
-    from interpretant.corpus.files import source_texts  # noqa: PLC0415
-    from interpretant.corpus.lemmas import (  # noqa: PLC0415
+    from interpretant.corpus.audit import load_target_words
+    from interpretant.corpus.files import source_texts
+    from interpretant.corpus.lemmas import (
         count_types,
         learn_lemma_map,
         load_votes,
@@ -477,8 +477,8 @@ def corpus_lemmas_apply(
     processed_dir: Path, sources: tuple[str, ...], map_path: Path, output_dir: Path
 ) -> None:
     """Rewrite every processed file with the lemma map applied, mirroring the layout."""
-    from interpretant.corpus.files import rewrite_texts, source_texts  # noqa: PLC0415
-    from interpretant.corpus.lemmas import LemmaMap  # noqa: PLC0415
+    from interpretant.corpus.files import rewrite_texts, source_texts
+    from interpretant.corpus.lemmas import LemmaMap
 
     lemma_map = LemmaMap.load(map_path)
     paths = source_texts(processed_dir, sources)
@@ -492,19 +492,19 @@ def corpus_lemmas_apply(
     type=click.Path(path_type=Path),
     default=Path("data/processed"),
     show_default=True,
-)  # noqa: E501
+)
 @click.option(
     "--words-file",
     type=click.Path(path_type=Path),
     default=Path("data/words_of_interest.txt"),
     show_default=True,
-)  # noqa: E501
+)
 @click.option(
     "--min-occurrences",
     default=150,
     show_default=True,
     help="Occurrences a word needs in both decades for a transition to count as reliable.",
-)  # noqa: E501
+)
 @click.option("--output", type=click.Path(path_type=Path), help="Also write the audit as JSON.")
 def corpus_audit(
     processed_dir: Path,
@@ -513,9 +513,9 @@ def corpus_audit(
     output: Path | None,
 ) -> None:
     """Report cell volume and target-word coverage."""
-    import json  # noqa: PLC0415
+    import json
 
-    from interpretant.corpus.audit import (  # noqa: PLC0415
+    from interpretant.corpus.audit import (
         audit_corpus,
         format_decade_ranges,
         load_target_words,
@@ -582,8 +582,8 @@ def corpus_audit(
 
 def _configure_gensim_logging() -> None:
     """Silence gensim's harmless Apple Silicon finalizer noise and show training progress."""
-    import logging  # noqa: PLC0415
-    import sys  # noqa: PLC0415
+    import logging
+    import sys
 
     # Suppress the harmless gensim Apple Silicon finalizer spam.
     # our_dot_float is a Cython symbol missing from the pre-built wheel;
@@ -657,7 +657,7 @@ def twec() -> None:
 @click.option("--negative", default=5, show_default=True, help="Negative samples per word.")
 @click.option("--workers", default=8, show_default=True)
 @click.option("--seed", default=42, show_default=True)
-def twec_grid(  # noqa: PLR0913
+def twec_grid(
     input_dir: Path,
     layers: tuple[str, ...],
     extra_layers: tuple[str, ...],
@@ -677,8 +677,8 @@ def twec_grid(  # noqa: PLR0913
     is then trained with the compass's context vectors frozen, so every cell shares one
     space. Finished cells are skipped, so an interrupted run resumes.
     """
-    from interpretant.embedding.grid import discover_cells, train_twec_grid  # noqa: PLC0415
-    from interpretant.embedding.twec import TWECTrainer  # noqa: PLC0415
+    from interpretant.embedding.grid import discover_cells, train_twec_grid
+    from interpretant.embedding.twec import TWECTrainer
 
     _configure_gensim_logging()
     main_cells = discover_cells(input_dir, layers)
@@ -743,7 +743,7 @@ def ppmi_grid(
 
     Each cell is factorised on its own, so compare PPMI cells by neighbourhood shift only.
     """
-    from interpretant.embedding.grid import build_ppmi_grid, discover_cells  # noqa: PLC0415
+    from interpretant.embedding.grid import build_ppmi_grid, discover_cells
 
     cells = discover_cells(input_dir, layers)
     console.print(
@@ -783,7 +783,7 @@ def drift() -> None:
     show_default=True,
     type=click.Choice([1, 2]),
     help="2: Kneser-Ney bigram; 1: add-one unigram, the lexical-composition control.",
-)  # noqa: E501
+)
 @click.option(
     "--fixed-budget",
     default=0,
@@ -793,7 +793,7 @@ def drift() -> None:
 @click.option(
     "--drop-shared", is_flag=True, help="Remove abstracts that appear in more than one cell."
 )
-def drift_perplexity(  # noqa: PLR0913
+def drift_perplexity(
     texts_dir: Path,
     output: Path,
     seeds: tuple[int, ...],
@@ -805,7 +805,7 @@ def drift_perplexity(  # noqa: PLR0913
 
     Method and predictions: docs/predictions_cross_perplexity.md.
     """
-    from interpretant.drift.perplexity import cross_entropy_runs  # noqa: PLC0415
+    from interpretant.drift.perplexity import cross_entropy_runs
 
     result = cross_entropy_runs(
         texts_dir, seeds, fixed_budget or None, drop_shared, order, console.print
@@ -834,7 +834,7 @@ def drift_perplexity(  # noqa: PLR0913
     default=Path("data/drift/cross_perplexity_decomposition.parquet"),
     show_default=True,
 )
-def drift_decompose(  # noqa: PLR0913
+def drift_decompose(
     texts_dir: Path,
     early: int,
     late: int,
@@ -847,9 +847,9 @@ def drift_decompose(  # noqa: PLR0913
     """Split every pair's fall in excess cross-entropy between two decades into a word-mix
     effect (the text's word frequencies changed) and a rate effect (the model's per-word
     skill changed). A fall that is all mix says the text moved; the model learned nothing."""
-    import polars as pl  # noqa: PLC0415
+    import polars as pl
 
-    from interpretant.drift.perplexity import decompose_runs  # noqa: PLC0415
+    from interpretant.drift.perplexity import decompose_runs
 
     try:
         result = decompose_runs(texts_dir, early, late, seeds, fixed_budget, order, texts or None)
@@ -895,7 +895,7 @@ def drift_decompose(  # noqa: PLR0913
     default=Path("data/drift"),
     show_default=True,
 )
-def drift_separability(  # noqa: PLR0913
+def drift_separability(
     texts_dir: Path,
     decades: tuple[int, ...],
     seeds: tuple[int, ...],
@@ -905,8 +905,8 @@ def drift_separability(  # noqa: PLR0913
 ) -> None:
     """How well a classifier tells every two fields apart, per decade, and where a classifier
     over all fields sends each field's abstracts (round S)."""
-    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
-    from interpretant.drift.separability import separability_runs  # noqa: PLC0415
+    from interpretant.corpus.audit import load_target_words
+    from interpretant.drift.separability import separability_runs
 
     terms = frozenset(load_target_words(terms_file)) if terms_file else frozenset()
     pairs, assignments = separability_runs(
@@ -944,7 +944,7 @@ def drift_heldout(
     input_dir: Path, layers: tuple[str, ...], seeds: tuple[int, ...], workers: int, output: Path
 ) -> None:
     """Held-out minus training cross-entropy of every cell's bigram model (round M)."""
-    from interpretant.drift.heldout import heldout_runs  # noqa: PLC0415
+    from interpretant.drift.heldout import heldout_runs
 
     table = heldout_runs(input_dir, layers, seeds, workers, console.print)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -982,7 +982,7 @@ def drift_heldout(
     default=Path("data/drift/direction_assignments.parquet"),
     show_default=True,
 )
-def drift_direction(  # noqa: PLR0913
+def drift_direction(
     texts_dir: Path,
     train_decades: tuple[int, ...],
     test_decades: tuple[int, ...],
@@ -990,7 +990,7 @@ def drift_direction(  # noqa: PLR0913
     output: Path,
 ) -> None:
     """Where each decade's classifier sends later decades' abstracts (round N)."""
-    from interpretant.drift.direction import assignment_runs  # noqa: PLC0415
+    from interpretant.drift.direction import assignment_runs
 
     table = assignment_runs(texts_dir, train_decades, test_decades, seeds, log=console.print)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -1026,7 +1026,7 @@ def drift_direction(  # noqa: PLR0913
 @click.option("--plural", is_flag=True, help="Match the word's regular plural too (round C′).")
 @click.option("--quality", is_flag=True, help="Round C′'s quality rules.")
 @click.option("--output", type=click.Path(path_type=Path), required=True)
-def drift_senses(  # noqa: PLR0913
+def drift_senses(
     raw_dir: Path,
     words: tuple[str, ...],
     fields: tuple[str, ...],
@@ -1042,7 +1042,7 @@ def drift_senses(  # noqa: PLR0913
     output: Path,
 ) -> None:
     """Senses of words by field and decade, from one contextual encoder (round C)."""
-    from interpretant.drift.senses import (  # noqa: PLC0415
+    from interpretant.drift.senses import (
         SENSE_RANGE,
         Sampling,
         TransformerEncoder,
@@ -1096,7 +1096,7 @@ def drift_senses(  # noqa: PLR0913
 @click.option("--measure-min", default=150, show_default=True, help="Occurrences in both cells.")
 @click.option("--neighbour-min", default=50, show_default=True, help="Occurrences for a neighbour.")
 @click.option("--neighbours", default=25, show_default=True)
-def drift_grid(  # noqa: PLR0913
+def drift_grid(
     model_dir: Path,
     output_dir: Path,
     words_file: Path,
@@ -1112,10 +1112,10 @@ def drift_grid(  # noqa: PLR0913
     one row per word measured in a pair, with percentile ranks against the pair's
     whole-vocabulary noise floor and a candidate flag.
     """
-    import polars as pl  # noqa: PLC0415
+    import polars as pl
 
-    from interpretant.corpus.audit import load_target_words  # noqa: PLC0415
-    from interpretant.drift.grid import measure_grid  # noqa: PLC0415
+    from interpretant.corpus.audit import load_target_words
+    from interpretant.drift.grid import measure_grid
 
     try:
         tables = measure_grid(
@@ -1159,33 +1159,33 @@ def export() -> None:
     type=click.Path(path_type=Path),
     default=Path("models/twec_grid"),
     show_default=True,
-)  # noqa: E501
+)
 @click.option(
     "--ppmi-dir",
     type=click.Path(path_type=Path),
     default=Path("models/ppmi_grid"),
     show_default=True,
-)  # noqa: E501
+)
 @click.option(
     "--drift-dir", type=click.Path(path_type=Path), default=Path("data/drift"), show_default=True
-)  # noqa: E501
+)
 @click.option(
     "--audit",
     "audit_path",
     type=click.Path(path_type=Path),
     default=Path("data/phrased/audit.json"),
     show_default=True,
-)  # noqa: E501
+)
 @click.option(
     "--words-file",
     type=click.Path(path_type=Path),
     default=Path("data/words_of_interest.txt"),
     show_default=True,
-)  # noqa: E501
+)
 @click.option(
     "--output-dir", type=click.Path(path_type=Path), default=Path("web/data"), show_default=True
-)  # noqa: E501
-def export_web_command(  # noqa: PLR0913
+)
+def export_web_command(
     model_dir: Path,
     ppmi_dir: Path,
     drift_dir: Path,
@@ -1195,7 +1195,7 @@ def export_web_command(  # noqa: PLR0913
 ) -> None:
     """Write the JSON the web explorer (web/) builds from: neighbours, drift rows, counts,
     cross-perplexity and the prediction verdicts."""
-    from interpretant.export import PREDICTIONS_PATHS, export_web  # noqa: PLC0415
+    from interpretant.export import PREDICTIONS_PATHS, export_web
 
     export_web(
         model_dir=model_dir,
@@ -1237,7 +1237,7 @@ def export_web_command(  # noqa: PLR0913
 )
 def figures(model_dir: Path, drift_dir: Path, audit_path: Path, output_dir: Path) -> None:
     """Draw the README figures from the trained grid models and the drift tables."""
-    from interpretant.visualization.figures import readme_figures  # noqa: PLC0415
+    from interpretant.visualization.figures import readme_figures
 
     output_dir.mkdir(parents=True, exist_ok=True)
     drawn = readme_figures(model_dir, drift_dir, audit_path)

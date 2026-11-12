@@ -359,9 +359,9 @@ def run_batch(
     A stored result has the request's ``custom_id``, its ``type`` and, when it succeeded, its
     ``stop_reason``, ``text``, token counts and ``model``.
     """
-    import time  # noqa: PLC0415
+    import time
 
-    import anthropic  # noqa: PLC0415
+    import anthropic
 
     results_path = record / "results.jsonl"
     if not results_path.exists():
@@ -425,7 +425,7 @@ class JevLabeller:
     workers: int = 8
 
     def questions(self, senses: SenseList) -> dict[str, object]:
-        from typesafe_sdk import Choice, Noul  # noqa: PLC0415
+        from typesafe_sdk import Choice, Noul
 
         listed = "; ".join(f"{s.key}: {s.definition}" for s in senses.senses)
         return {
@@ -450,9 +450,9 @@ class JevLabeller:
 
     def label(self, work: Sequence[tuple[SenseList, Item]], record: Path) -> dict[str, str]:
         """Labels by item key; ``record`` is a directory with one stored answer per item."""
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
-        import typesafe_sdk  # noqa: PLC0415
+        import typesafe_sdk
 
         transient = (
             typesafe_sdk.TypeSafeAPIConnectionError,

@@ -3,7 +3,7 @@
 The fake encoder places a context by its cue words: the attention mechanism's (*transformer,
 layer, weights*) on one axis, selective attention's (*visual, task, participants*) on another.
 AI's 2020s abstracts use the mechanism sense, AI's 1990s abstracts and psychology's use the
-other, so the clustering must find two senses and the measures must place the change in AI.
+other, so the clustering must find two senses and place the change in AI.
 """
 
 from __future__ import annotations
@@ -23,18 +23,13 @@ from interpretant.drift.senses import (
     Sampling,
     cased_abstracts,
     context_around,
-    context_words,
-    distribution,
     drop_shared,
-    examples,
     foreign_share,
     induce_senses,
-    jensen_shannon,
     narrowed,
     sample_many,
     sample_occurrences,
     sense_runs,
-    sense_shares,
     span_mask,
     word_pattern,
 )
@@ -160,17 +155,14 @@ def test_the_new_sense_is_found_in_ai_and_psychology_does_not_change(
     )
 
     rows = table.filter(pl.col("seed") == 1)
-    shares = sense_shares(rows)
     assert set(table["senses"]) == {2}
-    assert jensen_shannon(distribution(shares, "ai", 1990), distribution(shares, "ai", 2020)) > 0.9
-    psychology = [distribution(shares, "psychology", decade) for decade in (1990, 2020)]
-    assert jensen_shannon(*psychology) < 0.01
-    ai_2020 = rows.filter(pl.col("field") == "ai", pl.col("decade") == 2020)
-    mechanism = int(ai_2020["sense"].mode().sort()[0])
-    assert set(context_words(rows, mechanism, top=4)) == set(MECHANISM)
-    assert all(
-        any(cue in context for cue in MECHANISM) for context in examples(rows, mechanism, top=5)
-    )
+
+    def modal_sense(field: str, decade: int) -> int:
+        cell = rows.filter(pl.col("field") == field, pl.col("decade") == decade)
+        return int(cell["sense"].mode().sort()[0])
+
+    assert modal_sense("ai", 1990) != modal_sense("ai", 2020)
+    assert modal_sense("psychology", 1990) == modal_sense("psychology", 2020)
 
 
 def test_an_occurrence_drawn_in_several_seeds_is_encoded_once(
@@ -184,19 +176,6 @@ def test_an_occurrence_drawn_in_several_seeds_is_encoded_once(
 
     assert encoder.calls == 1
     assert len(table) == 3 * 4 * 60
-
-
-def test_shares_fill_unused_senses_with_zero_and_sum_to_one() -> None:
-    occurrences = [("ai", 1990, 0), ("ai", 1990, 0), ("ai", 2020, 1), ("ai", 2020, 2)]
-    rows = pl.DataFrame(
-        [{"field": f, "decade": d, "sense": s, "senses": 3} for f, d, s in occurrences]
-    )
-
-    shares = sense_shares(rows)
-
-    assert distribution(shares, "ai", 1990).tolist() == [1.0, 0.0, 0.0]
-    assert distribution(shares, "ai", 2020).tolist() == [0.0, 0.5, 0.5]
-    assert jensen_shannon(np.array([1.0, 0.0]), np.array([0.0, 1.0])) == pytest.approx(1.0)
 
 
 def test_cased_abstracts_keep_case_and_punctuation_and_drop_the_label(tmp_path: Path) -> None:
