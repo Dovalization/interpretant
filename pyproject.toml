@@ -49,6 +49,11 @@ labels = [
     "anthropic>=2.8.0",
     "typesafe-sdk>=0.7.5",
 ]
+# CuPy for spaCy on a CUDA 12 GPU (the homelab); never installed on the Mac. Required directly,
+# not through spacy[cuda12x], whose resolution picks a CuPy that forces NumPy 1.
+gpu = [
+    "cupy-cuda12x>=13.3",
+]
 
 [project.scripts]
 interpretant = "interpretant.__main__:cli"
