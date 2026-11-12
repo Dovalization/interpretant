@@ -170,9 +170,35 @@ uv run python scripts/score_predictions.py
 | `gensim`               | Word2Vec training (TWEC compass and cell models), phrase detection |
 | `scipy`                | PPMI-SVD (sparse SVD)                                 |
 | OpenAlex API           | Field × decade abstract samples                        |
-| `pandas` / `pyarrow`   | Drift and cross-perplexity tables                     |
+| `pandas` / `pyarrow`   | Drift and cross-perplexity tables (pandas is being replaced by Polars) |
+| `PyTorch` / `transformers` | Contextual encoders (XL-LEXEME, DeBERTa-v3-large) for the vector store |
+| `scikit-learn`         | Sense classifier, cross-validation                    |
+| `spaCy` (`en_core_web_sm`, `en_core_web_trf`) | Sentences, part of speech, lemmas and named entities of target occurrences |
+| `lingua`               | Language identification, per sentence                 |
+| `datasketch`           | Near-duplicate abstracts (MinHash with locality-sensitive hashing) |
+| `Polars` / Parquet     | Every table: store manifest, metadata, audit and drift tables |
+| `pandera`              | Data checks run on every rebuild                      |
 | `matplotlib`           | Figures                                               |
 | `Ruff`, `mypy` (strict), `pytest` | Linting, type checking, tests (synthetic fixtures, no real NLP in the suite) |
+
+The stack was settled on 2026-11-11, before the data audit and the store's rebuild.
+
+- **spaCy** gives every annotation a target occurrence needs from one pipeline and streams over
+  large inputs: the small model on the CPU for corpus-wide passes, the transformer model on the
+  homelab GPU where accuracy matters. It also replaces simplemma in the plural and spelling map.
+- **lingua** checks the language of each sentence, not only each abstract: a bilingual abstract
+  passes the abstract-level check, and a usage's sentence can be its other half. It was chosen
+  over fastText's identifier, whose repository was archived in March 2024.
+- **datasketch** finds near-duplicates (a preprint and its published version), which would shrink
+  the distance within a period and inflate a change score that compares across with within.
+- **Polars** is the only dataframe library: it reads Parquet lazily and runs queries larger than
+  memory, which the rebuild needs. pandas is being ported out, and the scorers of past rounds
+  that used it stay in git at the commits where they ran.
+- **pandera** turns the audit's rules into table-level checks (unique keys, usages inside their
+  cell's years, language shares), which per-record validation cannot express.
+- **nltk** was dropped with the WordNet code of rounds Q and Z.
+- Built datasets are versioned by content hashes in a committed manifest rather than a data
+  versioning tool.
 
 ---
 
