@@ -1,4 +1,4 @@
-"""A type-level lemma map: regular -s inflections and British spellings, nothing else.
+"""A type-level lemma map: -s inflections, plural nouns and British spellings, nothing else.
 
 The cells are not lemmatised beyond the target words, so *structure* and *structures*,
 *embedding* and *embeddings*, *conceptualisation* and *conceptualization* train as separate
@@ -6,10 +6,11 @@ words. A general lemmatiser is the wrong tool here: it turns *learning* into *le
 *meaning* into *mean* and *embodied* into *embody*, which destroys the nominalisations the
 targets live on. So the map merges a word only into the singular or base form spaCy gives it
 in context (a plural noun, a third-person verb), when the readings agree and the word is a regular
--s form of it; it normalises British spellings to American through rules gated on spaCy's word
-list and an exception list, and leaves every other form alone. The votes come from one spaCy pass
-over the raw abstracts (``lemma_votes``); the map is learned once from them, written to a
-reviewable file, and applied line by line like the phrase model.
+-s form of it or one of spaCy's irregular plurals; it normalises British spellings to American
+through rules gated on spaCy's word list or the corpus and an exception list, and leaves every
+other form alone. The votes come from one spaCy pass over the raw abstracts (``lemma_votes``);
+the map is learned once from them, written to a reviewable file, and applied line by line like
+the phrase model.
 """
 
 from __future__ import annotations
@@ -48,6 +49,7 @@ PROPER_TAGS = frozenset({"NNP", "NNPS"})
 SINGULAR_TAGS = {RULE_PLURAL: frozenset({"NN"}), RULE_VERB: frozenset({"VB", "VBP"})}
 # Stem endings after which English spells the plural or third person with -es.
 ES_STEM_ENDINGS = ("s", "x", "z", "ch", "sh", "o")
+MEN_SUFFIX = "men"
 # A word merges only with at least this many tagged occurrences, at least this share of them
 # read as an -s inflection of one lemma.
 MIN_VOTES = 5
@@ -97,7 +99,10 @@ ISE_EXCEPTION_STEMS = (
     "televis",
     "treatis",
 )
-ISE_EXCEPTION_SUFFIXES = ("wise", "rise", "rising", "risen")
+ISE_EXCEPTION_SUFFIXES = ("wise",)
+# The root *rise* (*rise*, *sunrise*, *uprising*) starts the word or follows a consonant; after a
+# vowel, *-rise* is the -ise suffix (*characterise*, *theorise*, *summarise*).
+_RISE_ROOT = re.compile(r"(?:^|[^aeiou])ris(?:e|es|ed|ing|en)$")
 # Verbs whose final l doubles before a suffix in British spelling only.
 DOUBLE_L_STEMS = (
     "bevel",
@@ -309,6 +314,28 @@ def _regular_singulars(token: str) -> list[str]:
     return [form for form in dict.fromkeys(candidates) if regular_plural(token, form)]
 
 
+@cache
+def _noun_exceptions() -> Mapping[str, Sequence[str]]:
+    """spaCy's irregular plural nouns and their singulars (*mice* → *mouse*)."""
+    return cast(Mapping[str, Sequence[str]], _lemmatizer().lookups.get_table("lemma_exc")["noun"])
+
+
+def _men_singular(token: str) -> str | None:
+    """The -man singular of a -men plural (*freshmen* → *freshman*), a guess by spelling alone."""
+    if token.endswith(MEN_SUFFIX) and len(token) > len(MEN_SUFFIX) + 1:
+        return token[: -len(MEN_SUFFIX)] + "man"
+    return None
+
+
+def _irregular_singulars(token: str) -> list[str]:
+    """Singulars English spelling rules cannot reach: spaCy's irregular nouns (*wives*, *testes*,
+    *appendices*), then -men to -man."""
+    candidates = [lemma for lemma in _noun_exceptions().get(token, ()) if lemma != token]
+    if (men := _men_singular(token)) is not None:
+        candidates.append(men)
+    return candidates
+
+
 def _tags(word: str, votes: Votes) -> Counter[str]:
     """The word's readings by tag, proper-noun readings left out."""
     tags: Counter[str] = Counter()
@@ -321,18 +348,22 @@ def _tags(word: str, votes: Votes) -> Counter[str]:
 def voted_lemma(
     token: str, votes: Votes, counts: Counter[str] | None = None
 ) -> tuple[str, str] | None:
-    """``(lemma, rule)`` when spaCy mostly reads ``token`` as a regular -s inflection, or ``None``.
+    """``(lemma, rule)`` when spaCy mostly reads ``token`` as an -s inflection or a plural noun,
+    or ``None``.
 
     spaCy's tags decide whether the token is an inflection: at least ``MIN_VOTE_SHARE`` of at
     least ``MIN_VOTES`` readings (proper nouns left out, *United States*) must be plural nouns
     or third-person verbs. English spelling limits the possible singulars (no *plan* for
-    *planes*); among them the one spaCy most often reads as the matching part of speech wins (a
-    singular noun for a plural, a base verb for a third-person verb), then the most frequent,
-    then the one spaCy names.
+    *planes*); a plural noun also takes the singulars of spaCy's irregular nouns (*mice*,
+    *shelves* → *shelf*, *testes* → *testis*) and -men to -man. Among the candidates the one
+    spaCy most often reads as the matching part of speech wins (a singular noun for a plural, a
+    base verb for a third-person verb), then the most frequent, then the one spaCy names.
     spaCy's own lemmas of *-es* words are not used: they are unreliable (*uses* → *us*,
     *senses* → *sens*). A singular spaCy does not read as that part of speech at least
     ``MIN_VOTES`` times must, with ``counts``, occur at least ``MIN_SHARE`` as often as the token
-    (no *polis* → *poli*). Plurals that are words of their own (*aesthetics*,
+    (no *polis* → *poli*); a -man singular must always be read so, and more often as a common
+    noun than as a name, as the rule is only a guess (*specimen* has no *speciman*, *hymen* is
+    not the plural of the surname *Hyman*). Plurals that are words of their own (*aesthetics*,
     *ethics*) are kept by the override file, not by this rule.
     """
     tags = _tags(token, votes)
@@ -340,10 +371,12 @@ def voted_lemma(
     inflected = sum(tags[tag] for tag in INFLECTED_TAGS)
     if total < MIN_VOTES or inflected / total < MIN_VOTE_SHARE:
         return None
+    rule = RULE_PLURAL if tags["NNS"] >= tags["VBZ"] else RULE_VERB
     candidates = _regular_singulars(token)
+    if rule == RULE_PLURAL:
+        candidates = list(dict.fromkeys(candidates + _irregular_singulars(token)))
     if not candidates:
         return None
-    rule = RULE_PLURAL if tags["NNS"] >= tags["VBZ"] else RULE_VERB
     matching = SINGULAR_TAGS[rule]
     named: Counter[str] = Counter()
     for tag, lemma_named, count in votes.get(token, ()):
@@ -357,7 +390,11 @@ def voted_lemma(
 
     lemma = max(candidates, key=preference)
     recognised = preference(lemma)[0] >= MIN_VOTES
-    if not recognised and counts is not None and not _common_enough(lemma, token, counts):
+    if lemma == _men_singular(token) and lemma not in _noun_exceptions().get(token, ()):
+        noun_readings = preference(lemma)[0]
+        proper_readings = sum(count for tag, _, count in votes.get(lemma, ()) if tag in PROPER_TAGS)
+        return (lemma, rule) if recognised and noun_readings > proper_readings else None
+    if not recognised and not _common_enough(lemma, token, counts):
         return None
     return lemma, rule
 
@@ -365,7 +402,11 @@ def voted_lemma(
 def _spelling_candidate(token: str) -> str | None:
     if token in SPELLINGS:
         return SPELLINGS[token]
-    if token.startswith(ISE_EXCEPTION_STEMS) or token.endswith(ISE_EXCEPTION_SUFFIXES):
+    if (
+        token.startswith(ISE_EXCEPTION_STEMS)
+        or token.endswith(ISE_EXCEPTION_SUFFIXES)
+        or _RISE_ROOT.search(token)
+    ):
         return None
     if _ISE_SUFFIX.search(token):
         return _ISE_SUFFIX.sub(lambda match: "iz" + match.group(2), token)
@@ -388,15 +429,20 @@ def _spelling_candidate(token: str) -> str | None:
 def american(token: str, counts: Counter[str] | None = None) -> str | None:
     """The American spelling of a British form, or ``None`` when the token is not one.
 
-    With ``counts``, the American form must also occur in the corpus at least ``MIN_SHARE`` as
-    often as the token.
+    Without ``counts``, the American form must be in spaCy's word list. With ``counts``, it must
+    occur in the corpus at least ``MIN_SHARE`` as often as the token, and at least ``MIN_VOTES``
+    times when the word list lacks it: the list has few derived words (*contextualize*,
+    *personalization*), so the corpus is the evidence for those.
     """
     if len(token) < MIN_SPELLING_LENGTH:
         return None
     candidate = _spelling_candidate(token)
-    if candidate is None or candidate == token or not _known(candidate):
+    if candidate is None or candidate == token:
         return None
-    return candidate if _common_enough(candidate, token, counts) else None
+    if counts is None:
+        return candidate if _known(candidate) else None
+    attested = _known(candidate) or counts[candidate] >= MIN_VOTES
+    return candidate if attested and _common_enough(candidate, token, counts) else None
 
 
 @dataclass
@@ -469,7 +515,11 @@ def normal_form(
 def learn_lemma_map(
     counts: Counter[str], votes: Votes, protected: Iterable[str], overrides: dict[str, str]
 ) -> LemmaMap:
-    """Map every type in ``counts`` that has a normal form other than itself."""
+    """Map every type in ``counts`` that has a normal form other than itself.
+
+    A normal form that is itself mapped is followed to the end of the chain, so applying the map
+    once is final (*particularises* → *particularizes* → *particularize*).
+    """
     protected_set = set(protected)
     lemma_map = LemmaMap()
     for token in counts:
@@ -477,7 +527,22 @@ def learn_lemma_map(
         if lemma != token:
             lemma_map.mapping[token] = lemma
             lemma_map.rules[token] = rule
+    for token in list(lemma_map.mapping):
+        lemma = _end_of_chain(token, lemma_map.mapping)
+        if lemma == token:
+            del lemma_map.mapping[token], lemma_map.rules[token]
+        else:
+            lemma_map.mapping[token] = lemma
     return lemma_map
+
+
+def _end_of_chain(token: str, mapping: Mapping[str, str]) -> str:
+    seen = {token}
+    lemma = mapping[token]
+    while lemma in mapping and lemma not in seen:
+        seen.add(lemma)
+        lemma = mapping[lemma]
+    return lemma
 
 
 def count_types(paths: Iterable[Path]) -> Counter[str]:

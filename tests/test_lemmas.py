@@ -46,7 +46,7 @@ def test_third_person_verbs_map_to_their_base_form() -> None:
         ("discuss", [("VB", "discuss", 30), ("VBP", "discuss", 10)]),  # read as a verb
         ("aesthetics", [("NN", "aesthetic", 25), ("NNS", "aesthetic", 5)]),  # mostly singular
         ("structures", [("NNS", "structure", 4)]),  # too few readings
-        ("data", [("NNS", "datum", 50)]),  # not a regular -s form of its lemma
+        ("bacteria", [("NNS", "bacterium", 50)]),  # neither regular nor in spaCy's irregulars
     ],
 )
 def test_words_spacy_does_not_mostly_read_as_regular_inflections_stay(
@@ -86,6 +86,47 @@ def test_a_singular_rare_in_the_corpus_is_not_merged_into() -> None:
     votes = {"polis": [("NNS", "poli", 20)]}
 
     assert voted_lemma("polis", votes, Counter({"polis": 100, "poli": 2})) is None
+
+
+@pytest.mark.parametrize(
+    ("token", "lemma"),
+    [
+        ("mice", "mouse"),
+        ("wives", "wife"),
+        ("appendices", "appendix"),
+        ("shelves", "shelf"),  # not the verb *shelve* the spelling rule offers
+        ("testes", "testis"),
+    ],
+)
+def test_irregular_plurals_map_to_spacys_singular(token: str, lemma: str) -> None:
+    votes = {token: [("NNS", lemma, 20)], lemma: [("NN", lemma, 30)]}
+
+    assert voted_lemma(token, votes, Counter({token: 20, lemma: 30})) == (lemma, "plural")
+
+
+def test_irregular_singulars_apply_only_to_plural_nouns() -> None:
+    votes = {"leaves": [("VBZ", "leave", 50), ("NNS", "leaf", 10)], "leave": [("VB", "leave", 40)]}
+
+    assert voted_lemma("leaves", votes) == ("leave", "verb")
+
+
+def test_men_plurals_need_a_singular_read_as_a_noun() -> None:
+    votes = {
+        "freshmen": [("NNS", "freshman", 30)],
+        "freshman": [("NN", "freshman", 25)],
+        "specimen": [("NNS", "speciman", 30)],
+    }
+    counts = Counter({"freshmen": 30, "freshman": 25, "specimen": 30})
+
+    assert voted_lemma("freshmen", votes, counts) == ("freshman", "plural")
+    assert voted_lemma("specimen", votes, counts) is None
+    assert voted_lemma("specimen", votes) is None
+
+
+def test_men_plurals_are_not_merged_into_a_name() -> None:
+    votes = {"hymen": [("NNS", "hyman", 15)], "hyman": [("NN", "hyman", 18), ("NNP", "hyman", 375)]}
+
+    assert voted_lemma("hymen", votes, Counter({"hymen": 19, "hyman": 372})) is None
 
 
 def test_lemma_votes_count_spacy_readings_by_processed_type() -> None:
@@ -129,6 +170,10 @@ def test_verbs_participles_comparatives_and_ing_nouns_stay(token: str) -> None:
         ("dialogue", "dialog"),
         ("programme", "program"),
         ("judgement", "judgment"),
+        ("characterise", "characterize"),
+        ("characterising", "characterizing"),
+        ("summarise", "summarize"),
+        ("theorise", "theorize"),
     ],
 )
 def test_british_spellings_map_to_american(token: str, lemma: str) -> None:
@@ -143,6 +188,9 @@ def test_british_spellings_map_to_american(token: str, lemma: str) -> None:
         "surprise",
         "surprising",
         "arising",
+        "rising",
+        "sunrise",
+        "uprising",
         "otherwise",
         "enterprise",
         "hour",
@@ -218,3 +266,24 @@ def test_spelling_merges_need_the_american_form_in_the_corpus() -> None:
 
     assert american("organisation", counts) == "organization"
     assert american("colonisation", counts) is None
+
+
+def test_american_forms_missing_from_spacys_word_list_count_when_the_corpus_has_them() -> None:
+    counts = Counter({"contextualise": 270, "contextualize": 810, "personalisation": 500})
+
+    assert american("contextualise") is None  # no corpus, so the word list decides
+    assert american("contextualise", counts) == "contextualize"
+    assert american("personalisation", counts) is None
+
+
+def test_chains_are_followed_to_their_end() -> None:
+    counts = Counter({"particularises": 6, "particularizes": 40, "particularize": 90})
+    votes = {
+        "particularizes": [("VBZ", "particularize", 30)],
+        "particularize": [("VB", "particularize", 60)],
+    }
+
+    lemma_map = learn_lemma_map(counts, votes, protected=set(), overrides={})
+
+    assert lemma_map.mapping["particularises"] == "particularize"
+    assert lemma_map.rules["particularises"] == "spelling"
