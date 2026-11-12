@@ -47,7 +47,6 @@ dev = [
 ]
 labels = [
     "anthropic>=2.8.0",
-    "nltk>=3.10.4",
     "typesafe-sdk>=0.7.5",
 ]
 
@@ -72,7 +71,7 @@ namespace_packages = true
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
-module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*", "nltk.*"]
+module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*"]
 ignore_missing_imports = true
 
 [tool.uv.sources]

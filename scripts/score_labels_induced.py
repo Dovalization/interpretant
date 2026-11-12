@@ -49,7 +49,6 @@ from interpretant.drift.induction import (  # noqa: E402
     placed,
     stop_words,
     wiktionary_entries,
-    wordnet_entries,
 )
 from interpretant.drift.labels import (  # noqa: E402
     FAILED,
@@ -84,18 +83,17 @@ COVERAGE = 0.10
 REVISION_USAGES = 40
 MAX_SENSES = 8
 SHUFFLES = 20
-POS = {"nn": ("n", "noun"), "vb": ("v", "verb")}
+POS = {"nn": "noun", "vb": "verb"}
 
 CONSOLIDATION_PROMPT = """You build the list of senses in which a word is used in a set of texts.
 You are given evidence gathered from those texts and from dictionaries: groups of substitute words
 that a language model proposed for the word in context (C1, C2, ..., each with its most frequent
 substitutes and example usages, the word marked with ⟦ and ⟧), the words most often found right
-before or after it (N1, N2, ...), and dictionary glosses from WordNet (W1, ...) and Wiktionary
-(K1, ...).
+before or after it (N1, N2, ...), and dictionary glosses from Wiktionary (K1, ...).
 
 Write the list of senses the texts show, following these rules.
 1. Every sense cites at least one substitute group (C...) or neighbour (N...) as evidence. A
-   dictionary entry (W..., K...) may be cited as well, never alone. Leave out senses the texts do
+   dictionary entry (K...) may be cited as well, never alone. Leave out senses the texts do
    not show.
 2. Use the fewest senses a careful reader could tell apart in context, and merge senses a reader
    could not reliably tell apart. Between 1 and 8 senses.
@@ -227,12 +225,11 @@ def evidence() -> None:
         record = {
             "lemma": lemma,
             "word": word,
-            "pos": POS[part][1],
+            "pos": POS[part],
             "half_a": len(keys),
             "communities": groups,
             "neighbours": neighbours([found[k][2] for k in keys], stops),
-            "wordnet": wordnet_entries(word, POS[part][0]),
-            "wiktionary": wiktionary_entries(kaikki(word), POS[part][1]),
+            "wiktionary": wiktionary_entries(kaikki(word), POS[part]),
         }
         (folder / f"{lemma}.json").write_text(json.dumps(record, indent=1), encoding="utf-8")
         print(f"{lemma}: {len(groups)} communities, {len(record['wiktionary'])} Wiktionary senses")
@@ -259,8 +256,6 @@ def evidence_text(record: dict[str, object]) -> str:
         f"N{i}: {item} ({count})"
         for i, (item, count) in enumerate(record["neighbours"], start=1)  # type: ignore[arg-type]
     ]
-    lines += ["", "WordNet:"]
-    lines += [f"W{i}: {gloss}" for i, gloss in enumerate(record["wordnet"], start=1)]  # type: ignore[arg-type]
     lines += ["", "Wiktionary:"]
     lines += [f"K{i}: {gloss}" for i, gloss in enumerate(record["wiktionary"], start=1)]  # type: ignore[arg-type]
     return "\n".join(lines)
@@ -433,8 +428,8 @@ def freeze() -> None:
     lines = [
         "# Round Q's sense lists (docs/predictions_labels.md), induced from half A of DWUG EN by",
         "# scripts/score_labels_induced.py; not edited by hand. Evidence ids refer to",
-        "# data/labels/round_q/evidence/ (C substitute groups, N neighbours, W WordNet, K",
-        "# Wiktionary, U usages in the revision pass).",
+        "# data/labels/round_q/evidence/ (C substitute groups, N neighbours, K Wiktionary,",
+        "# U usages in the revision pass).",
         "",
     ]
     community_map = {}

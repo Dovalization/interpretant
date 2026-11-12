@@ -6,7 +6,7 @@ Evidence for a word's senses comes from methods that are not generative language
   (Amrami and Goldberg 2019), grouped into communities of substitutes that appear together
   (Eyal et al. 2022);
 - the words found immediately before and after the target;
-- the word's entries in WordNet and Wiktionary.
+- the word's entries in Wiktionary.
 
 A language model then consolidates the evidence into a list of senses, citing the evidence each
 sense rests on (see ``scripts/score_labels_induced.py``). The substitute communities also give a
@@ -168,18 +168,6 @@ def neighbours(
         if after and after[0].lower() not in stops:
             counts[f"after {after[0].lower()}"] += 1
     return sorted(counts.items(), key=lambda item: (-item[1], item[0]))[:top]
-
-
-def wordnet_entries(word: str, pos: str) -> list[str]:
-    """Glosses of the word's WordNet synsets of that part of speech, instances left out."""
-    from nltk.corpus import wordnet  # noqa: PLC0415
-
-    return [
-        synset.definition()
-        for synset in wordnet.synsets(word, pos=pos)
-        if not synset.instance_hypernyms()
-        and word in (lemma.name().lower() for lemma in synset.lemmas())
-    ]
 
 
 def wiktionary_entries(path: Path, pos: str) -> list[str]:
