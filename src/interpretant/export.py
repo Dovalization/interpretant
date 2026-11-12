@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import pandas as pd
+import polars as pl
 from gensim.models import KeyedVectors
 
 from interpretant.corpus.audit import load_target_words
@@ -126,12 +126,8 @@ def parse_predictions(paths: Iterable[Path]) -> dict[str, Any]:
     return {"rounds": rounds, "predictions": predictions}
 
 
-def _rows(table: pd.DataFrame, rename: dict[str, str]) -> list[dict[str, Any]]:
-    selected = table[list(rename)].rename(columns=rename)
-    return [
-        {str(key): value.item() if hasattr(value, "item") else value for key, value in row.items()}
-        for row in selected.to_dict(orient="records")
-    ]
+def _rows(table: pl.DataFrame, rename: dict[str, str]) -> list[dict[str, Any]]:
+    return table.select(list(rename)).rename(rename).to_dicts()
 
 
 WITHIN_COLUMNS = {
@@ -223,10 +219,11 @@ def export_web(  # noqa: PLR0913
                     )
             log(f"  {method} {cell.layer}/{cell.name}_{cell.decade}")
 
-    within = pd.read_parquet(drift_dir / "within_field.parquet")
     # Drift tables measured before the books layer was retired still hold its rows.
-    within = within[within.layer.isin(LAYERS)]
-    cross = pd.read_parquet(drift_dir / "cross_field.parquet")
+    within = pl.read_parquet(drift_dir / "within_field.parquet").filter(
+        pl.col("layer").is_in(LAYERS)
+    )
+    cross = pl.read_parquet(drift_dir / "cross_field.parquet")
     fields = sorted({cell["field"] for cell in cells})
     _dump(
         output_dir / "corpus.json",
@@ -260,22 +257,23 @@ def export_web(  # noqa: PLR0913
                 "word": word,
                 "counts": counts[word],
                 "neighbours": neighbours[word],
-                "within": _rows(within[within.word == word], WITHIN_COLUMNS),
-                "cross": _rows(cross[cross.word == word], CROSS_COLUMNS),
+                "within": _rows(within.filter(pl.col("word") == word), WITHIN_COLUMNS),
+                "cross": _rows(cross.filter(pl.col("word") == word), CROSS_COLUMNS),
             },
         )
-    perplexity = pd.read_parquet(drift_dir / "cross_perplexity_corrected.parquet")
+    perplexity = pl.read_parquet(drift_dir / "cross_perplexity_corrected.parquet")
+    keys = ["decade", "model_field", "text_field"]
     grouped = (
-        perplexity.sort_values("seed")
-        .groupby(["decade", "model_field", "text_field"])["excess"]
-        .apply(list)
-        .reset_index()
+        perplexity.sort("seed", maintain_order=True)
+        .group_by(keys, maintain_order=True)
+        .agg(pl.col("excess"))
+        .sort(keys)
     )
     _dump(
         output_dir / "perplexity.json",
         {
-            "fields": sorted(set(perplexity.text_field)),
-            "decades": sorted(int(decade) for decade in set(perplexity.decade)),
+            "fields": sorted(set(perplexity["text_field"])),
+            "decades": sorted(int(decade) for decade in set(perplexity["decade"])),
             "rows": [
                 {
                     "decade": int(row["decade"]),
@@ -283,23 +281,24 @@ def export_web(  # noqa: PLR0913
                     "text": row["text_field"],
                     "excess": [round(float(value), 4) for value in row["excess"]],
                 }
-                for row in grouped.to_dict(orient="records")
+                for row in grouped.iter_rows(named=True)
             ],
         },
     )
     falls_path = drift_dir / "cross_perplexity_decomposition.parquet"
     if falls_path.exists():
-        falls = pd.read_parquet(falls_path)
+        falls = pl.read_parquet(falls_path)
+        fall_keys = ["model_field", "text_field", "early", "late"]
         grouped_falls = (
-            falls.sort_values("seed")
-            .groupby(["model_field", "text_field", "early", "late"])
+            falls.sort("seed", maintain_order=True)
+            .group_by(fall_keys, maintain_order=True)
             .agg(
-                fall=("fall", "mean"),
-                mix=("mix", "mean"),
-                rate=("rate", "mean"),
-                seeds=("fall", list),
+                pl.col("fall").mean(),
+                pl.col("mix").mean(),
+                pl.col("rate").mean(),
+                pl.col("fall").alias("seeds"),
             )
-            .reset_index()
+            .sort(fall_keys)
         )
         _dump(
             output_dir / "falls.json",
@@ -315,7 +314,7 @@ def export_web(  # noqa: PLR0913
                         "rate": round(float(row["rate"]), 4),
                         "seeds": [round(float(value), 4) for value in row["seeds"]],
                     }
-                    for row in grouped_falls.to_dict(orient="records")
+                    for row in grouped_falls.iter_rows(named=True)
                 ]
             },
         )
