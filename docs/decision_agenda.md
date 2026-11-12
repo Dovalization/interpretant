@@ -536,10 +536,64 @@ Decision (2026-11-12), after a critical pass and a check of established practice
 
 ## Step 6: detection experiments
 
-The detection draft's decisions: rules written before each run or open reading then confirmation
-on held-out cases; which cases are held out; the interval and bar in experiment 1.
+Inputs: `docs/design_detection_experiments.md`, steps 2–5, and established practice (checked
+2026-11-12). Detection asks whether a word's use changed between periods, and how much.
 
-Decision:
+**Revised list and order (the author, 2026-11-12: established methods first, exploratory ones
+after):**
+
+| Order | Experiment | Standing | Needs |
+|---|---|---|---|
+| 0a | Calibration on the LSCD Benchmark's datasets (Schlechtweg, Virk and Arefyev 2024), not only DWUG English: encoder and measures against human graded change, comparable with published numbers | Standard tooling | Encoders, the benchmark data |
+| 0b | A systematic synthetic set as the development set: several planted scenarios (gradual or sudden, a sense gained or lost, a frequency change without a change of meaning) (Shoemark et al. 2019) | Established | The rebuilt store |
+| 1 | J on every usage: bootstrap intervals (resampling abstracts), permutation significance, false discovery rate correction when many words are screened (Liu, Medlar and Glowacka 2021) | Established | The rebuilt store |
+| 2 | Matched controls (step 5) as the bar | Established (SemEval-2020 style) | The word list |
+| 3 | Year-by-year time series of a word's change against a reference period, with change-point detection and a shuffle null, replacing half-decade windows (Kulkarni et al. 2015; Shoemark et al. 2019: the full series beats two points) | Established | Years per usage (4.6); possibly `ruptures`, weighed under the dependency rule |
+| 4 | One measure for the static grid instead of the two-threshold rule | The project's own diagnosis | The rebuilt grid |
+| 5 | Same-abstract controls, aimed at topic change | Exploratory: the literature has no method that separates topic shift from semantic change (Montanelli and Periti's survey lists it as open) | The abstracts table |
+| 6 | Removing the era signal from the vectors (concept erasure, LEACE) | Exploratory | Last, since it alters every vector |
+
+Checks every experiment reads: the documented changes (*alignment* and *attention* in AI,
+2010s→2020s; *network* in AI, 1980s→1990s; *platform* in communication, 2000s→2010s), the quiet
+transitions, planted changes, the placebo, shuffles and controls. Exploratory experiments are
+judged hard against planted changes and the placebo, since no published result supports them.
+
+**6.1 How results are judged.** Rules written before each run, or open reading on development
+cases and confirmation on held-out ones. *Recommendation:* the second, the standard split of
+exploratory and confirmatory analysis, with confirmation rules written before the confirming
+run (guarding against the "garden of forking paths", Gelman and Loken).
+
+**6.2 Held-out cases.** All known cases were used in round X, and four are too few to split.
+*Recommendation:* develop on the synthetic set (0b) and the benchmark (0a); build a fresh set of
+known answers for confirmation (changes dated by dictionaries in the project's fields, such as
+Wiktionary's dated and field-labelled senses, and cases such as *hallucination* in psychology and
+*prompt* in AI), and hold it back. The author judges which cases count as documented.
+
+**6.3 The bar in experiment 1.** *Recommendation:* the 95% interval must clear the matched
+controls' 95th percentile (at least 30 controls, step 5), with shuffles as the floor and false
+discovery rate correction when many words are screened.
+
+Decisions (2026-11-12): the revised list and order above; and
+
+- 6.1: explore freely on the synthetic set (0b) and the benchmark (0a); confirm once on held-out
+  cases under a confirmation plan committed to git before the confirming run (the frozen
+  method, the cases, the pass rule; the commit's timestamp shows it came first). Development
+  material is not the project's domain (synthetic changes; historical general English), so the
+  held-out set from the project's fields is the test that counts.
+- 6.2: a fresh held-out set of about 10–20 documented changes and as many stable cases (chosen
+  like matched controls), drafted by Claude with evidence (sense, field, dating source, corpus
+  counts per decade; sources: Wiktionary through the kaikki.org extracts, well-documented
+  recent cases, the corpus), reviewed by the author (reading a few usages per decade is
+  annotation, not measuring), committed and marked not for use until confirmation, with its
+  hash recorded. Its pass rule (for example, at least 8 of 10 changes found, at most 1 of 10
+  stable words flagged) is set before any measuring.
+- 6.3: the bar's form is fixed now (the target's 95% interval against its matched controls'
+  distribution, shuffles as the floor, false discovery rate correction when screening); its
+  level is chosen during development, where the answers are known, and frozen in the
+  confirmation plan. Tools: scikit-learn `cosine_similarity` on the store's vectors, scipy's
+  `bootstrap` (resampling abstracts, never pairing a usage with its own copy, which would bias J
+  upwards), `permutation_test` with at least 1,000 shuffles (the similarity matrix computed once,
+  labels reshuffled), `false_discovery_control`.
 
 ## Step 6b: the static models (after detection experiment 4)
 
