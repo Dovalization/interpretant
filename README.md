@@ -133,8 +133,9 @@ uv run interpretant corpus openalex download
 uv run interpretant corpus openalex ingest
 
 # Collapse plurals and British spellings, merge multi-word terms, then audit coverage
-uv run interpretant corpus lemmas learn      # writes data/processed/lemmas.tsv for review
-uv run interpretant corpus lemmas apply
+uv run interpretant corpus lemmas votes --workers 10  # spaCy's readings of every abstract
+uv run interpretant corpus lemmas learn      # writes data/processed/lemmas_voted.tsv for review
+uv run interpretant corpus lemmas apply      # default map: the grid's, data/processed/lemmas.tsv
 uv run interpretant corpus phrases learn
 uv run interpretant corpus phrases apply
 uv run interpretant corpus audit --processed-dir data/phrased --output data/phrased/audit.json

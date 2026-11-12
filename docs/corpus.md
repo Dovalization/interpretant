@@ -45,17 +45,35 @@ does that job without changing the context windows.
 ### Lemmatisation
 
 Since November 2026 the processed cells pass through a type-level lemma map before phrase
-detection (`corpus lemmas learn|apply`, `data/lemmatised/`). The map collapses regular plurals
-onto their singular (simplemma's lemma, accepted only when the token is `lemma + s/es`,
-`y → ies` or the *-is/-es* alternation) and British spellings onto American ones (rules for
-*-ise/-isation*, *-yse*, *-our*, *-re*, doubled *l* and a short word list, gated on
-simplemma's lexicon, an exception list and the American form's own frequency in the corpus).
-Verbs, participles and *-ing* nominalisations are deliberately left alone: a general
-lemmatiser turns *learning* into *learn* and *meaning* into *mean*, which would destroy the
-concepts under study. Target words, hyphenated and phrase tokens are never mapped. Irregular
-plurals and words kept on purpose (*data*, *media*, *means*, *odds*) are in the tracked
-`data/lemma_overrides.tsv`; the learned map (`data/processed/lemmas.tsv`, about 37,000
-types, 8.3% of tokens) is written for review and regenerated from the vocabulary.
+detection (`corpus lemmas apply`, `data/lemmatised/`). The map collapses regular *-s*
+inflections (plural nouns onto their singular, third-person verbs onto their base form; the
+token must be `lemma + s/es`, `y → ies` or the *-is/-es* alternation of it) and British
+spellings onto American ones (rules for *-ise/-isation*, *-yse*, *-our*, *-re*, doubled *l* and
+a short word list, gated on a word list, an exception list and the American form's own frequency
+in the corpus). Other verb forms, participles and *-ing* nominalisations are deliberately left
+alone: a general lemmatiser turns *learning* into *learn* and *meaning* into *mean*, which would
+destroy the concepts under study. Target words, hyphenated and phrase tokens are never mapped.
+Irregular plurals and words kept on purpose (*data*, *media*, *means*, *odds*) are in the tracked
+`data/lemma_overrides.tsv`.
+
+Two maps exist. The grid was lemmatised with the first, learned from simplemma's lemmas of bare
+word types (`data/processed/lemmas.tsv`, about 37,000 types, 8.3% of tokens). The grid is frozen,
+so that map stays as it is, and the scripts that match the grid's vocabulary read it. Since
+2026-11-11 the map is learned from spaCy (`corpus lemmas votes`, then `corpus lemmas learn`,
+written to `data/processed/lemmas_voted.tsv`). One pass of spaCy's tagger over the raw abstracts,
+each abstract tagged once, counts how every word type is read in its sentences; a type merges
+only when at least 80% of at least five readings are plural-noun or third-person-verb readings of
+one lemma. spaCy's word list gates the spellings. Lemmatising bare words with spaCy, with no
+sentence to read, merged *loss* into *los* and *aesthetics* into *aesthetic*
+(`docs/spacy.md`).
+
+The first spaCy map (2026-11-12, votes from 1,274,029 abstracts, each tagged once) maps 21,251
+types, 8.7% of the tokens: plurals 6.9%, third-person verbs 1.5%, spellings 0.1%, overrides 0.2%.
+It agrees with the simplemma map on 15,801 types (8.6% of the tokens) and differs on 0.2%: it
+merges possessives that lost their apostrophe (*kants* → *kant*), corrects simplemma's
+singulars (*fixes* → *fix*, not *fixe*; *skies* → *sky*, not *ski*), and keeps the plurals the
+override file lists (*graphics*, *odds*, *commons*). Known remaining errors, for the override
+file: *cosmos* → *cosmo*, *thanks* → *thank*, *mises* → *mis*.
 
 ### OpenAlex grid
 

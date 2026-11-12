@@ -41,7 +41,7 @@ One pipeline, run from the CLI in this order. Every command has `--help`.
 
 ```
 corpus openalex download|ingest                         data/processed/<layer>/texts/<cell>.txt
-corpus lemmas learn|apply                               data/lemmatised/<layer>/texts/<cell>.txt
+corpus lemmas votes|learn|apply                         data/lemmatised/<layer>/texts/<cell>.txt
 corpus phrases learn|apply                              data/phrased/<layer>/texts/<cell>.txt
 corpus audit --processed-dir data/phrased --output data/phrased/audit.json
 twec grid [--seed 43 --output-dir models/twec_grid_seed43]   models/twec_grid/<layer>/<field>_<decade>.kv
@@ -76,11 +76,11 @@ analysis: predictions first, in their own commit.
   Commands parse options, call one library function and print; the loops (ingest,
   grid training, drift, cross-perplexity, figures) live in the library with tests.
 - `corpus/`: `openalex.py` (API client, sampling, cleaning at ingest, `ingest_fields`), `files.py`
-  (`source_texts`, `rewrite_texts`: one stage's cell files into the next),
-  `caps.py` (author caps), `lemmas.py` (type-level plural and spelling map), `phrases.py`
-  (gensim `Phrases` on a balanced sample),
-  `preprocessing.py` (`preprocess_text`, target variant map), `audit.py` (cell counts, target
-  coverage, manifest risks; `audit_corpus`).
+  (`source_texts`, `rewrite_texts`: one stage's cell files into the next), `caps.py` (author
+  caps), `lemmas.py` (type-level map: *-s* inflections from spaCy's readings in context, and
+  British spellings), `phrases.py` (gensim `Phrases` on a balanced sample), `preprocessing.py`
+  (`preprocess_text`, target variant map), `audit.py` (cell counts and target coverage;
+  `audit_corpus`).
 - `embedding/`: `base.py` (`training_sentences`: splits lines at 10,000 tokens, gensim's
   silent truncation limit), `twec.py` (`TWECTrainer`: balanced compass, frozen context
   vectors per cell), `grid.py` (cell discovery, compass sample, `train_twec_grid`,

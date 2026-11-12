@@ -14,12 +14,14 @@ collapsing. Plurals and British spellings of the target words are mapped onto on
 that job without changing the context windows.
 
 `corpus lemmas learn|apply` (`corpus/lemmas.py`) then normalises the rest of the vocabulary at
-the type level, and only in two ways: regular plurals collapse onto their singular (simplemma's
-lemma, accepted only when the token is a regular plural of it), and British spellings onto
-American ones (rules gated on simplemma's lexicon, an exception list and the American form's
-own corpus frequency). Verbs, participles and *-ing* nominalisations stay as they are, because
-a general lemmatiser maps *learning* to *learn* and *embedding* to *embed*. The map is written
-to `data/processed/lemmas.tsv` for review; the hand-kept part is `data/lemma_overrides.tsv`.
+the type level, and only in two ways: regular *-s* inflections collapse onto their lemma (plural
+nouns onto the singular, third-person verbs onto the base form), and British spellings onto
+American ones (rules gated on a word list, an exception list and the American form's own corpus
+frequency). Other verb forms, participles and *-ing* nominalisations stay as they are, because a
+general lemmatiser maps *learning* to *learn* and *embedding* to *embed*. The grid's map came
+from simplemma (`data/processed/lemmas.tsv`); since 2026-11-11 the map comes from how spaCy's
+tagger reads each word in context (`data/processed/lemmas_voted.tsv`, `docs/corpus.md`). The
+hand-kept part is `data/lemma_overrides.tsv`.
 Round 4 of the predictions tested which findings survive this change: all of the robust ones did; *information*'s convergence did not.
 
 `corpus phrases learn` fits one gensim `Phrases` model (normalised PMI ≥ 0.5, minimum count 20)

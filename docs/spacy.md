@@ -13,10 +13,23 @@ lemmatizer has to guess, and it guesses badly: on the corpus vocabulary it read 
 in *s* as a possible plural noun (*loss* → *los*, *discuss* → *discus*, *aesthetics* →
 *aesthetic*) and missed third-person verbs (*uses*, *identifies*). The type-level lemma map
 therefore takes its merges from votes: one spaCy pass over the raw abstracts counts how each word
-type is read in context, and a type merges only when spaCy mostly reads it as a plural noun or a
-third-person verb of one lemma (`corpus lemmas votes`, then `corpus lemmas learn`).
+type is read in context (`corpus lemmas votes`, then `corpus lemmas learn`).
 
-The general rule: use spaCy on sentences, not on bare words.
+Even in context, three things needed rules of the project's own:
+
+- **spaCy's tags decide whether a word merges, not its lemmas.** Its lemmas of *-es* words are
+  unreliable (*uses* → *us*, *senses* → *sens*, *taxes* → *taxis*); spaCy's own source calls the
+  ordering of candidate lemmas "dodgy ... until we get frequencies". English spelling limits the
+  possible singulars (*-es* only after *s*, *x*, *z*, *ch*, *sh* or *o*), and among them the one
+  read as the matching part of speech wins, then the most frequent.
+- **Proper-noun readings are left out** (*United States*, *Academy of Sciences*).
+- **Plurals that are words of their own** (*aesthetics*, *hermeneutics*, *odds*, *arrears*) are
+  kept by `data/lemma_overrides.tsv`, an exception list in the way spaCy's own rule lemmatizer
+  takes WordNet's. The 135 added on 2026-11-11 were found in the votes (merged as plurals,
+  their own WordNet entry, a singular mostly read as an adjective) and reviewed by hand.
+
+The general rule: use spaCy on sentences, not on bare words, and keep a reviewed list for the
+words no rule can tell apart.
 
 ## Where it fits
 
@@ -25,6 +38,7 @@ The general rule: use spaCy on sentences, not on bare words.
 | Sentence segmentation (parser or `senter`) | Usage contexts in the store; shared-sentence detection | The regex sentence splitters in `corpus/quality.py` and `drift/senses.py`, which break on *e.g.*, *et al.* and *Fig. 2* |
 | Part of speech and morphology (tagger) | Lemma votes; a usage feature for counting senses | Adds a check on anachronisms: *prompt* read as a verb cannot carry the language-model sense |
 | Lemmas in context | Finding target words in the store | `TARGET_VARIANTS` in `corpus/preprocessing.py` and `word_pattern` in `drift/senses.py` |
+| `AttributeRuler` (patterns that set `LEMMA`) | Lemma exceptions in the store's pipeline: it loads `data/lemma_overrides.tsv`, so the store's lemmas in context follow the same reviewed list as the type-level map | spaCy's lemmas left as they are, which would merge *aesthetics* into *aesthetic* again |
 | `Matcher` (patterns on lemma, part of speech, morphology) | Cue words for counting senses; boilerplate patterns | The cue syntax of `drift/classifier.py` (`<word`, `>>word`, `!word` in a five-word window) |
 | `PhraseMatcher` | Phrase targets (*neural network*, *social network*) | Phrase handling that rests on the grid's gensim phrase model |
 | `DependencyMatcher` (needs the parser) | Syntactic cues: *prompt* as the object of *design* or *engineer*, *attention* modified by *self-* or *multi-head* | Cues by proximity, which cannot tell syntax from neighbourhood |
@@ -39,8 +53,9 @@ The general rule: use spaCy on sentences, not on bare words.
 
 ## When
 
-1. **Store rebuild:** sentences, part of speech and morphology, lemmas in context, named entities,
-   `PhraseMatcher` for targets, lingua as a component, span groups with `DocBin`, the GPU path.
+1. **Store rebuild:** sentences, part of speech and morphology, lemmas in context with the
+   override list in an `AttributeRuler`, named entities, `PhraseMatcher` for targets, lingua as a
+   component, span groups with `DocBin`, the GPU path.
 2. **Counting senses:** `Matcher` and `DependencyMatcher` cues, noun chunks.
 3. **Later experiments:** dependency collocations for detection, trainable classifiers, the entity
    linker.
@@ -55,8 +70,12 @@ The general rule: use spaCy on sentences, not on bare words.
 
 From spaCy's documentation, read 2026-11-11.
 
-- Lemmatizer: <https://spacy.io/api/lemmatizer>; trained pipeline design and the lemmatizer's
-  dependence on the tagger: <https://spacy.io/models>.
+- Lemmatizer, including the source of its rule lemmatization: <https://spacy.io/api/lemmatizer>;
+  trained pipeline design and the lemmatizer's dependence on the tagger:
+  <https://spacy.io/models>; exception lists and the trainable lemmatizer:
+  <https://spacy.io/usage/linguistic-features>.
+- `AttributeRuler`, and the move of lemma exceptions to it in spaCy 3:
+  <https://spacy.io/api/attributeruler>, <https://spacy.io/usage/v3>.
 - Rule-based matching (`Matcher`, `PhraseMatcher`, `DependencyMatcher`):
   <https://spacy.io/usage/rule-based-matching>.
 - Processing pipelines (`nlp.pipe`, multiprocessing, disabling components):
