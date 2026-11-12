@@ -728,6 +728,25 @@ Decisions (2026-11-12):
   pass two hard tests, anachronism (no language-model *prompt* before about 2020, no AI
   *hallucination* before the late 2010s) and stability (no invented change in *component* and
   *having*).
+- 7.4: proportions by quantification with **QuaPy** (0.2.3, October 2026, BSD; it brings pandas
+  back as an installed dependency, which the author accepted; the project's code stays on
+  Polars), through a small adapter that passes a counter's probabilities through as a stand-in
+  classifier (tested in a throwaway environment with the project's versions). Candidates: PACC,
+  ACC and EM, the method chosen per word by QuaPy's artificial-prevalence protocol run on the
+  author's labels, since no method wins everywhere (Schumacher et al., JMLR 2025; ACC, PACC and EM
+  stand out in Moreo and Sebastiani's re-evaluation). EM only with bias-corrected temperature
+  scaling (BCTS), done by QuaPy: uncalibrated EM collapsed in tests and is known to fail with
+  several classes or uncalibrated probabilities (Esuli, Molinari and Sebastiani 2020), while EM
+  with BCTS is hard to beat (Alexandari, Kundaje and Shrikumar 2020); plain temperature scaling
+  still failed. Plain classify-and-count is always reported alongside (near state of the art
+  when tuned: Esuli, Moreo and Sebastiani). Bootstrap intervals resample both the cell's usages
+  and the author's labels, since error rates estimated from 50–70 labels per word are noisy and
+  the corrections amplify that (a synthetic test showed adjusted counts overshooting); where a
+  key word's interval is too wide, more labels for that word only. The methods assume a sense
+  looks alike in every period; where a word's senses change how they are expressed (computing
+  *attention*), error rates are estimated per period (guarded by 7.3's per-period scoring).
+  Reference for intervals: *Learning to Quantify* (Esuli, Fabris, Moreo and Sebastiani 2023, open
+  access). To add to `related_work.md`: these sources.
 
 ## Step 8: code layout (follows from steps 1–7)
 
