@@ -290,20 +290,189 @@ lexicalised plurals of the override file).
 
 ## Step 4: usages and the store
 
-Inputs: store draft decisions 1, 2, 4, 5; the data-acquisition draft; `pipeline_map.md`
-stages 7–8.
+Inputs: store draft decisions 1, 2, 4, 5; the data-acquisition draft; `pipeline_map.md` stages
+7–8; steps 2 and 3. A usage is one occurrence of a target word in its sentence.
 
-- Target matching: a spaCy `Matcher` on lemma replaces `word_pattern` (word plus regular plural
-  only); it catches irregular plurals and can leave out verb readings.
-- Compounds (from 2.5): whether *self-attention* counts as a usage of *attention*, as
-  `word_pattern` makes it today, or as a term of its own.
-- One occurrence per abstract: the first match (today) or a random one.
-- Context: the spaCy sentence.
-- One usage key (replaces five copies and two other schemes).
-- Store format: a Parquet manifest; shards named so a changed manifest cannot mix them.
-- Scope, which settles `scripts/discovery/`.
-- Downloads: the three thin words, decade sizing, the floor of 500; the gap check counts
-  occurrences the way the new matcher does.
+**4.1 Matching a target.** Today `word_pattern` (`\bword(s?)\b`, any case): the word and its
+regular plural only, no part of speech. *Recommendation:* spaCy's `Matcher` on the lemma (so
+irregular plurals and British spellings match through step 3), the `PhraseMatcher` for phrase
+targets; every usage records its part of speech and morphology, and nothing is filtered at
+matching: a measure or the sense counter decides whether verb readings count (*prompt* as a
+verb), as with shared works in 2.4.
+
+**4.2 Compounds** (from 2.5 and 3.5). Hyphenated words stay whole, so *self-attention* is one
+token. *Recommendation:* match it (a `Matcher` pattern on the lower-case form ending in the target)
+and record it as a compound usage, with the compound; multi-word compounds (*neural network*)
+are marked the same way through the `PhraseMatcher`. Measures choose all usages, only those
+outside compounds, or only one compound.
+
+**4.3 One occurrence per abstract** (store decision 1). Today the first match in each abstract.
+*Recommendation:* the manifest lists every occurrence (matching is cheap); one per abstract is
+drawn at random with a recorded seed for encoding and measures, so abstracts stay independent
+and the draw is not tied to the opening sentences, where an abstract's framing plausibly sits.
+Other occurrences can be encoded later if a measure needs them.
+
+**4.4 Context** (store decision 2). *Recommendation:* the spaCy sentence (XL-LEXEME was trained on
+sentences); a long sentence is cut by the encoder's own window centred on the target, as now.
+
+**4.5 Usage key.** Today defined five times. *Recommendation:* one function, a hash of the
+sentence text and the target's offsets (as now), so a usage whose text the cleaning changes gets
+a new key and a new vector; the work id is a column, not part of the key.
+
+**4.6 Store format.** *Recommendation:* the manifest as one Parquet table (Polars), one row per
+usage: key, word, compound, part of speech, morphology, lemma, field, decade, year, work id, its
+cells (2.4), sentence and offsets, sentence language and confidence, near-duplicate group;
+pandera checks on every rebuild. Annotated documents of target-bearing abstracts as `DocBin`
+files per cell. Vectors stored with their keys inside each file and found by key, and encoding
+resumed by the keys still missing, not by which files exist, so a changed manifest cannot mix
+shards.
+
+**4.7 Scope** (store decision 5). The target words, the control words (step 5), round A′'s
+words, the shortlist and the long list (capped at 300 abstracts per cell). The long list came
+from `scripts/discovery/` (a scan of the old grid; single-letter names; one input has no
+producer). *Recommendation:* keep `data/discovery/longlist.json` as data, delete the discovery
+scripts, and regenerate the long list from the rebuilt grid later.
+
+**4.8 Downloads** (the data-acquisition draft). *Recommendation:* the three thin words
+(*attention*, *platform*, *alignment*), sized per decade, floor 500 usages; the gap check runs
+after the new pass, counting occurrences the way 4.1 matches them; likely under 200 OpenAlex
+credits of 10,000 a day; nothing is downloaded without the author's go.
+
+**4.9 Models and running time** (store decision 4). The last full pass (lemma votes, small model,
+tagger and lemmatizer) read 1,274,029 abstracts, 206 million tokens, in 30 minutes on 10 CPU
+processes; the new pass adds `senter`, lingua and the `SpanRuler`, so under an hour.
+*Recommendation:* the small model for the whole pass; the transformer model only if a comparison
+on one field shows it changes target sentences' tags, lemmas or boundaries enough to matter (on
+lemmas it differed on 63 of 10,395 types); the GPU then for the transformer and the encoders.
+
+Decisions (2026-11-12):
+
+- 4.1: spaCy's `Matcher` on the lemma and the `PhraseMatcher` for phrase targets; every usage
+  records its part of speech, morphology and any named entity it sits in. The target list gains a
+  column stating each word's intended reading (*medium*: noun, not the adjective of *medium
+  effect size*, 22% of its uses; *learning*: noun, 36% verb readings); the manifest keeps every
+  match and flags whether it is in scope (the intended reading, not inside a name), measures use
+  in-scope usages by default and may include the rest on purpose. The one-field comparison with
+  the transformer model (4.9) looks at these words, where the small tagger errs.
+- 4.2: hyphenated words stay whole (2.5), so a lemma search alone would miss every compound
+  (*self-attention* has the lemma *self-attention*): 2–8% of a target's uses, and among them the
+  senses studied (*self-attention*, *cross-attention*) or others (*attention-deficit*,
+  *actor-network*, *e-learning*). A second `Matcher` rule finds the target as any part of a
+  hyphenated word; each usage records the compound and the target's position (head or
+  modifier); the encoder marks only the target part (*self-⟨t⟩attention⟨/t⟩*); compounds are in
+  scope by default, and a measure may leave them out on purpose. Multi-word compounds (*neural
+  network*) are marked the same way by the `PhraseMatcher` (3.5). Using compounds as evidence of
+  a sense is step 7's.
+- 4.3: one mention per abstract, drawn at random with a recorded seed (option B), replacing the
+  first mention: in abstracts with several mentions (15–44% of them), the first lands in the
+  opening sentence about twice as often as a random one (*network* 49% against 23%). The
+  manifest lists every mention, so all mentions with each abstract weighted equally (option C)
+  stays available without re-reading; it was not chosen now because within one abstract a word
+  usually keeps its sense ("one sense per discourse", Gale, Church and Yarowsky 1992), so the
+  extra mentions add little about a cell's sense mix, while every measure would have to handle
+  same-abstract pairs (J and APD), split the classifier by abstract and resample abstracts in
+  bootstraps. If C is switched on, that grouped handling is written once, in the library.
+- 4.4: the store records the usage and each encoder decides how to read it, so XL-LEXEME can be
+  replaced later (the author's requirement). Stored, encoder-independent: the sentence text and
+  the target's character offsets, the sentence's place in its abstract (the cleaned abstract is
+  kept in the annotated documents, 4.6), the usage key (4.5). One encoder table declares each
+  encoder's model and pinned revision, its context policy (the sentence by default; sentence
+  plus neighbours or the whole abstract possible), its window and centring (XL-LEXEME: 128
+  subword tokens) and how it marks or pools the target. Vectors are stored per encoder (name,
+  revision, context policy), keyed by the usage key; swapping an encoder is one table entry and
+  an encoding run. The 100-word pre-cut is dropped (the window is the encoder's setting);
+  sentence length is recorded (sample of 2,462 target sentences: median 25 words, 1.1% under 8
+  words, 2.1% beyond XL-LEXEME's window); malformed abstracts with no sentence punctuation (a
+  "sentence" over about 150 words) are flagged in cleaning as a new keeping rule (step 2), their
+  fate left to the sample audit.
+- 4.5: two identifiers, each defined once in the library (they replace five copies of `key_of`
+  and two other schemes). The **usage id** (work id, target word, mention number within the
+  abstract) is the manifest's row identifier, stable unless a mention itself is added or removed
+  (character positions would shift whenever cleaning changed earlier text); positions are
+  ordinary columns. The **content key** (sha256 of the sentence text and the target's offsets in
+  it, 20 hex characters) finds vectors: identical text is encoded once and shared, for every
+  encoder, with no merge-time special case. pandera checks enforce both: usage ids unique,
+  content keys equal to the hash recomputed from sentence and offsets, offsets pointing at the
+  target.
+  *Amended with 4.6:* the vector-cache key is the hash of exactly the text an encoder reads plus
+  the target's position in it; for sentence-only encoders such as XL-LEXEME it equals the
+  sentence key above, and for an encoder reading neighbours or the whole abstract it differs, so
+  identical sentences in different abstracts never share a vector wrongly.
+- 4.6: the store is Parquet throughout, written and read with Polars. An **abstracts** table is
+  the durable record of the cleaned corpus (work id, cells, year, cleaned text, sentence
+  boundaries, language, flags and removal reasons). A **usages** table points into it (usage id,
+  content key, word, compound and position, part of speech, morphology, lemma, in scope,
+  sentence and target offsets, sentence length, near-duplicate group) instead of copying text.
+  **Vectors** are Parquet tables per encoder and word (`vectors/encoder=…/word=…/`, read by
+  Polars' hive partitioning), one row per cache key with the vector as an array of 16-bit floats
+  (tested: 1,884 bytes per vector, a filtered read of 100 keys in 0.07 s); encoding resumes by an
+  anti-join of usages against existing keys; no numpy shards, sidecar keys or index file.
+  spaCy's `DocBin` is only a rebuildable cache of the annotations: it is tied to spaCy's version,
+  and target-bearing abstracts are nearly all of them (57% contain one of the 39 target words
+  alone; about 2–2.5 GB for the corpus). Unchanged from the store draft: pandera checks on every
+  rebuild, the datasheet, versioning (see step 9). The static pipeline's normalised text stays as
+  plain text files. Matches common practice: DWUG keeps a usages table per word with the
+  context, target offsets and sentence offsets inside the context; Parquet partitioned by column
+  is the standard analytical layout; a vector database is not needed, since measures compare
+  usages within one word.
+- 4.7: one **word list** file for the whole project (word, intended reading from 4.1, role:
+  target, control or candidate, pipelines, cap), read by the store, the static pipeline, the
+  downloads and the checks; it replaces `words_of_interest.txt`, the control-word files as
+  sources of fixed controls, the list typed into `build_vector_store.py` and the scope part of
+  `longlist.json` (the static and contextual target lists barely overlap today: 39 against 11).
+  Caps by role, not one cap: targets and their controls share one, so they stay comparable;
+  candidates keep a lower one (300 now), since one cap of 1,000 would mean up to 12 million
+  long-list usages against 1.9 million in the whole store today, where the control word *paper*
+  alone has 125,784. Controls are encoded only in the cells of their targets' planned
+  comparisons. The static outputs record the word-list version (the phrase rule of 3.5 makes the
+  normalised text depend on it; step 9). Same-abstract controls (detection experiment 2) are
+  drawn from the abstracts table when needed, not listed. `longlist.json` is kept as data and
+  `scripts/discovery/` deleted, the long list regenerated from the rebuilt grid. *component*,
+  *having* and the six-word shortlist get roles after checking their history. Cap values are set
+  after steps 5 and 6.
+- 4.8: downloads are a curated decision, not a pipeline step. The pipeline reports gaps (word,
+  field, decade, usable usages, OpenAlex's total of abstracts containing the word, estimated
+  cost); the author approves a committed **download plan** (word, cells, reason); the download
+  script carries out only the plan, after the author's go, and records what it fetched (counts,
+  totals, seed). Order: the plan is drafted from existing counts once steps 5 and 6 fix the words
+  and comparisons; downloads run before the full spaCy pass, so one pass cleans the regular
+  samples and the downloads together; after the pass, the gap report counts usable usages in
+  final terms (4.1, 4.2) and any cell still under the floor gets a small curated top-up.
+  Improvements: OpenAlex's total of matching abstracts is recorded per cell (the share sampled);
+  when that total is small, the whole set is downloaded, not a sample; fetching continues until
+  the floor of usable usages is met, since OpenAlex's stemmed search returns related forms. Kept
+  rules: one source per word (a word's cells all regular or all downloaded); downloaded cells
+  never feed the static pipeline (the abstracts table marks each abstract's source). The floor
+  (500) is provisional until step 6. First candidates: *attention* (AI), *platform*
+  (communication), *alignment* (AI).
+- 4.9: the small model (`en_core_web_sm`) for the whole corpus: cleaning, sentences, the static
+  normalised text (about 30 minutes on 10 CPU processes for the last full pass). The transformer
+  model (`en_core_web_trf`) is a candidate for target sentences only, re-annotating tags,
+  morphology and entities (and dependencies if step 7 needs them) within the small model's
+  sentences, so boundaries stay consistent. spaCy's own scores (general English, not abstracts):
+  tags 97.3% against 98.1%, entities 0.843 against 0.899, labelled dependencies 0.899 against
+  0.938, sentence boundaries 0.907 against 0.886 (the transformer is not better there). Decided
+  by a one-field comparison: if more than a couple of percent of usages change their in-scope
+  flag or lemma between the models, target sentences use the transformer, on bazzite's GPU after
+  its repository is synced.
+
+Step 4 decided (2026-11-12).
+
+## Step 4b: corpus quality
+
+How we know the corpus is good: four layers, the last two curated. The written record follows
+the "Datasheets for Datasets" template (Gebru et al. 2018).
+
+| Layer | What it does | How |
+|---|---|---|
+| 1. Definition | What a cell is (OpenAlex field label, language, document types, decade, the random sample and its seed), with known weaknesses: field labels come from OpenAlex's classifier, nested fields overlap, HCI's label widened from 915 venues to 3,601 | Written once, reviewed |
+| 2. Automatic checks | pandera on every rebuild (4.6); counts per removal reason per cell (step 2) | Automatic |
+| 3. Human review of samples | The author reads about 20 random abstracts per cell and records judgements (a real abstract? the right field? clean? did cleaning remove the right things?), plus samples of what each cleaning rule dropped | Curated |
+| 4. Sign-off | No rebuilt corpus is used for experiments until the datasheet and the review are read and approved, with the decision recorded | Curated |
+
+Decide: the review's sample size and form (a page of abstracts with a judgement per item, as in
+the earlier blind judging), and whether layer 3 runs on every rebuild or only when cleaning
+rules change.
 
 Decision:
 
@@ -412,6 +581,36 @@ Decision:
   hash of every input (content hashes were agreed in the stack decision).
 - Outputs record the settings that made them, so a rerun with other settings cannot silently
   reuse a stale file.
+
+- Data versioning: DVC, the common tool in ML projects for tracking data files by content hash
+  and the pipeline stages that produce them, against a small manifest of the project's own
+  (file hashes and the settings that made each file). Weighed under the reasonable-dependency
+  rule: DVC brings its own workflow and remote storage.
+
+- Outputs that depend on the word list (the static normalised text, through 3.5's phrase rule)
+  record its version.
+
+Decision:
+
+## Step 10: terminology pass (later)
+
+The author, 2026-11-12: names should follow common NLP and data-project usage, as *static* and
+*contextual* replaced "type track" and "usage track". One pass over code, docs and data paths,
+after the rebuild's names settle, listing each project-made term, the standard one, and where it
+is used. Candidates noted so far (to be checked against the literature, not assumed):
+
+| Project term | Possible standard term |
+|---|---|
+| cell (a field in a decade) | corpus slice, time bin, subcorpus |
+| grid (both the corpus of cells and the TWEC models) | two names, one per meaning |
+| layer (`openalex`, `openalex_full`) | source, subcorpus |
+| known answers; quiet transitions | gold-standard changes; stable (negative) cases |
+| planted changes | simulated or synthetic semantic change |
+| sense shares | sense distribution |
+| J (across minus within) | to be checked: a named measure in the literature, or ours |
+| word stream (the static pipeline's text) | normalised token stream, normalised text |
+| rounds, rungs | experiments; calibration stages |
+| usages-table columns | DWUG's names where they mean the same (*context*, target offsets, *grouping* for periods) |
 
 Decision:
 
