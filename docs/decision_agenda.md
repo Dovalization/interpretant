@@ -785,12 +785,12 @@ Replacement audit (the rule above, applied to existing code; extend as code is t
 | Bootstrap intervals (detection experiment 1, to be written) | `scipy.stats.bootstrap` |
 | Already library-backed, kept | Jensen-Shannon (`scipy.spatial.distance.jensenshannon`), NNLS (`scipy.optimize.nnls`), Louvain (`networkx`), KMeans and silhouette (scikit-learn) |
 
-Decision (2026-11-12): one job per package, so code is easy to find and to change; workflows
+Decision (2026-11-12): one job per package, so code is easy to find and to change; pipelines
 compose the jobs; only storage reads and writes data.
 
 Layers (one import-linter contract): `storage/` at the bottom; the job packages side by side,
 none importing another (`corpus/`, `embeddings/`, `detection/`, `senses/`, `evaluation/`,
-`review/`); `workflows/` composing them; `cli/` on top, thin. `experiments/` sits outside the
+`review/`); `pipelines/` composing them; `cli/` on top, thin. `experiments/` sits outside the
 package; `common/` at the bottom only for helpers needed in three or more places.
 
 ```
@@ -807,9 +807,10 @@ src/interpretant/
 │                 llm_labellers.py
 ├── evaluation/   benchmarks.py, synthetic_changes.py, known_answers.py, metrics.py
 ├── review/       judging pages, review samples, reading judgements back
-├── workflows/    acquire.py, build_corpus.py, human_review.py, train_static.py,
-│                 encode_contextual.py, detect.py, count_senses.py (and their settings)
-├── cli/          one module per workflow, same names
+├── pipelines/    download_abstracts.py, build_corpus.py, prepare_review.py,
+│                 train_static_embeddings.py, encode_usages.py, detect_change.py,
+│                 count_senses.py (one module per stage, and their settings)
+├── cli/          one module per pipeline, same names
 └── common/       only for helpers used in three or more places
 experiments/      one runner per experiment, named by its question
 tests/            mirrors src/
@@ -825,15 +826,16 @@ tests/            mirrors src/
   stays in `senses/quantification.py`; `review/` replaces `scripts/review/`; model-calling code
   goes by job (substitutes and generated definitions in `senses/induction.py`, the Claude and
   JEV labellers in `senses/llm_labellers.py`, encoders in `embeddings/`), shared GPU and
-  batching helpers in `common/`; settings objects belong to `workflows/`, job functions take
+  batching helpers in `common/`; settings objects belong to `pipelines/`, job functions take
   plain arguments; "static" and "contextual" are flows across packages and CLI command groups,
   not packages.
 - Design rules: storage hands out streams (iterators) and jobs consume and produce them, so
-  memory stays bounded; storage is split by dataset; each workflow reads as a table of contents
+  memory stays bounded; storage is split by dataset; each pipeline reads as a table of contents
   (one call per stage), with a one-page `docs/architecture.md`; interfaces only at the four swap
   points (the encoder table, the counters, the cleaning patterns file, the word list and
   settings files).
-- Names: job modules are nouns, workflows verb phrases; the field's standard terms
+- Names: job modules are nouns, pipelines verb-plus-object phrases (`encode_usages`,
+  `detect_change`); the field's standard terms
   (`significance`, after the "statistically significant detection" papers; `inventory`;
   `disambiguation`; `term_extraction`; `provenance`); British spelling, no abbreviations;
   experiments named by their question, not by round letters.
@@ -846,6 +848,10 @@ tests/            mirrors src/
 - `scripts/` disappears once its contents are rebuilt; the replacement audit below applies as
   code moves; the layout is not a separate refactor but the shape the rebuild builds into, phase
   by phase, a commit per phase.
+- The composing package is `pipelines/` (the author, 2026-11-12), the most widely recognised name
+  (Kedro, ZenML, scikit-learn), chosen over `workflows/` (collides with `.github/workflows/`) and
+  `stages/` (DVC's term); each module is one stage, the static and contextual flows are sequences
+  of stages, and "the spaCy pipeline" is always named so inside `corpus/`.
 
 ## Step 9: reproducible runs
 
