@@ -785,7 +785,67 @@ Replacement audit (the rule above, applied to existing code; extend as code is t
 | Bootstrap intervals (detection experiment 1, to be written) | `scipy.stats.bootstrap` |
 | Already library-backed, kept | Jensen-Shannon (`scipy.spatial.distance.jensenshannon`), NNLS (`scipy.optimize.nnls`), Louvain (`networkx`), KMeans and silhouette (scikit-learn) |
 
-Decision:
+Decision (2026-11-12): one job per package, so code is easy to find and to change; workflows
+compose the jobs; only storage reads and writes data.
+
+Layers (one import-linter contract): `storage/` at the bottom; the job packages side by side,
+none importing another (`corpus/`, `embeddings/`, `detection/`, `senses/`, `evaluation/`,
+`review/`); `workflows/` composing them; `cli/` on top, thin. `experiments/` sits outside the
+package; `common/` at the bottom only for helpers needed in three or more places.
+
+```
+src/interpretant/
+├── storage/      abstracts.py, usages.py, vectors.py, word_list.py, schemas.py,
+│                 provenance.py, paths.py (and generic readers for external files)
+├── corpus/       openalex.py (fetching through pyalex, carrying out download plans),
+│                 cleaning.py, deduplication.py, language.py, annotation.py,
+│                 target_matching.py, usage_selection.py, lemma_exceptions.py, spelling.py,
+│                 term_extraction.py
+├── embeddings/   twec.py, ppmi.py, encoders.py
+├── detection/    static.py, contextual.py, controls.py, significance.py, change_points.py
+├── senses/       inventory.py, cues.py, induction.py, disambiguation.py, quantification.py,
+│                 llm_labellers.py
+├── evaluation/   benchmarks.py, synthetic_changes.py, known_answers.py, metrics.py
+├── review/       judging pages, review samples, reading judgements back
+├── workflows/    acquire.py, build_corpus.py, human_review.py, train_static.py,
+│                 encode_contextual.py, detect.py, count_senses.py (and their settings)
+├── cli/          one module per workflow, same names
+└── common/       only for helpers used in three or more places
+experiments/      one runner per experiment, named by its question
+tests/            mirrors src/
+```
+
+- Placements: usage selection is a research decision, in `corpus/`, not storage; the OpenAlex
+  client is `corpus/openalex.py` (corpus compilation includes collecting the texts; a second
+  source would become a module beside it), using `pyalex` (0.21, February 2026, MIT, depending
+  only on requests and urllib3) in place of the hand-written HTTP client, with storage writing
+  what it fetches; `evaluation/` holds everything DWUG-specific (storage only reads files
+  generically and records their versions), planted changes, the held-out known answers and the
+  metrics, since detection and senses cannot import each other; the shifted-shares protocol
+  stays in `senses/quantification.py`; `review/` replaces `scripts/review/`; model-calling code
+  goes by job (substitutes and generated definitions in `senses/induction.py`, the Claude and
+  JEV labellers in `senses/llm_labellers.py`, encoders in `embeddings/`), shared GPU and
+  batching helpers in `common/`; settings objects belong to `workflows/`, job functions take
+  plain arguments; "static" and "contextual" are flows across packages and CLI command groups,
+  not packages.
+- Design rules: storage hands out streams (iterators) and jobs consume and produce them, so
+  memory stays bounded; storage is split by dataset; each workflow reads as a table of contents
+  (one call per stage), with a one-page `docs/architecture.md`; interfaces only at the four swap
+  points (the encoder table, the counters, the cleaning patterns file, the word list and
+  settings files).
+- Names: job modules are nouns, workflows verb phrases; the field's standard terms
+  (`significance`, after the "statistically significant detection" papers; `inventory`;
+  `disambiguation`; `term_extraction`; `provenance`); British spelling, no abbreviations;
+  experiments named by their question, not by round letters.
+- Data folders: generated data follows the Cookiecutter Data Science convention
+  (`data/external/` for DWUG and other datasets, `data/raw/` for downloads, `data/interim/` for
+  the annotation cache, `data/processed/` for tables and vectors, `models/` for trained static
+  models); hand-curated inputs live in a committed `curated/` folder, never overwritten by a run
+  (the word list, sense inventories, cleaning patterns, lemma exceptions, the spelling table,
+  download plans, the held-out known answers).
+- `scripts/` disappears once its contents are rebuilt; the replacement audit below applies as
+  code moves; the layout is not a separate refactor but the shape the rebuild builds into, phase
+  by phase, a commit per phase.
 
 ## Step 9: reproducible runs
 
