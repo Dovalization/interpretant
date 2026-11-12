@@ -710,6 +710,24 @@ Decisions (2026-11-12):
   measure anchoring) is held in reserve for words whose results come out uncertain, and doubles
   as a measure of Claude's labelling. When: after the store rebuild and the consolidation of the
   sense lists (7.5), before the counters are evaluated.
+- 7.3: the counters, in order: (1) the cue classifier, the current baseline; (1b) a supervised
+  classifier (scikit-learn logistic regression on XL-LEXEME vectors, strongly regularised)
+  trained on the author's random cross-period labels, the standard baseline, which removes the
+  cue classifier's era bias at its source; (2) nearest sense by examples, in the manner of LMMS
+  (Loureiro and Jorge 2019; LMMS Reloaded 2022): sense vectors averaged from XL-LEXEME vectors of
+  labelled usages and each list's example, which suits XL-LEXEME's training on usage pairs; (3)
+  nearest definition, zero-shot, expected weaker since XL-LEXEME was not trained on definitions;
+  (4) cues as spaCy `Matcher` patterns with recorded compounds as cues, alone or cue-first before
+  (2); (5) a bi-encoder trained on definitions (Blevins and Zettlemoyer 2020) only if the others
+  fall short, trained by the project since the original code is archived (January 2024, PyTorch
+  1.2, non-commercial licence); Sonnet and JEV as the comparison arm. Every counter: outputs
+  probabilities (for probabilistic adjusted counting, 7.4) and can answer "no listed sense fits"
+  (a cut-off set on the author's "other or unclear" items; those usages feed step 7a's gap
+  finding); is evaluated out of fold, so labels never build and grade the same counter; is
+  scored per period, with sense vectors built from examples balanced across periods; and must
+  pass two hard tests, anachronism (no language-model *prompt* before about 2020, no AI
+  *hallucination* before the late 2010s) and stability (no invented change in *component* and
+  *having*).
 
 ## Step 8: code layout (follows from steps 1–7)
 
