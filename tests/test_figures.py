@@ -6,7 +6,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 
 from interpretant.visualization.figures import (
@@ -60,7 +60,7 @@ def test_excess_by_decade_draws_one_line_and_one_label_per_pair() -> None:
     ]
 
     figure = excess_by_decade(
-        pd.DataFrame(rows), [("philosophy", "hci"), ("hci", "philosophy")], title="Excess"
+        pl.DataFrame(rows), [("philosophy", "hci"), ("hci", "philosophy")], title="Excess"
     )
     axes = figure.axes[0]
 
@@ -70,7 +70,7 @@ def test_excess_by_decade_draws_one_line_and_one_label_per_pair() -> None:
 
 
 def test_corpus_grid_shows_counts_and_marks_empty_cells() -> None:
-    cells = pd.DataFrame(
+    cells = pl.DataFrame(
         {
             "source": ["ai", "ai", "hci"],
             "decade": [1990, 2000, 2000],
@@ -104,7 +104,7 @@ def test_variants_of_the_word_and_of_earlier_neighbours_are_collapsed() -> None:
 
 
 def test_known_answer_ranks_label_every_case_and_colour_by_documentation() -> None:
-    ranks = pd.DataFrame(
+    ranks = pl.DataFrame(
         [
             {
                 "case": case,

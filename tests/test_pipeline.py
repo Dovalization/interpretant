@@ -10,7 +10,7 @@ import json
 import random
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 from click.testing import CliRunner
 from gensim.models import KeyedVectors
 
@@ -85,14 +85,15 @@ def test_pipeline_runs_from_processed_text_to_drift_tables(tmp_path: Path) -> No
     for root in (models, ppmi):
         vectors = KeyedVectors.load(str(root / "openalex" / "hci_2000.kv"))
         assert "interface" in vectors.key_to_index
-    within = pd.read_parquet(drift / "within_field.parquet")
-    cross = pd.read_parquet(drift / "cross_field.parquet")
-    assert set(within.field_a) == {"hci", "philosophy"}
-    assert set(cross.decade_a) == {1990, 2000}
-    assert within.is_target.any()
-    assert within.is_control.any()
-    perplexity = pd.read_parquet(drift / "cross.parquet")
+    within = pl.read_parquet(drift / "within_field.parquet")
+    cross = pl.read_parquet(drift / "cross_field.parquet")
+    assert set(within["field_a"]) == {"hci", "philosophy"}
+    assert set(cross["decade_a"]) == {1990, 2000}
+    assert within["is_target"].any()
+    assert within["is_control"].any()
+    perplexity = pl.read_parquet(drift / "cross.parquet")
     assert len(perplexity) == 2 * 4
-    assert (perplexity[perplexity.model_field == perplexity.text_field].excess == 0).all()
-    falls = pd.read_parquet(drift / "falls.parquet")
-    assert set(falls.text_field) == {"hci", "philosophy"}
+    own = perplexity.filter(pl.col("model_field") == pl.col("text_field"))
+    assert (own["excess"] == 0).all()
+    falls = pl.read_parquet(drift / "falls.parquet")
+    assert set(falls["text_field"]) == {"hci", "philosophy"}

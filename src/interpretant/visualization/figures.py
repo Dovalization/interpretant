@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+import polars as pl
 from gensim.models import KeyedVectors
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.figure import Figure
@@ -176,7 +176,7 @@ def neighbour_panel(
 
 
 def excess_by_decade(
-    table: pd.DataFrame,
+    table: pl.DataFrame,
     pairs: list[tuple[str, str]],
     title: str,
     subtitle: str = "",
@@ -192,22 +192,25 @@ def excess_by_decade(
     style_axes(axes)
     decades = sorted(table["decade"].unique())
     for (model_field, text_field), colour in zip(pairs, SERIES, strict=False):
-        rows = table[(table["model_field"] == model_field) & (table["text_field"] == text_field)]
-        means = rows.groupby("decade")["excess"].mean().reindex(decades)
+        rows = table.filter(
+            pl.col("model_field") == model_field, pl.col("text_field") == text_field
+        )
+        by_decade = dict(rows.group_by("decade").agg(pl.col("excess").mean()).iter_rows())
+        means = [by_decade.get(decade, float("nan")) for decade in decades]
         axes.scatter(
-            rows["decade"],
-            rows["excess"],
+            rows["decade"].to_numpy(),
+            rows["excess"].to_numpy(),
             s=28,
             color=colour,
             alpha=0.45,
             linewidths=0,
             zorder=2,
         )
-        axes.plot(means.index, means.to_numpy(), color=colour, linewidth=2, zorder=3)
+        axes.plot(decades, means, color=colour, linewidth=2, zorder=3)
         label = f"{field_label(model_field)} → {field_label(text_field)}"
         axes.annotate(
             label,
-            xy=(means.index[-1], means.iloc[-1]),
+            xy=(decades[-1], means[-1]),
             xytext=(8, 0),
             textcoords="offset points",
             color=colour,
@@ -237,7 +240,7 @@ def excess_by_decade(
 
 
 def corpus_grid(
-    cells: pd.DataFrame,
+    cells: pl.DataFrame,
     title: str,
     subtitle: str = "",
     footnote: str = "",
@@ -247,10 +250,15 @@ def corpus_grid(
 
     ``cells`` has the columns ``source``, ``decade`` and ``documents``.
     """
-    pivot = cells.pivot_table(index="source", columns="decade", values="documents", fill_value=0)
-    if fields is not None:
-        pivot = pivot.reindex(fields).fillna(0)
-    matrix = pivot.to_numpy(dtype=float)
+    documents = {
+        (source, decade): count
+        for source, decade, count in cells.select("source", "decade", "documents").iter_rows()
+    }
+    sources = fields if fields is not None else sorted(cells["source"].unique())
+    decades = sorted(cells["decade"].unique())
+    matrix = np.array(
+        [[float(documents.get((source, decade), 0)) for decade in decades] for source in sources]
+    )
     rows, columns = matrix.shape
     height = 0.46 * rows + 2.0
     figure = new_figure((1.0 * columns + 3.4, height), title, subtitle)
@@ -260,9 +268,9 @@ def corpus_grid(
     colormap.set_bad(SURFACE)
     axes.imshow(shown, cmap=colormap, aspect="auto", vmin=0, vmax=matrix.max())
     axes.set_xticks(range(columns))
-    axes.set_xticklabels([decade_label(int(decade)) for decade in pivot.columns])
+    axes.set_xticklabels([decade_label(int(decade)) for decade in decades])
     axes.set_yticks(range(rows))
-    axes.set_yticklabels([field_label(str(source)) for source in pivot.index])
+    axes.set_yticklabels([field_label(str(source)) for source in sources])
     axes.tick_params(colors=INK_SECONDARY, labelsize=9, length=0)
     for spine in axes.spines.values():
         spine.set_visible(False)
@@ -294,7 +302,7 @@ def corpus_grid(
 
 
 def fall_by_model(
-    table: pd.DataFrame,
+    table: pl.DataFrame,
     text_field: str,
     early: int,
     late: int,
@@ -307,24 +315,28 @@ def fall_by_model(
     One bar per model (the fall of excess cross-entropy, bits per token, mean over seeds), the
     seeds as points, sorted; one hue, since the bars are one measure.
     """
-    rows = table[table["text_field"] == text_field]
-    rows = rows[rows["model_field"] != text_field]
+    rows = table.filter(pl.col("text_field") == text_field, pl.col("model_field") != text_field)
+
+    def excess_in(decade: int, name: str) -> pl.DataFrame:
+        return rows.filter(pl.col("decade") == decade).select(
+            "model_field", "seed", pl.col("excess").alias(name)
+        )
+
     falls = (
-        rows.pivot_table(index=["model_field", "seed"], columns="decade", values="excess")
-        .pipe(lambda frame: frame[early] - frame[late])
-        .rename("fall")
-        .reset_index()
+        excess_in(early, "early")
+        .join(excess_in(late, "late"), on=["model_field", "seed"])
+        .select("model_field", fall=pl.col("early") - pl.col("late"))
     )
-    means = falls.groupby("model_field")["fall"].mean().sort_values()
-    models = list(means.index)
+    means = falls.group_by("model_field").agg(pl.col("fall").mean()).sort("fall")
+    models = means["model_field"].to_list()
     height = 0.42 * len(models) + 2.2
     figure = new_figure((8, height), title, subtitle)
     axes = figure.add_axes((0.3, 0.12, 0.66, plot_top(height) - 0.12))
     style_axes(axes, grid_axis="x")
     positions = range(len(models))
-    axes.barh(positions, means.to_numpy(), color=SERIES[0], height=0.55, zorder=2)
+    axes.barh(positions, means["fall"].to_numpy(), color=SERIES[0], height=0.55, zorder=2)
     for position, model in zip(positions, models, strict=True):
-        seeds = falls.loc[falls["model_field"] == model, "fall"]
+        seeds = falls.filter(pl.col("model_field") == model)["fall"].to_numpy()
         axes.scatter(
             seeds, [position] * len(seeds), s=18, color=INK, alpha=0.6, zorder=3, linewidths=0
         )
@@ -344,7 +356,7 @@ def fall_by_model(
 
 
 def known_answer_ranks(
-    ranks: pd.DataFrame,
+    ranks: pl.DataFrame,
     title: str,
     subtitle: str = "",
     footnote: str = "",
@@ -366,16 +378,16 @@ def known_answer_ranks(
     style_axes(axes, grid_axis="both")
     axes.fill_between([threshold, 100], threshold, 100, color=SEQUENTIAL[1], zorder=1, linewidth=0)
     colours = {True: SERIES[1], False: SERIES[0]}
-    for case, rows in ranks.groupby("case", sort=False):
-        colour = colours[bool(rows["documented"].iloc[0])]
-        axes.plot(rows["cosine_rank"], rows["shift_rank"], color=colour, linewidth=0.8, zorder=2)
-        axes.scatter(
-            rows["cosine_rank"], rows["shift_rank"], s=28, color=colour, zorder=3, linewidths=0
-        )
+    for rows in ranks.partition_by("case", maintain_order=True):
+        case = rows["case"][0]
+        colour = colours[bool(rows["documented"][0])]
+        cosine, shift = rows["cosine_rank"].to_numpy(), rows["shift_rank"].to_numpy()
+        axes.plot(cosine, shift, color=colour, linewidth=0.8, zorder=2)
+        axes.scatter(cosine, shift, s=28, color=colour, zorder=3, linewidths=0)
         right, up, alignment = offsets.get(str(case), (6.0, -3.0, "left"))
         axes.annotate(
             str(case),
-            (rows["cosine_rank"].mean(), rows["shift_rank"].mean()),
+            (float(cosine.mean()), float(shift.mean())),
             xytext=(right, up),
             textcoords="offset points",
             color=INK,
@@ -499,9 +511,9 @@ def readme_figures(model_dir: Path, drift_dir: Path, audit_path: Path) -> dict[s
         subtitle="Nearest neighbours of representation in 10,000-abstract AI cells",
         footnote="TWEC models on the main OpenAlex grid, first 12 distinct neighbours (inflections and spelling variants collapsed); the symbolic 1980s holds in TWEC only, the learned 2020s in every run.",  # noqa: E501
     )
-    table = pd.read_parquet(drift_dir / "cross_perplexity_corrected.parquet")
+    table = pl.read_parquet(drift_dir / "cross_perplexity_corrected.parquet")
     drawn["philosophy_hci"] = excess_by_decade(
-        table[table["decade"] >= 1990],
+        table.filter(pl.col("decade") >= 1990),
         [("philosophy", "hci"), ("hci", "philosophy")],
         title="Philosophy's model learned to predict HCI; HCI's did not learn philosophy",
         subtitle="Excess cross-entropy of one field's held-out abstracts under the other field's bigram model",  # noqa: E501
@@ -517,8 +529,13 @@ def readme_figures(model_dir: Path, drift_dir: Path, audit_path: Path) -> dict[s
         footnote="Bars: mean of five resampled runs; points: the runs. Each decade's own models, 200,000 training tokens, shared abstracts removed. A classifier held at the 1990s reads HCI's change differently (round N).",  # noqa: E501
     )
     report = json.loads(audit_path.read_text(encoding="utf-8"))
-    audited = pd.DataFrame(report["cells"])
-    cells = audited.loc[audited["layer"] == "openalex", ["source", "decade", "documents"]]
+    cells = pl.DataFrame(
+        [
+            {key: cell[key] for key in ("source", "decade", "documents")}
+            for cell in report["cells"]
+            if cell["layer"] == "openalex"
+        ]
+    )
     fields = sorted(
         {str(source) for source in cells["source"]},
         key=lambda field: field_label(field).lower(),
