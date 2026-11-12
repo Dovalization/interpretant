@@ -20,7 +20,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 from tqdm import tqdm
 
 DISCOUNT = 0.75
@@ -211,7 +211,7 @@ def decade_cross_entropy(
     fixed_budget: int | None = None,
     drop_shared: bool = False,
     order: int = 2,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Score every qualifying field's held-out text with every qualifying field's model.
 
     By default every qualifying field trains on the smallest qualifying pool, capped at
@@ -219,10 +219,9 @@ def decade_cross_entropy(
     tokens and qualifies only if its pool is at least that large; with ``drop_shared``
     abstracts appearing in more than one cell are removed first.
     """
-    columns = ["model_field", "text_field", "cross_entropy", "training_tokens"]
     decade = build_decade(cells, seed, fixed_budget, drop_shared, order)
     if decade is None:
-        return pd.DataFrame(columns=columns)
+        return pl.DataFrame(schema=CROSS_ENTROPY_SCHEMA)
     rows = [
         {
             "model_field": model_field,
@@ -233,7 +232,22 @@ def decade_cross_entropy(
         for model_field, model in decade.models.items()
         for field, held_out in decade.held_out.items()
     ]
-    return pd.DataFrame(rows, columns=columns)
+    return pl.DataFrame(rows, schema=CROSS_ENTROPY_SCHEMA)
+
+
+CROSS_ENTROPY_SCHEMA = {
+    "model_field": pl.String,
+    "text_field": pl.String,
+    "cross_entropy": pl.Float64,
+    "training_tokens": pl.Int64,
+}
+FALL_SCHEMA = {
+    "model_field": pl.String,
+    "text_field": pl.String,
+    "fall": pl.Float64,
+    "mix": pl.Float64,
+    "rate": pl.Float64,
+}
 
 
 @dataclass
@@ -280,14 +294,15 @@ def build_decade(
     )
 
 
-def add_excess(table: pd.DataFrame) -> pd.DataFrame:
+def add_excess(table: pl.DataFrame) -> pl.DataFrame:
     """Add each row's excess over the text field's own model, per decade (and seed)."""
-    keys = ["seed", "decade", "text_field"] if "seed" in table else ["decade", "text_field"]
-    own = table[table.model_field == table.text_field].set_index(keys)["cross_entropy"]
-    result = table.copy()
-    result["own_cross_entropy"] = own.reindex(pd.MultiIndex.from_frame(result[keys])).to_numpy()
-    result["excess"] = result.cross_entropy - result.own_cross_entropy
-    return result
+    keys = ["seed", "decade", "text_field"] if "seed" in table.columns else ["decade", "text_field"]
+    own = table.filter(pl.col("model_field") == pl.col("text_field")).select(
+        *keys, own_cross_entropy=pl.col("cross_entropy")
+    )
+    return table.join(own, on=keys, how="left", maintain_order="left").with_columns(
+        excess=pl.col("cross_entropy") - pl.col("own_cross_entropy")
+    )
 
 
 @dataclass(frozen=True)
@@ -342,7 +357,7 @@ def decompose_fall(
 
 def decompose_decades(
     early: DecadeModels, late: DecadeModels, text_fields: Iterable[str] | None = None
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Decompose the fall for every model x text pair qualifying in both decades."""
     fields = sorted(set(early.models) & set(late.models))
     texts = [t for t in fields if text_fields is None or t in set(text_fields)]
@@ -353,7 +368,7 @@ def decompose_decades(
         if model_field != text_field
         for d in [decompose_fall(early, late, model_field, text_field)]
     ]
-    return pd.DataFrame(rows, columns=["model_field", "text_field", "fall", "mix", "rate"])
+    return pl.DataFrame(rows, schema=FALL_SCHEMA)
 
 
 def cells_by_decade(texts_dir: Path) -> dict[int, list[Path]]:
@@ -368,6 +383,12 @@ def _ignore(message: str) -> None:
     del message
 
 
+def _labelled(table: pl.DataFrame, **labels: int) -> pl.DataFrame:
+    """Prepend integer label columns (seed, decade, ...) in the order given."""
+    columns = [pl.lit(value, dtype=pl.Int64).alias(name) for name, value in labels.items()]
+    return table.select(*columns, pl.all())
+
+
 def cross_entropy_runs(  # noqa: PLR0913
     texts_dir: Path,
     seeds: Iterable[int],
@@ -375,7 +396,7 @@ def cross_entropy_runs(  # noqa: PLR0913
     drop_shared: bool = False,
     order: int = 2,
     log: Callable[[str], None] = _ignore,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Score every decade's fields against each other once per seed, with excess added.
 
     One row per seed, decade, model field and text field (see :func:`decade_cross_entropy`).
@@ -384,15 +405,13 @@ def cross_entropy_runs(  # noqa: PLR0913
     for seed in seeds:
         for decade, cells in tqdm(cells_by_decade(texts_dir).items(), desc=f"  seed {seed}"):
             table = decade_cross_entropy(cells, seed, fixed_budget, drop_shared, order)
-            table.insert(0, "decade", decade)
-            table.insert(0, "seed", seed)
-            frames.append(table)
+            frames.append(_labelled(table, seed=seed, decade=decade))
             if len(table):
                 log(
-                    f"  seed {seed} {decade}s: {table.text_field.nunique()} fields, "
-                    f"{table.training_tokens.max():,} tokens each"
+                    f"  seed {seed} {decade}s: {table['text_field'].n_unique()} fields, "
+                    f"{table.select(pl.col('training_tokens').max()).item():,} tokens each"
                 )
-    return add_excess(pd.concat(frames, ignore_index=True))
+    return add_excess(pl.concat(frames))
 
 
 def decompose_runs(  # noqa: PLR0913
@@ -403,7 +422,7 @@ def decompose_runs(  # noqa: PLR0913
     fixed_budget: int,
     order: int = 2,
     text_fields: Iterable[str] | None = None,
-) -> pd.DataFrame:
+) -> pl.DataFrame:
     """Decompose every pair's fall from ``early`` to ``late`` once per seed, with shared
     abstracts removed. Raises ValueError if a decade has fewer than two qualifying fields."""
     frames = []
@@ -415,8 +434,5 @@ def decompose_runs(  # noqa: PLR0913
         if early_models is None or late_models is None:
             raise ValueError("a decade has fewer than two qualifying fields")
         table = decompose_decades(early_models, late_models, text_fields)
-        table.insert(0, "late", late)
-        table.insert(0, "early", early)
-        table.insert(0, "seed", seed)
-        frames.append(table)
-    return pd.concat(frames, ignore_index=True)
+        frames.append(_labelled(table, seed=seed, early=early, late=late))
+    return pl.concat(frames)

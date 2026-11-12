@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pandas as pd
+import polars as pl
 import pytest
 
 from interpretant.drift.perplexity import (
@@ -59,15 +59,17 @@ def test_decade_cross_entropy_scores_every_pair_with_equal_training(tmp_path: Pa
     for field, sentence in (("philosophy", PHILOSOPHY), ("compsci", COMPUTING)):
         (tmp_path / f"{field}_2010.txt").write_text("\n".join([sentence] * 30_000))
 
-    table = decade_cross_entropy(sorted(tmp_path.glob("*.txt")))
-    table.insert(0, "decade", 2010)
-    scored = add_excess(table).set_index(["model_field", "text_field"])
+    table = decade_cross_entropy(sorted(tmp_path.glob("*.txt"))).with_columns(decade=2010)
+    scored = add_excess(table)
+    excess = {
+        (model, text): value
+        for model, text, value in scored.select("model_field", "text_field", "excess").iter_rows()
+    }
 
     assert len(scored) == 4
-    assert scored.training_tokens.nunique() == 1
-    assert scored.loc[("philosophy", "philosophy"), "excess"] == 0
-    assert scored.loc[("compsci", "philosophy"), "excess"] > 0
-    assert isinstance(scored, pd.DataFrame)
+    assert scored["training_tokens"].n_unique() == 1
+    assert excess[("philosophy", "philosophy")] == 0
+    assert excess[("compsci", "philosophy")] > 0
 
 
 def test_remove_shared_drops_abstracts_found_in_more_than_one_cell() -> None:
@@ -85,12 +87,12 @@ def test_fixed_budget_trains_everyone_equally_and_drops_small_cells(tmp_path: Pa
 
     table = decade_cross_entropy(sorted(tmp_path.glob("*.txt")), fixed_budget=50_000)
 
-    assert set(table.text_field) == {"philosophy", "compsci"}
-    assert set(table.training_tokens) == {50_000}
+    assert set(table["text_field"]) == {"philosophy", "compsci"}
+    assert set(table["training_tokens"]) == {50_000}
 
 
 def test_add_excess_compares_within_each_seed() -> None:
-    table = pd.DataFrame(
+    table = pl.DataFrame(
         {
             "seed": [1, 1, 2, 2],
             "decade": [2010] * 4,
@@ -100,7 +102,7 @@ def test_add_excess_compares_within_each_seed() -> None:
         }
     )
 
-    assert list(add_excess(table).excess) == [0.0, 1.0, 0.0, 3.0]
+    assert add_excess(table)["excess"].to_list() == [0.0, 1.0, 0.0, 3.0]
 
 
 def test_word_bits_add_up_to_the_cross_entropy() -> None:
@@ -193,10 +195,10 @@ def test_cross_entropy_runs_scores_every_seed_and_decade_with_excess(tmp_path: P
     table = cross_entropy_runs(tmp_path, seeds=(1, 2), fixed_budget=50_000, log=logged.append)
 
     assert len(table) == 2 * 2 * 4
-    assert set(table.seed) == {1, 2}
-    assert set(table.decade) == {1990, 2020}
-    own = table[table.model_field == table.text_field]
-    assert (own.excess == 0).all()
+    assert set(table["seed"]) == {1, 2}
+    assert set(table["decade"]) == {1990, 2020}
+    own = table.filter(pl.col("model_field") == pl.col("text_field"))
+    assert (own["excess"] == 0).all()
     assert len(logged) == 4
 
 
@@ -206,8 +208,8 @@ def test_decompose_runs_splits_each_seed_fall_into_mix_and_rate(tmp_path: Path) 
     table = decompose_runs(tmp_path, 1990, 2020, seeds=(1, 2), fixed_budget=50_000)
 
     assert len(table) == 2 * 2
-    assert set(table.early) == {1990}
-    assert list(table.fall) == pytest.approx(list(table.mix + table.rate))
+    assert set(table["early"]) == {1990}
+    assert table["fall"].to_list() == pytest.approx((table["mix"] + table["rate"]).to_list())
 
 
 def test_decompose_runs_needs_two_fields_in_both_decades(tmp_path: Path) -> None:

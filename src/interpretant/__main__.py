@@ -738,7 +738,7 @@ def drift_perplexity(  # noqa: PLR0913
         texts_dir, seeds, fixed_budget or None, drop_shared, order, console.print
     )
     output.parent.mkdir(parents=True, exist_ok=True)
-    result.to_parquet(output, index=False)
+    result.write_parquet(output)
     console.print(f"[green]{len(result):,} rows[/green] → {output}")
 
 
@@ -774,6 +774,8 @@ def drift_decompose(  # noqa: PLR0913
     """Split every pair's fall in excess cross-entropy between two decades into a word-mix
     effect (the text's word frequencies changed) and a rate effect (the model's per-word
     skill changed). A fall that is all mix says the text moved; the model learned nothing."""
+    import polars as pl  # noqa: PLC0415
+
     from interpretant.drift.perplexity import decompose_runs  # noqa: PLC0415
 
     try:
@@ -781,9 +783,13 @@ def drift_decompose(  # noqa: PLR0913
     except ValueError as error:
         raise click.ClickException(str(error)) from error
     output.parent.mkdir(parents=True, exist_ok=True)
-    result.to_parquet(output, index=False)
-    summary = result.groupby(["model_field", "text_field"])[["fall", "mix", "rate"]].mean()
-    console.print(summary.round(3).to_string())
+    result.write_parquet(output)
+    summary = (
+        result.group_by("model_field", "text_field")
+        .agg(pl.col("fall", "mix", "rate").mean().round(3))
+        .sort("model_field", "text_field")
+    )
+    console.print(str(summary))
     console.print(f"[green]{len(result):,} rows[/green] → {output}")
 
 
