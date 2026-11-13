@@ -9,7 +9,7 @@ with the work it duplicates recorded.
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 
 import polars as pl
 from datasketch import MinHash, MinHashLSH
@@ -66,7 +66,12 @@ def build_shingles(text: str, removals: Sequence[Removal]) -> set[bytes]:
     }
 
 
-def mark_near_duplicates(abstracts: pl.DataFrame, *, threshold: float) -> pl.DataFrame:
+def mark_near_duplicates(
+    abstracts: pl.DataFrame,
+    *,
+    threshold: float,
+    advance: Callable[[int], None] | None = None,
+) -> pl.DataFrame:
     """Drop each abstract too similar to an earlier kept one, recording that work.
 
     An abstract is a near-duplicate when its estimated Jaccard similarity to a kept abstract
@@ -74,7 +79,8 @@ def mark_near_duplicates(abstracts: pl.DataFrame, *, threshold: float) -> pl.Dat
     dropped take part. They are visited earliest first (year, then work id); each is compared
     with the kept abstracts the LSH index proposes and, if it matches, is marked a duplicate of
     its most similar match (the earliest on a tie); otherwise it is kept and indexed. Exact
-    duplicates are the special case of similarity 1.
+    duplicates are the special case of similarity 1. ``advance`` is called with 1 as each
+    abstract is visited, for a progress display.
     """
     candidates = abstracts.filter(pl.col("dropped_reason").is_null()).sort("year", "work_id")
     order = {work_id: position for position, work_id in enumerate(candidates["work_id"])}
@@ -85,6 +91,8 @@ def mark_near_duplicates(abstracts: pl.DataFrame, *, threshold: float) -> pl.Dat
     # all at once, the shingles of the whole corpus take about 15 GB.
     rows = zip(candidates["work_id"], candidates["text"], candidates["removals"], strict=True)
     for work_id, text, removals in rows:
+        if advance is not None:
+            advance(1)
         shingles = build_shingles(text, [Removal(**removal) for removal in removals])
         if not shingles:
             continue

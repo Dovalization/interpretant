@@ -9,8 +9,10 @@ import click
 from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
+from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.fetch_metadata import (
     OpenAlexSettings,
+    count_works,
     fetch_cell_metadata,
     openalex_fetcher,
     select_raw_cells,
@@ -49,15 +51,19 @@ def fetch_metadata_command(
     """Fetch OpenAlex's record of every raw work beyond its abstract, resuming where it stopped.
 
     About one request per 100 works, inside the API key's free daily budget for the regular
-    samples. One line is printed per cell as it finishes.
+    samples. Progress is shown live, and one line is printed per cell as it finishes.
     """
     catalog = read_catalog(catalog_file)
     cells = select_raw_cells(catalog, fields=fields, decades=decades)
     fetch = openalex_fetcher(OpenAlexSettings(), today=date.today())
     console = Console()
-    for number, cell in enumerate(cells, start=1):
-        result = fetch_cell_metadata(catalog, cell, fetch, workers=workers)
-        console.print(
-            f"[{number}/{len(cells)}] {cell.field} {cell.decade}: {result.fetched:,} fetched, "
-            f"{result.missing:,} missing, {result.already_fetched:,} already there"
-        )
+    with LiveProgress(console) as progress:
+        progress.stage("counting the raw works")
+        total = count_works(catalog, cells)
+        progress.stage("fetching metadata", total=total)
+        for number, cell in enumerate(cells, start=1):
+            result = fetch_cell_metadata(catalog, cell, fetch, workers=workers, progress=progress)
+            console.print(
+                f"[{number}/{len(cells)}] {cell.field} {cell.decade}: {result.fetched:,} "
+                f"fetched, {result.missing:,} missing, {result.already_fetched:,} already there"
+            )

@@ -8,6 +8,7 @@ import click
 from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
+from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_result
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
 from interpretant.pipelines.params import CorpusSelection
@@ -44,14 +45,20 @@ def annotate_corpus_command(
     batch_size: int,
     process_count: int,
 ) -> None:
-    """Run the spaCy pass over the corpus in params.yaml, writing the cache and annotated table."""
-    result = annotate_corpus(
-        read_catalog(catalog_file),
-        CorpusSelection(),
-        AnnotateCorpusSettings(),
-        fields=fields,
-        decades=decades,
-        batch_size=batch_size,
-        process_count=process_count,
-    )
-    Console().print(render_result(result))
+    """Run the spaCy pass over the corpus in params.yaml, writing the cache and annotated table.
+
+    Progress is shown live: a bar in a terminal, a line every half minute in a log file.
+    """
+    console = Console()
+    with LiveProgress(console) as progress:
+        result = annotate_corpus(
+            read_catalog(catalog_file),
+            CorpusSelection(),
+            AnnotateCorpusSettings(),
+            fields=fields,
+            decades=decades,
+            batch_size=batch_size,
+            process_count=process_count,
+            progress=progress,
+        )
+    console.print(render_result(result))

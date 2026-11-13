@@ -31,6 +31,7 @@ from interpretant.pipelines.corpus import (
     summarise,
 )
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
+from interpretant.pipelines.progress import SILENT, Progress
 
 _PART = "part"
 
@@ -47,7 +48,11 @@ class BuildCorpusSettings(ParamsSettings):
 
 
 def build_corpus(
-    catalog: CatalogConfig, selection: CorpusSelection, settings: BuildCorpusSettings
+    catalog: CatalogConfig,
+    selection: CorpusSelection,
+    settings: BuildCorpusSettings,
+    *,
+    progress: Progress = SILENT,
 ) -> CorpusResult:
     """Apply the corpus-level rules and the review flags to every annotated part, and save them.
 
@@ -58,19 +63,30 @@ def build_corpus(
     """
     cells = corpus_cells(catalog, selection)
     parts = [part_name(cell.field, cell.decade) for cell in cells]
+    progress.stage("loading the annotated parts")
     annotated = load_annotated_abstracts(catalog, parts)
     table = pl.concat(
         part.with_columns(pl.lit(name).alias(_PART)) for name, part in annotated.items()
     )
+    progress.stage("checking the work metadata")
     metadata = index_work_metadata(load_corpus_metadata(catalog, cells), table["work_id"])
+    progress.stage("template sentences")
     table = mark_template_sentences(table, min_abstracts=settings.template_min_abstracts)
+    progress.stage("repeated sentences")
     table = mark_repeated_sentences(table)
-    table = mark_near_duplicates(table, threshold=settings.near_duplicate_threshold)
+    progress.stage("near-duplicates", total=table["dropped_reason"].null_count())
+    table = mark_near_duplicates(
+        table, threshold=settings.near_duplicate_threshold, advance=progress.advance
+    )
+    progress.stage("author cap")
     table = mark_author_cap(
         table, max_share=settings.author_cap_share, floor=settings.author_cap_floor
     )
+    progress.stage("review flags")
     table = mark_truncated(mark_metadata_flags(table, metadata))
     tables = {part: table.filter(pl.col(_PART) == part).drop(_PART) for part in parts}
+    progress.stage("saving the parts", total=len(tables))
     for part, rows in tables.items():
         save_abstracts(catalog, rows, part=part)
+        progress.advance()
     return summarise(tables)

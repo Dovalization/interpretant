@@ -8,6 +8,7 @@ import click
 from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
+from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_result
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.params import CorpusSelection
@@ -23,6 +24,13 @@ from interpretant.pipelines.params import CorpusSelection
     help="The catalog file naming the inputs and outputs.",
 )
 def build_corpus_command(catalog_file: Path) -> None:
-    """Apply the corpus-level rules to every annotated part and write the abstracts table."""
-    result = build_corpus(read_catalog(catalog_file), CorpusSelection(), BuildCorpusSettings())
-    Console().print(render_result(result))
+    """Apply the corpus-level rules to every annotated part and write the abstracts table.
+
+    Progress is shown live: a bar in a terminal, a line every half minute in a log file.
+    """
+    console = Console()
+    with LiveProgress(console) as progress:
+        result = build_corpus(
+            read_catalog(catalog_file), CorpusSelection(), BuildCorpusSettings(), progress=progress
+        )
+    console.print(render_result(result))

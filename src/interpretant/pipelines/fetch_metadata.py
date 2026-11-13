@@ -31,6 +31,7 @@ from interpretant.corpus.work_metadata import (
     configure_openalex,
     fetch_work_metadata,
 )
+from interpretant.pipelines.progress import SILENT, Progress
 
 ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
 
@@ -79,8 +80,18 @@ def select_raw_cells(
     return cells
 
 
+def count_works(catalog: CatalogConfig, cells: Sequence[RawCell]) -> int:
+    """The distinct works of each cell, summed over the cells: a progress total."""
+    return sum(len({work.work_id for work in load_raw_cell(catalog, cell)}) for cell in cells)
+
+
 def fetch_cell_metadata(
-    catalog: CatalogConfig, cell: RawCell, fetch: Fetcher, *, workers: int = 1
+    catalog: CatalogConfig,
+    cell: RawCell,
+    fetch: Fetcher,
+    *,
+    workers: int = 1,
+    progress: Progress = SILENT,
 ) -> CellFetch:
     """Fetch the records of a cell's works not yet in its metadata file, 100 at a time.
 
@@ -99,12 +110,14 @@ def fetch_cell_metadata(
         pending[start : start + IDS_PER_REQUEST]
         for start in range(0, len(pending), IDS_PER_REQUEST)
     ]
+    progress.advance(len(done))
     missing = 0
     with ThreadPoolExecutor(max_workers=workers) as executor:
         try:
             for records in executor.map(fetch, batches):
                 append_work_metadata(catalog, cell, records)
                 missing += sum(1 for record in records if record.get("missing"))
+                progress.advance(len(records))
         except BaseException:
             executor.shutdown(cancel_futures=True)
             raise

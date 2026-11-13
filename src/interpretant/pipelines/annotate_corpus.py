@@ -12,10 +12,10 @@ the run before the slow pass, not after it.
 from __future__ import annotations
 
 import gc
-from collections.abc import Collection
+from collections.abc import Collection, Iterable, Iterator
 from dataclasses import asdict
 from itertools import groupby
-from typing import Any
+from typing import Any, TypeVar
 
 import polars as pl
 from pydantic import Field
@@ -45,8 +45,10 @@ from interpretant.pipelines.corpus import (
     summarise,
 )
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
+from interpretant.pipelines.progress import SILENT, Progress
 
 REGULAR = "regular"
+_Item = TypeVar("_Item")
 
 
 class AnnotateCorpusSettings(ParamsSettings):
@@ -68,6 +70,7 @@ def annotate_corpus(
     decades: Collection[int] = (),
     batch_size: int = 256,
     process_count: int = 1,
+    progress: Progress = SILENT,
 ) -> CorpusResult:
     """Annotate the parts of the given fields and decades (all parts when none are given).
 
@@ -86,19 +89,23 @@ def annotate_corpus(
     }
     if not chosen:
         raise ValueError(f"no part of the corpus for fields {fields} in decades {decades}")
+    progress.stage("merging the raw cells")
     abstracts = merge_cells(
         ((cell.field, load_raw_cell(catalog, cell)) for cell in cells), source=REGULAR
     )
+    progress.stage("checking the work metadata")
     index_work_metadata(
         load_corpus_metadata(catalog, cells), (abstract.work_id for abstract in abstracts)
     )
     selected = sorted(
         (abstract for abstract in abstracts if _part_of(abstract) in chosen), key=_part_of
     )
+    progress.stage("loading the spaCy pipeline")
     patterns = load_cleaning_patterns(catalog)
     nlp = build_pipeline(
         patterns, languages=settings.languages, english_threshold=settings.english_threshold
     )
+    progress.stage("spaCy pass", total=len(selected))
     annotated = annotate_abstracts(
         selected,
         nlp,
@@ -115,7 +122,8 @@ def annotate_corpus(
     gc.collect()
     gc.freeze()
     try:
-        for part, pairs in groupby(annotated, key=lambda pair: _part_of(pair[1])):
+        counted = _advancing(annotated, progress)
+        for part, pairs in groupby(counted, key=lambda pair: _part_of(pair[1])):
             docs, rows = zip(*pairs, strict=True)
             save_annotations(catalog, docs, part=part)
             tables[part] = _table(rows)
@@ -127,6 +135,13 @@ def annotate_corpus(
         tables[part] = _table(())
         save_annotated_abstracts(catalog, tables[part], part=part)
     return summarise(dict(sorted(tables.items())))
+
+
+def _advancing(items: Iterable[_Item], progress: Progress) -> Iterator[_Item]:
+    """The items unchanged, each counted as done once the next is asked for."""
+    for item in items:
+        yield item
+        progress.advance()
 
 
 def _part_of(abstract: RawAbstract | AnnotatedAbstract) -> str:
