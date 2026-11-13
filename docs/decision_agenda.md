@@ -157,7 +157,10 @@ views (the full order is in step 9).
   kept once, later copies marked "repeated sentence" (353 of 322,329 raw abstracts, 0.11%, repeat
   a sentence of 40 or more characters, often the abstract pasted twice; without this rule two
   mentions would share a usage id, 4.5); near-duplicates (2.5); the author cap, 1% of a cell with
-  a floor of at least 5 works, so small cells are not gutted.
+  a floor of at least 5 works, so small cells are not gutted. Each cell (source, field, decade) is
+  capped on all its works, independently of the others, and a work over the cap in any cell leaves
+  all of them, so the order of the cells cannot matter (on the raw cells this drops the same 5,491
+  works as capping the cells in turn).
 - *Normalisation of the static view:* accents folded (café → cafe); non-Latin text goes by the
   language check instead of being deleted; digit-only tokens dropped from the static view and
   kept in contextual sentences (*1990s* is not a number to spaCy and stays); hyphenated words kept
@@ -165,7 +168,9 @@ views (the full order is in step 9).
 - *Sample audit first:* the old regexes and the new patterns run side by side and must catch the
   same abstracts before the regexes are deleted; count what the template rule alone catches and
   delete patterns it makes redundant; check how the mojibake abstracts spread over cells before
-  dropping them.
+  dropping them; count the near-duplicate pairs whose works sit in different fields of one decade
+  and those in different decades (2.5); read the repository-only works per field and decade and
+  decide which kinds are dropped (4b).
 
 **2.4 Language.** lingua alone (`lingua-language-detector`, version 2.1.1 installed; version 2.2
 needs Python
@@ -185,7 +190,11 @@ to 0.8 (Lee et al. 2022, with edit similarity). The same work in two cells is ke
 it belongs to (some overlap is legitimate: AI sits inside computer science, and a full cell holds
 its sample cell; but in a comparison between two such fields, shared works make them look alike),
 its cells recorded in the abstracts table; leaving shared works out of a
-comparison is one library helper every measure uses, not a rule each measure writes.
+comparison is one library helper every measure uses, not a rule each measure writes. A dropped
+near-duplicate takes its fields with it, so a field publishing a later version loses that text;
+whether the kept work should instead take the fields of the works it replaces within one decade
+(as one work downloaded in two cells does) is decided once the sample audit has counted such
+pairs (2.3). Each dropped near-duplicate names the work it duplicates (`duplicate_of`).
 
 Replaces: four cleaning rule sets, three language checks, two sentence splitters, two URL
 regexes, the mojibake table, six duplicate and shared-text rules.
@@ -408,6 +417,17 @@ a day and a search request costs 10 credits, so the earlier estimate (under 200 
 day) is re-estimated with the plan. A seeded OpenAlex sample is repeatable only while records are
 not added, withdrawn or reclassified (4b), which is why downloads are registered, not regenerated.
 
+**Work metadata.** The raw cells keep only each work's id, year, type, author ids and abstract, so
+an abstract cannot be told from a digitised archive record (4b). Every downloaded work's OpenAlex
+record is therefore fetched once by id with `pyalex` (100 ids per request: about 7,100 list
+requests, about $0.71, for the regular samples) and stored beside its cell with the fetch date,
+registered like the downloads: source and host, all locations and their count, indexes
+(`indexed_in`), DOI, `is_paratext`, `is_retracted`, OpenAlex's language, `updated_date`, primary
+topic, topics, keywords, authorships (names, ORCID, institutions, countries), referenced works,
+citation counts by year, title, publication date and other ids. Left out: charges, impact
+percentiles, funders, awards, development goals, related works, content links, the retired
+concepts and the abstract. Later downloads ask for these fields in the download itself.
+
 **4.9 Models and running time.** The small model (`en_core_web_sm`) for the whole corpus:
 cleaning, sentences, the static view (the last full pass, lemma votes with tagger and lemmatizer,
 read 1,274,029 abstracts, 206 million tokens, in 30 minutes on 10 CPU processes; `senter`, lingua
@@ -450,7 +470,15 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   `SpanRuler` and template counts), malformed or cut-off abstracts (length, missing sentence
   punctuation), and likely wrong-field abstracts (a scikit-learn field classifier trained on data
   separate from what it flags, treating nested fields such as AI inside computer science as
-  compatible; OpenAlex's calibrated topic score fetched for those if useful).
+  compatible; OpenAlex's calibrated topic score fetched for those if useful), and repository-only
+  works (primary source a repository, listed in none of Crossref, PubMed, arXiv or DOAJ; from the
+  work metadata, 4.8). OpenAlex types digitised archive records as articles (letters, student
+  newspapers, staff magazines, photo captions; their "authors" are often institutions, and they
+  were most of the author cap's drops on the raw cells); repository-only "articles" are 45% of
+  OpenAlex's 1960s history and philosophy of science cell and 4% of AI in the 2010s, mixed with
+  theses, reports and preprints, so they are flagged and the review decides which kinds go.
+  OpenAlex's own `is_xpac` and `is_traditional` do not separate them (checked on seven archive
+  records).
 - **Codebook, six categories:** valid abstract; wrong field (clearly another discipline, not
   merely interdisciplinary, since the fields overlap by design); not English or mixed;
   boilerplate or junk; duplicate; truncated or malformed.
@@ -1278,7 +1306,7 @@ The sized tasks come to about 4 hours; three are not yet sized.
   already downloaded (step 5).
 - `concept-erasure` or LEACE's closed form, at experiment 6.
 - Dependencies agreed but not installed, each installed when its step starts and after the
-  author's yes on the stack: DVC, QuaPy, pyalex, `correlation-clustering`,
+  author's yes on the stack: DVC, QuaPy, `correlation-clustering`,
   networkx 3.7 or later,
   `ruptures`, `ipykernel`, `nbstripout`.
 - Sources read only as abstracts or records (their full texts were not opened): Efron 1987,
