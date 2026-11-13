@@ -462,122 +462,223 @@ of the abstract, truncation).
 
 ## Step 5: control words
 
-Inputs: the detection draft's experiments 2 and 3; `pipeline_map.md` stage 11. Four control
-files from four scripts today, parsed three ways. Decide one selection method per purpose:
-matched on frequency and part of speech, or drawn from the same abstracts (the detection draft
-argues for the latter).
+Inputs: the detection draft's experiments 2 and 3; `pipeline_map.md` stage 11; round X's stored
+vectors and the existing cells' counts (`second_review/control_matching.py`,
+`bar_stability.py`). How a target is judged against its controls is in 6.3.
 
-Decision (2026-11-12), after a critical pass and a check of established practice:
+- **The four control-word files are retired as sources** and kept as data (past rounds used
+  them). They contradict each other (*control* is a target and a rung-3 control) and do not match
+  the targets; round A found 4 of 4 changes against shuffles, 2 of 4 against them.
+- **Shuffles on for every measure**, the established control condition (Dubossarsky et al. 2017,
+  "Outta Control"; Dubossarsky et al. 2019, "Time-Out", which shuffle corpora for static vectors;
+  Liu, Medlar and Glowacka 2021 permute period labels for usage vectors, as here). They are the
+  floor, not the bar: a word whose contexts moved only with its field's topics passes them, as
+  round X's quiet transition did, and across domains a shuffle control left most of a measure's
+  agreement in place (Schlechtweg et al. 2019, SURel).
+- **Matched controls, generated per comparison** and stored in
+  `curated/comparison_controls.tsv` after the author approves the proposal (step 8):
+  - same part of speech as the target (the word table's);
+  - frequency (the share of abstracts containing the word in that part of speech) between half
+    and twice the target's in each period (Card 2023 draws background terms within a factor of
+    two; SemEval-2020 matched "the same POS and comparable frequency development", taking the
+    smallest tolerance that found a control); for a sense that arrives (the target under the floor
+    in the early period) only the later period is matched; the realised tolerance is recorded per
+    comparison;
+  - at least n usages in each period, n being the comparison's (6.3);
+  - not a target, a held-out word, a sense-list word or a candidate.
 
-- The four control-word files are retired as sources and kept as data (past rounds used them).
-  They contradict each other (*control* is a target and a rung-3 control) and do not match the
-  targets; round A found 4 of 4 changes against shuffles, 2 of 4 against them.
-- **Shuffles on for every measure** (scipy's `permutation_test`): the established control
-  condition (Dubossarsky et al. 2017, "Outta Control"; Dubossarsky et al. 2019, "Time-Out"). They
-  are the floor, not the bar: a word whose contexts moved only with its field's topics passes
-  them, as round X's quiet transition did.
-- **Matched control words, generated, at least 30 per target** (or pooled by frequency band), so
-  a percentile bar is defined: same part of speech, comparable frequency trajectory between the
-  two periods (SemEval-2020's criterion: "same POS and comparable frequency development"),
-  similar within-period spread (frequency and polysemy both create apparent change: Dubossarsky
-  et al. 2017; Keidar et al. 2022 found no causal link of their own and cite that result),
-  excluding targets, sense-list words and candidates; stored in
-  the word list with the role "control" and their target. *Amended by A12, A14 and A15:* stored
-  per comparison in `curated/comparison_controls.tsv`, matched on part of speech and on frequency
-  within a factor of two in each period; every eligible candidate is a control.
-- **Controls validated against each other, not against their shuffles** (topic drift moves every
-  word, so that test would reject them all): outliers among the controls are read briefly by
-  hand, a light version of SemEval's manual verification, then replaced. *Amended by A2:* never
-  replaced on their change score; only for score-blind reasons, before any target is scored.
-- **False discovery rate correction** (`scipy.stats.false_discovery_control`, Benjamini–Hochberg)
-  whenever many words are screened at once (Liu, Medlar and Glowacka 2021), noting their caveats:
-  permutation tests are costly, and the correction assumes independent tests (their wording;
-  Benjamini–Hochberg also holds under positive dependence: Benjamini and Yekutieli 2001).
-  *Amended by A10:* 100,000 shuffles per word, Benjamini–Yekutieli reported beside
-  Benjamini–Hochberg.
+  Every eligible candidate is a control, about 60 per comparison (encoding resumes by missing
+  keys, so encoding them all is cheap), not thinned to 30: thinning was one more choice to make,
+  and the rank test of 6.3 needs the numbers. Within-period spread, which like frequency can
+  create apparent change (Dubossarsky et al. 2017), is recorded for every control and checked,
+  not selected on: experiment 2 tests whether the controls' J relates to frequency or to spread,
+  and a relation there tightens the rule before any target is scored.
+- **Controls are never replaced on their change score.** Replacing the controls that changed most
+  lowers the bar, an outcome-driven exclusion of the kind that inflates false positives (Simmons,
+  Nelson and Simonsohn 2011); controls that change a lot measure the method's background change
+  and stay. Controls are replaced only for reasons that do not use their score, written into the
+  code and the confirmation plan before any target is scored: wrong part of speech in practice,
+  mostly a name or fixed phrase, frequency mismatch after cleaning, a documented change in a
+  dictionary, or the author's blind reading of a few usages per period (as SemEval-2020 verified
+  its stable words), done before scoring. The set is then frozen for that comparison; every
+  replacement is recorded with its reason. Controls are compared with each other, never with
+  their shuffles (topic drift moves every word, so that test would reject them all).
 - Same-abstract controls are drawn at experiment time from the abstracts table; the static grid
-  uses its frequency bands; an automatic check forbids a word being both target and control.
-- Which bar decides a change (shuffles, matched or same-abstract controls) is step 6's.
-- To add to `related_work.md`: Schlechtweg et al. 2020 (SemEval-2020 Task 1), Dubossarsky et al.
-  2019 (Time-Out), Liu, Medlar and Glowacka 2021, Keidar et al. 2022.
+  uses its frequency bands.
+
+*Why within a factor of two:* on the existing cells (nouns, at least 100 abstracts per period),
+30 candidates matched in both periods need ±34% (*attention*, AI 2010s→2020s), ±39%
+(*alignment*), ±57% (*platform*, communication 2000s→2010s) and ±61% (*network*, AI
+1980s→1990s), and 60 candidates ±44% to ±70%; within SemEval's ±15% there are 10 candidates for
+*attention*, 2 for *alignment* and none for *platform* or *network*, because a documented change
+usually came with a rise in frequency; *prompt* and *hallucination* are nearly absent from the
+early period of the regular sample. Frequency matters less here than for static vectors: with n
+equalised, round X's 157 control-and-transition pairs show no relation between J and frequency
+(Spearman −0.04) and a weak one with the size of the frequency change (+0.14, p = 0.07).
+
+Replaces: four control-word files from four scripts, parsed three ways.
 
 ## Step 6: detection experiments
 
-Inputs: `docs/design_detection_experiments.md`, steps 2–5, and established practice (checked
-2026-11-12). Detection asks whether a word's use changed between periods, and how much.
-
-**Revised list and order (the author, 2026-11-12: established methods first, exploratory ones
-after):**
+Inputs: `docs/design_detection_experiments.md`, steps 2–5, and established practice. Detection
+asks whether a word's use changed between periods, and how much. Established methods first,
+exploratory ones after (the author):
 
 | Order | Experiment | Standing | Needs |
 |---|---|---|---|
-| 0a | Calibration on the datasets the LSCD Benchmark covers (Schlechtweg, Virk and Arefyev 2024), not only DWUG English: encoder and measures against human graded change, comparable with published numbers. The benchmark's code is not a dependency (Hydra scripts pinned to Python 3.10, no licence stated); its datasets and standard metrics are used with scipy and scikit-learn | Standard practice | Encoders, the published datasets |
-| 0b | A systematic synthetic set as the development set: several planted scenarios (a sense gained gradually, a sense gained as the old one is lost, and distractors that are not changes of meaning, such as a frequency change or a short-lived spike) (Shoemark et al. 2019) | Established | The rebuilt store |
-| 1 | J on every usage: bootstrap intervals (resampling abstracts), permutation significance, false discovery rate correction when many words are screened (Liu, Medlar and Glowacka 2021) | Established | The rebuilt store; the matched controls (step 5), since 6.3's bar is their 95th percentile |
-| 2 | Matched controls (step 5) as the bar | Established (SemEval-2020 style) | The word list |
-| 3 | Year-by-year time series of a word's change against a reference period, with change-point detection and a shuffle null, replacing half-decade windows (Kulkarni et al. 2015; Shoemark et al. 2019: the full series beats two points); time unit, reference period and downloads by year in A20 | Established | Years per usage (4.6); `ruptures` (1.1.10, September 2025, maintained), added when the experiment starts |
-| 4 | One measure for the static grid instead of the two-threshold rule | The project's own diagnosis | The rebuilt grid |
-| 5 | Same-abstract controls, aimed at topic change | Exploratory: the literature has no method that separates topic shift from semantic change (Kutuzov et al. 2022 call the two inseparable in the data; Hengchen et al. 2021 note that methods conflate meaning with topical information; partial precedents: Perrone et al. 2019 for genre, Card 2023 for frequency-matched background terms) | The abstracts table |
-| 6 | Removing the era signal from the vectors (concept erasure, LEACE), fitted on words other than the target (A21) | Exploratory | Last, since it alters every vector; `concept-erasure` (EleutherAI, last release January 2024) or LEACE's closed form written with numpy and scipy, decided then |
+| 0a | Calibration on the datasets the LSCD Benchmark covers (Schlechtweg, Virk and Arefyev 2024; DWUG in five languages, DiscoWUG, RefWUG, NorDiaChange, ChiWUG, DURel, SURel, RuSemShift, RuShiftEval; only DWUG EN is English): encoder and measures against human graded change, comparable with published numbers, J's being those for the distance between mean vectors (6.3). The benchmark's code is not a dependency (Hydra scripts pinned to Python 3.10, no licence); its datasets and standard metrics are used with scipy and scikit-learn | Standard practice | Encoders, the published datasets |
+| 0b | A systematic synthetic set as the development set: planted scenarios (a sense gained gradually, a sense gained as the old one is lost) and distractors that are not changes of meaning (a frequency change, a short-lived spike) (Shoemark et al. 2019) | Established | The rebuilt store |
+| 1 | J on every usage, judged against matched controls and shuffles (6.3) | Established | The rebuilt store; the matched controls (step 5) |
+| 2 | Matched controls (step 5) as the bar, with the check that their J does not follow frequency or spread | Established (SemEval-2020 style) | The word tables |
+| 3 | Year-by-year series of a word's change, replacing half-decade windows (Kulkarni et al. 2015, with a permutation null; Shoemark et al. 2019: the full series beats two points). Each year, or a window of two or three years where a year holds fewer than about 50 usages (fixed per word before measuring), is compared with one reference period of several hundred usages; the series is scored by change points and by its linear trend, and the last period is among the references tried on the synthetic set (Shoemark et al. found it the better reference, and linear trends to match or exceed change points) | Established | Years per usage (4.6); downloads sized per year (4.8); `ruptures` (1.1.10, September 2025, maintained), added when the experiment starts |
+| 4 | One measure for the static grid instead of the two-threshold rule, and the choice among the static models (6b) | The project's own diagnosis | The rebuilt grid |
+| 5 | Same-abstract controls, aimed at topic change | Exploratory: no method separates topic shift from semantic change (Kutuzov et al. 2022 call the two inseparable in the data; Hengchen et al. 2021 note that methods conflate meaning with topical information; partial precedents: Perrone et al. 2019 for genre, Card 2023 for frequency-matched background terms) | The abstracts table |
+| 6 | Removing the era signal from the vectors (concept erasure, LEACE), the eraser always fitted on words other than the one it is applied to | Exploratory | Last, since it alters every vector; `concept-erasure` (EleutherAI, last release January 2024) or LEACE's closed form written with numpy and scipy, decided then |
+
+*Why experiment 3's design:* usages per year in the existing store, before 2020, are about 20 for
+*attention* in AI, 4–16 for *alignment*, 2–57 for *platform* in communication and 150–320 for
+*network*; with no change at all, J's 95th percentile is 0.016 for 20 usages against 20 and
+0.0085 for 20 against 500 (simulated), beside decade-level changes of 0.010 (*platform*), 0.025
+(*alignment*) and 0.036 (*attention*).
+
+*Why experiment 6 fits the eraser on other words:* J is a function of the two periods' mean
+vectors (6.3), and LEACE makes those means equal for the data it is fitted on, so fitting it on
+the target's own usages removes J by construction (*attention*, AI 2010s→2020s: 0.0355 before,
+−0.0007 after). Fitted on the 30 other words of that transition, it leaves the documented changes
+(*attention* 0.0376; *alignment* 0.0225 from 0.0261) and halves a stable word's (*component*
+0.0012 from 0.0023).
 
 Checks every experiment reads: the documented changes (*alignment* and *attention* in AI,
 2010s→2020s; *network* in AI, 1980s→1990s; *platform* in communication, 2000s→2010s), the quiet
 transitions, planted changes, the placebo, shuffles and controls. Exploratory experiments are
 judged hard against planted changes and the placebo, since no published result supports them.
 
-**6.1 How results are judged.** Rules written before each run, or open reading on development
-cases and confirmation on held-out ones. *Recommendation:* the second, the standard split of
-exploratory and confirmatory analysis, with confirmation rules written before the confirming
-run (guarding against the "garden of forking paths", Gelman and Loken).
+**6.1 How results are judged.** Explore freely on the synthetic set (0b) and the benchmark (0a);
+confirm once on held-out cases under a confirmation plan committed to git before the confirming
+run (the frozen method, the cases, the pass rule; the commit's timestamp shows it came first):
+the standard split of exploratory and confirmatory analysis, against the "garden of forking
+paths" (Gelman and Loken 2013). Development material is not the project's domain (synthetic
+changes; historical general English), so the held-out set from the project's fields is the test
+that counts.
 
-**6.2 Held-out cases.** All known cases were used in round X, and four are too few to split.
-*Recommendation:* develop on the synthetic set (0b) and the benchmark (0a); build a fresh set of
-known answers for confirmation (changes dated by dictionaries in the project's fields, such as
-Wiktionary's dated and field-labelled senses, and cases such as *hallucination* in psychology and
-*prompt* in AI), and hold it back. The author judges which cases count as documented.
+**6.2 The held-out set.** All known cases were used in round X, and four are too few to split, so
+a fresh set is built and held back:
 
-**6.3 The bar in experiment 1.** *Recommendation:* the 95% interval must clear the matched
-controls' 95th percentile (at least 30 controls, step 5), with shuffles as the floor and false
-discovery rate correction when many words are screened.
+- **About 20 documented changes and 20 stable words** (chosen like matched controls), drawn from
+  words used nowhere in development (*prompt* and *hallucination* are development words, 7.1).
+  Claude drafts them with evidence, never change scores (sense, field, dating source, corpus
+  counts per decade; sources: Wiktionary through the kaikki.org extracts, well-documented recent
+  cases, the corpus); the author reviews them (reading a few usages per decade is annotation, not
+  measuring) and judges which count as documented. The set is committed, marked not for use until
+  confirmation, its hash recorded. If 20 documented changes cannot be found in the project's
+  fields, the plan states the number reached and what it can show.
+- **Nothing leaks into development.** Held-out words carry `held_out` in the word table and are
+  left out of every development output (screening, reports, gap lists, the static grid's ranked
+  lists) until the confirmation plan is committed. Labels for held-out words are made only after
+  the plan is frozen, and the labelling procedure is written into it. The plan carries a leakage
+  checklist (what development used, the held-out list's hash, that held-out words were filtered
+  from every development output, that their labels came after the plan), after Kapoor and
+  Narayanan's model info sheets (2023: leakage found in 294 papers across 17 fields, often not
+  apparent from the papers themselves); SemEval-2020 likewise kept its gold labels hidden.
+- **The pass rule** is set before any measuring (for example, at least 16 of 20 changes found and
+  at most 2 of 20 stable words flagged), and the confirmation reports both rates with Wilson
+  intervals beside pass or fail. *Why 20:* with 10 of each, a method that finds 70% of changes
+  passes "8 of 10" 38% of the time and one with 20% false alarms passes "at most 1 of 10" 38% of
+  the time; with 20, those fall to 24% and 21%, while a method at 90% and 5% passes 96% and 92%;
+  8 of 10 has a 95% interval of 49–94%, 16 of 20 of 58–92%.
 
-Decisions (2026-11-12): the revised list and order above; and
+**6.3 The statistics.** All the rules for measuring and judging change, in one place.
 
-- 6.1: explore freely on the synthetic set (0b) and the benchmark (0a); confirm once on held-out
-  cases under a confirmation plan committed to git before the confirming run (the frozen
-  method, the cases, the pass rule; the commit's timestamp shows it came first). Development
-  material is not the project's domain (synthetic changes; historical general English), so the
-  held-out set from the project's fields is the test that counts.
-- 6.2: a fresh held-out set of about 10–20 documented changes and as many stable cases (chosen
-  like matched controls), drafted by Claude with evidence (sense, field, dating source, corpus
-  counts per decade; sources: Wiktionary through the kaikki.org extracts, well-documented
-  recent cases, the corpus), reviewed by the author (reading a few usages per decade is
-  annotation, not measuring), committed and marked not for use until confirmation, with its
-  hash recorded. Its pass rule (for example, at least 8 of 10 changes found, at most 1 of 10
-  stable words flagged) is set before any measuring. *Amended by A24:* about 20 of each, the
-  rates reported with intervals.
-- 6.3: the bar's form is fixed now (the target's 95% interval against its matched controls'
-  distribution, shuffles as the floor, false discovery rate correction when screening); its
-  level is chosen during development, where the answers are known, and frozen in the
-  confirmation plan. Tools: scikit-learn `cosine_similarity` on the store's vectors, scipy's
-  `bootstrap` (resampling abstracts, never pairing a usage with its own copy, which would bias J
-  upwards), `permutation_test` with at least 1,000 shuffles (the similarity matrix computed once,
-  labels reshuffled), `false_discovery_control`. *Amended by A10:* 100,000 shuffles, the same n
-  per period for the target and its controls. *Amended by A14 and A26:* the bar is a rank test on
-  J against every eligible control, the interval reported for size; J is computed from mean
-  vectors.
+- **The measure, J.** The mean distance between usages of different periods minus the mean of the
+  two within-period mean distances (cosine distance, a usage never paired with itself). It is a
+  known statistic: half the energy distance with squared distances (Rizzo and Székely 2010),
+  which is the maximum mean discrepancy with a linear kernel (Gretton et al. 2012; Sejdinovic et
+  al. 2013), so it equals half the squared distance between the two periods' mean unit vectors,
+  estimated without a usage's pairing with itself. It therefore sees a shift of the mean and
+  nothing else, and is the noise-corrected form of the distance between mean vectors (PRT).
+  *Why J:* on DWUG EN (round U, `second_review/j_identity.py`, `measure_candidates.py`), APD
+  agrees with human graded change at 0.864 but keeps 0.842 with the periods shuffled, so it
+  mostly ranks words by their variety of uses (Kutuzov, Velldal and Øvrelid 2022 proposed
+  comparing within-period subsets as future work); PRT keeps 0.60 when shuffled; J agrees at 0.54
+  and falls to −0.12. Tried and not better: the energy distance with plain distances (0.46), a
+  Gaussian-kernel discrepancy (0.33), J divided by the within-period distance (0.29), a period
+  classifier's AUC (0.40). J grows with the square of a shift in sense shares, so sizes are
+  compared on its square root where a scale matters.
+- **Computation.** From sums of unit vectors, with no usage-by-usage similarity matrix (the
+  pairwise and mean-vector forms agree to 1e-7 on DWUG; 100,000 shuffles of 1,000 usages take
+  about a second); vectors cast from 16-bit to 32-bit floats first. APD, when reported beside J,
+  by scikit-learn's `cosine_similarity`.
+- **Equal n.** Each comparison draws the same n usages per period for the target and every
+  control (n = the cap, or the target's count if lower, never below the floor; seed recorded);
+  candidates with fewer than n are not eligible (step 5); n is a parameter, so a change reruns
+  the target and its controls together. *Why:* J's chance level falls with the number of usages
+  (with no change, its 95th percentile is 0.0030 at 100 usages per period, 0.0017 at 200, 0.0006
+  at 500), so unequal counts would let the controls' noise set the bar; Liu et al. take it as
+  given that high-frequency words come out highly significant, and subsample their corpora.
+- **The bar: a rank test against the controls.** The target's J is compared with its controls' J
+  at the same n: p = (1 + controls at or above the target) / (controls + 1) (Phipson and Smyth
+  2010; North, Curtis and Sham 2002), and the target counts as changed at p at or under the level
+  frozen in the confirmation plan (0.05 unless development argues otherwise). With 59 controls at
+  most two may be at or above the target, under 39 none, and under 19 no result is possible.
+  *Why not the interval against the 95th percentile:* a percentile of 30 values is not a 5% test
+  (simulated with a stable target, a J above the 95th percentile of 30 controls was flagged 7.7%
+  of the time, 5.9% with 59), and requiring the interval's lower end to clear it counts sampling
+  noise twice, since the controls' J carry the same noise at the same n: the interval rule found a
+  moderate change 2% of the time (a large one 68%), against 35–44% (93–97%) for the rank rule at
+  3–4% false alarms (`decision_rule.py`). On round X's vectors, *network* in AI, 1980s→1990s (J
+  0.0045, interval 0.0010 to 0.0119, 29 controls) is above the 95th percentile (0.0024), fails the
+  interval rule and has rank p = 0.067; leaving one control out moves that percentile between
+  0.0014 and 0.0025. Precedent for a quantile bar of frequency-matched background terms: Card
+  2023.
+- **The size: a BCa bootstrap interval**, reported beside the test, resampling abstracts and never
+  pairing a usage with its own copy (which would bias J upwards); scipy's default BCa (second-order
+  accurate where the percentile interval is first-order: Efron 1987; DiCiccio and Efron 1996);
+  a `DegenerateDataWarning` stops the run instead of switching method. Near zero, J's
+  large-sample theory changes form (Gretton et al. 2012) and a naive bootstrap is not guaranteed;
+  tested, the interval contained the true J for 96–100% of simulated words and zero for 99% of
+  250 real same-cell splits, so it errs wide there (`bootstrap_null_real.py`).
+- **The floor: shuffles.** scipy's `permutation_test` relabels periods; its p-value is
+  (exceedances + 1) / (shuffles + 1). Every word gets 100,000 shuffles (computed from sums of
+  vectors, timed on one word before relying on it), with the rule that 1/(shuffles + 1) is at
+  least ten times below 0.05 / m for m screened words. *Why:* with 1,000 shuffles the smallest
+  p-value is about 0.001, while Benjamini–Hochberg needs a word standing alone at 0.05 / m: above
+  50 screened words a single finding cannot pass, and several words tied at the smallest p-value
+  pass only together (at least 2 of 100, 6 of 300) (simulated: a very large change got p = 0.001,
+  `first_review/finding10_demo.py`). Liu et al. escalate step by step (1,000, then 10,000 and
+  100,000 shuffles for small p-values). Benjamini–Yekutieli's threshold for a single word is lower
+  still (0.05 / m divided by 1 + 1/2 + … + 1/m: about 2.7e-5 at 300 words, under 1e-5 from about
+  700 words), so beyond that the shuffles rise with it.
+- **Screening many words.** The false discovery rate correction applies to the shuffle p-values:
+  Benjamini–Hochberg (`scipy.stats.false_discovery_control`), with Benjamini–Yekutieli
+  (`method="by"`) reported beside it, since words in one field share its topic drift (BH holds
+  under independence or positive dependence, BY under any: Benjamini and Yekutieli 2001; Liu et
+  al. note the dependence and the cost). The rank p-value cannot be corrected (its smallest value
+  is 1 / (controls + 1)), so screened words above their controls are candidates for reading,
+  about 5% of stable words by construction.
+- The simulations above (the permutation floor, J's chance level by n, the rank rule against the
+  interval rule) become tests of the statistics module.
 
 ## Step 6b: the static models (after detection experiment 4)
 
-Whether the static pipeline keeps skip-gram vectors (TWEC, or cells trained apart with gensim and
-aligned with scipy's `orthogonal_procrustes`) or runs on PPMI-SVD alone (the project's own code,
-deterministic, no gensim). Skip-gram with alignment is probably the stronger static method for
-detecting change (checked in A13 and A22: the evidence is mixed, and weaker for small corpora;
-temporal referencing is a fourth option; not yet in `related_work.md`), and the README's best
-finding rests on
-both agreeing. Experiment 4 tests whether the grid's misses came from its rule, its windows or
-the embeddings; if the grid does not earn its place, the question lapses and gensim goes with it.
+Which static model the pipeline keeps, decided by experiment 4 on the synthetic set and the
+benchmark; nothing is presumed. The options:
 
-Decision:
+1. TWEC (the project's trainer on gensim's internals; `cade` does not count, step 1a);
+2. skip-gram cells trained apart with gensim and aligned with scipy's `orthogonal_procrustes`
+   (Hamilton, Leskovec and Jurafsky 2016);
+3. temporal referencing: one skip-gram model on all the text, the target words tagged by period;
+   plain gensim, no alignment (Dubossarsky et al. 2019, where it outperformed alignment on a
+   synthetic task and a manual test set);
+4. PPMI-SVD alone (the project's own code, deterministic, no gensim).
+
+*The evidence is mixed:* Hamilton et al. 2016 found PPMI clearly worse and SVD against skip-gram
+"somewhat equivocal", with skip-gram finding 72% of known shifts on the smaller corpus against
+SVD's 96%; Schlechtweg et al. 2019, across domains (SURel), have skip-gram best at its best setting
+(0.85 against PPMI's 0.79 and SVD's 0.64) but close to PPMI on average (0.52 and 0.50); in
+DIACR-Ita, Procrustes-aligned skip-gram scored 0.94 against 0.83 for two TWEC systems, and no
+independent evaluation found has TWEC clearly ahead. Field-decade cells are small corpora. The
+README's best finding rests on skip-gram and PPMI agreeing. If the grid does not earn its place in
+experiment 4, the question lapses and gensim goes with it.
 
 ## Step 7a: finding senses
 
