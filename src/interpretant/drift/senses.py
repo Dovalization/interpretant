@@ -1,16 +1,9 @@
-"""Senses of a word by field and decade, from contextual embeddings of its occurrences.
+"""Occurrences of a word by field and decade, for the contextual measures and the sense labels.
 
-The type-level models give a word one vector per cell, which mixes its senses. Here every
-occurrence gets its own vector: a contextual encoder reads the sentence around it, and the
-vector is the mean of its last layers over the word's subword tokens. All occurrences of a word,
-from every field and decade, are clustered together, so a sense is the same set of uses in
-every cell, and a cell's sense distribution is the share of its occurrences in each cluster
-(Giulianelli et al. 2020). The number of senses is the k in ``SENSE_RANGE`` with the best
-silhouette.
-
-Occurrences come from the cased abstracts behind the cleaned cells, with abstracts found in
-more than one field's cell removed: up to ``CAP`` abstracts per
-cell that contain the word, one occurrence each, drawn per seed.
+The cased abstracts behind the cleaned cells, with abstracts found in more than one field's cell
+removed on request, and seeded samples of a word's occurrences in them: up to ``CAP`` abstracts
+per cell that contain the word, one occurrence each, drawn per seed. (The sense clustering that
+also lived here was deleted in step 1b; rounds C, C′ and C″ are recorded in docs/experiments.md.)
 """
 
 from __future__ import annotations
@@ -20,24 +13,15 @@ import json
 import random
 import re
 from collections import Counter
-from collections.abc import Callable, Iterable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
-
-import numpy as np
-import polars as pl
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
 
 from interpretant.corpus.openalex import OpenAlexSource, cell_path, strip_boilerplate
 
 CAP = 500
 SENSE_RANGE = range(2, 11)
 CONTEXT_WORDS = 100
-SILHOUETTE_SAMPLE = 5_000
-LAYERS = 4
-NARROW_CHARS = 200
 
 Abstracts = Mapping[tuple[str, int], Sequence[tuple[str, str]]]
 
@@ -217,158 +201,3 @@ def sample_many(
                 if taken == sampling.cap:
                     break
     return result
-
-
-class Encoder(Protocol):
-    """Gives every occurrence a vector."""
-
-    def encode(self, occurrences: Sequence[Occurrence]) -> np.ndarray: ...
-
-
-def span_mask(offsets: np.ndarray, start: int, end: int) -> np.ndarray:
-    """Which tokens, by their ``(start, end)`` character offsets, overlap ``[start, end)``;
-    special tokens (empty offsets) never do."""
-    return (offsets[:, 0] < end) & (offsets[:, 1] > start) & (offsets[:, 1] > offsets[:, 0])
-
-
-def narrowed(occurrence: Occurrence, chars: int = NARROW_CHARS) -> Occurrence:
-    """The occurrence with its context cut to ``chars`` characters on either side, for a
-    context the encoder truncates before reaching it (text without spaces between words)."""
-    first = max(occurrence.start - chars, 0)
-    context = occurrence.context[first : occurrence.end + chars]
-    return Occurrence(
-        occurrence.field,
-        occurrence.decade,
-        occurrence.work_id,
-        context,
-        occurrence.start - first,
-        occurrence.end - first,
-    )
-
-
-class TransformerEncoder:
-    """A Hugging Face encoder: an occurrence's vector is the mean of the last ``layers`` hidden
-    layers over the subword tokens that overlap it."""
-
-    def __init__(self, model_name: str, layers: int = LAYERS, batch_size: int = 32) -> None:
-        import torch
-        from transformers import AutoModel, AutoTokenizer
-
-        self.torch = torch
-        self.device = "mps" if torch.backends.mps.is_available() else "cpu"
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)  # type: ignore[no-untyped-call]
-        self.model = AutoModel.from_pretrained(model_name).to(self.device).eval()
-        self.layers = layers
-        self.batch_size = batch_size
-
-    def encode(self, occurrences: Sequence[Occurrence]) -> np.ndarray:
-        vectors: list[np.ndarray] = []
-        for first in range(0, len(occurrences), self.batch_size):
-            vectors.extend(self._encode_batch(occurrences[first : first + self.batch_size]))
-        return np.vstack(vectors)
-
-    def _encode_batch(self, batch: Sequence[Occurrence], narrow: bool = True) -> list[np.ndarray]:
-        """One vector per occurrence; an occurrence past the encoder's 512 tokens is encoded
-        again from its :func:`narrowed` context."""
-        encoded = self.tokenizer(
-            [occurrence.context for occurrence in batch],
-            return_offsets_mapping=True,
-            padding=True,
-            truncation=True,
-            max_length=512,
-            return_tensors="pt",
-        )
-        offsets = encoded.pop("offset_mapping").numpy()
-        with self.torch.no_grad():
-            output = self.model(**encoded.to(self.device), output_hidden_states=True)
-        hidden = self.torch.stack(output.hidden_states[-self.layers :]).mean(0)
-        hidden_rows = hidden.float().cpu().numpy()
-        vectors: list[np.ndarray] = []
-        for row, occurrence in enumerate(batch):
-            mask = span_mask(offsets[row], occurrence.start, occurrence.end)
-            if mask.any():
-                vectors.append(hidden_rows[row][mask].mean(axis=0))
-            elif narrow:
-                vectors.extend(self._encode_batch([narrowed(occurrence)], narrow=False))
-            else:
-                raise ValueError(f"no token covers the occurrence in {occurrence.work_id}")
-        return vectors
-
-
-def induce_senses(
-    vectors: np.ndarray, seed: int, sense_range: Iterable[int] = SENSE_RANGE
-) -> tuple[np.ndarray, np.ndarray]:
-    """K-means on the length-normalised vectors for every k in ``sense_range``; the labels and
-    centres of the k with the best silhouette (cosine, on a seeded sample), or of the one k
-    when the range holds one."""
-    normalised = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
-    candidates = list(sense_range)
-    if len(candidates) == 1:
-        model = KMeans(n_clusters=candidates[0], n_init=10, random_state=seed).fit(normalised)
-        return model.labels_, model.cluster_centers_
-    sample = min(len(normalised), SILHOUETTE_SAMPLE)
-    best: tuple[float, np.ndarray, np.ndarray] | None = None
-    for senses in candidates:
-        if senses >= len(normalised):
-            break
-        model = KMeans(n_clusters=senses, n_init=10, random_state=seed).fit(normalised)
-        score = float(
-            silhouette_score(
-                normalised, model.labels_, metric="cosine", sample_size=sample, random_state=seed
-            )
-        )
-        if best is None or score > best[0]:
-            best = (score, model.labels_, model.cluster_centers_)
-    if best is None:
-        raise ValueError("too few occurrences to cluster")
-    return best[1], best[2]
-
-
-def sense_runs(
-    abstracts: Abstracts,
-    words: Iterable[str],
-    seeds: Iterable[int],
-    encoder: Encoder,
-    sampling: Sampling = ROUND_C,
-    sense_range: Iterable[int] = SENSE_RANGE,
-    log: Callable[[str], None] = print,
-) -> pl.DataFrame:
-    """Sample, encode and cluster every word's occurrences in every seed.
-
-    An occurrence drawn in several seeds is encoded once. One row per seed, word and
-    occurrence, with its sense, the number of senses and its cosine distance to its sense's
-    centre (the nearest are a sense's examples).
-    """
-    rows: list[dict[str, object]] = []
-    cache: dict[Occurrence, np.ndarray] = {}
-    for word in words:
-        for seed in seeds:
-            occurrences = sample_occurrences(abstracts, word, seed, sampling)
-            new = list(dict.fromkeys(o for o in occurrences if o not in cache))
-            if new:
-                cache.update(zip(new, encoder.encode(new), strict=True))
-            vectors = np.vstack([cache[occurrence] for occurrence in occurrences])
-            labels, centres = induce_senses(vectors, seed, sense_range)
-            normalised = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
-            centre_norms = np.linalg.norm(centres, axis=1)
-            distances = (
-                1 - np.einsum("ij,ij->i", normalised, centres[labels]) / centre_norms[labels]
-            )
-            rows.extend(
-                {
-                    "seed": seed,
-                    "word": word,
-                    "field": occurrence.field,
-                    "decade": occurrence.decade,
-                    "work_id": occurrence.work_id,
-                    "context": occurrence.context,
-                    "start": occurrence.start,
-                    "end": occurrence.end,
-                    "sense": int(label),
-                    "senses": len(centres),
-                    "distance": float(distance),
-                }
-                for occurrence, label, distance in zip(occurrences, labels, distances, strict=True)
-            )
-            log(f"  {word}, seed {seed}: {len(occurrences):,} occurrences, {len(centres)} senses")
-    return pl.DataFrame(rows)

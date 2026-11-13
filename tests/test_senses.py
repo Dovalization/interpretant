@@ -14,50 +14,21 @@ import random
 from collections.abc import Sequence
 from pathlib import Path
 
-import numpy as np
-import polars as pl
 import pytest
 
 from interpretant.drift.senses import (
-    Occurrence,
     Sampling,
     cased_abstracts,
     context_around,
     drop_shared,
     foreign_share,
-    induce_senses,
-    narrowed,
     sample_many,
     sample_occurrences,
-    sense_runs,
-    span_mask,
     word_pattern,
 )
 
 MECHANISM = ("transformer", "layer", "weights", "encoder")
 SELECTIVE = ("visual", "task", "participants", "selective")
-
-
-class CueEncoder:
-    """A context's vector counts its mechanism and selective-attention cues, plus noise."""
-
-    def __init__(self) -> None:
-        self.calls = 0
-        self.rng = np.random.default_rng(0)
-
-    def encode(self, occurrences: Sequence[Occurrence]) -> np.ndarray:
-        self.calls += 1
-        rows = []
-        for occurrence in occurrences:
-            words = occurrence.context.lower().split()
-            rows.append(
-                [
-                    sum(word in MECHANISM for word in words),
-                    sum(word in SELECTIVE for word in words),
-                    0.1,
-                ]
-            )
-        return np.array(rows, dtype=float) + self.rng.normal(0, 0.05, (len(rows), 3))
 
 
 def abstract(rng: random.Random, cues: Sequence[str], number: int) -> tuple[str, str]:
@@ -127,57 +98,6 @@ def test_sampling_takes_one_occurrence_per_abstract_up_to_the_cap_and_repeats_by
     assert all(o.context[o.start : o.end].lower() == "attention" for o in first)
 
 
-def test_the_span_mask_keeps_overlapping_tokens_and_drops_special_ones() -> None:
-    offsets = np.array([[0, 0], [0, 4], [4, 13], [13, 14], [15, 20], [0, 0]])
-
-    assert span_mask(offsets, 4, 13).tolist() == [False, False, True, False, False, False]
-    assert span_mask(offsets, 2, 14).tolist() == [False, True, True, True, False, False]
-
-
-def test_the_silhouette_picks_the_number_of_planted_clusters() -> None:
-    rng = np.random.default_rng(3)
-    centres = np.eye(3) * 5
-    vectors = np.vstack([centre + rng.normal(0, 0.3, (40, 3)) for centre in centres])
-
-    labels, found = induce_senses(vectors, seed=1)
-
-    assert len(found) == 3
-    assert all(len(set(labels[n * 40 : (n + 1) * 40])) == 1 for n in range(3))
-
-
-def test_the_new_sense_is_found_in_ai_and_psychology_does_not_change(
-    abstracts: dict[tuple[str, int], list[tuple[str, str]]],
-) -> None:
-    encoder = CueEncoder()
-
-    table = sense_runs(
-        abstracts, ["attention"], [1, 2], encoder, sampling=Sampling(cap=30), log=lambda _: None
-    )
-
-    rows = table.filter(pl.col("seed") == 1)
-    assert set(table["senses"]) == {2}
-
-    def modal_sense(field: str, decade: int) -> int:
-        cell = rows.filter(pl.col("field") == field, pl.col("decade") == decade)
-        return int(cell["sense"].mode().sort()[0])
-
-    assert modal_sense("ai", 1990) != modal_sense("ai", 2020)
-    assert modal_sense("psychology", 1990) == modal_sense("psychology", 2020)
-
-
-def test_an_occurrence_drawn_in_several_seeds_is_encoded_once(
-    abstracts: dict[tuple[str, int], list[tuple[str, str]]],
-) -> None:
-    encoder = CueEncoder()
-
-    table = sense_runs(
-        abstracts, ["attention"], [1, 2, 3], encoder, sampling=Sampling(cap=60), log=lambda _: None
-    )
-
-    assert encoder.calls == 1
-    assert len(table) == 3 * 4 * 60
-
-
 def test_cased_abstracts_keep_case_and_punctuation_and_drop_the_label(tmp_path: Path) -> None:
     text = (
         "Abstract: We studied how People direct their attention. The results, which were "
@@ -207,17 +127,6 @@ def test_an_abstract_in_two_fields_of_one_decade_is_dropped_from_both() -> None:
         ("psychology", 2020): [("W3", "c")],
         ("psychology", 1990): [("W1", "a")],
     }
-
-
-def test_a_narrowed_context_keeps_the_occurrence_and_its_offsets() -> None:
-    context = "字" * 700 + "intelligence" + "字" * 300
-    occurrence = Occurrence("ai", 2020, "W1", context, 700, 712)
-
-    narrow = narrowed(occurrence, chars=50)
-
-    assert len(narrow.context) == 50 + 12 + 50
-    assert narrow.context[narrow.start : narrow.end] == "intelligence"
-    assert narrowed(Occurrence("ai", 2020, "W1", "intelligence here", 0, 12), 50).start == 0
 
 
 def test_drawing_with_replacement_varies_a_small_cell_between_seeds() -> None:
@@ -254,15 +163,6 @@ def test_the_quality_rules_skip_foreign_script_and_drop_urls() -> None:
     assert [o.work_id for o in found] == ["W2"]
     assert "https" not in found[0].context
     assert found[0].context[found[0].start : found[0].end] == "attention"
-
-
-def test_a_single_number_of_senses_is_used_as_given() -> None:
-    rng = np.random.default_rng(3)
-    vectors = np.vstack([centre + rng.normal(0, 0.3, (40, 3)) for centre in np.eye(3) * 5])
-
-    _, centres = induce_senses(vectors, seed=1, sense_range=(5,))
-
-    assert len(centres) == 5
 
 
 def test_sampling_many_words_in_one_pass_matches_sampling_each_word() -> None:
