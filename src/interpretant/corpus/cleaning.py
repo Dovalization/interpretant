@@ -53,12 +53,14 @@ def mark_repeated_sentences(abstracts: pl.DataFrame) -> pl.DataFrame:
 def mark_author_cap(abstracts: pl.DataFrame, *, max_share: float, floor: int) -> pl.DataFrame:
     """Drop works so no author holds more than ``max(floor, max_share × n)`` of a cell's n works.
 
-    A cell is a source, field and decade; cells are capped in sorted order over the works still
-    kept, so a work dropped in one cell leaves the others. Within a cell, the most frequent
-    authors go first, and an author over the cap keeps the works that come first when ordered by
-    a hash of the work id: a stable order, so which works an author keeps does not change when
-    other works are added or removed (as for drawn mentions, decision agenda 4.3). Dropping a
-    co-authored work also lowers its co-authors' counts.
+    A cell is a source, field and decade. Each cell is capped on all its works not already
+    dropped, independently of the other cells, and a work over the cap in any cell leaves all of
+    them: no cell's result depends on another's, so the order of the cells cannot matter.
+    Within a cell, the most frequent authors go first, and an author over the cap keeps the works
+    that come first when ordered by a hash of the work id: a stable order, so which works an
+    author keeps does not change when other works are added or removed (as for drawn mentions,
+    decision agenda 4.3). Dropping a co-authored work also lowers its co-authors' counts in that
+    cell.
     """
     kept = abstracts.filter(pl.col("dropped_reason").is_null())
     authors_by_work = {
@@ -72,27 +74,37 @@ def mark_author_cap(abstracts: pl.DataFrame, *, max_share: float, floor: int) ->
                 row["work_id"]
             )
     dropped: set[str] = set()
-    for cell in sorted(works_by_cell):
-        cell_works = [work_id for work_id in works_by_cell[cell] if work_id not in dropped]
-        limit = max(floor, int(max_share * len(cell_works)))
-        author_counts = Counter(
-            author for work_id in cell_works for author in authors_by_work[work_id]
-        )
-        for author, count in sorted(author_counts.items(), key=lambda item: (-item[1], item[0])):
-            if count <= limit:
-                break
-            author_works = sorted(
-                (
-                    work_id
-                    for work_id in cell_works
-                    if work_id not in dropped and author in authors_by_work[work_id]
-                ),
-                key=_stable_rank,
-            )
-            dropped.update(author_works[limit:])
+    for cell_works in works_by_cell.values():
+        dropped |= _cap_cell(cell_works, authors_by_work, max_share=max_share, floor=floor)
     return _mark_dropped(
         abstracts, pl.Series(sorted(dropped), dtype=pl.String()), reason=AUTHOR_CAP
     )
+
+
+def _cap_cell(
+    cell_works: list[str],
+    authors_by_work: dict[str, frozenset[str]],
+    *,
+    max_share: float,
+    floor: int,
+) -> set[str]:
+    """The works one cell drops so that no author holds more than its limit."""
+    limit = max(floor, int(max_share * len(cell_works)))
+    author_counts = Counter(author for work_id in cell_works for author in authors_by_work[work_id])
+    dropped: set[str] = set()
+    for author, count in sorted(author_counts.items(), key=lambda item: (-item[1], item[0])):
+        if count <= limit:
+            break
+        author_works = sorted(
+            (
+                work_id
+                for work_id in cell_works
+                if work_id not in dropped and author in authors_by_work[work_id]
+            ),
+            key=_stable_rank,
+        )
+        dropped.update(author_works[limit:])
+    return dropped
 
 
 def _sentence_rows(abstracts: pl.DataFrame) -> pl.DataFrame:

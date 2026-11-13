@@ -133,6 +133,26 @@ def test_mark_author_cap_counts_each_cell_of_a_work_in_two_fields() -> None:
     assert list(dropped_reasons(marked).values()).count(AUTHOR_CAP) == 1
 
 
+def test_mark_author_cap_caps_each_cell_on_all_its_works() -> None:
+    """No cell's cap depends on another cell's drops, so the order of the cells cannot matter."""
+    prolific = "https://openalex.org/A9"
+    fields_by_work = {
+        **dict.fromkeys(range(1, 6), ("ai", "compsci")),
+        **dict.fromkeys(range(6, 10), ("ai",)),
+        **dict.fromkeys(range(10, 13), ("compsci",)),
+    }
+    rows = [
+        abstract_row(work, [BODY], author_ids=[prolific], fields=list(fields))
+        for work, fields in fields_by_work.items()
+    ]
+    marked = mark_author_cap(abstracts_table(rows), max_share=0.01, floor=5)
+    capped = {work for work, reason in dropped_reasons(marked).items() if reason == AUTHOR_CAP}
+    ai_cell = set(stable_order(list(range(1, 10)))[5:])
+    compsci_cell = set(stable_order([*range(1, 6), *range(10, 13)])[5:])
+    # Capped one after the other, compsci would count only the works ai kept and miss one.
+    assert capped == ai_cell | compsci_cell
+
+
 @pytest.mark.parametrize(
     "rule",
     [
