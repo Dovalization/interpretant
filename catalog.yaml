@@ -7,6 +7,12 @@ raw_abstracts:
   path: data/raw/openalex
   format: jsonl.gz
 
+# OpenAlex's record of each raw work beyond its abstract (source, indexes, topics, authorships,
+# references and more), fetched by id: one gzipped JSON Lines file per raw cell, same layout.
+work_metadata:
+  path: data/raw/openalex_metadata
+  format: jsonl.gz
+
 abstracts:
   path: data/processed/abstracts
   format: parquet

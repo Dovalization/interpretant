@@ -10,6 +10,7 @@ from rich.table import Table
 from tqdm import tqdm
 
 from interpretant.cli.build_corpus import build_corpus_command
+from interpretant.cli.fetch_metadata import fetch_metadata_command
 
 console = Console()
 
@@ -21,6 +22,7 @@ def cli() -> None:
 
 
 cli.add_command(build_corpus_command)
+cli.add_command(fetch_metadata_command)
 
 
 # ---------------------------------------------------------------------------

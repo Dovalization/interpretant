@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import shutil
 from pathlib import Path
 
 import pytest
@@ -14,8 +15,17 @@ from click.testing import CliRunner
 from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import CatalogConfig, load_abstracts, load_annotations, read_catalog
+from interpretant.catalog import (
+    CatalogConfig,
+    RawCell,
+    append_work_metadata,
+    load_abstracts,
+    load_annotations,
+    read_catalog,
+)
+from interpretant.corpus.work_metadata import REPOSITORY_ONLY
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
+from tests.metadata_records import metadata_record
 
 PARAGRAPH = (
     "Attention mechanisms let a neural network weigh the parts of its input that matter most for "
@@ -53,6 +63,7 @@ def catalog_file(tmp_path: Path) -> Path:
     catalog_file = tmp_path / "catalog.yaml"
     catalog_file.write_text(
         "raw_abstracts:\n  path: raw\n  format: jsonl.gz\n"
+        "work_metadata:\n  path: metadata\n  format: jsonl.gz\n"
         "abstracts:\n  path: abstracts\n  format: parquet\n"
         f"cleaning_rules:\n  path: '{repository.cleaning_rules.path}'\n  format: yaml\n"
         f"cleaning_patterns:\n  path: '{repository.cleaning_patterns.path}'\n  format: jsonl\n"
@@ -72,6 +83,14 @@ def catalog_file(tmp_path: Path) -> Path:
         path.parent.mkdir(parents=True, exist_ok=True)
         with gzip.open(path, "wt", encoding="utf-8") as cell:
             cell.writelines(f"{line}\n" for line in lines)
+        # Work 3 is a repository-only record; the others sit in indexed journals.
+        records = [
+            metadata_record(work, source_type="repository", indexed_in=())
+            if work == 3
+            else metadata_record(work)
+            for work in (int(json.loads(line)["id"].rsplit("W", 1)[1]) for line in lines)
+        ]
+        append_work_metadata(read_catalog(catalog_file), RawCell(field, decade), records)
     return catalog_file
 
 
@@ -92,6 +111,14 @@ def test_build_corpus_annotates_merges_and_applies_the_corpus_rules(catalog_file
     table = load_abstracts(catalog).sort("work_id").collect()
     assert table["fields"].to_list() == [["ai", "compsci"], ["ai"], ["ai"], ["compsci"]]
     assert table["duplicate_of"].to_list() == [None, None, None, "https://openalex.org/W3"]
+    assert table["flags"].to_list() == [[], [], [REPOSITORY_ONLY], []]
+
+
+def test_build_corpus_refuses_cells_whose_metadata_was_not_fetched(catalog_file: Path) -> None:
+    catalog = read_catalog(catalog_file)
+    shutil.rmtree(catalog.work_metadata.path / "compsci")
+    with pytest.raises(ValueError, match="compsci 2010: run `interpretant fetch-metadata`"):
+        build_corpus(catalog, settings())
 
 
 def test_build_corpus_caches_each_part_in_the_order_of_its_rows(

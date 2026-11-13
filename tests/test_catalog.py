@@ -16,13 +16,17 @@ from interpretant.catalog import (
     CATALOG_FILE,
     CatalogConfig,
     RawCell,
+    append_work_metadata,
+    fetched_work_ids,
     list_raw_cells,
     load_abstracts,
     load_raw_cell,
+    load_work_metadata,
     read_catalog,
     save_abstracts,
 )
 from tests.abstracts_tables import abstract_row, abstracts_table
+from tests.metadata_records import metadata_record, missing_record
 
 SENTENCES = ["Attention helps.", "See https://example.org for more."]
 URL_REMOVAL = {"start": 21, "end": 40, "reason": "url"}
@@ -76,6 +80,33 @@ def test_load_raw_cell_rejects_a_line_that_is_not_a_work(catalog: CatalogConfig)
     write_raw_cell(catalog, "ai", 2010, ['{"id": "https://openalex.org/W1", "year": 2017}'])
     with pytest.raises(pydantic.ValidationError):
         list(load_raw_cell(catalog, RawCell("ai", 2010)))
+
+
+def test_append_work_metadata_adds_to_a_cell_file_across_runs(catalog: CatalogConfig) -> None:
+    cell = RawCell("ai", 2010)
+    append_work_metadata(catalog, cell, [metadata_record(1)])
+    append_work_metadata(catalog, cell, [metadata_record(2), missing_record(3)])
+    records = list(load_work_metadata(catalog, cell))
+    assert [record.work_id for record in records] == [
+        "https://openalex.org/W1",
+        "https://openalex.org/W2",
+        "https://openalex.org/W3",
+    ]
+    assert [record.missing for record in records] == [False, False, True]
+    assert fetched_work_ids(catalog, cell) == {record.work_id for record in records}
+
+
+def test_fetched_work_ids_is_empty_before_a_cell_is_fetched(catalog: CatalogConfig) -> None:
+    assert fetched_work_ids(catalog, RawCell("ai", 2010)) == set()
+
+
+def test_append_work_metadata_writes_nothing_when_a_record_is_malformed(
+    catalog: CatalogConfig,
+) -> None:
+    cell = RawCell("ai", 2010)
+    with pytest.raises(pydantic.ValidationError):
+        append_work_metadata(catalog, cell, [metadata_record(1), {"id": "W2"}])
+    assert fetched_work_ids(catalog, cell) == set()
 
 
 def test_read_catalog_resolves_paths_against_the_catalog_file(

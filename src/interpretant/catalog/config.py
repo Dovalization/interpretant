@@ -26,6 +26,7 @@ class CatalogConfig(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     raw_abstracts: DatasetEntry
+    work_metadata: DatasetEntry
     abstracts: DatasetEntry
     cleaning_rules: DatasetEntry
     cleaning_patterns: DatasetEntry

@@ -41,9 +41,13 @@ The rebuild's stages so far, with their settings in `params.yaml` and their data
 `catalog.yaml`:
 
 ```
+fetch-metadata [--field ai --decade 2010]                   data/raw/openalex_metadata/<field>/<decade>.jsonl.gz
 build-corpus [--field ai --decade 2010 --process-count 8]   data/processed/abstracts/<part>.parquet,
                                                              data/interim/annotations/<part>.spacy
 ```
+
+`fetch-metadata` is not a stage: like the downloads it runs by hand once (resuming where it
+stopped) and its output is registered; `build-corpus` refuses cells whose metadata is missing.
 
 ## Pre-registration
 
@@ -60,18 +64,22 @@ analysis: predictions first, in their own commit.
 
 - `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift grid`). Commands parse options,
   call one library function and print; the loops live in the library with tests.
-- `cli/` and `pipelines/` (rebuild): one thin command per pipeline (`build-corpus`), and the
-  pipelines composing the jobs, each with its pydantic settings object reading `params.yaml`.
+- `cli/` and `pipelines/` (rebuild): one thin command per pipeline (`fetch-metadata`,
+  `build-corpus`), and the pipelines composing the jobs, each with its pydantic settings object
+  reading `params.yaml` (or `.env`, for the OpenAlex key).
   Import contracts: `__main__` → `cli` → `pipelines` → `corpus` → `catalog`.
-- `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`), the
+- `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`) and
+  each raw work's OpenAlex metadata (`metadata.py`), the
   abstracts table's pandera schema and its parquet parts, the curated cleaning rules and spaCy
   patterns (`load_cleaning_patterns`), and the annotation cache (DocBin). It imports no other
   interpretant package.
 - `corpus/` (rebuild): `repair.py` (text repair before spaCy, mojibake detection),
   `annotation.py` (the spaCy pass: sentences, labelled removal spans, the pass's keeping rules,
   one abstracts-table row per work), `language.py` (lingua as the pipeline's last component,
-  setting each sentence's language on its span), `deduplication.py` (one row per work across cells; MinHash near-duplicates) and
-  `cleaning.py` (template sentences, repeated sentences, the author cap).
+  setting each sentence's language on its span), `deduplication.py` (one row per work across
+  cells; MinHash near-duplicates), `cleaning.py` (template sentences, repeated sentences, the
+  author cap) and `work_metadata.py` (OpenAlex's record of each work, fetched by id with pyalex;
+  the repository-only flag).
 - `corpus/` (old pipeline, replaced as the rebuild lands): `openalex.py` (API client, sampling,
   cleaning at ingest, `ingest_fields`), `files.py` (`source_texts`, `rewrite_texts`: one stage's
   cell files into the next), `caps.py` (author caps), `lemmas.py` (type-level map: *-s*

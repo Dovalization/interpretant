@@ -85,9 +85,9 @@ module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*"]
 ignore_missing_imports = true
 
 # Libraries without type hints and with no stubs package: compiled spaCy modules, srsly,
-# datasketch.
+# datasketch, pyalex.
 [[tool.mypy.overrides]]
-module = ["spacy.symbols", "spacy.tokenizer", "srsly", "datasketch"]
+module = ["spacy.symbols", "spacy.tokenizer", "srsly", "datasketch", "pyalex"]
 ignore_missing_imports = true
 
 # pydantic-settings calls settings_customise_sources with these keyword arguments, so an override

@@ -3,12 +3,15 @@
 Stages 2 and 3 of the decision agenda's run order (9.1): every selected cell's works, merged
 across cells, are repaired and annotated in one stream; each part's documents go to the
 annotation cache as the stream reaches its end; then the corpus-level rules run over the whole
-table and its parts are saved. A part is a field in a decade, the first of a work's fields.
+table, the works' OpenAlex metadata flags repository-only works for the review (4b), and the
+table's parts are saved. A part is a field in a decade, the first of a work's fields. Every
+selected cell's metadata must have been fetched first (``interpretant fetch-metadata``).
 """
 
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Iterator
 from dataclasses import asdict, dataclass
 from itertools import groupby
 from pathlib import Path
@@ -26,9 +29,12 @@ from pydantic_settings import (
 from interpretant.catalog import (
     ABSTRACTS_COLUMNS,
     CatalogConfig,
+    RawCell,
+    WorkMetadata,
     list_raw_cells,
     load_cleaning_patterns,
     load_raw_cell,
+    load_work_metadata,
     save_abstracts,
     save_annotations,
 )
@@ -44,6 +50,7 @@ from interpretant.corpus.cleaning import (
     mark_template_sentences,
 )
 from interpretant.corpus.deduplication import mark_near_duplicates, merge_cells
+from interpretant.corpus.work_metadata import index_work_metadata, mark_metadata_flags
 
 PARAMS_FILE = Path(__file__).resolve().parents[3] / "params.yaml"
 REGULAR = "regular"
@@ -113,14 +120,17 @@ def build_corpus(
     ]
     if not cells:
         raise ValueError(f"no raw cell for fields {settings.fields} in decades {settings.decades}")
-    patterns = load_cleaning_patterns(catalog)
-    nlp = build_pipeline(
-        patterns, languages=settings.languages, english_threshold=settings.english_threshold
-    )
     abstracts = merge_cells(
         ((cell.field, load_raw_cell(catalog, cell)) for cell in cells), source=REGULAR
     )
     abstracts.sort(key=_part_name)
+    metadata = index_work_metadata(
+        _load_metadata(catalog, cells), (abstract.work_id for abstract in abstracts)
+    )
+    patterns = load_cleaning_patterns(catalog)
+    nlp = build_pipeline(
+        patterns, languages=settings.languages, english_threshold=settings.english_threshold
+    )
     annotated = annotate_abstracts(
         abstracts,
         nlp,
@@ -136,7 +146,7 @@ def build_corpus(
         part_tables.append(_table(rows).with_columns(pl.lit(part).alias(_PART)))
     if not part_tables:
         raise ValueError(f"the raw cells {cells} hold no works")
-    table = _apply_corpus_rules(pl.concat(part_tables), settings)
+    table = mark_metadata_flags(_apply_corpus_rules(pl.concat(part_tables), settings), metadata)
     parts = table[_PART].unique(maintain_order=True).to_list()
     for part in parts:
         save_abstracts(catalog, table.filter(pl.col(_PART) == part).drop(_PART), part=part)
@@ -147,6 +157,17 @@ def build_corpus(
         removal_counts=_counts(table["removals"].explode().drop_nulls().struct.field("reason")),
         parts=parts,
     )
+
+
+def _load_metadata(catalog: CatalogConfig, cells: list[RawCell]) -> Iterator[WorkMetadata]:
+    for cell in cells:
+        try:
+            yield from load_work_metadata(catalog, cell)
+        except FileNotFoundError as exc:
+            raise ValueError(
+                f"no work metadata for {cell.field} {cell.decade}: "
+                "run `interpretant fetch-metadata`"
+            ) from exc
 
 
 def _part_name(abstract: RawAbstract | AnnotatedAbstract) -> str:

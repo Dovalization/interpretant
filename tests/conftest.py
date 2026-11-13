@@ -50,6 +50,7 @@ def catalog_text() -> str:
     """A catalog file's content with every dataset, its paths relative to the file."""
     return (
         "raw_abstracts:\n  path: data/raw\n  format: jsonl.gz\n"
+        "work_metadata:\n  path: data/metadata\n  format: jsonl.gz\n"
         "abstracts:\n  path: data/abstracts\n  format: parquet\n"
         "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
         "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"

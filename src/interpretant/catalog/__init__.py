@@ -14,6 +14,12 @@ from interpretant.catalog.curated import (
     Scope,
     load_cleaning_patterns,
 )
+from interpretant.catalog.metadata import (
+    WorkMetadata,
+    append_work_metadata,
+    fetched_work_ids,
+    load_work_metadata,
+)
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
 from interpretant.catalog.schemas import ABSTRACTS_COLUMNS, ABSTRACTS_SCHEMA, REMOVAL, SENTENCE
 
@@ -31,11 +37,15 @@ __all__ = [
     "RawCell",
     "RawWork",
     "Scope",
+    "WorkMetadata",
+    "append_work_metadata",
+    "fetched_work_ids",
     "list_raw_cells",
     "load_abstracts",
     "load_annotations",
     "load_cleaning_patterns",
     "load_raw_cell",
+    "load_work_metadata",
     "read_catalog",
     "save_abstracts",
     "save_annotations",
