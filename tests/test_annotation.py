@@ -103,6 +103,11 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
     [
         ("Letter from John Smith to the editor, 1890, about the harvest.", "catalogue_record"),
         ("Journal of Things, Volume 3, Issue 2, 2010, Pages 120-123.", "citation_record"),
+        (
+            "(1985). Towards a theory of predication for English. Australian Journal of "
+            "Linguistics: Vol. 5, No. 2, pp. 143-196.",
+            "citation_record",
+        ),
         ("Export citation. Save to Binder. Track citations.", "web_scrape"),
         (
             "No AccessJournal of Speech and Hearing DisordersArticle1 Dec 1954A Simple Adapter "
@@ -117,6 +122,7 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
     ids=[
         "catalogue record",
         "citation record",
+        "citation stub starting with its year",
         "web scrape",
         "page with no access glued",
         "exam spam",
@@ -143,6 +149,7 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
         "Students prepare for English certification exams with self-directed strategies.",
         "This paper concentrates on two actual questions of nerve growth factor research.",
         "No accessible records of the dialect survive from before the war.",
+        "The first survey of the dialect (1985). A second one followed a decade later.",
     ],
     ids=[
         "letter mid-sentence",
@@ -151,6 +158,7 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
         "research on certification exams",
         "actual questions meaning current ones",
         "no accessible at the start",
+        "a bracketed year not at the start",
     ],
 )
 def test_annotate_abstracts_keeps_look_alikes_of_the_rules(

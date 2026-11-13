@@ -46,7 +46,11 @@ labels:
   copyright: rest_of_sentence
   # Letters, memos and similar catalogue records standing in for an abstract (start only).
   catalogue_record: abstract
-  # A citation string standing in for an abstract ("Volume 3, Issue 2").
+  # A citation string standing in for an abstract ("Volume 3, Issue 2"), or a record that
+  # starts with its year in brackets and a full stop, "(1985). Title. Journal: Vol. 5, No. 2,
+  # pp. 143-196." (start only; added 2026-11-13: 4,292 such records were kept in run 2, none over
+  # 60 words, and 899 more were dropped as not_english only because lingua read the journal
+  # line as Latin or French).
   citation_record: abstract
   # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
   # alone: social media are a research topic. "No Access" glued to the journal name

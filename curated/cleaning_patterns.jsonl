@@ -18,6 +18,7 @@
 {"label":"copyright","pattern":[{"TEXT":"("},{"LOWER":"c"},{"TEXT":")"},{"SHAPE":"dddd"}]}
 {"label":"catalogue_record","pattern":[{"LOWER":{"IN":["letter","script","telegram","memo","memorandum","postcard","note"]}},{"LOWER":{"IN":["from","to","by"]}}],"id":"start"}
 {"label":"citation_record","pattern":[{"LOWER":"volume"},{"LIKE_NUM":true},{"TEXT":",","OP":"?"},{"LOWER":{"IN":["issue","number"]}},{"LIKE_NUM":true}]}
+{"label":"citation_record","pattern":[{"TEXT":"("},{"SHAPE":"dddd"},{"TEXT":")"},{"TEXT":"."}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":{"IN":["noaccess","no-access"]}}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":"no"},{"LOWER":"access"}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":"no"},{"TEXT":{"REGEX":"^Access[A-Z]"}}],"id":"start"}
