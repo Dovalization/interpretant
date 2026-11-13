@@ -6,6 +6,10 @@ abstracts:
   path: data/processed/abstracts
   format: parquet
 
-cleaning_patterns:
-  path: curated/cleaning_patterns.yaml
+cleaning_rules:
+  path: curated/cleaning_rules.yaml
   format: yaml
+
+cleaning_patterns:
+  path: curated/cleaning_patterns.jsonl
+  format: jsonl

@@ -5,26 +5,29 @@ from __future__ import annotations
 import re
 from typing import Any, Literal
 
+import srsly
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from interpretant.catalog.config import CatalogConfig
 
 Scope = Literal["tokens", "sentence", "abstract"]
+# The pattern id that makes a match count only when it begins the abstract.
+START_ID = "start"
 
 
 class CleaningPattern(BaseModel):
-    """One spaCy SpanRuler token pattern and the label its matches carry."""
+    """One line of a spaCy pattern file: a label, a token pattern, and an optional id."""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     label: str
     pattern: list[dict[str, Any]] = Field(min_length=1)
-    at_start: bool = False
+    id: Literal["start"] | None = None
 
 
 class CleaningPatterns(BaseModel):
-    """The cleaning patterns file: mojibake signatures, what each label removes, the patterns."""
+    """The cleaning rules and patterns: mojibake signatures, label scopes, token patterns."""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -51,14 +54,19 @@ class CleaningPatterns(BaseModel):
             raise ValueError(f"patterns use labels with no scope declared: {undeclared}")
         return self
 
+    def span_ruler_patterns(self) -> list[dict[str, Any]]:
+        """The patterns as spaCy's SpanRuler takes them, without unset ids."""
+        return [pattern.model_dump(exclude_none=True) for pattern in self.patterns]
+
 
 def load_cleaning_patterns(catalog: CatalogConfig) -> CleaningPatterns:
-    """The cleaning patterns file, validated.
+    """The cleaning rules file and the pattern file, read together and validated.
 
     Raises:
-        FileNotFoundError: if the file does not exist.
+        FileNotFoundError: if either file does not exist.
         pydantic.ValidationError: if a pattern uses an undeclared label, a scope is unknown or a
             signature is not a valid regular expression.
     """
-    text = catalog.cleaning_patterns.path.read_text(encoding="utf-8")
-    return CleaningPatterns.model_validate(yaml.safe_load(text))
+    rules = yaml.safe_load(catalog.cleaning_rules.path.read_text(encoding="utf-8"))
+    patterns = list(srsly.read_jsonl(catalog.cleaning_patterns.path))
+    return CleaningPatterns.model_validate({**rules, "patterns": patterns})

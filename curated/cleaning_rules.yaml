@@ -1,0 +1,41 @@
+# What the spaCy pass removes from abstracts, and why (decision agenda, step 2.3).
+# Translated from the pre-rebuild regex rules on 2026-11-13; AWAITING THE AUTHOR'S REVIEW
+# (phase 1b), after which runs never write here. The token patterns themselves are in
+# cleaning_patterns.jsonl, in spaCy's pattern-file format (one {"label", "pattern", "id"} object
+# per line, read with srsly and added to the SpanRuler, as spaCy's documentation shows); every
+# match becomes a labelled removal span, so every removal carries its reason.
+
+# Mis-decoding signatures, read on the raw text: an abstract showing one is dropped.
+mojibake_signatures:
+  - 'Ã[\x80-\xbf]'
+  - 'â€'
+  - 'Â[\xa0-\xbf]'
+
+# What each label removes:
+#   tokens:   the matched tokens, skipped in the static view (contextual sentences keep them, so
+#             target offsets do not move);
+#   sentence: the sentence holding the match, dropped from both views;
+#   abstract: the whole abstract, dropped with the label as its reason.
+# A pattern with "id": "start" counts only when it begins the abstract.
+labels:
+  # Links and identifiers (spaCy's like_url and like_email; DOIs kept whole by the tokenizer).
+  url: tokens
+  email: tokens
+  doi: tokens
+  # A token with a LaTeX command or a superscript or subscript marker.
+  latex: tokens
+  # The leading "Abstract" or "Summary" label, with its punctuation (start only).
+  abstract_label: tokens
+  # Footers appended to real abstracts: JSTOR's download stamp, purchase prompts.
+  footer: sentence
+  # Copyright lines: the formula, the sign, or "copyright" or "(c)" before a year.
+  copyright: sentence
+  # Letters, memos and similar catalogue records standing in for an abstract (start only).
+  catalogue_record: abstract
+  # A citation string standing in for an abstract ("Volume 3, Issue 2").
+  citation_record: abstract
+  # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
+  # alone: social media are a research topic.
+  web_scrape: abstract
+  # Exam-dump advertising.
+  exam_spam: abstract

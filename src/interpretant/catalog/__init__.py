@@ -7,6 +7,7 @@ step 8.3).
 from interpretant.catalog.abstracts import load_abstracts, save_abstracts
 from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, DatasetEntry, read_catalog
 from interpretant.catalog.curated import (
+    START_ID,
     CleaningPattern,
     CleaningPatterns,
     Scope,
@@ -20,6 +21,7 @@ __all__ = [
     "CATALOG_FILE",
     "REMOVAL",
     "SENTENCE",
+    "START_ID",
     "CatalogConfig",
     "CleaningPattern",
     "CleaningPatterns",

@@ -81,6 +81,11 @@ explicit_package_bases = true
 module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*"]
 ignore_missing_imports = true
 
+# A library without type hints and with no stubs package.
+[[tool.mypy.overrides]]
+module = ["srsly"]
+ignore_missing_imports = true
+
 [tool.importlinter]
 root_packages = ["interpretant"]
 
