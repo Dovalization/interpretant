@@ -381,7 +381,11 @@ def test_build_pipeline_keeps_hyphenated_words_whole(nlp: Language) -> None:
 def test_build_pipeline_runs_lingua_then_drops_the_tensors(nlp: Language) -> None:
     assert nlp.pipe_names[-2:] == [SENTENCE_LANGUAGES, "doc_cleaner"]
     settings = nlp.config["components"][SENTENCE_LANGUAGES]
-    assert (settings["languages"], settings["english_threshold"]) == (["en", "de", "fr", "es"], 0.9)
+    assert (
+        settings["languages"],
+        settings["english_threshold"],
+        settings["minimum_relative_distance"],
+    ) == (["en", "de", "fr", "es"], 0.9, 0.1)
     assert nlp("Attention helps models.").tensor is None
 
 
@@ -391,7 +395,11 @@ def test_build_pipeline_runs_named_entity_recognition_only_when_asked(
     assert "ner" not in nlp.pipe_names
     assert not nlp("Ada Lovelace worked in London.").has_annotation("ENT_IOB")
     with_entities = build_pipeline(
-        patterns, languages=["en"], english_threshold=0.9, named_entity_recognition=True
+        patterns,
+        languages=["en"],
+        english_threshold=0.9,
+        minimum_relative_distance=0.1,
+        named_entity_recognition=True,
     )
     assert "ner" in with_entities.pipe_names
 

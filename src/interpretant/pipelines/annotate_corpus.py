@@ -58,6 +58,7 @@ class AnnotateCorpusSettings(ParamsSettings):
 
     languages: tuple[str, ...] = Field(min_length=1)
     english_threshold: float = Field(gt=0, le=1)
+    minimum_relative_distance: float = Field(ge=0, le=0.99)
     min_english_words: int = Field(ge=1)
     named_entity_recognition: bool
 
@@ -107,6 +108,7 @@ def annotate_corpus(
         patterns,
         languages=settings.languages,
         english_threshold=settings.english_threshold,
+        minimum_relative_distance=settings.minimum_relative_distance,
         named_entity_recognition=settings.named_entity_recognition,
     )
     progress.stage("spaCy pass", total=len(selected))

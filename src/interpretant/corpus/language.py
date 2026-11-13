@@ -1,7 +1,8 @@
 """Sentence languages by lingua, as a spaCy pipeline component.
 
 The decision agenda, step 2.4: lingua alone, restricted to English and the languages found in the
-corpus; per abstract first, per sentence only for abstracts not confidently English. The
+corpus (scripts/evidence/language_scan.py); per abstract first, per sentence only for abstracts
+not confidently English. The
 ``sentence_languages`` component sets each sentence's language and confidence as span extension
 attributes, so the annotation cache keeps them (4.6) and the abstracts table copies them. As a
 component it runs inside spaCy's worker processes, and its settings are part of the pipeline's
@@ -14,13 +15,7 @@ import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from lingua import (
-    ConfidenceValue,
-    DetectionResult,
-    IsoCode639_1,
-    LanguageDetector,
-    LanguageDetectorBuilder,
-)
+from lingua import ConfidenceValue, IsoCode639_1, LanguageDetector, LanguageDetectorBuilder
 from lingua import Language as LinguaLanguage
 from spacy.language import Language
 from spacy.tokens import Doc, Span
@@ -50,17 +45,21 @@ class SentenceLanguage:
 _NO_LANGUAGE = SentenceLanguage(UNDETERMINED, 0.0)
 
 
-def build_language_detector(languages: Sequence[str]) -> LanguageDetector:
+def build_language_detector(
+    languages: Sequence[str], *, minimum_relative_distance: float
+) -> LanguageDetector:
     """A lingua detector restricted to the given ISO 639-1 codes, which must include English.
 
     Restricting the candidates improves accuracy when the text's languages are among them
-    (lingua's documentation).
+    (lingua's documentation). Below ``minimum_relative_distance`` between the two likeliest
+    languages, detecting a text's language gives no verdict; confidence values are unaffected.
 
     Raises:
         ValueError: if English is missing or a code is not an ISO 639-1 code lingua knows.
     """
     return (
         LanguageDetectorBuilder.from_languages(*_lingua_languages(languages))
+        .with_minimum_relative_distance(minimum_relative_distance)
         .with_preloaded_language_models()
         .build()
     )
@@ -70,11 +69,12 @@ class SentenceLanguageDetector:
     """The pipeline component setting each sentence's language and lingua's confidence in it.
 
     When lingua gives English at least ``english_threshold`` confidence for the whole abstract,
-    every sentence with letters takes that verdict. Otherwise lingua's detection of several
-    languages in one text (documented as experimental, so validated on the sample: decision
-    agenda 2.4) splits the abstract into single-language ranges; each sentence takes the language
-    covering most of its characters, with lingua's confidence for that language in that
-    sentence. Sentences without letters are undetermined.
+    every sentence with letters takes that verdict. Otherwise each sentence is detected on its
+    own, with lingua's confidence for the language found; a sentence whose two likeliest
+    languages are closer than ``minimum_relative_distance`` is undetermined, as is a sentence
+    without letters. (Until 2026-11-13 lingua's experimental detection of several languages in
+    one text split such abstracts; the corpus audit found it read real English as German or
+    French, decision agenda 2.4.)
 
     lingua's detector cannot be pickled, and spaCy pickles each component to start its worker
     processes, so the detector is built on first use and left out of the pickled state: each
@@ -82,7 +82,9 @@ class SentenceLanguageDetector:
     already run the abstracts in parallel.
     """
 
-    def __init__(self, languages: Sequence[str], english_threshold: float) -> None:
+    def __init__(
+        self, languages: Sequence[str], english_threshold: float, minimum_relative_distance: float
+    ) -> None:
         """Check the language codes now; build the detector when the first document arrives.
 
         Raises:
@@ -91,6 +93,7 @@ class SentenceLanguageDetector:
         _lingua_languages(languages)
         self.languages = tuple(languages)
         self.english_threshold = english_threshold
+        self.minimum_relative_distance = minimum_relative_distance
         self._detector: LanguageDetector | None = None
 
     def __call__(self, doc: Doc) -> Doc:
@@ -98,9 +101,8 @@ class SentenceLanguageDetector:
         detector = self._loaded_detector()
         whole = _top_language(detector.compute_language_confidence_values(doc.text))
         is_english = whole.language == ENGLISH and whole.confidence >= self.english_threshold
-        ranges = None if is_english else detector.detect_multiple_languages_of(doc.text)
         for sentence in doc.sents:
-            language = _sentence_language(sentence, whole, ranges, detector)
+            language = _sentence_language(sentence, whole if is_english else None, detector)
             sentence._.set(LANGUAGE_ATTRIBUTE, language.language)
             sentence._.set(CONFIDENCE_ATTRIBUTE, language.confidence)
         return doc
@@ -111,7 +113,9 @@ class SentenceLanguageDetector:
 
     def _loaded_detector(self) -> LanguageDetector:
         if self._detector is None:
-            self._detector = build_language_detector(self.languages)
+            self._detector = build_language_detector(
+                self.languages, minimum_relative_distance=self.minimum_relative_distance
+            )
         return self._detector
 
 
@@ -121,11 +125,15 @@ class SentenceLanguageDetector:
     requires=["token.is_sent_start"],
 )
 def create_sentence_language_detector(
-    nlp: Language, name: str, languages: list[str], english_threshold: float
+    nlp: Language,
+    name: str,
+    languages: list[str],
+    english_threshold: float,
+    minimum_relative_distance: float,
 ) -> SentenceLanguageDetector:
     """The factory spaCy calls to add the component; declares the span attributes it sets."""
     declare_sentence_attributes()
-    return SentenceLanguageDetector(languages, english_threshold)
+    return SentenceLanguageDetector(languages, english_threshold, minimum_relative_distance)
 
 
 def read_sentence_languages(doc: Doc) -> list[SentenceLanguage]:
@@ -183,24 +191,13 @@ def _sentence_language_of(language: LinguaLanguage, confidence: float) -> Senten
 
 
 def _sentence_language(
-    sentence: Span,
-    whole: SentenceLanguage,
-    ranges: Sequence[DetectionResult] | None,
-    detector: LanguageDetector,
+    sentence: Span, whole_english: SentenceLanguage | None, detector: LanguageDetector
 ) -> SentenceLanguage:
     if not _LETTER.search(sentence.text):
         return _NO_LANGUAGE
-    if ranges is None:
-        return whole
-    overlaps = [
-        (
-            min(found.end_index, sentence.end_char) - max(found.start_index, sentence.start_char),
-            found,
-        )
-        for found in ranges
-    ]
-    overlap, best = max(overlaps, key=lambda pair: pair[0], default=(0, None))
-    if best is None or overlap <= 0:
+    if whole_english is not None:
+        return whole_english
+    found = detector.detect_language_of(sentence.text)
+    if found is None:
         return _NO_LANGUAGE
-    confidence = detector.compute_language_confidence(sentence.text, best.language)
-    return _sentence_language_of(best.language, confidence)
+    return _sentence_language_of(found, detector.compute_language_confidence(sentence.text, found))

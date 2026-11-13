@@ -145,6 +145,7 @@ def build_pipeline(
     *,
     languages: Sequence[str],
     english_threshold: float,
+    minimum_relative_distance: float,
     named_entity_recognition: bool = False,
     model: str = "en_core_web_sm",
 ) -> Language:
@@ -153,7 +154,9 @@ def build_pipeline(
     The parser is left out and ``senter`` sets sentences (about ten times faster, and it matched
     the parser on the sample once the abbreviation special cases were in: docs/spacy.md). The
     language component reads the given ISO 639-1 codes and takes an abstract with at least
-    ``english_threshold`` confidence in English as English throughout (decision agenda 2.4); it
+    ``english_threshold`` confidence in English as English throughout, and otherwise labels each
+    sentence on its own, too-close calls (``minimum_relative_distance``) undetermined (decision
+    agenda 2.4); it
     declares the sentence language attributes on spaCy's ``Span`` class as a side effect.
 
     The model's named entity recognition (``ner``) is left out unless
@@ -198,7 +201,11 @@ def build_pipeline(
     ruler.add_patterns(patterns.span_ruler_patterns())
     nlp.add_pipe(
         SENTENCE_LANGUAGES,
-        config={"languages": list(languages), "english_threshold": english_threshold},
+        config={
+            "languages": list(languages),
+            "english_threshold": english_threshold,
+            "minimum_relative_distance": minimum_relative_distance,
+        },
     )
     # The tok2vec vectors left on each document are neither cached nor read later; dropping them
     # makes a document about a third the size to hold and to pass between worker processes

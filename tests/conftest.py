@@ -89,4 +89,9 @@ def nlp(patterns: CleaningPatterns) -> Language:
 
     Its language component reads English, German, French and Spanish.
     """
-    return build_pipeline(patterns, languages=["en", "de", "fr", "es"], english_threshold=0.9)
+    return build_pipeline(
+        patterns,
+        languages=["en", "de", "fr", "es"],
+        english_threshold=0.9,
+        minimum_relative_distance=0.1,
+    )
