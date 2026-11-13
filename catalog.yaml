@@ -13,3 +13,7 @@ cleaning_rules:
 cleaning_patterns:
   path: curated/cleaning_patterns.jsonl
   format: jsonl
+
+annotations:
+  path: data/interim/annotations
+  format: docbin

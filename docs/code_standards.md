@@ -126,8 +126,9 @@ checked by a tool, the tool decides; the rest is checked in review (see Enforcem
 ## Tests
 
 - Named `test_<subject>_<behaviour>` (`test_compute_j_ignores_self_pairs`).
-- Behaviour, not implementation; synthetic data only, no network and no real models; external
-  services mocked at the boundary.
+- Behaviour, not implementation; synthetic data only, no network, and no real models except
+  those installed as pinned dependencies and run offline (`en_core_web_sm`, lingua's language
+  models), loaded once per session; external services mocked at the boundary.
 - The simulations behind decisions become tests (decision agenda, "Tests the rebuild must
   include").
 

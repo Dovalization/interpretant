@@ -52,12 +52,18 @@ analysis: predictions first, in their own commit.
 
 - `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift grid`). Commands parse options,
   call one library function and print; the loops live in the library with tests.
-- `corpus/`: `openalex.py` (API client, sampling, cleaning at ingest, `ingest_fields`), `files.py`
-  (`source_texts`, `rewrite_texts`: one stage's cell files into the next), `caps.py` (author
-  caps), `lemmas.py` (type-level map: *-s* inflections from spaCy's readings in context, and
-  British spellings), `phrases.py` (gensim `Phrases` on a balanced sample), `preprocessing.py`
-  (`preprocess_text`, target variant map), `audit.py` (cell counts and target coverage;
-  `audit_corpus`).
+- `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the abstracts table's pandera schema and
+  its parquet parts, the curated cleaning rules and spaCy patterns (`load_cleaning_patterns`),
+  and the annotation cache (DocBin). It imports no other interpretant package.
+- `corpus/` (rebuild): `repair.py` (text repair before spaCy, mojibake detection) and
+  `annotation.py` (the spaCy pass: sentences, labelled removal spans, sentence languages by
+  lingua, one abstracts-table row per work).
+- `corpus/` (old pipeline, replaced as the rebuild lands): `openalex.py` (API client, sampling,
+  cleaning at ingest, `ingest_fields`), `files.py` (`source_texts`, `rewrite_texts`: one stage's
+  cell files into the next), `caps.py` (author caps), `lemmas.py` (type-level map: *-s*
+  inflections from spaCy's readings in context, and British spellings), `phrases.py` (gensim
+  `Phrases` on a balanced sample), `preprocessing.py` (`preprocess_text`, target variant map),
+  `audit.py` (cell counts and target coverage; `audit_corpus`).
 - `embedding/`: `base.py` (`training_sentences`: splits lines at 10,000 tokens, gensim's
   silent truncation limit), `twec.py` (`TWECTrainer`: balanced compass, frozen context
   vectors per cell), `grid.py` (cell discovery, compass sample, `train_twec_grid`,
@@ -83,8 +89,10 @@ live in `curated/` (tracked). Old results are set aside under `data/retired/`. `
 
 ## Tests
 
-Synthetic only: no real models, no corpus files, no network. `tests/test_pipeline.py` runs the
-whole CLI, ingest to drift grid, on a synthetic two-field, two-decade grid in a few seconds.
+Synthetic only: no corpus files, no network, and no real models except the ones installed as
+pinned dependencies and run offline (`en_core_web_sm` and lingua's language models, which
+`tests/test_annotation.py` loads once per session). `tests/test_pipeline.py` runs the whole CLI,
+ingest to drift grid, on a synthetic two-field, two-decade grid in a few seconds.
 
 ## Code style
 

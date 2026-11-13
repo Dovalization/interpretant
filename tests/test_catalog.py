@@ -40,41 +40,22 @@ def abstracts_row(**changes: Any) -> pl.DataFrame:
     return pl.DataFrame([row], schema=ABSTRACTS_COLUMNS)
 
 
-@pytest.fixture
-def catalog(tmp_path: Path) -> CatalogConfig:
-    catalog_file = tmp_path / "catalog.yaml"
-    catalog_file.write_text(
-        "abstracts:\n  path: data/abstracts\n  format: parquet\n"
-        "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
-        "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
-    )
-    return read_catalog(catalog_file)
-
-
 def test_read_catalog_resolves_paths_against_the_catalog_file(
     catalog: CatalogConfig, tmp_path: Path
 ) -> None:
     assert catalog.abstracts.path == tmp_path / "data/abstracts"
 
 
-def test_read_catalog_rejects_an_unknown_format(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    ("original", "broken"),
+    [("format: parquet", "format: csv"), ("abstracts:", "abstract:")],
+    ids=["unknown format", "misspelt dataset"],
+)
+def test_read_catalog_rejects_a_malformed_catalog(
+    tmp_path: Path, catalog_text: str, original: str, broken: str
+) -> None:
     catalog_file = tmp_path / "catalog.yaml"
-    catalog_file.write_text(
-        "abstracts:\n  path: data/abstracts\n  format: csv\n"
-        "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
-        "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
-    )
-    with pytest.raises(pydantic.ValidationError):
-        read_catalog(catalog_file)
-
-
-def test_read_catalog_rejects_a_misspelt_dataset(tmp_path: Path) -> None:
-    catalog_file = tmp_path / "catalog.yaml"
-    catalog_file.write_text(
-        "abstract:\n  path: data/abstracts\n  format: parquet\n"
-        "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
-        "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
-    )
+    catalog_file.write_text(catalog_text.replace(original, broken))
     with pytest.raises(pydantic.ValidationError):
         read_catalog(catalog_file)
 

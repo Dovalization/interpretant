@@ -17,7 +17,7 @@ class DatasetEntry(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     path: Path
-    format: Literal["parquet", "yaml", "jsonl"]
+    format: Literal["parquet", "yaml", "jsonl", "docbin"]
 
 
 class CatalogConfig(BaseModel):
@@ -28,6 +28,7 @@ class CatalogConfig(BaseModel):
     abstracts: DatasetEntry
     cleaning_rules: DatasetEntry
     cleaning_patterns: DatasetEntry
+    annotations: DatasetEntry
 
 
 def read_catalog(catalog_file: Path = CATALOG_FILE) -> CatalogConfig:

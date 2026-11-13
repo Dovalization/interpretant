@@ -5,6 +5,7 @@ step 8.3).
 """
 
 from interpretant.catalog.abstracts import load_abstracts, save_abstracts
+from interpretant.catalog.annotations import load_annotations, save_annotations
 from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, DatasetEntry, read_catalog
 from interpretant.catalog.curated import (
     START_ID,
@@ -28,7 +29,9 @@ __all__ = [
     "DatasetEntry",
     "Scope",
     "load_abstracts",
+    "load_annotations",
     "load_cleaning_patterns",
     "read_catalog",
     "save_abstracts",
+    "save_annotations",
 ]

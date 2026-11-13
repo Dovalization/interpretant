@@ -2,15 +2,13 @@
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 import polars as pl
 
 from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.parts import part_path
 from interpretant.catalog.schemas import ABSTRACTS_SCHEMA
-
-_PART_NAME = re.compile(r"^[a-z0-9][a-z0-9_.-]*$")
 
 
 def save_abstracts(catalog: CatalogConfig, abstracts: pl.DataFrame, part: str) -> Path:
@@ -31,12 +29,9 @@ def save_abstracts(catalog: CatalogConfig, abstracts: pl.DataFrame, part: str) -
         ValueError: if the part name is not safe as a file name.
         pandera.errors.SchemaError: if the rows break the schema; nothing is written.
     """
-    if not _PART_NAME.match(part):
-        raise ValueError(f"part name {part!r} must match {_PART_NAME.pattern}")
+    target = part_path(catalog.abstracts.path, part, ".parquet")
     validated: pl.DataFrame = ABSTRACTS_SCHEMA.validate(abstracts)
-    folder = catalog.abstracts.path
-    folder.mkdir(parents=True, exist_ok=True)
-    target = folder / f"{part}.parquet"
+    target.parent.mkdir(parents=True, exist_ok=True)
     staging = target.with_suffix(".parquet.partial")
     validated.write_parquet(staging)
     staging.replace(target)
