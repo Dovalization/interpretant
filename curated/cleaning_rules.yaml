@@ -15,7 +15,9 @@ mojibake_signatures:
 # What each label removes:
 #   tokens:   the matched tokens, skipped in the static view (contextual sentences keep them, so
 #             target offsets do not move);
-#   sentence: the sentence holding the match, dropped from both views;
+#   rest_of_sentence: from the match to the end of its sentence, dropped from both views (text
+#             before a notice survives; until 2026-11-13 the whole sentence went, and run 1
+#             lost the text glued before 1,885 copyright notices and 280 JSTOR stamps);
 #   abstract: the whole abstract, dropped with the label as its reason.
 # A pattern with "id": "start" counts only when it begins the abstract.
 labels:
@@ -32,10 +34,16 @@ labels:
   latex: tokens
   # The leading "Abstract" or "Summary" label, with its punctuation (start only).
   abstract_label: tokens
-  # Footers appended to real abstracts: JSTOR's download stamp, purchase prompts.
-  footer: sentence
-  # Copyright lines: the formula, the sign, or "copyright" or "(c)" before a year.
-  copyright: sentence
+  # Footers appended to real abstracts: purchase and login prompts, the start of the page
+  # metadata of ASHA's publishing platform ("Additional Resources FiguresReferences..."), and
+  # the start or end of a JSTOR download stamp whose other half is missing.
+  footer: rest_of_sentence
+  # JSTOR's download stamp, which sits at page breaks mid-text: "This content downloaded from
+  # <address> on <date> <time> UTC All use subject to <terms>", removed exactly.
+  download_stamp: tokens
+  # Copyright notices: the formula, the sign, "copyright" or "(c)" before a year, "Copyright ©"
+  # (also glued to the word before it) and APA's "(PsycINFO Database Record".
+  copyright: rest_of_sentence
   # Letters, memos and similar catalogue records standing in for an abstract (start only).
   catalogue_record: abstract
   # A citation string standing in for an abstract ("Volume 3, Issue 2").

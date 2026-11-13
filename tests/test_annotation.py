@@ -18,6 +18,7 @@ from interpretant.corpus.annotation import (
     RawAbstract,
     annotate_abstracts,
     build_pipeline,
+    kept_text,
 )
 from interpretant.corpus.language import (
     CONFIDENCE_ATTRIBUTE,
@@ -175,6 +176,62 @@ def test_annotate_abstracts_removes_links_without_a_scheme(
     text: str, removed: str, nlp: Language, patterns: CleaningPatterns
 ) -> None:
     assert removed_texts(annotate(text, nlp, patterns))["url"] == [removed]
+
+
+STAMP = (
+    "This content downloaded from 157.55.39.1 on Tue, 01 Jan 2019 12:34:56 UTC "
+    "All use subject to http://about.jstor.org/terms"
+)
+
+
+@pytest.mark.parametrize(
+    ("text", "reason", "removed"),
+    [
+        (
+            "Models learn senses from context in five corpora Copyright © 2019 Elsevier Ltd.",
+            "copyright",
+            "Copyright © 2019 Elsevier Ltd.",
+        ),
+        (
+            f"{ENGLISH_SENTENCE} (PsycINFO Database Record (c) 2006 APA, all rights reserved).",
+            "copyright",
+            "(PsycINFO Database Record (c) 2006 APA, all rights reserved).",
+        ),
+        (
+            f"{ENGLISH_SENTENCE} To register or login click here.",
+            "footer",
+            "To register or login click here.",
+        ),
+        (
+            f"Deduction is developed as a process of composition {STAMP} in Rule XII, replacing "
+            "definition as the means to clarity.",
+            "download_stamp",
+            STAMP,
+        ),
+        (
+            f"{ENGLISH_SENTENCE} Additional Resources FiguresReferencesRelatedDetailsCited by "
+            "Richard Luchsinger and Gottfried E. Arnold (1970).",
+            "footer",
+            "Additional Resources FiguresReferencesRelatedDetailsCited by Richard Luchsinger "
+            "and Gottfried E. Arnold (1970).",
+        ),
+    ],
+    ids=[
+        "copyright after text",
+        "psycinfo record",
+        "login prompt",
+        "jstor stamp mid-text",
+        "platform page metadata",
+    ],
+)
+def test_annotate_abstracts_removes_a_notice_and_keeps_the_text_before_it(
+    text: str, reason: str, removed: str, nlp: Language, patterns: CleaningPatterns
+) -> None:
+    row = annotate(text, nlp, patterns)
+    assert removed_texts(row)[reason] == [removed]
+    kept = kept_text(row.text, row.removals)
+    assert kept.split() == text.replace(removed, " ").split()
+    assert row.dropped_reason is None
 
 
 def test_annotate_abstracts_removes_an_encoded_library_link_and_keeps_the_abstract(

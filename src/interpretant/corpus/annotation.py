@@ -272,10 +272,12 @@ def find_removals(
 ) -> tuple[list[Removal], list[str]]:
     """The removal ranges of one abstract, sorted, and the labels that drop it whole.
 
-    A tokens-scope match removes its own characters; a sentence-scope match removes its whole
-    sentence; an abstract-scope match removes its characters and drops the abstract. Matches of
-    patterns with the id ``start`` count only at the first token. A sentence lingua reads as
-    another language is removed with the reason ``not_english``.
+    A tokens-scope match removes its own characters; a rest-of-sentence match removes from its
+    start to the end of its sentence, so text before a notice survives; an abstract-scope match
+    removes its characters and drops the abstract. Matches of patterns with the id ``start``
+    count only at the first token. A sentence lingua reads as another language is removed with
+    the reason ``not_english``. A range inside another range with the same reason is left out,
+    as when one notice holds several matches ("(PsycINFO Database Record (c) 2006").
     """
     removals: set[Removal] = set()
     drop_reasons: list[str] = []
@@ -283,9 +285,8 @@ def find_removals(
         if span.id_ == START_ID and span.start != 0:
             continue
         label = span.label_
-        if scopes[label] == "sentence":
-            sentence = span.sent
-            removals.add(Removal(sentence.start_char, sentence.end_char, label))
+        if scopes[label] == "rest_of_sentence":
+            removals.add(Removal(span.start_char, span.sent.end_char, label))
             continue
         removals.add(Removal(span.start_char, span.end_char, label))
         if scopes[label] == "abstract" and label not in drop_reasons:
@@ -293,7 +294,22 @@ def find_removals(
     for sentence, language in zip(doc.sents, languages, strict=True):
         if language.language not in (ENGLISH, UNDETERMINED):
             removals.add(Removal(sentence.start_char, sentence.end_char, "not_english"))
-    return sorted(removals), drop_reasons
+    return _outermost(removals), drop_reasons
+
+
+def _outermost(removals: set[Removal]) -> list[Removal]:
+    """The removals, sorted, without those inside another removal with the same reason."""
+    return sorted(
+        removal
+        for removal in removals
+        if not any(
+            other != removal
+            and other.reason == removal.reason
+            and other.start <= removal.start
+            and removal.end <= other.end
+            for other in removals
+        )
+    )
 
 
 def kept_text(text: str, removals: Sequence[Removal]) -> str:

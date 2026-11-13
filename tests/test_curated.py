@@ -18,7 +18,7 @@ DOMAIN_SUFFIX = r")(?::[^.]*)?$"
 def cleaning_patterns(**changes: Any) -> dict[str, Any]:
     content: dict[str, Any] = {
         "mojibake_signatures": ["â€"],
-        "labels": {"url": "tokens", "abstract_label": "tokens", "footer": "sentence"},
+        "labels": {"url": "tokens", "abstract_label": "tokens", "footer": "rest_of_sentence"},
         "patterns": [
             {"label": "url", "pattern": [{"LIKE_URL": True}]},
             {"label": "abstract_label", "pattern": [{"LOWER": "abstract"}], "id": "start"},
@@ -66,7 +66,7 @@ def test_cleaning_patterns_reject_a_malformed_set(changes: dict[str, Any]) -> No
 
 def test_the_repository_cleaning_rules_and_patterns_are_valid() -> None:
     patterns = load_cleaning_patterns(read_catalog())
-    assert {"tokens", "sentence", "abstract"} == set(patterns.labels.values())
+    assert {"tokens", "rest_of_sentence", "abstract"} == set(patterns.labels.values())
     assert any(pattern.id == "start" for pattern in patterns.patterns)
 
 

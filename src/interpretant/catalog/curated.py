@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from interpretant.catalog.config import CatalogConfig
 
-Scope = Literal["tokens", "sentence", "abstract"]
+Scope = Literal["tokens", "rest_of_sentence", "abstract"]
 # The pattern id that makes a match count only when it begins the abstract.
 START_ID = "start"
 

@@ -4,11 +4,16 @@
 {"label":"doi","pattern":[{"TEXT":{"REGEX":"^(?:doi:|https?://(?:dx\\.)?doi\\.org/)?10\\.\\d{4,9}/\\S+$"}}]}
 {"label":"latex","pattern":[{"TEXT":{"REGEX":"\\\\[A-Za-z]+|[\\^_]\\{"}}]}
 {"label":"abstract_label","pattern":[{"LOWER":{"IN":["abstract","summary"]}},{"IS_PUNCT":true,"OP":"*"}],"id":"start"}
+{"label":"download_stamp","pattern":[{"LOWER":"this"},{"LOWER":"content"},{"LOWER":"downloaded"},{"LOWER":"from"},{"OP":"{5,20}"},{"LOWER":"all"},{"LOWER":"use"},{"LOWER":"subject"},{"LOWER":"to"},{"LIKE_URL":true,"OP":"?"}]}
 {"label":"footer","pattern":[{"LOWER":"this"},{"LOWER":"content"},{"LOWER":"downloaded"},{"LOWER":"from"}]}
 {"label":"footer","pattern":[{"LOWER":"all"},{"LOWER":"use"},{"LOWER":"subject"},{"LOWER":"to"}]}
 {"label":"footer","pattern":[{"LOWER":"click"},{"LOWER":"here"}]}
+{"label":"footer","pattern":[{"LOWER":"to"},{"LOWER":"register"},{"LOWER":"or"},{"LOWER":{"IN":["login","log"]}}]}
+{"label":"footer","pattern":[{"LOWER":"additional"},{"LOWER":"resources"},{"LOWER":{"REGEX":"^figuresreferences"}}]}
 {"label":"copyright","pattern":[{"LOWER":"all"},{"LOWER":"rights"},{"LOWER":"reserved"}]}
 {"label":"copyright","pattern":[{"TEXT":"\u00a9"}]}
+{"label":"copyright","pattern":[{"LOWER":{"REGEX":"copyright$"}},{"TEXT":"\u00a9"}]}
+{"label":"copyright","pattern":[{"TEXT":"(","OP":"?"},{"LOWER":"psycinfo"},{"LOWER":"database"},{"LOWER":"record"}]}
 {"label":"copyright","pattern":[{"LOWER":"copyright"},{"SHAPE":"dddd"}]}
 {"label":"copyright","pattern":[{"TEXT":"("},{"LOWER":"c"},{"TEXT":")"},{"SHAPE":"dddd"}]}
 {"label":"catalogue_record","pattern":[{"LOWER":{"IN":["letter","script","telegram","memo","memorandum","postcard","note"]}},{"LOWER":{"IN":["from","to","by"]}}],"id":"start"}
