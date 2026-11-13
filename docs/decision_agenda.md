@@ -465,7 +465,7 @@ of the abstract, truncation).
 
 Inputs: the detection draft's experiments 2 and 3; `pipeline_map.md` stage 11; round X's stored
 vectors and the existing cells' counts (`second_review/control_matching.py`,
-`bar_stability.py`). How a target is judged against its controls is in 6.3.
+`bar_stability.py`, `spread_check.py`). How a target is judged against its controls is in 6.3.
 
 - **The four control-word files are retired as sources** and kept as data (past rounds used
   them). They contradict each other (*control* is a target and a rung-3 control) and do not match
@@ -485,15 +485,26 @@ vectors and the existing cells' counts (`second_review/control_matching.py`,
     smallest tolerance that found a control); for a sense that arrives (the target under the floor
     in the early period) only the later period is matched; the realised tolerance is recorded per
     comparison;
+  - within-period spread (the mean distance between a word's usages within one period) within
+    ±50% of the target's in the **early** period, the state before the change: a change raises
+    the later period's spread, so matching on it would pick naturally varied controls and absorb
+    part of the change (the rule against adjusting for a variable the treatment has affected:
+    Rosenbaum 1984); for a sense that arrives, spread is recorded but not matched, since the
+    early period has too few usages to measure it;
   - at least n usages in each period, n being the comparison's (6.3);
-  - not a target, a held-out word, a sense-list word or a candidate.
+  - not a target, a sense-list word or a candidate, and never a held-out word: the rank test's
+    level is chosen during development (6.3), so a held-out word among the controls would shape
+    the method before its own confirmation ("If the training dataset is not separated from the
+    test dataset during all pre-processing, modeling and evaluation steps, the model has access
+    to information in the test set before its performance is evaluated": Kapoor and Narayanan
+    2023).
 
-  Every eligible candidate is a control, about 60 per comparison (encoding resumes by missing
-  keys, so encoding them all is cheap), not thinned to 30: thinning was one more choice to make,
-  and the rank test of 6.3 needs the numbers. Within-period spread, which like frequency can
-  create apparent change (Dubossarsky et al. 2017), is recorded for every control and checked,
-  not selected on: experiment 2 tests whether the controls' J relates to frequency or to spread,
-  and a relation there tightens the rule before any target is scored.
+  Every eligible candidate is a control, not thinned to the closest 30: thinning was one more
+  choice to make, and the rank test of 6.3 needs the numbers. The pool starts at about 60
+  frequency-matched candidates per comparison (encoding resumes by missing keys, so encoding them
+  is cheap); if fewer than about 40 are eligible after the spread band, more candidates are drawn
+  and encoded. Experiment 2 still checks whether the controls' J relates to frequency or spread
+  within the bands, and a relation there tightens the rule before any target is scored.
 - **Controls are never replaced on their change score.** Replacing the controls that changed most
   lowers the bar, an outcome-driven exclusion of the kind that inflates false positives (Simmons,
   Nelson and Simonsohn 2011); controls that change a lot measure the method's background change
@@ -516,6 +527,17 @@ usually came with a rise in frequency; *prompt* and *hallucination* are nearly a
 early period of the regular sample. Frequency matters less here than for static vectors: with n
 equalised, round X's 157 control-and-transition pairs show no relation between J and frequency
 (Spearman −0.04) and a weak one with the size of the frequency change (+0.14, p = 0.07).
+
+*Why match on spread, and at ±50%:* the distance between two samples of a word "gets larger as w
+acquires more meanings" (Dubossarsky et al. 2017), and SemEval-2020, which did not control its
+test sets for polysemy, found "strong correlations … between graded change and polysemy"
+(Schlechtweg et al. 2020). J subtracts the within-period distances, but only partly cancels
+spread: on round X's 175 control-and-transition pairs at equal n, APD follows spread completely
+(Spearman +1.00) and J still rises with it (+0.21, p = 0.004), so controls less varied than their
+target would set the bar too low. Around round X's documented changes, ±50% of the early
+period's spread keeps 12–20 of about 30 unmatched controls and ±25% only 5–10. The later
+period's spread rises with the change (*alignment* 0.157 → 0.219, *attention* in AI 0.192 →
+0.279).
 
 Replaces: four control-word files from four scripts, parsed three ways.
 
