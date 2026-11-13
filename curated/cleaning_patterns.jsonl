@@ -30,6 +30,3 @@
 {"label":"exam_spam","pattern":[{"LOWER":"brain"},{"LOWER":{"IN":["dump","dumps"]}}]}
 {"label":"exam_spam","pattern":[{"LOWER":"exam"},{"LOWER":{"IN":["dump","dumps"]}}]}
 {"label":"exam_spam","pattern":[{"LOWER":"dumps"},{"LOWER":{"IN":["pdf","questions"]}}]}
-{"label":"exam_spam","pattern":[{"LOWER":"certification"},{"LOWER":{"IN":["exam","exams"]}}]}
-{"label":"exam_spam","pattern":[{"LOWER":"exam"},{"LOWER":"questions"},{"LOWER":"and"},{"LOWER":"answers"}]}
-{"label":"exam_spam","pattern":[{"LOWER":"actual"},{"LOWER":"exam","OP":"?"},{"LOWER":"questions"}]}

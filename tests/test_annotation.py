@@ -127,8 +127,16 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
         "We received a letter from the editor about the harvest.",
         "Twitter use among teenagers rose sharply over the decade.",
         "The abstract: a summary of attention research.",
+        "Students prepare for English certification exams with self-directed strategies.",
+        "This paper concentrates on two actual questions of nerve growth factor research.",
     ],
-    ids=["letter mid-sentence", "a lone social network", "label not at the start"],
+    ids=[
+        "letter mid-sentence",
+        "a lone social network",
+        "label not at the start",
+        "research on certification exams",
+        "actual questions meaning current ones",
+    ],
 )
 def test_annotate_abstracts_keeps_look_alikes_of_the_rules(
     text: str, nlp: Language, patterns: CleaningPatterns

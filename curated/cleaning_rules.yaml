@@ -1,6 +1,7 @@
 # What the spaCy pass removes from abstracts, and why (decision agenda, step 2.3).
-# Translated from the pre-rebuild regex rules on 2026-11-13; AWAITING THE AUTHOR'S REVIEW
-# (phase 1b), after which runs never write here. The token patterns themselves are in
+# Translated from the pre-rebuild regex rules on 2026-11-13 and approved provisionally by the
+# author the same day: the sample audit checks each rule on its dropped abstracts (4b), and runs
+# never write here. The token patterns themselves are in
 # cleaning_patterns.jsonl, in spaCy's pattern-file format (one {"label", "pattern", "id"} object
 # per line, read with srsly and added to the SpanRuler, as spaCy's documentation shows); every
 # match becomes a labelled removal span, so every removal carries its reason.
@@ -37,5 +38,7 @@ labels:
   # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
   # alone: social media are a research topic.
   web_scrape: abstract
-  # Exam-dump advertising.
+  # Exam-dump advertising, matched only by words naming dumps or dump sites. Phrases such as
+  # "certification exam" and "actual questions" were dropped on 2026-11-13: they removed real
+  # abstracts (a study of English certification exams, an NGF paper's "actual questions").
   exam_spam: abstract

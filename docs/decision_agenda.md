@@ -167,7 +167,10 @@ views (the full order is in step 9).
   kept in contextual sentences (*1990s* is not a number to spaCy and stays); hyphenated words kept
   whole on purpose (*self-organising*, *meta-analysis*), so compounds are handled in 4.2.
 - *Sample audit first:* the old regexes and the new patterns run side by side and must catch the
-  same abstracts before the regexes are deleted; count what the template rule alone catches and
+  same abstracts before the regexes are deleted, apart from deliberate fixes (the exam-spam
+  phrases "certification exam", "actual questions" and "exam questions and answers" were left out
+  on 2026-11-13: in the raw cells they dropped at least six real abstracts, while letting through
+  15 exam-guide blurbs, several of them near-copies); count what the template rule alone catches and
   delete patterns it makes redundant; check how the mojibake abstracts spread over cells before
   dropping them; count the near-duplicate pairs whose works sit in different fields of one decade
   and those in different decades (2.5); read the repository-only works per field and decade and
