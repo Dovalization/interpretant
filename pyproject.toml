@@ -33,6 +33,7 @@ dependencies = [
     "pandera[polars]>=0.20",
     "en-core-web-sm",
     "en-core-web-trf",
+    "pyalex>=0.21",
 ]
 
 [project.optional-dependencies]
