@@ -1,0 +1,91 @@
+# The corpus pipeline (decision agenda, step 9): `uv run dvc repro` runs the stages whose data,
+# code, curated files or settings changed since `dvc.lock` was written, and `dvc.lock` records
+# what each output was made from. Paths come from catalog.yaml, written there once.
+#
+# Each stage lists the exact modules it imports (tests/test_dvc_stages.py checks this), so a
+# change reruns only what it can affect. Library versions (uv.lock) are not dependencies: after an
+# upgrade that can change results, rerun with `dvc repro --force`.
+#
+# The downloads are not stages: they are registered with `dvc add` (data/raw/*.dvc).
+
+vars:
+  - catalog.yaml
+
+stages:
+  annotate_corpus:
+    cmd: interpretant annotate-corpus
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/annotation.py
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/deduplication.py
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/work_metadata.py
+      - src/interpretant/pipelines/annotate_corpus.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - ${cleaning_rules.path}
+      - ${cleaning_patterns.path}
+      - ${raw_abstracts.path}
+      - ${work_metadata.path}
+    params:
+      - corpus
+      - annotate_corpus
+    outs:
+      # Kept on the machine that ran the pass (about 1 GB), never in the DVC store. Both outputs
+      # persist, so a pass stopped part-way can be finished by hand part by part
+      # (`--field`, `--decade`) and recorded with `dvc commit annotate_corpus`.
+      - ${annotations.path}:
+          cache: false
+          persist: true
+      - ${annotated_abstracts.path}:
+          persist: true
+
+  build_corpus:
+    cmd: interpretant build-corpus
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/annotation.py
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/deduplication.py
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/work_metadata.py
+      - src/interpretant/pipelines/build_corpus.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - ${annotated_abstracts.path}
+      - ${raw_abstracts.path}
+      - ${work_metadata.path}
+    params:
+      - corpus
+      - build_corpus
+    outs:
+      - ${abstracts.path}
+
+  report_corpus:
+    cmd: interpretant report-corpus
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/work_metadata.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/report_corpus.py
+      - src/interpretant/review/corpus_report.py
+      - ${abstracts.path}
+      - ${raw_abstracts.path}
+      - ${work_metadata.path}
+    params:
+      - corpus
+    outs:
+      - ${corpus_report.path}
+    metrics:
+      # Kept in git, so `dvc metrics diff` compares the corpus between commits.
+      - ${corpus_metrics.path}:
+          cache: false

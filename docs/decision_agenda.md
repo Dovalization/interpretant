@@ -1177,6 +1177,18 @@ touched):
 
 ## Step 9: reproducible runs
 
+*In place 2026-11-13 for stages 1 to 3:* the downloads are registered with `dvc add`
+(`data/raw/*.dvc`) and stored on bazzite's data disk through the SSH remote `storage`;
+`dvc.yaml` runs `annotate_corpus`, `build_corpus` and `report_corpus`, each listing exactly the
+modules it imports (`tests/test_dvc_stages.py`); `report-corpus` writes `metrics/corpus.json`,
+which `dvc metrics diff` compares between commits; and every corpus command appends a record to
+`metrics/runs.jsonl` (when, which commit, whether tracked files differed from it, the machine as
+system, architecture and CPU count, each stage's seconds, the headline counts). The baseline
+metrics are those of run 1, the first full build (705,283 abstracts, 653,005 kept). Run 1 has no
+record in the log: it was put together from several partial runs before the log existed. On
+bazzite (12 CPUs) its spaCy pass took about 47 minutes across restarts, and
+`build-corpus` about 4.5 minutes, of which near-duplicates took 2 min 54 s.
+
 **DVC** for pipelines and provenance, after comparing it with Snakemake (runs steps, no data
 versioning or lock file), Kedro (a full framework to restructure around), Hydra (configuration
 only; pydantic settings already exist), MLflow (experiment tracking at a scale the Markdown

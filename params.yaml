@@ -1,5 +1,5 @@
 # The pipelines' settings, one section per stage, read by each stage's pydantic settings object
-# (decision agenda, step 9); DVC will track them as parameters. Values marked provisional are fixed
+# (decision agenda, step 9); DVC tracks them as parameters. Values marked provisional are fixed
 # by the sample study and the sample audit.
 
 # The raw cells the corpus is built from, read by both corpus stages.
