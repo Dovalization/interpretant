@@ -217,6 +217,50 @@ def test_build_pipeline_starts_a_sentence_after_glued_punctuation(
     assert sentences[0].endswith(first)
 
 
+@pytest.mark.parametrize(
+    ("text", "first"),
+    [
+        (
+            "This was studied by Goodman [2] and Haberman [3]. Examples covered both cases.",
+            "This was studied by Goodman [2] and Haberman [3].",
+        ),
+        (
+            "Prior work [4, 5] used attention. We extend it to longer texts.",
+            "Prior work [4, 5] used attention.",
+        ),
+        (
+            "The target moves fast [7][8][9]. Therefore, tracking is hard.",
+            "The target moves fast [7][8][9].",
+        ),
+        (
+            "Results agree with [12–14].As shown in Fig. 2, the gain holds.",
+            "Results agree with [12–14].",
+        ),
+        (
+            "Adults discriminate [ta] from [da] and rate sleep quality [PSQI] well. Others do not.",
+            "Adults discriminate [ta] from [da] and rate sleep quality [PSQI] well.",
+        ),
+        (
+            "The problem is solved efficiently [2]. [3] claims that it is not.",
+            "The problem is solved efficiently [2].",
+        ),
+    ],
+    ids=[
+        "single numbers",
+        "list",
+        "consecutive",
+        "range then glued stop",
+        "phonetic symbols and an abbreviation",
+        "citation starting a sentence",
+    ],
+)
+def test_build_pipeline_starts_no_sentence_inside_square_brackets(
+    text: str, first: str, nlp: Language
+) -> None:
+    sentences = [sentence.text for sentence in nlp(text).sents]
+    assert sentences == [first, text.removeprefix(first).lstrip()]
+
+
 def test_build_pipeline_splits_glued_punctuation_and_brackets_off(nlp: Language) -> None:
     tokenizer = nlp.tokenizer
     assert isinstance(tokenizer, Tokenizer)

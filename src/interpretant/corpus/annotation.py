@@ -1,12 +1,13 @@
 """The spaCy pass: tokens, sentences, tags, lemmas, entities and labelled removal spans.
 
 One pass annotates each repaired abstract (decision agenda, steps 2 and 4.9): sentences by
-``senter`` with abbreviation special cases and a sentence start after punctuation glued to the
-next sentence, hyphenated words kept whole, DOIs kept as single tokens, and every cleaning
-pattern's matches written as labelled spans in ``doc.spans["removals"]``. Sentence languages
-come from lingua, as the pipeline's last component (``corpus.language``). The keeping rules of
-the pass (2.3) drop an abstract with mojibake, an abstract-scope pattern, mostly another language
-or fewer than five words, and flag one whose "sentence" runs past about 150 words.
+``senter`` with abbreviation special cases and two sentence rules (a start after punctuation
+glued to the next sentence, none inside square brackets), hyphenated words kept whole, DOIs kept
+as single tokens, and every cleaning pattern's matches written as labelled spans in
+``doc.spans["removals"]``. Sentence languages come from lingua, as the pipeline's last component
+(``corpus.language``). The keeping rules of the pass (2.3) drop an abstract with mojibake, an
+abstract-scope pattern, mostly another language or fewer than five words, and flag one whose
+"sentence" runs past about 150 words.
 """
 
 from __future__ import annotations
@@ -75,8 +76,13 @@ _NEXT_SENTENCE = rf"[{ALPHA_UPPER}][{ALPHA_LOWER}]"
 GLUED_STOP_INFIX = rf"(?<=[{ALPHA_LOWER}0-9{_CLOSERS}])[.?!](?={_NEXT_SENTENCE})"
 GLUED_CLOSER_INFIX = rf"(?<=[{ALPHA}0-9])[{_CLOSERS}](?=[.?!]{_NEXT_SENTENCE})"
 _GLUED_STOP = re.compile(GLUED_STOP_INFIX)
-# The component starting a sentence after glued sentence punctuation, placed before ``senter``.
-GLUED_SENTENCE_STARTS = "glued_sentence_starts"
+# A short square-bracket group, not nested: citations ("[2]", "[4, pp. 258-265]", "[Labov,
+# 1966]"), abbreviations ("[PSQI]"), phonetic symbols ("[ta]"), "[Formula: see text]". spaCy's
+# sentence model often starts a sentence at its bracket (decision agenda 2.3).
+_SQUARE_BRACKETS = re.compile(r"\[[^\[\]]{1,40}\]")
+_SENTENCE_FINAL = frozenset({".", "?", "!"})
+# The component setting the sentence boundaries the sentence model misses, before ``senter``.
+SENTENCE_RULES = "sentence_rules"
 _DOI = r"^(?:doi:)?10\.\d{4,9}/\S+$"
 # spaCy's own URL rule extended with DOIs, as one compiled pattern so the tokenizer can still be
 # serialised to worker processes.
@@ -176,7 +182,7 @@ def build_pipeline(
     infixes += [GLUED_STOP_INFIX, GLUED_CLOSER_INFIX]
     tokenizer.infix_finditer = compile_infix_regex(infixes).finditer
     tokenizer.url_match = URL_OR_DOI.match
-    nlp.add_pipe(GLUED_SENTENCE_STARTS, before="senter")
+    nlp.add_pipe(SENTENCE_RULES, before="senter")
     # Overlapping matches keep the first longest, with spaCy's registered filter (the entity
     # ruler's default), so "Abstract:" wins over "Abstract".
     ruler = nlp.add_pipe(
@@ -201,22 +207,48 @@ def build_pipeline(
     return nlp
 
 
-@Language.component(GLUED_SENTENCE_STARTS)
-def mark_glued_sentence_starts(doc: Doc) -> Doc:
-    """Start a sentence after sentence punctuation glued to the next sentence.
+@Language.component(SENTENCE_RULES)
+def apply_sentence_rules(doc: Doc) -> Doc:
+    """Set the sentence boundaries spaCy's sentence model gets wrong in abstracts.
 
-    The tokenizer splits such punctuation off (``GLUED_STOP_INFIX``), but the sentence model,
-    trained on text with a space after each sentence, put a boundary at only about half of the
-    places in run 1 (51% between two letters, 3% after a digit, bracket or quote, in 60,000
-    abstracts), and the sampled misses were nearly all real sentence ends. ``senter`` keeps a
-    sentence start already set (its ``overwrite`` setting is off), as spaCy's documentation shows
-    for custom boundaries set before the parser.
+    spaCy's documentation offers such rules on top of the statistical segmenter, set on
+    ``Token.is_sent_start`` before it; ``senter`` keeps what is set (its ``overwrite`` setting is
+    off). Two rules, from run 1's audit:
+
+    - A sentence starts after sentence punctuation glued to the next sentence. The tokenizer
+      splits the punctuation off (``GLUED_STOP_INFIX``), but the model, trained on text with a
+      space after each sentence, put a boundary at only 48% of these places, and the sampled
+      misses were nearly all real sentence ends.
+    - No sentence starts inside a short square-bracket group, nor at its opening bracket unless
+      sentence-final punctuation comes before it. The model started one at the bracket even with
+      normal spacing ("Goodman | [ | 2] and Haberman"): 56,208 broken pieces in 21,440 of run
+      1's abstracts counting numbered citations alone; on 6,000 abstracts with brackets, broken
+      pieces fell from 13,315 to 1,400.
     """
+    _start_after_glued_punctuation(doc)
+    _join_square_brackets(doc)
+    return doc
+
+
+def _start_after_glued_punctuation(doc: Doc) -> None:
     for match in _GLUED_STOP.finditer(doc.text):
         punctuation = doc.char_span(match.start(), match.end())
-        if punctuation is not None and punctuation.end < len(doc):
-            doc[punctuation.end].is_sent_start = True
-    return doc
+        if punctuation is None or punctuation.end == len(doc):
+            continue
+        doc[punctuation.end].is_sent_start = True
+
+
+def _join_square_brackets(doc: Doc) -> None:
+    for match in _SQUARE_BRACKETS.finditer(doc.text):
+        group = doc.char_span(match.start(), match.end(), alignment_mode="expand")
+        if group is None:
+            continue
+        for token in group[1:]:
+            token.is_sent_start = False
+        opening = group[0]
+        if opening.i == 0 or doc[opening.i - 1].text in _SENTENCE_FINAL:
+            continue
+        opening.is_sent_start = False
 
 
 def cache_serialiser_extensions() -> None:
