@@ -20,6 +20,11 @@ mojibake_signatures:
 # A pattern with "id": "start" counts only when it begins the abstract.
 labels:
   # Links and identifiers (spaCy's like_url and like_email; DOIs kept whole by the tokenizer).
+  # A url match also needs a scheme, "www." or a slash, or a last dotted part from spaCy's list
+  # of domain endings (spacy.lang.lex_attrs._tlds, 274 endings, copied from spaCy 3.8.18 into
+  # the second url pattern; a test checks the copy). like_url alone also took glued words,
+  # software and species names ("of.the", "Node.js", "E.coli"): 10,185 of run 1's 24,638 url
+  # removals, spared since 2026-11-13.
   url: tokens
   email: tokens
   doi: tokens

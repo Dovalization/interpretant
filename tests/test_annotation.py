@@ -162,6 +162,28 @@ def test_annotate_abstracts_keeps_abbreviations_inside_sentences(
     ]
 
 
+@pytest.mark.parametrize(
+    ("text", "removed"),
+    [
+        ("Scores are listed at www.example.org for all teams.", "www.example.org"),
+        ("Scores are listed at example.org/scores for all teams.", "example.org/scores"),
+        ("Attention scores were tracked by altmetric.com over time.", "altmetric.com"),
+    ],
+    ids=["www", "path", "domain ending"],
+)
+def test_annotate_abstracts_removes_links_without_a_scheme(
+    text: str, removed: str, nlp: Language, patterns: CleaningPatterns
+) -> None:
+    assert removed_texts(annotate(text, nlp, patterns))["url"] == [removed]
+
+
+def test_annotate_abstracts_keeps_dotted_words_that_are_not_links(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    text = "We coded the interviews in ATLAS.ti and served Node.js apps of.the E.coli lab."
+    assert "url" not in removed_texts(annotate(text, nlp, patterns))
+
+
 def test_annotate_abstracts_keeps_the_audit_abbreviations_inside_sentences(
     nlp: Language, patterns: CleaningPatterns
 ) -> None:

@@ -6,8 +6,13 @@ from typing import Any
 
 import pydantic
 import pytest
+from spacy.lang.lex_attrs import _tlds
 
 from interpretant.catalog import CleaningPatterns, load_cleaning_patterns, read_catalog
+
+# The url pattern for a last dotted part from spaCy's list of domain endings, around the list.
+DOMAIN_PREFIX = r"\.(?:"
+DOMAIN_SUFFIX = r")(?::[^.]*)?$"
 
 
 def cleaning_patterns(**changes: Any) -> dict[str, Any]:
@@ -63,3 +68,17 @@ def test_the_repository_cleaning_rules_and_patterns_are_valid() -> None:
     patterns = load_cleaning_patterns(read_catalog())
     assert {"tokens", "sentence", "abstract"} == set(patterns.labels.values())
     assert any(pattern.id == "start" for pattern in patterns.patterns)
+
+
+def test_the_url_domain_endings_are_spacys() -> None:
+    patterns = load_cleaning_patterns(read_catalog()).patterns
+    regexes = [
+        token["TEXT"]["REGEX"]
+        for pattern in patterns
+        if pattern.label == "url"
+        for token in pattern.pattern
+        if "TEXT" in token
+    ]
+    (domain,) = [regex for regex in regexes if regex.startswith(DOMAIN_PREFIX)]
+    copied = domain.removeprefix(DOMAIN_PREFIX).removesuffix(DOMAIN_SUFFIX).split("|")
+    assert sorted(copied) == sorted(_tlds)
