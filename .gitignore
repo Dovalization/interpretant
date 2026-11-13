@@ -46,6 +46,8 @@ data/*.htm
 !data/words_of_interest.txt
 !data/control_words.txt
 !data/control_words_cross_field.txt
+!data/control_words_rung3.txt
+!data/control_words_senses.txt
 !data/technology_terms.txt
 !data/raw/.gitkeep
 !data/processed/.gitkeep
@@ -78,3 +80,15 @@ data/labels/**/raw/
 
 # The shared vector store (scripts/build_vector_store.py): large, local only
 data/store/
+
+# JavaScript and Next.js build output (anywhere in the tree)
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
