@@ -86,7 +86,7 @@ field-level work was never stopped, only left out of the fresh start's jobs.
   and the only instrument that scans every word).
 - Delete for now: the web explorer's export and the figures code; rebuilt when there are new
   results.
-- Set aside: the old results (`data/drift` tables, `models/`) in `data/retired/type_track/`.
+- Set aside: the old results (`data/drift` tables, `models/`) in `data/retired/static/`.
 - Record first: every finding as a past experiment (what, method and settings, downsides
   including the older cleaning, the commit that produced it) before any of this is deleted.
 
@@ -96,7 +96,7 @@ the fresh start set their rules aside; results stay in `docs/` and `data/`.
 | Proposed fate | Scripts |
 |---|---|
 | Live: replaced during the rebuild, the old script deleted in the same commit | `score_pairs_known` (round X; the store's re-baseline), `score_pairs_benchmark` (round U on DWUG; calibration), `check_planted_pairs` (planted changes), `score_labels_benchmark` (DWUG labelling; the human benchmark), `build_vector_store`, `fetch_sense_words`, `pilot_labellers` (its `usage_id`, `usages` and DWUG helpers feed the store's dev set and two scripts) |
-| Keep the data, delete the script | `gold_pairs` (check 2b), `check_known_presence` (check 1a; its marker words move first, since `check_planted_pairs` imports them): the author's judgements are what matters |
+| Keep the data, delete the script | `gold_pairs` (check 2b; its Markdown judgements converted to a TSV in `curated/` first, step 8), `check_known_presence` (check 1a; its marker words move first, since `check_planted_pairs` imports them): the author's judgements are what matters |
 | Delete: field-level (step 1a) | `score_venue` (K), `score_decomposition` (G), `measure_label_noise` (S) |
 | Delete: closed line | `score_labels_wordnet` (round Z; cites a missing script) |
 | Decide with step 7a (finding senses is open) | `score_labels_induced` and `drift/induction.py` (round Q's substitutes), the clustering half of `drift senses` (SciBERT, KMeans, silhouette; failed in rounds C, C′, C″ in that one design) |
@@ -138,7 +138,7 @@ that apply on different paths today. *Recommendation:* yes.
 | Author cap, 1% of a cell | Rule set 1; falls to 1 work in cells under 200 | Keep, with a floor (for example at least 5 works) so small cells are not gutted |
 | LaTeX math | `$…$` regex, which also deletes prose between two dollar amounts | Keep, stripping only spans with LaTeX markers (`\`, `^`, `_`) |
 | URLs and DOIs | Two different regexes | spaCy's `like_url` plus one DOI pattern |
-| Mojibake (broken encodings, "Ã©") | A hand-written table | `ftfy`, an established library for this (a new dependency, so it needs the author's yes on the stack); or keep the table |
+| Mojibake (broken encodings, "Ã©") | A hand-written table | `ftfy`, an established library for this (a new dependency, so it needs the author's yes on the stack); or keep the table (decided below: neither; affected abstracts dropped) |
 | Soft hyphens, control characters | The contextual path only | Keep, for both pipelines |
 | Folding to ASCII | Deletes non-Latin characters outright | Fold accents (café → cafe) in the word stream only; non-Latin sentences go by the language check instead |
 
@@ -150,8 +150,11 @@ characters 0.17%, ligatures 0.17%, mojibake 0.03% (461), HTML almost none):
 
 - *Before spaCy, repair only:* NFKC (which also expands ligatures), control and format
   characters removed by Unicode category, soft hyphens removed; abstracts with mojibake dropped
-  (no `ftfy`; the hand-written table goes).
-- *In the spaCy pass:* DOIs as single tokens through `url_match`; lingua per sentence; one
+  (no `ftfy`; the hand-written repair table goes), detected by a short list of the usual
+  mis-decoding signatures (such as `Ã©` and `â€™`) kept in the cleaning patterns file, so the
+  detector is data and is checked in the sample audit.
+- *In the spaCy pass:* DOIs as single tokens through `url_match`; lingua (per abstract, per
+  sentence only where an abstract comes out mixed: 2.3); one
   `SpanRuler` patterns file (data, reviewable) labelling every text rule (catalogue and citation
   records, web-page scrapes, spam, footers, copyright, the leading label, LaTeX tokens, URLs,
   e-mails), so every removal carries its reason. LaTeX is dropped from the word stream only;
@@ -165,7 +168,8 @@ characters 0.17%, ligatures 0.17%, mojibake 0.03% (461), HTML almost none):
 
 **2.3 Language.** Three checks today. *Recommendation:* lingua alone, per sentence; drop
 non-English sentences, and an abstract when most of its sentences are not English (the share
-fixed after reading a sample).
+fixed after reading a sample). (Decided below: per abstract first, per sentence only for mixed
+or uncertain abstracts.)
 
 **2.4 Duplicates.** Six mechanisms today. *Recommendation:*
 
@@ -174,7 +178,7 @@ fixed after reading a sample).
   duplicates become a special case.
 - The same work in two cells: some overlap is legitimate (AI inside computer science; a full
   cell holds its sample cell), but in a comparison between those two fields it makes them look
-  alike. Keep the work in every cell it belongs to, record its cells in the manifest, and let
+  alike. Keep the work in every cell it belongs to, record its cells in the abstracts table, and let
   each measure decide whether to leave shared works out. Today the contextual rounds drop them
   from both cells and the store keeps them; this makes the choice explicit.
 
@@ -192,7 +196,7 @@ Decision (2026-11-12): as recommended, with these refinements.
   uncertain (short sentences are where detectors err); sentences without letters are not judged;
   lingua limited to English and the languages found in the corpus.
 - 2.4: near-duplicates by MinHash, threshold from the sample study; a work in several cells kept
-  in each, its cells recorded in the manifest; leaving shared works out is one library helper
+  in each, its cells recorded in the abstracts table; leaving shared works out is one library helper
   that every measure uses, not a rule each measure writes.
 - 2.5: hyphenated words kept whole. Consequence for step 4: a lemma matcher no longer finds
   *attention* inside *self-attention*, as `word_pattern` does today; whether compounds count as
@@ -213,7 +217,8 @@ because of each other; the map now handles plurals, irregulars and spellings its
 keeping `TARGET_VARIANTS` would leave two maps that can disagree (an earlier claim here, that it
 maps *mediums* wrongly, was a mistake: *mediums* → *medium* is a regular plural; *media* is the
 form the override file keeps). *Recommendation:* drop both;
-`data/lemma_overrides.tsv` stays the only exception list, loaded by the map and by the
+`data/lemma_overrides.tsv` (moving to `curated/lemma_exceptions.tsv`, step 8) stays the only
+exception list, loaded by the map and by the
 `AttributeRuler` for lemmas in context; after relearning, check that no target word is mapped
 away.
 
@@ -307,7 +312,7 @@ are marked the same way through the `PhraseMatcher`. Measures choose all usages,
 outside compounds, or only one compound.
 
 **4.3 One occurrence per abstract** (store decision 1). Today the first match in each abstract.
-*Recommendation:* the manifest lists every occurrence (matching is cheap); one per abstract is
+*Recommendation:* the usages table lists every occurrence (matching is cheap); one per abstract is
 drawn at random with a recorded seed for encoding and measures, so abstracts stay independent
 and the draw is not tied to the opening sentences, where an abstract's framing plausibly sits.
 Other occurrences can be encoded later if a measure needs them.
@@ -319,12 +324,12 @@ sentences); a long sentence is cut by the encoder's own window centred on the ta
 sentence text and the target's offsets (as now), so a usage whose text the cleaning changes gets
 a new key and a new vector; the work id is a column, not part of the key.
 
-**4.6 Store format.** *Recommendation:* the manifest as one Parquet table (Polars), one row per
+**4.6 Store format.** *Recommendation:* the usages as one Parquet table (Polars), one row per
 usage: key, word, compound, part of speech, morphology, lemma, field, decade, year, work id, its
 cells (2.4), sentence and offsets, sentence language and confidence, near-duplicate group;
 pandera checks on every rebuild. Annotated documents of target-bearing abstracts as `DocBin`
 files per cell. Vectors stored with their keys inside each file and found by key, and encoding
-resumed by the keys still missing, not by which files exist, so a changed manifest cannot mix
+resumed by the keys still missing, not by which files exist, so a changed usages table cannot mix
 shards.
 
 **4.7 Scope** (store decision 5). The target words, the control words (step 5), round A′'s
@@ -350,7 +355,7 @@ Decisions (2026-11-12):
 - 4.1: spaCy's `Matcher` on the lemma and the `PhraseMatcher` for phrase targets; every usage
   records its part of speech, morphology and any named entity it sits in. The target list gains a
   column stating each word's intended reading (*medium*: noun, not the adjective of *medium
-  effect size*, 22% of its uses; *learning*: noun, 36% verb readings); the manifest keeps every
+  effect size*, 22% of its uses; *learning*: noun, 36% verb readings); the usages table keeps every
   match and flags whether it is in scope (the intended reading, not inside a name), measures use
   in-scope usages by default and may include the rest on purpose. The one-field comparison with
   the transformer model (4.9) looks at these words, where the small tagger errs.
@@ -366,16 +371,18 @@ Decisions (2026-11-12):
 - 4.3: one mention per abstract, drawn at random with a recorded seed (option B), replacing the
   first mention: in abstracts with several mentions (15–44% of them), the first lands in the
   opening sentence about twice as often as a random one (*network* 49% against 23%). The
-  manifest lists every mention, so all mentions with each abstract weighted equally (option C)
+  usages table lists every mention, so all mentions with each abstract weighted equally (option C)
   stays available without re-reading; it was not chosen now because within one abstract a word
   usually keeps its sense ("one sense per discourse", Gale, Church and Yarowsky 1992), so the
   extra mentions add little about a cell's sense mix, while every measure would have to handle
   same-abstract pairs (J and APD), split the classifier by abstract and resample abstracts in
   bootstraps. If C is switched on, that grouped handling is written once, in the library.
+  *Amended by A11:* the draw is among in-scope mentions only, by the smallest hash of (seed, work
+  id, content key), not a seeded shuffle.
 - 4.4: the store records the usage and each encoder decides how to read it, so XL-LEXEME can be
   replaced later (the author's requirement). Stored, encoder-independent: the sentence text and
   the target's character offsets, the sentence's place in its abstract (the cleaned abstract is
-  kept in the annotated documents, 4.6), the usage key (4.5). One encoder table declares each
+  kept in the abstracts table, 4.6), the usage key (4.5). One encoder table declares each
   encoder's model and pinned revision, its context policy (the sentence by default; sentence
   plus neighbours or the whole abstract possible), its window and centring (XL-LEXEME: 128
   subword tokens) and how it marks or pools the target. Vectors are stored per encoder (name,
@@ -387,7 +394,7 @@ Decisions (2026-11-12):
   fate left to the sample audit.
 - 4.5: two identifiers, each defined once in the library (they replace five copies of `key_of`
   and two other schemes). The **usage id** (work id, target word, mention number within the
-  abstract) is the manifest's row identifier, stable unless a mention itself is added or removed
+  abstract) is the usages table's row identifier, stable unless a mention itself is added or removed
   (character positions would shift whenever cleaning changed earlier text); positions are
   ordinary columns. The **content key** (sha256 of the sentence text and the target's offsets in
   it, 20 hex characters) finds vectors: identical text is encoded once and shared, for every
@@ -398,11 +405,15 @@ Decisions (2026-11-12):
   the target's position in it; for sentence-only encoders such as XL-LEXEME it equals the
   sentence key above, and for an encoder reading neighbours or the whole abstract it differs, so
   identical sentences in different abstracts never share a vector wrongly.
+  *Amended by A11:* the usage id is (work id, word, content key), not the mention number, which
+  shifted whenever a rule found an earlier mention.
 - 4.6: the store is Parquet throughout, written and read with Polars. An **abstracts** table is
   the durable record of the cleaned corpus (work id, cells, year, cleaned text, sentence
   boundaries, language, flags and removal reasons). A **usages** table points into it (usage id,
   content key, word, compound and position, part of speech, morphology, lemma, in scope,
-  sentence and target offsets, sentence length, near-duplicate group) instead of copying text.
+  sentence and target offsets, sentence length, sentence language and its confidence (lingua's
+  per-sentence result where the abstract was checked per sentence, 2.3, otherwise the
+  abstract's), near-duplicate group) instead of copying text.
   **Vectors** are Parquet tables per encoder and word (`vectors/encoder=…/word=…/`, read by
   Polars' hive partitioning), one row per cache key with the vector as an array of 16-bit floats
   (tested: 1,884 bytes per vector, a filtered read of 100 keys in 0.07 s); encoding resumes by an
@@ -430,7 +441,9 @@ Decisions (2026-11-12):
   `scripts/discovery/` deleted, the long list regenerated from the rebuilt grid. *component*
   and *having* are stable checks (check 2b's author-judged words, 7.1); the six-word shortlist
   gets a role after checking its history. Cap values are set
-  after steps 5 and 6.
+  after steps 5 and 6. *Amended by A12 and A5:* the word list becomes three tables (words,
+  comparisons, comparison controls; no "pipelines" column), words are (lemma, part of speech)
+  pairs, and caps start as provisional values in the parameter files.
 - 4.8: downloads are a curated decision, not a pipeline step. The pipeline reports gaps (word,
   field, decade, usable usages, OpenAlex's total of abstracts containing the word, estimated
   cost); the author approves a committed **download plan** (word, cells, reason); the download
@@ -522,13 +535,17 @@ Decision (2026-11-12), after a critical pass and a check of established practice
   two periods (SemEval-2020's criterion: "same POS and comparable frequency development"),
   similar within-period spread (frequency and polysemy both create apparent change: Dubossarsky
   et al. 2017; Keidar et al. 2022), excluding targets, sense-list words and candidates; stored in
-  the word list with the role "control" and their target.
+  the word list with the role "control" and their target. *Amended by A12:* stored per
+  comparison in `curated/comparison_controls.tsv`, matched on frequency in each period, the
+  tolerance the smallest that yields 30 candidates.
 - **Controls validated against each other, not against their shuffles** (topic drift moves every
   word, so that test would reject them all): outliers among the controls are read briefly by
-  hand, a light version of SemEval's manual verification, then replaced.
+  hand, a light version of SemEval's manual verification, then replaced. *Amended by A2:* never
+  replaced on their change score; only for score-blind reasons, before any target is scored.
 - **False discovery rate correction** (`scipy.stats.false_discovery_control`, Benjamini–Hochberg)
   whenever many words are screened at once (Liu, Medlar and Glowacka 2021), noting their caveats:
-  permutation tests are costly, and the correction assumes independent tests.
+  permutation tests are costly, and the correction assumes independent tests. *Amended by A10:*
+  100,000 shuffles per word, Benjamini–Yekutieli reported beside Benjamini–Hochberg.
 - Same-abstract controls are drawn at experiment time from the abstracts table; the static grid
   uses its frequency bands; an automatic check forbids a word being both target and control.
 - Which bar decides a change (shuffles, matched or same-abstract controls) is step 6's.
@@ -547,7 +564,7 @@ after):**
 |---|---|---|---|
 | 0a | Calibration on the datasets the LSCD Benchmark covers (Schlechtweg, Virk and Arefyev 2024), not only DWUG English: encoder and measures against human graded change, comparable with published numbers. The benchmark's code is not a dependency (Hydra scripts pinned to Python 3.10, no licence stated); its datasets and standard metrics are used with scipy and scikit-learn | Standard practice | Encoders, the published datasets |
 | 0b | A systematic synthetic set as the development set: several planted scenarios (gradual or sudden, a sense gained or lost, a frequency change without a change of meaning) (Shoemark et al. 2019) | Established | The rebuilt store |
-| 1 | J on every usage: bootstrap intervals (resampling abstracts), permutation significance, false discovery rate correction when many words are screened (Liu, Medlar and Glowacka 2021) | Established | The rebuilt store |
+| 1 | J on every usage: bootstrap intervals (resampling abstracts), permutation significance, false discovery rate correction when many words are screened (Liu, Medlar and Glowacka 2021) | Established | The rebuilt store; the matched controls (step 5), since 6.3's bar is their 95th percentile |
 | 2 | Matched controls (step 5) as the bar | Established (SemEval-2020 style) | The word list |
 | 3 | Year-by-year time series of a word's change against a reference period, with change-point detection and a shuffle null, replacing half-decade windows (Kulkarni et al. 2015; Shoemark et al. 2019: the full series beats two points) | Established | Years per usage (4.6); `ruptures` (1.1.10, September 2025, maintained), added when the experiment starts |
 | 4 | One measure for the static grid instead of the two-threshold rule | The project's own diagnosis | The rebuilt grid |
@@ -594,14 +611,16 @@ Decisions (2026-11-12): the revised list and order above; and
   confirmation plan. Tools: scikit-learn `cosine_similarity` on the store's vectors, scipy's
   `bootstrap` (resampling abstracts, never pairing a usage with its own copy, which would bias J
   upwards), `permutation_test` with at least 1,000 shuffles (the similarity matrix computed once,
-  labels reshuffled), `false_discovery_control`.
+  labels reshuffled), `false_discovery_control`. *Amended by A10:* 100,000 shuffles, the same n
+  per period for the target and its controls.
 
 ## Step 6b: the static models (after detection experiment 4)
 
-Whether the static pipeline keeps skip-gram vectors (TWEC, trained with gensim) or runs on
-PPMI-SVD alone (the project's own code, deterministic, no gensim). Skip-gram with alignment is
-probably the stronger static method for detecting change (Claude's recollection of the
-literature, to be checked; not yet in `related_work.md`), and the README's best finding rests on
+Whether the static pipeline keeps skip-gram vectors (TWEC, or cells trained apart with gensim and
+aligned with scipy's `orthogonal_procrustes`) or runs on PPMI-SVD alone (the project's own code,
+deterministic, no gensim). Skip-gram with alignment is probably the stronger static method for
+detecting change (partly checked in A13; skip-gram against PPMI-SVD still to be checked; not yet
+in `related_work.md`), and the README's best finding rests on
 both agreeing. Experiment 4 tests whether the grid's misses came from its rule, its windows or
 the embeddings; if the grid does not earn its place, the question lapses and gensim goes with it.
 
@@ -668,7 +687,9 @@ Decision (2026-11-12), after checking the literature and the tools:
   `correlation-clustering` 2.0.0 (April 2026, by the DWUG authors, depending only on networkx,
   numpy and scipy) is the one new dependency, adopted once its licence is confirmed (PyPI states
   none). DWUG's `WUGs` scripts (no package, conflicting licences) and `chinese-whispers` (last
-  release July 2024) are references only.
+  release July 2024) are references only. If no licence is confirmed: ask its authors (an issue
+  on their repository, after the author's go); until then (1) waits and (2)–(3) go ahead; no
+  re-implementation.
 
 ## Step 7: counting senses
 
@@ -748,7 +769,9 @@ Decisions (2026-11-12):
   Reference for intervals: *Learning to Quantify* (Esuli, Fabris, Moreo and Sebastiani 2023, open
   access). To add to `related_work.md`: these sources.
 - 7.5: one Claude labelling path (the Message Batches API `BatchLabeller`; the command-line
-  `Labeller` is deleted); one divergence function (scipy's Jensen-Shannon); one sense-list
+  `Labeller` is deleted); one divergence function (scipy's `jensenshannon`, which returns the
+  Jensen-Shannon distance, the square root of the divergence; squared where the divergence is
+  meant, and every report names which); one sense-list
   format (the corpus format: keys, definitions, examples, cues, exclusions), into which the
   final lists are written before the author labels (7.2). The step 1b scripts left for step 7
   are superseded and go once their results are in `docs/experiments.md`:
@@ -764,7 +787,8 @@ Step 7 decided (2026-11-12).
 
 ## Step 8: code layout (follows from steps 1–7)
 
-The code review's critical items: a `usages/` package; `corpus/cleaning.py` and an annotation
+The code review's critical items: a `usages/` package (which became `corpus/target_matching.py`,
+`corpus/usage_selection.py` and the catalog's usages dataset); `corpus/cleaning.py` and an annotation
 module holding the spaCy pass; `lemmas.py` split (spelling, map); a `cli/` package. Plus one
 neighbour function (from the measured pool, if the explorer stays) and the repeated helpers
 extracted (unit rows, divergence, torch device, cell reading, label tables).
@@ -777,26 +801,26 @@ Replacement audit (the rule above, applied to existing code; extend as code is t
 | `metrics.cosine_distance` | `scipy.spatial.distance.cosine` |
 | Sentence regexes (`quality._SENTENCE`, `senses._SENTENCE_END`) | spaCy `senter` with special cases (step 2) |
 | Six regex tokenisers | spaCy tokens (step 3) |
-| Mojibake table (`classifier.MOJIBAKE`) | dropped with the affected abstracts (step 2.2) |
+| Mojibake table (`classifier.MOJIBAKE`) | affected abstracts dropped, found by a signature list in the patterns file (step 2.2) |
 | URL and DOI regexes | spaCy `like_url` and `url_match` (step 2.2) |
 | Language checks (`looks_english`, `english_share`, `foreign_share`) | lingua (step 2.3) |
 | Duplicate rules | datasketch MinHash (step 2.4) |
 | Judgements parsed from markdown with a regex (`gold_pairs.py`) | a TSV file read with Polars |
 | Bootstrap intervals (detection experiment 1, to be written) | `scipy.stats.bootstrap` |
-| Already library-backed, kept | Jensen-Shannon (`scipy.spatial.distance.jensenshannon`), NNLS (`scipy.optimize.nnls`), Louvain (`networkx`), KMeans and silhouette (scikit-learn) |
+| Already library-backed, kept | Jensen-Shannon distance (`scipy.spatial.distance.jensenshannon`), NNLS (`scipy.optimize.nnls`), community detection (`networkx`; Leiden replaces Louvain, 7a.2), KMeans and silhouette (scikit-learn) |
 
 Decision (2026-11-12): one job per package, so code is easy to find and to change; pipelines
-compose the jobs; only storage reads and writes data.
+compose the jobs; only the catalog reads and writes data (A8).
 
-Layers (one import-linter contract): `storage/` at the bottom; the job packages side by side,
+Layers (one import-linter contract): `catalog/` at the bottom; the job packages side by side,
 none importing another (`corpus/`, `embeddings/`, `detection/`, `senses/`, `evaluation/`,
 `review/`); `pipelines/` composing them; `cli/` on top, thin. `experiments/` sits outside the
 package; `common/` at the bottom only for helpers needed in three or more places.
 
 ```
 src/interpretant/
-├── storage/      abstracts.py, usages.py, vectors.py, word_list.py, schemas.py,
-│                 provenance.py, paths.py (and generic readers for external files)
+├── catalog/      abstracts.py, usages.py, vectors.py, words.py, schemas.py, provenance.py
+│                 (one typed load and save per dataset; paths from the catalog file, A8)
 ├── corpus/       openalex.py (fetching through pyalex, carrying out download plans),
 │                 cleaning.py, deduplication.py, language.py, annotation.py,
 │                 target_matching.py, usage_selection.py, lemma_exceptions.py, spelling.py,
@@ -816,11 +840,11 @@ experiments/      one runner per experiment, named by its question
 tests/            mirrors src/
 ```
 
-- Placements: usage selection is a research decision, in `corpus/`, not storage; the OpenAlex
+- Placements: usage selection is a research decision, in `corpus/`, not the catalog; the OpenAlex
   client is `corpus/openalex.py` (corpus compilation includes collecting the texts; a second
   source would become a module beside it), using `pyalex` (0.21, February 2026, MIT, depending
-  only on requests and urllib3) in place of the hand-written HTTP client, with storage writing
-  what it fetches; `evaluation/` holds everything DWUG-specific (storage only reads files
+  only on requests and urllib3) in place of the hand-written HTTP client, with the catalog saving
+  what it fetches; `evaluation/` holds everything DWUG-specific (the catalog only reads files
   generically and records their versions), planted changes, the held-out known answers and the
   metrics, since detection and senses cannot import each other; the shifted-shares protocol
   stays in `senses/quantification.py`; `review/` replaces `scripts/review/`; model-calling code
@@ -829,10 +853,10 @@ tests/            mirrors src/
   batching helpers in `common/`; settings objects belong to `pipelines/`, job functions take
   plain arguments; "static" and "contextual" are flows across packages and CLI command groups,
   not packages.
-- Design rules: storage hands out streams (iterators) and jobs consume and produce them, so
-  memory stays bounded; storage is split by dataset; each pipeline reads as a table of contents
+- Design rules: the catalog hands out streams (iterators) and jobs consume and produce them, so
+  memory stays bounded; the catalog is split by dataset; each pipeline reads as a table of contents
   (one call per stage), with a one-page `docs/architecture.md`; interfaces only at the four swap
-  points (the encoder table, the counters, the cleaning patterns file, the word list and
+  points (the encoder table, the counters, the cleaning patterns file, the word tables and
   settings files).
 - Names: job modules are nouns, pipelines verb-plus-object phrases (`encode_usages`,
   `detect_change`); the field's standard terms
@@ -843,7 +867,7 @@ tests/            mirrors src/
   (`data/external/` for DWUG and other datasets, `data/raw/` for downloads, `data/interim/` for
   the annotation cache, `data/processed/` for tables and vectors, `models/` for trained static
   models); hand-curated inputs live in a committed `curated/` folder, never overwritten by a run
-  (the word list, sense inventories, cleaning patterns, lemma exceptions, the spelling table,
+  (the word tables of A12, sense inventories, cleaning patterns, lemma exceptions, the spelling table,
   download plans, the held-out known answers).
 - `scripts/` disappears once its contents are rebuilt; the replacement audit below applies as
   code moves; the layout is not a separate refactor but the shape the rebuild builds into, phase
@@ -910,9 +934,10 @@ scale the Markdown reports cover) and a manifest of the project's own (a re-impl
   shards, caches).
 - `dvc.lock`, committed, is the provenance record: hashes of each output's inputs, settings and
   code; reports cite the commit and the lock entry they came from; it records the word-list
-  version, since `curated/word_list.tsv` is a dependency of the stages that read it (replacing
-  `storage/provenance.py`'s planned role, which shrinks to reading the lock for reports).
-- Raw downloads are versioned with DVC.
+  version, since the word tables in `curated/` (A12) are dependencies of the stages that read
+  them (replacing `catalog/provenance.py`'s planned role, which shrinks to reading the lock for
+  reports).
+- Raw downloads are versioned with DVC: registered with `dvc add`, never produced by a stage (A7).
 - Large data: the cache links outputs with reflinks (copy-on-write; APFS on the Mac and btrfs on
   bazzite support them), so it does not double disk use; huge regenerable outputs may be
   `cache: false`.
@@ -944,6 +969,248 @@ is used. Candidates noted so far (to be checked against the literature, not assu
 
 Decision:
 
+## Amendments after review (2026-11-12)
+
+A retroactive review of steps 0–10 (Claude's own pass and an independent agent's cold read,
+merged and checked) found contradictions, ordering problems and methodological gaps. Each
+amendment below was agreed with the author and overrides the step it names.
+
+- **A1 (steps 6.2, 7.1): held-out words never leak into development.** The word list gains a
+  `held_out` role; every development output (screening, reports, gap lists, the static grid's
+  ranked lists) leaves held-out words out until the confirmation plan is committed. *prompt* and
+  *hallucination* are struck from the held-out candidates (they are development words in 7.1);
+  the held-out set is drawn from words used nowhere in development. Labels for held-out words
+  are made only after the confirmation plan is frozen, and the labelling procedure is written
+  into the plan. Drafted candidates carry their evidence (dictionary dating, corpus counts), never
+  change scores. The confirmation plan carries a leakage checklist (what development used, the
+  held-out list's hash, that held-out words were filtered from every development output, that
+  their labels came after the plan was frozen), after Kapoor and Narayanan's model info sheets
+  ("Leakage and the Reproducibility Crisis in ML-based Science", 2023: leakage in at least 294
+  papers across 17 fields, undetectable from the papers themselves); SemEval-2020 likewise kept
+  its gold labels hidden.
+- **A2 (step 5): controls are never replaced on their change score.** Replacing the controls
+  that changed most lowers the bar targets must clear (the controls' 95th percentile), an
+  outcome-driven exclusion of the kind that inflates false positives (Simmons, Nelson and
+  Simonsohn 2011, "False-Positive Psychology"); controls that change a lot measure the method's
+  background change and stay (Dubossarsky et al. 2017). Controls are replaced only for reasons
+  that do not use their score, written into the step 5 code and the confirmation plan before any
+  target is scored: wrong part of speech in practice, mostly a name or fixed phrase, frequency
+  mismatch after cleaning, a documented change in a dictionary, or the author's blind reading of a
+  few usages per period (as SemEval-2020 verified its stable words), done before scoring. The
+  control set is then frozen for that comparison; every replacement is recorded with its reason.
+- **A3 (steps 7.2–7.4): the author's labels are split and sampled so they can carry their jobs.**
+  The same labels train counter 1b, build counter 2's sense vectors, set the "no sense fits"
+  cut-off, measure error rates for the correction, choose the counting method and test it all;
+  7.2's plan gave about 15 labels each to *component* and *having*, not the 50–70 per word 7.4
+  assumed. (a) Building needs few labels: averaging contextual vectors per sense holds up with
+  about three examples per sense (Loureiro et al., *Computational Linguistics* 2021), drawn from
+  the author's labels and each list's example. (b) Error rates are the binding constraint: labels
+  are drawn by stratified sampling, by period and by the sense a baseline counter predicts, with
+  inclusion probabilities recorded and inverse-probability weights in every estimate, so rare
+  senses are covered without bias (stratified evaluation: Kumar and Raj; importance-weighted
+  evaluation for rare categories under 300 labels: Poms et al. 2021). (c) At least about ten
+  labels per sense in each period where it exists, for error rates; below that, pooled error
+  rates with honest intervals (replacing 7.4's per-period rates where the minimum is not met).
+  (d) A written nested split per word: an outer split only for testing, building and calibration
+  inside, so no label builds and grades the same thing (Varma and Simon 2006). (e) The counting
+  method is chosen once, across all words (replacing 7.4's per-word choice, too thin per word).
+  (f) Period balance applies only where a sense exists (an arriving sense has no earlier
+  examples). Intervals rest on Vaz, Izbicki and Stern (*JMLR* 2019). Time: about 200 new labels
+  (about 1–1.5 hours, in sittings) beside check 1a's 280, more only for words whose intervals are
+  too wide.
+- **A4 (step 4b): the corpus review screens fields instead of claiming rates it cannot show.**
+  About 12 abstracts per field cannot show "wrong field under 5%" (zero problems still allows
+  about 24%), and 130 pooled cannot show "junk under 2%" (rule of three: 2.3%). Following lot
+  quality assurance sampling (a fixed sample and decision rule per group, keeping both kinds of
+  misclassification tolerable; Hund, Bedrick and Pagano), each field gets 15 random kept
+  abstracts and the rule "2 or more wrong-field abstracts means a closer look" (about 17% chance
+  of flagging a fine field at a 5% rate and of missing a bad one at 20%); a field that triggers
+  gets a second sample of 15. The 165 pooled cover the junk check (zero junk in 165 puts the rate
+  likely under 1.8%). Thresholds are screening rules stated in advance, with intervals reported.
+  The judging page shows each abstract's end as well as its beginning and highlights removed
+  spans, so truncation and over-cleaning are visible. The wrong-field classifier is trained on
+  data separate from what it flags and treats nested fields (AI inside computer science,
+  cognitive psychology inside psychology) as compatible. First rebuild: 165 random kept, about
+  120 dropped items, 80 flagged, 20 repeats, about 385 judgements (about 1 hour 5 minutes, in
+  sittings), plus second samples only for fields that trigger.
+- **A5 (steps 4.7, 4.8, 5, 6): first guesses, then adjust; nothing waits on later work.** The
+  plan asked for answers before the work that produces them (caps, floor and download plan
+  "after steps 5 and 6", which need the rebuilt store; controls chosen by within-period spread,
+  which needs their encoding). Order instead: (1) provisional caps, the floor (500) and the
+  download plan for the three thin words, from existing counts, written in the parameter files
+  (step 9); (2) downloads, then the first full pass; (3) candidate controls chosen from the new
+  text by part of speech and frequency trajectory, a pool larger than needed (about 60 per
+  target) encoded so spread can be measured, the final 30 or more picked from it (encoding
+  resumes by missing keys, 4.6); (4) the experiments, which may revise caps and the floor through
+  the parameter files, DVC rerunning only what depends on them. A top-up download after the pass
+  reruns the corpus-level rules (templates, near-duplicates) in full, not as a patch.
+- **A6 (steps 2.2, 4.4–4.6, 4.9): stand-off annotation; the text is never edited.** Cutting removed
+  text would shift every stored position, keeping it would leave it in the sentences, and the
+  static text written during the pass would miss the corpus-level rules applied after it. The
+  established answer is stand-off annotation (brat never modifies the text; the ISO 24612
+  Linguistic Annotation Framework addresses annotations by character offsets; STAM likewise), and
+  spaCy's document model is one: its tokenization is non-destructive (every token keeps
+  `token.idx`), spans carry labels and character positions, the `SpanRuler` writes its matches
+  into a span group (`doc.spans`), and `DocBin` saves span groups. So: the stored text is the
+  repaired text, never edited after; every removal is a labelled range in a span group (footers,
+  URLs, LaTeX from the pass; templates, near-duplicates and author-cap marks added by the
+  corpus-level stage), copied into the abstracts table as a Polars list column of (start, end,
+  reason); the views are derived after the corpus-level stage, never stored as edited text: the
+  contextual view takes the sentences not marked removed (small ranges inside kept sentences stay,
+  as 2.2 decided), the static view skips every marked range. Stage order: spaCy pass → corpus-level
+  rules → derived views. No new library; the project's own code is the copy into the table and the
+  derivation.
+- **A7 (steps 4.6, 4.8, 9): DVC keeps what is costly or cannot be remade.** DVC's documentation:
+  "Stage outputs are deleted from the workspace before executing the stage commands that produce
+  them (unless `persist: true` is used)." Unchanged, that would wipe every stored vector when any
+  upstream input changes (defeating 4.6's resume by missing keys), refetch the downloads when
+  their code changes (contradicting 4.8's curated, approved downloads; OpenAlex's samples are not
+  repeatable and cost credits), and rerun everything when a stage depends on all of `src/`. So:
+  (1) the vector store and the annotation cache (`DocBin`) are `persist: true` outputs; encoding
+  adds only missing keys; vectors for usages that no longer exist stay unread until a deliberate
+  clean-up command removes them. The trade-off is stated in the lock's meaning: these outputs are
+  their inputs plus earlier runs, which is safe because a vector is found by the hash of the exact
+  text the encoder read. (2) Vectors are stored per encoder name and version
+  (`vectors/<encoder>-<version>/`), since the content key covers the text, not the model; a new
+  encoder or new weights write a new folder and never read the old one (4.4's encoder table
+  carries the version). (3) Downloads are not a stage: an approved plan runs by hand and its
+  output is registered with `dvc add data/raw/...`, versioned by hash and never regenerated by
+  DVC. (4) Each stage lists the modules it depends on (the spaCy pass: the annotation, cleaning
+  and language modules, the patterns file and its settings; not `senses/`), so a change reruns
+  only what it can affect; the list sits beside the stage definitions and is checked when stages
+  change.
+- **A8 (step 8): a data catalog; jobs receive data, never paths.** Four places broke the rule
+  that job packages never import each other: `senses/` needed the spaCy pipeline (cues, compound
+  cues, the `DocBin` cache's vocabulary) built in `corpus/`; the nearest-sense and definition
+  counters needed vectors of sense examples and definitions from `embeddings/`; `evaluation/`
+  needed to run detection and counting on benchmarks; and "only storage reads and writes data"
+  clashed with library-native loading. One principle fixes all four: jobs are plain functions of
+  data, and the pipelines (or experiment runners) build objects and pass them in (dependency
+  injection: Fowler 2004; "functional core, imperative shell": Bernhardt, "Boundaries", 2012;
+  Percival and Gregory, *Architecture Patterns with Python*, 2020). (1) The spaCy pipeline is
+  built in `corpus/annotation.py`; `pipelines/count_senses.py` passes it (or its vocab) to
+  `senses/`. (2) The encoding stage encodes the usages and the sense lists' examples and
+  definitions into the same per-encoder store (A7), same content key; `senses/` gets those
+  vectors from the pipeline. (3) `evaluation/` supplies benchmark data and scoring; the experiment
+  runner composes load → measure → score, so `evaluation/` imports neither `detection/` nor
+  `senses/`. (4) `storage/` becomes `catalog/`, the data catalog (Kedro's `DataCatalog`; Fowler's
+  Repository, 2002; Cockburn's ports and adapters, 2005), responsible for the project's data at
+  rest: it knows every dataset by name in one catalog file (path, format, encoder and version),
+  which `dvc.yaml` reads through its templating (`vars:`), so each path is written once; it loads
+  and saves each dataset with the format's own function (Polars for Parquet, `DocBin`, gensim's
+  save and load, TOML and TSV for `curated/`), models the project trains included; it runs the
+  pandera checks on read and write; it hands out large datasets as streams. It is not external
+  services (pyalex in `corpus/`, the Batch API in `senses/`, the Hugging Face Hub in
+  `embeddings/`, whose results are saved through the catalog; model weights are pinned by name and
+  revision in the encoder table and kept in Hugging Face's cache), not research decisions, and not
+  versioning (DVC's lock; `provenance.py` shrinks to reading it for reports, or goes). The rule:
+  jobs never see a path; only pipelines and experiment runners call the catalog, one typed `load`
+  per dataset (a grouped load would lose the types under strict mypy; bundle only if three stages
+  load the same group); spaCy receives its patterns and exceptions as lists
+  (`ruler.add_patterns`, `attribute_ruler.add`).
+- **A9 (steps 7a, 7.2–7.5): sense lists are frozen before labelling; check 1a's labels are
+  mapped, not assumed comparable.** (a) 7.3 sent "no listed sense fits" usages back to 7a's gap
+  finding, which could add a sense after the labels and counts exist: the labels would be against
+  the old list, the counters evaluated on it, and a sense added after seeing shares is a forking
+  path (Gelman and Loken 2013). Annotation practice revises the scheme in a pilot, freezes it,
+  then annotates, and re-annotates what a later change touches (OntoNotes revised sense groupings
+  until agreement reached 90% before they were used, Hovy et al. 2006; content analysis pretests
+  and freezes the codebook, recoding after any change; Pustejovsky and Stubbs's MATTER cycle
+  tracks guideline versions). So: 7a's aids run on the rebuilt store, the author reviews the
+  proposed senses, the lists are frozen as a numbered version, then the author labels; a gap
+  found after the freeze makes a new list version, the author re-labels only the items marked
+  "other or unclear", and the frozen version's counts stay the confirmatory result, the new
+  version's reported beside them as exploratory. (b) Check 1a's 280 items stored no work id;
+  rerunning its seeded sampling recovered 279 of them (2026-11-12). 71% come from abstracts with
+  one mention, where the first mention is the random mention; "unclear" was 2–5% whatever the
+  position (7 items in all, weak evidence). The 279 mapped labels serve building and error rates,
+  each recording its mention position and whether it was the only mention; once A3's labels
+  (random mentions) exist, one comparison on multi-mention abstracts checks first against random
+  mentions, and only a gap there removes the 1a labels from the error-rate set (sample selection
+  bias: Zadrozny 2004). Items whose abstract the new cleaning drops are excluded; items whose
+  sentence reads differently are listed for the author. Side finding: abstracts with several
+  mentions carry the changing sense far more often (57% against 26%), so 4.3's unit matters;
+  reports state that shares are shares of abstracts.
+- **A10 (steps 5, 6.3): the statistics hold when many words are screened.** (1) scipy's
+  permutation p-value is (exceedances + 1) / (shuffles + 1), so 1,000 shuffles cannot go below
+  about 0.001, while Benjamini–Hochberg at 5% needs the strongest word at 0.05 / m: above 50
+  screened words nothing can pass (simulated 2026-11-12: a very large change got p = 0.001, which
+  fails at 100 and 300 words). Liu, Medlar and Glowacka (2021) escalate from 1,000 to 100,000
+  shuffles; here every word gets 100,000 (the similarity matrix computed once, each batch of
+  shuffles one matrix product, timed on one word before relying on it), and the rule is that
+  1/(shuffles + 1) is at least ten times below 0.05 / m. (2) The bootstrap keeps scipy's default
+  BCa interval (better coverage than percentile: Efron 1987; DiCiccio and Efron 1996; its
+  jackknife costs about as much as the bootstrap with a vectorised statistic); a
+  `DegenerateDataWarning` stops the run instead of switching method. (3) J's chance level falls
+  with the number of usages (simulated with no change: its 95th percentile 0.0030 at 100 usages
+  per period, 0.0017 at 200, 0.0006 at 500), so unequal counts would let the controls' noise set
+  the bar; Liu et al. found high-frequency words almost always significant and subsampled. Each
+  comparison therefore draws the same n per period for the target and every control (n = the cap,
+  or the target's count if lower, never below the floor; seed recorded); candidate controls with
+  fewer than n usages are not eligible (A5's pool absorbs this); n is a parameter, so a change
+  reruns the target and its controls together. (4) Benjamini–Yekutieli (`method="by"`, valid
+  under any dependence) is reported beside Benjamini–Hochberg, since words in one field share its
+  topic drift. The two simulations in (1) and (3) (two-sense unit vectors, J by
+  `permutation_test`) become tests of the statistics module.
+- **A11 (steps 3.2–3.6, 4.1, 4.3, 4.5, 4.6): usage selection is fully specified.** (1) The
+  mention for an abstract is drawn among its in-scope mentions only (the sampling frame is the
+  eligible units: Kish, *Survey Sampling*, 1965); every mention stays in the usages table. (2) The
+  draw is by hashing, not a seeded shuffle, so one abstract's choice never depends on other
+  abstracts or row order (hash-based assignment as in online experiments: Kohavi, Tang and Xu
+  2020): the in-scope mention with the smallest hash of (seed, work id, content key). The usage id
+  becomes (work id, word, content key) instead of the mention number, which shifted whenever a
+  rule found an earlier mention; the content key's offsets are within the sentence, so the id
+  changes only if that mention's sentence does. (3) Matching uses spaCy's full lemma after the
+  exceptions file (so *prompted* is found; 7.1 counts verb senses), and each usage records the
+  static view's token beside it, so the two pipelines' counts reconcile. (4) No second full
+  pass: the order is spaCy pass → corpus-level rules → the author's lemma review → exceptions
+  applied to the cached documents by an `AttributeRuler` → matching and usages. Measured
+  2026-11-12 on 2,000 abstracts: parsing 25.6 s, loading the cache and applying exceptions 0.2 s
+  (about two minutes for the corpus on one process). The cache keeps spaCy's default `DocBin`
+  attributes: spaCy 3.8.18's defaults include `NORM`, `SENT_START` and `ENT_ID` (the
+  documentation lists older defaults), and a round trip kept sentences from `senter`, token-level
+  norms and span groups, while an explicit attribute list without `SENT_START` lost the
+  sentences; only extension attributes (lingua's sentence languages) need `store_user_data=True`.
+  A round-trip test (sentences, norms, span groups, languages) guards it. (5) The lemma review:
+  types where both spaCy and the voted map merge and disagree, spelling-only differences left
+  out, numbered 577 (0.024% of tokens) on 2026-11-12, very skewed (the 50 most frequent cover 89%
+  of their tokens, 100 cover 93%, 400 cover 99%); the voted map was right on nearly all of the 25
+  most frequent (*senses* → *sense*, not *sens*; *motives* → *motive*, not *motif*). Rebuilt after
+  the new cleaning, the review covers the 100 most frequent types and every case touching a
+  word-list word (about two sittings); for the rest, 30 drawn at random are checked, and if the
+  voted map is right on at least 27 (set before reading, as in A4), its lemma is accepted for the
+  whole tail as exceptions; otherwise more are reviewed.
+- **A12 (steps 4.7, 5, 7.1): the word list becomes three tables, and words carry their part of
+  speech.** 4.7's single list could not hold the stable checks (7.1), the held-out words (A1),
+  matching by form (*having*), or controls that belong to one comparison (*attention* has three
+  comparisons with different frequency trajectories, and A10 fixes n per comparison). Each kind of
+  observational unit gets its own table (Wickham, "Tidy Data", 2014): `curated/words.tsv` (lemma,
+  part of speech, match by `lemma` or `form`, `held_out`), `curated/comparisons.tsv` (comparison
+  id, target, field, the two periods, purpose: documented change, stable check, held-out change or
+  held-out stable; n per period) and `curated/comparison_controls.tsv` (comparison id, control,
+  status and reason, so A2's score-blind replacements are recorded). Roles follow from the data
+  (a target heads a comparison, a control is listed under one), and step 5's "never both target
+  and control" check becomes a join; the "pipelines" column goes (the contextual pipeline reads
+  the comparisons, the static pipeline its own list). A word is a (lemma, part of speech) pair,
+  as in SemEval-2020 Task 1, which joined English targets with their POS tag "because English
+  frequently combines various POS in one lemma and many of our target words underwent
+  POS-specific semantic changes" (Schlechtweg et al. 2020, §3.2): usages and frequency counts
+  cover that part of speech only, so mixed-POS words are narrowed rather than excluded, and a
+  control's part of speech is always its target's (nothing for the author to fill in). Controls
+  are matched per comparison on part of speech and on frequency in each of the two periods, as
+  SemEval matched "the same POS and comparable frequency development between C1 and C2"; the
+  frequency tolerance is the smallest that yields at least 30 eligible candidates (SemEval's Latin
+  set took the smallest p "for which a control word could be found"), a score-blind rule in the
+  sense of A2 and A5. Generated candidates are written to `data/` as proposals and enter
+  `curated/` after the author's approval.
+- **A13 (step 6b): the static question has three options, and part of its premise is checked.**
+  Besides TWEC (whose package, `cade`, is inactive: step 0, row 1a) and PPMI-SVD, the library route
+  is skip-gram cells trained apart with gensim and aligned with scipy's `orthogonal_procrustes`
+  (Hamilton, Leskovec and Jurafsky 2016). In SemEval-2020 Task 1, 7 of the 10 best systems in
+  subtask 1 (8 of 10 in subtask 2) used type embeddings, with Orthogonal Procrustes among the
+  usual alignments (Schlechtweg et al. 2020, §§6–7); that predates XL-LEXEME, and how skip-gram
+  compares with PPMI-SVD for change detection is still to be checked before step 6b is decided.
+
 ## Housekeeping (outside the steps)
 
 - [x] pyarrow: nothing imported it and nothing else depended on it; removed (2026-11-12).
@@ -962,7 +1229,7 @@ Decision:
 
 | Moves to spaCy | Stays outside |
 |---|---|
-| Tokens and sentences (`senter` with abbreviation special cases), URL and e-mail detection, possessives and contractions, spellings (`norm_`), lemma votes from the same pass, target matching (`Matcher`, `PhraseMatcher`), cue words (`Matcher`, `DependencyMatcher`), lemma overrides (`AttributeRuler`), the name filter (entities), annotated documents (`DocBin`), language (lingua as a component) | OpenAlex downloads, template sentences (using spaCy's sentences), near-duplicates (datasketch), mojibake (table or ftfy), math stripping, static models (gensim), encoders (transformers), the classifier (scikit-learn), perplexity models |
+| Tokens and sentences (`senter` with abbreviation special cases), URL and e-mail detection, possessives and contractions, spellings (`norm_`), lemma votes from the same pass, target matching (`Matcher`, `PhraseMatcher`), cue words (`Matcher`, `DependencyMatcher`), lemma exceptions (`AttributeRuler`), the name filter (entities), removal spans (`SpanRuler` span groups, A6), the annotation cache (`DocBin`), language (lingua as a component) | OpenAlex downloads, template sentences (using spaCy's sentences), near-duplicates (datasketch), mojibake (affected abstracts dropped), static models (gensim), encoders (transformers), the classifier (scikit-learn) |
 
 ## Reference: merges
 
@@ -971,7 +1238,7 @@ Decision:
 | 4 cleaning rule sets, 3 language checks, 2 sentence splitters, about 6 regex tokenisers, 2 URL regexes | 1 cleaning step in the spaCy pass, with lingua |
 | 6 duplicate and shared-text rules | work id plus MinHash, and template sentences |
 | 2 lemma maps | 1 map, plus the `AttributeRuler` |
-| 5 copies of the usage key, plus 2 schemes | `Usage.key` |
+| 5 copies of the usage key, plus 2 schemes | the usage id and the content key, each defined once (4.5, A11) |
 | Divergence 3 times, unit rows 7, logistic regression 4, torch device 4, cell reading 6 | one library helper each |
 | 2 Claude labellers | 1 |
 | 2 neighbour implementations | 1 |
