@@ -1,0 +1,40 @@
+{
+  "abstracts": 705283,
+  "dropped": 52278,
+  "dropped_by_reason": {
+    "author_cap": 163,
+    "catalogue_record": 8032,
+    "citation_record": 7116,
+    "exam_spam": 61,
+    "mojibake": 228,
+    "near_duplicate": 5468,
+    "not_english": 13857,
+    "template": 10946,
+    "too_short": 4705,
+    "web_scrape": 1702
+  },
+  "flagged_by_flag": {
+    "malformed": 4878,
+    "paratext": 9,
+    "repository_only": 96267,
+    "retracted": 147,
+    "truncated": 79789
+  },
+  "kept": 653005,
+  "removed_ranges_by_reason": {
+    "abstract_label": 36947,
+    "catalogue_record": 8032,
+    "citation_record": 7182,
+    "copyright": 5183,
+    "doi": 5767,
+    "email": 1160,
+    "exam_spam": 715,
+    "footer": 1216,
+    "latex": 10801,
+    "not_english": 65299,
+    "repeated_sentence": 6178,
+    "template_sentence": 159170,
+    "url": 24638,
+    "web_scrape": 3662
+  }
+}
