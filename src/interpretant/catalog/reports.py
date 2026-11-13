@@ -20,6 +20,15 @@ def save_corpus_report(catalog: CatalogConfig, text: str) -> Path:
     return _write_whole(catalog.corpus_report.path, text)
 
 
+def load_corpus_metrics(catalog: CatalogConfig) -> dict[str, object]:
+    """The corpus metrics last written, or no metrics before the first report."""
+    target = catalog.corpus_metrics.path
+    if not target.exists():
+        return {}
+    metrics: dict[str, object] = json.loads(target.read_text(encoding="utf-8"))
+    return metrics
+
+
 def save_corpus_metrics(catalog: CatalogConfig, metrics: Mapping[str, object]) -> Path:
     """Write the corpus metrics as sorted, indented JSON, so their diffs read line by line."""
     text = json.dumps(metrics, indent=2, sort_keys=True, ensure_ascii=False) + "\n"

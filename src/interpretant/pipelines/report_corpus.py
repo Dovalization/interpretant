@@ -1,7 +1,8 @@
 """The corpus report (decision agenda 4b, layer 2), written after the corpus is built.
 
 Reads the abstracts table and each work's primary source from the work metadata, and writes the
-report the author reads before the corpus review, with its metrics for DVC.
+report the author reads before the corpus review, with its metrics for DVC. The report opens
+with every count that changed since the metrics were last written.
 """
 
 from __future__ import annotations
@@ -12,13 +13,19 @@ from interpretant.catalog import (
     CatalogConfig,
     WorkMetadata,
     load_abstracts,
+    load_corpus_metrics,
     save_corpus_metrics,
     save_corpus_report,
 )
 from interpretant.pipelines.corpus import corpus_cells, load_corpus_metadata
 from interpretant.pipelines.params import CorpusSelection
 from interpretant.pipelines.progress import SILENT, Progress
-from interpretant.review.corpus_report import build_corpus_report, corpus_metrics, render_markdown
+from interpretant.review.corpus_report import (
+    build_corpus_report,
+    compare_metrics,
+    corpus_metrics,
+    render_markdown,
+)
 
 
 def report_corpus(
@@ -38,8 +45,12 @@ def report_corpus(
         record.work_id: _source_name(record) for record in load_corpus_metadata(catalog, cells)
     }
     progress.stage("writing the report and its metrics")
+    previous = load_corpus_metrics(catalog)
+    metrics = corpus_metrics(abstracts)
     sections = build_corpus_report(abstracts, sources)
-    save_corpus_metrics(catalog, corpus_metrics(abstracts))
+    if previous:
+        sections.insert(0, compare_metrics(previous, metrics))
+    save_corpus_metrics(catalog, metrics)
     return save_corpus_report(catalog, render_markdown(sections, title="Corpus report"))
 
 

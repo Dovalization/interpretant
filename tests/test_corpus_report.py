@@ -7,12 +7,17 @@ from pathlib import Path
 
 import polars as pl
 
-from interpretant.catalog import read_catalog
+from interpretant.catalog import read_catalog, save_corpus_metrics
 from interpretant.corpus.work_metadata import REPOSITORY_ONLY
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.report_corpus import report_corpus
-from interpretant.review.corpus_report import build_corpus_report, corpus_metrics, render_markdown
+from interpretant.review.corpus_report import (
+    build_corpus_report,
+    compare_metrics,
+    corpus_metrics,
+    render_markdown,
+)
 from tests.abstracts_tables import abstract_row, abstracts_table
 from tests.corpus_catalog import ANNOTATE_SETTINGS, SELECTION
 
@@ -101,3 +106,28 @@ def test_corpus_metrics_counts_every_drop_removal_and_flag() -> None:
         "removed_ranges_by_reason": {"template_sentence": 1},
         "flagged_by_flag": {REPOSITORY_ONLY: 2},
     }
+
+
+def test_compare_metrics_lists_only_the_counts_that_changed() -> None:
+    previous = {"kept": 2, "dropped_by_reason": {"not_english": 5, "too_short": 1}}
+    current = {"kept": 4, "dropped_by_reason": {"too_short": 1, "url": 2}}
+    table = compare_metrics(previous, current).table
+    assert table.rows() == [
+        ("dropped_by_reason.not_english", 5, 0, -5),
+        ("dropped_by_reason.url", 0, 2, 2),
+        ("kept", 2, 4, 2),
+    ]
+
+
+def test_report_corpus_compares_the_run_with_the_metrics_it_replaces(
+    corpus_catalog_file: Path,
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    build_corpus(catalog, SELECTION, BuildCorpusSettings())
+    first = report_corpus(catalog, SELECTION).read_text()
+    assert "## Compared with the previous run" not in first
+    save_corpus_metrics(catalog, {"abstracts": 9})
+    second = report_corpus(catalog, SELECTION).read_text()
+    assert "## Compared with the previous run" in second
+    assert "| abstracts" in second

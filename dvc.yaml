@@ -86,6 +86,8 @@ stages:
     outs:
       - ${corpus_report.path}
     metrics:
-      # Kept in git, so `dvc metrics diff` compares the corpus between commits.
+      # Kept in git, so `dvc metrics diff` compares the corpus between commits. It persists, so
+      # the report can compare the run with the metrics it replaces.
       - ${corpus_metrics.path}:
           cache: false
+          persist: true

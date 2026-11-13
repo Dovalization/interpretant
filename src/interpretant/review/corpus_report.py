@@ -65,6 +65,29 @@ def corpus_metrics(abstracts: pl.DataFrame) -> dict[str, object]:
     }
 
 
+def compare_metrics(previous: Mapping[str, object], current: Mapping[str, object]) -> ReportSection:
+    """Every count that differs between the previous run's metrics and this run's."""
+    before = _flatten(previous)
+    after = _flatten(current)
+    changed = sorted(
+        name for name in before.keys() | after.keys() if before.get(name, 0) != after.get(name, 0)
+    )
+    table = pl.DataFrame(
+        {
+            "count": changed,
+            "previous": [before.get(name, 0) for name in changed],
+            "now": [after.get(name, 0) for name in changed],
+            "change": [after.get(name, 0) - before.get(name, 0) for name in changed],
+        },
+        schema={"count": pl.String, "previous": pl.Int64, "now": pl.Int64, "change": pl.Int64},
+    )
+    note = (
+        "Each count that changed since the metrics were last written (metrics/corpus.json, kept "
+        "in git); `dvc metrics diff` compares any two commits the same way."
+    )
+    return ReportSection("Compared with the previous run", note, table)
+
+
 def render_markdown(sections: Sequence[ReportSection], *, title: str) -> str:
     """The report as a Markdown document, each table written by Polars."""
     parts = [f"# {title}\n"]
@@ -83,6 +106,16 @@ def render_markdown(sections: Sequence[ReportSection], *, title: str) -> str:
             f"## {section.title}\n\n{section.note}\n\n{section.table}\n" for section in sections
         )
     return "\n".join(parts)
+
+
+def _flatten(metrics: Mapping[str, object], prefix: str = "") -> dict[str, int]:
+    flat: dict[str, int] = {}
+    for key, value in metrics.items():
+        if isinstance(value, Mapping):
+            flat |= _flatten(value, f"{prefix}{key}.")
+        elif isinstance(value, int):
+            flat[f"{prefix}{key}"] = value
+    return flat
 
 
 def _value_counts(values: pl.Series) -> dict[str, int]:

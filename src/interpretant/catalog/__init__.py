@@ -28,6 +28,7 @@ from interpretant.catalog.metadata import (
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
 from interpretant.catalog.reports import (
     append_run_record,
+    load_corpus_metrics,
     save_corpus_metrics,
     save_corpus_report,
 )
@@ -56,6 +57,7 @@ __all__ = [
     "load_annotated_abstracts",
     "load_annotations",
     "load_cleaning_patterns",
+    "load_corpus_metrics",
     "load_raw_cell",
     "load_work_metadata",
     "read_catalog",
