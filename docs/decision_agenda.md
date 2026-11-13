@@ -482,15 +482,12 @@ vectors and the existing cells' counts (`second_review/control_matching.py`,
   - frequency (the share of abstracts containing the word in that part of speech) between half
     and twice the target's in each period (Card 2023 draws background terms within a factor of
     two; SemEval-2020 matched "the same POS and comparable frequency development", taking the
-    smallest tolerance that found a control); for a sense that arrives (the target under the floor
-    in the early period) only the later period is matched; the realised tolerance is recorded per
-    comparison;
+    smallest tolerance that found a control); the realised tolerance is recorded per comparison;
   - within-period spread (the mean distance between a word's usages within one period) within
     ±50% of the target's in the **early** period, the state before the change: a change raises
     the later period's spread, so matching on it would pick naturally varied controls and absorb
     part of the change (the rule against adjusting for a variable the treatment has affected:
-    Rosenbaum 1984); for a sense that arrives, spread is recorded but not matched, since the
-    early period has too few usages to measure it;
+    Rosenbaum 1984);
   - at least n usages in each period, n being the comparison's (6.3);
   - not a target, a sense-list word or a candidate, and never a held-out word: the rank test's
     level is chosen during development (6.3), so a held-out word among the controls would shape
@@ -505,6 +502,24 @@ vectors and the existing cells' counts (`second_review/control_matching.py`,
   is cheap); if fewer than about 40 are eligible after the spread band, more candidates are drawn
   and encoded. Experiment 2 still checks whether the controls' J relates to frequency or spread
   within the bands, and a relation there tightens the rule before any target is scored.
+
+  Every comparison J scores has at least n usages in both periods (6.3), so the target's
+  frequency and early spread are always measurable. A word under the floor in the early period
+  is not a detection comparison, as the benchmarks also require usages in both periods
+  (SemEval-2020 checked 50 per period, DWUG sampled 100): its arrival is tested by sense
+  counting's anachronism test (7.3) and by planted new senses on the synthetic set (0b), the
+  way new senses are usually evaluated (Cook and Hirst 2011).
+
+  **Targets whose cells are word downloads** (4.8) are not matched on frequency: their downloaded
+  cells hold the word by construction, and candidates as rare as the target in the regular cells
+  cannot supply n usages (*prompt* is in 15 of about 10,000 regular AI abstracts of the 2010s,
+  against n of 500 or more). Their controls come from the regular cells, matched on part of
+  speech and spread; each control's two periods come from one source, as 4.8 requires for every
+  word. Equal n is how the field removes frequency's effect on sampling noise (Liu, Medlar and
+  Glowacka 2021 subsample; SemEval-2020 and DWUG draw a fixed number of usages per word), and the
+  spread band covers how varied a word's uses are. Rounds X and A judged *prompt*'s downloaded
+  cells against regular-cell controls the same way. These controls are far more frequent than
+  the target, beyond the range where J was found independent of frequency (an open question).
 - **Controls are never replaced on their change score.** Replacing the controls that changed most
   lowers the bar, an outcome-driven exclusion of the kind that inflates false positives (Simmons,
   Nelson and Simonsohn 2011); controls that change a lot measure the method's background change
@@ -524,7 +539,8 @@ vectors and the existing cells' counts (`second_review/control_matching.py`,
 1980s→1990s), and 60 candidates ±44% to ±70%; within SemEval's ±15% there are 10 candidates for
 *attention*, 2 for *alignment* and none for *platform* or *network*, because a documented change
 usually came with a rise in frequency; *prompt* and *hallucination* are nearly absent from the
-early period of the regular sample. Frequency matters less here than for static vectors: with n
+regular sample's early periods, which is why their cells are word downloads (298 and 323 early
+usages in the existing store). Frequency matters less here than for static vectors: with n
 equalised, round X's 157 control-and-transition pairs show no relation between J and frequency
 (Spearman −0.04) and a weak one with the size of the frequency change (+0.14, p = 0.07).
 
@@ -1187,6 +1203,10 @@ The sized tasks come to about 4 hours; three are not yet sized.
 - The rank test's level, frozen in the confirmation plan (6.3); whether 20 documented changes can
   be found for the held-out set (6.2).
 - The six-word shortlist's role, after checking its history (4.7).
+- Whether J stays independent of frequency for rare words: a downloaded target's controls are far
+  more frequent than it (5% or more of abstracts against about 0.15% for *prompt*), beyond the
+  range checked (words in at least 100 abstracts per cell); experiment 2 tests it on the words
+  already downloaded (step 5).
 - `concept-erasure` or LEACE's closed form, at experiment 6.
 - Dependencies agreed but not installed, each installed when its step starts and after the
   author's yes on the stack: DVC, QuaPy, pyalex, `correlation-clustering`, networkx 3.7 or later,
