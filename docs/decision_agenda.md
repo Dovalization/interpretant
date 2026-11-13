@@ -341,7 +341,8 @@ scripts, and regenerate the long list from the rebuilt grid later.
 **4.8 Downloads** (the data-acquisition draft). *Recommendation:* the three thin words
 (*attention*, *platform*, *alignment*), sized per decade, floor 500 usages; the gap check runs
 after the new pass, counting occurrences the way 4.1 matches them; likely under 200 OpenAlex
-credits of 10,000 a day; nothing is downloaded without the author's go.
+credits of 10,000 a day (to be re-estimated: a search request now costs 10 credits); nothing is
+downloaded without the author's go.
 
 **4.9 Models and running time** (store decision 4). The last full pass (lemma votes, small model,
 tagger and lemmatizer) read 1,274,029 abstracts, 206 million tokens, in 30 minutes on 10 CPU
@@ -373,7 +374,9 @@ Decisions (2026-11-12):
   opening sentence about twice as often as a random one (*network* 49% against 23%). The
   usages table lists every mention, so all mentions with each abstract weighted equally (option C)
   stays available without re-reading; it was not chosen now because within one abstract a word
-  usually keeps its sense ("one sense per discourse", Gale, Church and Yarowsky 1992), so the
+  usually keeps its sense ("one sense per discourse", Gale, Church and Yarowsky 1992: 51 of 54
+  pairs, with coarse senses; with fine senses about a third of ambiguous words vary within a
+  text, Krovetz 1998), so the
   extra mentions add little about a cell's sense mix, while every measure would have to handle
   same-abstract pairs (J and APD), split the classifier by abstract and resample abstracts in
   bootstraps. If C is switched on, that grouped handling is written once, in the library.
@@ -534,18 +537,21 @@ Decision (2026-11-12), after a critical pass and a check of established practice
   a percentile bar is defined: same part of speech, comparable frequency trajectory between the
   two periods (SemEval-2020's criterion: "same POS and comparable frequency development"),
   similar within-period spread (frequency and polysemy both create apparent change: Dubossarsky
-  et al. 2017; Keidar et al. 2022), excluding targets, sense-list words and candidates; stored in
-  the word list with the role "control" and their target. *Amended by A12:* stored per
-  comparison in `curated/comparison_controls.tsv`, matched on frequency in each period, the
-  tolerance the smallest that yields 30 candidates.
+  et al. 2017; Keidar et al. 2022 found no causal link of their own and cite that result),
+  excluding targets, sense-list words and candidates; stored in
+  the word list with the role "control" and their target. *Amended by A12, A14 and A15:* stored
+  per comparison in `curated/comparison_controls.tsv`, matched on part of speech and on frequency
+  within a factor of two in each period; every eligible candidate is a control.
 - **Controls validated against each other, not against their shuffles** (topic drift moves every
   word, so that test would reject them all): outliers among the controls are read briefly by
   hand, a light version of SemEval's manual verification, then replaced. *Amended by A2:* never
   replaced on their change score; only for score-blind reasons, before any target is scored.
 - **False discovery rate correction** (`scipy.stats.false_discovery_control`, Benjamini–Hochberg)
   whenever many words are screened at once (Liu, Medlar and Glowacka 2021), noting their caveats:
-  permutation tests are costly, and the correction assumes independent tests. *Amended by A10:*
-  100,000 shuffles per word, Benjamini–Yekutieli reported beside Benjamini–Hochberg.
+  permutation tests are costly, and the correction assumes independent tests (their wording;
+  Benjamini–Hochberg also holds under positive dependence: Benjamini and Yekutieli 2001).
+  *Amended by A10:* 100,000 shuffles per word, Benjamini–Yekutieli reported beside
+  Benjamini–Hochberg.
 - Same-abstract controls are drawn at experiment time from the abstracts table; the static grid
   uses its frequency bands; an automatic check forbids a word being both target and control.
 - Which bar decides a change (shuffles, matched or same-abstract controls) is step 6's.
@@ -563,13 +569,13 @@ after):**
 | Order | Experiment | Standing | Needs |
 |---|---|---|---|
 | 0a | Calibration on the datasets the LSCD Benchmark covers (Schlechtweg, Virk and Arefyev 2024), not only DWUG English: encoder and measures against human graded change, comparable with published numbers. The benchmark's code is not a dependency (Hydra scripts pinned to Python 3.10, no licence stated); its datasets and standard metrics are used with scipy and scikit-learn | Standard practice | Encoders, the published datasets |
-| 0b | A systematic synthetic set as the development set: several planted scenarios (gradual or sudden, a sense gained or lost, a frequency change without a change of meaning) (Shoemark et al. 2019) | Established | The rebuilt store |
+| 0b | A systematic synthetic set as the development set: several planted scenarios (a sense gained gradually, a sense gained as the old one is lost, and distractors that are not changes of meaning, such as a frequency change or a short-lived spike) (Shoemark et al. 2019) | Established | The rebuilt store |
 | 1 | J on every usage: bootstrap intervals (resampling abstracts), permutation significance, false discovery rate correction when many words are screened (Liu, Medlar and Glowacka 2021) | Established | The rebuilt store; the matched controls (step 5), since 6.3's bar is their 95th percentile |
 | 2 | Matched controls (step 5) as the bar | Established (SemEval-2020 style) | The word list |
-| 3 | Year-by-year time series of a word's change against a reference period, with change-point detection and a shuffle null, replacing half-decade windows (Kulkarni et al. 2015; Shoemark et al. 2019: the full series beats two points) | Established | Years per usage (4.6); `ruptures` (1.1.10, September 2025, maintained), added when the experiment starts |
+| 3 | Year-by-year time series of a word's change against a reference period, with change-point detection and a shuffle null, replacing half-decade windows (Kulkarni et al. 2015; Shoemark et al. 2019: the full series beats two points); time unit, reference period and downloads by year in A20 | Established | Years per usage (4.6); `ruptures` (1.1.10, September 2025, maintained), added when the experiment starts |
 | 4 | One measure for the static grid instead of the two-threshold rule | The project's own diagnosis | The rebuilt grid |
-| 5 | Same-abstract controls, aimed at topic change | Exploratory: the literature has no method that separates topic shift from semantic change (Montanelli and Periti's survey lists it as open) | The abstracts table |
-| 6 | Removing the era signal from the vectors (concept erasure, LEACE) | Exploratory | Last, since it alters every vector; `concept-erasure` (EleutherAI, last release January 2024) or LEACE's closed form written with numpy and scipy, decided then |
+| 5 | Same-abstract controls, aimed at topic change | Exploratory: the literature has no method that separates topic shift from semantic change (Kutuzov et al. 2022 call the two inseparable in the data; Hengchen et al. 2021 note that methods conflate meaning with topical information; partial precedents: Perrone et al. 2019 for genre, Card 2023 for frequency-matched background terms) | The abstracts table |
+| 6 | Removing the era signal from the vectors (concept erasure, LEACE), fitted on words other than the target (A21) | Exploratory | Last, since it alters every vector; `concept-erasure` (EleutherAI, last release January 2024) or LEACE's closed form written with numpy and scipy, decided then |
 
 Checks every experiment reads: the documented changes (*alignment* and *attention* in AI,
 2010s→2020s; *network* in AI, 1980s→1990s; *platform* in communication, 2000s→2010s), the quiet
@@ -604,7 +610,8 @@ Decisions (2026-11-12): the revised list and order above; and
   recent cases, the corpus), reviewed by the author (reading a few usages per decade is
   annotation, not measuring), committed and marked not for use until confirmation, with its
   hash recorded. Its pass rule (for example, at least 8 of 10 changes found, at most 1 of 10
-  stable words flagged) is set before any measuring.
+  stable words flagged) is set before any measuring. *Amended by A24:* about 20 of each, the
+  rates reported with intervals.
 - 6.3: the bar's form is fixed now (the target's 95% interval against its matched controls'
   distribution, shuffles as the floor, false discovery rate correction when screening); its
   level is chosen during development, where the answers are known, and frozen in the
@@ -612,15 +619,18 @@ Decisions (2026-11-12): the revised list and order above; and
   `bootstrap` (resampling abstracts, never pairing a usage with its own copy, which would bias J
   upwards), `permutation_test` with at least 1,000 shuffles (the similarity matrix computed once,
   labels reshuffled), `false_discovery_control`. *Amended by A10:* 100,000 shuffles, the same n
-  per period for the target and its controls.
+  per period for the target and its controls. *Amended by A14 and A26:* the bar is a rank test on
+  J against every eligible control, the interval reported for size; J is computed from mean
+  vectors.
 
 ## Step 6b: the static models (after detection experiment 4)
 
 Whether the static pipeline keeps skip-gram vectors (TWEC, or cells trained apart with gensim and
 aligned with scipy's `orthogonal_procrustes`) or runs on PPMI-SVD alone (the project's own code,
 deterministic, no gensim). Skip-gram with alignment is probably the stronger static method for
-detecting change (partly checked in A13; skip-gram against PPMI-SVD still to be checked; not yet
-in `related_work.md`), and the README's best finding rests on
+detecting change (checked in A13 and A22: the evidence is mixed, and weaker for small corpora;
+temporal referencing is a fourth option; not yet in `related_work.md`), and the README's best
+finding rests on
 both agreeing. Experiment 4 tests whether the grid's misses came from its rule, its windows or
 the embeddings; if the grid does not earn its place, the question lapses and gensim goes with it.
 
@@ -646,15 +656,15 @@ Clustering approaches to consider (the author, 2026-11-12: try different approac
 
 | Approach | Source |
 |---|---|
-| XL-LEXEME vectors from the store (agreement with human clusters 0.27 against BERT's 0.14 and annotators' 0.63) | Periti and Tahmasebi 2024, in `related_work.md` |
-| Substitutes grouped by community detection at scale, field by field | Eyal et al. 2022; Lucy et al. 2023 ("not done" in `related_work.md`) |
+| XL-LEXEME vectors from the store (adjusted Rand index against human clusters 0.27, BERT 0.14, both from correlation clustering of pair similarities; the 0.63 quoted for annotators is their agreement on pair judgements, Krippendorff's alpha, not a ceiling on that scale) | Periti and Tahmasebi 2024, Table 2, in `related_work.md` |
+| Substitutes grouped by community detection at scale (senses induced once on a pooled sample, then scored per field) | Eyal et al. 2022; Lucy et al. 2023 ("not done" in `related_work.md`) |
 | Correlation clustering over pairwise XL-LEXEME similarities, mirroring how DWUG's human clusters were built from pair judgements | Claude's suggestion; to be read before it is relied on |
 | Algorithms without a fixed number of senses: agglomerative with a distance threshold, affinity propagation, HDBSCAN (which leaves outliers unassigned) | Claude's suggestion |
 | Hybrid: hand-written senses as seeds, clustering only the usages no listed sense fits | Claude's suggestion |
 | Clustering generated definitions (a comparison arm, since it needs a generative model) | Giulianelli et al. 2023, in `related_work.md` |
 
-Benchmarks: DWUG's human clusters (round Y's bar 0.273; annotators 0.63) and the author's labels
-on the corpus.
+Benchmarks: DWUG's human clusters (round Y's bar 0.273; the annotators' 0.63 is agreement on pair
+judgements, a different scale) and the author's labels on the corpus.
 
 Decide: which candidates are tried, on which benchmark, and against the hand-written lists.
 Settles the step 1b code marked "decide with step 7a".
@@ -665,7 +675,8 @@ Decision (2026-11-12), after checking the literature and the tools:
   approaches correlate less but explain more, and XL-LEXEME is the best model for sense induction
   too (Periti and Tahmasebi 2024); DWUG's human clusters come from correlation clustering of a
   usage-pair graph (Schlechtweg et al. 2021), and filling the missing pairs with a model before
-  clustering improves agreement with human senses (LChange 2024); K-Means and affinity
+  clustering improves agreement with human senses (Noble, Periti and Tahmasebi 2024, on graphs
+  that already hold human-judged pairs, which the corpus lacks); K-Means and affinity
   propagation are the most used algorithms, with agglomerative clustering and HDBSCAN also in use
   (Montanelli and Periti's survey); sense induction is still open. The hand-written lists'
   0.69–0.80 (rank correlation with human graded change) and clustering's 0.27 (agreement with
@@ -676,20 +687,18 @@ Decision (2026-11-12), after checking the literature and the tools:
   its clusters; (2) XL-LEXEME vectors with affinity propagation, agglomerative clustering
   (distance threshold) or HDBSCAN; (3) substitutes grouped by community detection at scale (Eyal
   et al. 2022; Lucy et al. 2023) with **Leiden** (Traag et al. 2019; Louvain's successor, which
-  guarantees well-connected groups; in networkx 3.6 already), label propagation as a quick
+  guarantees well-connected groups; native from networkx 3.7, A17), label propagation as a quick
   check; then exploratory (4) hand-written senses as seeds, clustering only the usages no listed
   sense fits; (5) generated definitions as a comparison arm only.
 - 7a.3: scored by agreement with DWUG's human clusters (adjusted Rand index) on the openly
   published DWUG datasets (English, German, Swedish and others), by the same measure as the
   hand-written lists, and on the corpus by the author's labels (step 7).
 - Tools: scikit-learn 1.8 (`AffinityPropagation`, `AgglomerativeClustering`, `HDBSCAN`) and
-  networkx 3.6 (`leiden_communities`, `label_propagation_communities`), both installed;
-  `correlation-clustering` 2.0.0 (April 2026, by the DWUG authors, depending only on networkx,
-  numpy and scipy) is the one new dependency, adopted once its licence is confirmed (PyPI states
-  none). DWUG's `WUGs` scripts (no package, conflicting licences) and `chinese-whispers` (last
-  release July 2024) are references only. If no licence is confirmed: ask its authors (an issue
-  on their repository, after the author's go); until then (1) waits and (2)–(3) go ahead; no
-  re-implementation.
+  networkx (`label_propagation_communities`; `leiden_communities` from 3.7, A17), both installed;
+  `correlation-clustering` 2.0.0 (April 2026, by DWUG's first author, depending only on networkx,
+  numpy and scipy; BSD-3-Clause, A18) is the one new dependency. DWUG's `WUGs` scripts (no
+  package, conflicting licences) and `chinese-whispers` (last release July 2024) are references
+  only.
 
 ## Step 7: counting senses
 
@@ -759,15 +768,18 @@ Decisions (2026-11-12):
   scaling (BCTS), done by QuaPy: uncalibrated EM collapsed in tests and is known to fail with
   several classes or uncalibrated probabilities (Esuli, Molinari and Sebastiani 2020), while EM
   with BCTS is hard to beat (Alexandari, Kundaje and Shrikumar 2020); plain temperature scaling
-  still failed. Plain classify-and-count is always reported alongside (near state of the art
-  when tuned: Esuli, Moreo and Sebastiani). Bootstrap intervals resample both the cell's usages
+  still failed. Plain classify-and-count is always reported alongside as the baseline (with its
+  adjusted variants it is near state of the art once tuned: Moreo and Sebastiani 2021; alone it is
+  weaker on average: Schumacher et al. 2025). Bootstrap intervals resample both the cell's usages
   and the author's labels, since error rates estimated from 50–70 labels per word are noisy and
   the corrections amplify that (a synthetic test showed adjusted counts overshooting); where a
   key word's interval is too wide, more labels for that word only. The methods assume a sense
   looks alike in every period; where a word's senses change how they are expressed (computing
   *attention*), error rates are estimated per period (guarded by 7.3's per-period scoring).
   Reference for intervals: *Learning to Quantify* (Esuli, Fabris, Moreo and Sebastiani 2023, open
-  access). To add to `related_work.md`: these sources.
+  access). To add to `related_work.md`: these sources. *Amended by A16:* A3's sampling weights
+  are applied in the project's own code, and labelled cells report the stratified estimate as the
+  reference.
 - 7.5: one Claude labelling path (the Message Batches API `BatchLabeller`; the command-line
   `Labeller` is deleted); one divergence function (scipy's `jensenshannon`, which returns the
   Jensen-Shannon distance, the square root of the divergence; squared where the divergence is
@@ -788,7 +800,8 @@ Step 7 decided (2026-11-12).
 ## Step 8: code layout (follows from steps 1–7)
 
 The code review's critical items: a `usages/` package (which became `corpus/target_matching.py`,
-`corpus/usage_selection.py` and the catalog's usages dataset); `corpus/cleaning.py` and an annotation
+`corpus/usage_selection.py` and the catalog's usages dataset); `corpus/cleaning.py` and an
+annotation
 module holding the spaCy pass; `lemmas.py` split (spelling, map); a `cli/` package. Plus one
 neighbour function (from the measured pool, if the explorer stays) and the repeated helpers
 extracted (unit rows, divergence, torch device, cell reading, label tables).
@@ -867,7 +880,8 @@ tests/            mirrors src/
   (`data/external/` for DWUG and other datasets, `data/raw/` for downloads, `data/interim/` for
   the annotation cache, `data/processed/` for tables and vectors, `models/` for trained static
   models); hand-curated inputs live in a committed `curated/` folder, never overwritten by a run
-  (the word tables of A12, sense inventories, cleaning patterns, lemma exceptions, the spelling table,
+  (the word tables of A12, sense inventories, cleaning patterns, lemma exceptions, the spelling
+  table,
   download plans, the held-out known answers).
 - `scripts/` disappears once its contents are rebuilt; the replacement audit below applies as
   code moves; the layout is not a separate refactor but the shape the rebuild builds into, phase
@@ -962,7 +976,7 @@ is used. Candidates noted so far (to be checked against the literature, not assu
 | known answers; quiet transitions | gold-standard changes; stable (negative) cases |
 | planted changes | simulated or synthetic semantic change |
 | sense shares | sense distribution |
-| J (across minus within) | to be checked: a named measure in the literature, or ours |
+| J (across minus within) | half the energy distance with squared distances, equal to the maximum mean discrepancy with a linear kernel (A26); a short name is chosen in the pass |
 | word stream (the static pipeline's text) | normalised token stream, normalised text |
 | rounds, rungs | experiments; calibration stages |
 | usages-table columns | DWUG's names where they mean the same (*context*, target offsets, *grouping* for periods) |
@@ -986,7 +1000,8 @@ amendment below was agreed with the author and overrides the step it names.
   held-out list's hash, that held-out words were filtered from every development output, that
   their labels came after the plan was frozen), after Kapoor and Narayanan's model info sheets
   ("Leakage and the Reproducibility Crisis in ML-based Science", 2023: leakage in at least 294
-  papers across 17 fields, undetectable from the papers themselves); SemEval-2020 likewise kept
+  papers across 17 fields, often not apparent from the papers themselves); SemEval-2020 likewise
+  kept
   its gold labels hidden.
 - **A2 (step 5): controls are never replaced on their change score.** Replacing the controls
   that changed most lowers the bar targets must clear (the controls' 95th percentile), an
@@ -1003,8 +1018,9 @@ amendment below was agreed with the author and overrides the step it names.
   cut-off, measure error rates for the correction, choose the counting method and test it all;
   7.2's plan gave about 15 labels each to *component* and *having*, not the 50–70 per word 7.4
   assumed. (a) Building needs few labels: averaging contextual vectors per sense holds up with
-  about three examples per sense (Loureiro et al., *Computational Linguistics* 2021), drawn from
-  the author's labels and each list's example. (b) Error rates are the binding constraint: labels
+  about three examples per sense (Loureiro et al., *Computational Linguistics* 2021, shown for
+  coarse noun senses with BERT), drawn from the author's labels and each list's example. (b) Error
+  rates are the binding constraint: labels
   are drawn by stratified sampling, by period and by the sense a baseline counter predicts, with
   inclusion probabilities recorded and inverse-probability weights in every estimate, so rare
   senses are covered without bias (stratified evaluation: Kumar and Raj; importance-weighted
@@ -1015,7 +1031,9 @@ amendment below was agreed with the author and overrides the step it names.
   inside, so no label builds and grades the same thing (Varma and Simon 2006). (e) The counting
   method is chosen once, across all words (replacing 7.4's per-word choice, too thin per word).
   (f) Period balance applies only where a sense exists (an arriving sense has no earlier
-  examples). Intervals rest on Vaz, Izbicki and Stern (*JMLR* 2019). Time: about 200 new labels
+  examples). Intervals rest on Vaz, Izbicki and Stern (*JMLR* 2019; their theory is for two
+  classes and large samples, so 7.4's bootstrap carries the intervals here). The weights are
+  applied as A16 says. Time: about 200 new labels
   (about 1–1.5 hours, in sittings) beside check 1a's 280, more only for words whose intervals are
   too wide.
 - **A4 (step 4b): the corpus review screens fields instead of claiming rates it cannot show.**
@@ -1032,13 +1050,15 @@ amendment below was agreed with the author and overrides the step it names.
   data separate from what it flags and treats nested fields (AI inside computer science,
   cognitive psychology inside psychology) as compatible. First rebuild: 165 random kept, about
   120 dropped items, 80 flagged, 20 repeats, about 385 judgements (about 1 hour 5 minutes, in
-  sittings), plus second samples only for fields that trigger.
+  sittings), plus second samples only for fields that trigger. *Amended by A23 (the 15 per field
+  are split by era) and A25 (the second sample's rule).*
 - **A5 (steps 4.7, 4.8, 5, 6): first guesses, then adjust; nothing waits on later work.** The
   plan asked for answers before the work that produces them (caps, floor and download plan
   "after steps 5 and 6", which need the rebuilt store; controls chosen by within-period spread,
   which needs their encoding). Order instead: (1) provisional caps, the floor (500) and the
-  download plan for the three thin words, from existing counts, written in the parameter files
-  (step 9); (2) downloads, then the first full pass; (3) candidate controls chosen from the new
+  download plan for the three thin words (sized per year for experiment 3, A20), from existing
+  counts, written in the parameter files (step 9); (2) downloads, then the first full pass; (3)
+  candidate controls chosen from the new
   text by part of speech and frequency trajectory, a pool larger than needed (about 60 per
   target) encoded so spread can be measured, the final 30 or more picked from it (encoding
   resumes by missing keys, 4.6); (4) the experiments, which may revise caps and the floor through
@@ -1064,8 +1084,9 @@ amendment below was agreed with the author and overrides the step it names.
   "Stage outputs are deleted from the workspace before executing the stage commands that produce
   them (unless `persist: true` is used)." Unchanged, that would wipe every stored vector when any
   upstream input changes (defeating 4.6's resume by missing keys), refetch the downloads when
-  their code changes (contradicting 4.8's curated, approved downloads; OpenAlex's samples are not
-  repeatable and cost credits), and rerun everything when a stage depends on all of `src/`. So:
+  their code changes (contradicting 4.8's curated, approved downloads; OpenAlex's seeded samples
+  can change as records are added, abstracts withdrawn or works reclassified, A23, and they cost
+  credits), and rerun everything when a stage depends on all of `src/`. So:
   (1) the vector store and the annotation cache (`DocBin`) are `persist: true` outputs; encoding
   adds only missing keys; vectors for usages that no longer exist stay unread until a deliberate
   clean-up command removes them. The trade-off is stated in the lock's meaning: these outputs are
@@ -1114,7 +1135,8 @@ amendment below was agreed with the author and overrides the step it names.
   the old list, the counters evaluated on it, and a sense added after seeing shares is a forking
   path (Gelman and Loken 2013). Annotation practice revises the scheme in a pilot, freezes it,
   then annotates, and re-annotates what a later change touches (OntoNotes revised sense groupings
-  until agreement reached 90% before they were used, Hovy et al. 2006; content analysis pretests
+  until agreement between annotators reached 90% before they were used, Hovy et al. 2006; content
+  analysis pretests
   and freezes the codebook, recoding after any change; Pustejovsky and Stubbs's MATTER cycle
   tracks guideline versions). So: 7a's aids run on the rebuilt store, the author reviews the
   proposed senses, the lists are frozen as a numbered version, then the author labels; a gap
@@ -1133,18 +1155,23 @@ amendment below was agreed with the author and overrides the step it names.
   reports state that shares are shares of abstracts.
 - **A10 (steps 5, 6.3): the statistics hold when many words are screened.** (1) scipy's
   permutation p-value is (exceedances + 1) / (shuffles + 1), so 1,000 shuffles cannot go below
-  about 0.001, while Benjamini–Hochberg at 5% needs the strongest word at 0.05 / m: above 50
-  screened words nothing can pass (simulated 2026-11-12: a very large change got p = 0.001, which
-  fails at 100 and 300 words). Liu, Medlar and Glowacka (2021) escalate from 1,000 to 100,000
-  shuffles; here every word gets 100,000 (the similarity matrix computed once, each batch of
-  shuffles one matrix product, timed on one word before relying on it), and the rule is that
-  1/(shuffles + 1) is at least ten times below 0.05 / m. (2) The bootstrap keeps scipy's default
+  about 0.001, while Benjamini–Hochberg at 5% needs a word standing alone at 0.05 / m: above 50
+  screened words a single finding cannot pass, and several words tied at the smallest p-value
+  pass only together (at least 2 of 100, 6 of 300) (simulated 2026-11-12: a very large change got
+  p = 0.001, which fails alone at 100 and 300 words). Liu, Medlar and Glowacka (2021) escalate
+  step by step (1,000 shuffles, then 10,000 and 100,000 for small p-values); here every word gets
+  100,000 (computed from sums of vectors, A26, timed on one word before relying on it), and the
+  rule is that 1/(shuffles + 1) is at least ten times below 0.05 / m. Benjamini–Yekutieli's
+  threshold for a single word is lower still (0.05 / m divided by 1 + 1/2 + … + 1/m: about 2.7e-5
+  at 300 words, under 1e-5 from about 700 words), so beyond that the shuffles rise with it. (2)
+  The bootstrap keeps scipy's default
   BCa interval (better coverage than percentile: Efron 1987; DiCiccio and Efron 1996; its
   jackknife costs about as much as the bootstrap with a vectorised statistic); a
   `DegenerateDataWarning` stops the run instead of switching method. (3) J's chance level falls
   with the number of usages (simulated with no change: its 95th percentile 0.0030 at 100 usages
   per period, 0.0017 at 200, 0.0006 at 500), so unequal counts would let the controls' noise set
-  the bar; Liu et al. found high-frequency words almost always significant and subsampled. Each
+  the bar; Liu et al. take it as given that high-frequency words come out highly significant, and
+  subsample their corpora. Each
   comparison therefore draws the same n per period for the target and every control (n = the cap,
   or the target's count if lower, never below the floor; seed recorded); candidate controls with
   fewer than n usages are not eligible (A5's pool absorbs this); n is a parameter, so a change
@@ -1159,7 +1186,8 @@ amendment below was agreed with the author and overrides the step it names.
   abstracts or row order (hash-based assignment as in online experiments: Kohavi, Tang and Xu
   2020): the in-scope mention with the smallest hash of (seed, work id, content key). The usage id
   becomes (work id, word, content key) instead of the mention number, which shifted whenever a
-  rule found an earlier mention; the content key's offsets are within the sentence, so the id
+  rule found an earlier mention (unique once A19 marks repeated sentences); the content key's
+  offsets are within the sentence, so the id
   changes only if that mention's sentence does. (3) Matching uses spaCy's full lemma after the
   exceptions file (so *prompted* is found; 7.1 counts verb senses), and each usage records the
   static view's token beside it, so the two pipelines' counts reconcile. (4) No second full
@@ -1201,7 +1229,8 @@ amendment below was agreed with the author and overrides the step it names.
   SemEval matched "the same POS and comparable frequency development between C1 and C2"; the
   frequency tolerance is the smallest that yields at least 30 eligible candidates (SemEval's Latin
   set took the smallest p "for which a control word could be found"), a score-blind rule in the
-  sense of A2 and A5. Generated candidates are written to `data/` as proposals and enter
+  sense of A2 and A5 (*amended by A15:* within a factor of two). Generated candidates are written to
+  `data/` as proposals and enter
   `curated/` after the author's approval.
 - **A13 (step 6b): the static question has three options, and part of its premise is checked.**
   Besides TWEC (whose package, `cade`, is inactive: step 0, row 1a) and PPMI-SVD, the library route
@@ -1210,6 +1239,166 @@ amendment below was agreed with the author and overrides the step it names.
   subtask 1 (8 of 10 in subtask 2) used type embeddings, with Orthogonal Procrustes among the
   usual alignments (Schlechtweg et al. 2020, §§6–7); that predates XL-LEXEME, and how skip-gram
   compares with PPMI-SVD for change detection is still to be checked before step 6b is decided.
+  *Checked in A22.*
+
+A second pass (2026-11-12) checked every decision against its sources (three independent readings
+of the cited papers and library documentation) and by experiment, on simulated data and on the
+project's stored vectors. A14–A26 follow from it; smaller corrections of wording and citations
+were made in place in the steps. The scripts and the sources read are kept outside the repository
+(the papers are copyrighted); the simulations of A14 and A16 become tests of the statistics and
+quantification modules, as A10's did.
+
+- **A14 (steps 5, 6.3): the bar is a rank test on J at equal n, not an interval against a
+  percentile.** 6.3's bar (the target's 95% interval must clear the controls' 95th percentile) had
+  two faults. (1) A percentile of 30 values is not a 5% test: simulated with a stable target, a J
+  above the 95th percentile of 30 controls was flagged 7.7% of the time (5.9% with 59). The exact
+  form compares ranks, p = (1 + controls at or above the target) / (controls + 1) (Phipson and
+  Smyth 2010; North, Curtis and Sham 2002), whose smallest value with 30 controls is 1/31 = 0.032.
+  (2) Requiring the interval's lower end to clear the bar counts sampling noise twice, since the
+  controls' J already carry it at the same n (A10): simulated, the interval rule flagged a stable
+  target 0.1% of the time and found a moderate change 2% of the time (a large one 68%), against
+  35–44% (93–97%) for the rank rule at 3–4% false alarms. On round X's stored vectors, *network*
+  in AI, 1980s→1990s (J 0.0045, interval 0.0010 to 0.0119, 29 controls) is above the 95th
+  percentile (0.0024), fails the interval rule and has rank p = 0.067; leaving one control out
+  moves that percentile between 0.0014 and 0.0025. So: the target's J is compared with its
+  controls' J at the same n, and it counts as changed at rank p at or under the level frozen in
+  the confirmation plan (0.05 unless development argues otherwise). Every eligible candidate in
+  A5's pool is a control (about 60, not thinned to 30, which was one more choice to make): with 59
+  controls at most two may be at or above the target, under 39 none, and under 19 no result is
+  possible. The BCa interval is still reported, as the size of the change; tested, it contained
+  the true J for 96–100% of simulated words and zero for 99% of 250 real same-cell splits, erring
+  wide near zero, the case where J's large-sample theory changes form (Gretton et al. 2012).
+  Shuffles stay the floor. When many words are screened, the rank p-value cannot go through the
+  false discovery rate correction (its smallest value is 1 / (controls + 1)): the correction
+  applies to the shuffle p-values, and screened words above their controls are candidates for
+  reading, about 5% of stable words by construction. Precedent for a quantile bar of
+  frequency-matched background terms: Card 2023.
+- **A15 (step 5, A12): controls are matched on frequency within a factor of two.** A12's rule (the
+  smallest tolerance giving 30 candidates) was measured on the existing cells (share of abstracts
+  containing the word, nouns, at least 100 abstracts per period): 30 candidates matched in both
+  periods need ±34% (*attention*, AI 2010s→2020s), ±39% (*alignment*), ±57% (*platform*,
+  communication 2000s→2010s) and ±61% (*network*, AI 1980s→1990s), and 60 candidates ±44% to
+  ±70%; within SemEval's ±15% there are 10 candidates for *attention*, 2 for *alignment* and none
+  for *platform* or *network*, because a documented change usually came with a rise in frequency;
+  *prompt* and *hallucination* are nearly absent from the early period of the regular sample, so
+  nothing can match them there. Frequency matters less here than for static vectors: with n
+  equalised (A10), the 157 control-and-transition pairs of round X show no relation between J and
+  frequency (Spearman −0.04) and a weak one with the size of the frequency change (+0.14,
+  p = 0.07). So: same part of speech; frequency between half and twice the target's in each
+  period (Card 2023 draws background terms within a factor of two), the realised tolerance
+  recorded per comparison; for a sense that arrives (the target under the floor in the early
+  period) only the later period is matched; experiment 2 repeats the J-against-frequency check on
+  the new controls, and a relation there tightens the rule before any target is scored.
+- **A16 (7.4, A3): sampling weights are applied in the project's own code, and labelled cells get
+  an estimate that assumes nothing about the counter.** A3(b) draws labels with unequal
+  probabilities and requires weights in every estimate, but QuaPy 0.2.3 fits its adjusted counts
+  from predictions and labels only (`aggregation_fit(classif_predictions, labels)`; no
+  `sample_weight` in any of its methods). Simulated (three senses, 1,000 usages per cell, 30
+  labels per cell stratified by predicted sense): with the weights ignored, adjusted counting was
+  as biased as classify-and-count (−0.040 on a rise of 0.25); with them, unbiased. So adjusted
+  counting (ACC, PACC) is computed with a weighted confusion matrix and one constrained
+  least-squares solve (`scipy.optimize.nnls`); QuaPy keeps EM with BCTS and the protocol, fed a
+  sample redrawn in proportion to the weights. Second, because the labels are a random sample of
+  the cells themselves, a labelled cell has a classical estimate that needs no stable error rates:
+  within each predicted-sense stratum, the labelled share of each true sense, weighted by the
+  stratum's size (the stratified estimator of survey sampling; prediction-powered inference,
+  Angelopoulos et al. 2023, and design-based supervised learning, Egami et al. 2023, are its
+  recent forms). Simulated: with a counter equally good in both periods, pooled adjusted counting
+  is more precise (root-mean-square error 0.033 against 0.053); with a counter worse at the new
+  sense in the early period, pooled adjusted counting is off by +0.05 and the stratified estimate
+  unbiased; per-period adjusted counting and the stratified estimate coincide. So labelled cells
+  report the stratified estimate as the reference; the gap between it and the pooled adjusted
+  estimate is the test of whether error rates differ by period (deciding pooled or per-period
+  rates, A3(c)); cells without labels keep 7.4's methods. Written in the project's own code (a
+  few lines); `ppi-python` (0.2.3, December 2024, MIT, takes weights) is the library route if its
+  intervals are wanted.
+- **A17 (7a.2): Leiden comes with networkx 3.7.** In the installed 3.6.1, `leiden_communities` is a
+  stub for other backends and raises `NotImplementedError` (run 2026-11-12); the native version
+  arrived in 3.7 (September 2026). networkx is raised to 3.7 or later when step 7a starts; its
+  default quality function is the Constant Potts Model, not modularity, so the choice is set
+  explicitly and stated when results are compared with Louvain's.
+- **A18 (7a): `correlation-clustering` is BSD-3-Clause.** PyPI's `license_expression` and the
+  repository's licence file say so (only the older `license` field is empty), so approach (1) does
+  not wait and nobody needs to be asked.
+- **A19 (A11, step 2): a sentence repeated within one abstract is kept once.** A11's usage id (work
+  id, word, content key) is the same for two mentions in identical sentences, and the uniqueness
+  check would stop the build: 353 of 322,329 raw abstracts (0.11%) repeat a sentence of 40 or more
+  characters, 11 of them with one of seven target words in it (often the abstract pasted twice).
+  After the spaCy pass, later copies of a sentence within the same abstract are marked removed
+  (reason "repeated sentence", A6), which also keeps the copy out of both views.
+- **A20 (step 6 experiment 3, A5): yearly series need a reference period and a download plan by
+  year.** Usages per year in the existing store, before 2020: *attention* in AI about 20,
+  *alignment* 4–16, *platform* in communication 2–57, *network* 150–320. With no change at all,
+  J's 95th percentile is 0.016 for 20 usages against 20 and 0.0085 for 20 against 500 (simulated,
+  A10's generator), beside decade-level changes of 0.010 (*platform*), 0.025 (*alignment*) and
+  0.036 (*attention*). So each year (or a window of two or three years where a year holds fewer
+  than about 50 usages) is compared with one reference period of several hundred usages, the
+  window fixed per word before measuring; the download plan for the thin words (A5, step 1) is
+  sized per year, not per decade; and the series is scored both by change points and by its
+  linear trend, with the last period among the references tried on the synthetic set (Shoemark et
+  al. 2019 found the last time step the better reference and linear trends to match or exceed
+  change points).
+- **A21 (step 6 experiment 6): the era signal is erased with a map fitted on other words.** J is a
+  function of the two periods' mean vectors (A26), and LEACE makes those means equal for the data
+  it is fitted on, so fitting it on the target's own usages removes J by construction
+  (*attention*, AI 2010s→2020s: 0.0355 before, −0.0007 after). Fitted on the 30 other words of
+  that transition and applied to the target, it leaves the documented changes (*attention*
+  0.0376; *alignment* 0.0225 from 0.0261) and halves a stable word's (*component* 0.0012 from
+  0.0023). The eraser is always fitted without the word it is applied to.
+- **A22 (step 6b, A13): four static options, and no presumption for skip-gram.** Added: temporal
+  referencing (one skip-gram model on all the text, the target words tagged by period; plain
+  gensim, no alignment), which outperformed alignment on a synthetic task and a manual test set in
+  Dubossarsky et al. 2019. A13's open check: Hamilton et al. 2016 found PPMI clearly worse and SVD
+  against skip-gram "somewhat equivocal", with skip-gram finding 72% of known shifts on the
+  smaller corpus against SVD's 96%; Schlechtweg et al. 2019, across domains (SURel), have
+  skip-gram best at its best setting (0.85 against PPMI's 0.79 and SVD's 0.64) but close to PPMI
+  on average (0.52 and 0.50); in DIACR-Ita, Procrustes-aligned skip-gram scored 0.94 against 0.83
+  for two TWEC systems, and no independent evaluation found has TWEC clearly ahead. Field-decade
+  cells are small corpora, so experiment 4 decides among the four on the synthetic set and the
+  benchmark; nothing is presumed.
+- **A23 (step 4b, A4): corpus quality is screened by era as well as by field, and the datasheet
+  records what the source changed.** In the raw cells, 34% of 1950s abstracts are under 250
+  characters against 3.6% of the 2020s' (median length 503 against 1,204 characters); Kim, Holst
+  and Ginis (2026, a preprint) report about 21% of pre-2000 OpenAlex abstracts rejected against
+  about 6% for 2020–2025 (too little content, metadata in place of the abstract, truncation).
+  A4's 15 abstracts per field are split between two eras (before 2000, from 2000), so the 165
+  give about 80 per era pooled over fields: zero junk in 80 puts an era's rate likely under 3.7%,
+  and the junk threshold is stated per era, not overall; removal counts and the share of short
+  abstracts are reported per decade. No extra reading. (The cut at exactly 200 characters they
+  report does not show in these cells: 0.3–1.0% of abstracts per decade fall within 197–203.) The
+  datasheet's definition layer records the download dates; that OpenAlex replaced its topic
+  classifier in October 2026 (assignments changed, the old ones frozen on 5 October 2026 remain
+  available; the raw files are dated 9–11 November 2026, so the cells appear to carry the new
+  ones, to be confirmed); that closed-access abstracts of two large publishers were withdrawn in
+  November 2022 and November 2024 (Kramer 2024); and OpenAlex's own coverage figure (an abstract
+  for over 60% of 2022 works against about 45% before 2000).
+- **A24 (6.2): the held-out set has about 20 changes and 20 stable words.** With 10 of each, a
+  method that finds 70% of changes passes "8 of 10" 38% of the time, and one with 20% false alarms
+  passes "at most 1 of 10" 38% of the time; with 20 ("16 of 20", "at most 2 of 20") those fall to
+  24% and 21%, while a method at 90% and 5% passes 96% and 92%. The confirmation reports the two
+  rates with Wilson intervals (8 of 10 is 49–94%, 16 of 20 is 58–92%) beside pass or fail; if 20
+  documented changes cannot be found in the project's fields, the plan states the number reached
+  and what it can show.
+- **A25 (A4): the second sample has its rule.** At a true rate of 5%, 17% of fields trigger a
+  second sample, so with 11 fields at least one healthy field does in 87% of reviews. A field is
+  given the closer look when its two samples together hold 3 or more wrong-field abstracts of 30:
+  that flags 11% of fields at 5% and 82% of fields at 20% (4 or more would give 4.5% and 78%); set
+  before reading, like the first rule.
+- **A26 (step 10, 6.3, A10): J is a known statistic and is computed from mean vectors.** J equals
+  half the energy distance with squared distances (Rizzo and Székely 2010), which is the maximum
+  mean discrepancy with a linear kernel (Gretton et al. 2012; Sejdinovic et al. 2013): half the
+  squared distance between the two periods' mean unit vectors, estimated without pairing a usage
+  with itself. On DWUG EN the pairwise and the mean-vector computations agree to 1e-7. It
+  therefore sees a shift of the mean and nothing else, and sits with the distance between mean
+  vectors (PRT; rank correlation 0.98 on DWUG), of which it is the noise-corrected form: with
+  periods shuffled, PRT keeps an agreement of 0.60 with the human scores and J falls to −0.12
+  (Kutuzov, Velldal and Øvrelid 2022 proposed such a within-period comparison as future work).
+  Tried on DWUG and not better than J's 0.54: the energy distance with plain distances (0.46), a
+  Gaussian-kernel discrepancy (0.33), J divided by the within-period distance (0.29), a period
+  classifier's AUC (0.40); J stays. Consequences: no usage-by-usage similarity matrix is needed
+  (100,000 shuffles of 1,000 usages take about a second from sums of vectors); J grows with the
+  square of a shift in sense shares, so sizes are compared on its square root where a scale
+  matters; the published results to set it against are PRT's, not APD's; and A21.
 
 ## Housekeeping (outside the steps)
 
