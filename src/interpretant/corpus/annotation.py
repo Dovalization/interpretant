@@ -24,6 +24,7 @@ from spacy.symbols import ORTH
 from spacy.tokenizer import Tokenizer
 from spacy.tokens import Doc, Token
 from spacy.util import compile_infix_regex
+from srsly.msgpack import msgpack_decoders, msgpack_encoders
 
 from interpretant.catalog import START_ID, CleaningPatterns, Scope
 from interpretant.corpus.language import (
@@ -124,6 +125,7 @@ def build_pipeline(
         ValueError: if spaCy's English hyphen rule has changed and cannot be removed, or the
             language codes lack English or include one lingua does not know.
     """
+    cache_serialiser_extensions()
     nlp = spacy.load(model, exclude=["parser"])
     nlp.enable_pipe("senter")
     tokenizer = nlp.tokenizer
@@ -159,6 +161,22 @@ def build_pipeline(
     # (spaCy's documentation, "Memory management").
     nlp.add_pipe("doc_cleaner", config={"attrs": {"tensor": None}})
     return nlp
+
+
+def cache_serialiser_extensions() -> None:
+    """Look srsly's msgpack extensions up once, instead of on every pack and unpack.
+
+    srsly asks its two catalogue registries for extension encoders and decoders each time it
+    packs or unpacks, and each ask rescans the installed packages' entry points and filters
+    catalogue's global registry, where spaCy keeps thousands of functions: about a third of the
+    main process's time in a multi-process pass, which unpacks every finished document (profiled
+    2026-11-13). The two registries' contents (srsly's numpy functions; no installed package adds
+    any) are read once and served from then on; a function registered later would be missed.
+    Worker processes started by fork inherit the cache.
+    """
+    for registry in (msgpack_encoders, msgpack_decoders):
+        functions = registry.get_all()
+        registry.get_all = lambda functions=functions: functions
 
 
 def find_removals(
