@@ -77,10 +77,6 @@ def test_pipeline_runs_from_processed_text_to_drift_tables(tmp_path: Path) -> No
     run("drift", "grid", "--model-dir", models, "--output-dir", drift, "--words-file", words,
         "--controls-file", controls, "--measure-min", "20", "--neighbour-min", "10",
         "--neighbours", "5")  # fmt: skip
-    run("drift", "perplexity", "--texts-dir", texts, "--output", drift / "cross.parquet",
-        "--fixed-budget", "2000", "--drop-shared", "--seed", "1")  # fmt: skip
-    run("drift", "decompose", "--texts-dir", texts, "--early", "1990", "--late", "2000",
-        "--seed", "1", "--fixed-budget", "2000", "--output", drift / "falls.parquet")  # fmt: skip
 
     hci = (texts / "hci_1990.txt").read_text(encoding="utf-8").split()
     assert "interfaces" not in hci
@@ -96,9 +92,3 @@ def test_pipeline_runs_from_processed_text_to_drift_tables(tmp_path: Path) -> No
     assert set(cross["decade_a"]) == {1990, 2000}
     assert within["is_target"].any()
     assert within["is_control"].any()
-    perplexity = pl.read_parquet(drift / "cross.parquet")
-    assert len(perplexity) == 2 * 4
-    own = perplexity.filter(pl.col("model_field") == pl.col("text_field"))
-    assert (own["excess"] == 0).all()
-    falls = pl.read_parquet(drift / "falls.parquet")
-    assert set(falls["text_field"]) == {"hci", "philosophy"}

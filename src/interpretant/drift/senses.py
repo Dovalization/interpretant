@@ -10,8 +10,7 @@ silhouette.
 
 Occurrences come from the cased abstracts behind the cleaned cells, with abstracts found in
 more than one field's cell removed: up to ``CAP`` abstracts per
-cell that contain the word, one occurrence each, drawn per seed so the seed-noise rule of
-:func:`interpretant.drift.direction.present` applies.
+cell that contain the word, one occurrence each, drawn per seed.
 """
 
 from __future__ import annotations

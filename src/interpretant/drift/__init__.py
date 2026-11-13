@@ -1,4 +1,4 @@
-"""Drift on the field × decade grid and cross-perplexity between cells."""
+"""Drift on the field × decade grid."""
 
 from interpretant.drift.metrics import cosine_distance
 
