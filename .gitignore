@@ -78,6 +78,3 @@ data/labels/**/raw/
 
 # The shared vector store (scripts/build_vector_store.py): large, local only
 data/store/
-
-# The deleted web explorer's build output, still on disk until removed
-/web/
