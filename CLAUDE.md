@@ -6,6 +6,8 @@ Guidance for Claude Code in this repository.
 
 ```bash
 uv sync --all-extras         # install, with dev extras
+uv run pre-commit install    # once: run every check before each commit
+make check                   # every check, as pre-commit and CI run them
 
 make lint                    # ruff check + ruff format --check (src/, tests/)
 make fmt                     # ruff format + ruff check --fix
@@ -88,7 +90,7 @@ whole CLI, ingest to drift grid, on a synthetic two-field, two-decade grid in a 
 
 Follow `docs/code_standards.md`: self-documenting code first (comments say why, never what),
 names and verb prefixes with fixed meanings, keyword-only booleans, docstrings on public code, and the
-enforcement table. In short, until its rules are switched on at rebuild phase 1:
+enforcement table (pre-commit and CI run every automatic check). Also:
 
 - Line length 100 (`.ruff.toml`); mypy strict; `# type: ignore[code]` with a specific code.
 - Long `@click.option` lines take `# noqa: E501`; functions used with `ProcessPoolExecutor`

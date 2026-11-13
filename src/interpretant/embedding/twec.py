@@ -109,7 +109,6 @@ class TWECTrainer:
         sg: int = 1,
         negative: int = 10,
         seed: int = 42,
-        **kwargs: Any,
     ) -> None:
         self.vector_size = vector_size
         self.window = window

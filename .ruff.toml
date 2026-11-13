@@ -4,11 +4,80 @@ target-version = "py311"
 extend-exclude = ["scripts/evidence"]
 
 [lint]
-select = ["E", "F", "W", "I", "UP", "ANN", "N", "B", "C4", "SIM"]
-ignore = ["ANN101", "ANN102", "ANN401"]
+# The rules behind docs/code_standards.md; each ignore below says why.
+select = [
+    "E", "W",  # pycodestyle
+    "F",       # pyflakes
+    "I",       # import order
+    "B",       # bugbear
+    "C4",      # comprehensions
+    "UP",      # modern syntax
+    "A",       # shadowing builtins
+    "PTH",     # pathlib over os.path
+    "SIM",     # simplifications, guard clauses
+    "RET",     # returns, early exits
+    "RUF",     # ruff's own (stale noqa, mutable defaults)
+    "PERF",    # performance anti-patterns
+    "PIE",     # unnecessary code
+    "FLY",     # static string joins
+    "PGH",     # blanket type: ignore
+    "FA",      # future annotations
+    "N",       # naming case
+    "TRY",     # error handling
+    "FBT",     # boolean arguments are keyword-only
+    "ERA",     # commented-out code
+    "T20",     # no print in library code
+    "NPY",     # numpy
+    "D",       # docstrings (Google convention)
+    "ANN",     # annotations
+]
+ignore = [
+    "SIM108",  # forced ternaries often read worse than if/else
+    "RET504",  # a named value before return helps reading and debugging
+    "TRY003",  # long messages in exceptions are fine; no class per message
+    "TRY300",  # moving statements to else often hurts reading
+    "RUF001",  # deliberate typography in strings (→, ×, ′)
+    "RUF002",  # the same in docstrings
+    "RUF003",  # the same in comments
+    "D105",    # magic methods need no docstring
+    "D107",    # __init__ is documented on its class
+]
+
+[lint.pydocstyle]
+convention = "google"
 
 [lint.per-file-ignores]
-"tests/*" = ["ANN"]
+# Tests: names describe the behaviour, so no docstrings or annotations are required.
+"tests/*" = ["ANN", "D"]
+
+# Legacy: modules written before docs/code_standards.md, exempt only from the rules they break
+# today. Delete a file's entry when the module is rebuilt; never add a new one.
+"scripts/build_vector_store.py" = ["D103", "D205", "D209", "PERF401", "RUF005", "T201"]
+"scripts/check_planted_pairs.py" = ["D103", "T201"]
+"scripts/fetch_sense_words.py" = ["D103", "T201"]
+"scripts/pilot_labellers.py" = ["D103", "FBT001", "T201"]
+"scripts/review/build.py" = ["D103", "D205", "T201"]
+"scripts/review/collect.py" = ["PTH123", "T201"]
+"scripts/review/render.py" = ["D103", "T201"]
+"scripts/score_labels_benchmark.py" = ["D103", "D205", "D209", "T201"]
+"scripts/score_pairs_benchmark.py" = ["D103", "T201"]
+"scripts/score_pairs_known.py" = ["D101", "D102", "D103", "T201"]
+"src/interpretant/__main__.py" = ["D403", "FBT001", "T20"]
+"src/interpretant/corpus/audit.py" = ["RUF007"]
+"src/interpretant/corpus/files.py" = ["D205", "D209"]
+"src/interpretant/corpus/lemmas.py" = ["D102", "D103", "D205", "D209", "D403", "FBT001", "FBT002"]
+"src/interpretant/corpus/openalex.py" = ["D101", "D102", "D103", "D205", "D209", "FBT001", "FBT002"]
+"src/interpretant/corpus/phrases.py" = ["D102"]
+"src/interpretant/corpus/quality.py" = ["D103", "D205", "D209"]
+"src/interpretant/drift/classifier.py" = ["D103", "D205", "D209", "D301"]
+"src/interpretant/drift/grid.py" = ["D101", "FBT003"]
+"src/interpretant/drift/labels.py" = ["D102", "D103", "D205", "D209"]
+"src/interpretant/drift/pairs.py" = ["ANN401", "D102", "D205", "D209", "FBT001", "FBT002"]
+"src/interpretant/drift/senses.py" = ["D205", "D209", "FBT001", "FBT002"]
+"src/interpretant/embedding/grid.py" = ["D101", "D102", "D205", "D209"]
+"src/interpretant/embedding/twec.py" = ["ANN401", "D102"]
+"src/interpretant/predictions.py" = ["D205", "D209", "FBT001", "T201"]
+"tests/test_predictions.py" = ["FBT001", "FBT003"]
 
 [format]
 quote-style = "double"

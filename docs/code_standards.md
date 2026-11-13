@@ -142,5 +142,10 @@ checked by a tool, the tool decides; the rest is checked in review (see Enforcem
 | Banned abbreviations, single-letter names, test names | `tests/test_code_standards.py`, run with the test suite |
 | Verb fit, stutter, boolean question form, docstring content, self-documenting code, function size | review: the code-style reviewer agent at the end of each rebuild phase, against this document |
 
-pre-commit runs every automatic layer before a commit and CI runs the same. The rules are switched
-on at the start of rebuild phase 1; older modules are brought in line as they are rebuilt.
+pre-commit runs every automatic layer before a commit (install once with
+`uv run pre-commit install`; run by hand with `uv run pre-commit run --all-files`), and CI runs the
+same. The rules were switched on on 2026-11-13. Modules written before them are listed with
+exactly the rules they break today, in the legacy block of `.ruff.toml` and in `LEGACY` in
+`tests/test_code_standards.py`; a module leaves both lists when it is rebuilt, and no entry is
+ever added. import-linter's layer contract is added when the new packages exist (rebuild
+phase 1). vulture runs at 80% confidence, the level at which its findings are dependable.

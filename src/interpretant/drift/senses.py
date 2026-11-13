@@ -20,7 +20,6 @@ from pathlib import Path
 from interpretant.corpus.openalex import OpenAlexSource, cell_path, strip_boilerplate
 
 CAP = 500
-SENSE_RANGE = range(2, 11)
 CONTEXT_WORDS = 100
 
 Abstracts = Mapping[tuple[str, int], Sequence[tuple[str, str]]]
