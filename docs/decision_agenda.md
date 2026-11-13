@@ -1286,7 +1286,8 @@ The sized tasks come to about 4 hours; three are not yet sized.
   round E and round Q label files (to be sorted into `curated/`).
 - [ ] `related_work.md`: add the sources cited in the steps (the second review's verified links
   are kept with its sources, outside the repository).
-- [ ] `docs/experiments.md`: written before any step 1 deletion.
+- [x] `docs/experiments.md`: the record of past experiments, written before any step 1 deletion
+  (37 entries; the README points to it).
 - [ ] Push: the local commits wait for the author's go.
 - [ ] Devlog 07: waiting for the author's review.
 - [ ] bazzite's copy of the repository: behind the Mac; sync before any GPU run.
