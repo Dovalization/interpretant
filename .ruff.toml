@@ -1,5 +1,7 @@
 line-length = 100
 target-version = "py311"
+# Kept as a record of how the decision agenda's numbers were measured, not maintained code.
+extend-exclude = ["scripts/evidence"]
 
 [lint]
 select = ["E", "F", "W", "I", "UP", "ANN", "N", "B", "C4", "SIM"]
