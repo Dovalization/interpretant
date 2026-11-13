@@ -682,164 +682,207 @@ experiment 4, the question lapses and gensim goes with it.
 
 ## Step 7a: finding senses
 
-Not settled (the author, 2026-11-12): hand-written lists are the best so far on one benchmark;
-each automatic method failed in one configuration, not as a method.
+Inputs: rounds Y, Q, Z and C–C″; `docs/related_work.md`; the literature below. Hand-written lists
+are the best so far on one benchmark; each automatic method failed in one configuration, not as a
+method:
 
-| Method | What was tried | Result | Untried |
-|---|---|---|---|
-| Hand-written lists | Rounds Y, Q (DWUG), corpus lists | 0.69–0.80 | — |
-| Substitutes and neighbours | Round Q: ModernBERT "or even [MASK]", Louvain communities | 0.39–0.59 | Other patterns, encoders, graph methods |
-| Dictionaries | Round Z (WordNet); Wiktionary as a gap check | about 0.18 below hand-written; two gaps in four words | Wiktionary lists as such |
-| Clustering usage vectors | Rounds C, C′, C″: SciBERT, KMeans, k by silhouette | failed calibration | XL-LEXEME vectors from the store, other algorithms (agglomerative, affinity propagation, graph clustering), clustering only the usages no listed sense fits (gaps) |
+| Method | What was tried | Result |
+|---|---|---|
+| Hand-written lists | Rounds Y, Q (DWUG), corpus lists | 0.69–0.80 (rank correlation with human graded change) |
+| Substitutes and neighbours | Round Q: ModernBERT "or even [MASK]", Louvain communities | 0.39–0.59 |
+| Dictionaries | Round Z (WordNet); Wiktionary as a gap check | about 0.18 below hand-written; two gaps in four words |
+| Clustering usage vectors | Rounds C, C′, C″: SciBERT, KMeans, k by silhouette | failed calibration |
 
-What failed in rounds C–C″ was the rule turning clusters into a sense's share on unseen data;
-the encoder did place every known sense (`docs/related_work.md`). Clustering may therefore serve
-to find senses (build or check a list) even if counting is done another way.
+What failed in rounds C–C″ was the rule turning clusters into a sense's share on unseen data; the
+encoder did place every known sense. Clustering may therefore serve to find senses even if
+counting is done another way.
 
-Clustering approaches to consider (the author, 2026-11-12: try different approaches):
+*Literature:* under equal conditions APD predicts graded change best, and sense-based approaches
+correlate less while in principle explaining more; XL-LEXEME is the best embedding model for
+sense induction (Periti and Tahmasebi 2024: adjusted Rand index against DWUG EN's human clusters
+0.273, BERT 0.136, both by correlation clustering of pair similarities; GPT-4 reached 0.340; the
+0.633 they quote for annotators is agreement on pair judgements, Krippendorff's alpha, not a
+ceiling on that scale). DWUG's human clusters come from correlation clustering of a usage-pair
+graph (Schlechtweg et al. 2021); predicting the missing edges before clustering improves
+agreement with human senses on graphs that already hold human-judged pairs (Noble, Periti and
+Tahmasebi 2024), which the corpus lacks. K-Means and affinity propagation are the most used
+algorithms, agglomerative clustering and HDBSCAN also in use (Montanelli and Periti's survey);
+sense induction is still open. Substitute-based induction at scale (Eyal et al. 2022, Louvain on
+substitute graphs) was applied to 12 million scholarly abstracts by Lucy et al. 2023, who induce
+senses once on a pooled sample and score each sense per subfield, validated against Wiktionary's
+field labels. The hand-written lists' 0.69–0.80 and clustering's 0.27 are different measures and
+are not compared directly.
 
-| Approach | Source |
-|---|---|
-| XL-LEXEME vectors from the store (adjusted Rand index against human clusters 0.27, BERT 0.14, both from correlation clustering of pair similarities; the 0.63 quoted for annotators is their agreement on pair judgements, Krippendorff's alpha, not a ceiling on that scale) | Periti and Tahmasebi 2024, Table 2, in `related_work.md` |
-| Substitutes grouped by community detection at scale (senses induced once on a pooled sample, then scored per field) | Eyal et al. 2022; Lucy et al. 2023 ("not done" in `related_work.md`) |
-| Correlation clustering over pairwise XL-LEXEME similarities, mirroring how DWUG's human clusters were built from pair judgements | Claude's suggestion; to be read before it is relied on |
-| Algorithms without a fixed number of senses: agglomerative with a distance threshold, affinity propagation, HDBSCAN (which leaves outliers unassigned) | Claude's suggestion |
-| Hybrid: hand-written senses as seeds, clustering only the usages no listed sense fits | Claude's suggestion |
-| Clustering generated definitions (a comparison arm, since it needs a generative model) | Giulianelli et al. 2023, in `related_work.md` |
-
-Benchmarks: DWUG's human clusters (round Y's bar 0.273; the annotators' 0.63 is agreement on pair
-judgements, a different scale) and the author's labels on the corpus.
-
-Decide: which candidates are tried, on which benchmark, and against the hand-written lists.
-Settles the step 1b code marked "decide with step 7a".
-
-Decision (2026-11-12), after checking the literature and the tools:
-
-- Literature: under equal conditions APD predicts graded change best, while sense-based
-  approaches correlate less but explain more, and XL-LEXEME is the best model for sense induction
-  too (Periti and Tahmasebi 2024); DWUG's human clusters come from correlation clustering of a
-  usage-pair graph (Schlechtweg et al. 2021), and filling the missing pairs with a model before
-  clustering improves agreement with human senses (Noble, Periti and Tahmasebi 2024, on graphs
-  that already hold human-judged pairs, which the corpus lacks); K-Means and affinity
-  propagation are the most used algorithms, with agglomerative clustering and HDBSCAN also in use
-  (Montanelli and Periti's survey); sense induction is still open. The hand-written lists'
-  0.69–0.80 (rank correlation with human graded change) and clustering's 0.27 (agreement with
-  human clusters) are different measures and are not compared directly.
-- 7a.1: automatic methods serve first as an aid to the hand-written lists (proposing senses,
+- **7a.1** Automatic methods serve first as an aid to the hand-written lists (proposing senses,
   finding usages no listed sense fits, for the author's review), not as a replacement.
-- 7a.2, established first: (1) XL-LEXEME pair scores with correlation clustering, as DWUG built
+- **7a.2** Established first: (1) XL-LEXEME pair scores with correlation clustering, as DWUG built
   its clusters; (2) XL-LEXEME vectors with affinity propagation, agglomerative clustering
-  (distance threshold) or HDBSCAN; (3) substitutes grouped by community detection at scale (Eyal
-  et al. 2022; Lucy et al. 2023) with **Leiden** (Traag et al. 2019; Louvain's successor, which
-  guarantees well-connected groups; native from networkx 3.7, A17), label propagation as a quick
-  check; then exploratory (4) hand-written senses as seeds, clustering only the usages no listed
-  sense fits; (5) generated definitions as a comparison arm only.
-- 7a.3: scored by agreement with DWUG's human clusters (adjusted Rand index) on the openly
-  published DWUG datasets (English, German, Swedish and others), by the same measure as the
-  hand-written lists, and on the corpus by the author's labels (step 7).
-- Tools: scikit-learn 1.8 (`AffinityPropagation`, `AgglomerativeClustering`, `HDBSCAN`) and
-  networkx (`label_propagation_communities`; `leiden_communities` from 3.7, A17), both installed;
-  `correlation-clustering` 2.0.0 (April 2026, by DWUG's first author, depending only on networkx,
-  numpy and scipy; BSD-3-Clause, A18) is the one new dependency. DWUG's `WUGs` scripts (no
-  package, conflicting licences) and `chinese-whispers` (last release July 2024) are references
-  only.
+  (distance threshold) or HDBSCAN (which leaves outliers unassigned); (3) substitutes grouped by
+  community detection at scale (Eyal et al. 2022; Lucy et al. 2023) with **Leiden** (Traag,
+  Waltman and van Eck 2019: Louvain's successor, which guarantees connected communities),
+  label propagation as a quick check. Then exploratory: (4) hand-written senses as seeds,
+  clustering only the usages no listed sense fits; (5) clustering generated definitions
+  (Giulianelli et al. 2023), a comparison arm only, since it needs a generative model.
+- **7a.3** Scored by agreement with DWUG's human clusters (adjusted Rand index) on the openly
+  published DWUG datasets (English, German, Swedish and others), the hand-written lists by the
+  same measure, and on the corpus by the author's labels (step 7). Round Y's bar is 0.273.
+- **7a.4 The lists are frozen before labelling.** The aids run on the rebuilt store, the author
+  reviews the proposed senses, the lists are frozen as a numbered version, and only then does the
+  author label. A gap found after the freeze (for example among usages a counter puts under "no
+  listed sense fits") makes a new list version: the author re-labels only the items marked "other
+  or unclear", the frozen version's counts stay the confirmatory result, and the new version's
+  are reported beside them as exploratory. *Why:* a sense added after the labels and shares exist
+  would leave the labels against the old list and is a forking path (Gelman and Loken 2013);
+  annotation practice revises the scheme in a pilot, freezes it, then annotates, and re-annotates
+  what a later change touches (OntoNotes revised sense groupings until agreement between
+  annotators reached 90%, Hovy et al. 2006; content analysis pretests and freezes its codebook;
+  Pustejovsky and Stubbs's MATTER cycle versions its guidelines).
+- **Tools:** scikit-learn 1.8 (`AffinityPropagation`, `AgglomerativeClustering`, `HDBSCAN`);
+  networkx (`label_propagation_communities`; `leiden_communities` needs networkx 3.7 or later,
+  since in the installed 3.6.1 it is a stub for other backends and raises `NotImplementedError`;
+  its default quality function is the Constant Potts Model, not modularity, so the choice is set
+  explicitly and stated when results are compared with Louvain's); `correlation-clustering` 2.0.0
+  (April 2026, by DWUG's first author, depending only on networkx, numpy and scipy; BSD-3-Clause
+  in PyPI's `license_expression` and the repository's licence file), the one new dependency.
+  DWUG's `WUGs` scripts (no package, conflicting licences) and `chinese-whispers` (last release
+  July 2024) are references only.
 
 ## Step 7: counting senses
 
-- The sense-counting draft's decisions: which words; the author's labels (about 30 per word,
-  across decades); fine-tuning the definition reader or not.
-- Labellers: one Claude path (the Batch API) plus JEV; the CLI `Labeller` deleted. Language
-  models stay a comparison arm.
-- One classifier, one divergence function and one sense-list schema (two today) in the library.
-- Cue words move to the spaCy `Matcher`.
-- Settles the step 1b scripts marked "decide with step 7".
+Inputs: the sense-counting draft; check 1a; rounds E, Q and Y; the literature below.
 
-Decisions (2026-11-12):
+**7.1 Words.** The first set is eight words with reviewed lists: documented changes *attention*,
+*network*, *platform*, *alignment* (`corpus_v2.toml` and its working draft); arriving senses
+*prompt* (the anachronism test) and *hallucination* (`round_a_prime.toml`); stable checks
+*component* and *having*, the check 2b words whose pairs the author judged, with no documented
+change. Second wave: *transformer*, *embedding*, *cloud*, and the held-out set of 6.2, where
+counting is confirmed (the documented changes are development material here too). Fixes from
+checking the lists against steps 2–4: cues written for split hyphens (*attention*'s `<<self`,
+`<<head`) stop working when hyphenated words stay whole, so compounds recorded in 4.2 become cues
+when cues move to spaCy's `Matcher`; counting uses every reading a list covers (*prompt*'s
+adjective and verb senses), while the in-scope flag of 4.1 serves detection; *having* is matched
+by form (its reading: verb or auxiliary); *network* gains its own actor-network sense (Latour,
+Callon, Law; 214 uses), identified by the compound and kept separable, added to
+`corpus_v4_draft.toml` with the social sense excluding its cues (the frozen version 2 is
+unchanged).
 
-- 7.1: the first set is eight words with reviewed lists: documented changes *attention*,
-  *network*, *platform*, *alignment* (`corpus_v2.toml` and its working draft); arriving senses
-  *prompt* (the anachronism test) and *hallucination* (`round_a_prime.toml`); stable checks
-  *component* and *having*, the check 2b words whose pairs the author judged, with no documented
-  change. Second wave: *transformer*, *embedding*, *cloud*, and the held-out set of step 6, where
-  counting is confirmed (the documented changes are development material here too). Fixes from
-  checking the lists against steps 2–4: cues written for split hyphens (*attention*'s `<<self`,
-  `<<head`) stop working when hyphenated words stay whole, so compounds recorded in 4.2 become
-  cues when cues move to spaCy's `Matcher`; counting uses every reading a list covers (*prompt*'s
-  adjective and verb senses), while the intended-reading flag of 4.1 serves detection; the word
-  list gains a match-by-form option, since *having* is a form, not a lemma (its reading: verb or
-  auxiliary); *network* gains its own actor-network sense (Latour, Callon, Law; 214 uses),
-  identified by the compound and kept separable, added to `corpus_v4_draft.toml` with the social
-  sense excluding its cues (the frozen version 2 is unchanged).
-- 7.2: the author's labels are the calibration set (each counter's error rates for the
-  correction of 7.4) and its test; they must be human, blind, random and spread across periods,
-  since the earlier correction failed on error rates measured from easy cue-labelled usages.
-  About an hour, in sittings of about 15 minutes: refine check 1a (the author's 280 blind,
-  random, cross-period yes/no judgements on *attention*, *network*, *platform*, *alignment*,
-  *prompt*) by answering "which sense?" for its 183 "no" and "unclear" items (the 97 "yes" items
-  are the changing sense already), about 45 minutes; new blind labels for *hallucination*
-  (psychology and AI, both periods, about 30) and the stable checks *component* and *having*
-  (about 30), drawn at random from the rebuilt store; each list's senses plus "other or
-  unclear", on the keystroke judging page of step 4b. Claude's 300 development labels are not
-  ground truth; verifying them (about 30 minutes, with about 30 items labelled blind first to
-  measure anchoring) is held in reserve for words whose results come out uncertain, and doubles
-  as a measure of Claude's labelling. When: after the store rebuild and the consolidation of the
-  sense lists (7.5), before the counters are evaluated.
-- 7.3: the counters, in order: (1) the cue classifier, the current baseline; (1b) a supervised
-  classifier (scikit-learn logistic regression on XL-LEXEME vectors, strongly regularised)
-  trained on the author's random cross-period labels, the standard baseline, which removes the
-  cue classifier's era bias at its source; (2) nearest sense by examples, in the manner of LMMS
-  (Loureiro and Jorge 2019; LMMS Reloaded 2022): sense vectors averaged from XL-LEXEME vectors of
-  labelled usages and each list's example, which suits XL-LEXEME's training on usage pairs; (3)
-  nearest definition, zero-shot, expected weaker since XL-LEXEME was not trained on definitions;
-  (4) cues as spaCy `Matcher` patterns with recorded compounds as cues, alone or cue-first before
-  (2); (5) a bi-encoder trained on definitions (Blevins and Zettlemoyer 2020) only if the others
-  fall short, trained by the project since the original code is archived (January 2024, PyTorch
-  1.2, non-commercial licence); Sonnet and JEV as the comparison arm. Every counter: outputs
-  probabilities (for probabilistic adjusted counting, 7.4) and can answer "no listed sense fits"
-  (a cut-off set on the author's "other or unclear" items; those usages feed step 7a's gap
-  finding); is evaluated out of fold, so labels never build and grade the same counter; is
-  scored per period, with sense vectors built from examples balanced across periods; and must
-  pass two hard tests, anachronism (no language-model *prompt* before about 2020, no AI
-  *hallucination* before the late 2010s) and stability (no invented change in *component* and
-  *having*).
-- 7.4: proportions by quantification with **QuaPy** (0.2.3, October 2026, BSD; it brings pandas
-  back as an installed dependency, which the author accepted; the project's code stays on
-  Polars), through a small adapter that passes a counter's probabilities through as a stand-in
-  classifier (tested in a throwaway environment with the project's versions). Candidates: PACC,
-  ACC and EM, the method chosen per word by QuaPy's artificial-prevalence protocol run on the
-  author's labels, since no method wins everywhere (Schumacher et al., JMLR 2025; ACC, PACC and EM
-  stand out in Moreo and Sebastiani's re-evaluation). EM only with bias-corrected temperature
-  scaling (BCTS), done by QuaPy: uncalibrated EM collapsed in tests and is known to fail with
-  several classes or uncalibrated probabilities (Esuli, Molinari and Sebastiani 2020), while EM
-  with BCTS is hard to beat (Alexandari, Kundaje and Shrikumar 2020); plain temperature scaling
-  still failed. Plain classify-and-count is always reported alongside as the baseline (with its
-  adjusted variants it is near state of the art once tuned: Moreo and Sebastiani 2021; alone it is
-  weaker on average: Schumacher et al. 2025). Bootstrap intervals resample both the cell's usages
-  and the author's labels, since error rates estimated from 50–70 labels per word are noisy and
-  the corrections amplify that (a synthetic test showed adjusted counts overshooting); where a
-  key word's interval is too wide, more labels for that word only. The methods assume a sense
-  looks alike in every period; where a word's senses change how they are expressed (computing
-  *attention*), error rates are estimated per period (guarded by 7.3's per-period scoring).
-  Reference for intervals: *Learning to Quantify* (Esuli, Fabris, Moreo and Sebastiani 2023, open
-  access). To add to `related_work.md`: these sources. *Amended by A16:* A3's sampling weights
-  are applied in the project's own code, and labelled cells report the stratified estimate as the
-  reference.
-- 7.5: one Claude labelling path (the Message Batches API `BatchLabeller`; the command-line
-  `Labeller` is deleted); one divergence function (scipy's `jensenshannon`, which returns the
-  Jensen-Shannon distance, the square root of the divergence; squared where the divergence is
-  meant, and every report names which); one sense-list
-  format (the corpus format: keys, definitions, examples, cues, exclusions), into which the
-  final lists are written before the author labels (7.2). The step 1b scripts left for step 7
-  are superseded and go once their results are in `docs/experiments.md`:
-  `score_labels_classifier`, `score_labels_corpus`, `score_labels_head_to_head`,
-  `score_labels_known`, `finetune_classifier` and `dev_harness` (its last experiment, decade-
-  balanced weights and temperature scaling, committed first as a record); `scripts/review/` goes
-  once the keystroke judging page (4b, 7.2) exists, adapted from its template.
-- 7.6: the counters are used as they are first; fine-tuning (XL-LEXEME's top layers, or a
-  trained bi-encoder) only if they fall short on the author's labels, since labels are few and
-  fine-tuning risks learning the era again.
+**7.2 The author's labels.** They train counter 1b, build counter 2's sense vectors, set the "no
+sense fits" cut-off, measure each counter's error rates for the correction, choose the counting
+method and test it all, so they must be human, blind, random and spread across periods (the
+earlier correction failed on error rates measured from easy cue-labelled usages), and they are
+split and sampled so they can carry those jobs:
 
-Step 7 decided (2026-11-12).
+- *Building needs few labels:* averaging contextual vectors per sense holds up with about three
+  examples per sense (Loureiro et al., *Computational Linguistics* 2021, shown for coarse noun
+  senses with BERT), drawn from the labels and each list's example.
+- *Error rates are the binding constraint:* labels are drawn by stratified sampling, by period
+  and by the sense a baseline counter predicts, with inclusion probabilities recorded and
+  inverse-probability weights in every estimate, so rare senses are covered without bias
+  (stratified evaluation: Kumar and Raj; importance-weighted evaluation for rare categories under
+  300 labels: Poms et al. 2021). At least about ten labels per sense in each period where it
+  exists; below that, pooled error rates with honest intervals. Period balance applies only where
+  a sense exists (an arriving sense has no earlier examples).
+- *A written nested split per word:* an outer split only for testing, building and calibration
+  inside, so no label builds and grades the same thing (Varma and Simon 2006).
+- *Check 1a's labels are mapped, not assumed comparable.* Its 280 blind yes/no judgements on
+  *attention*, *network*, *platform*, *alignment* and *prompt* stored no work id; rerunning its
+  seeded sampling recovered 279 (`first_review/first_mention_1a.py`). The author refines them by
+  answering "which sense?" for the 183 "no" and "unclear" items (the 97 "yes" items are the
+  changing sense already; about 45 minutes). 71% come from abstracts with one mention, where the
+  first mention is the random mention; "unclear" was 2–5% whatever the position (7 items, weak
+  evidence). The mapped labels serve building and error rates, each recording its mention
+  position and whether it was the only mention; once the new random-mention labels exist, one
+  comparison on multi-mention abstracts checks first against random mentions, and only a gap
+  there removes the 1a labels from the error-rate set (sample selection bias: Zadrozny 2004).
+  Items whose abstract the new cleaning drops are excluded; items whose sentence reads
+  differently are listed for the author.
+- *Volume and timing:* about 200 new labels (about 1–1.5 hours, in sittings of about 15 minutes)
+  beside check 1a's, more only for words whose intervals come out too wide; each list's senses
+  plus "other or unclear", on the keystroke judging page of 4b. After the store rebuild and the
+  freezing of the lists (7a.4), before the counters are evaluated; labels for held-out words only
+  after the confirmation plan is frozen (6.2). Claude's 300 development labels are not ground
+  truth; verifying them (about 30 minutes, with about 30 items labelled blind first to measure
+  anchoring) is held in reserve for words whose results come out uncertain, and doubles as a
+  measure of Claude's labelling.
+
+**7.3 The counters**, in order: (1) the cue classifier, the current baseline; (1b) a supervised
+classifier (scikit-learn logistic regression on XL-LEXEME vectors, strongly regularised) trained
+on the author's random cross-period labels, the standard baseline, which removes the cue
+classifier's era bias at its source; (2) nearest sense by examples, in the manner of LMMS
+(Loureiro and Jorge 2019; LMMS Reloaded 2022): sense vectors averaged from XL-LEXEME vectors of
+labelled usages and each list's example, which suits XL-LEXEME's training on usage pairs; (3)
+nearest definition, zero-shot, expected weaker (with XL-LEXEME, example-based senses beat
+gloss-based ones for English in Lautenschlager et al. 2024, and a gloss carries no target word to
+mark); (4) cues as spaCy `Matcher` patterns with recorded compounds as cues, alone or cue-first
+before (2); (5) a bi-encoder trained on definitions (Blevins and Zettlemoyer 2020) only if the
+others fall short, trained by the project since the original code is archived (January 2024,
+PyTorch 1.2, non-commercial licence); Sonnet and JEV as the comparison arm. Every counter outputs
+probabilities and can answer "no listed sense fits" (a cut-off set on the author's "other or
+unclear" items); is evaluated out of fold; is scored per period, with sense vectors built from
+examples balanced across periods; and must pass two hard tests, anachronism (no language-model
+*prompt* before about 2020, no AI *hallucination* before the late 2010s) and stability (no
+invented change in *component* and *having*).
+
+**7.4 Proportions.** Each cell's sense shares, estimated two ways:
+
+- **Labelled cells: the stratified estimate is the reference.** Because the labels are a random
+  sample of the cells themselves, within each predicted-sense stratum the labelled share of each
+  true sense, weighted by the stratum's size, estimates the cell's shares with no assumption
+  about the counter (the stratified estimator of survey sampling; prediction-powered inference,
+  Angelopoulos et al. 2023, and design-based supervised learning, Egami et al. 2023, are its
+  recent forms). Written in the project's own code; `ppi-python` (0.2.3, December 2024, MIT,
+  takes weights) is the library route if its intervals are wanted.
+- **Every cell: adjusted counting.** ACC and PACC are computed in the project's own code with a
+  confusion matrix weighted by the inverse inclusion probabilities and one constrained
+  least-squares solve (`scipy.optimize.nnls`), since QuaPy 0.2.3 fits its adjusted counts from
+  predictions and labels only, with no sample weights. EM only with bias-corrected temperature
+  scaling (BCTS), through **QuaPy** (0.2.3, October 2026, BSD; it brings pandas back as an
+  installed dependency, which the author accepted; the project's code stays on Polars), fed a
+  sample redrawn in proportion to the weights: uncalibrated EM collapsed in tests and is reliable
+  only with few classes and a calibrated classifier (Esuli, Molinari and Sebastiani 2020), while
+  EM with BCTS is hard to beat (Alexandari, Kundaje and Shrikumar 2020). The method is chosen
+  once, across all words, by QuaPy's artificial-prevalence protocol on the author's labels, since
+  no method wins everywhere and per-word labels are too thin to choose by word (Schumacher et al.,
+  JMLR 2025; ACC, PACC and EM stand out in Moreo and Sebastiani's re-evaluation; with small
+  multiclass training sets Schumacher et al. find EM among the most robust). Plain
+  classify-and-count is always reported as the baseline (with its adjusted variants it is near
+  state of the art once tuned: Moreo and Sebastiani 2021; alone it is weaker on average:
+  Schumacher et al. 2025).
+- **Pooled or per-period error rates.** The methods assume a sense looks alike in every period;
+  in labelled cells the gap between the stratified estimate and the pooled adjusted estimate
+  tests that, and where it fails (computing *attention*, whose senses changed how they are
+  expressed), error rates are estimated per period, given about ten labels per sense there.
+- **Intervals** by bootstrap, resampling both the cell's usages and the author's labels, since
+  error rates from few labels are noisy and the corrections amplify that (a synthetic test showed
+  adjusted counts overshooting; with 100 training labels, analytic intervals covered only 64–75%,
+  and bootstrapping training and test samples together restored 91–95%: Tasche 2019). Vaz,
+  Izbicki and Stern (*JMLR* 2019) give intervals for two classes and large samples only, and show
+  that the precision cannot beat what the labels alone allow. Where a key word's interval is too
+  wide, more labels for that word only. Reference: *Learning to Quantify* (Esuli, Fabris, Moreo
+  and Sebastiani 2023, open access).
+
+*Why weights and the stratified reference* (simulated: three senses, 1,000 usages per cell, 30
+labels per cell stratified by predicted sense, `second_review/share_estimators.py`): with the
+weights ignored, adjusted counting was as biased as classify-and-count (−0.040 on a rise of
+0.25); with them, unbiased. With a counter equally good in both periods, pooled adjusted counting
+is the most precise (root-mean-square error 0.033 against 0.053 for the stratified estimate);
+with a counter worse at the new sense in the early period, pooled adjusted counting is off by
++0.05 and the stratified estimate is unbiased; per-period adjusted counting and the stratified
+estimate coincide. This simulation becomes a test of the quantification module.
+
+**7.5 One of each.** One Claude labelling path (the Message Batches API `BatchLabeller`; the
+command-line `Labeller` is deleted). One divergence function: scipy's `jensenshannon`, which
+returns the Jensen-Shannon distance, the square root of the divergence (squared where the
+divergence is meant, and every report names which). One sense-list format (the corpus format:
+keys, definitions, examples, cues, exclusions, and a version number), into which the lists are
+written before they are frozen (7a.4). Cue words move to spaCy's `Matcher`.
+
+**7.6 Fine-tuning.** The counters are used as they are first; fine-tuning (XL-LEXEME's top layers,
+or a trained bi-encoder) only if they fall short on the author's labels, since labels are few and
+fine-tuning risks learning the era again.
+
+Replaces: two Claude labellers, two sense-list schemas, divergence written three times, logistic
+regression written four times.
 
 ## Step 8: code layout (follows from steps 1–7)
 
