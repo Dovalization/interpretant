@@ -53,7 +53,7 @@ frozen-but-runnable code.
 
 ## Step 1: what stays in the project
 
-*Done 2026-11-13* (commits `81d1559` to `1863eb1`): the deletions below ran in seven groups,
+*Done 2026-11-13* (commits `81d1559` to `b310609`): the deletions below ran in seven groups,
 checks passing after each; the gold-pair judgements moved to `curated/`; the old results were set
 aside by kind in `data/retired/static/` (the grid's tables and the 10 GB of models),
 `data/retired/whole_field/` and `data/retired/sense_clustering/`, while the four XL-LEXEME vector
