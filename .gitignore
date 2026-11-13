@@ -31,6 +31,8 @@ logs/*.log
 # Data & models
 data/raw/*
 data/processed/*
+# The annotation cache (DocBin), rebuildable
+data/interim/
 data/external/*
 data/retired/
 models/*

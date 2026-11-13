@@ -73,6 +73,8 @@ addopts = "-v --tb=short"
 [tool.mypy]
 python_version = "3.11"
 strict = true
+# pydantic's plugin types model and settings initialisers (settings fields may come from files).
+plugins = ["pydantic.mypy"]
 mypy_path = "src"
 namespace_packages = true
 explicit_package_bases = true
@@ -87,6 +89,11 @@ ignore_missing_imports = true
 module = ["spacy.symbols", "spacy.tokenizer", "srsly", "datasketch"]
 ignore_missing_imports = true
 
+# pydantic-settings calls settings_customise_sources with these keyword arguments, so an override
+# keeps their names even when it ignores them.
+[tool.vulture]
+ignore_names = ["env_settings", "dotenv_settings", "file_secret_settings"]
+
 [tool.importlinter]
 root_packages = ["interpretant"]
 
@@ -97,10 +104,23 @@ type = "forbidden"
 source_modules = ["interpretant.catalog"]
 forbidden_modules = [
     "interpretant.__main__",
+    "interpretant.cli",
     "interpretant.corpus",
     "interpretant.drift",
     "interpretant.embedding",
+    "interpretant.pipelines",
     "interpretant.predictions",
+]
+
+[[tool.importlinter.contracts]]
+name = "The command line sits on the pipelines, which compose the jobs over the catalog"
+type = "layers"
+layers = [
+    "interpretant.__main__",
+    "interpretant.cli",
+    "interpretant.pipelines",
+    "interpretant.corpus",
+    "interpretant.catalog",
 ]
 
 [tool.uv.sources]

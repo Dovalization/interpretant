@@ -9,6 +9,8 @@ from rich.console import Console
 from rich.table import Table
 from tqdm import tqdm
 
+from interpretant.cli.build_corpus import build_corpus_command
+
 console = Console()
 
 
@@ -16,6 +18,9 @@ console = Console()
 @click.version_option(package_name="interpretant")
 def cli() -> None:
     """interpretant — diachronic semantic drift tracker for academic corpora."""
+
+
+cli.add_command(build_corpus_command)
 
 
 # ---------------------------------------------------------------------------
@@ -83,7 +88,7 @@ def corpus_openalex_download(
     unknown = set(fields) - FIELDS.keys()
     if unknown:
         raise click.BadParameter(f"unknown fields {sorted(unknown)}; choose from {sorted(FIELDS)}")
-    client = OpenAlexClient(OpenAlexSettings().openalex_api_key)  # type: ignore[call-arg]
+    client = OpenAlexClient(OpenAlexSettings().openalex_api_key)
     for field in fields or FIELDS:
         for decade in range(start, end, 10):
             try:
@@ -116,7 +121,7 @@ def corpus_openalex_sources(
         fetch_sources,
     )
 
-    client = OpenAlexClient(OpenAlexSettings().openalex_api_key)  # type: ignore[call-arg]
+    client = OpenAlexClient(OpenAlexSettings().openalex_api_key)
     for field in fields:
         for decade in decades:
             output = fetch_sources(client, raw_dir, field, decade)

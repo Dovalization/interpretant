@@ -365,7 +365,7 @@ def run_batch(
 
     results_path = record / "results.jsonl"
     if not results_path.exists():
-        client = anthropic.Anthropic(api_key=AnthropicSettings().anthropic_api_key)  # type: ignore[call-arg]
+        client = anthropic.Anthropic(api_key=AnthropicSettings().anthropic_api_key)
         batch_path = record / "batch.json"
         if batch_path.exists():
             batch_id = json.loads(batch_path.read_text(encoding="utf-8"))["id"]
@@ -461,7 +461,7 @@ class JevLabeller:
             typesafe_sdk.TypeSafeRateLimitError,
         )
         client = typesafe_sdk.TypeSafeClient(
-            api_key=TypeSafeSettings().typesafe_api_key,  # type: ignore[call-arg]
+            api_key=TypeSafeSettings().typesafe_api_key,
             model=self.model,
         )
         record.mkdir(parents=True, exist_ok=True)

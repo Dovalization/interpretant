@@ -37,6 +37,14 @@ A cell is one `<field>_<decade>` text file: one document per line, whitespace-to
 phrases joined with `_`. Layers: `openalex` (the equal-size grid) and `openalex_full` (whole
 fields, within-field trajectories only). The `books` layer was retired on 2026-11-11.
 
+The rebuild's stages so far, with their settings in `params.yaml` and their data in
+`catalog.yaml`:
+
+```
+build-corpus [--field ai --decade 2010 --process-count 8]   data/processed/abstracts/<part>.parquet,
+                                                             data/interim/annotations/<part>.spacy
+```
+
 ## Pre-registration
 
 Predictions are written to `docs/predictions.md` or `docs/predictions_cross_perplexity.md`
@@ -52,6 +60,9 @@ analysis: predictions first, in their own commit.
 
 - `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift grid`). Commands parse options,
   call one library function and print; the loops live in the library with tests.
+- `cli/` and `pipelines/` (rebuild): one thin command per pipeline (`build-corpus`), and the
+  pipelines composing the jobs, each with its pydantic settings object reading `params.yaml`.
+  Import contracts: `__main__` → `cli` → `pipelines` → `corpus` → `catalog`.
 - `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`), the
   abstracts table's pandera schema and its parquet parts, the curated cleaning rules and spaCy
   patterns (`load_cleaning_patterns`), and the annotation cache (DocBin). It imports no other
