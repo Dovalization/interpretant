@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import pytest
 from spacy.language import Language
+from spacy.tokenizer import Tokenizer
 
 from interpretant.catalog import CatalogConfig, CleaningPatterns, load_annotations, save_annotations
 from interpretant.corpus.annotation import (
@@ -28,6 +29,8 @@ from interpretant.corpus.language import (
 SHARE = 0.5
 ENGLISH_SENTENCE = "Attention mechanisms improve machine translation in many settings and tasks."
 GERMAN_SENTENCE = "Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung."
+# Numbers and abbreviations the glued-punctuation rules must leave whole.
+WHOLE_TOKENS = ("0.05", "U.S.", "Fig.", "Eq.", "0.922", "3.5")
 
 
 def raw(text: str, work: int = 1) -> RawAbstract:
@@ -157,6 +160,69 @@ def test_annotate_abstracts_keeps_abbreviations_inside_sentences(
         "As shown in Fig. 2, the effect holds (Smith et al. 2019), cf. Sect. 3.",
         "It is robust.",
     ]
+
+
+def test_annotate_abstracts_keeps_the_audit_abbreviations_inside_sentences(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    text = (
+        "Two measures, viz. recall and precision, rose (pp. 12-14, Vol. 3, vol. 2), "
+        "resp. 4% and 6%, from ca. 1950 on. It is robust."
+    )
+    row = annotate(text, nlp, patterns)
+    sentences = [row.text[sentence.start : sentence.end] for sentence in row.sentences]
+    assert sentences == [text.removesuffix(" It is robust."), "It is robust."]
+
+
+@pytest.mark.parametrize(
+    ("text", "first"),
+    [
+        ("The fit was good (r = 0.922).In addition, it held.", "The fit was good (r = 0.922)."),
+        ("This was shown before (Ogles, 2004).This focus matters.", "(Ogles, 2004)."),
+        ("The commission met in 1950.French delegates came.", "The commission met in 1950."),
+        ("He called it the “New Frontier”.The phrase spread.", "the “New Frontier”."),
+        ("The score rose to 3.5.Then it fell back.", "The score rose to 3.5."),
+        ("Models were trained on two corpora.Results were mixed.", "on two corpora."),
+        ("Does attention help?Yes, in every setting.", "Does attention help?"),
+    ],
+    ids=["bracket", "citation", "year", "quote", "decimal", "two words", "question"],
+)
+def test_build_pipeline_starts_a_sentence_after_glued_punctuation(
+    text: str, first: str, nlp: Language
+) -> None:
+    sentences = [sentence.text for sentence in nlp(text).sents]
+    assert len(sentences) == 2
+    assert sentences[0].endswith(first)
+
+
+def test_build_pipeline_splits_glued_punctuation_and_brackets_off(nlp: Language) -> None:
+    tokenizer = nlp.tokenizer
+    assert isinstance(tokenizer, Tokenizer)
+    assert [text for _, text in tokenizer.explain("(r = 0.922).In")] == [
+        "(",
+        "r",
+        "=",
+        "0.922",
+        ")",
+        ".",
+        "In",
+    ]
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "The effect was significant at p < 0.05 in the U.S. sample.",
+        "As shown in Fig. 2 and Eq. 3, the gain is 0.922 on average.",
+        "Results improved by 3.5% (see Table 2).",
+    ],
+    ids=["p value and country", "figure and equation", "percentage"],
+)
+def test_build_pipeline_keeps_numbers_and_abbreviations_whole(text: str, nlp: Language) -> None:
+    doc = nlp(text)
+    assert len(list(doc.sents)) == 1
+    tokens = {token.text for token in doc}
+    assert {kept for kept in WHOLE_TOKENS if kept in text} <= tokens
 
 
 def test_build_pipeline_keeps_hyphenated_words_whole(nlp: Language) -> None:

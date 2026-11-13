@@ -1,12 +1,12 @@
 """The spaCy pass: tokens, sentences, tags, lemmas, entities and labelled removal spans.
 
 One pass annotates each repaired abstract (decision agenda, steps 2 and 4.9): sentences by
-``senter`` with abbreviation special cases, hyphenated words kept whole, DOIs kept as single
-tokens, and every cleaning pattern's matches written as labelled spans in
-``doc.spans["removals"]``. Sentence languages come from lingua, as the pipeline's last component
-(``corpus.language``). The keeping rules of the pass (2.3) drop an abstract with mojibake, an
-abstract-scope pattern, mostly another language or fewer than five words, and flag one whose
-"sentence" runs past about 150 words.
+``senter`` with abbreviation special cases and a sentence start after punctuation glued to the
+next sentence, hyphenated words kept whole, DOIs kept as single tokens, and every cleaning
+pattern's matches written as labelled spans in ``doc.spans["removals"]``. Sentence languages
+come from lingua, as the pipeline's last component (``corpus.language``). The keeping rules of
+the pass (2.3) drop an abstract with mojibake, an abstract-scope pattern, mostly another language
+or fewer than five words, and flag one whose "sentence" runs past about 150 words.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from collections.abc import Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
 
 import spacy
-from spacy.lang.char_classes import ALPHA, HYPHENS
+from spacy.lang.char_classes import ALPHA, ALPHA_LOWER, ALPHA_UPPER, HYPHENS
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
 from spacy.pipeline import SpanRuler
@@ -38,8 +38,25 @@ from interpretant.corpus.language import (
 from interpretant.corpus.repair import compile_signatures, has_mojibake, repair_text
 
 SPANS_KEY = "removals"
-# Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md).
-ABBREVIATIONS = ("cf.", "Cf.", "Fig.", "Figs.", "Sect.", "Eq.", "Eqs.", "al.", "approx.")
+# Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md; "viz." to "ca."
+# added after the corpus audit, decision agenda 2.3).
+ABBREVIATIONS = (
+    "cf.",
+    "Cf.",
+    "Fig.",
+    "Figs.",
+    "Sect.",
+    "Eq.",
+    "Eqs.",
+    "al.",
+    "approx.",
+    "viz.",
+    "pp.",
+    "resp.",
+    "Vol.",
+    "vol.",
+    "ca.",
+)
 # The keeping rules of decision agenda 2.3: an abstract needs five words outside the removed
 # ranges, and a "sentence" longer than about 150 words means missing sentence punctuation.
 MIN_WORDS = 5
@@ -49,6 +66,17 @@ MALFORMED = "malformed"
 # (spacy/lang/en/punctuation.py); removing it keeps *self-attention* one token (decision agenda
 # 2.3), as spaCy's documentation shows under "Modifying existing rule sets".
 _HYPHEN_INFIX = rf"(?<=[{ALPHA}0-9])(?:{HYPHENS})(?=[{ALPHA}])"
+# Sentence punctuation with no space before the next sentence, as in "(r = 0.922).In addition"
+# or "in 1950.French delegates" (decision agenda 2.3). spaCy's English rules split a full stop
+# between two letters only; these two infix rules also split it after a digit, a closing bracket
+# or a quote, and split that bracket or quote off the word before it.
+_CLOSERS = r"\)\]\"”’"
+_NEXT_SENTENCE = rf"[{ALPHA_UPPER}][{ALPHA_LOWER}]"
+GLUED_STOP_INFIX = rf"(?<=[{ALPHA_LOWER}0-9{_CLOSERS}])[.?!](?={_NEXT_SENTENCE})"
+GLUED_CLOSER_INFIX = rf"(?<=[{ALPHA}0-9])[{_CLOSERS}](?=[.?!]{_NEXT_SENTENCE})"
+_GLUED_STOP = re.compile(GLUED_STOP_INFIX)
+# The component starting a sentence after glued sentence punctuation, placed before ``senter``.
+GLUED_SENTENCE_STARTS = "glued_sentence_starts"
 _DOI = r"^(?:doi:)?10\.\d{4,9}/\S+$"
 # spaCy's own URL rule extended with DOIs, as one compiled pattern so the tokenizer can still be
 # serialised to worker processes.
@@ -145,8 +173,10 @@ def build_pipeline(
         raise ValueError("the pipeline's language defines no infix rules")
     infixes = list(nlp.Defaults.infixes)
     infixes.remove(_HYPHEN_INFIX)
+    infixes += [GLUED_STOP_INFIX, GLUED_CLOSER_INFIX]
     tokenizer.infix_finditer = compile_infix_regex(infixes).finditer
     tokenizer.url_match = URL_OR_DOI.match
+    nlp.add_pipe(GLUED_SENTENCE_STARTS, before="senter")
     # Overlapping matches keep the first longest, with spaCy's registered filter (the entity
     # ruler's default), so "Abstract:" wins over "Abstract".
     ruler = nlp.add_pipe(
@@ -169,6 +199,24 @@ def build_pipeline(
     # (spaCy's documentation, "Memory management").
     nlp.add_pipe("doc_cleaner", config={"attrs": {"tensor": None}})
     return nlp
+
+
+@Language.component(GLUED_SENTENCE_STARTS)
+def mark_glued_sentence_starts(doc: Doc) -> Doc:
+    """Start a sentence after sentence punctuation glued to the next sentence.
+
+    The tokenizer splits such punctuation off (``GLUED_STOP_INFIX``), but the sentence model,
+    trained on text with a space after each sentence, put a boundary at only about half of the
+    places in run 1 (51% between two letters, 3% after a digit, bracket or quote, in 60,000
+    abstracts), and the sampled misses were nearly all real sentence ends. ``senter`` keeps a
+    sentence start already set (its ``overwrite`` setting is off), as spaCy's documentation shows
+    for custom boundaries set before the parser.
+    """
+    for match in _GLUED_STOP.finditer(doc.text):
+        punctuation = doc.char_span(match.start(), match.end())
+        if punctuation is not None and punctuation.end < len(doc):
+            doc[punctuation.end].is_sent_start = True
+    return doc
 
 
 def cache_serialiser_extensions() -> None:
