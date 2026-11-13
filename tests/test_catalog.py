@@ -1,7 +1,9 @@
-"""The data catalog: reading the catalog file, and saving and loading the abstracts table."""
+"""The data catalog: the catalog file, the raw cells, and the abstracts table."""
 
 from __future__ import annotations
 
+import gzip
+import json
 from pathlib import Path
 from typing import Any
 
@@ -11,33 +13,69 @@ import pydantic
 import pytest
 
 from interpretant.catalog import (
-    ABSTRACTS_COLUMNS,
     CATALOG_FILE,
     CatalogConfig,
+    RawCell,
+    list_raw_cells,
     load_abstracts,
+    load_raw_cell,
     read_catalog,
     save_abstracts,
 )
+from tests.abstracts_tables import abstract_row, abstracts_table
 
-TEXT = "Attention helps. See https://example.org for more."
+SENTENCES = ["Attention helps.", "See https://example.org for more."]
+URL_REMOVAL = {"start": 21, "end": 40, "reason": "url"}
 
 
 def abstracts_row(**changes: Any) -> pl.DataFrame:
-    row: dict[str, Any] = {
-        "work_id": "https://openalex.org/W1",
-        "year": 2017,
-        "decade": 2010,
-        "fields": ["ai"],
-        "source": "regular",
-        "document_type": "article",
-        "author_ids": ["https://openalex.org/A1"],
-        "text": TEXT,
-        "sentences": [{"start": 0, "end": 16, "language": "en", "confidence": 0.99}],
-        "removals": [{"start": 21, "end": 40, "reason": "url"}],
-        "dropped_reason": None,
-    }
-    row.update(changes)
-    return pl.DataFrame([row], schema=ABSTRACTS_COLUMNS)
+    return abstracts_table([abstract_row(1, SENTENCES, **{"removals": [URL_REMOVAL], **changes})])
+
+
+def write_raw_cell(catalog: CatalogConfig, field: str, decade: int, lines: list[str]) -> None:
+    path = catalog.raw_abstracts.path / field / f"{decade}.jsonl.gz"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(path, "wt", encoding="utf-8") as cell:
+        cell.writelines(f"{line}\n" for line in lines)
+
+
+def raw_line(work: int) -> str:
+    return json.dumps(
+        {
+            "id": f"https://openalex.org/W{work}",
+            "year": 2017,
+            "type": "article",
+            "authors": ["https://openalex.org/A1"],
+            "abstract": "Models learn senses.",
+        }
+    )
+
+
+def test_list_raw_cells_sorts_cells_by_field_and_decade(catalog: CatalogConfig) -> None:
+    for field, decade in [("compsci", 2010), ("ai", 2020), ("ai", 1990)]:
+        write_raw_cell(catalog, field, decade, [raw_line(1)])
+    assert list_raw_cells(catalog) == [
+        RawCell("ai", 1990),
+        RawCell("ai", 2020),
+        RawCell("compsci", 2010),
+    ]
+
+
+def test_load_raw_cell_reads_works_under_their_table_names(catalog: CatalogConfig) -> None:
+    write_raw_cell(catalog, "ai", 2010, [raw_line(1), raw_line(2)])
+    works = list(load_raw_cell(catalog, RawCell("ai", 2010)))
+    assert [work.work_id for work in works] == [
+        "https://openalex.org/W1",
+        "https://openalex.org/W2",
+    ]
+    assert works[0].author_ids == ("https://openalex.org/A1",)
+    assert works[0].text == "Models learn senses."
+
+
+def test_load_raw_cell_rejects_a_line_that_is_not_a_work(catalog: CatalogConfig) -> None:
+    write_raw_cell(catalog, "ai", 2010, ['{"id": "https://openalex.org/W1", "year": 2017}'])
+    with pytest.raises(pydantic.ValidationError):
+        list(load_raw_cell(catalog, RawCell("ai", 2010)))
 
 
 def test_read_catalog_resolves_paths_against_the_catalog_file(
@@ -48,7 +86,7 @@ def test_read_catalog_resolves_paths_against_the_catalog_file(
 
 @pytest.mark.parametrize(
     ("original", "broken"),
-    [("format: parquet", "format: csv"), ("abstracts:", "abstract:")],
+    [("format: parquet", "format: csv"), ("cleaning_rules:", "cleaning_rule:")],
     ids=["unknown format", "misspelt dataset"],
 )
 def test_read_catalog_rejects_a_malformed_catalog(
@@ -88,9 +126,10 @@ def test_saving_a_part_again_replaces_it(catalog: CatalogConfig) -> None:
         {"fields": []},
         {"source": "somewhere"},
         {"work_id": "W1"},
+        {"duplicate_of": "W2"},
     ],
     ids=["span past the text", "span ending before it starts", "decade", "no field", "source",
-         "work id"],
+         "work id", "duplicate of"],
 )  # fmt: skip
 def test_save_rejects_rows_that_break_the_schema(
     catalog: CatalogConfig, changes: dict[str, Any]

@@ -3,8 +3,9 @@
 One pass annotates each repaired abstract (decision agenda, steps 2 and 4.9): sentences by
 ``senter`` with abbreviation special cases, hyphenated words kept whole, DOIs kept as single
 tokens, and every cleaning pattern's matches written as labelled spans in
-``doc.spans["removals"]``. Sentence languages come from lingua, per abstract first and, for an
-abstract not confidently English, from lingua's detection of several languages in one text.
+``doc.spans["removals"]``. Sentence languages come from lingua (``corpus.language``). The keeping
+rules of the pass (2.3) drop an abstract with mojibake, an abstract-scope pattern, mostly another
+language or fewer than five words, and flag one whose "sentence" runs past about 150 words.
 """
 
 from __future__ import annotations
@@ -15,32 +16,36 @@ from dataclasses import dataclass, field
 from itertools import islice
 
 import spacy
-from lingua import (
-    ConfidenceValue,
-    DetectionResult,
-    IsoCode639_1,
-    LanguageDetector,
-    LanguageDetectorBuilder,
-)
-from lingua import Language as LinguaLanguage
+from lingua import LanguageDetector
 from spacy.lang.char_classes import ALPHA, HYPHENS
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
 from spacy.pipeline import SpanRuler
 from spacy.symbols import ORTH
 from spacy.tokenizer import Tokenizer
-from spacy.tokens import Doc, Span
+from spacy.tokens import Doc, Token
 from spacy.util import compile_infix_regex
 
 from interpretant.catalog import START_ID, CleaningPatterns, Scope
+from interpretant.corpus.language import (
+    ENGLISH,
+    UNDETERMINED,
+    SentenceLanguage,
+    compute_not_english_share,
+    declare_sentence_attributes,
+    detect_sentence_languages,
+    set_sentence_languages,
+)
 from interpretant.corpus.repair import compile_signatures, has_mojibake, repair_text
 
 SPANS_KEY = "removals"
-ENGLISH = "en"
-# ISO 639-2's code for an undetermined language: a sentence with no letters, or no verdict.
-UNDETERMINED = "und"
 # Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md).
 ABBREVIATIONS = ("cf.", "Cf.", "Fig.", "Figs.", "Sect.", "Eq.", "Eqs.", "al.", "approx.")
+# The keeping rules of decision agenda 2.3: an abstract needs five words outside the removed
+# ranges, and a "sentence" longer than about 150 words means missing sentence punctuation.
+MIN_WORDS = 5
+MALFORMED_SENTENCE_WORDS = 150
+MALFORMED = "malformed"
 # English's infix rule for a hyphen after a letter or digit and before a letter
 # (spacy/lang/en/punctuation.py); removing it keeps *self-attention* one token (decision agenda
 # 2.3), as spaCy's documentation shows under "Modifying existing rule sets".
@@ -49,10 +54,6 @@ _DOI = r"^(?:doi:)?10\.\d{4,9}/\S+$"
 # spaCy's own URL rule extended with DOIs, as one compiled pattern so the tokenizer can still be
 # serialised to worker processes.
 URL_OR_DOI = re.compile(f"(?u)(?:{_DOI})|(?:{URL_PATTERN})")
-_LETTER = re.compile(r"[^\W\d_]")
-# lingua's confidence for the same text varies in its last digits from call to call, so it is
-# rounded where it is read: the threshold decision and the stored table then reproduce.
-CONFIDENCE_DECIMALS = 4
 
 
 @dataclass(frozen=True)
@@ -66,14 +67,6 @@ class RawAbstract:
     document_type: str
     author_ids: tuple[str, ...]
     text: str
-
-
-@dataclass(frozen=True)
-class SentenceLanguage:
-    """A sentence's language (an ISO 639-1 code, or ``und``) and lingua's confidence in it."""
-
-    language: str
-    confidence: float
 
 
 @dataclass(frozen=True, order=True)
@@ -109,21 +102,30 @@ class AnnotatedAbstract:
     text: str
     sentences: list[Sentence] = field(default_factory=list)
     removals: list[Removal] = field(default_factory=list)
+    flags: list[str] = field(default_factory=list)
     dropped_reason: str | None = None
+    duplicate_of: str | None = None
 
 
-_NO_LANGUAGE = SentenceLanguage(UNDETERMINED, 0.0)
+@dataclass(frozen=True)
+class KeepingRules:
+    """The provisional thresholds of the pass's language rules (decision agenda 2.4)."""
+
+    english_threshold: float
+    max_not_english_share: float
 
 
 def build_pipeline(patterns: CleaningPatterns, *, model: str = "en_core_web_sm") -> Language:
     """The spaCy pipeline of the pass, with the cleaning patterns as a span ruler.
 
     The parser is left out and ``senter`` sets sentences (about ten times faster, and it matched
-    the parser on the sample once the abbreviation special cases were in: docs/spacy.md).
+    the parser on the sample once the abbreviation special cases were in: docs/spacy.md). The
+    sentence language attributes are declared on spaCy's ``Span`` class as a side effect.
 
     Raises:
         ValueError: if spaCy's English hyphen rule has changed and cannot be removed.
     """
+    declare_sentence_attributes()
     nlp = spacy.load(model, exclude=["parser"])
     nlp.enable_pipe("senter")
     tokenizer = nlp.tokenizer
@@ -151,68 +153,6 @@ def build_pipeline(patterns: CleaningPatterns, *, model: str = "en_core_web_sm")
         raise TypeError(f"expected a SpanRuler, got {type(ruler).__name__}")
     ruler.add_patterns(patterns.span_ruler_patterns())
     return nlp
-
-
-def build_language_detector(languages: Sequence[str]) -> LanguageDetector:
-    """A lingua detector restricted to the given ISO 639-1 codes, which must include English.
-
-    Restricting the candidates improves accuracy when the text's languages are among them
-    (lingua's documentation).
-
-    Raises:
-        ValueError: if English is missing or a code is not an ISO 639-1 code lingua knows.
-    """
-    codes = sorted({code.lower() for code in languages})
-    if ENGLISH not in codes:
-        raise ValueError("the language detector must include English")
-    unknown = [code for code in codes if not hasattr(IsoCode639_1, code.upper())]
-    if unknown:
-        raise ValueError(f"not ISO 639-1 codes lingua knows: {unknown}")
-    candidates = [
-        LinguaLanguage.from_iso_code_639_1(getattr(IsoCode639_1, code.upper())) for code in codes
-    ]
-    return (
-        LanguageDetectorBuilder.from_languages(*candidates).with_preloaded_language_models().build()
-    )
-
-
-def detect_sentence_languages(
-    docs: Sequence[Doc], detector: LanguageDetector, *, threshold: float
-) -> list[list[SentenceLanguage]]:
-    """Each document's sentence languages, in sentence order, judged by lingua in parallel.
-
-    When lingua gives English at least ``threshold`` confidence for the whole abstract, every
-    sentence with letters takes that verdict. Otherwise lingua's detection of several languages
-    in one text (documented as experimental, so validated on the sample: decision agenda 2.4)
-    splits the abstract into single-language ranges; each sentence takes the language covering
-    most of its characters, with lingua's confidence for that language in that sentence.
-    Sentences without letters are undetermined.
-    """
-    whole = [
-        _top_language(values)
-        for values in detector.compute_language_confidence_values_in_parallel(
-            [doc.text for doc in docs]
-        )
-    ]
-    uncertain = [
-        index
-        for index, verdict in enumerate(whole)
-        if not (verdict.language == ENGLISH and verdict.confidence >= threshold)
-    ]
-    ranges = detector.detect_multiple_languages_in_parallel_of(
-        [docs[index].text for index in uncertain]
-    )
-    ranges_by_doc = dict(zip(uncertain, ranges, strict=True))
-    languages = []
-    for index, doc in enumerate(docs):
-        doc_ranges = ranges_by_doc.get(index)
-        languages.append(
-            [
-                _sentence_language(sentence, whole[index], doc_ranges, detector)
-                for sentence in doc.sents
-            ]
-        )
-    return languages
 
 
 def find_removals(
@@ -244,30 +184,45 @@ def find_removals(
     return sorted(removals), drop_reasons
 
 
+def count_kept_words(doc: Doc, removals: Sequence[Removal]) -> int:
+    """The words (tokens that are neither punctuation nor space) outside every removed range."""
+    return sum(
+        1
+        for token in doc
+        if _is_word(token)
+        and not any(removal.start <= token.idx < removal.end for removal in removals)
+    )
+
+
 def annotate_abstracts(
     abstracts: Iterable[RawAbstract],
     nlp: Language,
     detector: LanguageDetector,
     patterns: CleaningPatterns,
+    rules: KeepingRules,
     *,
-    language_threshold: float,
     batch_size: int = 256,
     process_count: int = 1,
 ) -> Iterator[tuple[Doc, AnnotatedAbstract]]:
     """Repair and annotate each abstract: its spaCy document and its abstracts-table row.
 
-    Abstracts showing mojibake (read on the raw text) are annotated too and marked dropped,
-    so the corpus review can sample them; otherwise an abstract-scope pattern's label, if any,
-    is the drop reason.
+    Dropped abstracts are annotated too, with their reason, so the corpus review can sample
+    them. The reasons, first match wins: ``mojibake`` (read on the raw text), an abstract-scope
+    pattern's label, ``not_english`` (more than ``rules.max_not_english_share`` of the judged
+    text), ``too_short`` (fewer than five words kept).
     """
     signatures = compile_signatures(patterns.mojibake_signatures)
     pairs = ((repair_text(abstract.text), abstract) for abstract in abstracts)
     annotated = nlp.pipe(pairs, as_tuples=True, batch_size=batch_size, n_process=process_count)
     while chunk := list(islice(annotated, batch_size)):
         docs = [doc for doc, _ in chunk]
-        chunk_languages = detect_sentence_languages(docs, detector, threshold=language_threshold)
+        chunk_languages = detect_sentence_languages(
+            docs, detector, threshold=rules.english_threshold
+        )
         for (doc, abstract), languages in zip(chunk, chunk_languages, strict=True):
-            yield doc, _annotated_abstract(doc, abstract, languages, patterns, signatures)
+            set_sentence_languages(doc, languages)
+            row = _annotated_abstract(doc, abstract, languages, patterns, signatures, rules)
+            yield doc, row
 
 
 def _annotated_abstract(
@@ -276,12 +231,19 @@ def _annotated_abstract(
     languages: Sequence[SentenceLanguage],
     patterns: CleaningPatterns,
     signatures: re.Pattern[str],
+    rules: KeepingRules,
 ) -> AnnotatedAbstract:
     removals, drop_reasons = find_removals(doc, patterns.labels, languages)
     if has_mojibake(abstract.text, signatures):
-        dropped_reason: str | None = "mojibake"
-    else:
-        dropped_reason = drop_reasons[0] if drop_reasons else None
+        drop_reasons.insert(0, "mojibake")
+    if compute_not_english_share(doc, languages) > rules.max_not_english_share:
+        drop_reasons.append("not_english")
+    if count_kept_words(doc, removals) < MIN_WORDS:
+        drop_reasons.append("too_short")
+    is_malformed = any(
+        sum(1 for token in sentence if _is_word(token)) > MALFORMED_SENTENCE_WORDS
+        for sentence in doc.sents
+    )
     sentences = [
         Sentence(sentence.start_char, sentence.end_char, language.language, language.confidence)
         for sentence, language in zip(doc.sents, languages, strict=True)
@@ -297,42 +259,10 @@ def _annotated_abstract(
         text=doc.text,
         sentences=sentences,
         removals=removals,
-        dropped_reason=dropped_reason,
+        flags=[MALFORMED] if is_malformed else [],
+        dropped_reason=drop_reasons[0] if drop_reasons else None,
     )
 
 
-def _top_language(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
-    if not values:
-        return _NO_LANGUAGE
-    best = values[0]
-    return _sentence_language_of(best.language, best.value)
-
-
-def _sentence_language_of(language: LinguaLanguage, confidence: float) -> SentenceLanguage:
-    return SentenceLanguage(
-        language.iso_code_639_1.name.lower(), round(confidence, CONFIDENCE_DECIMALS)
-    )
-
-
-def _sentence_language(
-    sentence: Span,
-    whole: SentenceLanguage,
-    ranges: Sequence[DetectionResult] | None,
-    detector: LanguageDetector,
-) -> SentenceLanguage:
-    if not _LETTER.search(sentence.text):
-        return _NO_LANGUAGE
-    if ranges is None:
-        return whole
-    overlaps = [
-        (
-            min(found.end_index, sentence.end_char) - max(found.start_index, sentence.start_char),
-            found,
-        )
-        for found in ranges
-    ]
-    overlap, best = max(overlaps, key=lambda pair: pair[0], default=(0, None))
-    if best is None or overlap <= 0:
-        return _NO_LANGUAGE
-    confidence = detector.compute_language_confidence(sentence.text, best.language)
-    return _sentence_language_of(best.language, confidence)
+def _is_word(token: Token) -> bool:
+    return not (token.is_punct or token.is_space)

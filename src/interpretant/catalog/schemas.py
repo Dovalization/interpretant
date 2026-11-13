@@ -23,7 +23,9 @@ ABSTRACTS_COLUMNS = pl.Schema(
         "text": pl.String(),
         "sentences": pl.List(SENTENCE),
         "removals": pl.List(REMOVAL),
+        "flags": pl.List(pl.String()),
         "dropped_reason": pl.String(),
+        "duplicate_of": pl.String(),
     }
 )
 
@@ -80,7 +82,13 @@ ABSTRACTS_SCHEMA = pa.DataFrameSchema(
         "text": pa.Column(ABSTRACTS_COLUMNS["text"]),
         "sentences": pa.Column(ABSTRACTS_COLUMNS["sentences"]),
         "removals": pa.Column(ABSTRACTS_COLUMNS["removals"]),
+        "flags": pa.Column(ABSTRACTS_COLUMNS["flags"]),
         "dropped_reason": pa.Column(ABSTRACTS_COLUMNS["dropped_reason"], nullable=True),
+        "duplicate_of": pa.Column(
+            ABSTRACTS_COLUMNS["duplicate_of"],
+            nullable=True,
+            checks=pa.Check.str_startswith("https://openalex.org/W"),
+        ),
     },
     checks=[
         pa.Check(_decade_is_the_year_rounded_down, name="decade is the year rounded down"),
@@ -93,6 +101,7 @@ ABSTRACTS_SCHEMA = pa.DataFrameSchema(
         "One row per work, its repaired text never edited after repair. Removals are labelled "
         "character ranges into the text (stand-off annotation, decision agenda 2.2); "
         "dropped_reason is set when a keeping rule drops the whole abstract, so dropped "
-        "abstracts stay available for the corpus review (4b)."
+        "abstracts stay available for the corpus review (4b); duplicate_of names the earlier "
+        "work a near-duplicate was dropped for, and flags mark abstracts left to the review."
     ),
 )

@@ -1,6 +1,7 @@
 """The spaCy pass, with the repository's cleaning rules and patterns.
 
-It loads en_core_web_sm (the pass's own pipeline, a pinned dependency) once for the session.
+The pipeline (en_core_web_sm, a pinned dependency) and the language detector are loaded once
+per session in conftest.py.
 """
 
 from __future__ import annotations
@@ -9,39 +10,20 @@ import pytest
 from lingua import LanguageDetector
 from spacy.language import Language
 
-from interpretant.catalog import (
-    CatalogConfig,
-    CleaningPatterns,
-    load_annotations,
-    load_cleaning_patterns,
-    read_catalog,
-    save_annotations,
-)
+from interpretant.catalog import CatalogConfig, CleaningPatterns, load_annotations, save_annotations
 from interpretant.corpus.annotation import (
+    MALFORMED,
     SPANS_KEY,
     AnnotatedAbstract,
+    KeepingRules,
     RawAbstract,
     annotate_abstracts,
-    build_language_detector,
-    build_pipeline,
 )
+from interpretant.corpus.language import CONFIDENCE_ATTRIBUTE, LANGUAGE_ATTRIBUTE
 
-ENGLISH_THRESHOLD = 0.9
-
-
-@pytest.fixture(scope="session")
-def patterns() -> CleaningPatterns:
-    return load_cleaning_patterns(read_catalog())
-
-
-@pytest.fixture(scope="session")
-def nlp(patterns: CleaningPatterns) -> Language:
-    return build_pipeline(patterns)
-
-
-@pytest.fixture(scope="session")
-def detector() -> LanguageDetector:
-    return build_language_detector(["en", "de", "fr", "es"])
+RULES = KeepingRules(english_threshold=0.9, max_not_english_share=0.5)
+ENGLISH_SENTENCE = "Attention mechanisms improve machine translation in many settings and tasks."
+GERMAN_SENTENCE = "Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung."
 
 
 def raw(text: str, work: int = 1) -> RawAbstract:
@@ -59,9 +41,7 @@ def raw(text: str, work: int = 1) -> RawAbstract:
 def annotate(
     text: str, nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
 ) -> AnnotatedAbstract:
-    ((_, row),) = annotate_abstracts(
-        [raw(text)], nlp, detector, patterns, language_threshold=ENGLISH_THRESHOLD
-    )
+    ((_, row),) = annotate_abstracts([raw(text)], nlp, detector, patterns, RULES)
     return row
 
 
@@ -76,17 +56,22 @@ def removed_texts(row: AnnotatedAbstract) -> dict[str, list[str]]:
     ("text", "reason", "removed"),
     [
         ("Results are online at https://example.org today.", "url", "https://example.org"),
-        ("Write to someone@example.org for data.", "email", "someone@example.org"),
-        ("Data are at doi:10.1000/xyz123 for reuse.", "doi", "doi:10.1000/xyz123"),
-        ("We bound \\alpha by a constant.", "latex", "\\alpha"),
-        ("Abstract: We study attention.", "abstract_label", "Abstract:"),
+        ("Write to someone@example.org for the full data.", "email", "someone@example.org"),
         (
-            "We study attention. © 2019 Elsevier Ltd. All rights reserved.",
+            "The data are available at doi:10.1000/xyz123 for reuse.",
+            "doi",
+            "doi:10.1000/xyz123",
+        ),
+        ("We bound \\alpha by a constant.", "latex", "\\alpha"),
+        ("Abstract: We study attention in neural models.", "abstract_label", "Abstract:"),
+        (
+            "We study attention in neural models. © 2019 Elsevier Ltd. All rights reserved.",
             "copyright",
             "© 2019 Elsevier Ltd.",
         ),
         (
-            "We study attention. This content downloaded from 128.0.0.1 on Tue, 01 Jan 2019.",
+            "We study attention in neural models. "
+            "This content downloaded from 128.0.0.1 on Tue, 01 Jan 2019.",
             "footer",
             "This content downloaded from 128.0.0.1 on Tue, 01 Jan 2019.",
         ),
@@ -113,9 +98,19 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         ("Journal of Things, Volume 3, Issue 2, 2010, Pages 120-123.", "citation_record"),
         ("Export citation. Save to Binder. Track citations.", "web_scrape"),
         ("Get the latest brain dumps for certification exams here.", "exam_spam"),
-        ("cafÃ© society in the 1920s.", "mojibake"),
+        ("cafÃ© society in the 1920s and after the war.", "mojibake"),
+        ("Abstract: Short note.", "too_short"),
+        (f"{GERMAN_SENTENCE} {ENGLISH_SENTENCE[:30]}.", "not_english"),
     ],
-    ids=["catalogue record", "citation record", "web scrape", "exam spam", "mojibake"],
+    ids=[
+        "catalogue record",
+        "citation record",
+        "web scrape",
+        "exam spam",
+        "mojibake",
+        "too short",
+        "mostly another language",
+    ],
 )
 def test_annotate_abstracts_drops_records_that_are_not_abstracts(
     text: str,
@@ -177,35 +172,37 @@ def test_annotate_abstracts_reads_an_english_abstract_as_english(
 def test_annotate_abstracts_removes_a_sentence_in_another_language(
     nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
 ) -> None:
-    text = (
-        "Attention mechanisms improve machine translation in many settings. "
-        "Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung."
-    )
+    text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {GERMAN_SENTENCE}"
     row = annotate(text, nlp, detector, patterns)
-    assert [sentence.language for sentence in row.sentences] == ["en", "de"]
-    assert removed_texts(row)["not_english"] == [
-        "Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung."
-    ]
+    assert [sentence.language for sentence in row.sentences] == ["en", "en", "de"]
+    assert removed_texts(row)["not_english"] == [GERMAN_SENTENCE]
+    assert row.dropped_reason is None
 
 
-def test_annotation_cache_keeps_sentences_lemmas_and_removal_spans(
+def test_annotate_abstracts_flags_a_sentence_without_punctuation(
+    nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+) -> None:
+    run_on = " ".join(["models learn senses from attention in context"] * 22)
+    row = annotate(f"{run_on}.", nlp, detector, patterns)
+    assert row.flags == [MALFORMED]
+    assert row.dropped_reason is None
+
+
+def test_annotation_cache_keeps_sentences_norms_languages_and_removal_spans(
     catalog: CatalogConfig, nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
 ) -> None:
-    pairs = list(
-        annotate_abstracts(
-            [raw("Abstract: Models use senses. See https://example.org now.")],
-            nlp,
-            detector,
-            patterns,
-            language_threshold=ENGLISH_THRESHOLD,
-        )
-    )
-    save_annotations(catalog, [doc for doc, _ in pairs], part="ai_2010")
+    text = f"Abstract: Models use senses. See https://example.org now. {GERMAN_SENTENCE}"
+    ((original, _),) = annotate_abstracts([raw(text)], nlp, detector, patterns, RULES)
+    save_annotations(catalog, [original], part="ai_2010")
     (cached,) = load_annotations(catalog, "ai_2010", nlp.vocab)
-    original = pairs[0][0]
     assert [sentence.text for sentence in cached.sents] == [s.text for s in original.sents]
+    assert [token.norm_ for token in cached] == [token.norm_ for token in original]
     assert [token.lemma_ for token in cached] == [token.lemma_ for token in original]
     assert [span.label_ for span in cached.spans[SPANS_KEY]] == ["abstract_label", "url"]
+    assert [sentence._.get(LANGUAGE_ATTRIBUTE) for sentence in cached.sents] == ["en", "en", "de"]
+    assert [sentence._.get(CONFIDENCE_ATTRIBUTE) for sentence in cached.sents] == [
+        sentence._.get(CONFIDENCE_ATTRIBUTE) for sentence in original.sents
+    ]
 
 
 def test_annotate_abstracts_gives_the_same_rows_in_worker_processes(
@@ -219,19 +216,8 @@ def test_annotate_abstracts_gives_the_same_rows_in_worker_processes(
 
     def rows(process_count: int) -> list[AnnotatedAbstract]:
         pairs = annotate_abstracts(
-            abstracts,
-            nlp,
-            detector,
-            patterns,
-            language_threshold=ENGLISH_THRESHOLD,
-            batch_size=2,
-            process_count=process_count,
+            abstracts, nlp, detector, patterns, RULES, batch_size=2, process_count=process_count
         )
         return [row for _, row in pairs]
 
     assert rows(2) == rows(1)
-
-
-def test_build_language_detector_requires_english() -> None:
-    with pytest.raises(ValueError, match="English"):
-        build_language_detector(["de", "fr"])

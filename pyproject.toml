@@ -81,9 +81,10 @@ explicit_package_bases = true
 module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*"]
 ignore_missing_imports = true
 
-# Libraries without type hints and with no stubs package: compiled spaCy modules, srsly.
+# Libraries without type hints and with no stubs package: compiled spaCy modules, srsly,
+# datasketch.
 [[tool.mypy.overrides]]
-module = ["spacy.symbols", "spacy.tokenizer", "srsly"]
+module = ["spacy.symbols", "spacy.tokenizer", "srsly", "datasketch"]
 ignore_missing_imports = true
 
 [tool.importlinter]

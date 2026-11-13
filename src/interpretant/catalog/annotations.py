@@ -3,7 +3,8 @@
 A rebuildable cache, tied to spaCy's version (decision agenda 4.6): later stages apply lemma
 exceptions to it instead of parsing again (3.6). DocBin keeps spaCy's default attributes, which in
 the installed spaCy include sentence starts and norms, and always keeps span groups, so the
-removal spans survive.
+removal spans survive; extension attributes (the sentence languages) need ``store_user_data``,
+and a reader declares them again before reading them.
 """
 
 from __future__ import annotations
@@ -29,7 +30,7 @@ def save_annotations(catalog: CatalogConfig, docs: Iterable[Doc], part: str) -> 
     target = part_path(catalog.annotations.path, part, _SUFFIX)
     target.parent.mkdir(parents=True, exist_ok=True)
     staging = target.with_suffix(f"{_SUFFIX}.partial")
-    DocBin(docs=docs).to_disk(staging)
+    DocBin(docs=docs, store_user_data=True).to_disk(staging)
     staging.replace(target)
     return target
 

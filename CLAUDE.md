@@ -52,12 +52,15 @@ analysis: predictions first, in their own commit.
 
 - `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift grid`). Commands parse options,
   call one library function and print; the loops live in the library with tests.
-- `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the abstracts table's pandera schema and
-  its parquet parts, the curated cleaning rules and spaCy patterns (`load_cleaning_patterns`),
-  and the annotation cache (DocBin). It imports no other interpretant package.
-- `corpus/` (rebuild): `repair.py` (text repair before spaCy, mojibake detection) and
-  `annotation.py` (the spaCy pass: sentences, labelled removal spans, sentence languages by
-  lingua, one abstracts-table row per work).
+- `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`), the
+  abstracts table's pandera schema and its parquet parts, the curated cleaning rules and spaCy
+  patterns (`load_cleaning_patterns`), and the annotation cache (DocBin). It imports no other
+  interpretant package.
+- `corpus/` (rebuild): `repair.py` (text repair before spaCy, mojibake detection),
+  `annotation.py` (the spaCy pass: sentences, labelled removal spans, the pass's keeping rules,
+  one abstracts-table row per work), `language.py` (lingua's sentence languages, stored on the
+  spans), `deduplication.py` (one row per work across cells; MinHash near-duplicates) and
+  `cleaning.py` (template sentences, repeated sentences, the author cap).
 - `corpus/` (old pipeline, replaced as the rebuild lands): `openalex.py` (API client, sampling,
   cleaning at ingest, `ingest_fields`), `files.py` (`source_texts`, `rewrite_texts`: one stage's
   cell files into the next), `caps.py` (author caps), `lemmas.py` (type-level map: *-s*

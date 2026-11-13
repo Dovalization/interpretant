@@ -14,6 +14,7 @@ from interpretant.catalog.curated import (
     Scope,
     load_cleaning_patterns,
 )
+from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
 from interpretant.catalog.schemas import ABSTRACTS_COLUMNS, ABSTRACTS_SCHEMA, REMOVAL, SENTENCE
 
 __all__ = [
@@ -27,10 +28,14 @@ __all__ = [
     "CleaningPattern",
     "CleaningPatterns",
     "DatasetEntry",
+    "RawCell",
+    "RawWork",
     "Scope",
+    "list_raw_cells",
     "load_abstracts",
     "load_annotations",
     "load_cleaning_patterns",
+    "load_raw_cell",
     "read_catalog",
     "save_abstracts",
     "save_annotations",

@@ -2,6 +2,11 @@
 # Read by interpretant.catalog (decision agenda, step 8.3); dvc.yaml will read it through `vars:`.
 # Paths are relative to this file.
 
+# The regular OpenAlex samples, one gzipped JSON Lines file per cell: <field>/<decade>.jsonl.gz.
+raw_abstracts:
+  path: data/raw/openalex
+  format: jsonl.gz
+
 abstracts:
   path: data/processed/abstracts
   format: parquet

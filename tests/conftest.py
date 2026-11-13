@@ -6,8 +6,17 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from lingua import LanguageDetector
+from spacy.language import Language
 
-from interpretant.catalog import CatalogConfig, read_catalog
+from interpretant.catalog import (
+    CatalogConfig,
+    CleaningPatterns,
+    load_cleaning_patterns,
+    read_catalog,
+)
+from interpretant.corpus.annotation import build_pipeline
+from interpretant.corpus.language import build_language_detector
 
 VOCAB = ["network", "atom", "information", "model", "evolution", "structure"]
 DECADES = [1960, 1970, 1980, 1990, 2000, 2010]
@@ -42,6 +51,7 @@ def synthetic_model() -> dict[int, dict[str, np.ndarray]]:
 def catalog_text() -> str:
     """A catalog file's content with every dataset, its paths relative to the file."""
     return (
+        "raw_abstracts:\n  path: data/raw\n  format: jsonl.gz\n"
         "abstracts:\n  path: data/abstracts\n  format: parquet\n"
         "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
         "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
@@ -55,3 +65,21 @@ def catalog(tmp_path: Path, catalog_text: str) -> CatalogConfig:
     catalog_file = tmp_path / "catalog.yaml"
     catalog_file.write_text(catalog_text)
     return read_catalog(catalog_file)
+
+
+@pytest.fixture(scope="session")
+def patterns() -> CleaningPatterns:
+    """The repository's cleaning rules and patterns."""
+    return load_cleaning_patterns(read_catalog())
+
+
+@pytest.fixture(scope="session")
+def nlp(patterns: CleaningPatterns) -> Language:
+    """The spaCy pipeline of the pass (en_core_web_sm, a pinned dependency), loaded once."""
+    return build_pipeline(patterns)
+
+
+@pytest.fixture(scope="session")
+def detector() -> LanguageDetector:
+    """A lingua detector for English, German, French and Spanish, loaded once."""
+    return build_language_detector(["en", "de", "fr", "es"])
