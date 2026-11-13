@@ -929,6 +929,13 @@ invented change in *component* and *having*).
   near state of the art once tuned: Moreo and Sebastiani 2021; alone it is weaker on average:
   Schumacher et al. 2025).
 
+  *Build order:* weighted ACC and PACC first, with the protocol; EM with BCTS second, as a
+  candidate the protocol must choose on the inner folds of the nested split (7.2), so the outer
+  test labels stay untouched. If it does not beat ACC and PACC at the project's label counts, it
+  is not used. The risk it must clear: BCTS fits a temperature and one bias per sense on the
+  labels, and the evidence that EM with BCTS is hard to beat comes from calibration sets of 500 to
+  10,000 examples (Alexandari, Kundaje and Shrikumar 2020), against about 60 labels per word here.
+
   *Why not feed QuaPy redrawn samples:* redrawing the labels in proportion to their weights
   duplicates some and drops others. Simulated with a rare sense at 5%
   (`second_review/weights_or_resample.py`), the root-mean-square error of its share with 30
