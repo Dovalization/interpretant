@@ -899,49 +899,50 @@ invented change in *component* and *having*).
   Angelopoulos et al. 2023, and design-based supervised learning, Egami et al. 2023, are its
   recent forms). Written in the project's own code; `ppi-python` (0.2.3, December 2024, MIT,
   takes weights) is the library route if its intervals are wanted.
-- **Every cell: adjusted counting, all weighted, in the project's own code.** No maintained
-  library takes the sampling weights for these methods: QuaPy 0.2.3 fits from predictions and
-  labels only; `mlquantify` 0.5.1 takes weights only in its distribution-matching methods (and
-  computes class priors unweighted even there); `quantificationlib` 0.1.2 and `abstention`
-  (the BCTS authors' package, last released January 2020) take none; scikit-learn 1.8's
-  `CalibratedClassifierCV` weights only plain temperature scaling, which failed with EM in tests.
-  So, with inverse-probability weights throughout:
-  - ACC and PACC: a weighted confusion matrix and one constrained least-squares solve
-    (`scipy.optimize.nnls`);
-  - EM (the Saerens–Latinne–Decaestecker iteration, with class priors from the weighted labels),
-    only with bias-corrected temperature scaling (BCTS: a temperature and one bias per class,
-    fitted by minimising the weighted log loss with `scipy.optimize.minimize`): uncalibrated EM
-    collapsed in tests and is reliable only with few classes and a calibrated classifier (Esuli,
-    Molinari and Sebastiani 2020), while EM with BCTS is hard to beat (Alexandari, Kundaje and
-    Shrikumar 2020);
-  - the artificial-prevalence protocol, which resamples each sense at a grid of chosen shares,
-    drawing labels in proportion to their weights, and chooses the method once, across all
-    words, since no method wins everywhere and per-word labels are too thin to choose by word
-    (Schumacher et al., JMLR 2025; ACC, PACC and EM stand out in Moreo and Sebastiani's
-    re-evaluation; with small multiclass training sets Schumacher et al. find EM among the most
-    robust).
+- **Every cell: adjusted counting with QuaPy, the weights applied by copying labels.** ACC, PACC,
+  EM with bias-corrected temperature scaling (BCTS) and the artificial-prevalence protocol come
+  from **QuaPy** (0.2.3, October 2026, BSD; it brings pandas back as an installed dependency, which
+  the author accepted; the project's code stays on Polars), fed the counters' probabilities
+  directly (its `aggregation_fit` and `aggregate` take precomputed predictions).
+  - *The weights.* No maintained library takes sampling weights for these methods (QuaPy 0.2.3
+    fits from predictions and labels only; `mlquantify` 0.5.1 takes weights only in its
+    distribution-matching methods and computes class priors unweighted even there;
+    `quantificationlib` 0.1.2 and `abstention`, the BCTS authors' package, take none;
+    scikit-learn 1.8 weights only plain temperature scaling). So each label is passed as
+    round(10 × its weight ÷ the smallest weight) identical copies. Every step used reads only counts
+    or sums over the rows it is given: ACC's confusion matrix, PACC's mean probabilities, EM's
+    starting shares, and BCTS, which `abstention` fits as one L-BFGS minimisation of the log loss
+    over all rows with nothing held out; QuaPy splits labels only when it trains a classifier
+    itself, which it does not here. Copies therefore give the weighted estimate exactly, up to
+    the rounding. The protocol samples within each sense, so sampling from the copies draws
+    labels in proportion to their weights.
+  - *Copies are made after every split and resample, never before:* the nested split (7.2) and the
+    bootstrap work on the original labels, and each piece is copied just before it goes to QuaPy,
+    so no label's copies sit on both sides of a split.
+  - *EM only with BCTS:* uncalibrated EM collapsed in tests and is reliable only with few classes
+    and a calibrated classifier (Esuli, Molinari and Sebastiani 2020), while EM with BCTS is hard
+    to beat (Alexandari, Kundaje and Shrikumar 2020).
+  - *The method is chosen once, across all words,* by the protocol on the author's labels, since
+    no method wins everywhere and per-word labels are too thin to choose by word (Schumacher et
+    al., JMLR 2025; ACC, PACC and EM stand out in Moreo and Sebastiani's re-evaluation; with small
+    multiclass training sets Schumacher et al. find EM among the most robust).
+  - Plain classify-and-count is always reported as the baseline (with its adjusted variants it is
+    near state of the art once tuned: Moreo and Sebastiani 2021; alone it is weaker on average:
+    Schumacher et al. 2025).
 
-  **QuaPy** (0.2.3, October 2026, BSD) becomes a development-only dependency, the reference these
-  methods are tested against: with every weight set to 1, they must reproduce QuaPy's ACC, PACC,
-  EM with BCTS and protocol on the same predictions (its `aggregation_fit` and `aggregate` take
-  precomputed probabilities). pandas, which QuaPy brings, is therefore not a runtime dependency.
-  Plain classify-and-count is always reported as the baseline (with its adjusted variants it is
-  near state of the art once tuned: Moreo and Sebastiani 2021; alone it is weaker on average:
-  Schumacher et al. 2025).
+  *Build order:* ACC and PACC first, with the protocol; EM with BCTS second, as a candidate the
+  protocol must choose on the inner folds of the nested split (7.2), so the outer test labels stay
+  untouched. If it does not beat ACC and PACC at the project's label counts, it is not used. The
+  risk it must clear: BCTS fits a temperature and one bias per sense on the labels, and the
+  evidence that EM with BCTS is hard to beat comes from calibration sets of 500 to 10,000 examples
+  (Alexandari, Kundaje and Shrikumar 2020), against about 60 labels per word here.
 
-  *Build order:* weighted ACC and PACC first, with the protocol; EM with BCTS second, as a
-  candidate the protocol must choose on the inner folds of the nested split (7.2), so the outer
-  test labels stay untouched. If it does not beat ACC and PACC at the project's label counts, it
-  is not used. The risk it must clear: BCTS fits a temperature and one bias per sense on the
-  labels, and the evidence that EM with BCTS is hard to beat comes from calibration sets of 500 to
-  10,000 examples (Alexandari, Kundaje and Shrikumar 2020), against about 60 labels per word here.
-
-  *Why not feed QuaPy redrawn samples:* redrawing the labels in proportion to their weights
-  duplicates some and drops others. Simulated with a rare sense at 5%
-  (`second_review/weights_or_resample.py`), the root-mean-square error of its share with 30
-  labels per cell is 0.022 with exact weights, 0.061 with one redraw and 0.024 (bias +0.007) as
-  the mean of 50 redraws, and the redraws would be repeated inside every bootstrap round;
-  ignoring the weights gives 0.050, with the rare sense's share pushed towards zero.
+  *Why copies, not redrawn samples or ignored weights* (simulated with a rare sense at 5%,
+  `second_review/weights_or_resample.py`; root-mean-square error of its share): with 30 labels per
+  cell, exact weights give 0.0222 and copies 0.0222 (60 labels: 0.0151 and 0.0150); one random
+  redraw in proportion to the weights gives 0.061, and the mean of 50 redraws 0.024 with a bias of
+  +0.007, repeated inside every bootstrap round; ignoring the weights gives 0.050, with the rare
+  sense's share pushed towards zero.
 - **Pooled or per-period error rates.** The methods assume a sense looks alike in every period;
   in labelled cells the gap between the stratified estimate and the pooled adjusted estimate
   tests that, and where it fails (computing *attention*, whose senses changed how they are
@@ -1239,9 +1240,10 @@ The sized tasks come to about 4 hours; three are not yet sized.
 - **Statistics module** (6.3): J's pairwise and mean-vector forms agree; the permutation floor
   against Benjamini–Hochberg; J's chance level by n; the rank rule against the interval rule on
   simulated words.
-- **Quantification module** (7.4): with every weight set to 1, ACC, PACC, EM with BCTS and the
-  protocol reproduce QuaPy's results; weighted and unweighted adjusted counting, and the
-  stratified estimate under a counter that is worse in one period, on simulated cells.
+- **Quantification module** (7.4): labels passed as copies give the weighted adjusted count
+  (checked against the weighted formula); copying happens only after splits and resamples;
+  weighted and unweighted adjusted counting, and the stratified estimate under a counter that is
+  worse in one period, on simulated cells.
 - **Counter checks** on every evaluation (7.3): anachronism and stability.
 - **One-off audits**, not kept as tests: the old regexes against the new patterns (2.3); the
   small against the transformer model (4.9).
@@ -1266,7 +1268,7 @@ The sized tasks come to about 4 hours; three are not yet sized.
   already downloaded (step 5).
 - `concept-erasure` or LEACE's closed form, at experiment 6.
 - Dependencies agreed but not installed, each installed when its step starts and after the
-  author's yes on the stack: DVC, QuaPy (development only), pyalex, `correlation-clustering`,
+  author's yes on the stack: DVC, QuaPy, pyalex, `correlation-clustering`,
   networkx 3.7 or later,
   `ruptures`, `ipykernel`, `nbstripout`.
 - Sources read only as abstracts or records (their full texts were not opened): Efron 1987,

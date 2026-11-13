@@ -1,5 +1,6 @@
 """7.4: apply A3's sampling weights exactly (a weighted confusion matrix) or by redrawing the
-labelled set in proportion to the weights (so QuaPy could be used unchanged)? Same simulation as
+labelled set at random, or copying each label in proportion to its weight (so QuaPy can be used
+unchanged)? Same simulation as
 share_estimators.py: three senses, 1,000 usages per cell, labels stratified by predicted sense.
 The agenda's numbers come from `python weights_or_resample.py 0.60,0.35,0.05` (a rare sense at 5%)."""
 
@@ -40,6 +41,14 @@ def acc(predicted: np.ndarray, truth_l: np.ndarray, predicted_l: np.ndarray, wei
     return float(solution[2] / solution.sum())
 
 
+def replicated(predicted: np.ndarray, truth_l: np.ndarray, predicted_l: np.ndarray,
+               weights: np.ndarray, scale: int = 10) -> float:
+    """Each label copied round(scale * weight / smallest weight) times, then unweighted ACC."""
+    copies = np.maximum(1, np.rint(scale * weights / weights.min())).astype(int)
+    return acc(predicted, np.repeat(truth_l, copies), np.repeat(predicted_l, copies),
+               np.ones(copies.sum()))
+
+
 def resampled(predicted: np.ndarray, truth_l: np.ndarray, predicted_l: np.ndarray,
               weights: np.ndarray, redraws: int) -> float:
     estimates = []
@@ -50,13 +59,16 @@ def resampled(predicted: np.ndarray, truth_l: np.ndarray, predicted_l: np.ndarra
 
 
 for budget in (30, 60):
-    errors = {"weighted (exact)": [], "one redraw": [], "mean of 50 redraws": [], "weights ignored": []}
+    errors = {"weighted (exact)": [], "replicated copies": [], "one redraw": [], "mean of 50 redraws": [],
+              "weights ignored": []}
     for _ in range(2000):
         truth, predicted = draw_cell()
         index, weights = stratified_labels(predicted, budget)
         truth_l, predicted_l = truth[index], predicted[index]
         true_share = (truth == 2).mean()
         errors["weighted (exact)"].append(acc(predicted, truth_l, predicted_l, weights) - true_share)
+        errors["replicated copies"].append(
+            replicated(predicted, truth_l, predicted_l, weights) - true_share)
         errors["one redraw"].append(resampled(predicted, truth_l, predicted_l, weights, 1) - true_share)
         errors["mean of 50 redraws"].append(
             resampled(predicted, truth_l, predicted_l, weights, 50) - true_share)
