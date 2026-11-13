@@ -899,24 +899,42 @@ invented change in *component* and *having*).
   Angelopoulos et al. 2023, and design-based supervised learning, Egami et al. 2023, are its
   recent forms). Written in the project's own code; `ppi-python` (0.2.3, December 2024, MIT,
   takes weights) is the library route if its intervals are wanted.
-- **Every cell: adjusted counting.** ACC and PACC are computed in the project's own code with a
-  confusion matrix weighted by the inverse inclusion probabilities and one constrained
-  least-squares solve (`scipy.optimize.nnls`), since QuaPy 0.2.3 fits its adjusted counts from
-  predictions and labels only, with no sample weights. EM only with bias-corrected temperature
-  scaling (BCTS), through **QuaPy** (0.2.3, October 2026, BSD; it brings pandas back as an
-  installed dependency, which the author accepted; the project's code stays on Polars), fed a
-  sample redrawn in proportion to the weights and the counter's probabilities directly (its
-  `aggregation_fit` and `aggregate` take precomputed predictions; tested in a throwaway environment
-  with the project's versions): uncalibrated EM collapsed in tests and is reliable
-  only with few classes and a calibrated classifier (Esuli, Molinari and Sebastiani 2020), while
-  EM with BCTS is hard to beat (Alexandari, Kundaje and Shrikumar 2020). The method is chosen
-  once, across all words, by QuaPy's artificial-prevalence protocol on the author's labels, since
-  no method wins everywhere and per-word labels are too thin to choose by word (Schumacher et al.,
-  JMLR 2025; ACC, PACC and EM stand out in Moreo and Sebastiani's re-evaluation; with small
-  multiclass training sets Schumacher et al. find EM among the most robust). Plain
-  classify-and-count is always reported as the baseline (with its adjusted variants it is near
-  state of the art once tuned: Moreo and Sebastiani 2021; alone it is weaker on average:
+- **Every cell: adjusted counting, all weighted, in the project's own code.** No maintained
+  library takes the sampling weights for these methods: QuaPy 0.2.3 fits from predictions and
+  labels only; `mlquantify` 0.5.1 takes weights only in its distribution-matching methods (and
+  computes class priors unweighted even there); `quantificationlib` 0.1.2 and `abstention`
+  (the BCTS authors' package, last released January 2020) take none; scikit-learn 1.8's
+  `CalibratedClassifierCV` weights only plain temperature scaling, which failed with EM in tests.
+  So, with inverse-probability weights throughout:
+  - ACC and PACC: a weighted confusion matrix and one constrained least-squares solve
+    (`scipy.optimize.nnls`);
+  - EM (the Saerens–Latinne–Decaestecker iteration, with class priors from the weighted labels),
+    only with bias-corrected temperature scaling (BCTS: a temperature and one bias per class,
+    fitted by minimising the weighted log loss with `scipy.optimize.minimize`): uncalibrated EM
+    collapsed in tests and is reliable only with few classes and a calibrated classifier (Esuli,
+    Molinari and Sebastiani 2020), while EM with BCTS is hard to beat (Alexandari, Kundaje and
+    Shrikumar 2020);
+  - the artificial-prevalence protocol, which resamples each sense at a grid of chosen shares,
+    drawing labels in proportion to their weights, and chooses the method once, across all
+    words, since no method wins everywhere and per-word labels are too thin to choose by word
+    (Schumacher et al., JMLR 2025; ACC, PACC and EM stand out in Moreo and Sebastiani's
+    re-evaluation; with small multiclass training sets Schumacher et al. find EM among the most
+    robust).
+
+  **QuaPy** (0.2.3, October 2026, BSD) becomes a development-only dependency, the reference these
+  methods are tested against: with every weight set to 1, they must reproduce QuaPy's ACC, PACC,
+  EM with BCTS and protocol on the same predictions (its `aggregation_fit` and `aggregate` take
+  precomputed probabilities). pandas, which QuaPy brings, is therefore not a runtime dependency.
+  Plain classify-and-count is always reported as the baseline (with its adjusted variants it is
+  near state of the art once tuned: Moreo and Sebastiani 2021; alone it is weaker on average:
   Schumacher et al. 2025).
+
+  *Why not feed QuaPy redrawn samples:* redrawing the labels in proportion to their weights
+  duplicates some and drops others. Simulated with a rare sense at 5%
+  (`second_review/weights_or_resample.py`), the root-mean-square error of its share with 30
+  labels per cell is 0.022 with exact weights, 0.061 with one redraw and 0.024 (bias +0.007) as
+  the mean of 50 redraws, and the redraws would be repeated inside every bootstrap round;
+  ignoring the weights gives 0.050, with the rare sense's share pushed towards zero.
 - **Pooled or per-period error rates.** The methods assume a sense looks alike in every period;
   in labelled cells the gap between the stratified estimate and the pooled adjusted estimate
   tests that, and where it fails (computing *attention*, whose senses changed how they are
@@ -1214,8 +1232,9 @@ The sized tasks come to about 4 hours; three are not yet sized.
 - **Statistics module** (6.3): J's pairwise and mean-vector forms agree; the permutation floor
   against Benjamini–Hochberg; J's chance level by n; the rank rule against the interval rule on
   simulated words.
-- **Quantification module** (7.4): weighted and unweighted adjusted counting, and the stratified
-  estimate under a counter that is worse in one period, on simulated cells.
+- **Quantification module** (7.4): with every weight set to 1, ACC, PACC, EM with BCTS and the
+  protocol reproduce QuaPy's results; weighted and unweighted adjusted counting, and the
+  stratified estimate under a counter that is worse in one period, on simulated cells.
 - **Counter checks** on every evaluation (7.3): anachronism and stability.
 - **One-off audits**, not kept as tests: the old regexes against the new patterns (2.3); the
   small against the transformer model (4.9).
@@ -1240,7 +1259,8 @@ The sized tasks come to about 4 hours; three are not yet sized.
   already downloaded (step 5).
 - `concept-erasure` or LEACE's closed form, at experiment 6.
 - Dependencies agreed but not installed, each installed when its step starts and after the
-  author's yes on the stack: DVC, QuaPy, pyalex, `correlation-clustering`, networkx 3.7 or later,
+  author's yes on the stack: DVC, QuaPy (development only), pyalex, `correlation-clustering`,
+  networkx 3.7 or later,
   `ruptures`, `ipykernel`, `nbstripout`.
 - Sources read only as abstracts or records (their full texts were not opened): Efron 1987,
   DiCiccio and Efron 1996, Simmons, Nelson and Simonsohn 2011, Kish 1965, Kohavi, Tang and Xu
