@@ -69,8 +69,8 @@ analysis: predictions first, in their own commit.
   interpretant package.
 - `corpus/` (rebuild): `repair.py` (text repair before spaCy, mojibake detection),
   `annotation.py` (the spaCy pass: sentences, labelled removal spans, the pass's keeping rules,
-  one abstracts-table row per work), `language.py` (lingua's sentence languages, stored on the
-  spans), `deduplication.py` (one row per work across cells; MinHash near-duplicates) and
+  one abstracts-table row per work), `language.py` (lingua as the pipeline's last component,
+  setting each sentence's language on its span), `deduplication.py` (one row per work across cells; MinHash near-duplicates) and
   `cleaning.py` (template sentences, repeated sentences, the author cap).
 - `corpus/` (old pipeline, replaced as the rebuild lands): `openalex.py` (API client, sampling,
   cleaning at ingest, `ingest_fields`), `files.py` (`source_texts`, `rewrite_texts`: one stage's

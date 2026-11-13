@@ -1,13 +1,12 @@
 """The spaCy pass, with the repository's cleaning rules and patterns.
 
-The pipeline (en_core_web_sm, a pinned dependency) and the language detector are loaded once
-per session in conftest.py.
+The pipeline (en_core_web_sm, a pinned dependency, with lingua as its last component) is loaded
+once per session in conftest.py.
 """
 
 from __future__ import annotations
 
 import pytest
-from lingua import LanguageDetector
 from spacy.language import Language
 
 from interpretant.catalog import CatalogConfig, CleaningPatterns, load_annotations, save_annotations
@@ -15,13 +14,17 @@ from interpretant.corpus.annotation import (
     MALFORMED,
     SPANS_KEY,
     AnnotatedAbstract,
-    KeepingRules,
     RawAbstract,
     annotate_abstracts,
 )
-from interpretant.corpus.language import CONFIDENCE_ATTRIBUTE, LANGUAGE_ATTRIBUTE
+from interpretant.corpus.language import (
+    CONFIDENCE_ATTRIBUTE,
+    LANGUAGE_ATTRIBUTE,
+    SENTENCE_LANGUAGES,
+)
 
-RULES = KeepingRules(english_threshold=0.9, max_not_english_share=0.5)
+# The share of an abstract's judged text in another language that drops it.
+SHARE = 0.5
 ENGLISH_SENTENCE = "Attention mechanisms improve machine translation in many settings and tasks."
 GERMAN_SENTENCE = "Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung."
 
@@ -38,10 +41,8 @@ def raw(text: str, work: int = 1) -> RawAbstract:
     )
 
 
-def annotate(
-    text: str, nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
-) -> AnnotatedAbstract:
-    ((_, row),) = annotate_abstracts([raw(text)], nlp, detector, patterns, RULES)
+def annotate(text: str, nlp: Language, patterns: CleaningPatterns) -> AnnotatedAbstract:
+    ((_, row),) = annotate_abstracts([raw(text)], nlp, patterns, max_not_english_share=SHARE)
     return row
 
 
@@ -83,10 +84,9 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
     reason: str,
     removed: str,
     nlp: Language,
-    detector: LanguageDetector,
     patterns: CleaningPatterns,
 ) -> None:
-    row = annotate(text, nlp, detector, patterns)
+    row = annotate(text, nlp, patterns)
     assert removed in removed_texts(row).get(reason, [])
     assert row.dropped_reason is None
 
@@ -116,10 +116,9 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
     text: str,
     reason: str,
     nlp: Language,
-    detector: LanguageDetector,
     patterns: CleaningPatterns,
 ) -> None:
-    assert annotate(text, nlp, detector, patterns).dropped_reason == reason
+    assert annotate(text, nlp, patterns).dropped_reason == reason
 
 
 @pytest.mark.parametrize(
@@ -132,18 +131,18 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
     ids=["letter mid-sentence", "a lone social network", "label not at the start"],
 )
 def test_annotate_abstracts_keeps_look_alikes_of_the_rules(
-    text: str, nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+    text: str, nlp: Language, patterns: CleaningPatterns
 ) -> None:
-    row = annotate(text, nlp, detector, patterns)
+    row = annotate(text, nlp, patterns)
     assert row.dropped_reason is None
     assert row.removals == []
 
 
 def test_annotate_abstracts_keeps_abbreviations_inside_sentences(
-    nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+    nlp: Language, patterns: CleaningPatterns
 ) -> None:
     text = "As shown in Fig. 2, the effect holds (Smith et al. 2019), cf. Sect. 3. It is robust."
-    row = annotate(text, nlp, detector, patterns)
+    row = annotate(text, nlp, patterns)
     sentences = [row.text[sentence.start : sentence.end] for sentence in row.sentences]
     assert sentences == [
         "As shown in Fig. 2, the effect holds (Smith et al. 2019), cf. Sect. 3.",
@@ -161,38 +160,44 @@ def test_build_pipeline_keeps_hyphenated_words_whole(nlp: Language) -> None:
     ]
 
 
+def test_build_pipeline_runs_lingua_last_with_its_settings_in_the_config(nlp: Language) -> None:
+    assert nlp.pipe_names[-1] == SENTENCE_LANGUAGES
+    settings = nlp.config["components"][SENTENCE_LANGUAGES]
+    assert (settings["languages"], settings["english_threshold"]) == (["en", "de", "fr", "es"], 0.9)
+
+
 def test_annotate_abstracts_reads_an_english_abstract_as_english(
-    nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+    nlp: Language, patterns: CleaningPatterns
 ) -> None:
     text = "Attention mechanisms improve machine translation. The effect is large."
-    row = annotate(text, nlp, detector, patterns)
+    row = annotate(text, nlp, patterns)
     assert [sentence.language for sentence in row.sentences] == ["en", "en"]
 
 
 def test_annotate_abstracts_removes_a_sentence_in_another_language(
-    nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+    nlp: Language, patterns: CleaningPatterns
 ) -> None:
     text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {GERMAN_SENTENCE}"
-    row = annotate(text, nlp, detector, patterns)
+    row = annotate(text, nlp, patterns)
     assert [sentence.language for sentence in row.sentences] == ["en", "en", "de"]
     assert removed_texts(row)["not_english"] == [GERMAN_SENTENCE]
     assert row.dropped_reason is None
 
 
 def test_annotate_abstracts_flags_a_sentence_without_punctuation(
-    nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+    nlp: Language, patterns: CleaningPatterns
 ) -> None:
     run_on = " ".join(["models learn senses from attention in context"] * 22)
-    row = annotate(f"{run_on}.", nlp, detector, patterns)
+    row = annotate(f"{run_on}.", nlp, patterns)
     assert row.flags == [MALFORMED]
     assert row.dropped_reason is None
 
 
 def test_annotation_cache_keeps_sentences_norms_languages_and_removal_spans(
-    catalog: CatalogConfig, nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+    catalog: CatalogConfig, nlp: Language, patterns: CleaningPatterns
 ) -> None:
     text = f"Abstract: Models use senses. See https://example.org now. {GERMAN_SENTENCE}"
-    ((original, _),) = annotate_abstracts([raw(text)], nlp, detector, patterns, RULES)
+    ((original, _),) = annotate_abstracts([raw(text)], nlp, patterns, max_not_english_share=SHARE)
     save_annotations(catalog, [original], part="ai_2010")
     (cached,) = load_annotations(catalog, "ai_2010", nlp.vocab)
     assert [sentence.text for sentence in cached.sents] == [s.text for s in original.sents]
@@ -206,7 +211,7 @@ def test_annotation_cache_keeps_sentences_norms_languages_and_removal_spans(
 
 
 def test_annotate_abstracts_gives_the_same_rows_in_worker_processes(
-    nlp: Language, detector: LanguageDetector, patterns: CleaningPatterns
+    nlp: Language, patterns: CleaningPatterns
 ) -> None:
     abstracts = [
         raw("Abstract: Self-attention helps. See https://example.org now.", work=1),
@@ -216,7 +221,12 @@ def test_annotate_abstracts_gives_the_same_rows_in_worker_processes(
 
     def rows(process_count: int) -> list[AnnotatedAbstract]:
         pairs = annotate_abstracts(
-            abstracts, nlp, detector, patterns, RULES, batch_size=2, process_count=process_count
+            abstracts,
+            nlp,
+            patterns,
+            max_not_english_share=SHARE,
+            batch_size=2,
+            process_count=process_count,
         )
         return [row for _, row in pairs]
 

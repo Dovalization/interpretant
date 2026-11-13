@@ -6,7 +6,6 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from lingua import LanguageDetector
 from spacy.language import Language
 
 from interpretant.catalog import (
@@ -16,7 +15,6 @@ from interpretant.catalog import (
     read_catalog,
 )
 from interpretant.corpus.annotation import build_pipeline
-from interpretant.corpus.language import build_language_detector
 
 VOCAB = ["network", "atom", "information", "model", "evolution", "structure"]
 DECADES = [1960, 1970, 1980, 1990, 2000, 2010]
@@ -75,11 +73,8 @@ def patterns() -> CleaningPatterns:
 
 @pytest.fixture(scope="session")
 def nlp(patterns: CleaningPatterns) -> Language:
-    """The spaCy pipeline of the pass (en_core_web_sm, a pinned dependency), loaded once."""
-    return build_pipeline(patterns)
+    """The spaCy pipeline of the pass (en_core_web_sm, a pinned dependency), loaded once.
 
-
-@pytest.fixture(scope="session")
-def detector() -> LanguageDetector:
-    """A lingua detector for English, German, French and Spanish, loaded once."""
-    return build_language_detector(["en", "de", "fr", "es"])
+    Its language component reads English, German, French and Spanish.
+    """
+    return build_pipeline(patterns, languages=["en", "de", "fr", "es"], english_threshold=0.9)

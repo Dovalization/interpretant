@@ -34,7 +34,6 @@ from interpretant.catalog import (
 )
 from interpretant.corpus.annotation import (
     AnnotatedAbstract,
-    KeepingRules,
     RawAbstract,
     annotate_abstracts,
     build_pipeline,
@@ -45,7 +44,6 @@ from interpretant.corpus.cleaning import (
     mark_template_sentences,
 )
 from interpretant.corpus.deduplication import mark_near_duplicates, merge_cells
-from interpretant.corpus.language import build_language_detector
 
 PARAMS_FILE = Path(__file__).resolve().parents[3] / "params.yaml"
 REGULAR = "regular"
@@ -116,9 +114,9 @@ def build_corpus(
     if not cells:
         raise ValueError(f"no raw cell for fields {settings.fields} in decades {settings.decades}")
     patterns = load_cleaning_patterns(catalog)
-    nlp = build_pipeline(patterns)
-    detector = build_language_detector(settings.languages)
-    rules = KeepingRules(settings.english_threshold, settings.max_not_english_share)
+    nlp = build_pipeline(
+        patterns, languages=settings.languages, english_threshold=settings.english_threshold
+    )
     abstracts = merge_cells(
         ((cell.field, load_raw_cell(catalog, cell)) for cell in cells), source=REGULAR
     )
@@ -126,9 +124,8 @@ def build_corpus(
     annotated = annotate_abstracts(
         abstracts,
         nlp,
-        detector,
         patterns,
-        rules,
+        max_not_english_share=settings.max_not_english_share,
         batch_size=batch_size,
         process_count=process_count,
     )

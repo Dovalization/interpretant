@@ -3,9 +3,10 @@
 One pass annotates each repaired abstract (decision agenda, steps 2 and 4.9): sentences by
 ``senter`` with abbreviation special cases, hyphenated words kept whole, DOIs kept as single
 tokens, and every cleaning pattern's matches written as labelled spans in
-``doc.spans["removals"]``. Sentence languages come from lingua (``corpus.language``). The keeping
-rules of the pass (2.3) drop an abstract with mojibake, an abstract-scope pattern, mostly another
-language or fewer than five words, and flag one whose "sentence" runs past about 150 words.
+``doc.spans["removals"]``. Sentence languages come from lingua, as the pipeline's last component
+(``corpus.language``). The keeping rules of the pass (2.3) drop an abstract with mojibake, an
+abstract-scope pattern, mostly another language or fewer than five words, and flag one whose
+"sentence" runs past about 150 words.
 """
 
 from __future__ import annotations
@@ -13,10 +14,8 @@ from __future__ import annotations
 import re
 from collections.abc import Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
-from itertools import islice
 
 import spacy
-from lingua import LanguageDetector
 from spacy.lang.char_classes import ALPHA, HYPHENS
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
@@ -29,12 +28,11 @@ from spacy.util import compile_infix_regex
 from interpretant.catalog import START_ID, CleaningPatterns, Scope
 from interpretant.corpus.language import (
     ENGLISH,
+    SENTENCE_LANGUAGES,
     UNDETERMINED,
     SentenceLanguage,
     compute_not_english_share,
-    declare_sentence_attributes,
-    detect_sentence_languages,
-    set_sentence_languages,
+    read_sentence_languages,
 )
 from interpretant.corpus.repair import compile_signatures, has_mojibake, repair_text
 
@@ -107,25 +105,25 @@ class AnnotatedAbstract:
     duplicate_of: str | None = None
 
 
-@dataclass(frozen=True)
-class KeepingRules:
-    """The provisional thresholds of the pass's language rules (decision agenda 2.4)."""
-
-    english_threshold: float
-    max_not_english_share: float
-
-
-def build_pipeline(patterns: CleaningPatterns, *, model: str = "en_core_web_sm") -> Language:
-    """The spaCy pipeline of the pass, with the cleaning patterns as a span ruler.
+def build_pipeline(
+    patterns: CleaningPatterns,
+    *,
+    languages: Sequence[str],
+    english_threshold: float,
+    model: str = "en_core_web_sm",
+) -> Language:
+    """The spaCy pipeline of the pass: the cleaning patterns as a span ruler, then lingua.
 
     The parser is left out and ``senter`` sets sentences (about ten times faster, and it matched
     the parser on the sample once the abbreviation special cases were in: docs/spacy.md). The
-    sentence language attributes are declared on spaCy's ``Span`` class as a side effect.
+    language component reads the given ISO 639-1 codes and takes an abstract with at least
+    ``english_threshold`` confidence in English as English throughout (decision agenda 2.4); it
+    declares the sentence language attributes on spaCy's ``Span`` class as a side effect.
 
     Raises:
-        ValueError: if spaCy's English hyphen rule has changed and cannot be removed.
+        ValueError: if spaCy's English hyphen rule has changed and cannot be removed, or the
+            language codes lack English or include one lingua does not know.
     """
-    declare_sentence_attributes()
     nlp = spacy.load(model, exclude=["parser"])
     nlp.enable_pipe("senter")
     tokenizer = nlp.tokenizer
@@ -152,6 +150,10 @@ def build_pipeline(patterns: CleaningPatterns, *, model: str = "en_core_web_sm")
     if not isinstance(ruler, SpanRuler):
         raise TypeError(f"expected a SpanRuler, got {type(ruler).__name__}")
     ruler.add_patterns(patterns.span_ruler_patterns())
+    nlp.add_pipe(
+        SENTENCE_LANGUAGES,
+        config={"languages": list(languages), "english_threshold": english_threshold},
+    )
     return nlp
 
 
@@ -197,10 +199,9 @@ def count_kept_words(doc: Doc, removals: Sequence[Removal]) -> int:
 def annotate_abstracts(
     abstracts: Iterable[RawAbstract],
     nlp: Language,
-    detector: LanguageDetector,
     patterns: CleaningPatterns,
-    rules: KeepingRules,
     *,
+    max_not_english_share: float,
     batch_size: int = 256,
     process_count: int = 1,
 ) -> Iterator[tuple[Doc, AnnotatedAbstract]]:
@@ -208,35 +209,31 @@ def annotate_abstracts(
 
     Dropped abstracts are annotated too, with their reason, so the corpus review can sample
     them. The reasons, first match wins: ``mojibake`` (read on the raw text), an abstract-scope
-    pattern's label, ``not_english`` (more than ``rules.max_not_english_share`` of the judged
-    text), ``too_short`` (fewer than five words kept).
+    pattern's label, ``not_english`` (more than ``max_not_english_share`` of the judged text, a
+    provisional threshold: decision agenda 2.4), ``too_short`` (fewer than five words kept).
     """
     signatures = compile_signatures(patterns.mojibake_signatures)
     pairs = ((repair_text(abstract.text), abstract) for abstract in abstracts)
     annotated = nlp.pipe(pairs, as_tuples=True, batch_size=batch_size, n_process=process_count)
-    while chunk := list(islice(annotated, batch_size)):
-        docs = [doc for doc, _ in chunk]
-        chunk_languages = detect_sentence_languages(
-            docs, detector, threshold=rules.english_threshold
+    for doc, abstract in annotated:
+        yield (
+            doc,
+            _annotated_abstract(doc, abstract, patterns, signatures, max_not_english_share),
         )
-        for (doc, abstract), languages in zip(chunk, chunk_languages, strict=True):
-            set_sentence_languages(doc, languages)
-            row = _annotated_abstract(doc, abstract, languages, patterns, signatures, rules)
-            yield doc, row
 
 
 def _annotated_abstract(
     doc: Doc,
     abstract: RawAbstract,
-    languages: Sequence[SentenceLanguage],
     patterns: CleaningPatterns,
     signatures: re.Pattern[str],
-    rules: KeepingRules,
+    max_not_english_share: float,
 ) -> AnnotatedAbstract:
+    languages = read_sentence_languages(doc)
     removals, drop_reasons = find_removals(doc, patterns.labels, languages)
     if has_mojibake(abstract.text, signatures):
         drop_reasons.insert(0, "mojibake")
-    if compute_not_english_share(doc, languages) > rules.max_not_english_share:
+    if compute_not_english_share(doc, languages) > max_not_english_share:
         drop_reasons.append("not_english")
     if count_kept_words(doc, removals) < MIN_WORDS:
         drop_reasons.append("too_short")

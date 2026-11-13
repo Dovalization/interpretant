@@ -2,20 +2,21 @@
 
 from __future__ import annotations
 
+import pickle
+
 import pytest
-from lingua import LanguageDetector
+import spacy
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from interpretant.corpus.language import (
-    CONFIDENCE_ATTRIBUTE,
-    LANGUAGE_ATTRIBUTE,
+    SENTENCE_LANGUAGES,
     UNDETERMINED,
     SentenceLanguage,
+    SentenceLanguageDetector,
     build_language_detector,
     compute_not_english_share,
-    detect_sentence_languages,
-    set_sentence_languages,
+    read_sentence_languages,
 )
 
 
@@ -40,15 +41,35 @@ def test_build_language_detector_rejects_an_unknown_code() -> None:
         build_language_detector(["en", "xx"])
 
 
-def test_detect_sentence_languages_leaves_sentences_without_letters_undetermined(
-    nlp: Language, detector: LanguageDetector
-) -> None:
+def test_the_component_checks_its_language_codes_when_added() -> None:
+    with pytest.raises(ValueError, match="English"):
+        spacy.blank("en").add_pipe(
+            SENTENCE_LANGUAGES, config={"languages": ["de"], "english_threshold": 0.9}
+        )
+
+
+def test_the_component_leaves_sentences_without_letters_undetermined(nlp: Language) -> None:
     doc = sentences_doc(
         nlp, ["Attention mechanisms improve machine translation in many settings .", "12 34 ."]
     )
-    ((english, numbers),) = detect_sentence_languages([doc], detector, threshold=0.5)
+    english, numbers = read_sentence_languages(nlp.get_pipe(SENTENCE_LANGUAGES)(doc))
     assert english.language == "en"
     assert numbers == SentenceLanguage(UNDETERMINED, 0.0)
+
+
+def test_the_component_pickles_without_its_detector(nlp: Language) -> None:
+    component = nlp.get_pipe(SENTENCE_LANGUAGES)
+    component(sentences_doc(nlp, ["Attention mechanisms improve machine translation ."]))
+    copy = pickle.loads(pickle.dumps(component))
+    assert isinstance(copy, SentenceLanguageDetector)
+    assert (copy.languages, copy.english_threshold) == (("en", "de", "fr", "es"), 0.9)
+
+
+def test_read_sentence_languages_refuses_a_document_the_component_has_not_seen(
+    nlp: Language,
+) -> None:
+    with pytest.raises(ValueError, match=SENTENCE_LANGUAGES):
+        read_sentence_languages(sentences_doc(nlp, ["one two three"]))
 
 
 def test_compute_not_english_share_counts_judged_characters_only(nlp: Language) -> None:
@@ -59,12 +80,3 @@ def test_compute_not_english_share_counts_judged_characters_only(nlp: Language) 
         SentenceLanguage(UNDETERMINED, 0.0),
     ]
     assert compute_not_english_share(doc, languages) == pytest.approx(9 / (13 + 9))
-
-
-def test_set_sentence_languages_writes_each_sentence_attribute(nlp: Language) -> None:
-    doc = sentences_doc(nlp, ["one two three", "vier fünf"])
-    set_sentence_languages(doc, [SentenceLanguage("en", 0.9), SentenceLanguage("de", 0.8)])
-    assert [(s._.get(LANGUAGE_ATTRIBUTE), s._.get(CONFIDENCE_ATTRIBUTE)) for s in doc.sents] == [
-        ("en", 0.9),
-        ("de", 0.8),
-    ]
