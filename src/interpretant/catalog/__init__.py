@@ -6,6 +6,12 @@ step 8.3).
 
 from interpretant.catalog.abstracts import load_abstracts, save_abstracts
 from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, DatasetEntry, read_catalog
+from interpretant.catalog.curated import (
+    CleaningPattern,
+    CleaningPatterns,
+    Scope,
+    load_cleaning_patterns,
+)
 from interpretant.catalog.schemas import ABSTRACTS_COLUMNS, ABSTRACTS_SCHEMA, REMOVAL, SENTENCE
 
 __all__ = [
@@ -15,8 +21,12 @@ __all__ = [
     "REMOVAL",
     "SENTENCE",
     "CatalogConfig",
+    "CleaningPattern",
+    "CleaningPatterns",
     "DatasetEntry",
+    "Scope",
     "load_abstracts",
+    "load_cleaning_patterns",
     "read_catalog",
     "save_abstracts",
 ]

@@ -43,7 +43,10 @@ def abstracts_row(**changes: Any) -> pl.DataFrame:
 @pytest.fixture
 def catalog(tmp_path: Path) -> CatalogConfig:
     catalog_file = tmp_path / "catalog.yaml"
-    catalog_file.write_text("abstracts:\n  path: data/abstracts\n  format: parquet\n")
+    catalog_file.write_text(
+        "abstracts:\n  path: data/abstracts\n  format: parquet\n"
+        "cleaning_patterns:\n  path: curated/patterns.yaml\n  format: yaml\n"
+    )
     return read_catalog(catalog_file)
 
 
@@ -55,14 +58,20 @@ def test_read_catalog_resolves_paths_against_the_catalog_file(
 
 def test_read_catalog_rejects_an_unknown_format(tmp_path: Path) -> None:
     catalog_file = tmp_path / "catalog.yaml"
-    catalog_file.write_text("abstracts:\n  path: data/abstracts\n  format: csv\n")
+    catalog_file.write_text(
+        "abstracts:\n  path: data/abstracts\n  format: csv\n"
+        "cleaning_patterns:\n  path: curated/patterns.yaml\n  format: yaml\n"
+    )
     with pytest.raises(pydantic.ValidationError):
         read_catalog(catalog_file)
 
 
 def test_read_catalog_rejects_a_misspelt_dataset(tmp_path: Path) -> None:
     catalog_file = tmp_path / "catalog.yaml"
-    catalog_file.write_text("abstract:\n  path: data/abstracts\n  format: parquet\n")
+    catalog_file.write_text(
+        "abstract:\n  path: data/abstracts\n  format: parquet\n"
+        "cleaning_patterns:\n  path: curated/patterns.yaml\n  format: yaml\n"
+    )
     with pytest.raises(pydantic.ValidationError):
         read_catalog(catalog_file)
 

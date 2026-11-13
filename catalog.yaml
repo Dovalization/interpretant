@@ -5,3 +5,7 @@
 abstracts:
   path: data/processed/abstracts
   format: parquet
+
+cleaning_patterns:
+  path: curated/cleaning_patterns.yaml
+  format: yaml
