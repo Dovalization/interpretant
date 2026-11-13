@@ -19,6 +19,12 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+      - id: import-linter
+        name: import-linter (package layers)
+        entry: uv run lint-imports
+        language: system
+        types: [python]
+        pass_filenames: false
       - id: vulture
         name: vulture (dead code)
         entry: uv run vulture src tests --min-confidence 80

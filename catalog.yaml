@@ -1,0 +1,7 @@
+# Every dataset the pipelines read or write: its location and storage format, written once here.
+# Read by interpretant.catalog (decision agenda, step 8.3); dvc.yaml will read it through `vars:`.
+# Paths are relative to this file.
+
+abstracts:
+  path: data/processed/abstracts
+  format: parquet

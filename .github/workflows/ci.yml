@@ -20,5 +20,7 @@ jobs:
         run: uv run pytest -q
       - name: Type check
         run: uv run mypy src
+      - name: Package layers
+        run: uv run lint-imports
       - name: Dead code
         run: uv run vulture src tests --min-confidence 80
