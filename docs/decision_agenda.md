@@ -283,7 +283,11 @@ morphology, any named entity it sits in, and the static view's token beside it, 
 pipelines' counts reconcile. A usage is **in scope** when it has the part of speech its word
 table gives and is not inside a name (*medium* is a noun, not the adjective of *medium effect
 size*, 22% of its uses; *learning* has 36% verb readings); the usages table keeps every match, and
-measures use in-scope usages by default and may include the rest on purpose.
+measures use in-scope usages by default and may include the rest on purpose. Named entities are
+recognised here, on each target sentence alone, not in the corpus pass (4.9): for 15,018 target
+mentions in five parts, entities found on the sentence alone and on the whole abstract agreed on
+99.87% (the 19 differences mostly chapter titles and scraped page text). Matching refuses a
+document without entity annotation instead of reading it as having no names.
 
 **4.2 Compounds.** Hyphenated words stay whole, so a lemma search alone would miss every compound
 (*self-attention* has the lemma *self-attention*): 2–8% of a target's uses (`compounds.py`), among
@@ -365,7 +369,8 @@ text and offsets, offsets pointing at the target.
   `NORM`, `SENT_START` and `ENT_ID` (the documentation lists older defaults), and a round trip
   kept sentences, norms and span groups, while an explicit list without `SENT_START` lost the
   sentences. Span groups are always saved; only extension attributes (lingua's sentence
-  languages) need `store_user_data=True`. A round-trip test guards this.
+  languages) need `store_user_data=True`. A round-trip test guards this. The cache holds no
+  named entities: the pass leaves named entity recognition out (4.9).
 - The static pipeline's normalised text stays as plain text files.
 
 Common practice: DWUG keeps a usages table per word with the context, target offsets and sentence
@@ -437,7 +442,12 @@ concepts and the abstract. Later downloads ask for these fields in the download 
 cleaning, sentences, the static view (the last full pass, lemma votes with tagger and lemmatizer,
 read 1,274,029 abstracts, 206 million tokens, in 30 minutes on 10 CPU processes; `senter`, lingua
 and the `SpanRuler` keep it under an hour). `senter` ships disabled in the small model and is
-enabled for the pass, with abbreviation special cases (it matched the parser on the sample). The
+enabled for the pass, with abbreviation special cases (it matched the parser on the sample).
+Named entity recognition is left out of the pass (`named_entity_recognition: false` in
+`params.yaml`): nothing in cleaning reads entities, and it took about 44% of a worker's time
+(profiled 2026-11-13; on bazzite a 10,000-abstract part took 30 s instead of 44 s, and the 705,283
+abstracts about 27 minutes instead of 40). Matching recognises entities on target sentences (4.1).
+The
 transformer model (`en_core_web_trf`) is a candidate for target sentences only, re-annotating
 tags, morphology and entities (and dependencies if step 7 needs them) within the small model's
 sentences, so boundaries stay consistent. spaCy's own scores (general English): tags 97.3%
@@ -1221,7 +1231,8 @@ and nothing waits on work that comes later:
 4. The corpus review and sign-off (4b), before any experiment uses the corpus.
 5. The lemma review (3.3); exceptions applied to the cached documents (3.6).
 6. The derived views: the static text and the contextual sentences (2.2).
-7. Matching and the usages table; one mention drawn per abstract (4.1–4.5).
+7. Matching and the usages table, with named entities recognised on target sentences; one
+   mention drawn per abstract (4.1–4.5).
 8. The gap report; a top-up download if a cell is under the floor, after which stages 2–7 run for
    the new abstracts and the corpus-level rules rerun in full (4.8).
 9. Control candidates generated and approved (step 5); encoding of targets, controls, sense-list
@@ -1281,7 +1292,9 @@ The sized tasks come to about 4 hours; three are not yet sized.
   - no word is both target and control in a comparison (4.7, step 5);
   - held-out words appear in no development output (6.2);
   - an abstract's drawn mention does not change when other abstracts are added or removed (4.3);
-  - the era eraser is never fitted on the word it is applied to (step 6, experiment 6).
+  - the era eraser is never fitted on the word it is applied to (step 6, experiment 6);
+  - every usage carries its named-entity information, recognised at matching, and matching
+    fails on a document without entity annotation (4.1).
 - **Round trips:** a `DocBin` round trip keeps sentences, norms, span groups and sentence
   languages (4.6).
 - **Statistics module** (6.3): J's pairwise and mean-vector forms agree; the permutation floor

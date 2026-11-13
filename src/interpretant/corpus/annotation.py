@@ -111,6 +111,7 @@ def build_pipeline(
     *,
     languages: Sequence[str],
     english_threshold: float,
+    named_entity_recognition: bool = False,
     model: str = "en_core_web_sm",
 ) -> Language:
     """The spaCy pipeline of the pass: the cleaning patterns as a span ruler, then lingua.
@@ -121,12 +122,19 @@ def build_pipeline(
     ``english_threshold`` confidence in English as English throughout (decision agenda 2.4); it
     declares the sentence language attributes on spaCy's ``Span`` class as a side effect.
 
+    The model's named entity recognition (``ner``) is left out unless
+    ``named_entity_recognition`` is set: nothing in cleaning reads named entities, and it takes
+    about 44% of a worker's time (timed on bazzite: 30 s instead of
+    44 s per 10,000 abstracts). Matching recognises them on target sentences instead (decision
+    agenda 4.1); there they agree with entities found on whole abstracts for 99.87% of 15,018
+    target mentions.
+
     Raises:
         ValueError: if spaCy's English hyphen rule has changed and cannot be removed, or the
             language codes lack English or include one lingua does not know.
     """
     cache_serialiser_extensions()
-    nlp = spacy.load(model, exclude=["parser"])
+    nlp = spacy.load(model, exclude=["parser"] if named_entity_recognition else ["parser", "ner"])
     nlp.enable_pipe("senter")
     tokenizer = nlp.tokenizer
     if not isinstance(tokenizer, Tokenizer):

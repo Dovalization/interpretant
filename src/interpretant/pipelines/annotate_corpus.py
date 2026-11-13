@@ -52,13 +52,14 @@ _Item = TypeVar("_Item")
 
 
 class AnnotateCorpusSettings(ParamsSettings):
-    """The ``annotate_corpus`` section of ``params.yaml``: lingua's settings and its drop rule."""
+    """The ``annotate_corpus`` section of ``params.yaml``: lingua, its drop rule, entities."""
 
     model_config = SettingsConfigDict(yaml_config_section="annotate_corpus")
 
     languages: tuple[str, ...] = Field(min_length=1)
     english_threshold: float = Field(gt=0, le=1)
     max_not_english_share: float = Field(ge=0, le=1)
+    named_entity_recognition: bool
 
 
 def annotate_corpus(
@@ -103,7 +104,10 @@ def annotate_corpus(
     progress.stage("loading the spaCy pipeline")
     patterns = load_cleaning_patterns(catalog)
     nlp = build_pipeline(
-        patterns, languages=settings.languages, english_threshold=settings.english_threshold
+        patterns,
+        languages=settings.languages,
+        english_threshold=settings.english_threshold,
+        named_entity_recognition=settings.named_entity_recognition,
     )
     progress.stage("spaCy pass", total=len(selected))
     annotated = annotate_abstracts(

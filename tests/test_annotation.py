@@ -16,6 +16,7 @@ from interpretant.corpus.annotation import (
     AnnotatedAbstract,
     RawAbstract,
     annotate_abstracts,
+    build_pipeline,
 )
 from interpretant.corpus.language import (
     CONFIDENCE_ATTRIBUTE,
@@ -173,6 +174,17 @@ def test_build_pipeline_runs_lingua_then_drops_the_tensors(nlp: Language) -> Non
     settings = nlp.config["components"][SENTENCE_LANGUAGES]
     assert (settings["languages"], settings["english_threshold"]) == (["en", "de", "fr", "es"], 0.9)
     assert nlp("Attention helps models.").tensor is None
+
+
+def test_build_pipeline_runs_named_entity_recognition_only_when_asked(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    assert "ner" not in nlp.pipe_names
+    assert not nlp("Ada Lovelace worked in London.").has_annotation("ENT_IOB")
+    with_entities = build_pipeline(
+        patterns, languages=["en"], english_threshold=0.9, named_entity_recognition=True
+    )
+    assert "ner" in with_entities.pipe_names
 
 
 def test_annotate_abstracts_reads_an_english_abstract_as_english(

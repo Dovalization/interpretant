@@ -17,6 +17,9 @@ annotate_corpus:
   # An abstract is dropped when more than this share of its judged text is another language
   # ("most of it", provisional, 2.4).
   max_not_english_share: 0.5
+  # Whether the pass runs spaCy's named entity recognition (ner, about 44% of a worker's time).
+  # Off: matching recognises entities on target sentences only (4.1).
+  named_entity_recognition: false
 
 # Stage 3, the corpus-level rules (build-corpus).
 build_corpus:
