@@ -26,6 +26,7 @@ from interpretant.catalog.metadata import (
     load_work_metadata,
 )
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
+from interpretant.catalog.reports import save_corpus_report
 from interpretant.catalog.schemas import ABSTRACTS_COLUMNS, ABSTRACTS_SCHEMA, REMOVAL, SENTENCE
 
 __all__ = [
@@ -56,4 +57,5 @@ __all__ = [
     "save_abstracts",
     "save_annotated_abstracts",
     "save_annotations",
+    "save_corpus_report",
 ]

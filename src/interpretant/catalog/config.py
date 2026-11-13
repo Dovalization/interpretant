@@ -17,7 +17,7 @@ class DatasetEntry(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     path: Path
-    format: Literal["parquet", "yaml", "jsonl", "jsonl.gz", "docbin"]
+    format: Literal["parquet", "yaml", "jsonl", "jsonl.gz", "docbin", "markdown"]
 
 
 class CatalogConfig(BaseModel):
@@ -29,6 +29,7 @@ class CatalogConfig(BaseModel):
     work_metadata: DatasetEntry
     annotated_abstracts: DatasetEntry
     abstracts: DatasetEntry
+    corpus_report: DatasetEntry
     cleaning_rules: DatasetEntry
     cleaning_patterns: DatasetEntry
     annotations: DatasetEntry

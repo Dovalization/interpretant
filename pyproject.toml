@@ -111,6 +111,7 @@ forbidden_modules = [
     "interpretant.embedding",
     "interpretant.pipelines",
     "interpretant.predictions",
+    "interpretant.review",
 ]
 
 [[tool.importlinter.contracts]]
@@ -120,6 +121,7 @@ layers = [
     "interpretant.__main__",
     "interpretant.cli",
     "interpretant.pipelines",
+    "interpretant.review",
     "interpretant.corpus",
     "interpretant.catalog",
 ]

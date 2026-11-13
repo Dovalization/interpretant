@@ -23,6 +23,11 @@ abstracts:
   path: data/processed/abstracts
   format: parquet
 
+# What each rule dropped, removed and flagged, by decade and field (decision agenda 4b).
+corpus_report:
+  path: data/processed/corpus_report.md
+  format: markdown
+
 cleaning_rules:
   path: curated/cleaning_rules.yaml
   format: yaml

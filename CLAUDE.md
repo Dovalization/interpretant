@@ -46,13 +46,15 @@ annotate-corpus [--field ai --decade 2010 --process-count 10]
                                                              data/interim/annotations/<part>.spacy,
                                                              data/interim/annotated_abstracts/<part>.parquet
 build-corpus                                                 data/processed/abstracts/<part>.parquet
+report-corpus                                                data/processed/corpus_report.md
 ```
 
 `fetch-metadata` is not a stage: like the downloads it runs by hand once (resuming where it
 stopped) and its output is registered. `annotate-corpus` (stage 2, the slow spaCy pass) refuses
 cells whose metadata is missing and may annotate some parts only; `build-corpus` (stage 3, the
 corpus-level rules and review flags, minutes) always reads every part of the corpus in
-`params.yaml`'s `corpus` section, so a threshold change reruns only stage 3.
+`params.yaml`'s `corpus` section, so a threshold change reruns only stage 3. `report-corpus`
+writes the corpus report the author reads before the review (4b, layer 2).
 
 ## Pre-registration
 
@@ -70,10 +72,13 @@ analysis: predictions first, in their own commit.
 - `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift grid`). Commands parse options,
   call one library function and print; the loops live in the library with tests.
 - `cli/` and `pipelines/` (rebuild): one thin command per pipeline (`fetch-metadata`,
-  `annotate-corpus`, `build-corpus`), and the pipelines composing the jobs, each with its
-  pydantic settings object reading a section of `params.yaml` (`pipelines/params.py`; `.env`
-  for the OpenAlex key); `pipelines/corpus.py` holds what the two corpus stages share.
-  Import contracts: `__main__` → `cli` → `pipelines` → `corpus` → `catalog`.
+  `annotate-corpus`, `build-corpus`, `report-corpus`), and the pipelines composing the jobs,
+  each with its pydantic settings object reading a section of `params.yaml`
+  (`pipelines/params.py`; `.env` for the OpenAlex key); `pipelines/corpus.py` holds what the
+  two corpus stages share.
+  Import contracts: `__main__` → `cli` → `pipelines` → `review` → `corpus` → `catalog`.
+- `review/` (rebuild): the corpus review (4b): `corpus_report.py` (what each rule dropped,
+  removed and flagged, by decade, field and repository; rendered as Markdown by Polars).
 - `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`) and
   each raw work's OpenAlex metadata (`metadata.py`), the
   abstracts table's pandera schema and its parquet parts, the curated cleaning rules and spaCy
