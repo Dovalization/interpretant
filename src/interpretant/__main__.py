@@ -9,6 +9,7 @@ from rich.console import Console
 from rich.table import Table
 from tqdm import tqdm
 
+from interpretant.cli.annotate_corpus import annotate_corpus_command
 from interpretant.cli.build_corpus import build_corpus_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
 
@@ -21,8 +22,9 @@ def cli() -> None:
     """interpretant — diachronic semantic drift tracker for academic corpora."""
 
 
-cli.add_command(build_corpus_command)
 cli.add_command(fetch_metadata_command)
+cli.add_command(annotate_corpus_command)
+cli.add_command(build_corpus_command)
 
 
 # ---------------------------------------------------------------------------

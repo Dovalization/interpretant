@@ -42,12 +42,17 @@ The rebuild's stages so far, with their settings in `params.yaml` and their data
 
 ```
 fetch-metadata [--field ai --decade 2010 --workers 8]       data/raw/openalex_metadata/<field>/<decade>.jsonl.gz
-build-corpus [--field ai --decade 2010 --process-count 8]   data/processed/abstracts/<part>.parquet,
-                                                             data/interim/annotations/<part>.spacy
+annotate-corpus [--field ai --decade 2010 --process-count 10]
+                                                             data/interim/annotations/<part>.spacy,
+                                                             data/interim/annotated_abstracts/<part>.parquet
+build-corpus                                                 data/processed/abstracts/<part>.parquet
 ```
 
 `fetch-metadata` is not a stage: like the downloads it runs by hand once (resuming where it
-stopped) and its output is registered; `build-corpus` refuses cells whose metadata is missing.
+stopped) and its output is registered. `annotate-corpus` (stage 2, the slow spaCy pass) refuses
+cells whose metadata is missing and may annotate some parts only; `build-corpus` (stage 3, the
+corpus-level rules and review flags, minutes) always reads every part of the corpus in
+`params.yaml`'s `corpus` section, so a threshold change reruns only stage 3.
 
 ## Pre-registration
 
@@ -65,8 +70,9 @@ analysis: predictions first, in their own commit.
 - `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift grid`). Commands parse options,
   call one library function and print; the loops live in the library with tests.
 - `cli/` and `pipelines/` (rebuild): one thin command per pipeline (`fetch-metadata`,
-  `build-corpus`), and the pipelines composing the jobs, each with its pydantic settings object
-  reading `params.yaml` (or `.env`, for the OpenAlex key).
+  `annotate-corpus`, `build-corpus`), and the pipelines composing the jobs, each with its
+  pydantic settings object reading a section of `params.yaml` (`pipelines/params.py`; `.env`
+  for the OpenAlex key); `pipelines/corpus.py` holds what the two corpus stages share.
   Import contracts: `__main__` → `cli` → `pipelines` → `corpus` → `catalog`.
 - `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`) and
   each raw work's OpenAlex metadata (`metadata.py`), the

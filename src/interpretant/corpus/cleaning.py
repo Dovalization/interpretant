@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 from collections import Counter
+from collections.abc import Sequence
 
 import polars as pl
 
@@ -78,6 +79,17 @@ def mark_author_cap(abstracts: pl.DataFrame, *, max_share: float, floor: int) ->
         dropped |= _cap_cell(cell_works, authors_by_work, max_share=max_share, floor=floor)
     return _mark_dropped(
         abstracts, pl.Series(sorted(dropped), dtype=pl.String()), reason=AUTHOR_CAP
+    )
+
+
+def add_flag(abstracts: pl.DataFrame, work_ids: Sequence[str], *, flag: str) -> pl.DataFrame:
+    """Append ``flag`` to the flags of the given works, for the corpus review to sample."""
+    flagged = pl.col("work_id").is_in(pl.Series(work_ids, dtype=pl.String()).implode())
+    return abstracts.with_columns(
+        pl.when(flagged)
+        .then(pl.concat_list("flags", pl.lit(flag)))
+        .otherwise(pl.col("flags"))
+        .alias("flags")
     )
 
 

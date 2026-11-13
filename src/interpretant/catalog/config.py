@@ -27,6 +27,7 @@ class CatalogConfig(BaseModel):
 
     raw_abstracts: DatasetEntry
     work_metadata: DatasetEntry
+    annotated_abstracts: DatasetEntry
     abstracts: DatasetEntry
     cleaning_rules: DatasetEntry
     cleaning_patterns: DatasetEntry

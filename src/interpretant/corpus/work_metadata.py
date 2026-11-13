@@ -16,6 +16,7 @@ import polars as pl
 from pyalex import Works, config
 
 from interpretant.catalog import WorkMetadata
+from interpretant.corpus.cleaning import add_flag
 
 # The fields of decision agenda 4.8: everything the corpus rules, the review and later measures
 # may read, so the corpus is fetched once.
@@ -124,11 +125,5 @@ def mark_metadata_flags(
         NOT_IN_OPENALEX: [work for work, record in metadata.items() if record.missing],
     }
     for flag, work_ids in flags.items():
-        flagged = pl.col("work_id").is_in(pl.Series(work_ids, dtype=pl.String()).implode())
-        abstracts = abstracts.with_columns(
-            pl.when(flagged)
-            .then(pl.concat_list("flags", pl.lit(flag)))
-            .otherwise(pl.col("flags"))
-            .alias("flags")
-        )
+        abstracts = add_flag(abstracts, work_ids, flag=flag)
     return abstracts

@@ -4,7 +4,12 @@ Only pipelines and experiment runners call it; jobs receive data, never paths (d
 step 8.3).
 """
 
-from interpretant.catalog.abstracts import load_abstracts, save_abstracts
+from interpretant.catalog.abstracts import (
+    load_abstracts,
+    load_annotated_abstracts,
+    save_abstracts,
+    save_annotated_abstracts,
+)
 from interpretant.catalog.annotations import load_annotations, save_annotations
 from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, DatasetEntry, read_catalog
 from interpretant.catalog.curated import (
@@ -42,11 +47,13 @@ __all__ = [
     "fetched_work_ids",
     "list_raw_cells",
     "load_abstracts",
+    "load_annotated_abstracts",
     "load_annotations",
     "load_cleaning_patterns",
     "load_raw_cell",
     "load_work_metadata",
     "read_catalog",
     "save_abstracts",
+    "save_annotated_abstracts",
     "save_annotations",
 ]

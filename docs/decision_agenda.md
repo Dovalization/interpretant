@@ -1211,9 +1211,13 @@ reports cover) and a manifest of the project's own (a re-implementation).
 and nothing waits on work that comes later:
 
 1. Downloads from the approved plan (4.8), registered with `dvc add`.
-2. The spaCy pass: repair, annotation, the `SpanRuler`, lingua; the `DocBin` cache (step 2, 4.9).
-3. Corpus-level rules: template sentences, repeated sentences, near-duplicates, the author cap;
-   the abstracts table (2.3, 2.5, 4.6).
+2. The spaCy pass: repair, annotation, the `SpanRuler`, lingua; the `DocBin` cache and the
+   annotated table (step 2, 4.9; `interpretant annotate-corpus`, which can annotate some parts
+   only).
+3. Corpus-level rules: template sentences, repeated sentences, near-duplicates, the author cap,
+   then the review flags (repository-only: 4b); the abstracts
+   table (2.3, 2.5, 4.6; `interpretant build-corpus`, minutes, so a threshold change never redoes
+   stage 2).
 4. The corpus review and sign-off (4b), before any experiment uses the corpus.
 5. The lemma review (3.3); exceptions applied to the cached documents (3.6).
 6. The derived views: the static text and the contextual sentences (2.2).

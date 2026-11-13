@@ -13,6 +13,12 @@ work_metadata:
   path: data/raw/openalex_metadata
   format: jsonl.gz
 
+# The abstracts table as the spaCy pass leaves it (stage 2), one part per field and decade; the
+# corpus-level rules (stage 3) read it and write the abstracts table below.
+annotated_abstracts:
+  path: data/interim/annotated_abstracts
+  format: parquet
+
 abstracts:
   path: data/processed/abstracts
   format: parquet

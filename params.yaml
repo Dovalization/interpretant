@@ -2,10 +2,14 @@
 # (decision agenda, step 9); DVC will track them as parameters. Values marked provisional are fixed
 # by the sample study and the sample audit.
 
-build_corpus:
+# The raw cells the corpus is built from, read by both corpus stages.
+corpus:
   fields: [ai, cogpsych, communication, compsci, hci, histphilsci, linguistics, neuroscience,
     philosophy, psychology, sociology]
   decades: [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020]
+
+# Stage 2, the spaCy pass (annotate-corpus).
+annotate_corpus:
   # lingua's candidates: English and the languages the old checks looked for (provisional, 2.4).
   languages: [en, de, es, fr, pt]
   # lingua's confidence above which a whole abstract is read as English (provisional, 2.4).
@@ -13,6 +17,9 @@ build_corpus:
   # An abstract is dropped when more than this share of its judged text is another language
   # ("most of it", provisional, 2.4).
   max_not_english_share: 0.5
+
+# Stage 3, the corpus-level rules (build-corpus).
+build_corpus:
   # A sentence shared by this many abstracts, digits masked, is a template (2.3).
   template_min_abstracts: 20
   # Estimated Jaccard similarity of word 5-shingles from which an abstract is a near-duplicate

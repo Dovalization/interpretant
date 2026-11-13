@@ -15,6 +15,7 @@ from interpretant.catalog import (
     read_catalog,
 )
 from interpretant.corpus.annotation import build_pipeline
+from tests.corpus_catalog import write_corpus_catalog
 
 VOCAB = ["network", "atom", "information", "model", "evolution", "structure"]
 DECADES = [1960, 1970, 1980, 1990, 2000, 2010]
@@ -51,6 +52,7 @@ def catalog_text() -> str:
     return (
         "raw_abstracts:\n  path: data/raw\n  format: jsonl.gz\n"
         "work_metadata:\n  path: data/metadata\n  format: jsonl.gz\n"
+        "annotated_abstracts:\n  path: data/annotated\n  format: parquet\n"
         "abstracts:\n  path: data/abstracts\n  format: parquet\n"
         "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
         "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
@@ -64,6 +66,12 @@ def catalog(tmp_path: Path, catalog_text: str) -> CatalogConfig:
     catalog_file = tmp_path / "catalog.yaml"
     catalog_file.write_text(catalog_text)
     return read_catalog(catalog_file)
+
+
+@pytest.fixture
+def corpus_catalog_file(tmp_path: Path) -> Path:
+    """The small corpus of ``tests/corpus_catalog.py`` in a temporary catalog."""
+    return write_corpus_catalog(tmp_path)
 
 
 @pytest.fixture(scope="session")
