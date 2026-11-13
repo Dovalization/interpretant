@@ -11,6 +11,7 @@ from interpretant.catalog import read_catalog
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
+from interpretant.pipelines.progress import StageTimer
 from tests.corpus_catalog import ANNOTATE_SETTINGS, SELECTION
 
 
@@ -82,6 +83,23 @@ def test_live_progress_draws_bars_in_a_terminal() -> None:
         progress.stage("near-duplicates", total=10)
         progress.advance(10)
     assert "near-duplicates" in output.getvalue()
+
+
+def test_stage_timer_times_each_stage_and_passes_the_progress_on() -> None:
+    clock = Clock()
+    recorded = RecordingProgress()
+    timer = StageTimer(recorded, clock=clock)
+    timer.stage("loading")
+    clock.now = 2.5
+    timer.stage("near-duplicates", total=3)
+    timer.advance(3)
+    clock.now = 10
+    assert timer.finish() == [("loading", 2.5), ("near-duplicates", 7.5)]
+    assert recorded.stages == [("loading", None, 0), ("near-duplicates", 3, 3)]
+
+
+def test_stage_timer_without_stages_returns_no_stages() -> None:
+    assert StageTimer(RecordingProgress(), clock=Clock()).finish() == []
 
 
 def test_the_corpus_stages_report_every_step_and_every_abstract(

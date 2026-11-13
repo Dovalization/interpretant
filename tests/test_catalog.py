@@ -16,6 +16,7 @@ from interpretant.catalog import (
     CATALOG_FILE,
     CatalogConfig,
     RawCell,
+    append_run_record,
     append_work_metadata,
     fetched_work_ids,
     list_raw_cells,
@@ -24,6 +25,7 @@ from interpretant.catalog import (
     load_work_metadata,
     read_catalog,
     save_abstracts,
+    save_corpus_metrics,
 )
 from tests.abstracts_tables import abstract_row, abstracts_table
 from tests.metadata_records import metadata_record, missing_record
@@ -131,6 +133,18 @@ def test_read_catalog_rejects_a_malformed_catalog(
 
 def test_the_repository_catalog_file_is_valid() -> None:
     assert read_catalog(CATALOG_FILE).abstracts.format == "parquet"
+
+
+def test_save_corpus_metrics_writes_sorted_json(catalog: CatalogConfig) -> None:
+    written = save_corpus_metrics(catalog, {"kept": 2, "abstracts": 3})
+    assert written.read_text() == '{\n  "abstracts": 3,\n  "kept": 2\n}\n'
+
+
+def test_append_run_record_adds_one_line_per_run(catalog: CatalogConfig) -> None:
+    append_run_record(catalog, {"command": "build-corpus"})
+    append_run_record(catalog, {"command": "report-corpus"})
+    lines = catalog.run_log.path.read_text().splitlines()
+    assert [json.loads(line)["command"] for line in lines] == ["build-corpus", "report-corpus"]
 
 
 def test_save_then_load_returns_the_same_abstracts(catalog: CatalogConfig) -> None:

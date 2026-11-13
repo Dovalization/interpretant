@@ -1,5 +1,5 @@
 # Every dataset the pipelines read or write: its location and storage format, written once here.
-# Read by interpretant.catalog (decision agenda, step 8.3); dvc.yaml will read it through `vars:`.
+# Read by interpretant.catalog (decision agenda, step 8.3); dvc.yaml reads it through `vars:`.
 # Paths are relative to this file.
 
 # The regular OpenAlex samples, one gzipped JSON Lines file per cell: <field>/<decade>.jsonl.gz.
@@ -27,6 +27,16 @@ abstracts:
 corpus_report:
   path: data/processed/corpus_report.md
   format: markdown
+
+# The corpus report's counts as JSON, kept in git so DVC compares them between commits.
+corpus_metrics:
+  path: metrics/corpus.json
+  format: json
+
+# One line per run of a corpus command: when, from which commit, how long each stage took.
+run_log:
+  path: metrics/runs.jsonl
+  format: jsonl
 
 cleaning_rules:
   path: curated/cleaning_rules.yaml

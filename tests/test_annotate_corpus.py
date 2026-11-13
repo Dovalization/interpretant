@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 from pathlib import Path
 
@@ -11,6 +12,7 @@ from spacy.language import Language
 
 from interpretant.__main__ import cli
 from interpretant.catalog import load_annotated_abstracts, load_annotations, read_catalog
+from interpretant.cli.annotate_corpus import default_process_count
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
 from interpretant.pipelines.params import CorpusSelection
 from tests.corpus_catalog import ANNOTATE_SETTINGS, SELECTION, SHARED, write_raw_cell
@@ -73,11 +75,23 @@ def test_annotate_corpus_refuses_fields_outside_the_corpus(corpus_catalog_file: 
 
 
 def test_annotate_corpus_command_prints_what_each_rule_took(corpus_catalog_file: Path) -> None:
-    arguments = ["annotate-corpus", "--catalog", str(corpus_catalog_file), "--field", "ai"]
+    arguments = [
+        "annotate-corpus",
+        "--catalog",
+        str(corpus_catalog_file),
+        "--field",
+        "ai",
+        "--process-count",
+        "1",
+    ]
     outcome = CliRunner().invoke(cli, arguments)
     assert outcome.exit_code == 0, outcome.output
     assert "4 abstracts in 2 parts" in outcome.output
     assert "too_short" in outcome.output
+
+
+def test_the_default_process_count_leaves_two_cpus_free() -> None:
+    assert default_process_count() == max(1, (os.cpu_count() or 2) - 2)
 
 
 def test_the_repository_params_file_is_valid_for_the_pass() -> None:

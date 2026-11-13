@@ -9,9 +9,11 @@ from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
 from interpretant.cli.progress import LiveProgress
-from interpretant.cli.results import render_result
+from interpretant.cli.results import render_result, result_counts
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.params import CorpusSelection
+from interpretant.pipelines.progress import StageTimer
+from interpretant.pipelines.runs import record_run
 
 
 @click.command("build-corpus")
@@ -29,8 +31,9 @@ def build_corpus_command(catalog_file: Path) -> None:
     Progress is shown live: a bar in a terminal, a line every half minute in a log file.
     """
     console = Console()
-    with LiveProgress(console) as progress:
-        result = build_corpus(
-            read_catalog(catalog_file), CorpusSelection(), BuildCorpusSettings(), progress=progress
-        )
+    catalog = read_catalog(catalog_file)
+    with LiveProgress(console) as live:
+        timer = StageTimer(live)
+        result = build_corpus(catalog, CorpusSelection(), BuildCorpusSettings(), progress=timer)
+    record_run(catalog, command="build-corpus", stages=timer.finish(), counts=result_counts(result))
     console.print(render_result(result))

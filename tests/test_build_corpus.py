@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -39,12 +40,17 @@ def test_build_corpus_names_the_parts_not_yet_annotated(corpus_catalog_file: Pat
 def test_build_corpus_command_runs_after_the_pass(corpus_catalog_file: Path) -> None:
     catalog_option = ["--catalog", str(corpus_catalog_file)]
     runner = CliRunner()
-    annotated = runner.invoke(cli, ["annotate-corpus", *catalog_option])
+    annotated = runner.invoke(cli, ["annotate-corpus", *catalog_option, "--process-count", "1"])
     assert annotated.exit_code == 0, annotated.output
     built = runner.invoke(cli, ["build-corpus", *catalog_option])
     assert built.exit_code == 0, built.output
     assert "5 abstracts in 3 parts" in built.output
     assert "near_duplicate" in built.output
+    run_log = read_catalog(corpus_catalog_file).run_log.path.read_text().splitlines()
+    runs = [json.loads(line) for line in run_log]
+    assert [run["command"] for run in runs] == ["annotate-corpus", "build-corpus"]
+    assert runs[1]["counts"] == {"abstracts": 5, "dropped": 3, "parts": 3}
+    assert "near-duplicates" in [stage["name"] for stage in runs[1]["stages"]]
 
 
 def test_the_repository_params_file_is_valid_for_the_corpus_rules() -> None:

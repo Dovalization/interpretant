@@ -17,6 +17,8 @@ from interpretant.pipelines.fetch_metadata import (
     openalex_fetcher,
     select_raw_cells,
 )
+from interpretant.pipelines.progress import StageTimer
+from interpretant.pipelines.runs import record_run
 
 
 @click.command("fetch-metadata")
@@ -57,13 +59,15 @@ def fetch_metadata_command(
     cells = select_raw_cells(catalog, fields=fields, decades=decades)
     fetch = openalex_fetcher(OpenAlexSettings(), today=date.today())
     console = Console()
-    with LiveProgress(console) as progress:
-        progress.stage("counting the raw works")
+    with LiveProgress(console) as live:
+        timer = StageTimer(live)
+        timer.stage("counting the raw works")
         total = count_works(catalog, cells)
-        progress.stage("fetching metadata", total=total)
+        timer.stage("fetching metadata", total=total)
         for number, cell in enumerate(cells, start=1):
-            result = fetch_cell_metadata(catalog, cell, fetch, workers=workers, progress=progress)
+            result = fetch_cell_metadata(catalog, cell, fetch, workers=workers, progress=timer)
             console.print(
                 f"[{number}/{len(cells)}] {cell.field} {cell.decade}: {result.fetched:,} "
                 f"fetched, {result.missing:,} missing, {result.already_fetched:,} already there"
             )
+    record_run(catalog, command="fetch-metadata", stages=timer.finish(), counts={"works": total})

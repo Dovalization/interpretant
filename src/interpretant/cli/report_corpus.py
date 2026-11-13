@@ -10,7 +10,9 @@ from rich.console import Console
 from interpretant.catalog import CATALOG_FILE, read_catalog
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.params import CorpusSelection
+from interpretant.pipelines.progress import StageTimer
 from interpretant.pipelines.report_corpus import report_corpus
+from interpretant.pipelines.runs import record_run
 
 
 @click.command("report-corpus")
@@ -25,6 +27,11 @@ from interpretant.pipelines.report_corpus import report_corpus
 def report_corpus_command(catalog_file: Path) -> None:
     """Write the corpus report: what each rule dropped, removed and flagged, by decade and field."""
     console = Console()
-    with LiveProgress(console) as progress:
-        written = report_corpus(read_catalog(catalog_file), CorpusSelection(), progress=progress)
-    console.print(f"Corpus report written to {written}")
+    catalog = read_catalog(catalog_file)
+    with LiveProgress(console) as live:
+        timer = StageTimer(live)
+        written = report_corpus(catalog, CorpusSelection(), progress=timer)
+    record_run(catalog, command="report-corpus", stages=timer.finish(), counts={})
+    console.print(
+        f"Corpus report written to {written}, its metrics to {catalog.corpus_metrics.path}"
+    )

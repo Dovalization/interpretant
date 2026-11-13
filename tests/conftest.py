@@ -58,6 +58,8 @@ def catalog_text() -> str:
         "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
         "annotations:\n  path: data/annotations\n  format: docbin\n"
         "corpus_report:\n  path: data/corpus_report.md\n  format: markdown\n"
+        "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
+        "run_log:\n  path: metrics/runs.jsonl\n  format: jsonl\n"
     )
 
 

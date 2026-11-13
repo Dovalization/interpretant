@@ -7,6 +7,7 @@ works' primary sources, so that archives can be told apart from repositories of 
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
@@ -49,6 +50,21 @@ def build_corpus_report(
     ]
 
 
+def corpus_metrics(abstracts: pl.DataFrame) -> dict[str, object]:
+    """The corpus's headline counts, for DVC to compare between runs (``dvc metrics diff``)."""
+    dropped = abstracts["dropped_reason"].drop_nulls()
+    removals = abstracts["removals"].explode().drop_nulls().struct.field("reason")
+    flags = abstracts["flags"].explode().drop_nulls()
+    return {
+        "abstracts": abstracts.height,
+        _KEPT: abstracts.height - dropped.len(),
+        "dropped": dropped.len(),
+        "dropped_by_reason": _value_counts(dropped),
+        "removed_ranges_by_reason": _value_counts(removals),
+        "flagged_by_flag": _value_counts(flags),
+    }
+
+
 def render_markdown(sections: Sequence[ReportSection], *, title: str) -> str:
     """The report as a Markdown document, each table written by Polars."""
     parts = [f"# {title}\n"]
@@ -67,6 +83,10 @@ def render_markdown(sections: Sequence[ReportSection], *, title: str) -> str:
             f"## {section.title}\n\n{section.note}\n\n{section.table}\n" for section in sections
         )
     return "\n".join(parts)
+
+
+def _value_counts(values: pl.Series) -> dict[str, int]:
+    return {str(value): count for value, count in sorted(Counter(values.to_list()).items())}
 
 
 def _totals(abstracts: pl.DataFrame) -> ReportSection:

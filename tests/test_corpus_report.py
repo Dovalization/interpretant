@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import polars as pl
@@ -11,7 +12,7 @@ from interpretant.corpus.work_metadata import REPOSITORY_ONLY
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.report_corpus import report_corpus
-from interpretant.review.corpus_report import build_corpus_report, render_markdown
+from interpretant.review.corpus_report import build_corpus_report, corpus_metrics, render_markdown
 from tests.abstracts_tables import abstract_row, abstracts_table
 from tests.corpus_catalog import ANNOTATE_SETTINGS, SELECTION
 
@@ -87,3 +88,16 @@ def test_report_corpus_writes_the_report_after_the_build(corpus_catalog_file: Pa
     written = report_corpus(catalog, SELECTION)
     assert written == catalog.corpus_report.path
     assert "## Repository-only works by repository" in written.read_text()
+    metrics = json.loads(catalog.corpus_metrics.path.read_text())
+    assert metrics["abstracts"] == 4  # works 1 to 4, the 2010s cells
+
+
+def test_corpus_metrics_counts_every_drop_removal_and_flag() -> None:
+    assert corpus_metrics(report_table()) == {
+        "abstracts": 5,
+        "kept": 2,
+        "dropped": 3,
+        "dropped_by_reason": {"near_duplicate": 1, "template": 1, "too_short": 1},
+        "removed_ranges_by_reason": {"template_sentence": 1},
+        "flagged_by_flag": {REPOSITORY_ONLY: 2},
+    }

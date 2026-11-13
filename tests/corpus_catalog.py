@@ -55,6 +55,8 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"cleaning_patterns:\n  path: '{repository.cleaning_patterns.path}'\n  format: jsonl\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
+        "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
+        "run_log:\n  path: metrics/runs.jsonl\n  format: jsonl\n"
     )
     for (field, decade), works in CELLS.items():
         write_raw_cell(catalog_file, field, decade, works)

@@ -7,6 +7,15 @@ from rich.table import Table
 from interpretant.pipelines.corpus import CorpusResult
 
 
+def result_counts(result: CorpusResult) -> dict[str, int]:
+    """A stage's headline counts for the run log."""
+    return {
+        "abstracts": result.abstract_count,
+        "dropped": sum(result.dropped_counts.values()),
+        "parts": len(result.parts),
+    }
+
+
 def render_result(result: CorpusResult) -> Table:
     """One table: the run's totals, then the count of each drop, removal and flag reason."""
     table = Table(title=f"{result.abstract_count:,} abstracts in {len(result.parts)} parts")
