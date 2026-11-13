@@ -55,7 +55,9 @@ frozen-but-runnable code.
 
 **1a. The static pipeline.** Whole-field comparison (which field's language reads like which,
 convergence) leaves the project; comparing fields word by word stays (methodology job 1, roadmap
-rung 3). The direction of HCI's change was closed by round W on 2026-11-10.
+rung 3). Code is not kept only so old results can be rerun (the author): old findings are
+recorded as past experiments, with their method and downsides, and the code goes. The direction of
+HCI's change was closed by round W on 2026-11-10.
 
 - Delete: `drift perplexity` and `decompose`, `drift heldout`, `drift separability`,
   `drift direction` (with `perplexity.py`, `heldout.py`, `separability.py`, `direction.py`, their
@@ -174,7 +176,9 @@ conference paper and its journal version as two works on purpose) by MinHash wit
 keeping the earliest and recording each removal; exact duplicates are a special case. The
 threshold comes from the sample study; published practice ranges from 0.5 (Broder 1997; The Pile)
 to 0.8 (Lee et al. 2022, with edit similarity). The same work in two cells is kept in every cell
-it belongs to, its cells recorded in the abstracts table; leaving shared works out of a
+it belongs to (some overlap is legitimate: AI sits inside computer science, and a full cell holds
+its sample cell; but in a comparison between two such fields, shared works make them look alike),
+its cells recorded in the abstracts table; leaving shared works out of a
 comparison is one library helper every measure uses, not a rule each measure writes.
 
 Replaces: four cleaning rule sets, three language checks, two sentence splitters, two URL
@@ -197,8 +201,10 @@ lemma after the exceptions, so *prompted* is found. Exceptions go through spaCy'
 `AttributeRuler` from one file, `curated/lemma_exceptions.tsv` (today `data/lemma_overrides.tsv`):
 the lexicalised plurals the project keeps (*media*) and the reviewed corrections of spaCy's errors
 (3.3); spaCy receives them as a list (`attribute_ruler.add`). The voted lemma map stops running on
-the text; its rules survive only as the tool that finds spaCy's errors. `TARGET_VARIANTS` and the
-protected target list go; a check confirms that no target word is mapped away.
+the text; its rules survive only as the tool that finds spaCy's errors. `TARGET_VARIANTS` (26
+hand-written plurals and spellings of target words) and the protected target list go, since
+beside the lemmas they would be a second list that can disagree; a check confirms that no target
+word is mapped away.
 
 *Why:* over 22.6 million plural-noun and third-person-verb tokens, where both spaCy and the voted
 map merge, spaCy differs on 1,136 types (0.46% of tokens): about half spelling only (spaCy keeps
@@ -232,7 +238,9 @@ boilerplate and citations (*your_browser*, *york_routledge*), non-terms (*lend_i
 (PyATE archived June 2023; textacy's last release April 2023). Broken-word repair stays. The
 static view never joins a phrase containing a single-word target, so a target keeps all its uses
 (in AI, *neural network* is 30% of *network*'s uses in the 1980s and 50% in the 1990s, and the old
-rules removed them). Phrase targets (*neural network*, *artificial intelligence*) are studied in
+rules removed them; *artificial intelligence* is 77–86% of *intelligence*'s). spaCy's noun chunks
+were considered and set aside: they return whole noun phrases (*the new transformer model*), not
+terms. Phrase targets (*neural network*, *artificial intelligence*) are studied in
 the contextual pipeline through the `PhraseMatcher` (4.2). gensim stays only for skip-gram
 training, if step 6b keeps it.
 
@@ -270,7 +278,8 @@ marked the same way by the `PhraseMatcher`. Using compounds as evidence of a sen
 **4.3 One mention per abstract.** The usages table lists every mention; for encoding and
 measures, one per abstract is drawn **among its in-scope mentions only** (the sampling frame is
 the eligible units: Kish 1965), by the smallest cryptographic hash (sha256) of (seed, work id,
-content key), so one abstract's draw never depends on other abstracts or on row order
+content key), so abstracts stay independent observations, so one abstract's draw never depends on
+other abstracts or on row order
 (hash-based assignment: Kohavi et al. 2009; Kohavi, Tang and Xu 2020; their experiments found
 only cryptographic hashes free of correlations).
 
@@ -293,7 +302,9 @@ abstract is in the abstracts table), the identifiers (4.5). One **encoder table*
 encoder's model and pinned revision, its context policy (the sentence by default, as XL-LEXEME
 was trained on Word-in-Context sentence pairs; sentence plus neighbours or the whole abstract
 possible), its window and centring (XL-LEXEME: 128 subword tokens including the markers, centred
-on the target) and how it marks or pools the target. The old 100-word pre-cut is dropped.
+on the target) and how it marks or pools the target; swapping an encoder is one table entry and an
+encoding run.
+The old 100-word pre-cut is dropped.
 Sentence length is recorded (2,462 target sentences: median 25 words, 1.1% under 8 words, 2.1%
 beyond XL-LEXEME's window, `sentence_lengths.py`).
 
@@ -402,8 +413,10 @@ sentences, so boundaries stay consistent. spaCy's own scores (general English): 
 against 98.1%, entities 0.843 against 0.899, labelled dependencies 0.899 against 0.938, sentence
 boundaries 0.907 against 0.886 (the meta does not say which component produced the sentence
 score, so sentence quality rests on the comparison below). On lemmas the two models differed on
-63 of 10,395 types (`compare_taggers.py`). Decided by a one-field comparison: if more than a
-couple of percent of usages change their in-scope flag or lemma between the models, target
+63 of 10,395 types (`compare_taggers.py`). Decided by a one-field comparison, read on the words
+where the small tagger errs
+(*medium*, *learning*, 4.1): if more than a couple of percent of usages change their in-scope
+flag or lemma between the models, target
 sentences use the transformer, on bazzite's GPU after its repository is synced.
 
 ## Step 4b: corpus quality
@@ -419,7 +432,8 @@ beside it.
 | 3. Human review of samples | Below | Curated |
 | 4. Sign-off | No rebuilt corpus is used for experiments until the datasheet and the review are read and approved, with the decision recorded | Curated |
 
-**Layer 3, the review**, as automatic as possible without losing quality, on established audit
+**Layer 3, the review**, sized to about an hour (the author's budget) and as automatic as possible
+without losing quality, on established audit
 methods: sampled audits with a fixed set of categories (Kreutzer et al. 2022), auditing what
 filters removed as well as what they kept (Dodge et al. 2021, on C4), stratified random samples,
 a codebook written before reading, blind repeats for a single reviewer, and lot quality assurance
@@ -443,11 +457,12 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
 - **Rules set before reading** (screening rules, with Wilson intervals reported):
   - wrong field: 2 or more of a field's 15 gives it a second sample of 15, and 3 or more of the 30
     gives it the closer look (at a true rate of 5% a field gets a second sample 17% of the time and
-    the closer look 11%; at 20%, 83% and 82%; with 11 fields, a second sample somewhere is likely
-    in any review);
-  - junk or non-abstracts: judged per era, not overall, since quality differs by era (zero junk
-    in an era's 80 puts its rate likely under 3.7%);
+    the closer look 11%; at 20%, 83% and 82%; with 11 fields, a second sample somewhere happens
+    in 87% of reviews; the stricter 4 or more would flag 4.5% and 78%);
+  - junk or non-abstracts under 2%, judged per era, not overall, since quality differs by era
+    (zero junk in an era's 80 puts its rate likely under 3.7%);
   - a removal rule with 2 or more good texts among its 10 dropped items gets a closer look.
+- Results are reported automatically into the datasheet; the author reads one summary.
 - **Judging page:** field, decade, each abstract's beginning and end with removed spans
   highlighted (so truncation and over-cleaning show), the six categories on keys 1–6, progress
   saved; adapted from `scripts/review/judge_template.html`.
@@ -459,7 +474,8 @@ problems in 12 still allows about 22%); quality differs strongly by era (in the 
 1950s abstracts are under 250 characters against 3.6% of the 2020s', median length 503 against
 1,204 characters; Kim, Holst and Ginis 2026, a preprint, report integrity problems in about 21% of
 pre-2000 OpenAlex abstracts against about 6% for 2020–2025: too little content, metadata in place
-of the abstract, truncation).
+of the abstract, truncation). The cut at exactly 200 characters they report does not show in these
+cells (0.3–1.0% of abstracts per decade fall within 197–203 characters).
 
 ## Step 5: control words
 
@@ -634,7 +650,9 @@ a fresh set is built and held back:
   which is the maximum mean discrepancy with a linear kernel (Gretton et al. 2012; Sejdinovic et
   al. 2013), so it equals half the squared distance between the two periods' mean unit vectors,
   estimated without a usage's pairing with itself. It therefore sees a shift of the mean and
-  nothing else, and is the noise-corrected form of the distance between mean vectors (PRT).
+  nothing else, and is the noise-corrected form of the distance between mean vectors (PRT; rank
+  correlation
+  0.98 on DWUG).
   *Why J:* on DWUG EN (round U, `second_review/j_identity.py`, `measure_candidates.py`), APD
   agrees with human graded change at 0.864 but keeps 0.842 with the periods shuffled, so it
   mostly ranks words by their variety of uses (Kutuzov, Velldal and Øvrelid 2022 proposed
@@ -658,12 +676,14 @@ a fresh set is built and held back:
   at the same n: p = (1 + controls at or above the target) / (controls + 1) (Phipson and Smyth
   2010; North, Curtis and Sham 2002), and the target counts as changed at p at or under the level
   frozen in the confirmation plan (0.05 unless development argues otherwise). With 59 controls at
-  most two may be at or above the target, under 39 none, and under 19 no result is possible.
+  most two may be at or above the target, under 39 none (with 30, the smallest p is 1/31 =
+  0.032), and under 19 no result is possible.
   *Why not the interval against the 95th percentile:* a percentile of 30 values is not a 5% test
   (simulated with a stable target, a J above the 95th percentile of 30 controls was flagged 7.7%
   of the time, 5.9% with 59), and requiring the interval's lower end to clear it counts sampling
-  noise twice, since the controls' J carry the same noise at the same n: the interval rule found a
-  moderate change 2% of the time (a large one 68%), against 35–44% (93–97%) for the rank rule at
+  noise twice, since the controls' J carry the same noise at the same n: the interval rule flagged a
+  stable target 0.1% of the time but found a moderate change only 2% of the time (a large one 68%),
+  against 35–44% (93–97%) for the rank rule at
   3–4% false alarms (`decision_rule.py`). On round X's vectors, *network* in AI, 1980s→1990s (J
   0.0045, interval 0.0010 to 0.0119, 29 controls) is above the 95th percentile (0.0024), fails the
   interval rule and has rank p = 0.067; leaving one control out moves that percentile between
@@ -671,7 +691,8 @@ a fresh set is built and held back:
   2023.
 - **The size: a BCa bootstrap interval**, reported beside the test, resampling abstracts and never
   pairing a usage with its own copy (which would bias J upwards); scipy's default BCa (second-order
-  accurate where the percentile interval is first-order: Efron 1987; DiCiccio and Efron 1996);
+  accurate where the percentile interval is first-order: Efron 1987; DiCiccio and Efron 1996; its
+  jackknife costs about as much as the bootstrap with a statistic computed from vector sums);
   a `DegenerateDataWarning` stops the run instead of switching method. Near zero, J's
   large-sample theory changes form (Gretton et al. 2012) and a naive bootstrap is not guaranteed;
   tested, the interval contained the true J for 96–100% of simulated words and zero for 99% of
@@ -700,7 +721,8 @@ a fresh set is built and held back:
 ## Step 6b: the static models (after detection experiment 4)
 
 Which static model the pipeline keeps, decided by experiment 4 on the synthetic set and the
-benchmark; nothing is presumed. The options:
+benchmark, which also tests whether the old grid's misses came from its rule, its windows or the
+embeddings; nothing is presumed. The options:
 
 1. TWEC (the project's trainer on gensim's internals; `cade` does not count, step 1a);
 2. skip-gram cells trained apart with gensim and aligned with scipy's `orthogonal_procrustes`
@@ -715,14 +737,17 @@ benchmark; nothing is presumed. The options:
 SVD's 96%; Schlechtweg et al. 2019, across domains (SURel), have skip-gram best at its best setting
 (0.85 against PPMI's 0.79 and SVD's 0.64) but close to PPMI on average (0.52 and 0.50); in
 DIACR-Ita, Procrustes-aligned skip-gram scored 0.94 against 0.83 for two TWEC systems, and no
-independent evaluation found has TWEC clearly ahead. Field-decade cells are small corpora. The
+independent evaluation found has TWEC clearly ahead; in SemEval-2020 Task 1, 7 of the 10 best
+systems in subtask 1 (8 of 10 in subtask 2) used static (type) embeddings, before XL-LEXEME
+existed (Schlechtweg et al. 2020). Field-decade cells are small corpora. The
 README's best finding rests on skip-gram and PPMI agreeing. If the grid does not earn its place in
 experiment 4, the question lapses and gensim goes with it.
 
 ## Step 7a: finding senses
 
-Inputs: rounds Y, Q, Z and C–C″; `docs/related_work.md`; the literature below. Hand-written lists
-are the best so far on one benchmark; each automatic method failed in one configuration, not as a
+Inputs: rounds Y, Q, Z and C–C″; `docs/related_work.md`; the literature below. Finding senses is
+not settled (the author), and different approaches are to be tried. Hand-written lists are the
+best so far on one benchmark; each automatic method failed in one configuration, not as a
 method:
 
 | Method | What was tried | Result |
@@ -777,8 +802,9 @@ are not compared directly.
   annotators reached 90%, Hovy et al. 2006; content analysis pretests and freezes its codebook;
   Pustejovsky and Stubbs's MATTER cycle versions its guidelines).
 - **Tools:** scikit-learn 1.8 (`AffinityPropagation`, `AgglomerativeClustering`, `HDBSCAN`);
-  networkx (`label_propagation_communities`; `leiden_communities` needs networkx 3.7 or later,
-  since in the installed 3.6.1 it is a stub for other backends and raises `NotImplementedError`;
+  networkx (`label_propagation_communities`; `leiden_communities` needs networkx 3.7 or later
+  (September 2026), since in the installed 3.6.1 it is a stub for other backends and raises
+  `NotImplementedError`;
   its default quality function is the Constant Potts Model, not modularity, so the choice is set
   explicitly and stated when results are compared with Louvain's); `correlation-clustering` 2.0.0
   (April 2026, by DWUG's first author, depending only on networkx, numpy and scipy; BSD-3-Clause
@@ -835,8 +861,10 @@ split and sampled so they can carry those jobs:
   there removes the 1a labels from the error-rate set (sample selection bias: Zadrozny 2004).
   Items whose abstract the new cleaning drops are excluded; items whose sentence reads
   differently are listed for the author.
-- *Volume and timing:* about 200 new labels (about 1–1.5 hours, in sittings of about 15 minutes)
-  beside check 1a's, more only for words whose intervals come out too wide; each list's senses
+- *Volume and timing:* about 200 new labels across the eight words of 7.1 (about 1–1.5 hours, in
+  sittings of about 15 minutes; an earlier plan's 15 labels per stable word were too few for error
+  rates) beside check 1a's, more only for words whose intervals come out too wide; each list's
+  senses
   plus "other or unclear", on the keystroke judging page of 4b. After the store rebuild and the
   freezing of the lists (7a.4), before the counters are evaluated; labels for held-out words only
   after the confirmation plan is frozen (6.2). Claude's 300 development labels are not ground
@@ -877,7 +905,9 @@ invented change in *component* and *having*).
   predictions and labels only, with no sample weights. EM only with bias-corrected temperature
   scaling (BCTS), through **QuaPy** (0.2.3, October 2026, BSD; it brings pandas back as an
   installed dependency, which the author accepted; the project's code stays on Polars), fed a
-  sample redrawn in proportion to the weights: uncalibrated EM collapsed in tests and is reliable
+  sample redrawn in proportion to the weights and the counter's probabilities directly (its
+  `aggregation_fit` and `aggregate` take precomputed predictions; tested in a throwaway environment
+  with the project's versions): uncalibrated EM collapsed in tests and is reliable
   only with few classes and a calibrated classifier (Esuli, Molinari and Sebastiani 2020), while
   EM with BCTS is hard to beat (Alexandari, Kundaje and Shrikumar 2020). The method is chosen
   once, across all words, by QuaPy's artificial-prevalence protocol on the author's labels, since
@@ -914,7 +944,8 @@ command-line `Labeller` is deleted). One divergence function: scipy's `jensensha
 returns the Jensen-Shannon distance, the square root of the divergence (squared where the
 divergence is meant, and every report names which). One sense-list format (the corpus format:
 keys, definitions, examples, cues, exclusions, and a version number), into which the lists are
-written before they are frozen (7a.4). Cue words move to spaCy's `Matcher`.
+written before they are frozen (7a.4). One supervised classifier (counter 1b's), written once. Cue
+words move to spaCy's `Matcher`.
 
 **7.6 Fine-tuning.** The counters are used as they are first; fine-tuning (XL-LEXEME's top layers,
 or a trained bi-encoder) only if they fall short on the author's labels, since labels are few and
