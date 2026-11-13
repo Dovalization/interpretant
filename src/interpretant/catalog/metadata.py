@@ -4,7 +4,8 @@ Each cell is ``<field>/<decade>.jsonl.gz``, laid out like the raw cells, one rec
 OpenAlex returned it (the fields of decision agenda 4.8) plus the date it was fetched. A work
 OpenAlex no longer returns is recorded as missing, so a rerun does not ask for it again. Like the
 downloads, the files are registered, never regenerated; an interrupted fetch appends where it
-stopped (gzip reads the appended members as one file).
+stopped. Each append is one gzip member, compressed in memory and written in one call, so a fetch
+stopped between batches leaves a whole file (gzip reads the members as one stream).
 """
 
 from __future__ import annotations
@@ -75,10 +76,11 @@ def append_work_metadata(
     for record in records:
         WorkMetadata.model_validate(record)
         lines.append(json.dumps(record, ensure_ascii=False) + "\n")
+    member = gzip.compress("".join(lines).encode("utf-8"))
     path = _path(catalog, cell)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with gzip.open(path, "at", encoding="utf-8") as handle:
-        handle.writelines(lines)
+    with path.open("ab") as handle:
+        handle.write(member)
 
 
 def load_work_metadata(catalog: CatalogConfig, cell: RawCell) -> Iterator[WorkMetadata]:

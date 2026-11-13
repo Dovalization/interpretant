@@ -41,7 +41,7 @@ The rebuild's stages so far, with their settings in `params.yaml` and their data
 `catalog.yaml`:
 
 ```
-fetch-metadata [--field ai --decade 2010]                   data/raw/openalex_metadata/<field>/<decade>.jsonl.gz
+fetch-metadata [--field ai --decade 2010 --workers 8]       data/raw/openalex_metadata/<field>/<decade>.jsonl.gz
 build-corpus [--field ai --decade 2010 --process-count 8]   data/processed/abstracts/<part>.parquet,
                                                              data/interim/annotations/<part>.spacy
 ```

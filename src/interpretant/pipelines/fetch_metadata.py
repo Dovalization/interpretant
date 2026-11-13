@@ -1,13 +1,15 @@
 """Fetch OpenAlex's record of every raw work beyond its abstract (decision agenda 4.8).
 
 Not a stage of the rebuild: like the downloads it runs by hand once and its output is registered.
-Each raw cell's works are looked up 100 at a time and appended to the cell's metadata file; works
-already there are skipped, so an interrupted run resumes where it stopped.
+Each raw cell's works are looked up 100 at a time, several requests at once, and appended to the
+cell's metadata file; works already there are skipped, so an interrupted run resumes where it
+stopped. A free OpenAlex key allows 30 requests a second; eight at once run at about five.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date
 from functools import partial
@@ -77,19 +79,35 @@ def select_raw_cells(
     return cells
 
 
-def fetch_cell_metadata(catalog: CatalogConfig, cell: RawCell, fetch: Fetcher) -> CellFetch:
-    """Fetch the records of a cell's works not yet in its metadata file, 100 at a time."""
+def fetch_cell_metadata(
+    catalog: CatalogConfig, cell: RawCell, fetch: Fetcher, *, workers: int = 1
+) -> CellFetch:
+    """Fetch the records of a cell's works not yet in its metadata file, 100 at a time.
+
+    ``workers`` requests run at once; their results are appended in the cell's order by this
+    thread alone, so the file and the resume behave as with one request at a time. If a request
+    fails, the batches not yet started are cancelled and the error is raised; finished batches
+    after the failed one are fetched again on the next run.
+    """
     done = fetched_work_ids(catalog, cell)
     pending = list(
         dict.fromkeys(
             work.work_id for work in load_raw_cell(catalog, cell) if work.work_id not in done
         )
     )
+    batches = [
+        pending[start : start + IDS_PER_REQUEST]
+        for start in range(0, len(pending), IDS_PER_REQUEST)
+    ]
     missing = 0
-    for start in range(0, len(pending), IDS_PER_REQUEST):
-        records = fetch(pending[start : start + IDS_PER_REQUEST])
-        append_work_metadata(catalog, cell, records)
-        missing += sum(1 for record in records if record.get("missing"))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        try:
+            for records in executor.map(fetch, batches):
+                append_work_metadata(catalog, cell, records)
+                missing += sum(1 for record in records if record.get("missing"))
+        except BaseException:
+            executor.shutdown(cancel_futures=True)
+            raise
     return CellFetch(
         cell=cell, already_fetched=len(done), fetched=len(pending) - missing, missing=missing
     )

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import time
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
@@ -12,7 +13,7 @@ import pytest
 from click.testing import CliRunner
 
 from interpretant.__main__ import cli
-from interpretant.catalog import CatalogConfig, RawCell, fetched_work_ids
+from interpretant.catalog import CatalogConfig, RawCell, fetched_work_ids, load_work_metadata
 from interpretant.cli import fetch_metadata as fetch_metadata_cli
 from interpretant.pipelines.fetch_metadata import (
     OpenAlexSettings,
@@ -62,6 +63,39 @@ def test_fetch_cell_metadata_fetches_in_batches_and_resumes(catalog: CatalogConf
     assert len(fetched_work_ids(catalog, RawCell("ai", 2010))) == 150
     again = fetch_cell_metadata(catalog, RawCell("ai", 2010), fetch)
     assert (again.already_fetched, again.fetched, fetch.batches) == (150, 0, [100, 50])
+
+
+def test_fetch_cell_metadata_keeps_the_cell_order_with_requests_in_parallel(
+    catalog: CatalogConfig,
+) -> None:
+    write_raw_cell(catalog, "ai", 2010, range(1, 351))
+    fetch = FakeFetch()
+
+    def first_batch_slowest(work_ids: Sequence[str]) -> list[dict[str, Any]]:
+        if work_ids[0] == "https://openalex.org/W1":
+            time.sleep(0.2)
+        return fetch(work_ids)
+
+    result = fetch_cell_metadata(catalog, RawCell("ai", 2010), first_batch_slowest, workers=4)
+    written = [record.work_id for record in load_work_metadata(catalog, RawCell("ai", 2010))]
+    assert written == [f"https://openalex.org/W{work}" for work in range(1, 351)]
+    assert (result.fetched, sorted(fetch.batches)) == (350, [50, 100, 100, 100])
+
+
+def test_fetch_cell_metadata_keeps_the_batches_before_a_failed_request(
+    catalog: CatalogConfig,
+) -> None:
+    write_raw_cell(catalog, "ai", 2010, range(1, 301))
+    fetch = FakeFetch()
+
+    def second_batch_fails(work_ids: Sequence[str]) -> list[dict[str, Any]]:
+        if work_ids[0] == "https://openalex.org/W101":
+            raise ConnectionError("OpenAlex did not answer")
+        return fetch(work_ids)
+
+    with pytest.raises(ConnectionError):
+        fetch_cell_metadata(catalog, RawCell("ai", 2010), second_batch_fails, workers=2)
+    assert len(fetched_work_ids(catalog, RawCell("ai", 2010))) == 100
 
 
 def test_select_raw_cells_takes_every_cell_unless_told_otherwise(catalog: CatalogConfig) -> None:

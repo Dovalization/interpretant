@@ -36,8 +36,15 @@ from interpretant.pipelines.fetch_metadata import (
     show_default=True,
     help="The catalog file naming the inputs and outputs.",
 )
+@click.option(
+    "--workers",
+    type=click.IntRange(1, 20),
+    default=8,
+    show_default=True,
+    help="Requests run at once (OpenAlex allows a free key 30 a second).",
+)
 def fetch_metadata_command(
-    fields: tuple[str, ...], decades: tuple[int, ...], catalog_file: Path
+    fields: tuple[str, ...], decades: tuple[int, ...], catalog_file: Path, workers: int
 ) -> None:
     """Fetch OpenAlex's record of every raw work beyond its abstract, resuming where it stopped.
 
@@ -49,7 +56,7 @@ def fetch_metadata_command(
     fetch = openalex_fetcher(OpenAlexSettings(), today=date.today())
     console = Console()
     for number, cell in enumerate(cells, start=1):
-        result = fetch_cell_metadata(catalog, cell, fetch)
+        result = fetch_cell_metadata(catalog, cell, fetch, workers=workers)
         console.print(
             f"[{number}/{len(cells)}] {cell.field} {cell.decade}: {result.fetched:,} fetched, "
             f"{result.missing:,} missing, {result.already_fetched:,} already there"
