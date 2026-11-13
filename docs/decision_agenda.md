@@ -1068,7 +1068,11 @@ packages. Interfaces only at the swap points: the encoder table, the counters, t
 patterns file, the word tables and the settings files. Each pipeline reads as a table of contents
 (one call per stage), with a one-page `docs/architecture.md`.
 
-**8.5 Names.** Job modules are nouns, pipelines verb-plus-object phrases (`encode_usages`,
+**8.5 Names and code standards.** The full standards (names, functions, modules, types, docstrings
+and comments, errors, tests, and the tool that enforces each rule) are in `docs/code_standards.md`
+(decided 2026-11-13): self-documenting code first, names and verb prefixes with fixed meanings,
+keyword-only booleans, docstrings on public code, enforcement switched on at rebuild phase 1. Job
+modules are nouns, pipelines verb-plus-object phrases (`encode_usages`,
 `detect_change`); the field's standard terms (`significance`, after the "statistically
 significant detection" papers; `inventory`; `disambiguation`; `term_extraction`; `provenance`);
 British spelling, no abbreviations; experiments named by their question, not by round letters.

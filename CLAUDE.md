@@ -14,30 +14,12 @@ make test                    # pytest with coverage
 uv run pytest tests/test_drift_grid.py -v     # one file
 uv run pytest tests/ -k "neighbour" -v        # one test by name
 
-make figures                 # redraw figures/*.png from the models and drift tables
 ```
-
-## Web explorer (`web/`)
-
-A static Next.js app (pnpm, TypeScript strict, Tailwind 4, shadcn base-nova on Base UI,
-recharts, nuqs) that reads the JSON written by `uv run python -m interpretant.export web/data`
-(`src/interpretant/export.py`; `export web` joins the CLI after the lemmatised run). The JSON is
-tracked so the site builds without Python.
-
-```bash
-cd web && pnpm install
-pnpm dev                     # local dev server
-pnpm lint && pnpm typecheck && pnpm test && pnpm build   # the CI gates; build writes out/
-```
-
-Conventions follow axm: `eslint.config.js` bans `any`, `!` and `let`; imports sorted; UI
-primitives in `src/components/ui`; pages under `src/app`; pure data helpers in `src/lib` with
-vitest tests next to them; chart colours come from `--chart-N` tokens, one per field, never
-cycled (`src/lib/fields.ts`).
 
 ## Pipeline
 
-One pipeline, run from the CLI in this order. Every command has `--help`.
+The pre-rebuild pipeline, run from the CLI in this order. Every command has `--help`. The
+rebuild replaces it phase by phase (`docs/decision_agenda.md`, steps 2–9).
 
 ```
 corpus openalex download|ingest                         data/processed/<layer>/texts/<cell>.txt
@@ -47,12 +29,6 @@ corpus audit --processed-dir data/phrased --output data/phrased/audit.json
 twec grid [--seed 43 --output-dir models/twec_grid_seed43]   models/twec_grid/<layer>/<field>_<decade>.kv
 ppmi grid                                               models/ppmi_grid/...
 drift grid                                              data/drift/within_field.parquet, cross_field.parquet
-drift perplexity --drop-shared --fixed-budget 200000 --seed 1 ... --seed 5
-drift separability                                      data/drift/separability_{pairs,assignments}.parquet
-drift heldout                                           data/drift/heldout.parquet
-drift direction                                         data/drift/direction_assignments.parquet
-drift senses --word attention --field ai ... --output data/drift/senses_<encoder>.parquet
-figures                                                 figures/*.png
 ```
 
 A cell is one `<field>_<decade>` text file: one document per line, whitespace-tokenised,
@@ -72,9 +48,8 @@ analysis: predictions first, in their own commit.
 
 `src/interpretant/`
 
-- `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift`, `export`, `figures`).
-  Commands parse options, call one library function and print; the loops (ingest,
-  grid training, drift, cross-perplexity, figures) live in the library with tests.
+- `__main__.py`: the Click CLI (`corpus`, `twec`, `ppmi`, `drift grid`). Commands parse options,
+  call one library function and print; the loops live in the library with tests.
 - `corpus/`: `openalex.py` (API client, sampling, cleaning at ingest, `ingest_fields`), `files.py`
   (`source_texts`, `rewrite_texts`: one stage's cell files into the next), `caps.py` (author
   caps), `lemmas.py` (type-level map: *-s* inflections from spaCy's readings in context, and
@@ -88,39 +63,32 @@ analysis: predictions first, in their own commit.
 - `drift/`: `grid.py` (`compare_cells`, `add_noise_floor`, `cell_neighbours`, pair
   enumeration, `measure_grid`; the constants `MEASURE_MIN`, `NEIGHBOUR_MIN`, `NEIGHBOURS`,
   `FLOOR_QUANTILE`), `metrics.py` (cosine distance, batched neighbourhood shift),
-  `perplexity.py` (Kneser-Ney bigrams and the unigram control, shared-abstract removal, fixed
-  training budget, excess cross-entropy, the mix/rate decomposition; `cross_entropy_runs`,
-  `decompose_runs`), `separability.py` (TF-IDF and logistic-regression field classifiers:
-  pairwise accuracy and assignment shares per decade; `separability_runs`, rounds S and V),
-  `heldout.py` (held-out minus training cross-entropy of every cell's bigram model;
-  `heldout_runs`, round M), `direction.py` (each decade's classifier on later decades; the
-  relative gain net of every field's drift and the seed-noise `present` rule; round N; the
-  two-target contrast and the planted check, round W), `senses.py` (contextual embeddings of
-  a word's occurrences from the cased abstracts, clustered into senses shared by every cell;
-  sense shares, Jensen-Shannon divergence, context words and examples; round C).
-- `predictions.py`: helpers the scorers share (`report`, `load_vectors`, `word_count`,
-  `overlap`). Scorers are frozen, so a change here must leave every scorer's output
-  byte-identical: rerun them all and diff.
-- `export.py`: the JSON the web explorer reads.
-- `visualization/`: `figures.py` (the figure functions and `readme_figures`, the README's
-  five figures), `style.py` (palette, fonts).
+  `senses.py` (the cased abstracts behind the cells and seeded samples of a word's occurrences,
+  used by the contextual scripts), `pairs.py` (XL-LEXEME encoding, APD, J and PRT), `labels.py`
+  and `classifier.py` (sense labelling).
+- `predictions.py`: `report`, shared by the remaining scorers.
 
-`scripts/`: `select_*_controls.py` (control words), `score_*.py` (one per prediction
-round; frozen once run). The scorers of the grid, cross-perplexity, direction and clustering
-rounds were removed on 2026-11-12 and stay in git at the commits where they ran.
+`scripts/`: the contextual scripts still in use until the rebuild replaces them, and
+`scripts/evidence/` (the scripts behind the decision agenda's numbers, kept as a record). Every
+past experiment is recorded in `docs/experiments.md`; deleted scorers stay in git.
 
 ## Data and models
 
 `data/` and `models/` are local; only `data/words_of_interest.txt`, the control-word files
-and the round data under `data/labels/` and `data/diagnostics/` are tracked. `.env` holds `OPENALEX_API_KEY`.
+and the round data under `data/labels/` and `data/diagnostics/` are tracked. Human judgements
+live in `curated/` (tracked). Old results are set aside under `data/retired/`. `.env` holds
+`OPENALEX_API_KEY`.
 
 ## Tests
 
-Synthetic only: no real models, no corpus files, no network. Figures are tested on tiny
-`KeyedVectors` and DataFrames built in the test. `tests/test_pipeline.py` runs the whole CLI,
-lemmas to decomposition, on a synthetic two-field, two-decade grid in a few seconds.
+Synthetic only: no real models, no corpus files, no network. `tests/test_pipeline.py` runs the
+whole CLI, ingest to drift grid, on a synthetic two-field, two-decade grid in a few seconds.
 
 ## Code style
+
+Follow `docs/code_standards.md`: self-documenting code first (comments say why, never what),
+names and verb prefixes with fixed meanings, keyword-only booleans, docstrings on public code, and the
+enforcement table. In short, until its rules are switched on at rebuild phase 1:
 
 - Line length 100 (`.ruff.toml`); mypy strict; `# type: ignore[code]` with a specific code.
 - Long `@click.option` lines take `# noqa: E501`; functions used with `ProcessPoolExecutor`

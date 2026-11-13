@@ -1,4 +1,4 @@
-.PHONY: install lint type-check test figures clean
+.PHONY: install lint fmt type-check test clean
 
 install:
 	uv sync --all-extras
@@ -16,9 +16,6 @@ type-check:
 
 test:
 	uv run pytest tests/ -v --cov=src/interpretant --cov-report=term-missing
-
-figures:
-	uv run interpretant figures
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +
