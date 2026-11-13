@@ -155,23 +155,6 @@ def declare_sentence_attributes() -> None:
             Span.set_extension(name, default=None)
 
 
-def compute_not_english_share(doc: Doc, languages: Sequence[SentenceLanguage]) -> float:
-    """The share of the judged sentences' characters that lingua reads as another language.
-
-    Undetermined sentences are left out of both sides; an abstract with none judged scores 0.
-    """
-    judged = 0
-    other = 0
-    for sentence, language in zip(doc.sents, languages, strict=True):
-        if language.language == UNDETERMINED:
-            continue
-        length = sentence.end_char - sentence.start_char
-        judged += length
-        if language.language != ENGLISH:
-            other += length
-    return other / judged if judged else 0.0
-
-
 def _lingua_languages(codes: Sequence[str]) -> list[LinguaLanguage]:
     """The lingua languages for ISO 639-1 codes, which must include English."""
     unique_codes = sorted({code.lower() for code in codes})

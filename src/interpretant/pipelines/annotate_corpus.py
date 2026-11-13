@@ -58,7 +58,7 @@ class AnnotateCorpusSettings(ParamsSettings):
 
     languages: tuple[str, ...] = Field(min_length=1)
     english_threshold: float = Field(gt=0, le=1)
-    max_not_english_share: float = Field(ge=0, le=1)
+    min_english_words: int = Field(ge=1)
     named_entity_recognition: bool
 
 
@@ -114,7 +114,7 @@ def annotate_corpus(
         selected,
         nlp,
         patterns,
-        max_not_english_share=settings.max_not_english_share,
+        min_english_words=settings.min_english_words,
         batch_size=batch_size,
         process_count=process_count,
     )

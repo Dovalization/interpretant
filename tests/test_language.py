@@ -15,7 +15,6 @@ from interpretant.corpus.language import (
     SentenceLanguage,
     SentenceLanguageDetector,
     build_language_detector,
-    compute_not_english_share,
     read_sentence_languages,
 )
 
@@ -70,13 +69,3 @@ def test_read_sentence_languages_refuses_a_document_the_component_has_not_seen(
 ) -> None:
     with pytest.raises(ValueError, match=SENTENCE_LANGUAGES):
         read_sentence_languages(sentences_doc(nlp, ["one two three"]))
-
-
-def test_compute_not_english_share_counts_judged_characters_only(nlp: Language) -> None:
-    doc = sentences_doc(nlp, ["one two three", "vier fünf", "1 2"])
-    languages = [
-        SentenceLanguage("en", 0.9),
-        SentenceLanguage("de", 0.8),
-        SentenceLanguage(UNDETERMINED, 0.0),
-    ]
-    assert compute_not_english_share(doc, languages) == pytest.approx(9 / (13 + 9))

@@ -6,7 +6,8 @@ glued to the next sentence, none inside square brackets), hyphenated words kept 
 as single tokens, and every cleaning pattern's matches written as labelled spans in
 ``doc.spans["removals"]``. Sentence languages come from lingua, as the pipeline's last component
 (``corpus.language``). The keeping rules of the pass (2.3) drop an abstract with mojibake, an
-abstract-scope pattern, mostly another language or fewer than five words, and flag one whose
+abstract-scope pattern, too little English beside another language or fewer than five words,
+and flag one whose
 "sentence" runs past about 150 words.
 """
 
@@ -33,7 +34,6 @@ from interpretant.corpus.language import (
     SENTENCE_LANGUAGES,
     UNDETERMINED,
     SentenceLanguage,
-    compute_not_english_share,
     read_sentence_languages,
 )
 from interpretant.corpus.repair import compile_signatures, has_mojibake, repair_text
@@ -339,7 +339,7 @@ def annotate_abstracts(
     nlp: Language,
     patterns: CleaningPatterns,
     *,
-    max_not_english_share: float,
+    min_english_words: int,
     batch_size: int = 256,
     process_count: int = 1,
 ) -> Iterator[tuple[Doc, AnnotatedAbstract]]:
@@ -347,8 +347,10 @@ def annotate_abstracts(
 
     Dropped abstracts are annotated too, with their reason, so the corpus review can sample
     them. The reasons, first match wins: ``mojibake`` (read on the raw text), an abstract-scope
-    pattern's label, ``not_english`` (more than ``max_not_english_share`` of the judged text, a
-    provisional threshold: decision agenda 2.4), ``too_short`` (fewer than five words kept).
+    pattern's label, ``not_english`` (some text in another language and fewer than
+    ``min_english_words`` words left once it is removed, a provisional threshold: decision agenda
+    2.4), ``too_short`` (fewer than five words kept). An abstract printed in several languages
+    keeps its English part: other-language sentences are removed, not counted against it.
     """
     signatures = compile_signatures(patterns.mojibake_signatures)
     pairs = ((repair_text(abstract.text), abstract) for abstract in abstracts)
@@ -356,7 +358,7 @@ def annotate_abstracts(
     for doc, abstract in annotated:
         yield (
             doc,
-            _annotated_abstract(doc, abstract, patterns, signatures, max_not_english_share),
+            _annotated_abstract(doc, abstract, patterns, signatures, min_english_words),
         )
 
 
@@ -365,15 +367,19 @@ def _annotated_abstract(
     abstract: RawAbstract,
     patterns: CleaningPatterns,
     signatures: re.Pattern[str],
-    max_not_english_share: float,
+    min_english_words: int,
 ) -> AnnotatedAbstract:
     languages = read_sentence_languages(doc)
     removals, drop_reasons = find_removals(doc, patterns.labels, languages)
     if has_mojibake(abstract.text, signatures):
         drop_reasons.insert(0, "mojibake")
-    if compute_not_english_share(doc, languages) > max_not_english_share:
+    kept_words = count_kept_words(doc, removals)
+    has_other_language = any(
+        language.language not in (ENGLISH, UNDETERMINED) for language in languages
+    )
+    if has_other_language and kept_words < min_english_words:
         drop_reasons.append("not_english")
-    if count_kept_words(doc, removals) < MIN_WORDS:
+    if kept_words < MIN_WORDS:
         drop_reasons.append("too_short")
     is_malformed = any(
         sum(1 for token in sentence if _is_word(token)) > MALFORMED_SENTENCE_WORDS

@@ -26,8 +26,8 @@ from interpretant.corpus.language import (
     SENTENCE_LANGUAGES,
 )
 
-# The share of an abstract's judged text in another language that drops it.
-SHARE = 0.5
+# The English words an abstract with text in another language needs to stay.
+MIN_ENGLISH_WORDS = 30
 ENGLISH_SENTENCE = "Attention mechanisms improve machine translation in many settings and tasks."
 GERMAN_SENTENCE = "Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung."
 # Numbers and abbreviations the glued-punctuation rules must leave whole.
@@ -47,7 +47,9 @@ def raw(text: str, work: int = 1) -> RawAbstract:
 
 
 def annotate(text: str, nlp: Language, patterns: CleaningPatterns) -> AnnotatedAbstract:
-    ((_, row),) = annotate_abstracts([raw(text)], nlp, patterns, max_not_english_share=SHARE)
+    ((_, row),) = annotate_abstracts(
+        [raw(text)], nlp, patterns, min_english_words=MIN_ENGLISH_WORDS
+    )
     return row
 
 
@@ -405,11 +407,35 @@ def test_annotate_abstracts_reads_an_english_abstract_as_english(
 def test_annotate_abstracts_removes_a_sentence_in_another_language(
     nlp: Language, patterns: CleaningPatterns
 ) -> None:
-    text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {GERMAN_SENTENCE}"
+    text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {GERMAN_SENTENCE}"
     row = annotate(text, nlp, patterns)
-    assert [sentence.language for sentence in row.sentences] == ["en", "en", "de"]
+    assert [sentence.language for sentence in row.sentences] == ["en", "en", "en", "de"]
     assert removed_texts(row)["not_english"] == [GERMAN_SENTENCE]
     assert row.dropped_reason is None
+
+
+def test_annotate_abstracts_keeps_the_english_summary_of_a_bilingual_abstract(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {ENGLISH_SENTENCE} " + " ".join(
+        [GERMAN_SENTENCE] * 6
+    )
+    row = annotate(text, nlp, patterns)
+    assert len(removed_texts(row)["not_english"]) == 6
+    assert row.dropped_reason is None
+
+
+def test_annotate_abstracts_drops_too_little_english_beside_another_language(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {GERMAN_SENTENCE}"
+    assert annotate(text, nlp, patterns).dropped_reason == "not_english"
+
+
+def test_annotate_abstracts_keeps_a_short_english_abstract(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    assert annotate(ENGLISH_SENTENCE, nlp, patterns).dropped_reason is None
 
 
 def test_annotate_abstracts_flags_a_sentence_without_punctuation(
@@ -425,7 +451,9 @@ def test_annotation_cache_keeps_sentences_norms_languages_and_removal_spans(
     catalog: CatalogConfig, nlp: Language, patterns: CleaningPatterns
 ) -> None:
     text = f"Abstract: Models use senses. See https://example.org now. {GERMAN_SENTENCE}"
-    ((original, _),) = annotate_abstracts([raw(text)], nlp, patterns, max_not_english_share=SHARE)
+    ((original, _),) = annotate_abstracts(
+        [raw(text)], nlp, patterns, min_english_words=MIN_ENGLISH_WORDS
+    )
     save_annotations(catalog, [original], part="ai_2010")
     (cached,) = load_annotations(catalog, "ai_2010", nlp.vocab)
     assert [sentence.text for sentence in cached.sents] == [s.text for s in original.sents]
@@ -452,7 +480,7 @@ def test_annotate_abstracts_gives_the_same_rows_in_worker_processes(
             abstracts,
             nlp,
             patterns,
-            max_not_english_share=SHARE,
+            min_english_words=MIN_ENGLISH_WORDS,
             batch_size=2,
             process_count=process_count,
         )

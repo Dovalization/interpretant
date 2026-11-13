@@ -14,9 +14,11 @@ annotate_corpus:
   languages: [en, de, es, fr, pt]
   # lingua's confidence above which a whole abstract is read as English (provisional, 2.4).
   english_threshold: 0.9
-  # An abstract is dropped when more than this share of its judged text is another language
-  # ("most of it", provisional, 2.4).
-  max_not_english_share: 0.5
+  # An abstract with text in another language is dropped when fewer English words than this
+  # are left once that text is removed (provisional, 2.4). It replaced a share rule ("more
+  # than half another language") on 2026-11-13: the share dropped the English summaries of
+  # abstracts printed in two or three languages, 1,636 of them with 30 or more English words.
+  min_english_words: 30
   # Whether the pass runs spaCy's named entity recognition (ner, about 44% of a worker's time).
   # Off: matching recognises entities on target sentences only (4.1).
   named_entity_recognition: false
