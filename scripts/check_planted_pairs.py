@@ -10,13 +10,13 @@ Base and control vectors come from round X's cache; planted usages are encoded o
 from __future__ import annotations
 
 import random
+import re
 import sys
 from pathlib import Path
 
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
-import check_known_presence as check_1a
 import score_pairs_known as round_x
 
 from interpretant.drift.pairs import Usage, XLLexeme, across_minus_within
@@ -28,6 +28,17 @@ SHARES = (0.1, 0.2, 0.3, 0.4, 0.6)
 PLACEBO_SHARE = 0.4
 DRAWS = 5
 SEED = 2026
+# Check 1a's attention-mechanism markers (moved here when check 1a's script was deleted).
+MECHANISM_MARKERS = (
+    r"self-attention|self attention|cross-attention|transformers?|multi-head|multihead"
+    r"|attention mechanisms?|attention layers?|attention weights?|attention heads?"
+    r"|attention modules?"
+)
+
+
+def has_mechanism_marker(context: str) -> bool:
+    """Whether a context carries one of check 1a's attention-mechanism markers."""
+    return re.search(rf"\b(?:{MECHANISM_MARKERS})\b", context, re.IGNORECASE) is not None
 
 
 def planting_pool() -> dict[str, np.ndarray]:
@@ -39,8 +50,8 @@ def planting_pool() -> dict[str, np.ndarray]:
         cell, "attention", seed=1, sampling=Sampling(cap=100_000, plural=True, quality=True)
     )
     usages = [Usage(o.context, o.start, o.end) for o in found]
-    marked = [u for u in usages if check_1a.marked("attention", u.text)]
-    unmarked = [u for u in usages if not check_1a.marked("attention", u.text)]
+    marked = [u for u in usages if has_mechanism_marker(u.text)]
+    unmarked = [u for u in usages if not has_mechanism_marker(u.text)]
     encoder = XLLexeme()
     pool = {"marked": encoder.encode(marked), "unmarked": encoder.encode(unmarked)}
     np.savez(CACHE, **pool)  # type: ignore[arg-type]

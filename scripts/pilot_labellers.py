@@ -42,9 +42,9 @@ from interpretant.drift.labels import (
 )
 from interpretant.drift.pairs import Usage
 
-KEY = Path("data/diagnostics/gold_pairs_key.tsv")
-JUDGED = Path("data/diagnostics/gold_pairs.md")
-CORRECTIONS = Path("data/diagnostics/gold_pairs_author_corrections.tsv")
+KEY = Path("curated/gold_pairs_key.tsv")
+JUDGED = Path("curated/gold_pairs.tsv")
+CORRECTIONS = Path("curated/gold_pairs_author_corrections.tsv")
 LISTS = Path("data/sense_lists/pilot_check_2b.toml")
 OUT = Path("data/labels/pilot")
 SONNET = Labeller(model="claude-sonnet-5-5", effort="low")
@@ -239,13 +239,10 @@ def recheck() -> None:
 
 
 def judgements(corrected: bool) -> dict[str, int]:
-    import re
-
-    text = JUDGED.read_text(encoding="utf-8")
-    found = {
-        item: int(value)
-        for item, value in re.findall(r"## Item (\d+):.*?Judgement:[ \t]*([0-4])", text, re.DOTALL)
-    }
+    with JUDGED.open(encoding="utf-8") as table:
+        found = {
+            row["item"]: int(row["judgement"]) for row in csv.DictReader(table, delimiter="\t")
+        }
     if corrected:
         with CORRECTIONS.open(encoding="utf-8") as table:
             for row in csv.DictReader(table, delimiter="\t"):
