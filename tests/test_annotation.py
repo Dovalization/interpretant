@@ -177,6 +177,16 @@ def test_annotate_abstracts_removes_links_without_a_scheme(
     assert removed_texts(annotate(text, nlp, patterns))["url"] == [removed]
 
 
+def test_annotate_abstracts_removes_an_encoded_library_link_and_keeps_the_abstract(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    link = "{openurl}?query=rft.jtitle%253DJAMA%26rft_id%253Dinfo%253Apmid%252F10086433"
+    text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} [1]: {link} [2]: see the trial."
+    row = annotate(text, nlp, patterns)
+    assert removed_texts(row) == {"encoded_link": [link]}
+    assert row.dropped_reason is None
+
+
 def test_annotate_abstracts_keeps_dotted_words_that_are_not_links(
     nlp: Language, patterns: CleaningPatterns
 ) -> None:

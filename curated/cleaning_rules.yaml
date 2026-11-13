@@ -43,6 +43,11 @@ labels:
   # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
   # alone: social media are a research topic.
   web_scrape: abstract
+  # A library link with an OpenURL key (rft_id) or percent-encoding: the whole link, the run of
+  # tokens with no space between them around the encoded token. Until 2026-11-13 these patterns
+  # were web_scrape and dropped the abstract: 32 of run 1's drops were real evidence summaries
+  # ending in a list of such links.
+  encoded_link: tokens
   # Exam-dump advertising, matched only by words naming dumps or dump sites. Phrases such as
   # "certification exam" and "actual questions" were dropped on 2026-11-13: they removed real
   # abstracts (a study of English certification exams, an NGF paper's "actual questions").

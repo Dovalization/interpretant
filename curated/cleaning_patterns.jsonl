@@ -25,8 +25,8 @@
 {"label":"web_scrape","pattern":[{"LOWER":"download"},{"LOWER":"citation"},{"LOWER":"file"}]}
 {"label":"web_scrape","pattern":[{"LOWER":{"IN":["easybib","refworks"]}}]}
 {"label":"web_scrape","pattern":[{"LOWER":"request"},{"LOWER":"reuse"},{"LOWER":"permissions"}]}
-{"label":"web_scrape","pattern":[{"LOWER":{"REGEX":"rft_id"}}]}
-{"label":"web_scrape","pattern":[{"TEXT":{"REGEX":"(%2[0-9a-fA-F]){3}"}}]}
+{"label":"encoded_link","pattern":[{"SPACY":false,"OP":"*"},{"LOWER":{"REGEX":"rft_id|(?:%2[0-9a-f]){3}"},"SPACY":false},{"SPACY":false,"OP":"*"},{}]}
+{"label":"encoded_link","pattern":[{"SPACY":false,"OP":"*"},{"LOWER":{"REGEX":"rft_id|(?:%2[0-9a-f]){3}"}}]}
 {"label":"exam_spam","pattern":[{"LOWER":{"REGEX":"^(brain-?dumps?|dumps4\\w*|pass4sure)$"}}]}
 {"label":"exam_spam","pattern":[{"LOWER":"brain"},{"LOWER":{"IN":["dump","dumps"]}}]}
 {"label":"exam_spam","pattern":[{"LOWER":"exam"},{"LOWER":{"IN":["dump","dumps"]}}]}
