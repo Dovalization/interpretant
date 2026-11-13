@@ -154,9 +154,10 @@ views (the full order is in step 9).
 - *After the pass, corpus-level rules:* template sentences (shared by 20 or more abstracts,
   spaCy's sentences with digits masked, counted with Polars over every source after footers are
   marked; an abstract made mostly of them is dropped); a sentence repeated within one abstract is
-  kept once, later copies marked "repeated sentence" (353 of 322,329 raw abstracts, 0.11%, repeat
-  a sentence of 40 or more characters, often the abstract pasted twice; without this rule two
-  mentions would share a usage id, 4.5); near-duplicates (2.5); the author cap, 1% of a cell with
+  kept once, every later exact copy marked "repeated sentence" whatever its length, since any
+  repeat would give two mentions the same usage id (4.5) (353 of 322,329 raw abstracts, 0.11%,
+  repeat a sentence of 40 or more characters, often the abstract pasted twice; shorter repeats
+  were not counted); near-duplicates (2.5); the author cap, 1% of a cell with
   a floor of at least 5 works, so small cells are not gutted. Each cell (source, field, decade) is
   capped on all its works, independently of the others, and a work over the cap in any cell leaves
   all of them, so the order of the cells cannot matter (on the raw cells this drops the same 5,491
@@ -345,8 +346,9 @@ text and offsets, offsets pointing at the target.
   the removal ranges with their reasons (2.2).
 - A **usages** table points into it instead of copying text: usage id, content key, word,
   compound and position, part of speech, morphology, lemma, the static view's token, in scope,
-  sentence and target offsets, sentence length, sentence language and confidence,
-  near-duplicate group.
+  sentence and target offsets, sentence length, sentence language and confidence. No
+  near-duplicate group: only kept abstracts have usages, and the near-duplicate pairs are in the
+  abstracts table (`duplicate_of`, 2.5).
 - **Vectors** per encoder name and version and per word
   (`vectors/encoder=<name>-<version>/word=<word>/`, read by Polars' hive partitioning), one row
   per content key with the vector as 16-bit floats (1,884 bytes per vector; a filtered read of 100
