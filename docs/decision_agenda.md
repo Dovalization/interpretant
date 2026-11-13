@@ -1215,7 +1215,7 @@ and nothing waits on work that comes later:
    annotated table (step 2, 4.9; `interpretant annotate-corpus`, which can annotate some parts
    only).
 3. Corpus-level rules: template sentences, repeated sentences, near-duplicates, the author cap,
-   then the review flags (repository-only: 4b); the abstracts
+   then the review flags (repository-only, front matter, retracted, truncated: 4b); the abstracts
    table (2.3, 2.5, 4.6; `interpretant build-corpus`, minutes, so a threshold change never redoes
    stage 2).
 4. The corpus review and sign-off (4b), before any experiment uses the corpus.

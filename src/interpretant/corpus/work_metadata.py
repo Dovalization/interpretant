@@ -48,6 +48,8 @@ METADATA_FIELDS = (
 IDS_PER_REQUEST = 100
 REPOSITORY_ONLY = "repository_only"
 NOT_IN_OPENALEX = "not_in_openalex"
+PARATEXT = "paratext"
+RETRACTED = "retracted"
 # Indexes of scholarly publications. DataCite is left out: it lists research data and archive
 # records alike, so the review looks at it first (decision agenda 4b).
 SCHOLARLY_INDEXES = frozenset({"crossref", "pubmed", "arxiv", "doaj"})
@@ -119,10 +121,16 @@ def index_work_metadata(
 def mark_metadata_flags(
     abstracts: pl.DataFrame, metadata: Mapping[str, WorkMetadata]
 ) -> pl.DataFrame:
-    """Flag repository-only works, and works OpenAlex no longer returns, for the review."""
+    """Flag works for the review from their metadata.
+
+    The flags: repository-only, no longer returned by OpenAlex, front matter (OpenAlex's
+    ``is_paratext``: tables of contents, editorial boards) and retracted.
+    """
     flags = {
         REPOSITORY_ONLY: [work for work, record in metadata.items() if is_repository_only(record)],
         NOT_IN_OPENALEX: [work for work, record in metadata.items() if record.missing],
+        PARATEXT: [work for work, record in metadata.items() if record.is_paratext],
+        RETRACTED: [work for work, record in metadata.items() if record.is_retracted],
     }
     for flag, work_ids in flags.items():
         abstracts = add_flag(abstracts, work_ids, flag=flag)

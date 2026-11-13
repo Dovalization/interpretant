@@ -12,9 +12,11 @@ from interpretant.corpus.cleaning import (
     REPEATED_SENTENCE,
     TEMPLATE,
     TEMPLATE_SENTENCE,
+    TRUNCATED,
     mark_author_cap,
     mark_repeated_sentences,
     mark_template_sentences,
+    mark_truncated,
 )
 from tests.abstracts_tables import abstract_row, abstracts_table, dropped_reasons, removals_of
 
@@ -151,6 +153,25 @@ def test_mark_author_cap_caps_each_cell_on_all_its_works() -> None:
     compsci_cell = set(stable_order([*range(1, 6), *range(10, 13)])[5:])
     # Capped one after the other, compsci would count only the works ai kept and miss one.
     assert capped == ai_cell | compsci_cell
+
+
+def test_mark_truncated_flags_an_abstract_that_stops_mid_sentence() -> None:
+    table = abstracts_table(
+        [
+            abstract_row(1, ["Models learn senses.", "The effect of attention on"]),
+            abstract_row(2, ["Models learn senses (as shown below)."]),
+            abstract_row(3, ['They wrote "models learn senses."']),
+            abstract_row(4, ["Models learn senses?"]),
+        ]
+    )
+    assert mark_truncated(table)["flags"].to_list() == [[TRUNCATED], [], [], []]
+
+
+def test_mark_truncated_leaves_an_abstract_ending_in_a_removed_range() -> None:
+    sentences = ["Models learn senses.", "Code at https://example.org"]
+    url = {"start": 29, "end": 48, "reason": "url"}
+    table = abstracts_table([abstract_row(1, sentences, removals=[url])])
+    assert mark_truncated(table)["flags"].to_list() == [[]]
 
 
 @pytest.mark.parametrize(

@@ -2,7 +2,8 @@
 
 Template sentences and repeated sentences add labelled removal ranges, as the pass does; an
 abstract made mostly of template sentences, and works over an author's share of a cell, are
-dropped with their reason. The text is never edited (2.2).
+dropped with their reason; abstracts that seem cut off are flagged for the review. The text is
+never edited (2.2).
 """
 
 from __future__ import annotations
@@ -17,8 +18,13 @@ TEMPLATE_SENTENCE = "template_sentence"
 REPEATED_SENTENCE = "repeated_sentence"
 TEMPLATE = "template"
 AUTHOR_CAP = "author_cap"
+TRUNCATED = "truncated"
 # "An abstract made mostly of them is dropped": more than half its sentence characters.
 TEMPLATE_DROP_SHARE = 0.5
+# An abstract whose text, once closing brackets and quotes are set aside, ends otherwise was
+# probably cut off (decision agenda 4b: the review's "truncated or malformed" category).
+_SENTENCE_END = ".!?"
+_CLOSERS = ")]}\"'”’»"
 
 
 def mark_template_sentences(abstracts: pl.DataFrame, *, min_abstracts: int) -> pl.DataFrame:
@@ -80,6 +86,24 @@ def mark_author_cap(abstracts: pl.DataFrame, *, max_share: float, floor: int) ->
     return _mark_dropped(
         abstracts, pl.Series(sorted(dropped), dtype=pl.String()), reason=AUTHOR_CAP
     )
+
+
+def mark_truncated(abstracts: pl.DataFrame) -> pl.DataFrame:
+    """Flag abstracts that stop mid-sentence, for the corpus review.
+
+    An abstract is flagged when its text, closing brackets and quotes set aside, ends without
+    sentence punctuation. One that ends in a removed range (a URL, a copyright line) is not
+    judged: its own ending is gone.
+    """
+    truncated = []
+    for work_id, text, removals in abstracts.select("work_id", "text", "removals").iter_rows():
+        end = len(text.rstrip())
+        if any(removal["end"] >= end for removal in removals):
+            continue
+        ending = text[:end].rstrip(_CLOSERS + " ")
+        if ending and ending[-1] not in _SENTENCE_END:
+            truncated.append(work_id)
+    return add_flag(abstracts, truncated, flag=TRUNCATED)
 
 
 def add_flag(abstracts: pl.DataFrame, work_ids: Sequence[str], *, flag: str) -> pl.DataFrame:

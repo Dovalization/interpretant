@@ -18,7 +18,9 @@ from interpretant.corpus.work_metadata import (
     IDS_PER_REQUEST,
     METADATA_FIELDS,
     NOT_IN_OPENALEX,
+    PARATEXT,
     REPOSITORY_ONLY,
+    RETRACTED,
     configure_openalex,
     fetch_work_metadata,
     index_work_metadata,
@@ -132,3 +134,13 @@ def test_mark_metadata_flags_adds_flags_and_keeps_the_existing_ones() -> None:
     ]
     flagged = mark_metadata_flags(table, index_work_metadata(records, table["work_id"]))
     assert flagged["flags"].to_list() == [[MALFORMED, REPOSITORY_ONLY], [], [NOT_IN_OPENALEX]]
+
+
+def test_mark_metadata_flags_marks_front_matter_and_retracted_works() -> None:
+    table = abstracts_table([abstract_row(work, ["Models learn senses."]) for work in (1, 2)])
+    records = [
+        metadata({**metadata_record(1), "is_paratext": True}),
+        metadata({**metadata_record(2), "is_retracted": True}),
+    ]
+    flagged = mark_metadata_flags(table, index_work_metadata(records, table["work_id"]))
+    assert flagged["flags"].to_list() == [[PARATEXT], [RETRACTED]]
