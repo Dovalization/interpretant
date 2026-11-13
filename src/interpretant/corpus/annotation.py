@@ -154,6 +154,10 @@ def build_pipeline(
         SENTENCE_LANGUAGES,
         config={"languages": list(languages), "english_threshold": english_threshold},
     )
+    # The tok2vec vectors left on each document are neither cached nor read later; dropping them
+    # makes a document about a third the size to hold and to pass between worker processes
+    # (spaCy's documentation, "Memory management").
+    nlp.add_pipe("doc_cleaner", config={"attrs": {"tensor": None}})
     return nlp
 
 
@@ -184,6 +188,18 @@ def find_removals(
         if language.language not in (ENGLISH, UNDETERMINED):
             removals.add(Removal(sentence.start_char, sentence.end_char, "not_english"))
     return sorted(removals), drop_reasons
+
+
+def kept_text(text: str, removals: Sequence[Removal]) -> str:
+    """The text outside the removed ranges, the pieces joined by single spaces."""
+    pieces = []
+    position = 0
+    for removal in sorted(removals):
+        if removal.start > position:
+            pieces.append(text[position : removal.start])
+        position = max(position, removal.end)
+    pieces.append(text[position:])
+    return " ".join(pieces)
 
 
 def count_kept_words(doc: Doc, removals: Sequence[Removal]) -> int:

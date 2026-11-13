@@ -168,10 +168,11 @@ def test_build_pipeline_keeps_hyphenated_words_whole(nlp: Language) -> None:
     ]
 
 
-def test_build_pipeline_runs_lingua_last_with_its_settings_in_the_config(nlp: Language) -> None:
-    assert nlp.pipe_names[-1] == SENTENCE_LANGUAGES
+def test_build_pipeline_runs_lingua_then_drops_the_tensors(nlp: Language) -> None:
+    assert nlp.pipe_names[-2:] == [SENTENCE_LANGUAGES, "doc_cleaner"]
     settings = nlp.config["components"][SENTENCE_LANGUAGES]
     assert (settings["languages"], settings["english_threshold"]) == (["en", "de", "fr", "es"], 0.9)
+    assert nlp("Attention helps models.").tensor is None
 
 
 def test_annotate_abstracts_reads_an_english_abstract_as_english(

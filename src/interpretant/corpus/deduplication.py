@@ -15,7 +15,7 @@ import polars as pl
 from datasketch import MinHash, MinHashLSH
 
 from interpretant.catalog import RawWork
-from interpretant.corpus.annotation import RawAbstract, Removal
+from interpretant.corpus.annotation import RawAbstract, Removal, kept_text
 
 NEAR_DUPLICATE = "near_duplicate"
 SHINGLE_WORDS = 5
@@ -57,7 +57,7 @@ def build_shingles(text: str, removals: Sequence[Removal]) -> set[bytes]:
     texts, so punctuation attached to a word does no harm. A text shorter than five words is one
     shingle; an empty one has none.
     """
-    words = _kept_text(text, removals).lower().split()
+    words = kept_text(text, removals).lower().split()
     if len(words) < SHINGLE_WORDS:
         return {" ".join(words).encode()} if words else set()
     return {
@@ -77,21 +77,19 @@ def mark_near_duplicates(abstracts: pl.DataFrame, *, threshold: float) -> pl.Dat
     duplicates are the special case of similarity 1.
     """
     candidates = abstracts.filter(pl.col("dropped_reason").is_null()).sort("year", "work_id")
-    work_ids: list[str] = candidates["work_id"].to_list()
-    shingle_sets = [
-        build_shingles(text, [Removal(**removal) for removal in removals])
-        for text, removals in zip(candidates["text"], candidates["removals"], strict=True)
-    ]
-    order = {work_id: position for position, work_id in enumerate(work_ids)}
+    order = {work_id: position for position, work_id in enumerate(candidates["work_id"])}
     lsh_index = MinHashLSH(threshold=threshold, num_perm=PERMUTATION_COUNT)
     kept: dict[str, MinHash] = {}
     duplicate_of: dict[str, str] = {}
-    minhashes = MinHash.generator(
-        (sorted(shingles) for shingles in shingle_sets), num_perm=PERMUTATION_COUNT
-    )
-    for work_id, shingles, minhash in zip(work_ids, shingle_sets, minhashes, strict=True):
+    # Each abstract's shingles are built as it is visited and only its signature is kept: held
+    # all at once, the shingles of the whole corpus take about 15 GB.
+    rows = zip(candidates["work_id"], candidates["text"], candidates["removals"], strict=True)
+    for work_id, text, removals in rows:
+        shingles = build_shingles(text, [Removal(**removal) for removal in removals])
         if not shingles:
             continue
+        minhash = MinHash(num_perm=PERMUTATION_COUNT)
+        minhash.update_batch(list(shingles))
         similarities = [(minhash.jaccard(kept[key]), key) for key in lsh_index.query(minhash)]
         matches = [match for match in similarities if match[0] >= threshold]
         if matches:
@@ -115,14 +113,3 @@ def mark_near_duplicates(abstracts: pl.DataFrame, *, threshold: float) -> pl.Dat
         )
         .drop("original")
     )
-
-
-def _kept_text(text: str, removals: Sequence[Removal]) -> str:
-    pieces = []
-    position = 0
-    for removal in sorted(removals):
-        if removal.start > position:
-            pieces.append(text[position : removal.start])
-        position = max(position, removal.end)
-    pieces.append(text[position:])
-    return " ".join(pieces)
