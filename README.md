@@ -110,18 +110,6 @@ Word vectors are a natural instrument for this. The distributional hypothesis be
 
 ---
 
-## Explorer
-
-`web/` is a static Next.js explorer of the same data: a word's neighbour columns per field and
-decade, its drift ranks and frequency, the cross-field divergence matrix, the who-predicts-whom
-matrix with each pair over time, and the full prediction ledger. It reads JSON exported from the
-models and tables (`uv run interpretant export web`), so it needs no Python to
-build:
-
-```bash
-cd web && pnpm install && pnpm dev
-```
-
 ## Getting started
 
 ```bash
@@ -147,14 +135,6 @@ uv run interpretant drift grid          # data/drift/within_field.parquet, cross
 # Robustness: a second seed and a count-based method
 uv run interpretant twec grid --seed 43 --output-dir models/twec_grid_seed43
 uv run interpretant ppmi grid
-
-# Cross-perplexity between fields (corrected design, five seeds)
-uv run interpretant drift perplexity --drop-shared --fixed-budget 200000 \
-  --seed 1 --seed 2 --seed 3 --seed 4 --seed 5 \
-  --output data/drift/cross_perplexity_corrected.parquet
-
-# Redraw the figures above
-uv run interpretant figures
 
 # Score a past round: scorers were removed once their verdicts were recorded in
 # docs/predictions*.md; `git log -- scripts/<scorer>.py` finds the commit to check out

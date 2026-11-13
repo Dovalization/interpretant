@@ -66,9 +66,10 @@ Each item that produces results gets its predictions committed first.
    grid, drift, perplexity and figure loops moved from the CLI into the library with tests,
    the scorers share `interpretant.predictions`, mypy is at zero and enforced in CI, and
    `tests/test_pipeline.py` runs the whole pipeline on a synthetic grid.
-3. **Deploy the web explorer** (`web/`, built November 2026) and link it from the README, the
-   GitHub "About" field and doval.dev (whose project schema needs an `href` field). The
-   Streamlit dashboard was retired on 2026-11-11.
+3. ~~Deploy the web explorer~~ The `web/` explorer and the figure and export code were deleted on
+   2026-11-13 (decision agenda 8.6): good data comes before presenting it. Experiment runners
+   write Markdown reports in the meantime; a presentation is designed again once there are new
+   results. The Streamlit dashboard was retired on 2026-11-11.
 4. ~~Explain the one-sided philosophy → HCI effect~~ Rounds G, J and K′ (2026-11-09): HCI's
    language moved out of computing's register into the behavioural and social sciences',
    inside its own venues; the OpenAlex HCI label also widened (915 → 3,601 sources), which
