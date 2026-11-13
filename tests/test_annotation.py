@@ -102,6 +102,11 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         ("Letter from John Smith to the editor, 1890, about the harvest.", "catalogue_record"),
         ("Journal of Things, Volume 3, Issue 2, 2010, Pages 120-123.", "citation_record"),
         ("Export citation. Save to Binder. Track citations.", "web_scrape"),
+        (
+            "No AccessJournal of Speech and Hearing DisordersArticle1 Dec 1954A Simple Adapter "
+            "William R. Tiffany Google Scholar More articles by this author",
+            "web_scrape",
+        ),
         ("Get the latest brain dumps for certification exams here.", "exam_spam"),
         ("cafÃ© society in the 1920s and after the war.", "mojibake"),
         ("Abstract: Short note.", "too_short"),
@@ -111,6 +116,7 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         "catalogue record",
         "citation record",
         "web scrape",
+        "page with no access glued",
         "exam spam",
         "mojibake",
         "too short",
@@ -134,6 +140,7 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
         "The abstract: a summary of attention research.",
         "Students prepare for English certification exams with self-directed strategies.",
         "This paper concentrates on two actual questions of nerve growth factor research.",
+        "No accessible records of the dialect survive from before the war.",
     ],
     ids=[
         "letter mid-sentence",
@@ -141,6 +148,7 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
         "label not at the start",
         "research on certification exams",
         "actual questions meaning current ones",
+        "no accessible at the start",
     ],
 )
 def test_annotate_abstracts_keeps_look_alikes_of_the_rules(

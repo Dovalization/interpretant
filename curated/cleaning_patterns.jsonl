@@ -20,6 +20,7 @@
 {"label":"citation_record","pattern":[{"LOWER":"volume"},{"LIKE_NUM":true},{"TEXT":",","OP":"?"},{"LOWER":{"IN":["issue","number"]}},{"LIKE_NUM":true}]}
 {"label":"web_scrape","pattern":[{"LOWER":{"IN":["noaccess","no-access"]}}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":"no"},{"LOWER":"access"}],"id":"start"}
+{"label":"web_scrape","pattern":[{"LOWER":"no"},{"TEXT":{"REGEX":"^Access[A-Z]"}}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":"export"},{"LOWER":"citation"}]}
 {"label":"web_scrape","pattern":[{"LOWER":"save"},{"LOWER":"to"},{"LOWER":"binder"}]}
 {"label":"web_scrape","pattern":[{"LOWER":"add"},{"LOWER":"to"},{"LOWER":"favorites"}]}

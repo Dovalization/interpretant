@@ -49,7 +49,9 @@ labels:
   # A citation string standing in for an abstract ("Volume 3, Issue 2").
   citation_record: abstract
   # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
-  # alone: social media are a research topic.
+  # alone: social media are a research topic. "No Access" glued to the journal name
+  # ("No AccessJournal of Speech...") was added on 2026-11-13: 547 ASHA pages, title, authors,
+  # page tools and citing works with no abstract, were kept in run 1.
   web_scrape: abstract
   # A library link with an OpenURL key (rft_id) or percent-encoding: the whole link, the run of
   # tokens with no space between them around the encoded token. Until 2026-11-13 these patterns
