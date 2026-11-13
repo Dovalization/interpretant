@@ -11,6 +11,7 @@ the run before the slow pass, not after it.
 
 from __future__ import annotations
 
+import gc
 from collections.abc import Collection
 from dataclasses import asdict
 from itertools import groupby
@@ -107,11 +108,20 @@ def annotate_corpus(
         process_count=process_count,
     )
     tables: dict[str, pl.DataFrame] = {}
-    for part, pairs in groupby(annotated, key=lambda pair: _part_of(pair[1])):
-        docs, rows = zip(*pairs, strict=True)
-        save_annotations(catalog, docs, part=part)
-        tables[part] = _table(rows)
-        save_annotated_abstracts(catalog, tables[part], part=part)
+    # spaCy forks its worker processes when the stream starts. Frozen, the objects already alive
+    # (the merged works, the pipeline) are never visited by the workers' garbage collection, so
+    # the memory the workers inherit stays shared instead of being copied page by page (Python's
+    # documentation, gc.freeze). Unfrozen once the pass is over.
+    gc.collect()
+    gc.freeze()
+    try:
+        for part, pairs in groupby(annotated, key=lambda pair: _part_of(pair[1])):
+            docs, rows = zip(*pairs, strict=True)
+            save_annotations(catalog, docs, part=part)
+            tables[part] = _table(rows)
+            save_annotated_abstracts(catalog, tables[part], part=part)
+    finally:
+        gc.unfreeze()
     for part in sorted(chosen - tables.keys()):
         save_annotations(catalog, [], part=part)
         tables[part] = _table(())
