@@ -34,6 +34,7 @@ dependencies = [
     "en-core-web-sm",
     "en-core-web-trf",
     "pyalex>=0.21",
+    "dvc[ssh]>=3.67.1",
 ]
 
 [project.optional-dependencies]

@@ -1,0 +1,6 @@
+outs:
+- md5: fbf24c1c9c7cc37cf59d7557ae74020c.dir
+  size: 293915470
+  nfiles: 90
+  hash: md5
+  path: openalex

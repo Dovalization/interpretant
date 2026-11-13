@@ -1,0 +1,6 @@
+outs:
+- md5: edda602f82c1254c4f857f845f249ea5.dir
+  size: 631283086
+  nfiles: 88
+  hash: md5
+  path: openalex_metadata

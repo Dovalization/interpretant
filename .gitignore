@@ -29,7 +29,16 @@ logs/*.log
 !logs/.gitkeep
 
 # Data & models
-data/raw/*
+# data/raw holds the downloads. DVC registers them (decision agenda 4.8, step 9) and lists the
+# folders it tracks in data/raw/.gitignore, keeping its .dvc files beside them. data/raw itself
+# must not be ignored: DVC skips git-ignored folders when it looks for .dvc files. The older
+# downloads, not registered, are ignored here one by one.
+data/raw/acl/
+data/raw/arxiv/
+data/raw/openalex_full/
+data/raw/openalex_seed43/
+data/raw/openalex_unfiltered/
+data/raw/openalex_words/
 data/processed/*
 # The annotation cache (DocBin), rebuildable
 data/interim/
