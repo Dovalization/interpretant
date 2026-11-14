@@ -1,7 +1,7 @@
 """The spaCy pass: tokens, sentences, part-of-speech tags and lemmas of each repaired abstract.
 
 One pass annotates each repaired abstract (decision agenda, steps 2 and 4.9): sentences by
-``senter`` with abbreviation special cases and sentence rules (starts after glued punctuation,
+``senter`` with abbreviation special cases and sentence rules (starts after glued footnote numbers,
 none inside brackets or at a lowercase word), hyphenated words kept whole, DOIs kept
 as single tokens. Each document carries its work id. Sentence languages (``corpus.language``) and
 the cleaning patterns and keeping rules (``corpus.removals``) are later stages that read these
@@ -15,7 +15,7 @@ from collections.abc import Iterable, Iterator
 from typing import Any
 
 import spacy
-from spacy.lang.char_classes import ALPHA, ALPHA_LOWER, ALPHA_UPPER, CONCAT_QUOTES, HYPHENS
+from spacy.lang.char_classes import ALPHA, ALPHA_LOWER, ALPHA_UPPER, HYPHENS
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
 from spacy.matcher import Matcher
@@ -54,21 +54,11 @@ ABBREVIATIONS = (
 # (spacy/lang/en/punctuation.py); removing it keeps *self-attention* one token (decision agenda
 # 2.3), as spaCy's documentation shows under "Modifying existing rule sets".
 _HYPHEN_INFIX = rf"(?<=[{ALPHA}0-9])(?:{HYPHENS})(?=[{ALPHA}])"
-# Sentence punctuation with no space before the next sentence, as in "(r = 0.922).In addition"
-# or "in 1950.French delegates" (decision agenda 2.3). spaCy's English rules split a full stop
-# between two letters only; these two infix rules also split it after a digit, a closing bracket
-# or a quote, and split that bracket or quote off the word before it. The quotes are spaCy's own
-# class, as its English infix rules use it, less the comma it holds for the low quotation mark.
-_QUOTES = CONCAT_QUOTES.replace(",", "")
-_CLOSERS = rf"\)\]{_QUOTES}"
-_NEXT_SENTENCE = rf"[{ALPHA_UPPER}][{ALPHA_LOWER}]"
-# spaCy's upper and lower classes both include the scripts without case (Chinese, Japanese,
-# Korean, Arabic), so a sentence after "关系." starts as after "relation.".
-_SENTENCE_OPENING = re.compile(_NEXT_SENTENCE)
-GLUED_STOP_INFIX = rf"(?<=[{ALPHA_LOWER}0-9{_CLOSERS}])[.?!](?=[{_QUOTES}]?{_NEXT_SENTENCE})"
-GLUED_CLOSER_INFIX = rf"(?<=[{ALPHA}0-9])[{_CLOSERS}](?=[.?!]{_NEXT_SENTENCE})"
-# A closing quote after the full stop, glued to the next sentence: 'learns."Acquaintance'.
-GLUED_QUOTE_INFIX = rf"(?<=[.?!])[{_QUOTES}](?={_NEXT_SENTENCE})"
+# The capitalised word that opens a sentence. spaCy's upper and lower classes both include the
+# scripts without case (Chinese, Japanese, Korean, Arabic), so a sentence after "关系." starts as
+# after "relation.". Sentence punctuation glued to the next sentence ("in 1950.French
+# delegates") gets its missing space in repair, before this pass.
+_SENTENCE_OPENING = re.compile(rf"[{ALPHA_UPPER}][{ALPHA_LOWER}]")
 # A footnote number glued to the full stop of a sentence: "three weeks.4 Just prior" (12,257 in
 # run 2). The three lowercase letters before the stop keep "Vol.3", "Fig.4" and "pp.12" whole.
 GLUED_FOOTNOTE_INFIX = r"(?<=[a-z]{3})[.?!](?=\d{1,3}$)"
@@ -128,13 +118,7 @@ def build_pipeline(
         raise ValueError("the pipeline's language defines no infix rules")
     infixes = list(nlp.Defaults.infixes)
     infixes.remove(_HYPHEN_INFIX)
-    infixes += [
-        GLUED_STOP_INFIX,
-        GLUED_CLOSER_INFIX,
-        GLUED_QUOTE_INFIX,
-        GLUED_FOOTNOTE_INFIX,
-        DASH_INFIX,
-    ]
+    infixes += [GLUED_FOOTNOTE_INFIX, DASH_INFIX]
     tokenizer.infix_finditer = compile_infix_regex(infixes).finditer
     tokenizer.url_match = URL_OR_DOI.match
     nlp.add_pipe(SENTENCE_RULES, before="senter")
@@ -160,11 +144,10 @@ class SentenceRules:
     shape, brackets and quotes), its character classes and its ``Matcher``. From the audits of
     runs 1 and 2:
 
-    - A sentence starts after sentence punctuation glued to the next sentence, with or without a
-      closing quote ("1950.French", 'learns."Acquaintance'), and after a footnote number glued
-      to the full stop ("weeks.4 Just"). The tokenizer splits the punctuation off, but the model,
-      trained on text with a space after each sentence, put a boundary at only 48% of the first
-      kind and 7% of the footnotes.
+    - A sentence starts after a footnote number glued to the full stop ("weeks.4 Just"). The
+      tokenizer splits the number off, but the model, trained on text with a space after each
+      sentence, put a boundary at only 7% of them. (Sentence punctuation glued to the next
+      sentence gets its space in repair; with it, the model splits there as it does elsewhere.)
     - No sentence starts inside a short bracket group (square or round), right after an opening
       bracket, or at the bracket unless sentence-final punctuation comes before it. The model
       started one at a citation's bracket even with normal spacing ("Goodman | [ | 2] and
@@ -184,7 +167,7 @@ class SentenceRules:
 
     def __call__(self, doc: Doc) -> Doc:
         """Set the sentence starts the rules decide, leaving the rest to ``senter``."""
-        for token in _glued_sentence_starts(doc):
+        for token in _sentence_starts_after_footnotes(doc):
             token.is_sent_start = True
         for _, start, end in self.matcher(doc):
             group = doc[start:end]
@@ -200,28 +183,13 @@ class SentenceRules:
         return doc
 
 
-def _glued_sentence_starts(doc: Doc) -> Iterator[Token]:
-    """The first tokens of sentences glued to the sentence punctuation before them.
-
-    A closing quote after the punctuation ends the earlier sentence ('learns."Acquaintance');
-    an opening quote or bracket begins the next one ('night.“Fading”'); straight quotes, both
-    to spaCy, are taken as closing. A footnote number after the punctuation ends the earlier
-    sentence too ("weeks.4 Just").
-    """
+def _sentence_starts_after_footnotes(doc: Doc) -> Iterator[Token]:
+    """The first words of sentences after a footnote number glued to their stop ("weeks.4 Just")."""
     for token in doc[:-1]:
         if token.text not in _SENTENCE_FINAL or token.whitespace_:
             continue
         following = token.nbor()
-        glued_mark = not following.whitespace_ and following.i + 1 < len(doc)
-        if glued_mark and following.is_quote and following.is_right_punct:
-            if _SENTENCE_OPENING.match(following.nbor().text):
-                yield following.nbor()
-        elif glued_mark and following.is_left_punct:
-            if _SENTENCE_OPENING.match(following.nbor().text):
-                yield following
-        elif _SENTENCE_OPENING.match(following.text):
-            yield following
-        elif _is_footnote_number(following) and _ends_in_lowercase_word(token):
+        if _is_footnote_number(following) and _ends_in_lowercase_word(token):
             yield from _title_after_footnote(following)
 
 

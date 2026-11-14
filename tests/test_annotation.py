@@ -11,7 +11,6 @@ from functools import cache
 import pytest
 from lingua import LanguageDetector
 from spacy.language import Language
-from spacy.tokenizer import Tokenizer
 
 from interpretant.catalog import (
     WORK_ID,
@@ -32,14 +31,14 @@ from interpretant.corpus.removals import (
     clean_abstract,
     kept_text,
 )
-from interpretant.corpus.repair import compile_signatures
+from interpretant.corpus.repair import compile_signatures, repair_text
 from interpretant.corpus.works import RawAbstract
 
 # The English words an abstract with text in another language needs to stay.
 MIN_ENGLISH_WORDS = 30
 ENGLISH_SENTENCE = "Attention mechanisms improve machine translation in many settings and tasks."
 GERMAN_SENTENCE = "Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung."
-# Numbers and abbreviations the glued-punctuation rules must leave whole.
+# Numbers and abbreviations that repair and the tokenizer must leave whole.
 WHOLE_TOKENS = ("0.05", "U.S.", "Fig.", "Eq.", "0.922", "3.5")
 
 
@@ -319,13 +318,15 @@ def test_annotate_abstracts_keeps_the_audit_abbreviations_inside_sentences(
         ("The score rose to 3.5.Then it fell back.", "The score rose to 3.5."),
         ("Models were trained on two corpora.Results were mixed.", "on two corpora."),
         ("Does attention help?Yes, in every setting.", "Does attention help?"),
+        ('He said that the model learns."Acquaintance with the data grows.', 'model learns."'),
     ],
-    ids=["bracket", "citation", "year", "quote", "decimal", "two words", "question"],
-)
-def test_build_pipeline_starts_a_sentence_after_glued_punctuation(
+    ids=["bracket", "citation", "year", "quote", "decimal", "two words", "question",
+         "closing quote"],
+)  # fmt: skip
+def test_build_pipeline_starts_a_sentence_after_glued_punctuation_once_repaired(
     text: str, first: str, nlp: Language
 ) -> None:
-    sentences = [sentence.text for sentence in nlp(text).sents]
+    sentences = [sentence.text for sentence in nlp(repair_text(text)).sents]
     assert len(sentences) == 2
     assert sentences[0].endswith(first)
 
@@ -346,7 +347,7 @@ def test_build_pipeline_starts_a_sentence_after_glued_punctuation(
             "The target moves fast [7][8][9].",
         ),
         (
-            "Results agree with [12–14].As shown in Fig. 2, the gain holds.",
+            "Results agree with [12–14]. As shown in Fig. 2, the gain holds.",
             "Results agree with [12–14].",
         ),
         (
@@ -362,7 +363,7 @@ def test_build_pipeline_starts_a_sentence_after_glued_punctuation(
         "single numbers",
         "list",
         "consecutive",
-        "range then glued stop",
+        "range",
         "phonetic symbols and an abbreviation",
         "citation starting a sentence",
     ],
@@ -403,10 +404,6 @@ def test_build_pipeline_starts_no_sentence_inside_square_brackets(
             "Responses were markedly decreased.4. Cocaine potentiated responses in both areas.",
             "Responses were markedly decreased.4.",
         ),
-        (
-            'He said that the model learns."Acquaintance with the data grows slowly.',
-            'He said that the model learns."',
-        ),
     ],
     ids=[
         "lowercase after a unit",
@@ -415,7 +412,6 @@ def test_build_pipeline_starts_no_sentence_inside_square_brackets(
         "after a long square bracket",
         "glued footnote number",
         "glued footnote number with its own full stop",
-        "glued closing quote",
     ],
 )
 def test_build_pipeline_applies_the_run_2_sentence_rules(
@@ -448,20 +444,6 @@ def test_build_pipeline_splits_dashes_between_words_but_not_en_dashes(nlp: Langu
 def test_build_pipeline_keeps_dotted_numbers_and_volumes_whole(nlp: Language) -> None:
     tokens = [token.text for token in nlp("See Vol.3 and Fig.4 with 3.5 points.")]
     assert {"Vol.3", "Fig.4", "3.5"} <= set(tokens)
-
-
-def test_build_pipeline_splits_glued_punctuation_and_brackets_off(nlp: Language) -> None:
-    tokenizer = nlp.tokenizer
-    assert isinstance(tokenizer, Tokenizer)
-    assert [text for _, text in tokenizer.explain("(r = 0.922).In")] == [
-        "(",
-        "r",
-        "=",
-        "0.922",
-        ")",
-        ".",
-        "In",
-    ]
 
 
 @pytest.mark.parametrize(

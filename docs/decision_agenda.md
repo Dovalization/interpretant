@@ -193,10 +193,12 @@ views (the full order is in step 9).
   kept works change. Never inside web and e-mail addresses (spaCy's `like_url` and `like_email`)
   or HTML entities, nor between single letters (*N,N-dimethyl*, *(i,j)*, *x:Gx*). Left glued on
   purpose: colons before a lowercase word (ratios such as *light:dark* and *h:min*, vowel length)
-  and brackets (*(re)presented*, *H(2)O(2)*, *GABA(A)Rs*, *author(s)*). The tokenizer's three
-  rules for glued sentence punctuation and the sentence rule's glued branch now rarely fire; they
-  are measured on the affected works and go if spaCy's sentence model splits the repaired text as
-  well (the footnote rule, *weeks.4 Just*, stays).
+  and brackets (*(re)presented*, *H(2)O(2)*, *GABA(A)Rs*, *author(s)*). On 3,000 of the
+  affected works, run on the repaired text with and without them, the tokenizer's three rules for
+  glued sentence punctuation and the sentence rule's glued branch changed the tokens of 1 work and
+  the sentence starts of 3 (a space before "?", a Japanese abstract, a list of Bible verses); a
+  sentence started after 99.1% of the added spaces either way. So they went; the footnote rule
+  (*weeks.4 Just*) stays.
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800),
