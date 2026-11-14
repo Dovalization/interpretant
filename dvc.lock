@@ -15,9 +15,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
-      size: 74643
-      nfiles: 22
+      md5: 15edb290f32508590e98e07ddefc6b46.dir
+      size: 92746
+      nfiles: 26
     - path: src/interpretant/corpus/annotation.py
       hash: md5
       md5: 45e7e4a6ba0dedbf65ddcc6a5810e996
@@ -98,9 +98,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
-      size: 74643
-      nfiles: 22
+      md5: 15edb290f32508590e98e07ddefc6b46.dir
+      size: 92746
+      nfiles: 26
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 6add7e3be20d79882f7c461933d50837
@@ -123,8 +123,8 @@ stages:
       size: 7578
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
-      md5: 98c77834bd5e54c6c3fffcf34dbad53b
-      size: 4449
+      md5: a84664649e625bf43a15cc7aa56fc0ab
+      size: 4889
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -200,9 +200,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
-      size: 74643
-      nfiles: 22
+      md5: 15edb290f32508590e98e07ddefc6b46.dir
+      size: 92746
+      nfiles: 26
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 6add7e3be20d79882f7c461933d50837
@@ -213,8 +213,8 @@ stages:
       size: 7578
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
-      md5: 98c77834bd5e54c6c3fffcf34dbad53b
-      size: 4449
+      md5: a84664649e625bf43a15cc7aa56fc0ab
+      size: 4889
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -282,9 +282,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
-      size: 74643
-      nfiles: 22
+      md5: 15edb290f32508590e98e07ddefc6b46.dir
+      size: 92746
+      nfiles: 26
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -399,9 +399,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
-      size: 74643
-      nfiles: 22
+      md5: 15edb290f32508590e98e07ddefc6b46.dir
+      size: 92746
+      nfiles: 26
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
