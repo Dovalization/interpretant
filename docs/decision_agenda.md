@@ -562,6 +562,21 @@ other sources, fetched the same way (by hand, once, stored beside each cell, reg
   the journal lists are matched by ISSNs that pass it and by the linking ISSN; OpenAlex writes
   PubMed Central ids without their `PMC` prefix, which is added when they are used. Work, author
   and source ids, PubMed and MAG ids, ORCIDs and 9.1 million references are all well formed.
+- *Layers* (decided 2026-11-14), as data pipelines usually arrange them, in the folders the
+  repository already has (Cookiecutter Data Science's `data/raw`, `data/interim`,
+  `data/processed`); the medallion pattern calls the three bronze, silver and gold, and dbt
+  sources, staging and marts. The folders keep their names:
+  - *raw* (bronze, `data/raw`): each source as it answered, never edited, registered with
+    `dvc add` (OpenAlex's cells and work metadata, Crossref, PubMed);
+  - *staging* (silver, `data/interim`): one table per source, flattened to the fields the steps
+    use, typed, checked with pandera and keyed by work id, built by a DVC stage
+    (`build_linked_tables`; unlike the lookups it is reproducible from the raw files); the DOI
+    corrections are applied here;
+  - *combined* (gold, `data/processed`): the cleaning stage joins the staging tables onto the
+    abstracts table by work id and writes the values it decides (record type, page count, the
+    abstract's source) beside each source's own, so a precedence rule (Crossref's abstract
+    where OpenAlex's text is a citation) stays one visible, tested rule. Sources disagree, so
+    nothing is merged earlier.
 - *Not a check:* OpenAlex's own language field calls English 18,437 of the 18,788 works dropped
   as not English, since the cells were selected on it.
 - Crossref and NCBI both ask heavy users for a contact address; which one is used is the
