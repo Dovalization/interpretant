@@ -23,6 +23,20 @@ pubmed_records:
   path: data/raw/pubmed
   format: jsonl.gz
 
+# The staging tables (decision agenda 4.8, layers): one checked table per source, keyed by work
+# id, rebuilt from the raw files above by the build_linked_tables stage.
+openalex_works:
+  path: data/interim/openalex_works.parquet
+  format: parquet
+
+crossref_works:
+  path: data/interim/crossref_works.parquet
+  format: parquet
+
+pubmed_works:
+  path: data/interim/pubmed_works.parquet
+  format: parquet
+
 # The abstracts table as the spaCy pass leaves it (stage 2), one part per field and decade; the
 # corpus-level rules (stage 3) read it and write the abstracts table below.
 annotated_abstracts:

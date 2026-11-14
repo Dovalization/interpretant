@@ -105,3 +105,103 @@ ABSTRACTS_SCHEMA = pa.DataFrameSchema(
         "work a near-duplicate was dropped for, and flags mark abstracts left to the review."
     ),
 )
+
+OPENALEX_WORKS_COLUMNS = pl.Schema(
+    {
+        "work_id": pl.String(),
+        "is_missing": pl.Boolean(),
+        "doi": pl.String(),
+        "pmid": pl.String(),
+        "pmcid": pl.String(),
+        "title": pl.String(),
+        "openalex_type": pl.String(),
+        "publication_year": pl.Int64(),
+        "language": pl.String(),
+        "source_name": pl.String(),
+        "source_type": pl.String(),
+        "issn_l": pl.String(),
+        "issns": pl.List(pl.String()),
+        "indexed_in": pl.List(pl.String()),
+        "is_paratext": pl.Boolean(),
+        "is_retracted": pl.Boolean(),
+    }
+)
+CROSSREF_WORKS_COLUMNS = pl.Schema(
+    {
+        "work_id": pl.String(),
+        "doi": pl.String(),
+        "is_found": pl.Boolean(),
+        "is_invalid_doi": pl.Boolean(),
+        "crossref_type": pl.String(),
+        "title": pl.String(),
+        "container_title": pl.String(),
+        "issns": pl.List(pl.String()),
+        "published_year": pl.Int64(),
+        "abstract": pl.String(),
+        "page": pl.String(),
+        "page_count": pl.Int64(),
+        "references_count": pl.Int64(),
+        "relation_types": pl.List(pl.String()),
+        "update_types": pl.List(pl.String()),
+        "is_updated": pl.Boolean(),
+        "licence_urls": pl.List(pl.String()),
+        "has_text_mining_licence": pl.Boolean(),
+        "text_mining_links": pl.List(pl.String()),
+        "fetched": pl.Date(),
+    }
+)
+PUBMED_WORKS_COLUMNS = pl.Schema(
+    {
+        "work_id": pl.String(),
+        "pmid": pl.String(),
+        "is_found": pl.Boolean(),
+        "is_book": pl.Boolean(),
+        "status": pl.String(),
+        "title": pl.String(),
+        "publication_types": pl.List(pl.String()),
+        "mesh_descriptors": pl.List(pl.String()),
+        "mesh_major_descriptors": pl.List(pl.String()),
+        "keywords": pl.List(pl.String()),
+        "languages": pl.List(pl.String()),
+        "abstract": pl.String(),
+        "is_structured_abstract": pl.Boolean(),
+        "page": pl.String(),
+        "page_count": pl.Int64(),
+        "journal": pl.String(),
+        "journal_nlm_id": pl.String(),
+        "comment_types": pl.List(pl.String()),
+        "fetched": pl.Date(),
+    }
+)
+
+
+def _staging_schema(name: str, columns: pl.Schema, description: str) -> pa.DataFrameSchema:
+    """A staging table's schema: its columns, all nullable but the work id, one row per work."""
+    checked = {
+        column: pa.Column(dtype, nullable=column != "work_id") for column, dtype in columns.items()
+    }
+    checked["work_id"] = pa.Column(
+        columns["work_id"], unique=True, checks=pa.Check.str_startswith("https://openalex.org/W")
+    )
+    return pa.DataFrameSchema(checked, strict=True, name=name, description=description)
+
+
+OPENALEX_WORKS_SCHEMA = _staging_schema(
+    "openalex_works",
+    OPENALEX_WORKS_COLUMNS,
+    "One row per downloaded work: OpenAlex's metadata flattened, with the curated DOI "
+    "corrections applied, PubMed Central ids with their PMC prefix, and only the ISSNs that "
+    "pass their check digit.",
+)
+CROSSREF_WORKS_SCHEMA = _staging_schema(
+    "crossref_works",
+    CROSSREF_WORKS_COLUMNS,
+    "One row per work looked up in Crossref by DOI: the publisher's abstract as plain text, "
+    "the page range and its length, relations, updates and licences.",
+)
+PUBMED_WORKS_SCHEMA = _staging_schema(
+    "pubmed_works",
+    PUBMED_WORKS_COLUMNS,
+    "One row per work looked up in PubMed: the indexers' publication types and MeSH headings, "
+    "PubMed's abstract as plain text, the page range and its length.",
+)

@@ -34,6 +34,7 @@ from interpretant.catalog.linked_records import (
     append_linked_records,
     build_linked_record,
     fetched_linked_work_ids,
+    load_linked_records,
     select_linked_works,
 )
 from interpretant.catalog.metadata import (
@@ -51,13 +52,25 @@ from interpretant.catalog.reports import (
     save_corpus_metrics,
     save_corpus_report,
 )
-from interpretant.catalog.schemas import ABSTRACTS_COLUMNS, ABSTRACTS_SCHEMA, REMOVAL, SENTENCE
+from interpretant.catalog.schemas import (
+    ABSTRACTS_COLUMNS,
+    ABSTRACTS_SCHEMA,
+    CROSSREF_WORKS_COLUMNS,
+    OPENALEX_WORKS_COLUMNS,
+    PUBMED_WORKS_COLUMNS,
+    REMOVAL,
+    SENTENCE,
+)
+from interpretant.catalog.staging import StagingSource, load_staging_table, save_staging_table
 
 __all__ = [
     "ABSTRACTS_COLUMNS",
     "ABSTRACTS_SCHEMA",
     "CATALOG_FILE",
+    "CROSSREF_WORKS_COLUMNS",
     "LINKED_SOURCES",
+    "OPENALEX_WORKS_COLUMNS",
+    "PUBMED_WORKS_COLUMNS",
     "REMOVAL",
     "SENTENCE",
     "SENTENCE_LANGUAGES_SCHEMA",
@@ -73,6 +86,7 @@ __all__ = [
     "RawCell",
     "RawWork",
     "Scope",
+    "StagingSource",
     "WorkMetadata",
     "append_linked_records",
     "append_run_record",
@@ -89,8 +103,10 @@ __all__ = [
     "load_cleaning_patterns",
     "load_corpus_metrics",
     "load_doi_corrections",
+    "load_linked_records",
     "load_raw_cell",
     "load_sentence_languages",
+    "load_staging_table",
     "load_work_metadata",
     "read_catalog",
     "save_abstracts",
@@ -100,5 +116,6 @@ __all__ = [
     "save_corpus_metrics",
     "save_corpus_report",
     "save_sentence_languages",
+    "save_staging_table",
     "select_linked_works",
 ]

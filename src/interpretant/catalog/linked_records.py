@@ -8,7 +8,8 @@ rerun does not ask for it again (decision agenda 4.8, linked sources).
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Mapping
+import json
+from collections.abc import Callable, Iterable, Iterator, Mapping
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -78,6 +79,23 @@ def fetched_linked_work_ids(
     if not path.exists():
         return set()
     return {LinkedRecord.model_validate_json(line).work_id for line in read_json_lines(path)}
+
+
+def load_linked_records(
+    catalog: CatalogConfig, cell: RawCell, source: LinkedSource
+) -> Iterator[dict[str, Any]]:
+    """A cell's records from the source as stored, each checked to carry a work id and a date.
+
+    A cell none of whose works the source could be asked about has no file and gives nothing;
+    whether every work that should have a record has one is the reader's check.
+    """
+    path = _path(catalog, cell, source)
+    if not path.exists():
+        return
+    for line in read_json_lines(path):
+        record: dict[str, Any] = json.loads(line)
+        LinkedRecord.model_validate(record)
+        yield record
 
 
 def append_linked_records(

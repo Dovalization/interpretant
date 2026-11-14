@@ -15,7 +15,8 @@ from typing import Any
 import polars as pl
 from pyalex import Works, config
 
-from interpretant.catalog import DOICorrection, WorkMetadata
+from interpretant.catalog import OPENALEX_WORKS_COLUMNS, DOICorrection, WorkMetadata
+from interpretant.corpus.bibliographic import is_valid_issn
 from interpretant.corpus.cleaning import add_flag
 
 # The fields of decision agenda 4.8: everything the corpus rules, the review and later measures
@@ -47,6 +48,7 @@ METADATA_FIELDS = (
 # OpenAlex takes at most 100 values in one OR filter.
 IDS_PER_REQUEST = 100
 REPOSITORY_ONLY = "repository_only"
+_DOI_PREFIX = "https://doi.org/"
 NOT_IN_OPENALEX = "not_in_openalex"
 PARATEXT = "paratext"
 RETRACTED = "retracted"
@@ -103,6 +105,18 @@ def correct_dois(
         yield record if correction is None else record.model_copy(update={"doi": correction.doi})
 
 
+def build_openalex_works(records: Iterable[WorkMetadata]) -> pl.DataFrame:
+    """OpenAlex's staging table: one row per record, flattened (decision agenda 4.8, layers).
+
+    DOIs lose their resolver prefix and are lower-cased, as Crossref's table keeps them; PubMed
+    Central ids get the ``PMC`` prefix OpenAlex leaves out; an ISSN that fails its check digit
+    is left out (59 in the downloads are typos beside the journal's real ones).
+    """
+    return pl.from_dicts(
+        [_openalex_row(record) for record in records], schema=OPENALEX_WORKS_COLUMNS
+    )
+
+
 def is_repository_only(metadata: WorkMetadata) -> bool:
     """Whether a work's primary copy is in a repository and no scholarly index lists it."""
     location = metadata.primary_location
@@ -127,3 +141,29 @@ def mark_metadata_flags(
     for flag, work_ids in flags.items():
         abstracts = add_flag(abstracts, work_ids, flag=flag)
     return abstracts
+
+
+def _openalex_row(record: WorkMetadata) -> dict[str, object]:
+    location = record.primary_location
+    source = location.source if location and location.source else None
+    issn_l = source.issn_l if source and source.issn_l and is_valid_issn(source.issn_l) else None
+    pmid = record.ids.get("pmid", "").rsplit("/", 1)[-1]
+    pmcid = record.ids.get("pmcid", "").rsplit("/", 1)[-1]
+    return {
+        "work_id": record.work_id,
+        "is_missing": record.missing,
+        "doi": (record.doi or "").removeprefix(_DOI_PREFIX).lower() or None,
+        "pmid": pmid or None,
+        "pmcid": f"PMC{pmcid.removeprefix('PMC')}" if pmcid else None,
+        "title": record.title,
+        "openalex_type": record.type,
+        "publication_year": record.publication_date.year if record.publication_date else None,
+        "language": record.language,
+        "source_name": source.display_name if source else None,
+        "source_type": source.type if source else None,
+        "issn_l": issn_l,
+        "issns": [issn for issn in (source.issn or ()) if is_valid_issn(issn)] if source else [],
+        "indexed_in": list(record.indexed_in),
+        "is_paratext": record.is_paratext,
+        "is_retracted": record.is_retracted,
+    }

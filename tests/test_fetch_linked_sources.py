@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-import gzip
 import http.client
-import json
 import time
 import urllib.error
 from collections.abc import Sequence
@@ -38,21 +36,7 @@ from interpretant.pipelines.fetch_linked_sources import (
     retry_transient,
 )
 from tests.metadata_records import linked_metadata_record
-
-
-def write_raw_works(catalog: CatalogConfig, field: str, decade: int, works: range) -> None:
-    path = catalog.raw_abstracts.path / field / f"{decade}.jsonl.gz"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with gzip.open(path, "wt", encoding="utf-8") as cell:
-        for work in works:
-            record = {
-                "id": f"https://openalex.org/W{work}",
-                "year": decade,
-                "type": "article",
-                "authors": [],
-                "abstract": "Models learn senses.",
-            }
-            cell.write(json.dumps(record) + "\n")
+from tests.raw_cells import write_raw_cell
 
 
 class FakeHTTPStatusError(Exception):
@@ -176,7 +160,7 @@ def test_fetch_cell_linked_records_asks_with_the_corrected_dois(catalog: Catalog
 def test_fetch_linked_sources_command_prints_a_line_per_source_and_cell(
     catalog: CatalogConfig, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    write_raw_works(catalog, "ai", 2010, range(1, 4))
+    write_raw_cell(catalog, "ai", 2010, range(1, 4))
     append_work_metadata(
         catalog,
         RawCell("ai", 2010),

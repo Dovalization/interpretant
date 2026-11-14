@@ -29,6 +29,9 @@ class CatalogConfig(BaseModel):
     work_metadata: DatasetEntry
     crossref_records: DatasetEntry
     pubmed_records: DatasetEntry
+    openalex_works: DatasetEntry
+    crossref_works: DatasetEntry
+    pubmed_works: DatasetEntry
     annotated_abstracts: DatasetEntry
     abstracts: DatasetEntry
     corpus_report: DatasetEntry

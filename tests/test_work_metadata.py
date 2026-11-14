@@ -21,6 +21,7 @@ from interpretant.corpus.work_metadata import (
     PARATEXT,
     REPOSITORY_ONLY,
     RETRACTED,
+    build_openalex_works,
     configure_openalex,
     correct_dois,
     fetch_work_metadata,
@@ -162,3 +163,31 @@ def test_correct_dois_replaces_only_the_corrected_works() -> None:
     corrected = list(correct_dois(records, {correction.work_id: correction}))
     assert [record.doi for record in corrected] == [None, "https://doi.org/10.1/2"]
     assert records[0].doi == "https://doi.org/10.1/1"
+
+
+def test_build_openalex_works_normalises_the_identifiers_and_drops_bad_issns() -> None:
+    record = metadata_record(1)
+    record.update(
+        doi="https://doi.org/10.1152/JN.1999.81.2.535",
+        ids={"pmid": "https://pubmed.ncbi.nlm.nih.gov/123", "pmcid": "https://www.ncbi.nlm.nih.gov/pmc/articles/456"},
+        title="Dendrites",
+        type="article",
+        publication_date="1999-02-01",
+        primary_location={"source": {"display_name": "J Neurophysiol", "type": "journal",
+                                     "issn_l": "0018-9340", "issn": ["0018-9340", "0016-9340"]}},
+    )  # fmt: skip
+    rows = build_openalex_works(
+        [WorkMetadata.model_validate(record), WorkMetadata.model_validate(missing_record(2))]
+    ).to_dicts()
+    found, lost = rows
+    assert (found["doi"], found["pmid"], found["pmcid"]) == (
+        "10.1152/jn.1999.81.2.535",
+        "123",
+        "PMC456",
+    )
+    assert (found["publication_year"], found["issn_l"], found["issns"]) == (
+        1999,
+        "0018-9340",
+        ["0018-9340"],
+    )
+    assert (lost["is_missing"], lost["doi"], lost["issns"]) == (True, None, [])

@@ -11,6 +11,7 @@ from Bio import Entrez
 
 from interpretant.catalog import LinkedWork, WorkMetadata
 from interpretant.corpus.pubmed import (
+    build_pubmed_works,
     fetch_pubmed_records,
     parse_pubmed_articles,
     select_pubmed_works,
@@ -135,3 +136,28 @@ def test_fetch_pubmed_records_marks_the_ids_pubmed_leaves_out(
     assert records[0]["pmid"] == "13831000"
     assert records[0]["work_id"] == "https://openalex.org/W1"
     assert records[1]["missing"] is True
+
+
+def test_build_pubmed_works_joins_a_structured_abstract_and_keeps_the_indexing() -> None:
+    articles = parse_pubmed_articles(pubmed_answer())
+    stored = [
+        {"work_id": "https://openalex.org/W1", "identifier": "13831000", "fetched": "2026-11-14"}
+        | articles["13831000"],
+        {"work_id": "https://openalex.org/W2", "identifier": "77", "fetched": "2026-11-14",
+         "missing": True},
+    ]  # fmt: skip
+    first, second = build_pubmed_works(stored).to_dicts()
+    assert first["abstract"] == "BACKGROUND: Rare onset."
+    assert first["is_structured_abstract"]
+    assert first["publication_types"] == ["Case Reports", "Journal Article"]
+    assert (first["mesh_descriptors"], first["mesh_major_descriptors"]) == (
+        ["Narcolepsy"],
+        ["Narcolepsy"],
+    )
+    assert (first["page"], first["page_count"]) == ("538-9", 2)
+    assert first["comment_types"] == ["ErratumIn"]
+    assert (second["is_found"], second["abstract"], second["publication_types"]) == (
+        False,
+        None,
+        [],
+    )

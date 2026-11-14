@@ -17,6 +17,29 @@ vars:
   - catalog.yaml
 
 stages:
+  # One checked table per source, keyed by work id, from the raw files (decision agenda 4.8,
+  # layers); the DOI corrections are applied here. The cleaning stage reads these.
+  build_linked_tables:
+    cmd: interpretant build-linked-tables
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/bibliographic.py
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/crossref.py
+      - src/interpretant/corpus/pubmed.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/work_metadata.py
+      - src/interpretant/pipelines/build_linked_tables.py
+      - src/interpretant/pipelines/progress.py
+      - ${work_metadata.path}
+      - ${crossref_records.path}
+      - ${pubmed_records.path}
+      - ${doi_corrections.path}
+    outs:
+      - ${openalex_works.path}
+      - ${crossref_works.path}
+      - ${pubmed_works.path}
+
   annotate_corpus:
     cmd: interpretant annotate-corpus
     deps:
@@ -88,6 +111,7 @@ stages:
     cmd: interpretant build-corpus
     deps:
       - src/interpretant/catalog
+      - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/deduplication.py
       - src/interpretant/corpus/language.py
@@ -112,6 +136,7 @@ stages:
     cmd: interpretant report-corpus
     deps:
       - src/interpretant/catalog
+      - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/work_metadata.py

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import gzip
-import json
 import time
 from collections.abc import Sequence
 from pathlib import Path
@@ -21,21 +19,7 @@ from interpretant.pipelines.fetch_metadata import (
     select_raw_cells,
 )
 from tests.metadata_records import metadata_record, missing_record
-
-
-def write_raw_cell(catalog: CatalogConfig, field: str, decade: int, works: range) -> None:
-    path = catalog.raw_abstracts.path / field / f"{decade}.jsonl.gz"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with gzip.open(path, "wt", encoding="utf-8") as cell:
-        for work in works:
-            record = {
-                "id": f"https://openalex.org/W{work}",
-                "year": decade,
-                "type": "article",
-                "authors": [],
-                "abstract": "Models learn senses.",
-            }
-            cell.write(json.dumps(record) + "\n")
+from tests.raw_cells import write_raw_cell
 
 
 class FakeFetch:

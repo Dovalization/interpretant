@@ -9,14 +9,23 @@ the corpus rules read these from Crossref itself.
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from datetime import date
+from html.parser import HTMLParser
 from typing import Any
 from urllib.parse import quote
 
+import polars as pl
 from habanero import Crossref
 
-from interpretant.catalog import LinkedWork, WorkMetadata, build_linked_record, select_linked_works
+from interpretant.catalog import (
+    CROSSREF_WORKS_COLUMNS,
+    LinkedWork,
+    WorkMetadata,
+    build_linked_record,
+    select_linked_works,
+)
+from interpretant.corpus.bibliographic import count_pages, is_valid_issn
 
 # Crossref's works route rejects a field it does not offer. Reference lists are left out:
 # OpenAlex already holds each work's matched references, and they are most of a record's size.
@@ -99,6 +108,29 @@ def fetch_crossref_records(
     return [_record(work, found, fetched=fetched) for work in works]
 
 
+def build_crossref_works(records: Iterable[Mapping[str, Any]]) -> pl.DataFrame:
+    """Crossref's staging table: one row per stored record, flattened (decision agenda 4.8).
+
+    The abstract, deposited as JATS markup, becomes plain text without its "Abstract" heading;
+    the page range also gives its length; relations, updates and licences become their types
+    and addresses, with whether the publisher licenses text mining.
+    """
+    columns = {
+        name: dtype for name, dtype in CROSSREF_WORKS_COLUMNS.items() if name != "page_count"
+    }
+    rows = pl.from_dicts([_crossref_row(record) for record in records], schema=columns)
+    with_pages = rows.with_columns(count_pages("page").alias("page_count"))
+    return with_pages.select(CROSSREF_WORKS_COLUMNS.names())
+
+
+def parse_jats_text(markup: str) -> str:
+    """The plain text of a JATS abstract: its paragraphs' words, without titles or tags."""
+    parser = _JATSText()
+    parser.feed(markup)
+    parser.close()
+    return " ".join(" ".join(parser.parts).split())
+
+
 def _record(work: LinkedWork, found: dict[str, dict[str, Any]], *, fetched: date) -> dict[str, Any]:
     record = build_linked_record(work, found.get(work.identifier.lower()), fetched=fetched)
     if not _DOI_FORM.match(work.identifier):
@@ -116,3 +148,61 @@ def _fetch_crossref_work(crossref: Crossref, doi: str) -> dict[str, dict[str, An
         return {}
     item = answer["message"]
     return {doi.lower(): {field: item[field] for field in CROSSREF_FIELDS if field in item}}
+
+
+class _JATSText(HTMLParser):
+    """Collects the text of a JATS fragment, skipping its titles."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.parts: list[str] = []
+        self._title_depth = 0
+
+    def handle_starttag(self, tag: str, _attrs: list[tuple[str, str | None]]) -> None:
+        if tag.endswith("title"):
+            self._title_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.endswith("title") and self._title_depth:
+            self._title_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if not self._title_depth:
+            self.parts.append(data)
+
+
+def _crossref_row(record: Mapping[str, Any]) -> dict[str, object]:
+    published = record.get("published", {}).get("date-parts", [[None]])
+    licences = record.get("license", [])
+    abstract = record.get("abstract")
+    return {
+        "work_id": record["work_id"],
+        "doi": str(record["identifier"]).lower(),
+        "is_found": not record.get("missing", False),
+        "is_invalid_doi": bool(record.get("invalid_doi")),
+        "crossref_type": record.get("type"),
+        "title": _first(record.get("title")),
+        "container_title": _first(record.get("container-title")),
+        "issns": [issn for issn in record.get("ISSN", []) if is_valid_issn(issn)],
+        "published_year": published[0][0] if published and published[0] else None,
+        "abstract": parse_jats_text(abstract) if abstract else None,
+        "page": record.get("page"),
+        "references_count": record.get("references-count"),
+        "relation_types": sorted(record.get("relation", {})),
+        "update_types": sorted({update["type"] for update in record.get("update-to", [])}),
+        "is_updated": bool(record.get("updated-by")),
+        "licence_urls": [licence["URL"] for licence in licences],
+        "has_text_mining_licence": any(
+            licence.get("content-version") == "tdm" for licence in licences
+        ),
+        "text_mining_links": [
+            link["URL"]
+            for link in record.get("link", [])
+            if link.get("intended-application") == "text-mining"
+        ],
+        "fetched": date.fromisoformat(record["fetched"]),
+    }
+
+
+def _first(values: Sequence[str] | None) -> str | None:
+    return values[0] if values else None

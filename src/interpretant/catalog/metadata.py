@@ -30,6 +30,8 @@ class Source(BaseModel):
 
     display_name: str | None = None
     type: str | None = None
+    issn_l: str | None = None
+    issn: tuple[str, ...] | None = None
 
 
 class Location(BaseModel):
@@ -51,6 +53,10 @@ class WorkMetadata(BaseModel):
     doi: str | None = None
     # The work's identifiers in other systems by system ("doi", "pmid", "pmcid", "mag").
     ids: Mapping[str, str] = Field(default_factory=dict)
+    title: str | None = None
+    type: str | None = None
+    publication_date: date | None = None
+    language: str | None = None
     indexed_in: tuple[str, ...] = ()
     primary_location: Location | None = None
     is_paratext: bool = False

@@ -10,7 +10,9 @@ import pytest
 from interpretant.catalog import LinkedWork, WorkMetadata
 from interpretant.corpus.crossref import (
     batch_crossref_works,
+    build_crossref_works,
     fetch_crossref_records,
+    parse_jats_text,
     select_crossref_works,
 )
 from tests.metadata_records import linked_metadata_record, missing_record
@@ -102,3 +104,54 @@ def test_fetch_crossref_records_does_not_send_a_doi_without_crossrefs_form() -> 
     assert records[0]["missing"] is True
     assert records[0]["invalid_doi"] is True
     assert "invalid_doi" not in records[1]
+
+
+def test_parse_jats_text_keeps_the_paragraphs_without_the_heading() -> None:
+    markup = (
+        "<jats:title>Abstract</jats:title>\n  <jats:p>Brain networks &amp; "
+        "<jats:italic>IQ</jats:italic>\n differ.</jats:p><jats:p>A second point.</jats:p>"
+    )
+    assert parse_jats_text(markup) == "Brain networks & IQ differ. A second point."
+
+
+def test_build_crossref_works_flattens_found_and_missing_records() -> None:
+    found = {
+        "work_id": "https://openalex.org/W1",
+        "identifier": "10.1002/HBM.24074",
+        "fetched": "2026-11-14",
+        "DOI": "10.1002/hbm.24074",
+        "type": "journal-article",
+        "title": ["Brain networks"],
+        "container-title": ["Human Brain Mapping"],
+        "ISSN": ["1065-9471", "1065-9470"],
+        "published": {"date-parts": [[2018, 4, 17]]},
+        "abstract": "<jats:p>Networks differ.</jats:p>",
+        "page": "3253-3262",
+        "references-count": 64,
+        "relation": {"has-preprint": [{"id": "10.1101/143891"}]},
+        "update-to": [{"type": "correction"}],
+        "updated-by": [{"type": "retraction"}],
+        "license": [{"URL": "https://example.org/tdm", "content-version": "tdm"}],
+        "link": [
+            {"URL": "https://example.org/pdf", "intended-application": "text-mining"},
+            {"URL": "https://example.org/check", "intended-application": "similarity-checking"},
+        ],
+    }
+    missing = {
+        "work_id": "https://openalex.org/W2",
+        "identifier": "10.153/x",
+        "fetched": "2026-11-14",
+        "missing": True,
+        "invalid_doi": True,
+    }
+    table = build_crossref_works([found, missing])
+    first, second = table.to_dicts()
+    assert first["doi"] == "10.1002/hbm.24074"
+    assert (first["is_found"], first["page_count"], first["published_year"]) == (True, 10, 2018)
+    assert first["abstract"] == "Networks differ."
+    assert first["issns"] == ["1065-9471"]
+    assert (first["relation_types"], first["update_types"]) == (["has-preprint"], ["correction"])
+    assert first["is_updated"] and first["has_text_mining_licence"]
+    assert first["text_mining_links"] == ["https://example.org/pdf"]
+    assert (second["is_found"], second["is_invalid_doi"], second["abstract"]) == (False, True, None)
+    assert second["relation_types"] == []
