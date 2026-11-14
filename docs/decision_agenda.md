@@ -138,6 +138,7 @@ views (the full order is in step 9).
     2.0% of them and joins a word to a following digit in 24 (0.01%; *log₂* → *log2*), so it
     stays.
   - Control and format characters removed by Unicode category; soft hyphens removed.
+  - The missing space after punctuation glued to the next word (added after run 3, below).
   - Abstracts with mojibake are dropped (461, 0.03%), detected by a short list of the usual
     mis-decoding signatures (such as `Ã©` and `â€™`) in the cleaning patterns file, so the
     detector is data and is checked in the sample audit. `ftfy` was declined: it would repair
@@ -184,6 +185,18 @@ views (the full order is in step 9).
     with no finite verb, OCR damage and full texts. Book reviews, letters to the editor,
     obituaries, full texts over 1,000 words and severely OCR-damaged records: the author leans to
     dropping them, decided in that batch.
+- *After run 3 (2026-11-14)*, repair adds the space that punctuation glued to the next word lacks,
+  so the stored text reads normally for every later step (duplicate detection splits words at
+  spaces and read *rare.It* as one word). Counted on run 3's texts: sentence punctuation before a
+  capitalised word (*rare.It begins*, 236,539 spaces in 55,201 of 705,283 works), commas before a
+  word (61,527), semicolons before a word (4,303), colons before a capitalised word (5,116); 57,224
+  kept works change. Never inside web and e-mail addresses (spaCy's `like_url` and `like_email`)
+  or HTML entities, nor between single letters (*N,N-dimethyl*, *(i,j)*, *x:Gx*). Left glued on
+  purpose: colons before a lowercase word (ratios such as *light:dark* and *h:min*, vowel length)
+  and brackets (*(re)presented*, *H(2)O(2)*, *GABA(A)Rs*, *author(s)*). The tokenizer's three
+  rules for glued sentence punctuation and the sentence rule's glued branch now rarely fire; they
+  are measured on the affected works and go if spaCy's sentence model splits the repaired text as
+  well (the footnote rule, *weeks.4 Just*, stays).
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800),

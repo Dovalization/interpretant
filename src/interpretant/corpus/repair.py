@@ -1,7 +1,8 @@
 """Repair before spaCy: undo extraction artefacts so the stored text is clean, then never edit it.
 
 The decision agenda, step 2.3: NFKC, control and format characters by Unicode category, soft
-hyphens; abstracts with mojibake are dropped, not repaired, so detection reads the raw text.
+hyphens, the missing space after punctuation glued to the next word; abstracts with mojibake are
+dropped, not repaired, so detection reads the raw text.
 """
 
 from __future__ import annotations
@@ -9,6 +10,16 @@ from __future__ import annotations
 import re
 import unicodedata
 from collections.abc import Sequence
+
+from spacy.lang.char_classes import (
+    ALPHA_LOWER,
+    ALPHA_UPPER,
+    CONCAT_QUOTES,
+    LATIN,
+    LATIN_LOWER,
+    LATIN_UPPER,
+)
+from spacy.lang.lex_attrs import like_email, like_url
 
 # A literal backslash-n left in the text by an upstream extractor.
 _LITERAL_NEWLINE = re.compile(r"\\n")
@@ -23,6 +34,34 @@ _WHITESPACE_CONTROLS = frozenset("\t\n\r\x0b\x0c")
 # The Unicode hyphen characters (U+2010; NFKC turns the non-breaking U+2011 into it), written as
 # the ASCII hyphen-minus, so "post‐training" and "post-training" are one word (52,394 in run 2).
 _HYPHENS = str.maketrans({"\u2010": "-", "\u2011": "-"})
+# Sentence punctuation with no space before the next sentence: "very rare.It begins",
+# "(r = 0.922).In addition", 'learns."Acquaintance', 'night.\u201cFading\u201d' (55,202 of run 3's
+# 705,283 works). It follows a lowercase letter, a digit, a closing bracket or a quote and may
+# carry a closing quote or bracket; the space goes before the next sentence's opening quote or
+# bracket and its capitalised word, so "U.S.Army", "E.coli", "3.5" and "weeks.4" stay as they
+# are. The letter classes are spaCy's, as in the tokenizer's rules.
+_QUOTES = CONCAT_QUOTES.replace(",", "")
+_GLUED_SENTENCE = re.compile(
+    rf"(?<=[{ALPHA_LOWER}0-9\)\]{_QUOTES}])[.?!][\"'\u201d\u2019\u00bb\)\]]?"
+    rf"(?=[\u201c\u2018\u00ab\(\[]?[{ALPHA_UPPER}][{ALPHA_LOWER}])"
+)
+# A comma glued to the next word: "paper,the results", "body,spleen,intestine" (62,889 in 17,909
+# of run 3's kept works). A single letter on both sides keeps "N,N-dimethyl" and "(i,j)" whole.
+_GLUED_COMMA = re.compile(rf"(?<=[{LATIN}]{{2}}),(?=[{LATIN}])|(?<=[{LATIN}]),(?=[{LATIN}]{{2}})")
+# A semicolon glued to the next word: "form;comprehensively", "(Ragni, 2005;Ragni, 2007)" (4,439
+# in 2,340 kept works).
+_GLUED_SEMICOLON = re.compile(rf"(?<=[{LATIN}0-9\)\]]);(?=[{LATIN}])")
+# A colon glued to a capitalised word: "Objective:To study", "New York:Routledge" (4,952 in 3,926
+# kept works). Before a lowercase word it is left alone, since ratios ("light:dark", "h:min") and
+# vowel length ("a:s\u0268bi") are written that way, and so is a colon after one letter ("x:Gx").
+_GLUED_COLON = re.compile(rf"(?<=[{LATIN}]{{2}}):(?=[{LATIN_UPPER}][{LATIN_LOWER}])")
+_GLUED_PUNCTUATION = (_GLUED_SENTENCE, _GLUED_COMMA, _GLUED_SEMICOLON, _GLUED_COLON)
+# Punctuation around a web or e-mail address, stripped before spaCy's tests read it: ``like_url``
+# rejects anything that ends in a full stop.
+_ADDRESS_EDGES = "\"'\u201c\u201d\u2018\u2019\u00ab\u00bb()[]{}<>,;:.!?"
+# The end of an HTML entity, whole or with its ampersand lost ("&rsquo;s", "Hegelrsquo;s"), whose
+# semicolon is part of it.
+_ENTITY_END = re.compile(r"(?:&#?[A-Za-z0-9]+|[lr][sd]quo|dquo|nbsp|[nm]dash|hellip)$")
 
 
 def repair_text(raw: str) -> str:
@@ -33,7 +72,10 @@ def repair_text(raw: str) -> str:
     joiner) are removed; soft hyphens rejoin the word they split; runs of whitespace collapse to
     one space. NFKC also expands ligatures (*ﬁ* to *fi*), maps full-width punctuation and
     no-break spaces to their plain forms and writes superscripts as plain digits; the Unicode
-    hyphen characters become the ASCII hyphen-minus.
+    hyphen characters become the ASCII hyphen-minus. Punctuation glued to the next word gets the
+    missing space: sentence punctuation before a new sentence ("rare.It begins" to "rare. It
+    begins"), commas and semicolons before a word, colons before a capitalised word; never inside
+    web and e-mail addresses or HTML entities.
     """
     text = _SOFT_HYPHEN.sub("", _LITERAL_NEWLINE.sub(" ", raw))
     kept = []
@@ -43,7 +85,29 @@ def repair_text(raw: str) -> str:
         elif unicodedata.category(character) not in ("Cc", "Cf"):
             kept.append(character)
     normal = unicodedata.normalize("NFKC", "".join(kept)).translate(_HYPHENS)
-    return _SPACES.sub(" ", normal).strip()
+    text = _SPACES.sub(" ", normal).strip()
+    for pattern in _GLUED_PUNCTUATION:
+        text = _add_missing_spaces(pattern, text)
+    return text
+
+
+def _add_missing_spaces(pattern: re.Pattern[str], text: str) -> str:
+    def spaced(match: re.Match[str]) -> str:
+        if _inside_address(text, match.start(), match.end()):
+            return match.group()
+        if _ENTITY_END.search(text, 0, match.start()):
+            return match.group()
+        return match.group() + " "
+
+    return pattern.sub(spaced, text)
+
+
+def _inside_address(text: str, start: int, end: int) -> bool:
+    """Whether the run of text between spaces around ``start:end`` is a web or e-mail address."""
+    left = text.rfind(" ", 0, start) + 1
+    right = text.find(" ", end)
+    chunk = text[left : len(text) if right == -1 else right].strip(_ADDRESS_EDGES)
+    return like_url(chunk) or like_email(chunk)
 
 
 def compile_signatures(patterns: Sequence[str]) -> re.Pattern[str]:
