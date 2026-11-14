@@ -602,7 +602,9 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
 - **Run 3's review (2026-11-14, under way).** About 200 judgements cannot show a share under 1%
   in each decade (none in 25 only puts it under about 12%), so the review asks what the author's
   hour can answer: 200 kept records, 25 per decade, each judged abstract, not an abstract, not
-  English or unsure; the record-type detectors counted over every kept record for the per-decade
+  English or unsure (an article's opening paragraphs count as an abstract: the two are often
+  hard to tell apart, or the same text, and both are the work's own prose; decided during the
+  review); the record-type detectors counted over every kept record for the per-decade
   shares; 50 abstracts with their sentence breaks shown, wrong and missing breaks marked. The
   stopping rule, set before reading: at most 2 non-abstracts in the 200 and at most 2 in any
   decade's 25; the detectors' counts under 1% of every decade's records; sentence-break precision
