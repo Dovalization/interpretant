@@ -70,3 +70,43 @@ def load_cleaning_patterns(catalog: CatalogConfig) -> CleaningPatterns:
     rules = yaml.safe_load(catalog.cleaning_rules.path.read_text(encoding="utf-8"))
     patterns = list(srsly.read_jsonl(catalog.cleaning_patterns.path))
     return CleaningPatterns.model_validate({**rules, "patterns": patterns})
+
+
+class DOICorrection(BaseModel):
+    """A work whose DOI OpenAlex gives wrongly: OpenAlex's value, the right one, and why."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    work_id: str = Field(pattern=r"^https://openalex\.org/W\d+$")
+    openalex_doi: str
+    doi: str | None = Field(pattern=r"^https://doi\.org/10\.\d{4,}(?:\.\d+)*/\S+$")
+    evidence: str = Field(min_length=1)
+
+
+class DOICorrections(BaseModel):
+    """The corrections file: one entry per work, each work at most once."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    corrections: list[DOICorrection]
+
+    @model_validator(mode="after")
+    def _each_work_once(self) -> DOICorrections:
+        works = [correction.work_id for correction in self.corrections]
+        repeated = sorted({work for work in works if works.count(work) > 1})
+        if repeated:
+            raise ValueError(f"works corrected more than once: {repeated}")
+        return self
+
+
+def load_doi_corrections(catalog: CatalogConfig) -> dict[str, DOICorrection]:
+    """The DOI corrections by work id.
+
+    Raises:
+        FileNotFoundError: if the corrections file does not exist.
+        pydantic.ValidationError: if an entry is malformed, gives a DOI without Crossref's form or
+            corrects a work twice.
+    """
+    document = yaml.safe_load(catalog.doi_corrections.path.read_text(encoding="utf-8"))
+    corrections = DOICorrections.model_validate(document).corrections
+    return {correction.work_id: correction for correction in corrections}

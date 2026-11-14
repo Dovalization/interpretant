@@ -70,6 +70,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "abstracts:\n  path: abstracts\n  format: parquet\n"
         f"cleaning_rules:\n  path: '{repository.cleaning_rules.path}'\n  format: yaml\n"
         f"cleaning_patterns:\n  path: '{repository.cleaning_patterns.path}'\n  format: jsonl\n"
+        f"doi_corrections:\n  path: '{repository.doi_corrections.path}'\n  format: yaml\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"

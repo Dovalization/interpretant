@@ -8,7 +8,13 @@ import pydantic
 import pytest
 from spacy.lang.lex_attrs import _tlds
 
-from interpretant.catalog import CleaningPatterns, load_cleaning_patterns, read_catalog
+from interpretant.catalog import (
+    CatalogConfig,
+    CleaningPatterns,
+    load_cleaning_patterns,
+    load_doi_corrections,
+    read_catalog,
+)
 
 # The url pattern for a last dotted part from spaCy's list of domain endings, around the list.
 DOMAIN_PREFIX = r"\.(?:"
@@ -82,3 +88,33 @@ def test_the_url_domain_endings_are_spacys() -> None:
     (domain,) = [regex for regex in regexes if regex.startswith(DOMAIN_PREFIX)]
     copied = domain.removeprefix(DOMAIN_PREFIX).removesuffix(DOMAIN_SUFFIX).split("|")
     assert sorted(copied) == sorted(_tlds)
+
+
+def test_load_doi_corrections_reads_the_repository_file_by_work() -> None:
+    corrections = load_doi_corrections(read_catalog())
+    typo = corrections["https://openalex.org/W2410668642"]
+    assert typo.openalex_doi == "https://doi.org/10.153/scnp00400195"
+    assert typo.doi == "https://doi.org/10.1053/scnp00400195"
+    assert corrections["https://openalex.org/W15233091"].doi is None
+
+
+@pytest.mark.parametrize(
+    ("doi", "work_ids", "message"),
+    [
+        ("https://doi.org/10.153/x", ["W1"], "String should match pattern"),
+        ("https://doi.org/10.1053/x", ["W1", "W1"], "corrected more than once"),
+    ],
+    ids=["a corrected DOI without Crossref's form", "a work corrected twice"],
+)
+def test_load_doi_corrections_refuses_bad_entries(
+    catalog: CatalogConfig, doi: str, work_ids: list[str], message: str
+) -> None:
+    entries = "".join(
+        f"  - work_id: https://openalex.org/{work}\n    openalex_doi: x\n"
+        f"    doi: {doi}\n    evidence: seen\n"
+        for work in work_ids
+    )
+    catalog.doi_corrections.path.parent.mkdir(parents=True, exist_ok=True)
+    catalog.doi_corrections.path.write_text("corrections:\n" + entries)
+    with pytest.raises(pydantic.ValidationError, match=message):
+        load_doi_corrections(catalog)

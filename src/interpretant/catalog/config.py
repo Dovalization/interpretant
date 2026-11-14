@@ -37,6 +37,7 @@ class CatalogConfig(BaseModel):
     run_log: DatasetEntry
     cleaning_rules: DatasetEntry
     cleaning_patterns: DatasetEntry
+    doi_corrections: DatasetEntry
     annotations: DatasetEntry
     sentence_languages: DatasetEntry
 

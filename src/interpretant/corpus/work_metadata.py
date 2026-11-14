@@ -8,14 +8,14 @@ repository-only, and the corpus review decides which kinds are dropped (4b).
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Iterator, Mapping, Sequence
 from datetime import date
 from typing import Any
 
 import polars as pl
 from pyalex import Works, config
 
-from interpretant.catalog import WorkMetadata
+from interpretant.catalog import DOICorrection, WorkMetadata
 from interpretant.corpus.cleaning import add_flag
 
 # The fields of decision agenda 4.8: everything the corpus rules, the review and later measures
@@ -92,6 +92,15 @@ def fetch_work_metadata(work_ids: Sequence[str], *, fetched: date) -> list[dict[
         else {"id": work_id, "fetched": fetched.isoformat(), "missing": True}
         for work_id in work_ids
     ]
+
+
+def correct_dois(
+    records: Iterable[WorkMetadata], corrections: Mapping[str, DOICorrection]
+) -> Iterator[WorkMetadata]:
+    """The records with the curated DOI corrections applied; the downloaded files are unchanged."""
+    for record in records:
+        correction = corrections.get(record.work_id)
+        yield record if correction is None else record.model_copy(update={"doi": correction.doi})
 
 
 def is_repository_only(metadata: WorkMetadata) -> bool:

@@ -8,6 +8,7 @@ the corpus rules read these from Crossref itself.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, Sequence
 from datetime import date
 from typing import Any
@@ -41,6 +42,9 @@ CROSSREF_FIELDS = (
 DOIS_PER_REQUEST = 200
 MAX_FILTER_CHARACTERS = 6_000
 _DOI_PREFIX = "https://doi.org/"
+# Crossref refuses a whole batch if one DOI lacks its form: "10.", a prefix of 4 or more digits, a
+# slash and a suffix. Two works in OpenAlex carry a 3-digit prefix.
+_DOI_FORM = re.compile(r"^10\.\d{4,}(?:\.\d+)*/\S+$")
 
 
 def select_crossref_works(records: Iterable[WorkMetadata]) -> list[LinkedWork]:
@@ -71,7 +75,8 @@ def fetch_crossref_records(
     """Crossref's records of up to 200 works, in the given order, each with the work id and date.
 
     A DOI Crossref does not hold (registered with another agency, or unknown) gives a record
-    marked missing. A comma inside a DOI would split the batch filter, so such a DOI is asked for
+    marked missing. A DOI without Crossref's form is not sent: its record is marked missing and
+    ``invalid_doi``. A comma inside a DOI would split the batch filter, so such a DOI is asked for
     on its own.
 
     Raises:
@@ -80,20 +85,25 @@ def fetch_crossref_records(
     """
     if len(works) > DOIS_PER_REQUEST:
         raise ValueError(f"one Crossref request takes at most {DOIS_PER_REQUEST} DOIs")
-    batched = [work.identifier for work in works if "," not in work.identifier]
+    valid = [work.identifier for work in works if _DOI_FORM.match(work.identifier)]
+    batched = [doi for doi in valid if "," not in doi]
     found: dict[str, dict[str, Any]] = {}
     if batched:
         answer = crossref.works(
             filter={"doi": batched}, select=list(CROSSREF_FIELDS), limit=len(batched)
         )
         found.update({item["DOI"].lower(): item for item in answer["message"]["items"]})
-    for work in works:
-        if "," in work.identifier:
-            found.update(_fetch_crossref_work(crossref, work.identifier))
-    return [
-        build_linked_record(work, found.get(work.identifier.lower()), fetched=fetched)
-        for work in works
-    ]
+    for doi in valid:
+        if "," in doi:
+            found.update(_fetch_crossref_work(crossref, doi))
+    return [_record(work, found, fetched=fetched) for work in works]
+
+
+def _record(work: LinkedWork, found: dict[str, dict[str, Any]], *, fetched: date) -> dict[str, Any]:
+    record = build_linked_record(work, found.get(work.identifier.lower()), fetched=fetched)
+    if not _DOI_FORM.match(work.identifier):
+        record["invalid_doi"] = True
+    return record
 
 
 def _doi(record: WorkMetadata) -> str:

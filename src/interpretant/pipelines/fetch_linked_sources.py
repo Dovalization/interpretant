@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import threading
 import time
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date
@@ -28,6 +28,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from interpretant.catalog import (
     CatalogConfig,
+    DOICorrection,
     LinkedSource,
     LinkedWork,
     RawCell,
@@ -47,6 +48,7 @@ from interpretant.corpus.pubmed import (
     fetch_pubmed_records,
     select_pubmed_works,
 )
+from interpretant.corpus.work_metadata import correct_dois
 from interpretant.pipelines.progress import SILENT, Progress
 
 ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
@@ -162,9 +164,14 @@ def is_transient(error: Exception) -> bool:
     )
 
 
-def count_linked_works(catalog: CatalogConfig, cells: Sequence[RawCell], plan: SourcePlan) -> int:
+def count_linked_works(
+    catalog: CatalogConfig,
+    cells: Sequence[RawCell],
+    plan: SourcePlan,
+    corrections: Mapping[str, DOICorrection],
+) -> int:
     """The works the source can be asked about in each cell, summed over the cells."""
-    return sum(len(plan.select(load_work_metadata(catalog, cell))) for cell in cells)
+    return sum(len(_cell_works(catalog, cell, plan, corrections)) for cell in cells)
 
 
 def fetch_cell_linked_records(
@@ -172,6 +179,7 @@ def fetch_cell_linked_records(
     cell: RawCell,
     source: LinkedSource,
     plan: SourcePlan,
+    corrections: Mapping[str, DOICorrection],
     *,
     progress: Progress = SILENT,
 ) -> CellLookup:
@@ -183,7 +191,7 @@ def fetch_cell_linked_records(
     after the failed one are fetched again on the next run.
     """
     done = fetched_linked_work_ids(catalog, cell, source)
-    works = plan.select(load_work_metadata(catalog, cell))
+    works = _cell_works(catalog, cell, plan, corrections)
     pending = [work for work in works if work.work_id not in done]
     batches = plan.batch(pending)
     progress.advance(len(works) - len(pending))
@@ -203,6 +211,15 @@ def fetch_cell_linked_records(
         found=len(pending) - missing,
         missing=missing,
     )
+
+
+def _cell_works(
+    catalog: CatalogConfig,
+    cell: RawCell,
+    plan: SourcePlan,
+    corrections: Mapping[str, DOICorrection],
+) -> list[LinkedWork]:
+    return plan.select(correct_dois(load_work_metadata(catalog, cell), corrections))
 
 
 def _throttled(

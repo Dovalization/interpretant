@@ -11,7 +11,7 @@ from typing import Any
 import pytest
 from pyalex import config
 
-from interpretant.catalog import WorkMetadata, index_work_metadata
+from interpretant.catalog import DOICorrection, WorkMetadata, index_work_metadata
 from interpretant.corpus import work_metadata
 from interpretant.corpus.removals import MALFORMED
 from interpretant.corpus.work_metadata import (
@@ -22,6 +22,7 @@ from interpretant.corpus.work_metadata import (
     REPOSITORY_ONLY,
     RETRACTED,
     configure_openalex,
+    correct_dois,
     fetch_work_metadata,
     is_repository_only,
     mark_metadata_flags,
@@ -143,3 +144,21 @@ def test_mark_metadata_flags_marks_front_matter_and_retracted_works() -> None:
     ]
     flagged = mark_metadata_flags(table, index_work_metadata(records, table["work_id"]))
     assert flagged["flags"].to_list() == [[PARATEXT], [RETRACTED]]
+
+
+def test_correct_dois_replaces_only_the_corrected_works() -> None:
+    records = [
+        WorkMetadata.model_validate(
+            {**metadata_record(work), "doi": f"https://doi.org/10.1/{work}"}
+        )
+        for work in (1, 2)
+    ]
+    correction = DOICorrection(
+        work_id="https://openalex.org/W1",
+        openalex_doi="https://doi.org/10.1/1",
+        doi=None,
+        evidence="PubMed lists no DOI",
+    )
+    corrected = list(correct_dois(records, {correction.work_id: correction}))
+    assert [record.doi for record in corrected] == [None, "https://doi.org/10.1/2"]
+    assert records[0].doi == "https://doi.org/10.1/1"

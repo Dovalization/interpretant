@@ -61,6 +61,7 @@ def catalog_text() -> str:
         "abstracts:\n  path: data/abstracts\n  format: parquet\n"
         "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
         "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
+        "doi_corrections:\n  path: curated/doi_corrections.yaml\n  format: yaml\n"
         "annotations:\n  path: data/annotations\n  format: docbin\n"
         "sentence_languages:\n  path: data/sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: data/corpus_report.md\n  format: markdown\n"

@@ -17,8 +17,10 @@ from interpretant.catalog.curated import (
     START_ID,
     CleaningPattern,
     CleaningPatterns,
+    DOICorrection,
     Scope,
     load_cleaning_patterns,
+    load_doi_corrections,
 )
 from interpretant.catalog.languages import (
     SENTENCE_LANGUAGES_SCHEMA,
@@ -64,6 +66,7 @@ __all__ = [
     "CatalogConfig",
     "CleaningPattern",
     "CleaningPatterns",
+    "DOICorrection",
     "DatasetEntry",
     "LinkedSource",
     "LinkedWork",
@@ -85,6 +88,7 @@ __all__ = [
     "load_annotations",
     "load_cleaning_patterns",
     "load_corpus_metrics",
+    "load_doi_corrections",
     "load_raw_cell",
     "load_sentence_languages",
     "load_work_metadata",

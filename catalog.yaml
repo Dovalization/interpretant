@@ -62,6 +62,11 @@ cleaning_patterns:
   path: curated/cleaning_patterns.jsonl
   format: jsonl
 
+# DOIs OpenAlex gives wrongly, with the evidence for each; applied wherever a DOI is read.
+doi_corrections:
+  path: curated/doi_corrections.yaml
+  format: yaml
+
 annotations:
   path: data/interim/annotations
   format: docbin

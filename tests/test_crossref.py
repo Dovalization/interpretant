@@ -89,3 +89,16 @@ def test_batch_crossref_works_caps_each_request_by_count_and_by_length() -> None
     batches = batch_crossref_works(long)
     assert len(batches) > 1
     assert [work for batch in batches for work in batch] == long
+
+
+def test_fetch_crossref_records_does_not_send_a_doi_without_crossrefs_form() -> None:
+    works = [
+        LinkedWork("https://openalex.org/W1", "10.153/scnp00400195"),
+        LinkedWork("https://openalex.org/W2", "10.1000/b"),
+    ]
+    crossref = FakeCrossref(held={"10.1000/b"})
+    records = fetch_crossref_records(crossref, works, fetched=FETCHED)
+    assert crossref.filters == [["10.1000/b"]]
+    assert records[0]["missing"] is True
+    assert records[0]["invalid_doi"] is True
+    assert "invalid_doi" not in records[1]

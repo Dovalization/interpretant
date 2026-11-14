@@ -16,6 +16,7 @@ from click.testing import CliRunner
 from interpretant.__main__ import cli
 from interpretant.catalog import (
     CatalogConfig,
+    DOICorrection,
     LinkedWork,
     RawCell,
     append_work_metadata,
@@ -125,12 +126,30 @@ def test_fetch_cell_linked_records_asks_in_batches_and_resumes(catalog: CatalogC
     append_work_metadata(catalog, cell, records)
     fetch = FakeFetch(missing=frozenset({"10.1000/Work.2"}))
     plan = SourcePlan(select=select_crossref_works, batch=in_threes, fetch=fetch, workers=2)
-    result = fetch_cell_linked_records(catalog, cell, "crossref", plan)
+    result = fetch_cell_linked_records(catalog, cell, "crossref", plan, {})
     assert sorted(fetch.batches) == [1, 3, 3]
     assert (result.already_fetched, result.found, result.missing) == (0, 6, 1)
     assert len(fetched_linked_work_ids(catalog, cell, "crossref")) == 7
-    again = fetch_cell_linked_records(catalog, cell, "crossref", plan)
+    again = fetch_cell_linked_records(catalog, cell, "crossref", plan, {})
     assert (again.already_fetched, again.found, sorted(fetch.batches)) == (7, 0, [1, 3, 3])
+
+
+def test_fetch_cell_linked_records_asks_with_the_corrected_dois(catalog: CatalogConfig) -> None:
+    cell = RawCell("ai", 2010)
+    append_work_metadata(catalog, cell, [linked_metadata_record(work) for work in (1, 2)])
+    correction = DOICorrection(
+        work_id="https://openalex.org/W1",
+        openalex_doi="https://doi.org/",
+        doi=None,
+        evidence="PubMed lists no DOI",
+    )
+    fetch = FakeFetch()
+    plan = SourcePlan(select=select_crossref_works, batch=in_threes, fetch=fetch, workers=1)
+    result = fetch_cell_linked_records(
+        catalog, cell, "crossref", plan, {correction.work_id: correction}
+    )
+    assert (result.found, fetch.batches) == (1, [1])
+    assert fetched_linked_work_ids(catalog, cell, "crossref") == {"https://openalex.org/W2"}
 
 
 def test_fetch_linked_sources_command_prints_a_line_per_source_and_cell(
@@ -151,6 +170,8 @@ def test_fetch_linked_sources_command_prints_a_line_per_source_and_cell(
         return SourcePlan(select_pubmed_works, batch_pubmed_works, FakeFetch(), workers=1)
 
     monkeypatch.setenv("CONTACT_EMAIL", "someone@example.org")
+    catalog.doi_corrections.path.parent.mkdir(parents=True, exist_ok=True)
+    catalog.doi_corrections.path.write_text("corrections: []\n")
     monkeypatch.setattr(fetch_linked_sources_cli, "build_source_plan", fake_plan)
     arguments = ["fetch-linked-sources", "--catalog", str(tmp_path / "catalog.yaml")]
     outcome = CliRunner().invoke(cli, arguments)

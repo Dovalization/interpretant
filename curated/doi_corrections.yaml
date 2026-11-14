@@ -1,0 +1,31 @@
+# DOIs that OpenAlex's work metadata gives wrongly, each with its evidence (decision agenda 4.8,
+# linked sources). The downloaded metadata keeps OpenAlex's values as fetched; every step that
+# reads a work's DOI applies these corrections. `doi: null` means the work has no DOI.
+# Found 2026-11-14 by checking every DOI against Crossref's form (10., a prefix of 4 or more
+# digits, a slash and a suffix); all five works are PubMed records in OpenAlex.
+corrections:
+  - work_id: https://openalex.org/W2410668642
+    openalex_doi: https://doi.org/10.153/scnp00400195
+    doi: https://doi.org/10.1053/scnp00400195
+    evidence: >-
+      PubMed 10498787 lists 10.153/SCNP00400195; the journal (Seminars in Clinical
+      Neuropsychiatry) uses the prefix 10.1053, as PubMed 10378956 from the same journal shows
+      (10.1053/SCNP00400133). Never registered: doi.org finds neither form.
+  - work_id: https://openalex.org/W36794120
+    openalex_doi: https://doi.org/10.153/scnp00400155
+    doi: https://doi.org/10.1053/scnp00400155
+    evidence: >-
+      PubMed 10498783 lists 10.153/SCNP00400155; the same prefix typo as W2410668642, in the same
+      issue. Never registered: doi.org finds neither form.
+  - work_id: https://openalex.org/W15233091
+    openalex_doi: https://doi.org/
+    doi: null
+    evidence: OpenAlex's DOI is empty after its prefix; PubMed 23374524 lists no DOI.
+  - work_id: https://openalex.org/W2262914904
+    openalex_doi: https://doi.org/
+    doi: null
+    evidence: OpenAlex's DOI is empty after its prefix; PubMed 21798143 lists no DOI.
+  - work_id: https://openalex.org/W1853441388
+    openalex_doi: https://doi.org/
+    doi: null
+    evidence: OpenAlex's DOI is empty after its prefix; PubMed 15375443 lists no DOI.

@@ -8,7 +8,13 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog import CATALOG_FILE, LINKED_SOURCES, LinkedSource, read_catalog
+from interpretant.catalog import (
+    CATALOG_FILE,
+    LINKED_SOURCES,
+    LinkedSource,
+    load_doi_corrections,
+    read_catalog,
+)
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.fetch_linked_sources import (
     LinkedSourcesSettings,
@@ -60,6 +66,7 @@ def fetch_linked_sources_command(
     """
     catalog = read_catalog(catalog_file)
     cells = select_raw_cells(catalog, fields=fields, decades=decades)
+    corrections = load_doi_corrections(catalog)
     settings = LinkedSourcesSettings()
     console = Console()
     counts: dict[str, int] = {}
@@ -68,11 +75,13 @@ def fetch_linked_sources_command(
         for source in sources or LINKED_SOURCES:
             plan = build_source_plan(source, settings, today=date.today())
             timer.stage(f"counting the works {source} can be asked about")
-            total = count_linked_works(catalog, cells, plan)
+            total = count_linked_works(catalog, cells, plan, corrections)
             counts[f"{source}_works"] = total
             timer.stage(f"looking the works up in {source}", total=total)
             for number, cell in enumerate(cells, start=1):
-                result = fetch_cell_linked_records(catalog, cell, source, plan, progress=timer)
+                result = fetch_cell_linked_records(
+                    catalog, cell, source, plan, corrections, progress=timer
+                )
                 console.print(
                     f"{source} [{number}/{len(cells)}] {cell.field} {cell.decade}: "
                     f"{result.found:,} found, {result.missing:,} missing, "
