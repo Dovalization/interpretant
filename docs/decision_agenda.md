@@ -1416,6 +1416,12 @@ The sized tasks come to about 4 hours; three are not yet sized.
 - [ ] Push: the local commits wait for the author's go.
 - [ ] Devlog 07: waiting for the author's review.
 - [ ] bazzite's copy of the repository: behind the Mac; sync before any GPU run.
+- [ ] Speed up `detect-languages` (5 min 30 s in run 3, against about 1 min hoped for): only
+  lingua's own calls run in parallel; loading each part's documents from the cache and walking
+  their sentences happens on one core. Overlap the loading with lingua's calls, or load parts
+  in worker processes and keep lingua's batches in the main one.
+- [ ] Progress lines show "0/s" for stages that finish fewer than one item a second (the
+  language and cleaning stages count parts): show decimals, or items a minute, there.
 - [ ] Docs pass: go through the 23 documents in `docs/`, merge what overlaps, retire what is no
   longer relevant, sort the rest into `reference/`, `records/` and `design/` (8.6), with step 10.
 
