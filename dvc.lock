@@ -44,8 +44,8 @@ stages:
       size: 1593
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: adac672227db160787b40c7c2246c0ae
-      size: 2279
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
     params:
       params.yaml:
         annotate_corpus:
@@ -147,8 +147,8 @@ stages:
       size: 1593
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: adac672227db160787b40c7c2246c0ae
-      size: 2279
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
     params:
       params.yaml:
         build_corpus:
@@ -237,8 +237,8 @@ stages:
       size: 1593
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: adac672227db160787b40c7c2246c0ae
-      size: 2279
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
     - path: src/interpretant/pipelines/report_corpus.py
       hash: md5
       md5: cca7ace5677b129db0f98250ebb163e1
@@ -319,8 +319,8 @@ stages:
       size: 1593
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: adac672227db160787b40c7c2246c0ae
-      size: 2279
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
     params:
       params.yaml:
         corpus:
@@ -440,8 +440,8 @@ stages:
       size: 1593
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: adac672227db160787b40c7c2246c0ae
-      size: 2279
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
     - path: src/interpretant/pipelines/workers.py
       hash: md5
       md5: b1f43f70a990c6814549a2e0cc8dd81c
@@ -535,8 +535,8 @@ stages:
       size: 3652
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: adac672227db160787b40c7c2246c0ae
-      size: 2279
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
     outs:
     - path: data/interim/crossref_works.parquet
       hash: md5
