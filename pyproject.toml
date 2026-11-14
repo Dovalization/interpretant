@@ -35,6 +35,8 @@ dependencies = [
     "en-core-web-trf",
     "pyalex>=0.21",
     "dvc[ssh]>=3.67.1",
+    "biopython>=1.88",
+    "habanero>=2.9.2",
 ]
 
 [project.optional-dependencies]
@@ -77,12 +79,14 @@ python_version = "3.11"
 strict = true
 # pydantic's plugin types model and settings initialisers (settings fields may come from files).
 plugins = ["pydantic.mypy"]
+# Biopython ships a py.typed marker but leaves its Entrez functions unannotated.
+untyped_calls_exclude = ["Bio"]
 mypy_path = "src"
 namespace_packages = true
 explicit_package_bases = true
 
 [[tool.mypy.overrides]]
-module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*"]
+module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*", "habanero.*"]
 ignore_missing_imports = true
 
 # Libraries without type hints and with no stubs package: compiled spaCy modules, srsly,

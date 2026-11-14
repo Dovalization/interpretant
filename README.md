@@ -152,6 +152,7 @@ git log --oneline -- scripts/score_predictions.py
 | `gensim`               | Word2Vec training (TWEC compass and cell models), phrase detection |
 | `scipy`                | PPMI-SVD (sparse SVD)                                 |
 | OpenAlex API           | Field × decade abstract samples                        |
+| `habanero`, Biopython (`Bio.Entrez`) | Each work's record in Crossref and PubMed (publisher abstracts, page ranges, MeSH, publication types) |
 | `PyTorch` / `transformers` | Contextual encoders (XL-LEXEME, DeBERTa-v3-large) for the vector store |
 | `scikit-learn`         | Sense classifier, cross-validation                    |
 | `spaCy` (`en_core_web_sm`, `en_core_web_trf`) | Sentences, part of speech, lemmas and named entities of target occurrences |
@@ -178,6 +179,9 @@ The stack was settled on 2026-11-11, before the data audit and the store's rebui
   where they ran.
 - **pandera** turns the audit's rules into table-level checks (unique keys, usages inside their
   cell's years, language shares), which per-record validation cannot express.
+- **habanero** and **Biopython** look each work up in Crossref and PubMed (added 2026-11-14):
+  habanero is the maintained Crossref client and builds its batched DOI requests; Biopython's
+  Entrez module is NCBI's usual client, keeps to its rate limit and parses PubMed's XML.
 - **nltk** was dropped with the WordNet code of rounds Q and Z.
 - Built datasets are versioned by content hashes in a committed manifest rather than a data
   versioning tool.

@@ -27,6 +27,8 @@ class CatalogConfig(BaseModel):
 
     raw_abstracts: DatasetEntry
     work_metadata: DatasetEntry
+    crossref_records: DatasetEntry
+    pubmed_records: DatasetEntry
     annotated_abstracts: DatasetEntry
     abstracts: DatasetEntry
     corpus_report: DatasetEntry

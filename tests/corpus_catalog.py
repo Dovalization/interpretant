@@ -64,6 +64,8 @@ def write_corpus_catalog(folder: Path) -> Path:
     catalog_file.write_text(
         "raw_abstracts:\n  path: raw\n  format: jsonl.gz\n"
         "work_metadata:\n  path: metadata\n  format: jsonl.gz\n"
+        "crossref_records:\n  path: crossref\n  format: jsonl.gz\n"
+        "pubmed_records:\n  path: pubmed\n  format: jsonl.gz\n"
         "annotated_abstracts:\n  path: annotated\n  format: parquet\n"
         "abstracts:\n  path: abstracts\n  format: parquet\n"
         f"cleaning_rules:\n  path: '{repository.cleaning_rules.path}'\n  format: yaml\n"

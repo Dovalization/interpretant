@@ -55,6 +55,8 @@ def catalog_text() -> str:
     return (
         "raw_abstracts:\n  path: data/raw\n  format: jsonl.gz\n"
         "work_metadata:\n  path: data/metadata\n  format: jsonl.gz\n"
+        "crossref_records:\n  path: data/crossref\n  format: jsonl.gz\n"
+        "pubmed_records:\n  path: data/pubmed\n  format: jsonl.gz\n"
         "annotated_abstracts:\n  path: data/annotated\n  format: parquet\n"
         "abstracts:\n  path: data/abstracts\n  format: parquet\n"
         "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"

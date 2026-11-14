@@ -25,6 +25,12 @@ from interpretant.catalog.languages import (
     load_sentence_languages,
     save_sentence_languages,
 )
+from interpretant.catalog.linked_records import (
+    LINKED_SOURCES,
+    LinkedSource,
+    append_linked_records,
+    fetched_linked_work_ids,
+)
 from interpretant.catalog.metadata import (
     WorkMetadata,
     append_work_metadata,
@@ -46,6 +52,7 @@ __all__ = [
     "ABSTRACTS_COLUMNS",
     "ABSTRACTS_SCHEMA",
     "CATALOG_FILE",
+    "LINKED_SOURCES",
     "REMOVAL",
     "SENTENCE",
     "SENTENCE_LANGUAGES_SCHEMA",
@@ -55,12 +62,15 @@ __all__ = [
     "CleaningPattern",
     "CleaningPatterns",
     "DatasetEntry",
+    "LinkedSource",
     "RawCell",
     "RawWork",
     "Scope",
     "WorkMetadata",
+    "append_linked_records",
     "append_run_record",
     "append_work_metadata",
+    "fetched_linked_work_ids",
     "fetched_work_ids",
     "index_work_metadata",
     "list_raw_cells",

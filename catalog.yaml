@@ -13,6 +13,16 @@ work_metadata:
   path: data/raw/openalex_metadata
   format: jsonl.gz
 
+# Each raw work's record in Crossref (by DOI) and PubMed (by PubMed id), fetched once: one
+# gzipped JSON Lines file per raw cell, same layout (decision agenda 4.8, linked sources).
+crossref_records:
+  path: data/raw/crossref
+  format: jsonl.gz
+
+pubmed_records:
+  path: data/raw/pubmed
+  format: jsonl.gz
+
 # The abstracts table as the spaCy pass leaves it (stage 2), one part per field and decade; the
 # corpus-level rules (stage 3) read it and write the abstracts table below.
 annotated_abstracts:

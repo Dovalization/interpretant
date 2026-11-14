@@ -4,14 +4,11 @@ Each cell is ``<field>/<decade>.jsonl.gz``, laid out like the raw cells, one rec
 OpenAlex returned it (the fields of decision agenda 4.8) plus the date it was fetched. A work
 OpenAlex no longer returns is recorded as missing, so a rerun does not ask for it again. Like the
 downloads, the files are registered, never regenerated; an interrupted fetch appends where it
-stopped. Each append is one gzip member, compressed in memory and written in one call, so a fetch
-stopped between batches leaves a whole file (gzip reads the members as one stream).
+stopped.
 """
 
 from __future__ import annotations
 
-import gzip
-import json
 from collections.abc import Iterable, Iterator, Mapping
 from datetime import date
 from pathlib import Path
@@ -19,6 +16,7 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field
 
 from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.json_lines import append_json_lines, read_json_lines
 from interpretant.catalog.raw import RawCell
 
 _SUFFIX = ".jsonl.gz"
@@ -51,6 +49,8 @@ class WorkMetadata(BaseModel):
     fetched: date
     missing: bool = False
     doi: str | None = None
+    # The work's identifiers in other systems by system ("doi", "pmid", "pmcid", "mag").
+    ids: Mapping[str, str] = Field(default_factory=dict)
     indexed_in: tuple[str, ...] = ()
     primary_location: Location | None = None
     is_paratext: bool = False
@@ -72,15 +72,10 @@ def append_work_metadata(
     Raises:
         pydantic.ValidationError: if a record lacks a work id or a fetch date.
     """
-    lines = []
-    for record in records:
+    checked = list(records)
+    for record in checked:
         WorkMetadata.model_validate(record)
-        lines.append(json.dumps(record, ensure_ascii=False) + "\n")
-    member = gzip.compress("".join(lines).encode("utf-8"))
-    path = _path(catalog, cell)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("ab") as handle:
-        handle.write(member)
+    append_json_lines(_path(catalog, cell), checked)
 
 
 def load_work_metadata(catalog: CatalogConfig, cell: RawCell) -> Iterator[WorkMetadata]:
@@ -90,9 +85,8 @@ def load_work_metadata(catalog: CatalogConfig, cell: RawCell) -> Iterator[WorkMe
         FileNotFoundError: if the cell's metadata has not been fetched.
         pydantic.ValidationError: if a line is not a metadata record.
     """
-    with gzip.open(_path(catalog, cell), "rt", encoding="utf-8") as lines:
-        for line in lines:
-            yield WorkMetadata.model_validate_json(line)
+    for line in read_json_lines(_path(catalog, cell)):
+        yield WorkMetadata.model_validate_json(line)
 
 
 def _path(catalog: CatalogConfig, cell: RawCell) -> Path:
