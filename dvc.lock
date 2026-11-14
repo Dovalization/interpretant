@@ -15,9 +15,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: da63a754777b8dea6116af2d12ecb86a.dir
-      size: 34238
-      nfiles: 13
+      md5: a73913fb2964ae13b2a8d6ca8157a648.dir
+      size: 41260
+      nfiles: 14
     - path: src/interpretant/corpus/annotation.py
       hash: md5
       md5: 45e7e4a6ba0dedbf65ddcc6a5810e996
@@ -98,9 +98,13 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: da63a754777b8dea6116af2d12ecb86a.dir
-      size: 34238
-      nfiles: 13
+      md5: a73913fb2964ae13b2a8d6ca8157a648.dir
+      size: 41260
+      nfiles: 14
+    - path: src/interpretant/corpus/bibliographic.py
+      hash: md5
+      md5: 7a15322745efafd6cd15179f626ac30a
+      size: 1754
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 6add7e3be20d79882f7c461933d50837
@@ -123,8 +127,8 @@ stages:
       size: 7578
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
-      md5: a84664649e625bf43a15cc7aa56fc0ab
-      size: 4889
+      md5: 40f7e71821d79e8a2ac237afbaf9efc0
+      size: 6812
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -200,9 +204,13 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: da63a754777b8dea6116af2d12ecb86a.dir
-      size: 34238
-      nfiles: 13
+      md5: a73913fb2964ae13b2a8d6ca8157a648.dir
+      size: 41260
+      nfiles: 14
+    - path: src/interpretant/corpus/bibliographic.py
+      hash: md5
+      md5: 7a15322745efafd6cd15179f626ac30a
+      size: 1754
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 6add7e3be20d79882f7c461933d50837
@@ -213,8 +221,8 @@ stages:
       size: 7578
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
-      md5: a84664649e625bf43a15cc7aa56fc0ab
-      size: 4889
+      md5: 40f7e71821d79e8a2ac237afbaf9efc0
+      size: 6812
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -282,9 +290,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: da63a754777b8dea6116af2d12ecb86a.dir
-      size: 34238
-      nfiles: 13
+      md5: a73913fb2964ae13b2a8d6ca8157a648.dir
+      size: 41260
+      nfiles: 14
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -399,9 +407,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: da63a754777b8dea6116af2d12ecb86a.dir
-      size: 34238
-      nfiles: 13
+      md5: a73913fb2964ae13b2a8d6ca8157a648.dir
+      size: 41260
+      nfiles: 14
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -470,3 +478,75 @@ stages:
       md5: f6103e9d348132add2984d3cf6479ae5.dir
       size: 282245232
       nfiles: 88
+  build_linked_tables:
+    cmd: interpretant build-linked-tables
+    deps:
+    - path: curated/doi_corrections.yaml
+      hash: md5
+      md5: b5d733b1d965d9bc266ad54611797462
+      size: 1741
+    - path: data/raw/crossref
+      hash: md5
+      md5: 8494af15201ea27aa53509bf611ddc06.dir
+      size: 156964482
+      nfiles: 88
+    - path: data/raw/openalex_metadata
+      hash: md5
+      md5: edda602f82c1254c4f857f845f249ea5.dir
+      size: 631283086
+      nfiles: 88
+    - path: data/raw/pubmed
+      hash: md5
+      md5: 17d7a1f31e297ac64e2fd3fbc0ff8541.dir
+      size: 58645667
+      nfiles: 88
+    - path: src/interpretant/catalog
+      hash: md5
+      md5: a73913fb2964ae13b2a8d6ca8157a648.dir
+      size: 41260
+      nfiles: 14
+    - path: src/interpretant/corpus/bibliographic.py
+      hash: md5
+      md5: 7a15322745efafd6cd15179f626ac30a
+      size: 1754
+    - path: src/interpretant/corpus/cleaning.py
+      hash: md5
+      md5: 6add7e3be20d79882f7c461933d50837
+      size: 8796
+    - path: src/interpretant/corpus/crossref.py
+      hash: md5
+      md5: a0a45ef4f0f6eb7813f1938c34056bbf
+      size: 8189
+    - path: src/interpretant/corpus/pubmed.py
+      hash: md5
+      md5: edd36b0a4d52bfb205acbdf2f5f25a4b
+      size: 7354
+    - path: src/interpretant/corpus/repair.py
+      hash: md5
+      md5: 8ecf8974a71bb9d8bd738a5a2f721877
+      size: 7578
+    - path: src/interpretant/corpus/work_metadata.py
+      hash: md5
+      md5: 40f7e71821d79e8a2ac237afbaf9efc0
+      size: 6812
+    - path: src/interpretant/pipelines/build_linked_tables.py
+      hash: md5
+      md5: 9f1c913b60da2b803d9c5e5262345f3c
+      size: 4081
+    - path: src/interpretant/pipelines/progress.py
+      hash: md5
+      md5: adac672227db160787b40c7c2246c0ae
+      size: 2279
+    outs:
+    - path: data/interim/crossref_works.parquet
+      hash: md5
+      md5: 49de8a08d522e4db7f13ed5458ed4ae5
+      size: 103441163
+    - path: data/interim/openalex_works.parquet
+      hash: md5
+      md5: c74affd56f494e163d271e91393878ff
+      size: 38380657
+    - path: data/interim/pubmed_works.parquet
+      hash: md5
+      md5: 038f43b5cebbecf5ff9cf4ebdbeba525
+      size: 42808151
