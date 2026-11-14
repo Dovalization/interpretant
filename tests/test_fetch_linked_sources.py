@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 import gzip
+import http.client
 import json
 import time
+import urllib.error
 from collections.abc import Sequence
 from datetime import date
+from email.message import Message
 from pathlib import Path
 from typing import Any
 
 import pytest
+from Bio.Entrez.Parser import CorruptedXMLError
 from click.testing import CliRunner
 
 from interpretant.__main__ import cli
@@ -29,7 +33,8 @@ from interpretant.pipelines.fetch_linked_sources import (
     SourcePlan,
     Throttle,
     fetch_cell_linked_records,
-    is_transient,
+    is_transient_crossref_error,
+    is_transient_pubmed_error,
     retry_transient,
 )
 from tests.metadata_records import linked_metadata_record
@@ -58,13 +63,25 @@ class FakeHTTPStatusError(Exception):
         self.response = type("Response", (), {"status_code": status_code})()
 
 
-def test_is_transient_repeats_rate_limits_server_failures_and_lost_connections() -> None:
-    assert is_transient(FakeHTTPStatusError(429))
-    assert is_transient(FakeHTTPStatusError(503))
-    assert not is_transient(FakeHTTPStatusError(400))
-    assert is_transient(RuntimeError("HTTP Exception for https://api.crossref.org - timed out"))
-    assert is_transient(ConnectionResetError())
-    assert not is_transient(KeyError("items"))
+def test_is_transient_crossref_error_repeats_rate_limits_failures_and_lost_connections() -> None:
+    assert is_transient_crossref_error(FakeHTTPStatusError(429))
+    assert is_transient_crossref_error(FakeHTTPStatusError(503))
+    assert not is_transient_crossref_error(FakeHTTPStatusError(400))
+    assert is_transient_crossref_error(
+        RuntimeError("HTTP Exception for https://api.crossref.org - timed out")
+    )
+    assert is_transient_crossref_error(ConnectionResetError())
+    assert not is_transient_crossref_error(KeyError("items"))
+
+
+def test_is_transient_pubmed_error_repeats_refusals_and_cut_off_answers() -> None:
+    refusal = urllib.error.HTTPError(
+        "https://eutils.ncbi.nlm.nih.gov", 400, "Bad Request", Message(), None
+    )
+    assert is_transient_pubmed_error(refusal)
+    assert is_transient_pubmed_error(CorruptedXMLError("mismatched tag: line 760, column 6"))
+    assert is_transient_pubmed_error(http.client.IncompleteRead(b"<PubmedArticleSet>"))
+    assert not is_transient_pubmed_error(KeyError("MedlineCitation"))
 
 
 def test_retry_transient_repeats_until_an_answer_and_raises_the_rest() -> None:
@@ -75,19 +92,23 @@ def test_retry_transient_repeats_until_an_answer_and_raises_the_rest() -> None:
             raise failures.pop(0)
         return [{"answer": 1}]
 
-    assert retry_transient(flaky, first_pause=0) == [{"answer": 1}]
+    assert retry_transient(flaky, is_transient=is_transient_crossref_error, first_pause=0) == [
+        {"answer": 1}
+    ]
 
     def refused() -> list[dict[str, Any]]:
         raise FakeHTTPStatusError(400)
 
     with pytest.raises(FakeHTTPStatusError):
-        retry_transient(refused, first_pause=0)
+        retry_transient(refused, is_transient=is_transient_crossref_error, first_pause=0)
 
     def always_limited() -> list[dict[str, Any]]:
         raise FakeHTTPStatusError(429)
 
     with pytest.raises(FakeHTTPStatusError):
-        retry_transient(always_limited, attempts=3, first_pause=0)
+        retry_transient(
+            always_limited, is_transient=is_transient_crossref_error, attempts=3, first_pause=0
+        )
 
 
 def test_throttle_spaces_the_calls() -> None:

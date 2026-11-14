@@ -12,6 +12,7 @@ NCBI's limit (3 a second without a key).
 
 from __future__ import annotations
 
+import http.client
 import threading
 import time
 from collections.abc import Callable, Iterable, Mapping, Sequence
@@ -22,6 +23,7 @@ from functools import partial
 from pathlib import Path
 from typing import Any
 
+from Bio.Entrez.Parser import CorruptedXMLError
 from habanero import Crossref
 from habanero.exceptions import RequestError
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -112,18 +114,25 @@ def build_source_plan(
     """The fetch for a run of one source, configured with the contact address if there is one."""
     if source == "pubmed":
         configure_entrez(tool=TOOL_NAME, email=settings.contact_email)
+
+        def fetch_pubmed(works: Sequence[LinkedWork]) -> list[dict[str, Any]]:
+            return retry_transient(
+                partial(fetch_pubmed_records, works, fetched=today),
+                is_transient=is_transient_pubmed_error,
+            )
+
         return SourcePlan(
-            select=select_pubmed_works,
-            batch=batch_pubmed_works,
-            fetch=partial(fetch_pubmed_records, fetched=today),
-            workers=1,
+            select=select_pubmed_works, batch=batch_pubmed_works, fetch=fetch_pubmed, workers=1
         )
     polite = settings.contact_email is not None
     crossref = Crossref(mailto=settings.contact_email, ua_string=TOOL_NAME, timeout=120)
     throttle = Throttle(1 / 3 if polite else 1.0)
 
     def fetch(works: Sequence[LinkedWork]) -> list[dict[str, Any]]:
-        return retry_transient(lambda: _throttled(throttle, crossref, works, today))
+        return retry_transient(
+            partial(_throttled, throttle, crossref, works, today),
+            is_transient=is_transient_crossref_error,
+        )
 
     return SourcePlan(
         select=select_crossref_works,
@@ -134,7 +143,11 @@ def build_source_plan(
 
 
 def retry_transient(
-    call: Callable[[], list[dict[str, Any]]], *, attempts: int = 6, first_pause: float = 5.0
+    call: Callable[[], list[dict[str, Any]]],
+    *,
+    is_transient: Callable[[Exception], bool],
+    attempts: int = 6,
+    first_pause: float = 5.0,
 ) -> list[dict[str, Any]]:
     """Call again after a doubling pause while it fails with a transient error, then raise."""
     for attempt in range(attempts - 1):
@@ -147,7 +160,18 @@ def retry_transient(
     return call()
 
 
-def is_transient(error: Exception) -> bool:
+def is_transient_pubmed_error(error: Exception) -> bool:
+    """Whether a failed PubMed request is worth repeating.
+
+    Biopython already retries NCBI's server errors and lost connections; what reaches here and
+    still passes on a second try is an occasional refusal (seen: a 400 for a request that
+    succeeded unchanged moments later) and an answer cut off mid-transfer, which arrives as XML
+    the parser cannot read.
+    """
+    return isinstance(error, OSError | http.client.HTTPException | CorruptedXMLError)
+
+
+def is_transient_crossref_error(error: Exception) -> bool:
     """Whether a failed Crossref request is worth repeating: rate limited, failed, unanswered.
 
     habanero raises ``RequestError`` for an error status with a JSON body, lets other error
