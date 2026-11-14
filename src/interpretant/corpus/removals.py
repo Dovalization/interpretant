@@ -109,8 +109,9 @@ def clean_abstract(
 
     Dropped abstracts get a row too, with their reason, so the corpus review can sample them. The
     reasons, first match wins: ``mojibake`` (read on the raw text), an abstract-scope pattern's
-    label, ``not_english`` (some text in another language and fewer than ``min_english_words``
-    words left once it is removed, a provisional threshold: decision agenda 2.4), ``too_short``
+    label, ``not_english`` (fewer than ``min_english_words`` words left once text in another
+    language is removed, and more words removed as other-language than left: a provisional
+    threshold, decision agenda 2.4), ``too_short``
     (fewer than five words kept). An abstract printed in several languages keeps its English
     part: other-language sentences are removed, not counted against it.
     """
@@ -119,10 +120,10 @@ def clean_abstract(
     if has_mojibake(abstract.text, signatures):
         drop_reasons.insert(0, "mojibake")
     kept_words = count_kept_words(doc, removals)
-    has_other_language = any(
-        language.language not in (ENGLISH, UNDETERMINED) for language in languages
+    other_language_words = _count_words_inside(
+        doc, [removal for removal in removals if removal.reason == NOT_ENGLISH]
     )
-    if has_other_language and kept_words < min_english_words:
+    if kept_words < min_english_words and other_language_words > kept_words:
         drop_reasons.append(NOT_ENGLISH)
     if kept_words < MIN_WORDS:
         drop_reasons.append("too_short")
@@ -199,6 +200,14 @@ def count_kept_words(doc: Doc, removals: Sequence[Removal]) -> int:
         for token in doc
         if _is_word(token)
         and not any(removal.start <= token.idx < removal.end for removal in removals)
+    )
+
+
+def _count_words_inside(doc: Doc, removals: Sequence[Removal]) -> int:
+    return sum(
+        1
+        for token in doc
+        if _is_word(token) and any(removal.start <= token.idx < removal.end for removal in removals)
     )
 
 

@@ -18,11 +18,15 @@ annotate_corpus:
 detect_languages:
   # lingua's candidates: the languages with at least 0.5% of the sentences of abstracts not
   # confidently English, in a scan of 50,000 abstracts with all of lingua's 75 languages
-  # (scripts/evidence/language_scan.py, 2026-11-13). Against all 75 on those sentences, these
-  # 20 read 0.4% of other-language sentences as English; the old five (en de es fr pt) read
-  # 10.3%, and the 37 above 0.1% read 0.1% at twice the time (language_candidates.py). Latin
-  # stays: without it, 3.7% leak.
-  languages: [en, ar, bs, de, es, fi, fr, hr, id, it, ja, ko, la, ms, nl, pt, ru, tr, uk, zh]
+  # (scripts/evidence/language_scan.py, 2026-11-13), less Latin. Against all 75 on those
+  # sentences they read 0.4% of other-language sentences as English, where the old five
+  # (en de es fr pt) read 10.3% (language_candidates.py). Latin was in run 2 and was taken out
+  # after its audit: lingua read English prose and references as Latin (11 and 7 of 30 removed
+  # "Latin" sentences, 3 real Latin), dropping about 2,150 real abstracts; real Latin is mostly
+  # read as Italian or Spanish instead, still removed. The comparison's "3.7% leak without
+  # Latin" had counted those English sentences as leaks, since the 75-language reference never
+  # returns English where Latin wins.
+  languages: [en, ar, bs, de, es, fi, fr, hr, id, it, ja, ko, ms, nl, pt, ru, tr, uk, zh]
   # lingua's confidence above which a whole abstract is read as English (provisional, 2.4).
   english_threshold: 0.9
   # lingua's minimum relative distance between a sentence's two likeliest languages; a closer
@@ -31,10 +35,12 @@ detect_languages:
 
 # Stage 2c, the cleaning patterns and keeping rules (clean-corpus).
 clean_corpus:
-  # An abstract with text in another language is dropped when fewer English words than this
-  # are left once that text is removed (provisional, 2.4). It replaced a share rule ("more
-  # than half another language") on 2026-11-13: the share dropped the English summaries of
-  # abstracts printed in two or three languages, 1,636 of them with 30 or more English words.
+  # An abstract is dropped as not English when fewer English words than this are left once
+  # other-language text is removed, and that text had more words than are left (provisional,
+  # 2.4). It replaced a share rule ("more than half another language") on 2026-11-13: the share
+  # dropped the English summaries of abstracts printed in two or three languages, 1,636 of them
+  # with 30 or more English words. The second condition, added after run 2, keeps short English
+  # records with one misread fragment (1,724 in run 2).
   min_english_words: 30
 
 # Stage 3, the corpus-level rules (build-corpus).

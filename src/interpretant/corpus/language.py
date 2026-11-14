@@ -22,7 +22,59 @@ UNDETERMINED = "und"
 # lingua's confidence for the same text varies in its last digits from call to call, so it is
 # rounded where it is read: the threshold decision and the stored table then reproduce.
 CONFIDENCE_DECIMALS = 4
+# In an abstract read as English, a sentence is detected on its own when it is mostly in another
+# script, or has at least this many words and none of these English function words; it is taken
+# as another language when lingua is this confident (2.4, from the audit of run 2: such
+# sentences were Korean, Arabic, French "Résumé"s, German and Spanish).
+MIN_CHECKED_WORDS = 8
+FOREIGN_CONFIDENCE = 0.99
+ENGLISH_FUNCTION_WORDS = frozenset(
+    [
+        "a",
+        "an",
+        "and",
+        "are",
+        "as",
+        "at",
+        "be",
+        "been",
+        "between",
+        "by",
+        "can",
+        "for",
+        "from",
+        "had",
+        "has",
+        "have",
+        "in",
+        "into",
+        "is",
+        "it",
+        "its",
+        "may",
+        "not",
+        "of",
+        "on",
+        "or",
+        "our",
+        "than",
+        "that",
+        "the",
+        "their",
+        "these",
+        "this",
+        "to",
+        "was",
+        "we",
+        "were",
+        "which",
+        "with",
+    ]
+)
 _LETTER = re.compile(r"[^\W\d_]")
+# A letter outside the Latin script (Basic Latin, Latin-1, Latin Extended A and B and Additional).
+_NON_LATIN_LETTER = re.compile(r"[^\W\d_A-Za-z\u00c0-\u024f\u1e00-\u1eff]")
+_WORD = re.compile(r"[^\W\d_]+")
 
 
 @dataclass(frozen=True)
@@ -62,12 +114,17 @@ def detect_sentence_languages(
     """Each sentence's language and lingua's confidence in it, in order.
 
     When lingua gives English at least ``english_threshold`` confidence for the whole abstract,
-    every sentence with letters takes that verdict. Otherwise each sentence is detected on its
-    own, with lingua's confidence for the language found; a sentence whose two likeliest
-    languages are closer than the detector's minimum relative distance is undetermined, as is a
-    sentence without letters. (Until 2026-11-13 lingua's experimental detection of several
-    languages in one text split such abstracts; the corpus audit found it read real English as
-    German or French, decision agenda 2.4.)
+    every sentence with letters takes that verdict, except a sentence worth checking (mostly in
+    another script, or long with no English function word) that lingua reads as another
+    language: in another script at any confidence, in the Latin script at
+    ``FOREIGN_CONFIDENCE``. Otherwise each sentence is detected on its own, with lingua's
+    confidence for the language found. When its two likeliest languages are closer than the
+    detector's minimum relative distance, it is undetermined if one of them is English (short
+    English fragments, headings, references) and takes the likelier one if neither is (Croatian
+    and Bosnian, Indonesian and Malay). A sentence without letters is undetermined. (Until
+    2026-11-13 lingua's experimental detection of several languages in one text split such
+    abstracts; the corpus audit found it read real English as German or French, decision agenda
+    2.4.)
     """
     whole = _top_language(detector.compute_language_confidence_values(doc.text))
     is_english = whole.language == ENGLISH and whole.confidence >= english_threshold
@@ -99,19 +156,48 @@ def _top_language(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
 
 
 def _sentence_language_of(language: LinguaLanguage, confidence: float) -> SentenceLanguage:
-    return SentenceLanguage(
-        language.iso_code_639_1.name.lower(), round(confidence, CONFIDENCE_DECIMALS)
-    )
+    return SentenceLanguage(_code(language), round(confidence, CONFIDENCE_DECIMALS))
 
 
 def _sentence_language(
     sentence: Span, whole_english: SentenceLanguage | None, detector: LanguageDetector
 ) -> SentenceLanguage:
-    if not _LETTER.search(sentence.text):
+    text = sentence.text
+    if not _LETTER.search(text):
         return _NO_LANGUAGE
-    if whole_english is not None:
+    if whole_english is None:
+        return _detect(text, detector)
+    if not _is_worth_checking(text):
         return whole_english
-    found = detector.detect_language_of(sentence.text)
-    if found is None:
+    found = _detect(text, detector)
+    is_foreign = found.language not in (ENGLISH, UNDETERMINED) and (
+        _is_mostly_non_latin(text) or found.confidence >= FOREIGN_CONFIDENCE
+    )
+    return found if is_foreign else whole_english
+
+
+def _detect(text: str, detector: LanguageDetector) -> SentenceLanguage:
+    found = detector.detect_language_of(text)
+    if found is not None:
+        return _sentence_language_of(found, detector.compute_language_confidence(text, found))
+    values = detector.compute_language_confidence_values(text)
+    if len(values) < 2 or ENGLISH in (_code(values[0].language), _code(values[1].language)):
         return _NO_LANGUAGE
-    return _sentence_language_of(found, detector.compute_language_confidence(sentence.text, found))
+    return _sentence_language_of(values[0].language, values[0].value)
+
+
+def _is_worth_checking(text: str) -> bool:
+    if _is_mostly_non_latin(text):
+        return True
+    words = [word.lower() for word in _WORD.findall(text)]
+    return len(words) >= MIN_CHECKED_WORDS and ENGLISH_FUNCTION_WORDS.isdisjoint(words)
+
+
+def _is_mostly_non_latin(text: str) -> bool:
+    if not _NON_LATIN_LETTER.search(text):
+        return False
+    return 2 * len(_NON_LATIN_LETTER.findall(text)) > len(_LETTER.findall(text))
+
+
+def _code(language: LinguaLanguage) -> str:
+    return language.iso_code_639_1.name.lower()

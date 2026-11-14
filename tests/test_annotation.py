@@ -534,8 +534,16 @@ def test_annotate_abstracts_keeps_the_english_summary_of_a_bilingual_abstract(
 def test_annotate_abstracts_drops_too_little_english_beside_another_language(
     nlp: Language, patterns: CleaningPatterns
 ) -> None:
-    text = f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {GERMAN_SENTENCE}"
+    text = f"{ENGLISH_SENTENCE} {GERMAN_SENTENCE} {GERMAN_SENTENCE} {GERMAN_SENTENCE}"
     assert annotate(text, nlp, patterns).dropped_reason == "not_english"
+
+
+def test_annotate_abstracts_keeps_a_short_english_record_with_a_shorter_foreign_part(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    row = annotate(f"{ENGLISH_SENTENCE} {ENGLISH_SENTENCE} {GERMAN_SENTENCE}", nlp, patterns)
+    assert removed_texts(row)["not_english"] == [GERMAN_SENTENCE]
+    assert row.dropped_reason is None
 
 
 def test_annotate_abstracts_keeps_a_short_english_abstract(
