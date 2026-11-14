@@ -105,13 +105,26 @@ class LiveProgress:
         elapsed = max(now - self.started, 1e-9)
         rate = self.completed / elapsed
         if not self.total:
-            return f"{self.completed:,} items, {rate:,.0f}/s"
+            return f"{self.completed:,} items, {_rate(rate)}"
         share = self.completed / self.total
         left = (self.total - self.completed) / rate if rate else 0.0
         return (
-            f"{self.completed:,}/{self.total:,} ({share:.1%}), {rate:,.0f}/s, "
+            f"{self.completed:,}/{self.total:,} ({share:.1%}), {_rate(rate)}, "
             f"about {_duration(left)} left"
         )
+
+
+def _rate(per_second: float) -> str:
+    """The rate in a unit that keeps a figure: whole items a second, then decimals, then a minute.
+
+    Stages that count parts finish fewer than one a second, which a whole-number rate shows as
+    "0/s".
+    """
+    if per_second >= 10:
+        return f"{per_second:,.0f}/s"
+    if per_second >= 1:
+        return f"{per_second:.1f}/s"
+    return f"{per_second * 60:.1f}/min"
 
 
 def _duration(seconds: float) -> str:

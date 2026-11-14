@@ -5,6 +5,7 @@ from __future__ import annotations
 from io import StringIO
 from pathlib import Path
 
+import pytest
 from rich.console import Console
 
 from interpretant.catalog import read_catalog
@@ -66,6 +67,21 @@ def test_live_progress_prints_lines_in_a_log_at_each_interval() -> None:
         "spaCy pass: 400/1,000 (40.0%), 10/s, about 1 min 00 s left",
         "spaCy pass: done (400 items, 50 s)",
     ]
+
+
+@pytest.mark.parametrize(
+    ("completed", "rate"),
+    [(400, "10/s"), (100, "2.5/s"), (12, "18.0/min")],
+    ids=["whole items a second", "decimals under ten a second", "a minute under one a second"],
+)
+def test_live_progress_keeps_a_figure_in_slow_rates(completed: int, rate: str) -> None:
+    console, output = log_console()
+    clock = Clock()
+    with LiveProgress(console, interval=30, clock=clock) as progress:
+        progress.stage("cleaning the parts", total=1000)
+        clock.now = 40
+        progress.advance(completed)
+    assert f", {rate}, about " in output.getvalue().splitlines()[1]
 
 
 def test_live_progress_closes_each_stage_when_the_next_starts() -> None:
