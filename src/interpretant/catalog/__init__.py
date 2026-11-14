@@ -28,8 +28,11 @@ from interpretant.catalog.languages import (
 from interpretant.catalog.linked_records import (
     LINKED_SOURCES,
     LinkedSource,
+    LinkedWork,
     append_linked_records,
+    build_linked_record,
     fetched_linked_work_ids,
+    select_linked_works,
 )
 from interpretant.catalog.metadata import (
     WorkMetadata,
@@ -63,6 +66,7 @@ __all__ = [
     "CleaningPatterns",
     "DatasetEntry",
     "LinkedSource",
+    "LinkedWork",
     "RawCell",
     "RawWork",
     "Scope",
@@ -70,6 +74,7 @@ __all__ = [
     "append_linked_records",
     "append_run_record",
     "append_work_metadata",
+    "build_linked_record",
     "fetched_linked_work_ids",
     "fetched_work_ids",
     "index_work_metadata",
@@ -91,4 +96,5 @@ __all__ = [
     "save_corpus_metrics",
     "save_corpus_report",
     "save_sentence_languages",
+    "select_linked_works",
 ]

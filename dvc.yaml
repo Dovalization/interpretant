@@ -10,7 +10,8 @@
 # instead of a rerun. Library versions (uv.lock) are not dependencies: after an
 # upgrade that can change results, rerun with `dvc repro --force`.
 #
-# The downloads are not stages: they are registered with `dvc add` (data/raw/*.dvc).
+# The downloads are not stages: they are registered with `dvc add` (data/raw/*.dvc), the lookups
+# in Crossref and PubMed included, since what they hold depends on the day they were fetched.
 
 vars:
   - catalog.yaml

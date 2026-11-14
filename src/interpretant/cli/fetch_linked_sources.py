@@ -66,10 +66,10 @@ def fetch_linked_sources_command(
     with LiveProgress(console) as live:
         timer = StageTimer(live)
         for source in sources or LINKED_SOURCES:
-            timer.stage(f"counting the works {source} can be asked about")
-            total = count_linked_works(catalog, cells, source)
-            counts[f"{source}_works"] = total
             plan = build_source_plan(source, settings, today=date.today())
+            timer.stage(f"counting the works {source} can be asked about")
+            total = count_linked_works(catalog, cells, plan)
+            counts[f"{source}_works"] = total
             timer.stage(f"looking the works up in {source}", total=total)
             for number, cell in enumerate(cells, start=1):
                 result = fetch_cell_linked_records(catalog, cell, source, plan, progress=timer)

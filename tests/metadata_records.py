@@ -27,3 +27,11 @@ def metadata_record(
 def missing_record(work: int) -> dict[str, Any]:
     """The record of a work OpenAlex no longer returns."""
     return {"id": f"https://openalex.org/W{work}", "fetched": FETCHED, "missing": True}
+
+
+def linked_metadata_record(work: int, *, doi: bool = True, pmid: bool = False) -> dict[str, Any]:
+    """A found work's record with a DOI, a PubMed id, both or neither, as the lookups read them."""
+    record = metadata_record(work)
+    record["doi"] = f"https://doi.org/10.1000/Work.{work}" if doi else None
+    record["ids"] = {"pmid": f"https://pubmed.ncbi.nlm.nih.gov/{900 + work}"} if pmid else {}
+    return record
