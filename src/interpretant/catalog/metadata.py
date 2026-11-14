@@ -97,3 +97,20 @@ def load_work_metadata(catalog: CatalogConfig, cell: RawCell) -> Iterator[WorkMe
 
 def _path(catalog: CatalogConfig, cell: RawCell) -> Path:
     return catalog.work_metadata.path / cell.field / f"{cell.decade}{_SUFFIX}"
+
+
+def index_work_metadata(
+    records: Iterable[WorkMetadata], work_ids: Iterable[str]
+) -> dict[str, WorkMetadata]:
+    """Each work's metadata record, by work id.
+
+    Raises:
+        ValueError: if a work has no record (its cell's fetch did not finish).
+    """
+    by_work = {record.work_id: record for record in records}
+    unfetched = set(work_ids) - by_work.keys()
+    if unfetched:
+        raise ValueError(
+            f"{len(unfetched)} works have no metadata record: run `interpretant fetch-metadata`"
+        )
+    return by_work

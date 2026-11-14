@@ -8,8 +8,14 @@ corpus:
     philosophy, psychology, sociology]
   decades: [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020]
 
-# Stage 2, the spaCy pass (annotate-corpus).
+# Stage 2a, the spaCy pass (annotate-corpus).
 annotate_corpus:
+  # Whether the pass runs spaCy's named entity recognition (ner, about 44% of a worker's time).
+  # Off: matching recognises entities on target sentences only (4.1).
+  named_entity_recognition: false
+
+# Stage 2b, sentence languages (detect-languages).
+detect_languages:
   # lingua's candidates: the languages with at least 0.5% of the sentences of abstracts not
   # confidently English, in a scan of 50,000 abstracts with all of lingua's 75 languages
   # (scripts/evidence/language_scan.py, 2026-11-13). Against all 75 on those sentences, these
@@ -22,14 +28,14 @@ annotate_corpus:
   # lingua's minimum relative distance between a sentence's two likeliest languages; a closer
   # call is undetermined, so neither removed nor counted as another language (provisional, 2.4).
   minimum_relative_distance: 0.1
+
+# Stage 2c, the cleaning patterns and keeping rules (clean-corpus).
+clean_corpus:
   # An abstract with text in another language is dropped when fewer English words than this
   # are left once that text is removed (provisional, 2.4). It replaced a share rule ("more
   # than half another language") on 2026-11-13: the share dropped the English summaries of
   # abstracts printed in two or three languages, 1,636 of them with 30 or more English words.
   min_english_words: 30
-  # Whether the pass runs spaCy's named entity recognition (ner, about 44% of a worker's time).
-  # Off: matching recognises entities on target sentences only (4.1).
-  named_entity_recognition: false
 
 # Stage 3, the corpus-level rules (build-corpus).
 build_corpus:

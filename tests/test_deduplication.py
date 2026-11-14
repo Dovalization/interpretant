@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from interpretant.catalog import RawWork
-from interpretant.corpus.annotation import Removal
 from interpretant.corpus.deduplication import (
     NEAR_DUPLICATE,
     build_shingles,
     mark_near_duplicates,
-    merge_cells,
 )
+from interpretant.corpus.removals import Removal
+from interpretant.corpus.works import merge_cells
 from tests.abstracts_tables import abstract_row, abstracts_table, dropped_reasons
 
 # A long synthetic abstract, so one changed word leaves most 5-shingles shared.

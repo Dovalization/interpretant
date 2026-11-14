@@ -10,7 +10,7 @@ from interpretant.catalog.abstracts import (
     save_abstracts,
     save_annotated_abstracts,
 )
-from interpretant.catalog.annotations import load_annotations, save_annotations
+from interpretant.catalog.annotations import WORK_ID, load_annotations, save_annotations
 from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, DatasetEntry, read_catalog
 from interpretant.catalog.curated import (
     START_ID,
@@ -19,10 +19,16 @@ from interpretant.catalog.curated import (
     Scope,
     load_cleaning_patterns,
 )
+from interpretant.catalog.languages import (
+    SENTENCE_LANGUAGES_SCHEMA,
+    load_sentence_languages,
+    save_sentence_languages,
+)
 from interpretant.catalog.metadata import (
     WorkMetadata,
     append_work_metadata,
     fetched_work_ids,
+    index_work_metadata,
     load_work_metadata,
 )
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
@@ -40,7 +46,9 @@ __all__ = [
     "CATALOG_FILE",
     "REMOVAL",
     "SENTENCE",
+    "SENTENCE_LANGUAGES_SCHEMA",
     "START_ID",
+    "WORK_ID",
     "CatalogConfig",
     "CleaningPattern",
     "CleaningPatterns",
@@ -52,6 +60,7 @@ __all__ = [
     "append_run_record",
     "append_work_metadata",
     "fetched_work_ids",
+    "index_work_metadata",
     "list_raw_cells",
     "load_abstracts",
     "load_annotated_abstracts",
@@ -59,6 +68,7 @@ __all__ = [
     "load_cleaning_patterns",
     "load_corpus_metrics",
     "load_raw_cell",
+    "load_sentence_languages",
     "load_work_metadata",
     "read_catalog",
     "save_abstracts",
@@ -66,4 +76,5 @@ __all__ = [
     "save_annotations",
     "save_corpus_metrics",
     "save_corpus_report",
+    "save_sentence_languages",
 ]

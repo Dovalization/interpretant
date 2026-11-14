@@ -3,7 +3,11 @@
 # what each output was made from. Paths come from catalog.yaml, written there once.
 #
 # Each stage lists the exact modules it imports (tests/test_dvc_stages.py checks this), so a
-# change reruns only what it can affect. Library versions (uv.lock) are not dependencies: after an
+# change reruns only what it can affect. Stage 2 is split three ways so the costly spaCy models
+# rerun only for tokenizer, sentence-rule or model changes: a language setting reruns from
+# detect_languages, a cleaning pattern or threshold from clean_corpus. A catalog change that
+# cannot affect outputs (a dataset added for a later step) is recorded with `dvc commit <stage>`
+# instead of a rerun. Library versions (uv.lock) are not dependencies: after an
 # upgrade that can change results, rerun with `dvc repro --force`.
 #
 # The downloads are not stages: they are registered with `dvc add` (data/raw/*.dvc).
@@ -17,42 +21,80 @@ stages:
     deps:
       - src/interpretant/catalog
       - src/interpretant/corpus/annotation.py
-      - src/interpretant/corpus/cleaning.py
-      - src/interpretant/corpus/deduplication.py
-      - src/interpretant/corpus/language.py
       - src/interpretant/corpus/repair.py
-      - src/interpretant/corpus/work_metadata.py
+      - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/annotate_corpus.py
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
-      - ${cleaning_rules.path}
-      - ${cleaning_patterns.path}
       - ${raw_abstracts.path}
       - ${work_metadata.path}
     params:
       - corpus
       - annotate_corpus
     outs:
-      # Kept on the machine that ran the pass (about 1 GB), never in the DVC store. Both outputs
-      # persist, so a pass stopped part-way can be finished by hand part by part
-      # (`--field`, `--decade`) and recorded with `dvc commit annotate_corpus`.
+      # Kept on the machine that ran the pass (about 1 GB), never in the DVC store. It persists,
+      # so a pass stopped part-way can be finished by hand part by part (`--field`, `--decade`)
+      # and recorded with `dvc commit annotate_corpus`.
       - ${annotations.path}:
           cache: false
           persist: true
-      - ${annotated_abstracts.path}:
-          persist: true
+
+  detect_languages:
+    cmd: interpretant detect-languages
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/detect_languages.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - ${annotations.path}
+    params:
+      - corpus
+      - detect_languages
+    outs:
+      - ${sentence_languages.path}
+
+  clean_corpus:
+    cmd: interpretant clean-corpus
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/removals.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/clean_corpus.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - ${cleaning_rules.path}
+      - ${cleaning_patterns.path}
+      - ${raw_abstracts.path}
+      - ${work_metadata.path}
+      - ${annotations.path}
+      - ${sentence_languages.path}
+    params:
+      - corpus
+      - clean_corpus
+    outs:
+      - ${annotated_abstracts.path}
 
   build_corpus:
     cmd: interpretant build-corpus
     deps:
       - src/interpretant/catalog
-      - src/interpretant/corpus/annotation.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/deduplication.py
       - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/removals.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/work_metadata.py
+      - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/build_corpus.py
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
@@ -73,6 +115,7 @@ stages:
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/work_metadata.py
+      - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py

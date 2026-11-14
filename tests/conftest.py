@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from lingua import LanguageDetector
 from spacy.language import Language
 
 from interpretant.catalog import (
@@ -15,6 +16,8 @@ from interpretant.catalog import (
     read_catalog,
 )
 from interpretant.corpus.annotation import build_pipeline
+from interpretant.corpus.language import build_language_detector
+from interpretant.corpus.removals import build_cleaning_pipeline
 from tests.corpus_catalog import write_corpus_catalog
 
 VOCAB = ["network", "atom", "information", "model", "evolution", "structure"]
@@ -57,6 +60,7 @@ def catalog_text() -> str:
         "cleaning_rules:\n  path: curated/rules.yaml\n  format: yaml\n"
         "cleaning_patterns:\n  path: curated/patterns.jsonl\n  format: jsonl\n"
         "annotations:\n  path: data/annotations\n  format: docbin\n"
+        "sentence_languages:\n  path: data/sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: data/corpus_report.md\n  format: markdown\n"
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
         "run_log:\n  path: metrics/runs.jsonl\n  format: jsonl\n"
@@ -84,14 +88,18 @@ def patterns() -> CleaningPatterns:
 
 
 @pytest.fixture(scope="session")
-def nlp(patterns: CleaningPatterns) -> Language:
-    """The spaCy pipeline of the pass (en_core_web_sm, a pinned dependency), loaded once.
+def nlp() -> Language:
+    """The spaCy pipeline of the pass (en_core_web_sm, a pinned dependency), loaded once."""
+    return build_pipeline()
 
-    Its language component reads English, German, French and Spanish.
-    """
-    return build_pipeline(
-        patterns,
-        languages=["en", "de", "fr", "es"],
-        english_threshold=0.9,
-        minimum_relative_distance=0.1,
-    )
+
+@pytest.fixture(scope="session")
+def detector() -> LanguageDetector:
+    """A lingua detector for English, German, French and Spanish, built once."""
+    return build_language_detector(["en", "de", "fr", "es"], minimum_relative_distance=0.1)
+
+
+@pytest.fixture(scope="session")
+def cleaning(patterns: CleaningPatterns) -> Language:
+    """The blank pipeline that matches the repository's cleaning patterns."""
+    return build_cleaning_pipeline(patterns)

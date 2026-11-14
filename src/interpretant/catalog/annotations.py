@@ -1,10 +1,9 @@
 """The annotation cache: the spaCy pass's documents, saved per part with DocBin.
 
-A rebuildable cache, tied to spaCy's version (decision agenda 4.6): later stages apply lemma
-exceptions to it instead of parsing again (3.6). DocBin keeps spaCy's default attributes, which in
-the installed spaCy include sentence starts and norms, and always keeps span groups, so the
-removal spans survive; extension attributes (the sentence languages) need ``store_user_data``,
-and a reader declares them again before reading them.
+A rebuildable cache, tied to spaCy's version (decision agenda 4.6): the language and cleaning
+stages read it, and later stages apply lemma exceptions to it instead of parsing again (3.6).
+DocBin keeps spaCy's default attributes, which in the installed spaCy include sentence starts and
+norms; ``store_user_data`` keeps each document's ``user_data``, where the work id is.
 """
 
 from __future__ import annotations
@@ -19,6 +18,8 @@ from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.parts import part_path
 
 _SUFFIX = ".spacy"
+# The key of ``Doc.user_data`` holding each cached document's work id.
+WORK_ID = "work_id"
 
 
 def save_annotations(catalog: CatalogConfig, docs: Iterable[Doc], part: str) -> Path:

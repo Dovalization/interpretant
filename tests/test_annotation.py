@@ -1,30 +1,39 @@
-"""The spaCy pass, with the repository's cleaning rules and patterns.
+"""The spaCy pass, the sentence languages and the cleaning, on single abstracts.
 
-The pipeline (en_core_web_sm, a pinned dependency, with lingua as its last component) is loaded
-once per session in conftest.py.
+The spaCy pipeline (en_core_web_sm, a pinned dependency) is loaded once per session in
+conftest.py; each test runs an abstract through the three steps the corpus stages run.
 """
 
 from __future__ import annotations
 
+from functools import cache
+
 import pytest
+from lingua import LanguageDetector
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 
-from interpretant.catalog import CatalogConfig, CleaningPatterns, load_annotations, save_annotations
-from interpretant.corpus.annotation import (
+from interpretant.catalog import (
+    WORK_ID,
+    CatalogConfig,
+    CleaningPatterns,
+    load_annotations,
+    load_cleaning_patterns,
+    read_catalog,
+    save_annotations,
+)
+from interpretant.corpus.annotation import annotate_texts, build_pipeline
+from interpretant.corpus.language import build_language_detector, detect_sentence_languages
+from interpretant.corpus.removals import (
     MALFORMED,
     SPANS_KEY,
     AnnotatedAbstract,
-    RawAbstract,
-    annotate_abstracts,
-    build_pipeline,
+    build_cleaning_pipeline,
+    clean_abstract,
     kept_text,
 )
-from interpretant.corpus.language import (
-    CONFIDENCE_ATTRIBUTE,
-    LANGUAGE_ATTRIBUTE,
-    SENTENCE_LANGUAGES,
-)
+from interpretant.corpus.repair import compile_signatures
+from interpretant.corpus.works import RawAbstract
 
 # The English words an abstract with text in another language needs to stay.
 MIN_ENGLISH_WORDS = 30
@@ -47,10 +56,29 @@ def raw(text: str, work: int = 1) -> RawAbstract:
 
 
 def annotate(text: str, nlp: Language, patterns: CleaningPatterns) -> AnnotatedAbstract:
-    ((_, row),) = annotate_abstracts(
-        [raw(text)], nlp, patterns, min_english_words=MIN_ENGLISH_WORDS
+    """One abstract through the spaCy pass, the sentence languages and the cleaning."""
+    abstract = raw(text)
+    (doc,) = annotate_texts([abstract], nlp)
+    languages = detect_sentence_languages(doc, language_detector(), english_threshold=0.9)
+    return clean_abstract(
+        doc,
+        abstract,
+        languages,
+        cleaning=cleaning_pipeline(),
+        patterns=patterns,
+        signatures=compile_signatures(patterns.mojibake_signatures),
+        min_english_words=MIN_ENGLISH_WORDS,
     )
-    return row
+
+
+@cache
+def language_detector() -> LanguageDetector:
+    return build_language_detector(["en", "de", "fr", "es"], minimum_relative_distance=0.1)
+
+
+@cache
+def cleaning_pipeline() -> Language:
+    return build_cleaning_pipeline(load_cleaning_patterns(read_catalog()))
 
 
 def removed_texts(row: AnnotatedAbstract) -> dict[str, list[str]]:
@@ -386,30 +414,16 @@ def test_build_pipeline_keeps_hyphenated_words_whole(nlp: Language) -> None:
     ]
 
 
-def test_build_pipeline_runs_lingua_then_drops_the_tensors(nlp: Language) -> None:
-    assert nlp.pipe_names[-2:] == [SENTENCE_LANGUAGES, "doc_cleaner"]
-    settings = nlp.config["components"][SENTENCE_LANGUAGES]
-    assert (
-        settings["languages"],
-        settings["english_threshold"],
-        settings["minimum_relative_distance"],
-    ) == (["en", "de", "fr", "es"], 0.9, 0.1)
+def test_build_pipeline_ends_by_dropping_the_tensors(nlp: Language) -> None:
+    assert nlp.pipe_names[-1] == "doc_cleaner"
+    assert "span_ruler" not in nlp.pipe_names
     assert nlp("Attention helps models.").tensor is None
 
 
-def test_build_pipeline_runs_named_entity_recognition_only_when_asked(
-    nlp: Language, patterns: CleaningPatterns
-) -> None:
+def test_build_pipeline_runs_named_entity_recognition_only_when_asked(nlp: Language) -> None:
     assert "ner" not in nlp.pipe_names
     assert not nlp("Ada Lovelace worked in London.").has_annotation("ENT_IOB")
-    with_entities = build_pipeline(
-        patterns,
-        languages=["en"],
-        english_threshold=0.9,
-        minimum_relative_distance=0.1,
-        named_entity_recognition=True,
-    )
-    assert "ner" in with_entities.pipe_names
+    assert "ner" in build_pipeline(named_entity_recognition=True).pipe_names
 
 
 def test_annotate_abstracts_reads_an_english_abstract_as_english(
@@ -463,43 +477,36 @@ def test_annotate_abstracts_flags_a_sentence_without_punctuation(
     assert row.dropped_reason is None
 
 
-def test_annotation_cache_keeps_sentences_norms_languages_and_removal_spans(
-    catalog: CatalogConfig, nlp: Language, patterns: CleaningPatterns
+def test_annotation_cache_keeps_sentences_norms_lemmas_and_the_work_id(
+    catalog: CatalogConfig, nlp: Language
 ) -> None:
     text = f"Abstract: Models use senses. See https://example.org now. {GERMAN_SENTENCE}"
-    ((original, _),) = annotate_abstracts(
-        [raw(text)], nlp, patterns, min_english_words=MIN_ENGLISH_WORDS
-    )
+    (original,) = annotate_texts([raw(text, work=7)], nlp)
     save_annotations(catalog, [original], part="ai_2010")
     (cached,) = load_annotations(catalog, "ai_2010", nlp.vocab)
     assert [sentence.text for sentence in cached.sents] == [s.text for s in original.sents]
     assert [token.norm_ for token in cached] == [token.norm_ for token in original]
     assert [token.lemma_ for token in cached] == [token.lemma_ for token in original]
-    assert [span.label_ for span in cached.spans[SPANS_KEY]] == ["abstract_label", "url"]
-    assert [sentence._.get(LANGUAGE_ATTRIBUTE) for sentence in cached.sents] == ["en", "en", "de"]
-    assert [sentence._.get(CONFIDENCE_ATTRIBUTE) for sentence in cached.sents] == [
-        sentence._.get(CONFIDENCE_ATTRIBUTE) for sentence in original.sents
-    ]
+    assert cached.user_data[WORK_ID] == "https://openalex.org/W7"
+    assert SPANS_KEY not in cached.spans
 
 
-def test_annotate_abstracts_gives_the_same_rows_in_worker_processes(
-    nlp: Language, patterns: CleaningPatterns
-) -> None:
+def test_annotate_texts_gives_the_same_documents_in_worker_processes(nlp: Language) -> None:
     abstracts = [
         raw("Abstract: Self-attention helps. See https://example.org now.", work=1),
         raw("As shown in Fig. 2, doi:10.1000/xyz123 holds the data.", work=2),
         raw("Models learn senses. The effect is large.", work=3),
     ]
 
-    def rows(process_count: int) -> list[AnnotatedAbstract]:
-        pairs = annotate_abstracts(
-            abstracts,
-            nlp,
-            patterns,
-            min_english_words=MIN_ENGLISH_WORDS,
-            batch_size=2,
-            process_count=process_count,
-        )
-        return [row for _, row in pairs]
+    def documents(process_count: int) -> list[tuple[object, ...]]:
+        docs = annotate_texts(abstracts, nlp, batch_size=2, process_count=process_count)
+        return [
+            (
+                doc.user_data[WORK_ID],
+                [sentence.text for sentence in doc.sents],
+                [token.lemma_ for token in doc],
+            )
+            for doc in docs
+        ]
 
-    assert rows(2) == rows(1)
+    assert documents(2) == documents(1)

@@ -1,12 +1,9 @@
-"""Sentence languages by lingua, as a spaCy pipeline component.
+"""Sentence languages by lingua, read from the spaCy pass's sentences.
 
 The decision agenda, step 2.4: lingua alone, restricted to English and the languages found in the
 corpus (scripts/evidence/language_scan.py); per abstract first, per sentence only for abstracts
-not confidently English. The
-``sentence_languages`` component sets each sentence's language and confidence as span extension
-attributes, so the annotation cache keeps them (4.6) and the abstracts table copies them. As a
-component it runs inside spaCy's worker processes, and its settings are part of the pipeline's
-config.
+not confidently English. It runs as its own stage on the documents in the annotation cache, so a
+change to its settings reruns neither the spaCy models nor anything but the later stages.
 """
 
 from __future__ import annotations
@@ -17,20 +14,14 @@ from dataclasses import dataclass
 
 from lingua import ConfidenceValue, IsoCode639_1, LanguageDetector, LanguageDetectorBuilder
 from lingua import Language as LinguaLanguage
-from spacy.language import Language
 from spacy.tokens import Doc, Span
 
-# The component's registered factory name, which is also its name in the pipeline.
-SENTENCE_LANGUAGES = "sentence_languages"
 ENGLISH = "en"
 # ISO 639-2's code for an undetermined language: a sentence with no letters, or no verdict.
 UNDETERMINED = "und"
 # lingua's confidence for the same text varies in its last digits from call to call, so it is
 # rounded where it is read: the threshold decision and the stored table then reproduce.
 CONFIDENCE_DECIMALS = 4
-# The span extension attributes holding each sentence's language and lingua's confidence in it.
-LANGUAGE_ATTRIBUTE = "language"
-CONFIDENCE_ATTRIBUTE = "language_confidence"
 _LETTER = re.compile(r"[^\W\d_]")
 
 
@@ -65,102 +56,25 @@ def build_language_detector(
     )
 
 
-class SentenceLanguageDetector:
-    """The pipeline component setting each sentence's language and lingua's confidence in it.
+def detect_sentence_languages(
+    doc: Doc, detector: LanguageDetector, *, english_threshold: float
+) -> list[SentenceLanguage]:
+    """Each sentence's language and lingua's confidence in it, in order.
 
     When lingua gives English at least ``english_threshold`` confidence for the whole abstract,
     every sentence with letters takes that verdict. Otherwise each sentence is detected on its
     own, with lingua's confidence for the language found; a sentence whose two likeliest
-    languages are closer than ``minimum_relative_distance`` is undetermined, as is a sentence
-    without letters. (Until 2026-11-13 lingua's experimental detection of several languages in
-    one text split such abstracts; the corpus audit found it read real English as German or
-    French, decision agenda 2.4.)
-
-    lingua's detector cannot be pickled, and spaCy pickles each component to start its worker
-    processes, so the detector is built on first use and left out of the pickled state: each
-    worker builds its own. Its single-threaded calls are used, since spaCy's worker processes
-    already run the abstracts in parallel.
+    languages are closer than the detector's minimum relative distance is undetermined, as is a
+    sentence without letters. (Until 2026-11-13 lingua's experimental detection of several
+    languages in one text split such abstracts; the corpus audit found it read real English as
+    German or French, decision agenda 2.4.)
     """
-
-    def __init__(
-        self, languages: Sequence[str], english_threshold: float, minimum_relative_distance: float
-    ) -> None:
-        """Check the language codes now; build the detector when the first document arrives.
-
-        Raises:
-            ValueError: if English is missing or a code is not an ISO 639-1 code lingua knows.
-        """
-        _lingua_languages(languages)
-        self.languages = tuple(languages)
-        self.english_threshold = english_threshold
-        self.minimum_relative_distance = minimum_relative_distance
-        self._detector: LanguageDetector | None = None
-
-    def __call__(self, doc: Doc) -> Doc:
-        """Set the language attributes of every sentence of the document."""
-        detector = self._loaded_detector()
-        whole = _top_language(detector.compute_language_confidence_values(doc.text))
-        is_english = whole.language == ENGLISH and whole.confidence >= self.english_threshold
-        for sentence in doc.sents:
-            language = _sentence_language(sentence, whole if is_english else None, detector)
-            sentence._.set(LANGUAGE_ATTRIBUTE, language.language)
-            sentence._.set(CONFIDENCE_ATTRIBUTE, language.confidence)
-        return doc
-
-    def __getstate__(self) -> dict[str, object]:
-        """The settings without the detector, which each process builds for itself."""
-        return {**self.__dict__, "_detector": None}
-
-    def _loaded_detector(self) -> LanguageDetector:
-        if self._detector is None:
-            self._detector = build_language_detector(
-                self.languages, minimum_relative_distance=self.minimum_relative_distance
-            )
-        return self._detector
-
-
-@Language.factory(
-    SENTENCE_LANGUAGES,
-    assigns=[f"span._.{LANGUAGE_ATTRIBUTE}", f"span._.{CONFIDENCE_ATTRIBUTE}"],
-    requires=["token.is_sent_start"],
-)
-def create_sentence_language_detector(
-    nlp: Language,
-    name: str,
-    languages: list[str],
-    english_threshold: float,
-    minimum_relative_distance: float,
-) -> SentenceLanguageDetector:
-    """The factory spaCy calls to add the component; declares the span attributes it sets."""
-    declare_sentence_attributes()
-    return SentenceLanguageDetector(languages, english_threshold, minimum_relative_distance)
-
-
-def read_sentence_languages(doc: Doc) -> list[SentenceLanguage]:
-    """Each sentence's language and confidence, as the component set them.
-
-    Raises:
-        ValueError: if the component has not run on the document.
-    """
-    languages = []
-    for sentence in doc.sents:
-        language = sentence._.get(LANGUAGE_ATTRIBUTE)
-        if language is None:
-            raise ValueError(f"no sentence languages: run the {SENTENCE_LANGUAGES} component")
-        languages.append(SentenceLanguage(language, sentence._.get(CONFIDENCE_ATTRIBUTE)))
-    return languages
-
-
-def declare_sentence_attributes() -> None:
-    """Declare the sentence language attributes on spaCy's ``Span`` class, once.
-
-    spaCy keeps extension attributes globally, and a document read back from the annotation cache
-    only exposes the stored values once the attributes are declared again (spaCy's documentation,
-    "Serializing Doc objects efficiently").
-    """
-    for name in (LANGUAGE_ATTRIBUTE, CONFIDENCE_ATTRIBUTE):
-        if not Span.has_extension(name):
-            Span.set_extension(name, default=None)
+    whole = _top_language(detector.compute_language_confidence_values(doc.text))
+    is_english = whole.language == ENGLISH and whole.confidence >= english_threshold
+    return [
+        _sentence_language(sentence, whole if is_english else None, detector)
+        for sentence in doc.sents
+    ]
 
 
 def _lingua_languages(codes: Sequence[str]) -> list[LinguaLanguage]:

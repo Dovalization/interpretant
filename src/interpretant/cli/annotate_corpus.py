@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import click
 from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
+from interpretant.cli.options import default_process_count, process_count_option
 from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_result, result_counts
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
@@ -40,12 +40,7 @@ from interpretant.pipelines.runs import record_run
     help="The catalog file naming the inputs and outputs.",
 )
 @click.option("--batch-size", default=256, show_default=True, help="Abstracts per spaCy batch.")
-@click.option(
-    "--process-count",
-    type=click.IntRange(min=1),
-    default=None,
-    help="spaCy worker processes. Default: the machine's CPU count minus 2.",
-)
+@process_count_option
 def annotate_corpus_command(
     fields: tuple[str, ...],
     decades: tuple[int, ...],
@@ -53,7 +48,7 @@ def annotate_corpus_command(
     batch_size: int,
     process_count: int | None,
 ) -> None:
-    """Run the spaCy pass over the corpus in params.yaml, writing the cache and annotated table.
+    """Run the spaCy pass over the corpus in params.yaml, writing the annotation cache.
 
     Progress is shown live: a bar in a terminal, a line every half minute in a log file.
     """
@@ -75,8 +70,3 @@ def annotate_corpus_command(
         catalog, command="annotate-corpus", stages=timer.finish(), counts=result_counts(result)
     )
     console.print(render_result(result))
-
-
-def default_process_count() -> int:
-    """The machine's CPU count minus two, leaving room for the main process and the system."""
-    return max(1, (os.cpu_count() or 2) - 2)

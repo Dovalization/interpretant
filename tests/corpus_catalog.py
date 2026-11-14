@@ -12,8 +12,11 @@ import json
 from collections.abc import Sequence
 from pathlib import Path
 
-from interpretant.catalog import RawCell, append_work_metadata, read_catalog
-from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings
+from interpretant.catalog import CatalogConfig, RawCell, append_work_metadata, read_catalog
+from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
+from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus
+from interpretant.pipelines.corpus import CorpusResult
+from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from interpretant.pipelines.params import CorpusSelection
 from tests.metadata_records import metadata_record
 
@@ -39,7 +42,19 @@ CELLS = {
 }
 # The two 2010s cells, read by English and German candidates.
 SELECTION = CorpusSelection(fields=("ai", "compsci"), decades=(2010,))
-ANNOTATE_SETTINGS = AnnotateCorpusSettings(languages=("en", "de"))
+ANNOTATE_SETTINGS = AnnotateCorpusSettings(named_entity_recognition=False)
+LANGUAGE_SETTINGS = DetectLanguagesSettings(languages=("en", "de"))
+CLEAN_SETTINGS = CleanCorpusSettings()
+
+
+def prepare_annotated_corpus(
+    catalog: CatalogConfig, selection: CorpusSelection = SELECTION
+) -> CorpusResult:
+    """Run the three stages before the corpus-level rules, as ``dvc repro`` does: the spaCy
+    pass, the sentence languages and the cleaning; return the cleaning's result."""
+    annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
+    detect_languages(catalog, selection, LANGUAGE_SETTINGS)
+    return clean_corpus(catalog, selection, CLEAN_SETTINGS)
 
 
 def write_corpus_catalog(folder: Path) -> Path:
@@ -54,6 +69,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"cleaning_rules:\n  path: '{repository.cleaning_rules.path}'\n  format: yaml\n"
         f"cleaning_patterns:\n  path: '{repository.cleaning_patterns.path}'\n  format: jsonl\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
+        "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
         "run_log:\n  path: metrics/runs.jsonl\n  format: jsonl\n"

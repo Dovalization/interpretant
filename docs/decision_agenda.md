@@ -1189,6 +1189,20 @@ record in the log: it was put together from several partial runs before the log 
 bazzite (12 CPUs) its spaCy pass took about 47 minutes across restarts, and
 `build-corpus` about 4.5 minutes, of which near-duplicates took 2 min 54 s.
 
+*Stage 2 split three ways, 2026-11-13, after run 2:* `annotate_corpus` (repair, the tokenizer
+and sentence rules, the spaCy models; it writes only the `DocBin` cache, whose documents carry
+their work id in `user_data`), `detect_languages` (lingua on the cached sentences, one row per
+sentence in `data/interim/sentence_languages`) and `clean_corpus` (the `SpanRuler` patterns on a
+blank English pipeline, the removal ranges and keeping rules, the annotated table). Measured on
+bazzite: lingua is 10% of the pass (about 1.2 minutes over 10 processes as its own stage), and
+the patterns and keeping rules run at 725 cached documents a second in one process (about 1.6
+minutes over 10). A pattern or threshold change now reruns about 6–7 minutes of stages instead
+of 30, a language setting about 8. The two later stages run their parts in worker processes
+started with `spawn`, as Polars' documentation requires; the spaCy pass still forks its workers
+through spaCy, which works but is the case that documentation warns about, to be measured. The
+run log records each run's peak memory (main process and largest worker, from `getrusage`). A
+catalog change that cannot affect a stage's outputs is recorded with `dvc commit <stage>`.
+
 **DVC** for pipelines and provenance, after comparing it with Snakemake (runs steps, no data
 versioning or lock file), Kedro (a full framework to restructure around), Hydra (configuration
 only; pydantic settings already exist), MLflow (experiment tracking at a scale the Markdown
@@ -1233,9 +1247,10 @@ reports cover) and a manifest of the project's own (a re-implementation).
 and nothing waits on work that comes later:
 
 1. Downloads from the approved plan (4.8), registered with `dvc add`.
-2. The spaCy pass: repair, annotation, the `SpanRuler`, lingua; the `DocBin` cache and the
-   annotated table (step 2, 4.9; `interpretant annotate-corpus`, which can annotate some parts
-   only).
+2. The spaCy pass: repair, annotation; the `DocBin` cache (step 2, 4.9; `interpretant
+   annotate-corpus`, which can annotate some parts only). Then lingua on the cached sentences
+   (`interpretant detect-languages`) and the `SpanRuler` patterns and keeping rules, which write
+   the annotated table (`interpretant clean-corpus`).
 3. Corpus-level rules: template sentences, repeated sentences, near-duplicates, the author cap,
    then the review flags (repository-only, front matter, retracted, truncated: 4b); the abstracts
    table (2.3, 2.5, 4.6; `interpretant build-corpus`, minutes, so a threshold change never redoes
@@ -1307,8 +1322,8 @@ The sized tasks come to about 4 hours; three are not yet sized.
   - the era eraser is never fitted on the word it is applied to (step 6, experiment 6);
   - every usage carries its named-entity information, recognised at matching, and matching
     fails on a document without entity annotation (4.1).
-- **Round trips:** a `DocBin` round trip keeps sentences, norms, span groups and sentence
-  languages (4.6).
+- **Round trips:** a `DocBin` round trip keeps sentences, norms, lemmas and the work id (4.6);
+  sentence languages and removal ranges are tables of their own since the stage split.
 - **Statistics module** (6.3): J's pairwise and mean-vector forms agree; the permutation floor
   against Benjamini–Hochberg; J's chance level by n; the rank rule against the interval rule on
   simulated words.

@@ -35,6 +35,7 @@ class CatalogConfig(BaseModel):
     cleaning_rules: DatasetEntry
     cleaning_patterns: DatasetEntry
     annotations: DatasetEntry
+    sentence_languages: DatasetEntry
 
 
 def read_catalog(catalog_file: Path = CATALOG_FILE) -> CatalogConfig:

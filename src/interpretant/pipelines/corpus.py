@@ -1,9 +1,9 @@
-"""What both corpus stages share: the selected cells, the parts, the metadata and the counts."""
+"""What the corpus stages share: the selected cells, their works and parts, and the counts."""
 
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Iterator, Mapping, Sequence
+from collections.abc import Iterable, Iterator, Mapping, Sequence
 from dataclasses import dataclass
 
 import polars as pl
@@ -12,10 +12,17 @@ from interpretant.catalog import (
     CatalogConfig,
     RawCell,
     WorkMetadata,
+    index_work_metadata,
     list_raw_cells,
+    load_raw_cell,
     load_work_metadata,
 )
+from interpretant.corpus.works import RawAbstract, merge_cells, part_of
 from interpretant.pipelines.params import CorpusSelection
+from interpretant.pipelines.progress import Progress
+
+# The source of the regular OpenAlex samples, as the table records it.
+REGULAR = "regular"
 
 
 @dataclass(frozen=True)
@@ -45,6 +52,38 @@ def corpus_cells(catalog: CatalogConfig, selection: CorpusSelection) -> list[Raw
             f"no raw cell for fields {selection.fields} in decades {selection.decades}"
         )
     return cells
+
+
+def corpus_parts(cells: Sequence[RawCell]) -> list[str]:
+    """The parts the cells make, one per field and decade, in order."""
+    return [part_name(cell.field, cell.decade) for cell in cells]
+
+
+def load_corpus_works(
+    catalog: CatalogConfig, cells: Sequence[RawCell], progress: Progress
+) -> list[RawAbstract]:
+    """The cells' works merged, one record per work, once every work's metadata is checked.
+
+    Raises:
+        ValueError: if a cell's metadata has not been fetched or lacks a work.
+    """
+    progress.stage("merging the raw cells")
+    abstracts = merge_cells(
+        ((cell.field, load_raw_cell(catalog, cell)) for cell in cells), source=REGULAR
+    )
+    progress.stage("checking the work metadata")
+    index_work_metadata(
+        load_corpus_metadata(catalog, cells), (abstract.work_id for abstract in abstracts)
+    )
+    return abstracts
+
+
+def works_by_part(abstracts: Iterable[RawAbstract]) -> dict[str, list[RawAbstract]]:
+    """The abstracts grouped by part, in their order within each part."""
+    groups: dict[str, list[RawAbstract]] = {}
+    for abstract in abstracts:
+        groups.setdefault(part_name(*part_of(abstract)), []).append(abstract)
+    return groups
 
 
 def part_name(field: str, decade: int) -> str:
@@ -80,6 +119,25 @@ def summarise(tables: Mapping[str, pl.DataFrame]) -> CorpusResult:
         removal_counts=_counts(table["removals"].explode().drop_nulls().struct.field("reason")),
         flag_counts=_counts(table["flags"].explode().drop_nulls()),
     )
+
+
+def combine_results(results: Iterable[CorpusResult]) -> CorpusResult:
+    """One result for several parts' results: rows and every reason's count added up."""
+    results = list(results)
+    return CorpusResult(
+        abstract_count=sum(result.abstract_count for result in results),
+        parts=[part for result in results for part in result.parts],
+        dropped_counts=_added(result.dropped_counts for result in results),
+        removal_counts=_added(result.removal_counts for result in results),
+        flag_counts=_added(result.flag_counts for result in results),
+    )
+
+
+def _added(counts: Iterable[Mapping[str, int]]) -> dict[str, int]:
+    total: Counter[str] = Counter()
+    for count in counts:
+        total.update(count)
+    return dict(total.most_common())
 
 
 def _counts(reasons: pl.Series) -> dict[str, int]:

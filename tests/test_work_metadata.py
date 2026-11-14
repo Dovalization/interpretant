@@ -11,9 +11,9 @@ from typing import Any
 import pytest
 from pyalex import config
 
-from interpretant.catalog import WorkMetadata
+from interpretant.catalog import WorkMetadata, index_work_metadata
 from interpretant.corpus import work_metadata
-from interpretant.corpus.annotation import MALFORMED
+from interpretant.corpus.removals import MALFORMED
 from interpretant.corpus.work_metadata import (
     IDS_PER_REQUEST,
     METADATA_FIELDS,
@@ -23,7 +23,6 @@ from interpretant.corpus.work_metadata import (
     RETRACTED,
     configure_openalex,
     fetch_work_metadata,
-    index_work_metadata,
     is_repository_only,
     mark_metadata_flags,
 )

@@ -9,7 +9,6 @@ import polars as pl
 
 from interpretant.catalog import read_catalog, save_corpus_metrics
 from interpretant.corpus.work_metadata import REPOSITORY_ONLY
-from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.report_corpus import report_corpus
 from interpretant.review.corpus_report import (
@@ -19,7 +18,7 @@ from interpretant.review.corpus_report import (
     render_markdown,
 )
 from tests.abstracts_tables import abstract_row, abstracts_table
-from tests.corpus_catalog import ANNOTATE_SETTINGS, SELECTION
+from tests.corpus_catalog import SELECTION, prepare_annotated_corpus
 
 TEMPLATE = {"start": 0, "end": 8, "reason": "template_sentence"}
 
@@ -88,7 +87,7 @@ def test_render_markdown_writes_unwrapped_tables() -> None:
 
 def test_report_corpus_writes_the_report_after_the_build(corpus_catalog_file: Path) -> None:
     catalog = read_catalog(corpus_catalog_file)
-    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    prepare_annotated_corpus(catalog)
     build_corpus(catalog, SELECTION, BuildCorpusSettings())
     written = report_corpus(catalog, SELECTION)
     assert written == catalog.corpus_report.path
@@ -123,7 +122,7 @@ def test_report_corpus_compares_the_run_with_the_metrics_it_replaces(
     corpus_catalog_file: Path,
 ) -> None:
     catalog = read_catalog(corpus_catalog_file)
-    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    prepare_annotated_corpus(catalog)
     build_corpus(catalog, SELECTION, BuildCorpusSettings())
     first = report_corpus(catalog, SELECTION).read_text()
     assert "## Compared with the previous run" not in first

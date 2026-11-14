@@ -11,8 +11,15 @@ from interpretant.catalog import read_catalog
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
+from interpretant.pipelines.clean_corpus import clean_corpus
+from interpretant.pipelines.detect_languages import detect_languages
 from interpretant.pipelines.progress import StageTimer
-from tests.corpus_catalog import ANNOTATE_SETTINGS, SELECTION
+from tests.corpus_catalog import (
+    ANNOTATE_SETTINGS,
+    CLEAN_SETTINGS,
+    LANGUAGE_SETTINGS,
+    SELECTION,
+)
 
 
 class Clock:
@@ -109,6 +116,12 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
     annotated = RecordingProgress()
     annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS, progress=annotated)
     assert annotated.stages[-1] == ("spaCy pass", 4, 4)
+    detected = RecordingProgress()
+    detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS, progress=detected)
+    assert detected.stages == [("detecting sentence languages", 2, 2)]
+    cleaned = RecordingProgress()
+    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, progress=cleaned)
+    assert cleaned.stages[-1] == ("cleaning the parts", 2, 2)
     built = RecordingProgress()
     build_corpus(catalog, SELECTION, BuildCorpusSettings(), progress=built)
     assert [name for name, _, _ in built.stages] == [

@@ -1,7 +1,7 @@
-"""Duplicates (decision agenda 2.5): one row per work, and near-duplicates found by MinHash.
+"""Near-duplicates (decision agenda 2.5), found by MinHash.
 
-The same work in two cells is one row listing every field it was sampled for, so it is kept in
-every cell it belongs to. Near-duplicates (a preprint and its published version) are found with
+Exact duplicates, the same work in two cells, are merged earlier (``corpus.works``).
+Near-duplicates (a preprint and its published version) are found with
 MinHash and locality-sensitive hashing (``datasketch``) on word 5-shingles of the kept text, the
 design's starting point; the earliest work of each group is kept and every later one is dropped
 with the work it duplicates recorded.
@@ -9,45 +9,16 @@ with the work it duplicates recorded.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Sequence
 
 import polars as pl
 from datasketch import MinHash, MinHashLSH
 
-from interpretant.catalog import RawWork
-from interpretant.corpus.annotation import RawAbstract, Removal, kept_text
+from interpretant.corpus.removals import Removal, kept_text
 
 NEAR_DUPLICATE = "near_duplicate"
 SHINGLE_WORDS = 5
 PERMUTATION_COUNT = 128
-
-
-def merge_cells(
-    cells: Iterable[tuple[str, Iterable[RawWork]]], *, source: str
-) -> list[RawAbstract]:
-    """One abstract per work id, in order of first appearance, listing every field it came from.
-
-    A work's text, year, type and authors come from its first appearance; a work fetched twice
-    carries the same OpenAlex record.
-    """
-    first_seen: dict[str, RawWork] = {}
-    fields_by_work: dict[str, set[str]] = {}
-    for field, works in cells:
-        for work in works:
-            first_seen.setdefault(work.work_id, work)
-            fields_by_work.setdefault(work.work_id, set()).add(field)
-    return [
-        RawAbstract(
-            work_id=work_id,
-            year=work.year,
-            fields=tuple(sorted(fields_by_work[work_id])),
-            source=source,
-            document_type=work.document_type,
-            author_ids=work.author_ids,
-            text=work.text,
-        )
-        for work_id, work in first_seen.items()
-    ]
 
 
 def build_shingles(text: str, removals: Sequence[Removal]) -> set[bytes]:

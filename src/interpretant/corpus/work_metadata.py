@@ -8,7 +8,7 @@ repository-only, and the corpus review decides which kinds are dropped (4b).
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from datetime import date
 from typing import Any
 
@@ -99,23 +99,6 @@ def is_repository_only(metadata: WorkMetadata) -> bool:
     location = metadata.primary_location
     source_type = location.source.type if location and location.source else None
     return source_type == "repository" and not SCHOLARLY_INDEXES.intersection(metadata.indexed_in)
-
-
-def index_work_metadata(
-    records: Iterable[WorkMetadata], work_ids: Iterable[str]
-) -> dict[str, WorkMetadata]:
-    """Each work's metadata record, by work id.
-
-    Raises:
-        ValueError: if a work has no record (its cell's fetch did not finish).
-    """
-    by_work = {record.work_id: record for record in records}
-    unfetched = set(work_ids) - by_work.keys()
-    if unfetched:
-        raise ValueError(
-            f"{len(unfetched)} works have no metadata record: run `interpretant fetch-metadata`"
-        )
-    return by_work
 
 
 def mark_metadata_flags(

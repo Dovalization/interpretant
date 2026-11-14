@@ -14,7 +14,12 @@ import polars as pl
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
-from interpretant.catalog import CatalogConfig, load_annotated_abstracts, save_abstracts
+from interpretant.catalog import (
+    CatalogConfig,
+    index_work_metadata,
+    load_annotated_abstracts,
+    save_abstracts,
+)
 from interpretant.corpus.cleaning import (
     mark_author_cap,
     mark_repeated_sentences,
@@ -22,7 +27,7 @@ from interpretant.corpus.cleaning import (
     mark_truncated,
 )
 from interpretant.corpus.deduplication import mark_near_duplicates
-from interpretant.corpus.work_metadata import index_work_metadata, mark_metadata_flags
+from interpretant.corpus.work_metadata import mark_metadata_flags
 from interpretant.pipelines.corpus import (
     CorpusResult,
     corpus_cells,
