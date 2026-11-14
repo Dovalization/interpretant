@@ -223,7 +223,8 @@ views (the full order is in step 9).
   `&dquo;`); ERIC's document notes (*Documents acquired by ERIC include…*; 429 works, 268 of them
   from the 1990s); repository notes (*Contains fulltext: 75022.pdf*; 20). Checked and already
   struck: publisher alerts (*This alert has been successfully added*; 1,902 works, by the
-  template rule) and SIAM's copyright line (268).
+  template rule) and SIAM's copyright line (268). The record-type batch draws on the linked
+  sources (4.8): PubMed's publication types, page counts and titles.
 - *To decide: the unfinished last sentence of a cut-off record.* 70,276 of run 4's kept works end
   mid-sentence (the `truncated` flag; 25% of the 1950s, 4.9% of the 2020s), often where the
   source cut the text at a fixed length. Their sentences up to the last full stop are usable;
@@ -519,6 +520,43 @@ topic, topics, keywords, authorships (names, ORCID, institutions, countries), re
 citation counts by year, title, publication date and other ids. Left out: charges, impact
 percentiles, funders, awards, development goals, related works, content links, the retired
 concepts and the abstract. Later downloads ask for these fields in the download itself.
+
+**Linked sources** (decided 2026-11-14). The identifiers in the work metadata link each work to
+other sources, fetched the same way (by hand, once, stored beside each cell, registered with
+`dvc add`), after run 3's review and before the record-type batch (2.3):
+
+- *Crossref*, by DOI (78% of run 4's kept works): the abstract the publisher deposited, the
+  page range, relations (preprint and published version, chapter and book, corrections and
+  retractions), and text-mining licences and links. Of the 200 reviewed records, 49 have a
+  Crossref abstract; 47 are OpenAlex's text, and the other 2 are better than it (an article's
+  abstract where OpenAlex has a book citation; a book's description where OpenAlex has its
+  bullet points). Records dropped as citations, catalogue entries or too short (about 27,000)
+  take Crossref's abstract when it has one, with the text's source recorded; which text wins
+  when both exist and differ is decided on the full lookup's counts. This changes stored text,
+  so it joins the next full spaCy pass (the word-repair run). Crossref's subject field is empty,
+  so it gives no field labels.
+- *PubMed*, by PMID (17%; 65% of neuroscience, about a third of psychology and cognitive
+  psychology, 21–23% of each decade from the 1950s to the 1970s), 200 ids per request: MeSH
+  headings and publication types assigned by indexers (letter, editorial, comment, review,
+  biography, published erratum), and whether PubMed holds an abstract. For 25 sampled kept works
+  per decade it had one for 0 in the 1950s and 2 in the 1960s, against 20–25 from the 1980s, so
+  an older PubMed work's OpenAlex abstract was mined from the article (OpenAlex's documentation:
+  abstracts come from Crossref or PubMed records or are "text-mined from the full text", and no
+  field says which).
+- *Uses:* the text source before spaCy (2.3); publication types, page counts and titles in the
+  record-type batch (titles alone are noisy: 71 kept works are titled "Errata", but "Letter
+  interactions in brief visual displays" is research); relations in the near-duplicate check
+  (2.5); MeSH and journal subject lists (DOAJ, NLM Catalog, ERIH PLUS, by ISSN) in the
+  wrong-field check, and each abstract's provenance in the datasheet (4b).
+- *Later, with the steps they serve:* PubMed Central (27,000 kept works) and arXiv full texts
+  for the full-text comparison (4b); MeSH definitions and introduction years, and Semantic
+  Scholar's citation contexts (its terms checked first), for 7a.5; ORCID (on 7% of the 1950s'
+  kept works, rising to 74% of the 2020s') to check the author ids the author cap relies on;
+  DBLP's record types for computer science, AI and HCI.
+- *Not a check:* OpenAlex's own language field calls English 18,437 of the 18,788 works dropped
+  as not English, since the cells were selected on it.
+- Crossref and NCBI both ask heavy users for a contact address; which one is used is the
+  author's choice, asked before the first run.
 
 **4.9 Models and running time.** The small model (`en_core_web_sm`) for the whole corpus:
 cleaning, sentences, the static view (the last full pass, lemma votes with tagger and lemmatizer,
