@@ -960,6 +960,29 @@ are not compared directly.
   what a later change touches (OntoNotes revised sense groupings until agreement between
   annotators reached 90%, Hovy et al. 2006; content analysis pretests and freezes its codebook;
   Pustejovsky and Stubbs's MATTER cycle versions its guidelines).
+- **7a.5 Citations as an aid** (decided 2026-11-14). A citation table built from the work
+  metadata already downloaded (OpenAlex's `referenced_works`: 8.9 million references from run
+  4's kept works to 4.0 million works), as its own stage after the corpus sign-off, not in the
+  spaCy pass: citing work, cited work, and the citing work's decade and fields. Citations inside
+  the abstracts (*(Kanner, 1957)*) are not parsed: matching an author and a year to a work is
+  unreliable, and most abstracts cite nothing. For each target word, field and decade it lists
+  the works most cited by the corpus works that use the word, in aid of 7a.1:
+  - it dates a sense's arrival and names the work and the field it came from (references
+    across fields show one field borrowing from another);
+  - the hand-written lists take each sense's definition from the works that introduced it,
+    cited, rather than from the author's knowledge (the doubt left by round Z);
+  - on open questions it proposes candidate senses, since the ranking is made without knowing
+    the answer. Expected check: *attention* in AI in the 2020s is led by Vaswani et al. 2017.
+
+  The table is cleaned first: the most cited id (19,171 citing works, in every field) is no
+  longer returned by OpenAlex; one work can carry several ids (the DSM-5 and Cohen's
+  power-analysis book under two each); types can be wrong (Kuhn's *Structure* typed as a book
+  review). Counts are compared only within a decade: 30% of the 1950s' kept works have a
+  reference list against 65% of the 2020s' (median 0 references against 10). Overall counts
+  rank methods and instruments first (the DSM, R, lme4, G*Power, the Beck Depression
+  Inventory), so rankings are made per word. The sample is not weighted by citations, since the
+  question is how a whole field uses a word. Titles and types of cited works outside the corpus
+  are fetched by id, 100 per request.
 - **Tools:** scikit-learn 1.8 (`AffinityPropagation`, `AgglomerativeClustering`, `HDBSCAN`);
   networkx (`label_propagation_communities`; `leiden_communities` needs networkx 3.7 or later
   (September 2026), since in the installed 3.6.1 it is a stub for other backends and raises
