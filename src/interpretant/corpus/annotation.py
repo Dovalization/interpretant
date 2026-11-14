@@ -12,15 +12,19 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable, Iterator
+from typing import Any
 
 import spacy
-from spacy.lang.char_classes import ALPHA, ALPHA_LOWER, ALPHA_UPPER, HYPHENS
+from spacy.lang.char_classes import ALPHA, ALPHA_LOWER, ALPHA_UPPER, CONCAT_QUOTES, HYPHENS
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
+from spacy.matcher import Matcher
+from spacy.pipeline import Sentencizer
 from spacy.symbols import ORTH
 from spacy.tokenizer import Tokenizer
-from spacy.tokens import Doc
+from spacy.tokens import Doc, Token
 from spacy.util import compile_infix_regex
+from spacy.vocab import Vocab
 from srsly.msgpack import msgpack_decoders, msgpack_encoders
 
 from interpretant.catalog import WORK_ID
@@ -53,10 +57,14 @@ _HYPHEN_INFIX = rf"(?<=[{ALPHA}0-9])(?:{HYPHENS})(?=[{ALPHA}])"
 # Sentence punctuation with no space before the next sentence, as in "(r = 0.922).In addition"
 # or "in 1950.French delegates" (decision agenda 2.3). spaCy's English rules split a full stop
 # between two letters only; these two infix rules also split it after a digit, a closing bracket
-# or a quote, and split that bracket or quote off the word before it.
-_CLOSERS = r"\)\]\"”’"
-_QUOTES = r"\"”’"
+# or a quote, and split that bracket or quote off the word before it. The quotes are spaCy's own
+# class, as its English infix rules use it, less the comma it holds for the low quotation mark.
+_QUOTES = CONCAT_QUOTES.replace(",", "")
+_CLOSERS = rf"\)\]{_QUOTES}"
 _NEXT_SENTENCE = rf"[{ALPHA_UPPER}][{ALPHA_LOWER}]"
+# spaCy's upper and lower classes both include the scripts without case (Chinese, Japanese,
+# Korean, Arabic), so a sentence after "关系." starts as after "relation.".
+_SENTENCE_OPENING = re.compile(_NEXT_SENTENCE)
 GLUED_STOP_INFIX = rf"(?<=[{ALPHA_LOWER}0-9{_CLOSERS}])[.?!](?=[{_QUOTES}]?{_NEXT_SENTENCE})"
 GLUED_CLOSER_INFIX = rf"(?<=[{ALPHA}0-9])[{_CLOSERS}](?=[.?!]{_NEXT_SENTENCE})"
 # A closing quote after the full stop, glued to the next sentence: 'learns."Acquaintance'.
@@ -65,17 +73,24 @@ GLUED_QUOTE_INFIX = rf"(?<=[.?!])[{_QUOTES}](?={_NEXT_SENTENCE})"
 # run 2). The three lowercase letters before the stop keep "Vol.3", "Fig.4" and "pp.12" whole.
 GLUED_FOOTNOTE_INFIX = r"(?<=[a-z]{3})[.?!](?=\d{1,3}$)"
 # Dashes between two words, kept whole when the hyphen rule was removed: "theory—namely",
-# "first--applied" (about 46,000 in run 2). En dashes stay whole, like hyphens: they mostly join
-# compounds of two equal parts ("sleep–wake", "Mann–Whitney").
-DASH_INFIX = rf"(?<=[{ALPHA}])(?:—+|-{{2,3}}|~)(?=[{ALPHA}])"
-_GLUED_STOP = re.compile(rf"[.?!][{_QUOTES}]?(?={_NEXT_SENTENCE})")
-_GLUED_FOOTNOTE = re.compile(r"(?<=[a-z]{3})[.?!]\d{1,3}\.?\s+(?=[A-Z][a-z])")
-# A short bracket group, square or round, not nested: citations ("[2]", "[4, pp. 258-265]",
-# "(Smith, 2001)"), abbreviations ("[PSQI]"), phonetic symbols ("[ta]"), "[Formula: see text]".
-# spaCy's sentence model often starts a sentence inside one (decision agenda 2.3).
-_BRACKET_GROUPS = re.compile(r"\[[^\[\]]{1,40}\]|\([^()]{1,40}\)")
-_OPENING_BRACKETS = frozenset({"(", "["})
-_SENTENCE_FINAL = frozenset({".", "?", "!"})
+# "first--applied" (about 46,000 in run 2). They are spaCy's hyphen class less the hyphen and the
+# en dash, which stay inside words: en dashes mostly join compounds of two equal parts
+# ("sleep–wake", "Mann–Whitney"). Longest first, so "---" is not split as "--" and "-".
+_DASHES = sorted(
+    (dash for dash in HYPHENS.split("|") if dash not in {"-", "–"}), key=len, reverse=True
+)
+DASH_INFIX = rf"(?<=[{ALPHA}])(?:{'|'.join(_DASHES)})(?=[{ALPHA}])"
+# The sentence-final characters of spaCy's rule-based sentencizer, in every script it knows.
+_SENTENCE_FINAL = frozenset(Sentencizer.default_punct_chars)
+# A short bracket group, square or round, not nested, of up to 40 characters inside: citations
+# ("[2]", "[4, pp. 258-265]", "(Smith, 2001)"), abbreviations ("[PSQI]"), phonetic symbols
+# ("[ta]"), "[Formula: see text]". spaCy's sentence model often starts a sentence inside one
+# (2.3). The matcher counts tokens, so the length is checked on each match's characters.
+_BRACKET_GROUPS: list[list[dict[str, Any]]] = [
+    [{"ORTH": opening}, {"ORTH": {"NOT_IN": [opening, closing]}, "OP": "+"}, {"ORTH": closing}]
+    for opening, closing in (("[", "]"), ("(", ")"))
+]
+_BRACKET_GROUP_CHARACTERS = 42
 # The component setting the sentence boundaries the sentence model misses, before ``senter``.
 SENTENCE_RULES = "sentence_rules"
 _DOI = r"^(?:doi:)?10\.\d{4,9}/\S+$"
@@ -130,76 +145,121 @@ def build_pipeline(
     return nlp
 
 
-@Language.component(SENTENCE_RULES)
-def apply_sentence_rules(doc: Doc) -> Doc:
+@Language.factory(SENTENCE_RULES, requires=["token.is_sent_start"])
+def create_sentence_rules(nlp: Language, name: str) -> SentenceRules:
+    """The factory spaCy calls to add the sentence rules; the matcher needs the vocabulary."""
+    return SentenceRules(nlp.vocab)
+
+
+class SentenceRules:
     """Set the sentence boundaries spaCy's sentence model gets wrong in abstracts.
 
     spaCy's documentation offers such rules on top of the statistical segmenter, set on
     ``Token.is_sent_start`` before it; ``senter`` keeps what is set (its ``overwrite`` setting is
-    off). The rules, from the audits of runs 1 and 2:
+    off). The rules read spaCy's token attributes (the space after a token, lower case, the word
+    shape, brackets and quotes), its character classes and its ``Matcher``. From the audits of
+    runs 1 and 2:
 
     - A sentence starts after sentence punctuation glued to the next sentence, with or without a
       closing quote ("1950.French", 'learns."Acquaintance'), and after a footnote number glued
       to the full stop ("weeks.4 Just"). The tokenizer splits the punctuation off, but the model,
       trained on text with a space after each sentence, put a boundary at only 48% of the first
       kind and 7% of the footnotes.
-    - No sentence starts inside a short bracket group (square or round, up to 40 characters),
-      right after an opening bracket, or at the bracket unless sentence-final punctuation comes
-      before it. The model started one at a citation's bracket even with normal spacing
-      ("Goodman | [ | 2] and Haberman"): 56,208 broken pieces in 21,440 of run 1's abstracts.
-    - No sentence starts at a word beginning with a lowercase letter, unless it has a capital or
-      a digit inside ("mRNA", "fMRI"). Of run 2's 35,320 such starts, about 64% were wrong splits
-      (after units, "etc.)", OCR breaks, abbreviations the tokenizer does not know) and about 20%
-      the author's own lowercase, now joined to the sentence before.
+    - No sentence starts inside a short bracket group (square or round), right after an opening
+      bracket, or at the bracket unless sentence-final punctuation comes before it. The model
+      started one at a citation's bracket even with normal spacing ("Goodman | [ | 2] and
+      Haberman"): 56,208 broken pieces in 21,440 of run 1's abstracts.
+    - No sentence starts at a lowercase word (``is_lower``, its shape starting with a lowercase
+      letter and holding no digit: "mRNA", "p53" and "@lab" may start one; scripts without case
+      are untouched). Of run 2's 35,320 lowercase
+      starts, about 64%
+      were wrong splits (after units, "etc.)", OCR breaks, abbreviations the tokenizer does not
+      know) and about 20% the author's own lowercase, now joined to the sentence before.
     """
-    _start_after_glued_punctuation(doc)
-    _start_after_glued_footnotes(doc)
-    _join_bracket_groups(doc)
-    _join_inside_sentences(doc)
-    return doc
 
+    def __init__(self, vocab: Vocab) -> None:
+        """Build the matcher for the bracket groups."""
+        self.matcher = Matcher(vocab, validate=True)
+        self.matcher.add("bracket_group", _BRACKET_GROUPS)
 
-def _start_after_glued_punctuation(doc: Doc) -> None:
-    for match in _GLUED_STOP.finditer(doc.text):
-        punctuation = doc.char_span(match.start(), match.end())
-        if punctuation is None or punctuation.end == len(doc):
-            continue
-        doc[punctuation.end].is_sent_start = True
-
-
-def _start_after_glued_footnotes(doc: Doc) -> None:
-    for match in _GLUED_FOOTNOTE.finditer(doc.text):
-        following = doc.char_span(match.end(), match.end() + 1, alignment_mode="expand")
-        if following is None or following.start_char != match.end():
-            continue
-        following[0].is_sent_start = True
-
-
-def _join_bracket_groups(doc: Doc) -> None:
-    for match in _BRACKET_GROUPS.finditer(doc.text):
-        group = doc.char_span(match.start(), match.end(), alignment_mode="expand")
-        if group is None:
-            continue
-        for token in group[1:]:
-            token.is_sent_start = False
-
-
-def _join_inside_sentences(doc: Doc) -> None:
-    for token in doc[1:]:
-        if token.text in _OPENING_BRACKETS:
-            if token.i + 1 < len(doc):
-                doc[token.i + 1].is_sent_start = False
-            if doc[token.i - 1].text not in _SENTENCE_FINAL:
+    def __call__(self, doc: Doc) -> Doc:
+        """Set the sentence starts the rules decide, leaving the rest to ``senter``."""
+        for token in _glued_sentence_starts(doc):
+            token.is_sent_start = True
+        for _, start, end in self.matcher(doc):
+            group = doc[start:end]
+            if group.end_char - group.start_char > _BRACKET_GROUP_CHARACTERS:
+                continue
+            for token in group[1:]:
                 token.is_sent_start = False
-        elif _is_lowercase_word(token.text):
-            token.is_sent_start = False
+        for token in doc[1:]:
+            if _is_opening_bracket(token):
+                _join_opening_bracket(token)
+            elif _is_lowercase_word(token):
+                token.is_sent_start = False
+        return doc
 
 
-def _is_lowercase_word(text: str) -> bool:
-    """Whether a token starts with a lowercase letter and has no capital or digit after it."""
-    return text[:1].islower() and not any(
-        character.isupper() or character.isdigit() for character in text[1:]
+def _glued_sentence_starts(doc: Doc) -> Iterator[Token]:
+    """The first tokens of sentences glued to the sentence punctuation before them.
+
+    A closing quote after the punctuation ends the earlier sentence ('learns."Acquaintance');
+    an opening quote or bracket begins the next one ('night.“Fading”'); straight quotes, both
+    to spaCy, are taken as closing. A footnote number after the punctuation ends the earlier
+    sentence too ("weeks.4 Just").
+    """
+    for token in doc[:-1]:
+        if token.text not in _SENTENCE_FINAL or token.whitespace_:
+            continue
+        following = token.nbor()
+        glued_mark = not following.whitespace_ and following.i + 1 < len(doc)
+        if glued_mark and following.is_quote and following.is_right_punct:
+            if _SENTENCE_OPENING.match(following.nbor().text):
+                yield following.nbor()
+        elif glued_mark and following.is_left_punct:
+            if _SENTENCE_OPENING.match(following.nbor().text):
+                yield following
+        elif _SENTENCE_OPENING.match(following.text):
+            yield following
+        elif _is_footnote_number(following) and _ends_in_lowercase_word(token):
+            yield from _title_after_footnote(following)
+
+
+def _is_footnote_number(token: Token) -> bool:
+    return token.is_digit and len(token) <= 3
+
+
+def _ends_in_lowercase_word(punctuation: Token) -> bool:
+    previous = punctuation.doc[punctuation.i - 1] if punctuation.i else punctuation
+    return (
+        not previous.whitespace_ and previous.text[-3:].isalpha() and previous.text[-3:].islower()
     )
+
+
+def _title_after_footnote(number: Token) -> Iterator[Token]:
+    doc = number.doc
+    after = number.i + 1
+    if after < len(doc) and doc[after].text == "." and not number.whitespace_:
+        after += 1
+    if after < len(doc) and doc[after - 1].whitespace_ and _SENTENCE_OPENING.match(doc[after].text):
+        yield doc[after]
+
+
+def _is_opening_bracket(token: Token) -> bool:
+    return token.is_bracket and token.is_left_punct
+
+
+def _join_opening_bracket(bracket: Token) -> None:
+    doc = bracket.doc
+    if bracket.i + 1 < len(doc):
+        doc[bracket.i + 1].is_sent_start = False
+    if doc[bracket.i - 1].text not in _SENTENCE_FINAL:
+        bracket.is_sent_start = False
+
+
+def _is_lowercase_word(token: Token) -> bool:
+    shape = token.shape_
+    return token.is_lower and shape[:1] == "x" and "d" not in shape
 
 
 def cache_serialiser_extensions() -> None:
