@@ -18,6 +18,7 @@ SIGNATURES = compile_signatures([r"Ã[\x80-\xbf]", "â€", r"Â[\xa0-\xbf]"])
         ("zero​width space", "zero width space"),
         ("byte﻿order and join‍er", "byteorder and joiner"),
         ("lost � character", "lost character"),
+        ("post\u2010training and non\u2011breaking", "post-training and non-breaking"),
         ("the ﬁrst efﬂuent", "the first effluent"),
         ("full，width： colon", "full,width: colon"),
         ("no break", "no break"),
@@ -25,8 +26,9 @@ SIGNATURES = compile_signatures([r"Ã[\x80-\xbf]", "â€", r"Â[\xa0-\xbf]"])
         ("  padded   with   spaces  ", "padded with spaces"),
     ],
     ids=["line breaks and tabs", "literal backslash-n", "soft hyphens", "zero-width space",
-         "format characters", "replacement character", "ligatures", "full-width punctuation",
-         "no-break space", "superscripts and subscripts", "runs of spaces"],
+         "format characters", "replacement character", "unicode hyphens", "ligatures",
+         "full-width punctuation", "no-break space", "superscripts and subscripts",
+         "runs of spaces"],
 )  # fmt: skip
 def test_repair_text_undoes_extraction_artefacts(raw: str, repaired: str) -> None:
     assert repair_text(raw) == repaired

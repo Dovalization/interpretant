@@ -20,6 +20,9 @@ _SPACES = re.compile(r"\s+")
 # opportunity) and the replacement character (a lost character).
 _WORD_SEPARATORS = frozenset({"​", "�"})
 _WHITESPACE_CONTROLS = frozenset("\t\n\r\x0b\x0c")
+# The Unicode hyphen characters (U+2010; NFKC turns the non-breaking U+2011 into it), written as
+# the ASCII hyphen-minus, so "post‐training" and "post-training" are one word (52,394 in run 2).
+_HYPHENS = str.maketrans({"\u2010": "-", "\u2011": "-"})
 
 
 def repair_text(raw: str) -> str:
@@ -29,7 +32,8 @@ def repair_text(raw: str) -> str:
     and format characters (category Cc or Cf, such as the byte-order mark or the zero-width
     joiner) are removed; soft hyphens rejoin the word they split; runs of whitespace collapse to
     one space. NFKC also expands ligatures (*ﬁ* to *fi*), maps full-width punctuation and
-    no-break spaces to their plain forms and writes superscripts as plain digits.
+    no-break spaces to their plain forms and writes superscripts as plain digits; the Unicode
+    hyphen characters become the ASCII hyphen-minus.
     """
     text = _SOFT_HYPHEN.sub("", _LITERAL_NEWLINE.sub(" ", raw))
     kept = []
@@ -38,7 +42,7 @@ def repair_text(raw: str) -> str:
             kept.append(" ")
         elif unicodedata.category(character) not in ("Cc", "Cf"):
             kept.append(character)
-    normal = unicodedata.normalize("NFKC", "".join(kept))
+    normal = unicodedata.normalize("NFKC", "".join(kept)).translate(_HYPHENS)
     return _SPACES.sub(" ", normal).strip()
 
 
