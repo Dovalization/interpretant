@@ -1,42 +1,42 @@
 {
   "abstracts": 705283,
-  "dropped": 63183,
+  "dropped": 63259,
   "dropped_by_reason": {
     "author_cap": 175,
     "catalogue_record": 8032,
     "citation_record": 14824,
     "exam_spam": 61,
     "mojibake": 228,
-    "near_duplicate": 5388,
-    "not_english": 18798,
-    "template": 9276,
-    "too_short": 4012,
+    "near_duplicate": 5472,
+    "not_english": 18794,
+    "template": 9277,
+    "too_short": 4007,
     "web_scrape": 2389
   },
   "flagged_by_flag": {
-    "malformed": 2108,
+    "malformed": 2127,
     "paratext": 9,
     "repository_only": 96267,
     "retracted": 147,
-    "truncated": 77427
+    "truncated": 77440
   },
-  "kept": 642100,
+  "kept": 642024,
   "removed_ranges_by_reason": {
-    "abstract_label": 37111,
+    "abstract_label": 37113,
     "catalogue_record": 8032,
     "citation_record": 14923,
-    "copyright": 5320,
+    "copyright": 5322,
     "doi": 5767,
     "download_stamp": 155,
-    "email": 1158,
+    "email": 1164,
     "encoded_link": 32,
     "exam_spam": 715,
     "footer": 1768,
-    "latex": 10802,
-    "not_english": 113746,
-    "repeated_sentence": 4795,
-    "template_sentence": 122718,
-    "url": 14201,
+    "latex": 10772,
+    "not_english": 113049,
+    "repeated_sentence": 4783,
+    "template_sentence": 122828,
+    "url": 14206,
     "web_scrape": 4340
   }
 }

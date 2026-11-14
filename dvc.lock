@@ -15,17 +15,17 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 8a47529324a0af49a1e442c844ef83f6.dir
-      size: 73877
+      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
+      size: 74643
       nfiles: 22
     - path: src/interpretant/corpus/annotation.py
       hash: md5
-      md5: 1a65296d4e7abdb1a3787026ac119a99
-      size: 14155
+      md5: 45e7e4a6ba0dedbf65ddcc6a5810e996
+      size: 12478
     - path: src/interpretant/corpus/repair.py
       hash: md5
-      md5: d0bda3387d369627559d9d65c6b08bfd
-      size: 2731
+      md5: 8ecf8974a71bb9d8bd738a5a2f721877
+      size: 7578
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -75,16 +75,16 @@ stages:
     outs:
     - path: data/interim/annotations
       hash: md5
-      md5: 5a4eb6aa38215434e5cf30b7749f3e87.dir
-      size: 1111044501
+      md5: f4ea1ac04f04b5d31d1ce8ac2714035a.dir
+      size: 1110989684
       nfiles: 88
   build_corpus:
     cmd: interpretant build-corpus
     deps:
     - path: data/interim/annotated_abstracts
       hash: md5
-      md5: dc5a6e28016347080b06ec8270b1e0d0.dir
-      size: 282408090
+      md5: f6103e9d348132add2984d3cf6479ae5.dir
+      size: 282245232
       nfiles: 88
     - path: data/raw/openalex
       hash: md5
@@ -98,8 +98,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 8a47529324a0af49a1e442c844ef83f6.dir
-      size: 73877
+      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
+      size: 74643
       nfiles: 22
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
@@ -119,8 +119,8 @@ stages:
       size: 8700
     - path: src/interpretant/corpus/repair.py
       hash: md5
-      md5: d0bda3387d369627559d9d65c6b08bfd
-      size: 2731
+      md5: 8ecf8974a71bb9d8bd738a5a2f721877
+      size: 7578
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
       md5: 98c77834bd5e54c6c3fffcf34dbad53b
@@ -177,16 +177,16 @@ stages:
     outs:
     - path: data/processed/abstracts
       hash: md5
-      md5: bf981cdfc404b5fc25d3a233200868e6.dir
-      size: 288542676
+      md5: 8d661b35650d8379cf4e0a083e96d296.dir
+      size: 288384799
       nfiles: 88
   report_corpus:
     cmd: interpretant report-corpus
     deps:
     - path: data/processed/abstracts
       hash: md5
-      md5: bf981cdfc404b5fc25d3a233200868e6.dir
-      size: 288542676
+      md5: 8d661b35650d8379cf4e0a083e96d296.dir
+      size: 288384799
       nfiles: 88
     - path: data/raw/openalex
       hash: md5
@@ -200,8 +200,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 8a47529324a0af49a1e442c844ef83f6.dir
-      size: 73877
+      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
+      size: 74643
       nfiles: 22
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
@@ -209,8 +209,8 @@ stages:
       size: 8796
     - path: src/interpretant/corpus/repair.py
       hash: md5
-      md5: d0bda3387d369627559d9d65c6b08bfd
-      size: 2731
+      md5: 8ecf8974a71bb9d8bd738a5a2f721877
+      size: 7578
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
       md5: 98c77834bd5e54c6c3fffcf34dbad53b
@@ -266,24 +266,24 @@ stages:
     outs:
     - path: data/processed/corpus_report.md
       hash: md5
-      md5: 88d465a15e597346292a349ef1ba5e7e
-      size: 21239
+      md5: 6308f5c606b3255f93b3c0a00e5606dd
+      size: 20987
     - path: metrics/corpus.json
       hash: md5
-      md5: 3127c8c382083927fcc85d9e17fe7b63
+      md5: c9a218dffc8c4150068c0915245abbd5
       size: 916
   detect_languages:
     cmd: interpretant detect-languages
     deps:
     - path: data/interim/annotations
       hash: md5
-      md5: 5a4eb6aa38215434e5cf30b7749f3e87.dir
-      size: 1111044501
+      md5: f4ea1ac04f04b5d31d1ce8ac2714035a.dir
+      size: 1110989684
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 8a47529324a0af49a1e442c844ef83f6.dir
-      size: 73877
+      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
+      size: 74643
       nfiles: 22
     - path: src/interpretant/corpus/language.py
       hash: md5
@@ -291,8 +291,8 @@ stages:
       size: 9374
     - path: src/interpretant/corpus/repair.py
       hash: md5
-      md5: d0bda3387d369627559d9d65c6b08bfd
-      size: 2731
+      md5: 8ecf8974a71bb9d8bd738a5a2f721877
+      size: 7578
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -363,8 +363,8 @@ stages:
     outs:
     - path: data/interim/sentence_languages
       hash: md5
-      md5: 4ad6c9f3b4c908b51514c3cced63eda4.dir
-      size: 23456058
+      md5: b430d6218036637218c3448843484c3c.dir
+      size: 23448397
       nfiles: 88
   clean_corpus:
     cmd: interpretant clean-corpus
@@ -379,13 +379,13 @@ stages:
       size: 4355
     - path: data/interim/annotations
       hash: md5
-      md5: 5a4eb6aa38215434e5cf30b7749f3e87.dir
-      size: 1111044501
+      md5: f4ea1ac04f04b5d31d1ce8ac2714035a.dir
+      size: 1110989684
       nfiles: 88
     - path: data/interim/sentence_languages
       hash: md5
-      md5: 4ad6c9f3b4c908b51514c3cced63eda4.dir
-      size: 23456058
+      md5: b430d6218036637218c3448843484c3c.dir
+      size: 23448397
       nfiles: 88
     - path: data/raw/openalex
       hash: md5
@@ -399,8 +399,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 8a47529324a0af49a1e442c844ef83f6.dir
-      size: 73877
+      md5: 47ed63c8a8c44e0561e570570a3ea76a.dir
+      size: 74643
       nfiles: 22
     - path: src/interpretant/corpus/language.py
       hash: md5
@@ -412,8 +412,8 @@ stages:
       size: 8700
     - path: src/interpretant/corpus/repair.py
       hash: md5
-      md5: d0bda3387d369627559d9d65c6b08bfd
-      size: 2731
+      md5: 8ecf8974a71bb9d8bd738a5a2f721877
+      size: 7578
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -467,6 +467,6 @@ stages:
     outs:
     - path: data/interim/annotated_abstracts
       hash: md5
-      md5: dc5a6e28016347080b06ec8270b1e0d0.dir
-      size: 282408090
+      md5: f6103e9d348132add2984d3cf6479ae5.dir
+      size: 282245232
       nfiles: 88
