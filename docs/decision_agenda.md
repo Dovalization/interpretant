@@ -610,6 +610,23 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   decade's 25; the detectors' counts under 1% of every decade's records; sentence-break precision
   of at least 98% on the 50. The answers set the order of the cleaning batches (2.3); run 4
   changed only spacing, so they hold for it.
+- **After sign-off: abstracts against full texts** (assumption A6; decided 2026-11-14). Full
+  texts do not become the corpus. Of run 4's kept works, 19–22% per decade before the 2010s have
+  an open copy (42% in the 2010s, 67% in the 2020s), and 2–4% before 2000 carry a licence that
+  allows reuse (CC BY, CC0, public domain); a full-text corpus would change each decade's make-up
+  along the comparison itself, and its extra text would land where the corpus is already largest.
+  The older ones are scans, which OpenAlex's GROBID text does not OCR; the PDFs keep their
+  copyright, and Brazil's copyright law has no text-and-data-mining exception. Mentions within
+  one work are not independent (one sense per discourse: Gale, Church and Yarowsky 1992), so a
+  full text adds less evidence than its length suggests. Two steps instead:
+  1. for a few known-answer words in the 2010s and 2020s, compare what the abstracts show with
+     openly licensed full texts of the same works (OpenAlex's content API, $0.01 a file and 100
+     a day within the free allowance, or the open sets of PubMed Central and arXiv);
+  2. if the full texts show what the abstracts miss (theoretical words above all), add a
+     full-text source for those words in the 2010s–2020s, compared only within itself (one
+     source per word, 4.8).
+
+  The abstracts stay the corpus for the whole timeline.
 
 *Why these numbers:* about 12 abstracts per field could not show "wrong field under 5%" (zero
 problems in 12 still allows about 22%); quality differs strongly by era (in the raw cells 34% of
