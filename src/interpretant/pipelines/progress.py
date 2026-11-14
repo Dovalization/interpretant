@@ -1,8 +1,9 @@
 """How a pipeline reports its progress while it runs, so long commands never go silent.
 
 A pipeline names each stage as it starts, with the number of items when it is known, and
-advances as items finish; the command line draws it (``cli.progress``). Library callers and tests
-pass nothing and get the silent reporter.
+advances as items finish; a resumed stage skips the items an earlier run did, so they move the
+position but not the rate. The command line draws it (``cli.progress``). Library callers and
+tests pass nothing and get the silent reporter.
 """
 
 from __future__ import annotations
@@ -21,6 +22,9 @@ class Progress(Protocol):
     def advance(self, amount: int = 1) -> None:
         """``amount`` more items of the current stage are done."""
 
+    def skip(self, amount: int) -> None:
+        """``amount`` items of the current stage were done by an earlier run."""
+
 
 class SilentProgress:
     """A reporter that ignores everything, for callers with nowhere to show progress."""
@@ -30,6 +34,9 @@ class SilentProgress:
 
     def advance(self, amount: int = 1) -> None:
         """Ignore an advance."""
+
+    def skip(self, amount: int) -> None:
+        """Ignore skipped items."""
 
 
 SILENT = SilentProgress()
@@ -53,6 +60,10 @@ class StageTimer:
     def advance(self, amount: int = 1) -> None:
         """Pass the advance on."""
         self.progress.advance(amount)
+
+    def skip(self, amount: int) -> None:
+        """Pass the skipped items on."""
+        self.progress.skip(amount)
 
     def finish(self) -> list[tuple[str, float]]:
         """Close the last stage's clock and return every stage with its seconds."""

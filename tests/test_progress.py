@@ -46,6 +46,9 @@ class RecordingProgress:
         name, total, done = self.stages[-1]
         self.stages[-1] = (name, total, done + amount)
 
+    def skip(self, amount: int) -> None:
+        self.advance(amount)
+
 
 def log_console() -> tuple[Console, StringIO]:
     output = StringIO()
@@ -82,6 +85,34 @@ def test_live_progress_keeps_a_figure_in_slow_rates(completed: int, rate: str) -
         clock.now = 40
         progress.advance(completed)
     assert f", {rate}, about " in output.getvalue().splitlines()[1]
+
+
+def test_live_progress_leaves_an_earlier_runs_items_out_of_the_rate_in_a_log() -> None:
+    console, output = log_console()
+    clock = Clock()
+    with LiveProgress(console, interval=30, clock=clock) as progress:
+        progress.stage("looking the works up in crossref", total=1000)
+        progress.skip(600)
+        clock.now = 40
+        progress.advance(200)
+        clock.now = 50
+    assert output.getvalue().splitlines()[1:] == [
+        "looking the works up in crossref: 800/1,000 (80.0%), 5.0/s, about 40 s left",
+        "looking the works up in crossref: done (800 items, 600 of them from an earlier run, 50 s)",
+    ]
+
+
+def test_live_progress_leaves_an_earlier_runs_items_out_of_the_rate_in_a_terminal() -> None:
+    output = StringIO()
+    console = Console(file=output, force_terminal=True, width=160)
+    clock = Clock()
+    with LiveProgress(console, clock=clock) as progress:
+        progress.stage("looking the works up", total=1000)
+        progress.skip(600)
+        clock.now = 40
+        progress.advance(200)
+    assert "800/1000" in output.getvalue()
+    assert "5.0/s, about 40 s left" in output.getvalue()
 
 
 def test_live_progress_closes_each_stage_when_the_next_starts() -> None:

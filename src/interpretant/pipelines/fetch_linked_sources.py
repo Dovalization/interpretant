@@ -218,7 +218,7 @@ def fetch_cell_linked_records(
     works = _cell_works(catalog, cell, plan, corrections)
     pending = [work for work in works if work.work_id not in done]
     batches = plan.batch(pending)
-    progress.advance(len(works) - len(pending))
+    progress.skip(len(works) - len(pending))
     missing = 0
     with ThreadPoolExecutor(max_workers=plan.workers) as executor:
         try:

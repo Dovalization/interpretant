@@ -110,7 +110,7 @@ def fetch_cell_metadata(
         pending[start : start + IDS_PER_REQUEST]
         for start in range(0, len(pending), IDS_PER_REQUEST)
     ]
-    progress.advance(len(done))
+    progress.skip(len(done))
     missing = 0
     with ThreadPoolExecutor(max_workers=workers) as executor:
         try:

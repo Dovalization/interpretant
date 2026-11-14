@@ -3,6 +3,9 @@
 rich draws a live bar only in an interactive terminal; when the output goes to a file (a run left
 in the background), it prints the final state alone. So in a file the same figures are printed
 as plain lines: when a stage starts, every ``interval`` seconds while it runs, and when it ends.
+
+The rate and the time left come from the items this run did: a resumed stage's skipped items
+move the position alone, or the rate would count an earlier run's work as done in no time.
 """
 
 from __future__ import annotations
@@ -15,13 +18,15 @@ from rich.progress import (
     BarColumn,
     MofNCompleteColumn,
     Progress,
+    ProgressColumn,
     SpinnerColumn,
+    Task,
     TaskID,
     TaskProgressColumn,
     TextColumn,
     TimeElapsedColumn,
-    TimeRemainingColumn,
 )
+from rich.text import Text
 
 
 class LiveProgress:
@@ -42,6 +47,7 @@ class LiveProgress:
         self.name = ""
         self.total: int | None = None
         self.completed = 0
+        self.skipped = 0
         self.started = 0.0
         self.last_line = 0.0
 
@@ -54,8 +60,9 @@ class LiveProgress:
                 MofNCompleteColumn(),
                 TaskProgressColumn(),
                 TimeElapsedColumn(),
-                TimeRemainingColumn(),
+                _PaceColumn(),
                 console=self.console,
+                get_time=self.clock,
             )
             self.bars.start()
         return self
@@ -69,10 +76,10 @@ class LiveProgress:
     def stage(self, name: str, total: int | None = None) -> None:
         """Close the current stage and start ``name``, with ``total`` items when known."""
         self._finish_stage()
-        self.name, self.total, self.completed = name, total, 0
+        self.name, self.total, self.completed, self.skipped = name, total, 0, 0
         self.started = self.last_line = self.clock()
         if self.bars is not None:
-            self.task = self.bars.add_task(name, total=total)
+            self.task = self.bars.add_task(name, total=total, skipped=0)
             return
         items = f" ({total:,} items)" if total is not None else ""
         self.console.print(f"{name}: started{items}")
@@ -88,6 +95,13 @@ class LiveProgress:
             self.last_line = now
             self.console.print(f"{self.name}: {self._figures(now)}")
 
+    def skip(self, amount: int) -> None:
+        """Count ``amount`` items an earlier run did as done, outside this run's rate."""
+        self.completed += amount
+        self.skipped += amount
+        if self.bars is not None and self.task is not None:
+            self.bars.update(self.task, advance=amount, skipped=self.skipped)
+
     def _finish_stage(self) -> None:
         if not self.name:
             return
@@ -98,20 +112,39 @@ class LiveProgress:
         else:
             elapsed = self.clock() - self.started
             done = f"{self.completed:,} items, " if self.completed else ""
-            self.console.print(f"{self.name}: done ({done}{_duration(elapsed)})")
+            earlier = f"{self.skipped:,} of them from an earlier run, " if self.skipped else ""
+            self.console.print(f"{self.name}: done ({done}{earlier}{_duration(elapsed)})")
         self.name = ""
 
     def _figures(self, now: float) -> str:
-        elapsed = max(now - self.started, 1e-9)
-        rate = self.completed / elapsed
+        remaining = self.total - self.completed if self.total else None
+        pace = _pace(self.completed - self.skipped, now - self.started, remaining)
         if not self.total:
-            return f"{self.completed:,} items, {_rate(rate)}"
-        share = self.completed / self.total
-        left = (self.total - self.completed) / rate if rate else 0.0
-        return (
-            f"{self.completed:,}/{self.total:,} ({share:.1%}), {_rate(rate)}, "
-            f"about {_duration(left)} left"
-        )
+            position = f"{self.completed:,} items"
+        else:
+            share = self.completed / self.total
+            position = f"{self.completed:,}/{self.total:,} ({share:.1%})"
+        return ", ".join(part for part in (position, pace) if part)
+
+
+class _PaceColumn(ProgressColumn):
+    """This run's rate and the time left at it, from the items not skipped."""
+
+    def render(self, task: Task) -> Text:
+        """The task's pace, empty until this run has done an item."""
+        remaining = None if task.finished or task.total is None else task.remaining
+        done = task.completed - task.fields.get("skipped", 0)
+        return Text(_pace(done, task.elapsed or 0.0, remaining), style="progress.remaining")
+
+
+def _pace(done: float, seconds: float, remaining: float | None) -> str:
+    """The rate of ``done`` items in ``seconds`` and, with ``remaining`` items, the time left."""
+    if done <= 0:
+        return ""
+    rate = done / max(seconds, 1e-9)
+    if remaining is None:
+        return _rate(rate)
+    return f"{_rate(rate)}, about {_duration(remaining / rate)} left"
 
 
 def _rate(per_second: float) -> str:
