@@ -224,6 +224,11 @@ views (the full order is in step 9).
   from the 1990s); repository notes (*Contains fulltext: 75022.pdf*; 20). Checked and already
   struck: publisher alerts (*This alert has been successfully added*; 1,902 works, by the
   template rule) and SIAM's copyright line (268).
+- *To decide: the unfinished last sentence of a cut-off record.* 70,276 of run 4's kept works end
+  mid-sentence (the `truncated` flag; 25% of the 1950s, 4.9% of the 2020s), often where the
+  source cut the text at a fixed length. Their sentences up to the last full stop are usable;
+  the fragment after it (*Some months before he had been seen by an*) would give half-sentence
+  usages. Proposed: mark it removed with its own reason, so the contextual view leaves it out.
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
