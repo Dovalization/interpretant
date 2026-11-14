@@ -1,3 +1,8 @@
 # Add patterns of files dvc should ignore, which could improve
 # the performance. Learn more at
 # https://dvc.org/doc/user-guide/dvcignore
+
+# Python's bytecode differs between machines and is rewritten whenever the code runs, so a stage
+# that lists a package folder would look changed for nothing; git ignores it too.
+__pycache__/
+*.pyc
