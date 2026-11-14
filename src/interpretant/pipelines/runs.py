@@ -1,16 +1,18 @@
 """The run log: one record per run of a corpus command (decision agenda, step 9).
 
 DVC's lock file records which data, settings and code produced each output, but not when a run
-took place or how long it took; the run log keeps that. The machine is described by its system,
-architecture and CPU count rather than its name, since the log is committed to a public
-repository.
+took place, how long it took or how much memory it needed; the run log keeps that. The machine is
+described by its system, architecture and CPU count rather than its name, since the log is
+committed to a public repository.
 """
 
 from __future__ import annotations
 
 import os
 import platform
+import resource
 import subprocess
+import sys
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
@@ -41,8 +43,24 @@ def record_run(
         "seconds": round(sum(seconds for _, seconds in stages), 1),
         "stages": [{"name": name, "seconds": round(seconds, 1)} for name, seconds in stages],
         "counts": dict(counts),
+        "peak_memory_mb": peak_memory_mb(),
     }
     return append_run_record(catalog, record)
+
+
+def peak_memory_mb() -> dict[str, float]:
+    """The run's peak resident memory: the main process's, and the largest worker's.
+
+    From ``getrusage``: ``ru_maxrss`` is in kilobytes on Linux and in bytes on macOS, and for
+    the children it is the largest single finished worker, not their sum.
+    """
+    unit = 1 if sys.platform == "darwin" else 1024
+    return {
+        "main": round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * unit / 2**20, 1),
+        "largest_worker": round(
+            resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss * unit / 2**20, 1
+        ),
+    }
 
 
 def checkout_state(root: Path) -> tuple[str | None, bool]:

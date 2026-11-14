@@ -57,6 +57,7 @@ def test_build_corpus_command_runs_after_the_earlier_stages(corpus_catalog_file:
     ]
     assert runs[-1]["counts"] == {"abstracts": 5, "dropped": 3, "parts": 3}
     assert "near-duplicates" in [stage["name"] for stage in runs[-1]["stages"]]
+    assert set(runs[-1]["peak_memory_mb"]) == {"main", "largest_worker"}
 
 
 def test_the_repository_params_file_is_valid_for_the_corpus_rules() -> None:
