@@ -28,6 +28,12 @@ corpus_report:
   path: data/processed/corpus_report.md
   format: markdown
 
+# What changed since an earlier build: outcomes, removals and sentence languages, with samples
+# (interpretant compare-corpus, run by hand after each build).
+corpus_comparison:
+  path: data/processed/corpus_comparison.md
+  format: markdown
+
 # The corpus report's counts as JSON, kept in git so DVC compares them between commits.
 corpus_metrics:
   path: metrics/corpus.json

@@ -6,6 +6,7 @@ step 8.3).
 
 from interpretant.catalog.abstracts import (
     load_abstracts,
+    load_abstracts_from,
     load_annotated_abstracts,
     save_abstracts,
     save_annotated_abstracts,
@@ -35,6 +36,7 @@ from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_
 from interpretant.catalog.reports import (
     append_run_record,
     load_corpus_metrics,
+    save_corpus_comparison,
     save_corpus_metrics,
     save_corpus_report,
 )
@@ -63,6 +65,7 @@ __all__ = [
     "index_work_metadata",
     "list_raw_cells",
     "load_abstracts",
+    "load_abstracts_from",
     "load_annotated_abstracts",
     "load_annotations",
     "load_cleaning_patterns",
@@ -74,6 +77,7 @@ __all__ = [
     "save_abstracts",
     "save_annotated_abstracts",
     "save_annotations",
+    "save_corpus_comparison",
     "save_corpus_metrics",
     "save_corpus_report",
     "save_sentence_languages",

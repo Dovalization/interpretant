@@ -30,6 +30,7 @@ class CatalogConfig(BaseModel):
     annotated_abstracts: DatasetEntry
     abstracts: DatasetEntry
     corpus_report: DatasetEntry
+    corpus_comparison: DatasetEntry
     corpus_metrics: DatasetEntry
     run_log: DatasetEntry
     cleaning_rules: DatasetEntry

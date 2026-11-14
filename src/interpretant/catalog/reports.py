@@ -29,6 +29,11 @@ def load_corpus_metrics(catalog: CatalogConfig) -> dict[str, object]:
     return metrics
 
 
+def save_corpus_comparison(catalog: CatalogConfig, text: str) -> Path:
+    """Write the comparison with an earlier build, replacing the last one."""
+    return _write_whole(catalog.corpus_comparison.path, text)
+
+
 def save_corpus_metrics(catalog: CatalogConfig, metrics: Mapping[str, object]) -> Path:
     """Write the corpus metrics as sorted, indented JSON, so their diffs read line by line."""
     text = json.dumps(metrics, indent=2, sort_keys=True, ensure_ascii=False) + "\n"

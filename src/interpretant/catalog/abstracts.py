@@ -57,9 +57,18 @@ def load_abstracts(catalog: CatalogConfig) -> pl.LazyFrame:
     Raises:
         FileNotFoundError: if no part has been saved yet.
     """
-    parts = sorted(catalog.abstracts.path.glob(f"*{_SUFFIX}"))
+    return load_abstracts_from(catalog.abstracts.path)
+
+
+def load_abstracts_from(folder: Path) -> pl.LazyFrame:
+    """The abstracts table kept in another folder, such as an earlier build set aside.
+
+    Raises:
+        FileNotFoundError: if the folder holds no part.
+    """
+    parts = sorted(folder.glob(f"*{_SUFFIX}"))
     if not parts:
-        raise FileNotFoundError(f"no part of the abstracts table under {catalog.abstracts.path}")
+        raise FileNotFoundError(f"no part of the abstracts table under {folder}")
     table: pl.LazyFrame = ABSTRACTS_SCHEMA.validate(pl.scan_parquet(parts))
     return table
 

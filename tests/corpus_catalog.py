@@ -71,6 +71,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
+        "corpus_comparison:\n  path: corpus_comparison.md\n  format: markdown\n"
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
         "run_log:\n  path: metrics/runs.jsonl\n  format: jsonl\n"
     )

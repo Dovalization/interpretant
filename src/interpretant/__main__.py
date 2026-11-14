@@ -12,6 +12,7 @@ from tqdm import tqdm
 from interpretant.cli.annotate_corpus import annotate_corpus_command
 from interpretant.cli.build_corpus import build_corpus_command
 from interpretant.cli.clean_corpus import clean_corpus_command
+from interpretant.cli.compare_corpus import compare_corpus_command
 from interpretant.cli.detect_languages import detect_languages_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.report_corpus import report_corpus_command
@@ -31,6 +32,7 @@ cli.add_command(detect_languages_command)
 cli.add_command(clean_corpus_command)
 cli.add_command(build_corpus_command)
 cli.add_command(report_corpus_command)
+cli.add_command(compare_corpus_command)
 
 
 # ---------------------------------------------------------------------------

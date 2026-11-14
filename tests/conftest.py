@@ -62,6 +62,7 @@ def catalog_text() -> str:
         "annotations:\n  path: data/annotations\n  format: docbin\n"
         "sentence_languages:\n  path: data/sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: data/corpus_report.md\n  format: markdown\n"
+        "corpus_comparison:\n  path: data/corpus_comparison.md\n  format: markdown\n"
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
         "run_log:\n  path: metrics/runs.jsonl\n  format: jsonl\n"
     )
