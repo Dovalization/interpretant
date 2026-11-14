@@ -9,13 +9,14 @@ import pytest
 
 from interpretant.catalog import LinkedWork, WorkMetadata
 from interpretant.corpus.crossref import (
+    CROSSREF_RECORD_SCHEMA,
     batch_crossref_works,
     build_crossref_works,
     fetch_crossref_records,
     parse_jats_text,
     select_crossref_works,
 )
-from tests.metadata_records import linked_metadata_record, missing_record
+from tests.metadata_records import linked_metadata_record, missing_record, read_records
 
 FETCHED = date(2026, 11, 14)
 
@@ -144,7 +145,7 @@ def test_build_crossref_works_flattens_found_and_missing_records() -> None:
         "missing": True,
         "invalid_doi": True,
     }
-    table = build_crossref_works([found, missing])
+    table = build_crossref_works(read_records([found, missing], CROSSREF_RECORD_SCHEMA))
     first, second = table.to_dicts()
     assert first["doi"] == "10.1002/hbm.24074"
     assert (first["is_found"], first["page_count"], first["published_year"]) == (True, 10, 2018)

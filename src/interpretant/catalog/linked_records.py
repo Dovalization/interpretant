@@ -8,17 +8,17 @@ rerun does not ask for it again (decision agenda 4.8, linked sources).
 
 from __future__ import annotations
 
-import json
-from collections.abc import Callable, Iterable, Iterator, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 from typing import Any, Literal
 
+import polars as pl
 from pydantic import BaseModel, ConfigDict, Field
 
 from interpretant.catalog.config import CatalogConfig
-from interpretant.catalog.json_lines import append_json_lines, read_json_lines
+from interpretant.catalog.json_lines import append_json_lines, read_cell_files, read_json_lines
 from interpretant.catalog.metadata import WorkMetadata
 from interpretant.catalog.raw import RawCell
 
@@ -81,21 +81,15 @@ def fetched_linked_work_ids(
     return {LinkedRecord.model_validate_json(line).work_id for line in read_json_lines(path)}
 
 
-def load_linked_records(
-    catalog: CatalogConfig, cell: RawCell, source: LinkedSource
-) -> Iterator[dict[str, Any]]:
-    """A cell's records from the source as stored, each checked to carry a work id and a date.
+def load_linked_records_table(
+    catalog: CatalogConfig, source: LinkedSource, schema: pl.Schema
+) -> pl.DataFrame:
+    """Every cell's records from the source as one table, read by Polars with the given fields.
 
-    A cell none of whose works the source could be asked about has no file and gives nothing;
-    whether every work that should have a record has one is the reader's check.
+    A work downloaded in several cells has a row per cell; fields a record lacks are null.
     """
-    path = _path(catalog, cell, source)
-    if not path.exists():
-        return
-    for line in read_json_lines(path):
-        record: dict[str, Any] = json.loads(line)
-        LinkedRecord.model_validate(record)
-        yield record
+    entry = catalog.crossref_records if source == "crossref" else catalog.pubmed_records
+    return read_cell_files(entry.path, schema)
 
 
 def append_linked_records(

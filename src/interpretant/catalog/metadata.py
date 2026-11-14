@@ -13,10 +13,11 @@ from collections.abc import Iterable, Iterator, Mapping
 from datetime import date
 from pathlib import Path
 
+import polars as pl
 from pydantic import BaseModel, ConfigDict, Field
 
 from interpretant.catalog.config import CatalogConfig
-from interpretant.catalog.json_lines import append_json_lines, read_json_lines
+from interpretant.catalog.json_lines import append_json_lines, read_cell_files, read_json_lines
 from interpretant.catalog.raw import RawCell
 
 _SUFFIX = ".jsonl.gz"
@@ -93,6 +94,14 @@ def load_work_metadata(catalog: CatalogConfig, cell: RawCell) -> Iterator[WorkMe
     """
     for line in read_json_lines(_path(catalog, cell)):
         yield WorkMetadata.model_validate_json(line)
+
+
+def load_work_metadata_table(catalog: CatalogConfig, schema: pl.Schema) -> pl.DataFrame:
+    """Every cell's metadata records as one table, read by Polars with the given fields.
+
+    A work downloaded in several cells has a row per cell; fields a record lacks are null.
+    """
+    return read_cell_files(catalog.work_metadata.path, schema)
 
 
 def _path(catalog: CatalogConfig, cell: RawCell) -> Path:

@@ -11,6 +11,8 @@ import json
 from collections.abc import Iterable, Iterator, Mapping
 from pathlib import Path
 
+import polars as pl
+
 
 def append_json_lines(path: Path, records: Iterable[Mapping[str, object]]) -> None:
     """Append records to a gzipped JSON Lines file, one gzip member per call."""
@@ -28,3 +30,15 @@ def read_json_lines(path: Path) -> Iterator[str]:
     """
     with gzip.open(path, "rt", encoding="utf-8") as lines:
         yield from lines
+
+
+def read_cell_files(folder: Path, schema: pl.Schema) -> pl.DataFrame:
+    """Every ``<field>/<decade>.jsonl.gz`` file under ``folder`` as one table, with these fields.
+
+    Polars reads the gzipped files directly; fields a record lacks are null, fields the schema
+    does not name are left out. No file gives an empty table.
+    """
+    files = sorted(folder.glob("*/*.jsonl.gz"))
+    if not files:
+        return pl.DataFrame(schema=schema)
+    return pl.read_ndjson(files, schema=schema)

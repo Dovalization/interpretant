@@ -11,12 +11,13 @@ from Bio import Entrez
 
 from interpretant.catalog import LinkedWork, WorkMetadata
 from interpretant.corpus.pubmed import (
+    PUBMED_RECORD_SCHEMA,
     build_pubmed_works,
     fetch_pubmed_records,
     parse_pubmed_articles,
     select_pubmed_works,
 )
-from tests.metadata_records import linked_metadata_record, missing_record
+from tests.metadata_records import linked_metadata_record, missing_record, read_records
 
 FETCHED = date(2026, 11, 14)
 
@@ -146,7 +147,7 @@ def test_build_pubmed_works_joins_a_structured_abstract_and_keeps_the_indexing()
         {"work_id": "https://openalex.org/W2", "identifier": "77", "fetched": "2026-11-14",
          "missing": True},
     ]  # fmt: skip
-    first, second = build_pubmed_works(stored).to_dicts()
+    first, second = build_pubmed_works(read_records(stored, PUBMED_RECORD_SCHEMA)).to_dicts()
     assert first["abstract"] == "BACKGROUND: Rare onset."
     assert first["is_structured_abstract"]
     assert first["publication_types"] == ["Case Reports", "Journal Article"]

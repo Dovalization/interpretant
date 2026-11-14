@@ -31,7 +31,7 @@ def test_count_pages_reads_a_single_range(page: str | None, pages: int | None) -
 
 @pytest.mark.parametrize("issn", ["0018-9340", "0016-934X"], ids=["right", "check digit X"])
 def test_is_valid_issn_accepts_a_right_check_digit(issn: str) -> None:
-    assert is_valid_issn(issn)
+    assert pl.select(is_valid_issn(pl.lit(issn))).item()
 
 
 @pytest.mark.parametrize(
@@ -40,4 +40,4 @@ def test_is_valid_issn_accepts_a_right_check_digit(issn: str) -> None:
     ids=["typo", "wrong check digit", "no hyphen", "letters"],
 )
 def test_is_valid_issn_refuses_a_malformed_issn(issn: str) -> None:
-    assert not is_valid_issn(issn)
+    assert not pl.select(is_valid_issn(pl.lit(issn))).item()

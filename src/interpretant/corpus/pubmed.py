@@ -16,7 +16,6 @@ import polars as pl
 from Bio import Entrez
 
 from interpretant.catalog import (
-    PUBMED_WORKS_COLUMNS,
     LinkedWork,
     WorkMetadata,
     build_linked_record,
@@ -25,6 +24,28 @@ from interpretant.catalog import (
 from interpretant.corpus.bibliographic import count_pages
 
 PMIDS_PER_REQUEST = 200
+_TEXT, _FLAG, _TEXTS = pl.String(), pl.Boolean(), pl.List(pl.String())
+# The fields of a stored PubMed record (as parse_pubmed_articles wrote it) the staging table reads.
+PUBMED_RECORD_SCHEMA = pl.Schema(
+    {
+        "work_id": _TEXT,
+        "identifier": _TEXT,
+        "fetched": _TEXT,
+        "missing": _FLAG,
+        "is_book": _FLAG,
+        "status": _TEXT,
+        "title": _TEXT,
+        "abstract": pl.List(pl.Struct({"label": _TEXT, "text": _TEXT})),
+        "publication_types": _TEXTS,
+        "mesh_headings": pl.List(pl.Struct({"descriptor": _TEXT, "is_major": _FLAG})),
+        "keywords": _TEXTS,
+        "languages": _TEXTS,
+        "pages": _TEXT,
+        "journal": _TEXT,
+        "journal_nlm_id": _TEXT,
+        "comments_corrections": pl.List(pl.Struct({"type": _TEXT})),
+    }
+)
 
 
 def select_pubmed_works(records: Iterable[WorkMetadata]) -> list[LinkedWork]:
@@ -87,17 +108,56 @@ def parse_pubmed_articles(answer: Mapping[str, Any]) -> dict[str, dict[str, Any]
     return articles
 
 
-def build_pubmed_works(records: Iterable[Mapping[str, Any]]) -> pl.DataFrame:
-    """PubMed's staging table: one row per stored record, flattened (decision agenda 4.8).
+def build_pubmed_works(records: pl.DataFrame) -> pl.DataFrame:
+    """PubMed's staging table from stored records read with ``PUBMED_RECORD_SCHEMA``.
 
-    A structured abstract's parts are joined in order, each after its label ("BACKGROUND: ...");
-    the page range also gives its length; MeSH headings keep their descriptors, the major ones
-    also on their own.
+    One row per record (decision agenda 4.8, layers). A structured abstract's parts are joined
+    in order, each after its label ("BACKGROUND: ..."); the page range also gives its length;
+    MeSH headings keep their descriptors, the major ones also on their own; empty text is null.
     """
-    columns = {name: dtype for name, dtype in PUBMED_WORKS_COLUMNS.items() if name != "page_count"}
-    rows = pl.from_dicts([_pubmed_row(record) for record in records], schema=columns)
-    with_pages = rows.with_columns(count_pages("page").alias("page_count"))
-    return with_pages.select(PUBMED_WORKS_COLUMNS.names())
+    part = pl.element().struct
+    heading = pl.element().struct
+    labelled = pl.when(part.field("label") != "").then(
+        part.field("label") + ": " + part.field("text")
+    )
+    return records.select(
+        pl.col("work_id"),
+        pl.col("identifier").alias("pmid"),
+        pl.col("missing").fill_null(value=False).not_().alias("is_found"),
+        pl.col("is_book").fill_null(value=False),
+        _null_if_empty(pl.col("status")).alias("status"),
+        _null_if_empty(pl.col("title")).alias("title"),
+        _empty_if_null(pl.col("publication_types")).alias("publication_types"),
+        _empty_if_null(pl.col("mesh_headings").list.eval(heading.field("descriptor"))).alias(
+            "mesh_descriptors"
+        ),
+        _empty_if_null(
+            pl.col("mesh_headings").list.eval(
+                pl.element().filter(heading.field("is_major")).struct.field("descriptor")
+            )
+        ).alias("mesh_major_descriptors"),
+        _empty_if_null(pl.col("keywords")).alias("keywords"),
+        _empty_if_null(pl.col("languages")).alias("languages"),
+        _null_if_empty(
+            pl.col("abstract").list.eval(labelled.otherwise(part.field("text"))).list.join(" ")
+        ).alias("abstract"),
+        pl.col("abstract")
+        .list.eval(part.field("label") != "")
+        .list.any()
+        .fill_null(value=False)
+        .alias("is_structured_abstract"),
+        _null_if_empty(pl.col("pages")).alias("page"),
+        count_pages("pages").alias("page_count"),
+        _null_if_empty(pl.col("journal")).alias("journal"),
+        _null_if_empty(pl.col("journal_nlm_id")).alias("journal_nlm_id"),
+        _empty_if_null(
+            pl.col("comments_corrections")
+            .list.eval(pl.element().struct.field("type"))
+            .list.unique()
+            .list.sort()
+        ).alias("comment_types"),
+        pl.col("fetched").str.to_date().alias("fetched"),
+    )
 
 
 def _pmid(record: WorkMetadata) -> str:
@@ -143,32 +203,9 @@ def _parse_citation(citation: Any) -> dict[str, Any]:  # noqa: ANN401 (Biopython
     }
 
 
-def _pubmed_row(record: Mapping[str, Any]) -> dict[str, object]:
-    parts = record.get("abstract", [])
-    headings = record.get("mesh_headings", [])
-    comments = record.get("comments_corrections", [])
-    abstract = " ".join(
-        f"{part['label']}: {part['text']}" if part["label"] else part["text"] for part in parts
-    )
-    return {
-        "work_id": record["work_id"],
-        "pmid": str(record["identifier"]),
-        "is_found": not record.get("missing", False),
-        "is_book": bool(record.get("is_book")),
-        "status": record.get("status") or None,
-        "title": record.get("title") or None,
-        "publication_types": record.get("publication_types", []),
-        "mesh_descriptors": [heading["descriptor"] for heading in headings],
-        "mesh_major_descriptors": [
-            heading["descriptor"] for heading in headings if heading["is_major"]
-        ],
-        "keywords": record.get("keywords", []),
-        "languages": record.get("languages", []),
-        "abstract": abstract or None,
-        "is_structured_abstract": any(part["label"] for part in parts),
-        "page": record.get("pages") or None,
-        "journal": record.get("journal") or None,
-        "journal_nlm_id": record.get("journal_nlm_id") or None,
-        "comment_types": sorted({comment["type"] for comment in comments}),
-        "fetched": date.fromisoformat(record["fetched"]),
-    }
+def _null_if_empty(text: pl.Expr) -> pl.Expr:
+    return pl.when(text != "").then(text)
+
+
+def _empty_if_null(texts: pl.Expr) -> pl.Expr:
+    return texts.fill_null(pl.lit([], dtype=_TEXTS))

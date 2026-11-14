@@ -18,6 +18,7 @@ from interpretant.corpus.work_metadata import (
     IDS_PER_REQUEST,
     METADATA_FIELDS,
     NOT_IN_OPENALEX,
+    OPENALEX_METADATA_SCHEMA,
     PARATEXT,
     REPOSITORY_ONLY,
     RETRACTED,
@@ -29,7 +30,7 @@ from interpretant.corpus.work_metadata import (
     mark_metadata_flags,
 )
 from tests.abstracts_tables import abstract_row, abstracts_table
-from tests.metadata_records import FETCHED, metadata_record, missing_record
+from tests.metadata_records import FETCHED, metadata_record, missing_record, read_records
 
 
 class FakeQuery:
@@ -177,7 +178,7 @@ def test_build_openalex_works_normalises_the_identifiers_and_drops_bad_issns() -
                                      "issn_l": "0018-9340", "issn": ["0018-9340", "0016-9340"]}},
     )  # fmt: skip
     rows = build_openalex_works(
-        [WorkMetadata.model_validate(record), WorkMetadata.model_validate(missing_record(2))]
+        read_records([record, missing_record(2)], OPENALEX_METADATA_SCHEMA), {}
     ).to_dicts()
     found, lost = rows
     assert (found["doi"], found["pmid"], found["pmcid"]) == (

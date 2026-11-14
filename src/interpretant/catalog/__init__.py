@@ -34,7 +34,7 @@ from interpretant.catalog.linked_records import (
     append_linked_records,
     build_linked_record,
     fetched_linked_work_ids,
-    load_linked_records,
+    load_linked_records_table,
     select_linked_works,
 )
 from interpretant.catalog.metadata import (
@@ -43,6 +43,7 @@ from interpretant.catalog.metadata import (
     fetched_work_ids,
     index_work_metadata,
     load_work_metadata,
+    load_work_metadata_table,
 )
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
 from interpretant.catalog.reports import (
@@ -103,11 +104,12 @@ __all__ = [
     "load_cleaning_patterns",
     "load_corpus_metrics",
     "load_doi_corrections",
-    "load_linked_records",
+    "load_linked_records_table",
     "load_raw_cell",
     "load_sentence_languages",
     "load_staging_table",
     "load_work_metadata",
+    "load_work_metadata_table",
     "read_catalog",
     "save_abstracts",
     "save_annotated_abstracts",

@@ -8,8 +8,9 @@ the corpus rules read these from Crossref itself.
 
 from __future__ import annotations
 
+import json
 import re
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Iterable, Sequence
 from datetime import date
 from html.parser import HTMLParser
 from typing import Any
@@ -19,7 +20,6 @@ import polars as pl
 from habanero import Crossref
 
 from interpretant.catalog import (
-    CROSSREF_WORKS_COLUMNS,
     LinkedWork,
     WorkMetadata,
     build_linked_record,
@@ -54,6 +54,32 @@ _DOI_PREFIX = "https://doi.org/"
 # Crossref refuses a whole batch if one DOI lacks its form: "10.", a prefix of 4 or more digits, a
 # slash and a suffix. Two works in OpenAlex carry a 3-digit prefix.
 _DOI_FORM = re.compile(r"^10\.\d{4,}(?:\.\d+)*/\S+$")
+_TEXT, _FLAG, _TEXTS = pl.String(), pl.Boolean(), pl.List(pl.String())
+# The fields of a stored Crossref record the staging table reads, as Polars reads them. The
+# relation object is read as its JSON text: its keys are relation types, an open list (39 in the
+# downloads), which an explicit struct would silently cut to the ones it names.
+CROSSREF_RECORD_SCHEMA = pl.Schema(
+    {
+        "work_id": _TEXT,
+        "identifier": _TEXT,
+        "fetched": _TEXT,
+        "missing": _FLAG,
+        "invalid_doi": _FLAG,
+        "type": _TEXT,
+        "title": _TEXTS,
+        "container-title": _TEXTS,
+        "ISSN": _TEXTS,
+        "published": pl.Struct({"date-parts": pl.List(pl.List(pl.Int64()))}),
+        "abstract": _TEXT,
+        "page": _TEXT,
+        "references-count": pl.Int64(),
+        "relation": _TEXT,
+        "update-to": pl.List(pl.Struct({"type": _TEXT})),
+        "updated-by": _TEXT,
+        "license": pl.List(pl.Struct({"URL": _TEXT, "content-version": _TEXT})),
+        "link": pl.List(pl.Struct({"URL": _TEXT, "intended-application": _TEXT})),
+    }
+)
 
 
 def select_crossref_works(records: Iterable[WorkMetadata]) -> list[LinkedWork]:
@@ -108,19 +134,63 @@ def fetch_crossref_records(
     return [_record(work, found, fetched=fetched) for work in works]
 
 
-def build_crossref_works(records: Iterable[Mapping[str, Any]]) -> pl.DataFrame:
-    """Crossref's staging table: one row per stored record, flattened (decision agenda 4.8).
+def build_crossref_works(records: pl.DataFrame) -> pl.DataFrame:
+    """Crossref's staging table from stored records read with ``CROSSREF_RECORD_SCHEMA``.
 
-    The abstract, deposited as JATS markup, becomes plain text without its "Abstract" heading;
-    the page range also gives its length; relations, updates and licences become their types
-    and addresses, with whether the publisher licenses text mining.
+    One row per record (decision agenda 4.8, layers). The abstract, deposited as JATS markup,
+    becomes plain text without its "Abstract" heading and the relation object its types, both
+    through Python's standard library, as Polars parses neither; the page range also gives its
+    length; updates and licences become their types and addresses, with whether the publisher
+    licenses text mining.
     """
-    columns = {
-        name: dtype for name, dtype in CROSSREF_WORKS_COLUMNS.items() if name != "page_count"
-    }
-    rows = pl.from_dicts([_crossref_row(record) for record in records], schema=columns)
-    with_pages = rows.with_columns(count_pages("page").alias("page_count"))
-    return with_pages.select(CROSSREF_WORKS_COLUMNS.names())
+    licences = pl.col("license")
+    links = pl.col("link")
+    return records.select(
+        pl.col("work_id"),
+        pl.col("identifier").str.to_lowercase().alias("doi"),
+        pl.col("missing").fill_null(value=False).not_().alias("is_found"),
+        pl.col("invalid_doi").fill_null(value=False).alias("is_invalid_doi"),
+        pl.col("type").alias("crossref_type"),
+        pl.col("title").list.first().alias("title"),
+        pl.col("container-title").list.first().alias("container_title"),
+        _empty_if_null(
+            pl.col("ISSN").list.eval(pl.element().filter(is_valid_issn(pl.element())))
+        ).alias("issns"),
+        pl.col("published")
+        .struct.field("date-parts")
+        .list.first()
+        .list.first()
+        .alias("published_year"),
+        pl.col("abstract")
+        .map_elements(parse_jats_text, return_dtype=pl.String(), skip_nulls=True)
+        .alias("abstract"),
+        pl.col("page"),
+        count_pages("page").alias("page_count"),
+        pl.col("references-count").alias("references_count"),
+        _empty_if_null(
+            pl.col("relation").map_elements(_relation_types, return_dtype=_TEXTS, skip_nulls=True)
+        ).alias("relation_types"),
+        _empty_if_null(
+            pl.col("update-to")
+            .list.eval(pl.element().struct.field("type"))
+            .list.unique()
+            .list.sort()
+        ).alias("update_types"),
+        pl.col("updated-by").is_not_null().alias("is_updated"),
+        _empty_if_null(licences.list.eval(pl.element().struct.field("URL"))).alias("licence_urls"),
+        licences.list.eval(pl.element().struct.field("content-version") == "tdm")
+        .list.any()
+        .fill_null(value=False)
+        .alias("has_text_mining_licence"),
+        _empty_if_null(
+            links.list.eval(
+                pl.element()
+                .filter(pl.element().struct.field("intended-application") == "text-mining")
+                .struct.field("URL")
+            )
+        ).alias("text_mining_links"),
+        pl.col("fetched").str.to_date().alias("fetched"),
+    )
 
 
 def parse_jats_text(markup: str) -> str:
@@ -171,38 +241,9 @@ class _JATSText(HTMLParser):
             self.parts.append(data)
 
 
-def _crossref_row(record: Mapping[str, Any]) -> dict[str, object]:
-    published = record.get("published", {}).get("date-parts", [[None]])
-    licences = record.get("license", [])
-    abstract = record.get("abstract")
-    return {
-        "work_id": record["work_id"],
-        "doi": str(record["identifier"]).lower(),
-        "is_found": not record.get("missing", False),
-        "is_invalid_doi": bool(record.get("invalid_doi")),
-        "crossref_type": record.get("type"),
-        "title": _first(record.get("title")),
-        "container_title": _first(record.get("container-title")),
-        "issns": [issn for issn in record.get("ISSN", []) if is_valid_issn(issn)],
-        "published_year": published[0][0] if published and published[0] else None,
-        "abstract": parse_jats_text(abstract) if abstract else None,
-        "page": record.get("page"),
-        "references_count": record.get("references-count"),
-        "relation_types": sorted(record.get("relation", {})),
-        "update_types": sorted({update["type"] for update in record.get("update-to", [])}),
-        "is_updated": bool(record.get("updated-by")),
-        "licence_urls": [licence["URL"] for licence in licences],
-        "has_text_mining_licence": any(
-            licence.get("content-version") == "tdm" for licence in licences
-        ),
-        "text_mining_links": [
-            link["URL"]
-            for link in record.get("link", [])
-            if link.get("intended-application") == "text-mining"
-        ],
-        "fetched": date.fromisoformat(record["fetched"]),
-    }
+def _relation_types(relation: str) -> list[str]:
+    return sorted(json.loads(relation))
 
 
-def _first(values: Sequence[str] | None) -> str | None:
-    return values[0] if values else None
+def _empty_if_null(texts: pl.Expr) -> pl.Expr:
+    return texts.fill_null(pl.lit([], dtype=_TEXTS))

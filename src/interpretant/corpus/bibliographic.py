@@ -26,13 +26,13 @@ def count_pages(column: str) -> pl.Expr:
     return pl.when(pages.is_between(1, MAX_PAGES)).then(pages)
 
 
-def is_valid_issn(issn: str) -> bool:
-    """Whether an ISSN has its form (####-###X) and its check digit is right (ISO 3297)."""
-    digits = issn.replace("-", "")
-    if len(issn) != 9 or issn[4] != "-" or not digits[:7].isdigit():
-        return False
-    total = sum(
-        int(digit) * weight for digit, weight in zip(digits[:7], range(8, 1, -1), strict=True)
+def is_valid_issn(issn: pl.Expr) -> pl.Expr:
+    """Whether each ISSN has its form (####-###X) and the right check digit (ISO 3297)."""
+    digits = issn.str.replace("-", "", literal=True)
+    weighted = pl.sum_horizontal(
+        digits.str.slice(position, 1).cast(pl.Int64, strict=False) * (8 - position)
+        for position in range(7)
     )
-    check = (11 - total % 11) % 11
-    return digits[7] == ("X" if check == 10 else str(check))
+    check = (11 - weighted % 11) % 11
+    expected = pl.when(check == 10).then(pl.lit("X")).otherwise(check.cast(pl.String))
+    return issn.str.contains(r"^\d{4}-\d{3}[\dX]$") & (digits.str.slice(7, 1) == expected)

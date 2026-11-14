@@ -15,7 +15,7 @@ from typing import Any
 import polars as pl
 from pyalex import Works, config
 
-from interpretant.catalog import OPENALEX_WORKS_COLUMNS, DOICorrection, WorkMetadata
+from interpretant.catalog import DOICorrection, WorkMetadata
 from interpretant.corpus.bibliographic import is_valid_issn
 from interpretant.corpus.cleaning import add_flag
 
@@ -49,6 +49,30 @@ METADATA_FIELDS = (
 IDS_PER_REQUEST = 100
 REPOSITORY_ONLY = "repository_only"
 _DOI_PREFIX = "https://doi.org/"
+_TEXT, _FLAG, _TEXTS = pl.String(), pl.Boolean(), pl.List(pl.String())
+# The fields of a stored metadata record the staging table reads, as Polars reads them.
+OPENALEX_METADATA_SCHEMA = pl.Schema(
+    {
+        "id": _TEXT,
+        "missing": _FLAG,
+        "doi": _TEXT,
+        "ids": pl.Struct({"pmid": _TEXT, "pmcid": _TEXT}),
+        "title": _TEXT,
+        "type": _TEXT,
+        "publication_date": _TEXT,
+        "language": _TEXT,
+        "primary_location": pl.Struct(
+            {
+                "source": pl.Struct(
+                    {"display_name": _TEXT, "type": _TEXT, "issn_l": _TEXT, "issn": _TEXTS}
+                )
+            }
+        ),
+        "indexed_in": _TEXTS,
+        "is_paratext": _FLAG,
+        "is_retracted": _FLAG,
+    }
+)
 NOT_IN_OPENALEX = "not_in_openalex"
 PARATEXT = "paratext"
 RETRACTED = "retracted"
@@ -105,15 +129,53 @@ def correct_dois(
         yield record if correction is None else record.model_copy(update={"doi": correction.doi})
 
 
-def build_openalex_works(records: Iterable[WorkMetadata]) -> pl.DataFrame:
-    """OpenAlex's staging table: one row per record, flattened (decision agenda 4.8, layers).
+def build_openalex_works(
+    metadata: pl.DataFrame, corrections: Mapping[str, DOICorrection]
+) -> pl.DataFrame:
+    """OpenAlex's staging table from metadata read with ``OPENALEX_METADATA_SCHEMA``.
 
-    DOIs lose their resolver prefix and are lower-cased, as Crossref's table keeps them; PubMed
+    One row per record (decision agenda 4.8, layers), the curated DOI corrections applied. DOIs
+    lose their resolver prefix and are lower-cased, as Crossref's table keeps them; PubMed
     Central ids get the ``PMC`` prefix OpenAlex leaves out; an ISSN that fails its check digit
     is left out (59 in the downloads are typos beside the journal's real ones).
     """
-    return pl.from_dicts(
-        [_openalex_row(record) for record in records], schema=OPENALEX_WORKS_COLUMNS
+    corrected = pl.DataFrame(
+        {
+            "id": list(corrections),
+            "corrected_doi": [correction.doi for correction in corrections.values()],
+        },
+        schema={"id": pl.String(), "corrected_doi": pl.String()},
+    ).with_columns(pl.lit(value=True).alias("is_corrected"))
+    source = pl.col("primary_location").struct.field("source")
+    doi = pl.when(pl.col("is_corrected")).then(pl.col("corrected_doi")).otherwise(pl.col("doi"))
+    normalised_doi = doi.str.strip_prefix(_DOI_PREFIX).str.to_lowercase()
+    pmid = pl.col("ids").struct.field("pmid").str.split("/").list.last()
+    pmcid = pl.col("ids").struct.field("pmcid").str.split("/").list.last().str.strip_prefix("PMC")
+    issn_l = source.struct.field("issn_l")
+    return metadata.join(corrected, on="id", how="left").select(
+        pl.col("id").alias("work_id"),
+        pl.col("missing").fill_null(value=False).alias("is_missing"),
+        pl.when(normalised_doi != "").then(normalised_doi).alias("doi"),
+        pmid.alias("pmid"),
+        pl.when(pmcid.is_not_null()).then("PMC" + pmcid).alias("pmcid"),
+        pl.col("title"),
+        pl.col("type").alias("openalex_type"),
+        pl.col("publication_date")
+        .str.to_date(strict=False)
+        .dt.year()
+        .cast(pl.Int64())
+        .alias("publication_year"),
+        pl.col("language"),
+        source.struct.field("display_name").alias("source_name"),
+        source.struct.field("type").alias("source_type"),
+        pl.when(is_valid_issn(issn_l)).then(issn_l).alias("issn_l"),
+        source.struct.field("issn")
+        .list.eval(pl.element().filter(is_valid_issn(pl.element())))
+        .fill_null(pl.lit([], dtype=_TEXTS))
+        .alias("issns"),
+        pl.col("indexed_in").fill_null(pl.lit([], dtype=_TEXTS)),
+        pl.col("is_paratext").fill_null(value=False),
+        pl.col("is_retracted").fill_null(value=False),
     )
 
 
@@ -141,29 +203,3 @@ def mark_metadata_flags(
     for flag, work_ids in flags.items():
         abstracts = add_flag(abstracts, work_ids, flag=flag)
     return abstracts
-
-
-def _openalex_row(record: WorkMetadata) -> dict[str, object]:
-    location = record.primary_location
-    source = location.source if location and location.source else None
-    issn_l = source.issn_l if source and source.issn_l and is_valid_issn(source.issn_l) else None
-    pmid = record.ids.get("pmid", "").rsplit("/", 1)[-1]
-    pmcid = record.ids.get("pmcid", "").rsplit("/", 1)[-1]
-    return {
-        "work_id": record.work_id,
-        "is_missing": record.missing,
-        "doi": (record.doi or "").removeprefix(_DOI_PREFIX).lower() or None,
-        "pmid": pmid or None,
-        "pmcid": f"PMC{pmcid.removeprefix('PMC')}" if pmcid else None,
-        "title": record.title,
-        "openalex_type": record.type,
-        "publication_year": record.publication_date.year if record.publication_date else None,
-        "language": record.language,
-        "source_name": source.display_name if source else None,
-        "source_type": source.type if source else None,
-        "issn_l": issn_l,
-        "issns": [issn for issn in (source.issn or ()) if is_valid_issn(issn)] if source else [],
-        "indexed_in": list(record.indexed_in),
-        "is_paratext": record.is_paratext,
-        "is_retracted": record.is_retracted,
-    }
