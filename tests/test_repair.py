@@ -48,10 +48,13 @@ def test_repair_text_undoes_extraction_artefacts(raw: str, repaired: str) -> Non
         ("the teaching form;comprehensively", "the teaching form; comprehensively"),
         ("(Ragni, 2005;Ragni, 2007)", "(Ragni, 2005; Ragni, 2007)"),
         ("Objective:To study", "Objective: To study"),
+        ("see www.comphistsem.org).The next", "see www.comphistsem.org). The next"),
+        ("see (www.inamori-f.or.jp.Given) now", "see (www.inamori-f.or.jp. Given) now"),
     ],
     ids=["after a letter", "after a digit", "after a bracket", "closing quote",
          "opening quote", "question mark", "comma", "comma list", "semicolon",
-         "semicolon after a year", "colon before a capital"],
+         "semicolon after a year", "colon before a capital", "web address ending a sentence",
+         "bracketed web address ending a sentence"],
 )  # fmt: skip
 def test_repair_text_spaces_punctuation_glued_to_the_next_word(raw: str, repaired: str) -> None:
     assert repair_text(raw) == repaired
@@ -90,12 +93,14 @@ def test_repair_text_keeps_the_space_where_it_belongs(text: str) -> None:
 @pytest.mark.parametrize(
     "text",
     ["the U.S.Army", "E.coli strains", "a 3.5 mg dose", "three weeks.4 Just prior",
-     "e.g.the model", "see www.Nature.com today", "see (www.inamori-f.or.jp.Given) now",
-     "at http://Wiley.Biolucida.net/Atlas now", "write to J.Smith@uni.edu now",
+     "e.g.the model", "see www.Nature.com today", "at http://Wiley.Biolucida.net/Atlas now",
+     "at TTyler@Garnet.Berkeley.Edu. We", "[http://www.ArsDisputandi.org]",
+     "write to J.Smith@uni.edu now",
      "N,N-dimethyl", "the (i,j)th entry", "a 1,000 sample", "the light:dark cycle",
      "at 10:30 hours", "[!x:Gx]", "the author&rsquo;s view", "Hegelrsquo;s system"],
     ids=["initials", "species", "decimal", "footnote", "lowercase next word", "web address",
-         "bracketed web address", "address with a scheme", "e-mail address",
+         "address with a scheme", "e-mail address with a capitalised domain",
+         "address after www", "e-mail address",
          "comma between single letters", "indices", "thousands", "ratio", "time",
          "colon after one letter", "html entity", "html entity without its ampersand"],
 )  # fmt: skip
