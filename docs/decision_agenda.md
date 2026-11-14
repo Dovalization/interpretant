@@ -553,6 +553,15 @@ other sources, fetched the same way (by hand, once, stored beside each cell, reg
   Scholar's citation contexts (its terms checked first), for 7a.5; ORCID (on 7% of the 1950s'
   kept works, rising to 74% of the 2020s') to check the author ids the author cap relies on;
   DBLP's record types for computer science, AI and HCI.
+- *Identifiers checked* (2026-11-14), every one in the work metadata against its form, ORCIDs
+  and ISSNs also by their check digit: 5 of 532,878 DOIs are wrong at the source, all PubMed
+  records (two carry the prefix typo 10.153 for 10.1053, never registered; three are empty), so
+  `curated/doi_corrections.yaml` corrects them, with the evidence, wherever a DOI is read, and
+  the Crossref lookup sends no DOI without Crossref's form; 59 ISSNs in 58 journals fail their
+  check digit (typos beside the journal's real ISSNs, such as 0016-9340 beside 0018-9340), so
+  the journal lists are matched by ISSNs that pass it and by the linking ISSN; OpenAlex writes
+  PubMed Central ids without their `PMC` prefix, which is added when they are used. Work, author
+  and source ids, PubMed and MAG ids, ORCIDs and 9.1 million references are all well formed.
 - *Not a check:* OpenAlex's own language field calls English 18,437 of the 18,788 works dropped
   as not English, since the cells were selected on it.
 - Crossref and NCBI both ask heavy users for a contact address; which one is used is the
