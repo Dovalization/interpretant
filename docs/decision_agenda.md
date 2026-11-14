@@ -229,6 +229,26 @@ views (the full order is in step 9).
   struck: publisher alerts (*This alert has been successfully added*; 1,902 works, by the
   template rule) and SIAM's copyright line (268). The record-type batch draws on the linked
   sources (4.8): PubMed's publication types, page counts and titles.
+- *The record-type batch (built 2026-11-14; every kind kept until the author decides it after
+  run 3's review).* `curated/record_types.yaml` names eight kinds, what shows each and its
+  action (keep, flag or drop; the kind is the drop reason); `build-corpus` decides each work's
+  kind from the staging tables before the template, near-duplicate and author-cap rules, so a
+  dropped record counts in none of them, and a work showing several kinds takes the first in
+  the file's order. On run 4's 642,024 kept works: errata and correction or retraction notices
+  115; obituaries 634 (0.43% of the 1950s, 0.03% of the 2020s), by a heading or by a name and a
+  life span ending at most two years before publication; book reviews 1,124 (0.44% to 0.02%), by
+  a heading, a review of a named book or author, or a title citing the book's pages or price;
+  news 251; letters 797; editorials 273; comments 521; records of at most two pages 27,499 (7.9%
+  to 1.9%). Title patterns match whole section headings or a heading before a colon, since a
+  heading word that opens a title is often research (*News Coverage of the Gulf Crisis…*,
+  *Letter Cueing in Oral Translation Exercises*); each pattern was checked on samples of the
+  kept titles, and the tests hold the census's examples and its false positives. Crossref's
+  `new_version` and `new_edition` updates (125 works) are not notices, so they are not signals
+  (an earlier count of 160 notices included them; about 35 are notices). PubMed's Letter and
+  Comment also mark research letters and commentaries, so those kinds want the review's eye
+  before they drop anything. The record type is recorded through the drop reason or a flag for
+  now; a column beside each source's values waits for the combined layer (4.8, layers), since
+  the abstracts table's schema is shared with earlier builds that the comparison reads.
 - *To decide: the unfinished last sentence of a cut-off record.* 70,276 of run 4's kept works end
   mid-sentence (the `truncated` flag; 25% of the 1950s, 4.9% of the 2020s), often where the
   source cut the text at a fixed length. Their sentences up to the last full stop are usable;
