@@ -165,7 +165,30 @@ views (the full order is in step 9).
 - *Normalisation of the static view:* accents folded (café → cafe); non-Latin text goes by the
   language check instead of being deleted; digit-only tokens dropped from the static view and
   kept in contextual sentences (*1990s* is not a number to spaCy and stays); hyphenated words kept
-  whole on purpose (*self-organising*, *meta-analysis*), so compounds are handled in 4.2.
+  whole on purpose (*self-organising*, *meta-analysis*), so compounds are handled in 4.2. En
+  dashes between words stay whole in the tokenizer too, since they mostly join two-part compounds
+  (*sleep–wake*, *Mann–Whitney*; about 10,000 in 6,287 of run 2's kept abstracts), and the static
+  view folds the en dash into a hyphen so *human–computer* and *human-computer* are one word
+  (decided 2026-11-13); the stored text keeps the en dash.
+- *After run 2's audit (2026-11-13)*, four audits of the kept abstracts (non-abstract records,
+  damaged text, sentence and token boundaries, language labels) found three kinds of fix:
+  - in the spaCy pass, done before run 3: no sentence start at a lowercase word or after an
+    opening bracket, starts after glued footnote numbers and quotes, dashes between words split,
+    the Unicode hyphens written as `-` in repair;
+  - in the language stage, done before run 3 (2.4);
+  - in the cleaning stage, done in batches after run 3, each a rerun of about 6–7 minutes, record
+    types first because they skew by decade (12.4% of kept 1950s records are not abstracts,
+    against 1.2% of the 2020s): citation stubs the current patterns miss, publisher page text,
+    tables of contents, archive and catalogue items, thesis catalogue lines; then keyword lists,
+    funding, trial-registration and conflict statements, HTML entities; flags for short records
+    with no finite verb, OCR damage and full texts. Book reviews, letters to the editor,
+    obituaries, full texts over 1,000 words and severely OCR-damaged records: the author leans to
+    dropping them, decided in that batch.
+- *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
+  a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
+  records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800),
+  both from a word list counted over the corpus itself, since a rule without one cannot tell
+  *a void* from *avoid*. Until then the affected records are flagged.
 - *Sample audit first:* the old regexes and the new patterns run side by side and must catch the
   same abstracts before the regexes are deleted, apart from deliberate fixes (the exam-spam
   phrases "certification exam", "actual questions" and "exam questions and answers" were left out
@@ -177,14 +200,21 @@ views (the full order is in step 9).
   decide which kinds are dropped (4b).
 
 **2.4 Language.** lingua alone (`lingua-language-detector`, version 2.1.1 installed; version 2.2
-needs Python
-3.12), restricted with `from_languages` to English and the languages found in the corpus. Per
-abstract first; per sentence only for abstracts that come out mixed or uncertain, with
-`detect_multiple_languages_of` (documented as experimental, so validated on the sample), since
-short sentences are where detectors err (lingua's documentation: probabilities from few n-grams
-"are not reliable"). Sentences without letters are not judged. Non-English sentences are marked
-removed; an abstract is dropped when most of it is not English (the share fixed after reading a
-sample). Each sentence's language and confidence are kept (4.6).
+needs Python 3.12), restricted with `from_languages` to English and the languages found in the
+corpus. Per abstract first; per sentence only for abstracts that come out mixed or uncertain,
+since short sentences are where detectors err (lingua's documentation: probabilities from few
+n-grams "are not reliable"). Sentences without letters are not judged. Non-English sentences are
+marked removed. Each sentence's language and confidence are kept (4.6).
+
+*As revised after runs 1 and 2 (2026-11-13):* the candidates are the 19 languages with at least
+0.5% of the sentences of abstracts not confidently English in a 50,000-abstract scan with all 75
+of lingua's languages, Latin excluded (it read English prose and references as Latin);
+`detect_multiple_languages_of` is gone (it read real English as German or French) and mixed
+abstracts are labelled sentence by sentence, a close call involving English being undetermined
+and one between two other languages taking the likelier; in abstracts read as English, sentences
+in another script or long with no English function word are checked on their own; an abstract
+is dropped when fewer than 30 English words are left and the removed other-language text was
+longer than that (params.yaml, provisional).
 
 **2.5 Duplicates.** Near-duplicates (a preprint and its published version; OpenAlex keeps a
 conference paper and its journal version as two works on purpose) by MinHash with `datasketch`,
@@ -262,6 +292,12 @@ were considered and set aside: they return whole noun phrases (*the new transfor
 terms. Phrase targets (*neural network*, *artificial intelligence*) are studied in
 the contextual pipeline through the `PhraseMatcher` (4.2). gensim stays only for skip-gram
 training, if step 6b keeps it.
+
+The review also takes the lemmas of hyphenated words, which spaCy's lemmatizer gets wrong
+because it reads the whole compound as one word: *so-called* → *so-calle*, *well-being* →
+*well-bee*, *self-reported* → *self-reporte* (82 of 397 inflected hyphenated tokens in run 2's
+audit). The fix lemmatises the last segment and rejoins it, as exceptions applied to the cache
+(3.6), so it needs no new spaCy pass (decided 2026-11-13).
 
 **3.6 No second full pass.** The exceptions are applied to the cached documents, not by parsing
 again: spaCy pass → corpus-level rules → the lemma review → exceptions applied to the cache by an
