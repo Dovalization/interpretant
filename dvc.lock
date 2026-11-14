@@ -15,9 +15,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 15edb290f32508590e98e07ddefc6b46.dir
-      size: 92746
-      nfiles: 26
+      md5: da63a754777b8dea6116af2d12ecb86a.dir
+      size: 34238
+      nfiles: 13
     - path: src/interpretant/corpus/annotation.py
       hash: md5
       md5: 45e7e4a6ba0dedbf65ddcc6a5810e996
@@ -98,9 +98,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 15edb290f32508590e98e07ddefc6b46.dir
-      size: 92746
-      nfiles: 26
+      md5: da63a754777b8dea6116af2d12ecb86a.dir
+      size: 34238
+      nfiles: 13
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 6add7e3be20d79882f7c461933d50837
@@ -200,9 +200,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 15edb290f32508590e98e07ddefc6b46.dir
-      size: 92746
-      nfiles: 26
+      md5: da63a754777b8dea6116af2d12ecb86a.dir
+      size: 34238
+      nfiles: 13
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 6add7e3be20d79882f7c461933d50837
@@ -282,9 +282,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 15edb290f32508590e98e07ddefc6b46.dir
-      size: 92746
-      nfiles: 26
+      md5: da63a754777b8dea6116af2d12ecb86a.dir
+      size: 34238
+      nfiles: 13
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -399,9 +399,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 15edb290f32508590e98e07ddefc6b46.dir
-      size: 92746
-      nfiles: 26
+      md5: da63a754777b8dea6116af2d12ecb86a.dir
+      size: 34238
+      nfiles: 13
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
