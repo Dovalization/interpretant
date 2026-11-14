@@ -1,11 +1,13 @@
 """Stage 3 of the run order (decision agenda 9.1): the corpus-level rules over the annotated table.
 
-Reads every part of the selected cells as the spaCy pass left it (``annotate-corpus``), runs the
-corpus-level rules over the whole table at once (template sentences, repeated sentences,
-near-duplicates, the author cap: 2.3, 2.5), flags abstracts for the corpus review from their
-works' OpenAlex metadata and from their text (4b), and saves the abstracts table's parts. The
-rules compare abstracts across the corpus, so this stage always reads every part; it takes
-minutes, so changing a rule's threshold never redoes the pass.
+Reads every part of the selected cells as the spaCy pass left it (``annotate-corpus``), keeps,
+flags or drops each record by its kind from the staging tables (errata, obituaries, book
+reviews and the like, before the other rules count it: 2.3), runs the corpus-level rules over
+the whole table at once (template sentences, repeated sentences, near-duplicates, the author
+cap: 2.3, 2.5), flags abstracts for the corpus review from their works' OpenAlex metadata and
+from their text (4b), and saves the abstracts table's parts. The rules compare abstracts across
+the corpus, so this stage always reads every part; it takes minutes, so changing a rule's
+threshold never redoes the pass.
 """
 
 from __future__ import annotations
@@ -16,8 +18,11 @@ from pydantic_settings import SettingsConfigDict
 
 from interpretant.catalog import (
     CatalogConfig,
+    StagingSource,
     index_work_metadata,
     load_annotated_abstracts,
+    load_record_kinds,
+    load_staging_table,
     save_abstracts,
 )
 from interpretant.corpus.cleaning import (
@@ -27,6 +32,11 @@ from interpretant.corpus.cleaning import (
     mark_truncated,
 )
 from interpretant.corpus.deduplication import mark_near_duplicates
+from interpretant.corpus.record_types import (
+    decide_record_types,
+    join_record_signals,
+    mark_record_types,
+)
 from interpretant.corpus.work_metadata import mark_metadata_flags
 from interpretant.pipelines.corpus import (
     CorpusResult,
@@ -39,6 +49,7 @@ from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 
 _PART = "part"
+_STAGING_SOURCES: tuple[StagingSource, ...] = ("openalex", "crossref", "pubmed")
 
 
 class BuildCorpusSettings(ParamsSettings):
@@ -64,7 +75,8 @@ def build_corpus(
     Raises:
         ValueError: if no raw cell matches the selection, or a cell's metadata has not been
             fetched or is incomplete.
-        FileNotFoundError: naming the parts the spaCy pass has not annotated yet.
+        FileNotFoundError: naming the parts the spaCy pass has not annotated yet, or if the
+            staging tables have not been built.
     """
     cells = corpus_cells(catalog, selection)
     parts = [part_name(cell.field, cell.decade) for cell in cells]
@@ -75,6 +87,13 @@ def build_corpus(
     )
     progress.stage("checking the work metadata")
     metadata = index_work_metadata(load_corpus_metadata(catalog, cells), table["work_id"])
+    progress.stage("record types")
+    kinds = load_record_kinds(catalog)
+    signals = join_record_signals(
+        table,
+        *(load_staging_table(catalog, source).collect() for source in _STAGING_SOURCES),
+    )
+    table = mark_record_types(table, decide_record_types(signals, kinds), kinds)
     progress.stage("template sentences")
     table = mark_template_sentences(table, min_abstracts=settings.template_min_abstracts)
     progress.stage("repeated sentences")

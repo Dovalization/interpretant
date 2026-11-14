@@ -13,6 +13,7 @@ from interpretant.catalog import (
     CleaningPatterns,
     load_cleaning_patterns,
     load_doi_corrections,
+    load_record_kinds,
     read_catalog,
 )
 
@@ -118,3 +119,29 @@ def test_load_doi_corrections_refuses_bad_entries(
     catalog.doi_corrections.path.write_text("corrections:\n" + entries)
     with pytest.raises(pydantic.ValidationError, match=message):
         load_doi_corrections(catalog)
+
+
+def test_load_record_kinds_reads_the_repository_file_in_order_all_kept() -> None:
+    kinds = load_record_kinds(read_catalog())
+    names = list(kinds)
+    assert (names[0], names[-1]) == ("erratum", "short_record")
+    assert {kind.action for kind in kinds.values()} == {"keep"}
+
+
+@pytest.mark.parametrize(
+    ("entry", "message"),
+    [
+        ("letter:\n    action: keep\n", "at least one signal"),
+        ("letter:\n    action: remove\n    max_pages: 2\n", "action"),
+        ("letter:\n    action: keep\n    title_patterns: ['(']\n", "not a valid pattern"),
+        ("Book Review:\n    action: keep\n    max_pages: 2\n", "lower-case words"),
+    ],
+    ids=["a kind without signals", "an unknown action", "a broken pattern", "a malformed name"],
+)
+def test_load_record_kinds_refuses_bad_kinds(
+    catalog: CatalogConfig, entry: str, message: str
+) -> None:
+    catalog.record_types.path.parent.mkdir(parents=True, exist_ok=True)
+    catalog.record_types.path.write_text("kinds:\n  " + entry)
+    with pytest.raises(pydantic.ValidationError, match=message):
+        load_record_kinds(catalog)

@@ -41,6 +41,7 @@ class CatalogConfig(BaseModel):
     cleaning_rules: DatasetEntry
     cleaning_patterns: DatasetEntry
     doi_corrections: DatasetEntry
+    record_types: DatasetEntry
     annotations: DatasetEntry
     sentence_languages: DatasetEntry
 

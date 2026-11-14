@@ -43,7 +43,7 @@ def mark_template_sentences(abstracts: pl.DataFrame, *, min_abstracts: int) -> p
         (pl.col("length").filter("is_template").sum() / pl.col("length").sum()).alias("share")
     )
     mostly_templates = template_shares.filter(pl.col("share") > TEMPLATE_DROP_SHARE)["work_id"]
-    return _mark_dropped(marked, mostly_templates, reason=TEMPLATE)
+    return mark_dropped(marked, mostly_templates, reason=TEMPLATE)
 
 
 def mark_repeated_sentences(abstracts: pl.DataFrame) -> pl.DataFrame:
@@ -83,9 +83,7 @@ def mark_author_cap(abstracts: pl.DataFrame, *, max_share: float, floor: int) ->
     dropped: set[str] = set()
     for cell_works in works_by_cell.values():
         dropped |= _cap_cell(cell_works, authors_by_work, max_share=max_share, floor=floor)
-    return _mark_dropped(
-        abstracts, pl.Series(sorted(dropped), dtype=pl.String()), reason=AUTHOR_CAP
-    )
+    return mark_dropped(abstracts, pl.Series(sorted(dropped), dtype=pl.String()), reason=AUTHOR_CAP)
 
 
 def mark_truncated(abstracts: pl.DataFrame) -> pl.DataFrame:
@@ -114,6 +112,16 @@ def add_flag(abstracts: pl.DataFrame, work_ids: Sequence[str], *, flag: str) -> 
         .then(pl.concat_list("flags", pl.lit(flag)))
         .otherwise(pl.col("flags"))
         .alias("flags")
+    )
+
+
+def mark_dropped(abstracts: pl.DataFrame, work_ids: pl.Series, *, reason: str) -> pl.DataFrame:
+    """Set ``reason`` as the dropped reason of the given works not already dropped."""
+    return abstracts.with_columns(
+        pl.when(pl.col("dropped_reason").is_null() & pl.col("work_id").is_in(work_ids.implode()))
+        .then(pl.lit(reason))
+        .otherwise(pl.col("dropped_reason"))
+        .alias("dropped_reason")
     )
 
 
@@ -189,16 +197,6 @@ def _add_removals(abstracts: pl.DataFrame, ranges: pl.DataFrame, *, reason: str)
             .alias("removals")
         )
         .drop("added")
-    )
-
-
-def _mark_dropped(abstracts: pl.DataFrame, work_ids: pl.Series, *, reason: str) -> pl.DataFrame:
-    """Set ``reason`` as the dropped reason of the given works not already dropped."""
-    return abstracts.with_columns(
-        pl.when(pl.col("dropped_reason").is_null() & pl.col("work_id").is_in(work_ids.implode()))
-        .then(pl.lit(reason))
-        .otherwise(pl.col("dropped_reason"))
-        .alias("dropped_reason")
     )
 
 

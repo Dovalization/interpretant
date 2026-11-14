@@ -115,6 +115,7 @@ stages:
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/deduplication.py
       - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/record_types.py
       - src/interpretant/corpus/removals.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/work_metadata.py
@@ -123,9 +124,13 @@ stages:
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
+      - ${record_types.path}
       - ${annotated_abstracts.path}
       - ${raw_abstracts.path}
       - ${work_metadata.path}
+      - ${openalex_works.path}
+      - ${crossref_works.path}
+      - ${pubmed_works.path}
     params:
       - corpus
       - build_corpus

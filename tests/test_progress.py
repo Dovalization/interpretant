@@ -12,6 +12,7 @@ from interpretant.catalog import read_catalog
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
+from interpretant.pipelines.build_linked_tables import build_linked_tables
 from interpretant.pipelines.clean_corpus import clean_corpus
 from interpretant.pipelines.detect_languages import detect_languages
 from interpretant.pipelines.progress import StageTimer
@@ -160,6 +161,7 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
     corpus_catalog_file: Path,
 ) -> None:
     catalog = read_catalog(corpus_catalog_file)
+    build_linked_tables(catalog)
     annotated = RecordingProgress()
     annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS, progress=annotated)
     assert annotated.stages[-1] == ("spaCy pass", 4, 4)
@@ -174,6 +176,7 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
     assert [name for name, _, _ in built.stages] == [
         "loading the annotated parts",
         "checking the work metadata",
+        "record types",
         "template sentences",
         "repeated sentences",
         "near-duplicates",

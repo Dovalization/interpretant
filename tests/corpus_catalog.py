@@ -14,6 +14,7 @@ from pathlib import Path
 
 from interpretant.catalog import CatalogConfig, RawCell, append_work_metadata, read_catalog
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
+from interpretant.pipelines.build_linked_tables import build_linked_tables
 from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus
 from interpretant.pipelines.corpus import CorpusResult
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
@@ -50,8 +51,9 @@ CLEAN_SETTINGS = CleanCorpusSettings()
 def prepare_annotated_corpus(
     catalog: CatalogConfig, selection: CorpusSelection = SELECTION
 ) -> CorpusResult:
-    """Run the three stages before the corpus-level rules, as ``dvc repro`` does: the spaCy
-    pass, the sentence languages and the cleaning; return the cleaning's result."""
+    """Run the stages before the corpus-level rules, as ``dvc repro`` does: the staging tables,
+    the spaCy pass, the sentence languages and the cleaning; return the cleaning's result."""
+    build_linked_tables(catalog)
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
     detect_languages(catalog, selection, LANGUAGE_SETTINGS)
     return clean_corpus(catalog, selection, CLEAN_SETTINGS)
@@ -74,6 +76,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"cleaning_rules:\n  path: '{repository.cleaning_rules.path}'\n  format: yaml\n"
         f"cleaning_patterns:\n  path: '{repository.cleaning_patterns.path}'\n  format: jsonl\n"
         f"doi_corrections:\n  path: '{repository.doi_corrections.path}'\n  format: yaml\n"
+        f"record_types:\n  path: '{repository.record_types.path}'\n  format: yaml\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"

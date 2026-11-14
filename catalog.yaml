@@ -81,6 +81,11 @@ doi_corrections:
   path: curated/doi_corrections.yaml
   format: yaml
 
+# The kinds of record that are not a work's own abstract, what shows each, and what is done.
+record_types:
+  path: curated/record_types.yaml
+  format: yaml
+
 annotations:
   path: data/interim/annotations
   format: docbin

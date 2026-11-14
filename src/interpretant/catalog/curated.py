@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any, Literal
 
+import polars as pl
 import srsly
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -12,6 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 from interpretant.catalog.config import CatalogConfig
 
 Scope = Literal["tokens", "rest_of_sentence", "abstract"]
+RecordAction = Literal["keep", "flag", "drop"]
 # The pattern id that makes a match count only when it begins the abstract.
 START_ID = "start"
 
@@ -110,3 +112,75 @@ def load_doi_corrections(catalog: CatalogConfig) -> dict[str, DOICorrection]:
     document = yaml.safe_load(catalog.doi_corrections.path.read_text(encoding="utf-8"))
     corrections = DOICorrections.model_validate(document).corrections
     return {correction.work_id: correction for correction in corrections}
+
+
+class RecordKind(BaseModel):
+    """A kind of record that is not a work's own abstract: what shows it, and what is done.
+
+    A record shows the kind when any one signal is present: an OpenAlex type, a Crossref update
+    type (the record is itself a notice about another), a PubMed publication type, a title
+    pattern (case-insensitive, Polars' regular expressions), a title made of a name and a life
+    span ending at most ``life_span_within_years`` before publication, or at most ``max_pages``
+    pages.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    action: RecordAction
+    openalex_types: frozenset[str] = frozenset()
+    crossref_update_types: frozenset[str] = frozenset()
+    pubmed_types: frozenset[str] = frozenset()
+    title_patterns: tuple[str, ...] = ()
+    life_span_within_years: int | None = Field(default=None, ge=0)
+    max_pages: int | None = Field(default=None, ge=1)
+
+    @field_validator("title_patterns")
+    @classmethod
+    def _patterns_are_regular_expressions(cls, patterns: tuple[str, ...]) -> tuple[str, ...]:
+        for pattern in patterns:
+            try:
+                pl.select(pl.lit("").str.contains(pattern))
+            except pl.exceptions.ComputeError as exc:
+                raise ValueError(f"title pattern {pattern!r} is not a valid pattern") from exc
+        return patterns
+
+    @model_validator(mode="after")
+    def _has_a_signal(self) -> RecordKind:
+        signals = (
+            self.openalex_types,
+            self.crossref_update_types,
+            self.pubmed_types,
+            self.title_patterns,
+        )
+        lengths = (self.life_span_within_years, self.max_pages)
+        if not any(signals) and all(length is None for length in lengths):
+            raise ValueError("a record kind needs at least one signal")
+        return self
+
+
+class RecordKinds(BaseModel):
+    """The record kinds file, in order: a record showing several kinds takes the first."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    kinds: dict[str, RecordKind] = Field(min_length=1)
+
+    @field_validator("kinds")
+    @classmethod
+    def _names_are_reasons(cls, kinds: dict[str, RecordKind]) -> dict[str, RecordKind]:
+        malformed = sorted(name for name in kinds if not re.fullmatch(r"[a-z]+(?:_[a-z]+)*", name))
+        if malformed:
+            raise ValueError(f"kind names must be lower-case words joined by _: {malformed}")
+        return kinds
+
+
+def load_record_kinds(catalog: CatalogConfig) -> dict[str, RecordKind]:
+    """The record kinds by name, in the file's order (decision agenda 2.3, record types).
+
+    Raises:
+        FileNotFoundError: if the record kinds file does not exist.
+        pydantic.ValidationError: if a kind has no signal, an unknown action or field, a title
+            pattern Polars cannot read, or a name that cannot serve as a drop reason.
+    """
+    document = yaml.safe_load(catalog.record_types.path.read_text(encoding="utf-8"))
+    return dict(RecordKinds.model_validate(document).kinds)

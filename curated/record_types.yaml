@@ -1,0 +1,111 @@
+# The kinds of record that are not a work's own abstract, what shows each, and what is done with
+# it (decision agenda 2.3, the record-type batch). Read by build-corpus before the corpus-level
+# rules, so a dropped record counts in none of them. Runs never write here.
+#
+# A record shows a kind when any one of its signals is present; a record showing several kinds
+# takes the first in this file's order. The signals come from the staging tables: OpenAlex's
+# type and title, Crossref's update types (the record is itself a notice about another record),
+# PubMed's publication types and the page count (Crossref's page range, PubMed's otherwise).
+# Title patterns are case-insensitive regular expressions in Polars' syntax; (?-i:...) makes a
+# part case-sensitive. They match whole section headings ("Letters", "Errata") or a heading
+# before a colon, since a heading word at the start of a title is often research ("News
+# Coverage of the Gulf Crisis...", "Letter Cueing in Oral Translation Exercises", "Review of
+# the literature on...").
+#
+# action: keep (counted, nothing changes), flag (left to the review) or drop (the kind's name
+# is the drop reason). Every kind is kept until the author decides it after run 3's review.
+#
+# Never grounds by themselves (the author, 2026-11-14): dissertations, theses, monographs and
+# historical articles count as the work's own writing, so OpenAlex's and Crossref's
+# `dissertation`, Crossref's `monograph` and PubMed's Historical Article and Academic
+# Dissertation are not signals. Neither is PubMed's Biography: 2,436 of its 2,791 kept records
+# are also historical articles, mixing obituaries with history ("S. S. Stevens: his impact on
+# physiology"); obituaries are found by their titles instead.
+
+kinds:
+  # Notices correcting or retracting another record. Crossref's new_version and new_edition
+  # updates (125 kept records) are not notices; addenda are left out, since the authors' own
+  # additions and research use the word ("Addenda to Newman's Hausa and Chadic bibliography").
+  erratum:
+    action: keep
+    openalex_types: [erratum, retraction]
+    crossref_update_types: [correction, erratum, corrigendum, retraction, partial_retraction,
+      withdrawal, expression_of_concern, clarification, removal]
+    pubmed_types: [Published Erratum, Retraction Notice, Retraction of Publication,
+      Expression of Concern]
+    title_patterns:
+      - '^\s*(errata|erratum|corrigend(a|um)|corrections?|correction notice|retraction( notice)?|notice of retraction|expression of concern)\s*[.:;,—–-]?\s*$'
+      - '^\s*(errat(a|um)|corrigend(a|um)|correction|retraction|notice of retraction|expression of concern)\s*(to\b|:)'
+
+  # Obituaries and necrologies: a section heading, or a name and a life span ending at most two
+  # years before publication ("GEORGE ROSEN (1910–1977)", "Charles Donald O'Malley. 1 April
+  # 1907–7 April 1970"). A span after a phrase is a history period ("Canada's Immigration
+  # Policy, 1957-1962") and is not taken.
+  obituary:
+    action: keep
+    life_span_within_years: 2
+    title_patterns:
+      - '^\s*(obituar(y|ies)|necrology|necrologies|in memoriam)\s*[.:;,—–-]?\s*$'
+      - '^\s*(obituar(y|ies)|in memoriam|necrology)\s*[:.—–-]'
+
+  # Book reviews: a section heading, a review of a named book or author ("Review of Dahl (1985):
+  # Tense and Aspect Systems"), or a title citing the book with its pages or price ("THE
+  # JUVENILE IN DELINQUENT SOCIETY. By Milton L. Barron. New York: Alfred A. Knopf, 1954. 349
+  # pp. $5.00"). Lower-case "pp." is left out: it cites an article's pages in comments.
+  book_review:
+    action: keep
+    title_patterns:
+      - '^\s*(book reviews?|reviews? of books|reviews|books? received|new books|book notes?|books|short notices|briefly noted)\s*[.:;,—–-]?\s*$'
+      - '^\s*(book reviews?|reviews? of books)\s*:'
+      - '^\s*review of\s*:'
+      - '^\s*review of\b[^:]*\(\d{4}(/\d{4})?\)'
+      - '^\s*review of\b.*(?-i:\bby\s+[A-Z])'
+      - '^\s*review of\s+(?-i:[A-Z][a-z]+\s+[A-Z][a-z]+,|[A-Z]\.\s?(?:[A-Z]\.\s?)?[A-Z][a-z]+,)'
+      - '^\s*review\b.*\(eds?\.\)'
+      - '\b\d+\s*pp\b'
+      - '(?-i:\bPp\.\s*[ivxlcIVXLC0-9])'
+      - '\$\s?\d+(\.\d\d)?\s*\.?\s*$'
+      - '\b\d{1,2}s\.(\s*\d{1,2}d\.)?\s*$'
+      - '(?-i:\.\s+By\s+[A-Z][^.]*\.\s+[A-Z][a-z]+[^.]*:\s)'
+
+  # News sections and news items.
+  news:
+    action: keep
+    pubmed_types: [News, Newspaper Article]
+    title_patterns:
+      - '^\s*(news|news (in brief|briefs?|notes|and notes|and views|and comments?|& comments?|and events)|notes and news|notes & news|newsletter)\s*[.:;,—–-]?\s*$'
+      - '^\s*news\s*:\s*(?-i:[A-Z])'
+
+  # Letters: to the editor, and archive letters ("Letter from Dr. Koch to FA Davis Company",
+  # "LETTER XXIV. Newton to Cotes, June 7, 1711").
+  letter:
+    action: keep
+    openalex_types: [letter]
+    pubmed_types: [Letter]
+    title_patterns:
+      - '^\s*(letters?|letters? to the editors?|correspondence|readers''?\s*letters)\s*[.:;,—–-]?\s*$'
+      - '^\s*(letters? to the editors?|correspondence)\s*:'
+      - '^\s*letter (from|to)\b'
+      - '^\s*letter\s+([ivxlc]+|\d+)\b'
+
+  # Editorials and editors' notes.
+  editorial:
+    action: keep
+    openalex_types: [editorial]
+    pubmed_types: [Editorial]
+    title_patterns:
+      - '^\s*(editorial|guest editorial|editorial note|editor''?s''? note|editorial comment|from the editors?|editor''?s''? introduction|editor''?s''? preface)\s*[.:;,—–-]?\s*$'
+      - '^\s*(editorial|guest editorial)\s*:'
+
+  # Comments on another record, replies and discussions.
+  comment:
+    action: keep
+    pubmed_types: [Comment]
+    title_patterns:
+      - '^\s*(comments?|reply|replies|rejoinder|response|authors?''?\s*reply|discussion)\s*[.:;,—–-]?\s*$'
+
+  # Records of at most two pages: research notes as well as short items, so the review's
+  # verdicts on short records decide whether length alone is grounds.
+  short_record:
+    action: keep
+    max_pages: 2

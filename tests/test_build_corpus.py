@@ -41,6 +41,7 @@ def test_build_corpus_command_runs_after_the_earlier_stages(corpus_catalog_file:
     catalog_option = ["--catalog", str(corpus_catalog_file)]
     runner = CliRunner()
     for command, options in (
+        ("build-linked-tables", []),
         ("annotate-corpus", ["--process-count", "1"]),
         ("detect-languages", []),
         ("clean-corpus", ["--process-count", "1"]),
@@ -54,6 +55,7 @@ def test_build_corpus_command_runs_after_the_earlier_stages(corpus_catalog_file:
     run_log = read_catalog(corpus_catalog_file).run_log.path.read_text().splitlines()
     runs = [json.loads(line) for line in run_log]
     assert [run["command"] for run in runs] == [
+        "build-linked-tables",
         "annotate-corpus",
         "detect-languages",
         "clean-corpus",
