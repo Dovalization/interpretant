@@ -3,7 +3,8 @@
 The decision agenda, step 2.4: lingua alone, restricted to English and the languages found in the
 corpus (scripts/evidence/language_scan.py); per abstract first, per sentence only for abstracts
 not confidently English. It runs as its own stage on the documents in the annotation cache, so a
-change to its settings reruns neither the spaCy models nor anything but the later stages.
+change to its settings reruns neither the spaCy models nor anything but the later stages, and
+reads them in batches with lingua's multi-threaded methods.
 """
 
 from __future__ import annotations
@@ -14,7 +15,7 @@ from dataclasses import dataclass
 
 from lingua import ConfidenceValue, IsoCode639_1, LanguageDetector, LanguageDetectorBuilder
 from lingua import Language as LinguaLanguage
-from spacy.tokens import Doc, Span
+from spacy.tokens import Doc
 
 ENGLISH = "en"
 # ISO 639-2's code for an undetermined language: a sentence with no letters, or no verdict.
@@ -101,7 +102,7 @@ def build_language_detector(
         ValueError: if English is missing or a code is not an ISO 639-1 code lingua knows.
     """
     return (
-        LanguageDetectorBuilder.from_languages(*_lingua_languages(languages))
+        LanguageDetectorBuilder.from_iso_codes_639_1(*_iso_codes(languages))
         .with_minimum_relative_distance(minimum_relative_distance)
         .with_preloaded_language_models()
         .build()
@@ -109,9 +110,9 @@ def build_language_detector(
 
 
 def detect_sentence_languages(
-    doc: Doc, detector: LanguageDetector, *, english_threshold: float
-) -> list[SentenceLanguage]:
-    """Each sentence's language and lingua's confidence in it, in order.
+    docs: Sequence[Doc], detector: LanguageDetector, *, english_threshold: float
+) -> list[list[SentenceLanguage]]:
+    """Each document's sentence languages, with lingua's confidence in each, in order.
 
     When lingua gives English at least ``english_threshold`` confidence for the whole abstract,
     every sentence with letters takes that verdict, except a sentence worth checking (mostly in
@@ -125,27 +126,90 @@ def detect_sentence_languages(
     2026-11-13 lingua's experimental detection of several languages in one text split such
     abstracts; the corpus audit found it read real English as German or French, decision agenda
     2.4.)
+
+    The documents are read together with lingua's multi-threaded methods, which use every core
+    with one copy of the language models (lingua's documentation).
     """
-    whole = _top_language(detector.compute_language_confidence_values(doc.text))
-    is_english = whole.language == ENGLISH and whole.confidence >= english_threshold
-    return [
-        _sentence_language(sentence, whole if is_english else None, detector)
-        for sentence in doc.sents
+    wholes = [
+        _top_language(values)
+        for values in detector.compute_language_confidence_values_in_parallel(
+            [doc.text for doc in docs]
+        )
     ]
+    labels: list[list[SentenceLanguage]] = []
+    checks: list[tuple[int, int, str, bool]] = []
+    for doc_index, (doc, whole) in enumerate(zip(docs, wholes, strict=True)):
+        is_english = whole.language == ENGLISH and whole.confidence >= english_threshold
+        row: list[SentenceLanguage] = []
+        for sentence_index, sentence in enumerate(doc.sents):
+            text = sentence.text
+            if not _LETTER.search(text):
+                row.append(_NO_LANGUAGE)
+                continue
+            row.append(whole if is_english else _NO_LANGUAGE)
+            if not is_english or _is_worth_checking(text):
+                checks.append((doc_index, sentence_index, text, is_english))
+        labels.append(row)
+    detected = _detect_texts([text for _, _, text, _ in checks], detector)
+    for (doc_index, sentence_index, text, in_english), language in zip(
+        checks, detected, strict=True
+    ):
+        if in_english and not _is_foreign_in_english(text, language):
+            continue
+        labels[doc_index][sentence_index] = language
+    return labels
 
 
-def _lingua_languages(codes: Sequence[str]) -> list[LinguaLanguage]:
-    """The lingua languages for ISO 639-1 codes, which must include English."""
+def _detect_texts(texts: list[str], detector: LanguageDetector) -> list[SentenceLanguage]:
+    """Each text's language and lingua's confidence in it; close calls as the docstring above."""
+    results = [_NO_LANGUAGE] * len(texts)
+    found_by_code: dict[str, tuple[LinguaLanguage, list[int]]] = {}
+    undecided: list[int] = []
+    for index, language in enumerate(detector.detect_languages_in_parallel_of(texts)):
+        if language is None:
+            undecided.append(index)
+            continue
+        found_by_code.setdefault(_code(language), (language, []))[1].append(index)
+    for language, indexes in found_by_code.values():
+        confidences = detector.compute_language_confidence_in_parallel(
+            [texts[index] for index in indexes], language
+        )
+        for index, confidence in zip(indexes, confidences, strict=True):
+            results[index] = _sentence_language_of(language, confidence)
+    close_calls = detector.compute_language_confidence_values_in_parallel(
+        [texts[index] for index in undecided]
+    )
+    for index, values in zip(undecided, close_calls, strict=True):
+        results[index] = _close_call(values)
+    return results
+
+
+def _close_call(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
+    if len(values) < 2 or ENGLISH in (_code(values[0].language), _code(values[1].language)):
+        return _NO_LANGUAGE
+    return _sentence_language_of(values[0].language, values[0].value)
+
+
+def _is_foreign_in_english(text: str, language: SentenceLanguage) -> bool:
+    return language.language not in (ENGLISH, UNDETERMINED) and (
+        _is_mostly_non_latin(text) or language.confidence >= FOREIGN_CONFIDENCE
+    )
+
+
+def _iso_codes(codes: Sequence[str]) -> list[IsoCode639_1]:
+    """Lingua's ISO 639-1 codes for the given ones, which must include English."""
     unique_codes = sorted({code.lower() for code in codes})
     if ENGLISH not in unique_codes:
         raise ValueError("the language detector must include English")
-    unknown = [code for code in unique_codes if not hasattr(IsoCode639_1, code.upper())]
+    known, unknown = [], []
+    for code in unique_codes:
+        try:
+            known.append(IsoCode639_1.from_str(code))
+        except ValueError:
+            unknown.append(code)
     if unknown:
         raise ValueError(f"not ISO 639-1 codes lingua knows: {unknown}")
-    return [
-        LinguaLanguage.from_iso_code_639_1(getattr(IsoCode639_1, code.upper()))
-        for code in unique_codes
-    ]
+    return known
 
 
 def _top_language(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
@@ -157,33 +221,6 @@ def _top_language(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
 
 def _sentence_language_of(language: LinguaLanguage, confidence: float) -> SentenceLanguage:
     return SentenceLanguage(_code(language), round(confidence, CONFIDENCE_DECIMALS))
-
-
-def _sentence_language(
-    sentence: Span, whole_english: SentenceLanguage | None, detector: LanguageDetector
-) -> SentenceLanguage:
-    text = sentence.text
-    if not _LETTER.search(text):
-        return _NO_LANGUAGE
-    if whole_english is None:
-        return _detect(text, detector)
-    if not _is_worth_checking(text):
-        return whole_english
-    found = _detect(text, detector)
-    is_foreign = found.language not in (ENGLISH, UNDETERMINED) and (
-        _is_mostly_non_latin(text) or found.confidence >= FOREIGN_CONFIDENCE
-    )
-    return found if is_foreign else whole_english
-
-
-def _detect(text: str, detector: LanguageDetector) -> SentenceLanguage:
-    found = detector.detect_language_of(text)
-    if found is not None:
-        return _sentence_language_of(found, detector.compute_language_confidence(text, found))
-    values = detector.compute_language_confidence_values(text)
-    if len(values) < 2 or ENGLISH in (_code(values[0].language), _code(values[1].language)):
-        return _NO_LANGUAGE
-    return _sentence_language_of(values[0].language, values[0].value)
 
 
 def _is_worth_checking(text: str) -> bool:

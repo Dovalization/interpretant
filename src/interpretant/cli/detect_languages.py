@@ -8,7 +8,6 @@ import click
 from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
-from interpretant.cli.options import default_process_count, process_count_option
 from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_language_result
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
@@ -26,11 +25,11 @@ from interpretant.pipelines.runs import record_run
     show_default=True,
     help="The catalog file naming the inputs and outputs.",
 )
-@process_count_option
-def detect_languages_command(catalog_file: Path, process_count: int | None) -> None:
+def detect_languages_command(catalog_file: Path) -> None:
     """Detect each cached sentence's language with the settings in params.yaml.
 
-    Progress is shown live: a bar in a terminal, a line every half minute in a log file.
+    lingua uses every core. Progress is shown live: a bar in a terminal, a line every half minute
+    in a log file.
     """
     console = Console()
     catalog = read_catalog(catalog_file)
@@ -40,7 +39,6 @@ def detect_languages_command(catalog_file: Path, process_count: int | None) -> N
             catalog,
             CorpusSelection(),
             DetectLanguagesSettings(),
-            process_count=process_count or default_process_count(),
             progress=timer,
         )
     counts = {"abstracts": result.abstract_count, "sentences": sum(result.sentence_counts.values())}

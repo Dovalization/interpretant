@@ -51,7 +51,6 @@ stages:
       - src/interpretant/pipelines/detect_languages.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
-      - src/interpretant/pipelines/workers.py
       - ${annotations.path}
     params:
       - corpus

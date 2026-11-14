@@ -40,8 +40,12 @@ def test_build_corpus_names_the_parts_not_yet_annotated(corpus_catalog_file: Pat
 def test_build_corpus_command_runs_after_the_earlier_stages(corpus_catalog_file: Path) -> None:
     catalog_option = ["--catalog", str(corpus_catalog_file)]
     runner = CliRunner()
-    for command in ("annotate-corpus", "detect-languages", "clean-corpus"):
-        earlier = runner.invoke(cli, [command, *catalog_option, "--process-count", "1"])
+    for command, options in (
+        ("annotate-corpus", ["--process-count", "1"]),
+        ("detect-languages", []),
+        ("clean-corpus", ["--process-count", "1"]),
+    ):
+        earlier = runner.invoke(cli, [command, *catalog_option, *options])
         assert earlier.exit_code == 0, earlier.output
     built = runner.invoke(cli, ["build-corpus", *catalog_option])
     assert built.exit_code == 0, built.output

@@ -1233,9 +1233,11 @@ blank English pipeline, the removal ranges and keeping rules, the annotated tabl
 bazzite: lingua is 10% of the pass (about 1.2 minutes over 10 processes as its own stage), and
 the patterns and keeping rules run at 725 cached documents a second in one process (about 1.6
 minutes over 10). A pattern or threshold change now reruns about 6–7 minutes of stages instead
-of 30, a language setting about 8. The two later stages run their parts in worker processes
-started with `spawn`, as Polars' documentation requires; the spaCy pass still forks its workers
-through spaCy, which works but is the case that documentation warns about, to be measured. The
+of 30, a language setting about 8. The language stage reads each part with lingua's
+multi-threaded methods (one copy of the models, every core); the cleaning stage runs its parts in
+worker processes started with `spawn`, as Polars' documentation requires; the spaCy pass still
+forks its workers through spaCy, which works but is the case that documentation warns about, to
+be measured. The
 run log records each run's peak memory (main process and largest worker, from `getrusage`). A
 catalog change that cannot affect a stage's outputs is recorded with `dvc commit <stage>`.
 

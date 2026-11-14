@@ -118,7 +118,7 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
     assert annotated.stages[-1] == ("spaCy pass", 4, 4)
     detected = RecordingProgress()
     detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS, progress=detected)
-    assert detected.stages == [("detecting sentence languages", 2, 2)]
+    assert detected.stages == [("loading lingua", None, 0), ("detecting sentence languages", 2, 2)]
     cleaned = RecordingProgress()
     clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, progress=cleaned)
     assert cleaned.stages[-1] == ("cleaning the parts", 2, 2)

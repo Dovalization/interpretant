@@ -81,11 +81,12 @@ def test_clean_corpus_gives_the_same_rows_in_worker_processes(
 
 
 def test_clean_corpus_command_prints_what_each_rule_took(corpus_catalog_file: Path) -> None:
-    catalog_option = ["--catalog", str(corpus_catalog_file), "--process-count", "1"]
+    catalog_option = ["--catalog", str(corpus_catalog_file)]
+    workers = ["--process-count", "1"]
     runner = CliRunner()
-    for command in ("annotate-corpus", "detect-languages"):
-        assert runner.invoke(cli, [command, *catalog_option]).exit_code == 0
-    outcome = runner.invoke(cli, ["clean-corpus", *catalog_option])
+    assert runner.invoke(cli, ["annotate-corpus", *catalog_option, *workers]).exit_code == 0
+    assert runner.invoke(cli, ["detect-languages", *catalog_option]).exit_code == 0
+    outcome = runner.invoke(cli, ["clean-corpus", *catalog_option, *workers])
     assert outcome.exit_code == 0, outcome.output
     assert "5 abstracts in 3 parts" in outcome.output
     assert "too_short" in outcome.output
