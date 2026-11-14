@@ -184,7 +184,11 @@ views (the full order is in step 9).
     funding, trial-registration and conflict statements, HTML entities; flags for short records
     with no finite verb, OCR damage and full texts. Book reviews, letters to the editor,
     obituaries, full texts over 1,000 words and severely OCR-damaged records: the author leans to
-    dropping them, decided in that batch.
+    dropping them, decided in that batch. Dissertations, theses, monographs and historical
+    articles count as the work's own writing (the author, 2026-11-14): OpenAlex's and Crossref's
+    `dissertation`, Crossref's `monograph` and PubMed's Historical Article and Academic
+    Dissertation never drop or flag a record by themselves; a thesis catalogue line is still
+    dropped by its text.
 - *After run 3 (2026-11-14)*, repair puts the spaces around punctuation where they belong, so the
   stored text reads normally for every later step (duplicate detection splits words at spaces and
   read *rare.It* as one word). First it removes a space before a comma, full stop, semicolon or
