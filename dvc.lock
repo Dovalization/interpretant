@@ -15,8 +15,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 256818c56b0267fc3ee9c598952ab4c8.dir
-      size: 42060
+      md5: e03a452fdc991459b510e81ff5259115.dir
+      size: 45301
       nfiles: 14
     - path: src/interpretant/corpus/annotation.py
       hash: md5
@@ -81,11 +81,27 @@ stages:
   build_corpus:
     cmd: interpretant build-corpus
     deps:
+    - path: curated/record_types.yaml
+      hash: md5
+      md5: 6e1b89b287a5ed667114340cf99bf4d9
+      size: 5968
     - path: data/interim/annotated_abstracts
       hash: md5
       md5: f6103e9d348132add2984d3cf6479ae5.dir
       size: 282245232
       nfiles: 88
+    - path: data/interim/crossref_works.parquet
+      hash: md5
+      md5: 49de8a08d522e4db7f13ed5458ed4ae5
+      size: 103441163
+    - path: data/interim/openalex_works.parquet
+      hash: md5
+      md5: c74affd56f494e163d271e91393878ff
+      size: 38380657
+    - path: data/interim/pubmed_works.parquet
+      hash: md5
+      md5: 038f43b5cebbecf5ff9cf4ebdbeba525
+      size: 42808151
     - path: data/raw/openalex
       hash: md5
       md5: fbf24c1c9c7cc37cf59d7557ae74020c.dir
@@ -98,8 +114,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 256818c56b0267fc3ee9c598952ab4c8.dir
-      size: 42060
+      md5: e03a452fdc991459b510e81ff5259115.dir
+      size: 45301
       nfiles: 14
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
@@ -107,8 +123,8 @@ stages:
       size: 1847
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
-      md5: 6add7e3be20d79882f7c461933d50837
-      size: 8796
+      md5: f4a17b8fa31c6666cea4572ed76ba510
+      size: 8779
     - path: src/interpretant/corpus/deduplication.py
       hash: md5
       md5: e54bf7fb0f0dee3e88207005697e39f4
@@ -117,6 +133,10 @@ stages:
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
       size: 9374
+    - path: src/interpretant/corpus/record_types.py
+      hash: md5
+      md5: da55604ed4f81e8e787012d328659544
+      size: 7041
     - path: src/interpretant/corpus/removals.py
       hash: md5
       md5: 0dd5779e8854c5403913558ed275e210
@@ -135,8 +155,8 @@ stages:
       size: 1891
     - path: src/interpretant/pipelines/build_corpus.py
       hash: md5
-      md5: 4fec234d36744493c260c01a93115ddd
-      size: 3812
+      md5: f0c8a04aa81774fb87705bb96d164e03
+      size: 4596
     - path: src/interpretant/pipelines/corpus.py
       hash: md5
       md5: 78b775dac9246795248f19d6ee6624ed
@@ -204,8 +224,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 256818c56b0267fc3ee9c598952ab4c8.dir
-      size: 42060
+      md5: e03a452fdc991459b510e81ff5259115.dir
+      size: 45301
       nfiles: 14
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
@@ -213,8 +233,8 @@ stages:
       size: 1847
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
-      md5: 6add7e3be20d79882f7c461933d50837
-      size: 8796
+      md5: f4a17b8fa31c6666cea4572ed76ba510
+      size: 8779
     - path: src/interpretant/corpus/repair.py
       hash: md5
       md5: 8ecf8974a71bb9d8bd738a5a2f721877
@@ -290,8 +310,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 256818c56b0267fc3ee9c598952ab4c8.dir
-      size: 42060
+      md5: e03a452fdc991459b510e81ff5259115.dir
+      size: 45301
       nfiles: 14
     - path: src/interpretant/corpus/language.py
       hash: md5
@@ -407,8 +427,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 256818c56b0267fc3ee9c598952ab4c8.dir
-      size: 42060
+      md5: e03a452fdc991459b510e81ff5259115.dir
+      size: 45301
       nfiles: 14
     - path: src/interpretant/corpus/language.py
       hash: md5
@@ -502,8 +522,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 256818c56b0267fc3ee9c598952ab4c8.dir
-      size: 42060
+      md5: e03a452fdc991459b510e81ff5259115.dir
+      size: 45301
       nfiles: 14
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
@@ -511,8 +531,8 @@ stages:
       size: 1847
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
-      md5: 6add7e3be20d79882f7c461933d50837
-      size: 8796
+      md5: f4a17b8fa31c6666cea4572ed76ba510
+      size: 8779
     - path: src/interpretant/corpus/crossref.py
       hash: md5
       md5: 3e1b9243fee4988d796ef08a56fc329d
