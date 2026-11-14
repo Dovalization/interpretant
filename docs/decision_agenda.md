@@ -206,11 +206,30 @@ views (the full order is in step 9).
   the sentence starts of 3 (a space before "?", a Japanese abstract, a list of Bible verses); a
   sentence started after 99.1% of the added spaces either way. So they went; the footnote rule
   (*weeks.4 Just*) stays.
+- *Run 4 (2026-11-14)*, run 3 plus both spacing repairs: 642,024 works kept, 76 fewer. 83 kept
+  works became near-duplicates (copies that differed only in spacing now match), DOIs now end
+  before a glued word, and the removal totals barely moved (nearly every changed range is the
+  same text respaced). One repair leftover, already in run 3: a web address glued to the next
+  sentence (*…/labmat/).In*) gets no space, since the text around the stop reads as an address,
+  so the URL removal also takes the next sentence's first word (26 ranges in 21 kept works; 28 in
+  22 in run 3). The fix adds the space when what follows the stop, up to the next space, is a
+  plain word (*jp.Given* → *jp. Given*); it waits for the next run that needs the spaCy pass (the
+  word-repair step), since 21 works do not justify a 35-minute rerun on their own.
+- *Still to do in the cleaning batches*, found since run 3 (counts on run 4's kept works):
+  citation stubs that moved from too short to kept (*"One man's opinion.", 4(2), pp. 32–33*; 6
+  works, one of them a keyword list); text the language check now misses (7 works from not
+  English to kept: Frisian, German and French citation text, OCR noise; three more Frisian copies
+  became near-duplicates of the fourth); HTML entities left as text (109 works, 95 of them
+  `&dquo;`); ERIC's document notes (*Documents acquired by ERIC include…*; 429 works, 268 of them
+  from the 1990s); repository notes (*Contains fulltext: 75022.pdf*; 20). Checked and already
+  struck: publisher alerts (*This alert has been successfully added*; 1,902 works, by the
+  template rule) and SIAM's copyright line (268).
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
-  records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800),
-  both from a word list counted over the corpus itself, since a rule without one cannot tell
-  *a void* from *avoid*. Until then the affected records are flagged.
+  records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
+  and section headings run into the first word, *IntroductionThe*, *Author SummaryThe*, 548 kept
+  works in run 4), both from a word list counted over the corpus itself, since a rule without one
+  cannot tell *a void* from *avoid*. Until then the affected records are flagged.
 - *Sample audit first:* the old regexes and the new patterns run side by side and must catch the
   same abstracts before the regexes are deleted, apart from deliberate fixes (the exam-spam
   phrases "certification exam", "actual questions" and "exam questions and answers" were left out
@@ -575,6 +594,15 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   saved; adapted from `scripts/review/judge_template.html`.
 - **When:** the first rebuild, and again only when cleaning rules or sources change; otherwise
   layers 1 and 2.
+- **Run 3's review (2026-11-14, under way).** About 200 judgements cannot show a share under 1%
+  in each decade (none in 25 only puts it under about 12%), so the review asks what the author's
+  hour can answer: 200 kept records, 25 per decade, each judged abstract, not an abstract, not
+  English or unsure; the record-type detectors counted over every kept record for the per-decade
+  shares; 50 abstracts with their sentence breaks shown, wrong and missing breaks marked. The
+  stopping rule, set before reading: at most 2 non-abstracts in the 200 and at most 2 in any
+  decade's 25; the detectors' counts under 1% of every decade's records; sentence-break precision
+  of at least 98% on the 50. The answers set the order of the cleaning batches (2.3); run 4
+  changed only spacing, so they hold for it.
 
 *Why these numbers:* about 12 abstracts per field could not show "wrong field under 5%" (zero
 problems in 12 still allows about 22%); quality differs strongly by era (in the raw cells 34% of
@@ -1446,6 +1474,8 @@ The sized tasks come to about 4 hours; three are not yet sized.
   language and cleaning stages count parts): show decimals, or items a minute, there.
 - [ ] Docs pass: go through the 23 documents in `docs/`, merge what overlaps, retire what is no
   longer relevant, sort the rest into `reference/`, `records/` and `design/` (8.6), with step 10.
+- [ ] Remove the `../interpretant-split` worktree (branch `split-stage-2`, merged) after listing
+  what it holds.
 
 ## Reference: what moves to spaCy
 
