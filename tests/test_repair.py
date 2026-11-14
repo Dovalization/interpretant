@@ -58,6 +58,36 @@ def test_repair_text_spaces_punctuation_glued_to_the_next_word(raw: str, repaire
 
 
 @pytest.mark.parametrize(
+    ("raw", "repaired"),
+    [
+        ("a public spectacle , and it", "a public spectacle, and it"),
+        ("Nakahata et al . found that", "Nakahata et al. found that"),
+        ("on reading Jerusalem . For him", "on reading Jerusalem. For him"),
+        ("the end of the essay .", "the end of the essay."),
+        ("called real ; the only", "called real; the only"),
+        ("Abstract : This paper", "Abstract: This paper"),
+        ("Abusch's ( 2010 ) account", "Abusch's (2010) account"),
+        ("in this technology ,this article", "in this technology, this article"),
+    ],
+    ids=["comma", "full stop before a word", "full stop before a sentence", "final full stop",
+         "semicolon", "colon", "inside brackets", "space before and none after"],
+)  # fmt: skip
+def test_repair_text_removes_the_space_before_punctuation(raw: str, repaired: str) -> None:
+    assert repair_text(raw) == repaired
+
+
+@pytest.mark.parametrize(
+    "text",
+    ["IQ, .86 for performance", "they endeavour . . . to help", "Contents . . . . 12",
+     "a ratio of 1 : 2", "a ?yes? bias", "in us ?Or how", "found !that waves"],
+    ids=["decimal", "spaced ellipsis", "leader dots", "ratio", "lost characters",
+         "question mark", "exclamation mark"],
+)  # fmt: skip
+def test_repair_text_keeps_the_space_where_it_belongs(text: str) -> None:
+    assert repair_text(text) == text
+
+
+@pytest.mark.parametrize(
     "text",
     ["the U.S.Army", "E.coli strains", "a 3.5 mg dose", "three weeks.4 Just prior",
      "e.g.the model", "see www.Nature.com today", "see (www.inamori-f.or.jp.Given) now",

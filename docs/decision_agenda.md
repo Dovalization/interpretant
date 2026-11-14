@@ -185,12 +185,19 @@ views (the full order is in step 9).
     with no finite verb, OCR damage and full texts. Book reviews, letters to the editor,
     obituaries, full texts over 1,000 words and severely OCR-damaged records: the author leans to
     dropping them, decided in that batch.
-- *After run 3 (2026-11-14)*, repair adds the space that punctuation glued to the next word lacks,
-  so the stored text reads normally for every later step (duplicate detection splits words at
-  spaces and read *rare.It* as one word). Counted on run 3's texts: sentence punctuation before a
-  capitalised word (*rare.It begins*, 236,539 spaces in 55,201 of 705,283 works), commas before a
-  word (61,527), semicolons before a word (4,303), colons before a capitalised word (5,116); 57,224
-  kept works change. Never inside web and e-mail addresses (spaCy's `like_url` and `like_email`)
+- *After run 3 (2026-11-14)*, repair puts the spaces around punctuation where they belong, so the
+  stored text reads normally for every later step (duplicate detection splits words at spaces and
+  read *rare.It* as one word). First it removes a space before a comma, full stop, semicolon or
+  colon that belongs to the word before (*spectacle , and*, *et al . found*, *Abstract : This*)
+  and spaces just inside brackets (*( 2010 )*): 31,917 of run 3's kept works. A full stop keeps
+  its space before a digit (*.86*) and in spaced ellipses and leader dots, a colon between digits
+  (*1 : 2*); question and exclamation marks after a space are left, since they are mostly a
+  character the source lost (a micro sign, a pound sign, a dash) or OCR for "l" (*!arge*). Then it
+  adds the space that punctuation glued to the next word lacks, counted on run 3's texts after the
+  first step: sentence punctuation before a capitalised word (*rare.It begins*, 236,594 spaces in
+  55,210 of 705,283 works), commas before a word (62,634), semicolons before a word (4,636), colons
+  before a capitalised word (5,215). With both, 83,655 kept works change. The added space never
+  goes inside web and e-mail addresses (spaCy's `like_url` and `like_email`)
   or HTML entities, nor between single letters (*N,N-dimethyl*, *(i,j)*, *x:Gx*). Left glued on
   purpose: colons before a lowercase word (ratios such as *light:dark* and *h:min*, vowel length)
   and brackets (*(re)presented*, *H(2)O(2)*, *GABA(A)Rs*, *author(s)*). On 3,000 of the

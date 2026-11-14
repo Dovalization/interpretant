@@ -1,7 +1,7 @@
 """Repair before spaCy: undo extraction artefacts so the stored text is clean, then never edit it.
 
 The decision agenda, step 2.3: NFKC, control and format characters by Unicode category, soft
-hyphens, the missing space after punctuation glued to the next word; abstracts with mojibake are
+hyphens, the space before punctuation and the missing space after it; abstracts with mojibake are
 dropped, not repaired, so detection reads the raw text.
 """
 
@@ -56,6 +56,22 @@ _GLUED_SEMICOLON = re.compile(rf"(?<=[{LATIN}0-9\)\]]);(?=[{LATIN}])")
 # vowel length ("a:s\u0268bi") are written that way, and so is a colon after one letter ("x:Gx").
 _GLUED_COLON = re.compile(rf"(?<=[{LATIN}]{{2}}):(?=[{LATIN_UPPER}][{LATIN_LOWER}])")
 _GLUED_PUNCTUATION = (_GLUED_SENTENCE, _GLUED_COMMA, _GLUED_SEMICOLON, _GLUED_COLON)
+# A space before punctuation that belongs to the word before it: "spectacle , and", "et al .
+# found", "real ; the only", "Abstract : This" (in run 3's kept works: commas in 13,324, full
+# stops in 15,696, semicolons in 2,416, colons in 6,701), and spaces just inside brackets, "( 2010
+# )" and "( N = 610)" (5,175 and 6,346). A full stop keeps its space unless a space, a closing mark
+# or the end follows, so ".86" and spaced ellipses (". . .") stay, and a colon between digits
+# keeps it ("1 : 2"). Question and exclamation marks are left alone: after a space they are mostly
+# a character the source lost (a micro sign, a pound sign, a dash) or OCR for "l" ("!arge").
+_WORD_END = r"[^\W_]|[\)\]\"'”’%]"
+_SPACES_BEFORE_PUNCTUATION = (
+    re.compile(rf"(?<={_WORD_END}) +(?=[,;])"),
+    re.compile(rf"(?<={_WORD_END}) +(?=\.(?:$|[\"'”’\)\]]| (?!\.)))"),
+    re.compile(r"(?<=[^\W\d_]|[\)\]\"'”’%]) +(?=:)"),
+    re.compile(r"(?<=[0-9]) +(?=:(?! *[0-9]))"),
+    re.compile(rf"(?<={_WORD_END}|\.) +(?=[\)\]])"),
+    re.compile(r"(?<=[\(\[]) +(?=[^\W_])"),
+)
 # Punctuation around a web or e-mail address, stripped before spaCy's tests read it: ``like_url``
 # rejects anything that ends in a full stop.
 _ADDRESS_EDGES = "\"'\u201c\u201d\u2018\u2019\u00ab\u00bb()[]{}<>,;:.!?"
@@ -72,10 +88,12 @@ def repair_text(raw: str) -> str:
     joiner) are removed; soft hyphens rejoin the word they split; runs of whitespace collapse to
     one space. NFKC also expands ligatures (*ﬁ* to *fi*), maps full-width punctuation and
     no-break spaces to their plain forms and writes superscripts as plain digits; the Unicode
-    hyphen characters become the ASCII hyphen-minus. Punctuation glued to the next word gets the
-    missing space: sentence punctuation before a new sentence ("rare.It begins" to "rare. It
-    begins"), commas and semicolons before a word, colons before a capitalised word; never inside
-    web and e-mail addresses or HTML entities.
+    hyphen characters become the ASCII hyphen-minus. A space before a comma, full stop, semicolon
+    or colon that belongs to the word before it goes ("et al . found" to "et al. found"), as do
+    spaces just inside brackets. Then punctuation glued to the next word gets the missing space:
+    sentence punctuation before a new sentence ("rare.It begins" to "rare. It begins"), commas
+    and semicolons before a word, colons before a capitalised word; never inside web and e-mail
+    addresses or HTML entities.
     """
     text = _SOFT_HYPHEN.sub("", _LITERAL_NEWLINE.sub(" ", raw))
     kept = []
@@ -86,6 +104,8 @@ def repair_text(raw: str) -> str:
             kept.append(character)
     normal = unicodedata.normalize("NFKC", "".join(kept)).translate(_HYPHENS)
     text = _SPACES.sub(" ", normal).strip()
+    for pattern in _SPACES_BEFORE_PUNCTUATION:
+        text = pattern.sub("", text)
     for pattern in _GLUED_PUNCTUATION:
         text = _add_missing_spaces(pattern, text)
     return text
