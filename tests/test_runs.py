@@ -13,8 +13,9 @@ from interpretant.pipelines.runs import checkout_state, record_run
 
 
 def git(root: Path, *arguments: str) -> str:
+    environment = {name: value for name, value in os.environ.items() if not name.startswith("GIT_")}
     completed = subprocess.run(
-        ["git", *arguments], cwd=root, capture_output=True, text=True, check=True
+        ["git", *arguments], cwd=root, capture_output=True, text=True, check=True, env=environment
     )
     return completed.stdout.strip()
 

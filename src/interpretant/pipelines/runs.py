@@ -61,7 +61,9 @@ def checkout_state(root: Path) -> tuple[str | None, bool]:
 
 
 def _git(root: Path, *arguments: str) -> str:
+    # Inside a git hook, git exports GIT_DIR and its kin, which would override ``root``.
+    environment = {name: value for name, value in os.environ.items() if not name.startswith("GIT_")}
     completed = subprocess.run(
-        ["git", *arguments], cwd=root, capture_output=True, text=True, check=True
+        ["git", *arguments], cwd=root, capture_output=True, text=True, check=True, env=environment
     )
     return completed.stdout.strip()
