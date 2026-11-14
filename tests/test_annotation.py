@@ -374,6 +374,82 @@ def test_build_pipeline_starts_no_sentence_inside_square_brackets(
     assert sentences == [first, text.removeprefix(first).lstrip()]
 
 
+@pytest.mark.parametrize(
+    ("text", "first"),
+    [
+        (
+            "The effect lasted for 10 min. after the dose and then fell. It rose again later.",
+            "The effect lasted for 10 min. after the dose and then fell.",
+        ),
+        (
+            "It covers electronics, etc.) with management in mind. A survey followed.",
+            "It covers electronics, etc.) with management in mind.",
+        ),
+        (
+            "According to previous research in spatial reasoning (Toma &. Cross, 1998), it "
+            "holds. A survey followed.",
+            "According to previous research in spatial reasoning (Toma &. Cross, 1998), it holds.",
+        ),
+        (
+            "Anxiety was evaluated [with the long form of the inventory developed for this "
+            "study]. A survey followed.",
+            "Anxiety was evaluated [with the long form of the inventory developed for this study].",
+        ),
+        (
+            "The program ran for three weeks.4 Just prior to the end, it stopped.",
+            "The program ran for three weeks.4",
+        ),
+        (
+            "Responses were markedly decreased.4. Cocaine potentiated responses in both areas.",
+            "Responses were markedly decreased.4.",
+        ),
+        (
+            'He said that the model learns."Acquaintance with the data grows slowly.',
+            'He said that the model learns."',
+        ),
+    ],
+    ids=[
+        "lowercase after a unit",
+        "lowercase after etc.)",
+        "inside parentheses",
+        "after a long square bracket",
+        "glued footnote number",
+        "glued footnote number with its own full stop",
+        "glued closing quote",
+    ],
+)
+def test_build_pipeline_applies_the_run_2_sentence_rules(
+    text: str, first: str, nlp: Language
+) -> None:
+    sentences = [sentence.text for sentence in nlp(text).sents]
+    assert sentences == [first, text.removeprefix(first).lstrip()]
+
+
+def test_build_pipeline_lets_a_word_with_an_inner_capital_start_a_sentence(nlp: Language) -> None:
+    doc = nlp("We measured expression in every sample. mRNA levels rose after the treatment.")
+    assert [sentence.text for sentence in doc.sents][-1] == "mRNA levels rose after the treatment."
+
+
+def test_build_pipeline_splits_dashes_between_words_but_not_en_dashes(nlp: Language) -> None:
+    tokens = [token.text for token in nlp("the theory—namely first--applied sleep–wake cycles")]
+    assert tokens == [
+        "the",
+        "theory",
+        "—",
+        "namely",
+        "first",
+        "--",
+        "applied",
+        "sleep–wake",
+        "cycles",
+    ]
+
+
+def test_build_pipeline_keeps_dotted_numbers_and_volumes_whole(nlp: Language) -> None:
+    tokens = [token.text for token in nlp("See Vol.3 and Fig.4 with 3.5 points.")]
+    assert {"Vol.3", "Fig.4", "3.5"} <= set(tokens)
+
+
 def test_build_pipeline_splits_glued_punctuation_and_brackets_off(nlp: Language) -> None:
     tokenizer = nlp.tokenizer
     assert isinstance(tokenizer, Tokenizer)
