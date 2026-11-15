@@ -24,11 +24,16 @@ SIGNATURES = compile_signatures([r"Ã[\x80-\xbf]", "â€", r"Â[\xa0-\xbf]"])
         ("no break", "no break"),
         ("m² and CO₂", "m2 and CO2"),
         ("  padded   with   spaces  ", "padded with spaces"),
+        ("the author&rsquo;s view &#8211; and &#x2014; so", "the author’s view – and — so"),
+        ("Hegelrsquo;s ldquo;bad faithrdquo; casenbsp;study", "Hegel’s “bad faith” case study"),
+        ("the &dquo;obvious&dquo; answer", 'the "obvious" answer'),
+        ("Ruisdael&s;s depictions", "Ruisdael's depictions"),
     ],
     ids=["line breaks and tabs", "literal backslash-n", "soft hyphens", "zero-width space",
          "format characters", "replacement character", "unicode hyphens", "ligatures",
          "full-width punctuation", "no-break space", "superscripts and subscripts",
-         "runs of spaces"],
+         "runs of spaces", "html entities", "html entities without their ampersand",
+         "sage double quote", "apostrophe reference"],
 )  # fmt: skip
 def test_repair_text_undoes_extraction_artefacts(raw: str, repaired: str) -> None:
     assert repair_text(raw) == repaired
@@ -97,12 +102,14 @@ def test_repair_text_keeps_the_space_where_it_belongs(text: str) -> None:
      "at TTyler@Garnet.Berkeley.Edu. We", "[http://www.ArsDisputandi.org]",
      "write to J.Smith@uni.edu now", "see 10.1234/abc.Def-5 now",
      "N,N-dimethyl", "the (i,j)th entry", "a 1,000 sample", "the light:dark cycle",
-     "at 10:30 hours", "[!x:Gx]", "the author&rsquo;s view", "Hegelrsquo;s system"],
+     "at 10:30 hours", "[!x:Gx]", "the value&subd;i term", "the &copyright;notice",
+     "the summer camp; tents"],
     ids=["initials", "species", "decimal", "footnote", "lowercase next word", "web address",
          "address with a scheme", "e-mail address with a capitalised domain",
          "address after www", "e-mail address", "doi",
          "comma between single letters", "indices", "thousands", "ratio", "time",
-         "colon after one letter", "html entity", "html entity without its ampersand"],
+         "colon after one letter", "unknown html entity", "name html5 lacks",
+         "amp without its ampersand"],
 )  # fmt: skip
 def test_repair_text_leaves_other_full_stops_as_they_are(text: str) -> None:
     assert repair_text(text) == text

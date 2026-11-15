@@ -1,15 +1,17 @@
 """Repair before spaCy: undo extraction artefacts so the stored text is clean, then never edit it.
 
-The decision agenda, step 2.3: NFKC, control and format characters by Unicode category, soft
-hyphens, the space before punctuation and the missing space after it; abstracts with mojibake are
-dropped, not repaired, so detection reads the raw text.
+The decision agenda, step 2.3: HTML character references, NFKC, control and format characters by
+Unicode category, soft hyphens, the space before punctuation and the missing space after it;
+abstracts with mojibake are dropped, not repaired, so detection reads the raw text.
 """
 
 from __future__ import annotations
 
+import html
 import re
 import unicodedata
 from collections.abc import Sequence
+from html.entities import html5
 
 from spacy.lang.char_classes import (
     ALPHA_LOWER,
@@ -82,17 +84,29 @@ _GENERIC_DOMAINS = frozenset({"com", "org", "net", "edu", "gov", "int", "mil", "
 # 122"); the spaCy pass's tokenizer keeps one as a single token with the same pattern.
 DOI_PATTERN = r"^(?:doi:)?10\.\d{4,9}/\S+$"
 _DOI = re.compile(DOI_PATTERN)
-# The end of an HTML entity, whole or with its ampersand lost ("&rsquo;s", "Hegelrsquo;s"), whose
-# semicolon is part of it.
-_ENTITY_END = re.compile(r"(?:&#?[A-Za-z0-9]+|[lr][sd]quo|dquo|nbsp|[nm]dash|hellip)$")
+# HTML character references left by an upstream extractor (131 works in run 7): numeric ones and
+# HTML5 names with their semicolon, decoded as the standard library reads them, and names whose
+# ampersand was lost ("Hegelrsquo;s", "ldquo;bad faithrdquo;", "casenbsp;study"). Two are no HTML
+# at all: SAGE's "&dquo;" for a straight double quote (406 in 95 works) and "&s;" for an
+# apostrophe ("Ruisdael&s;s", 20 in 10). A name HTML5 lacks stays as it is ("&subd;"; checked
+# against the table, since ``html.unescape`` reads "&copyright;" as "&copy" and "right;"), and so
+# does "amp;" without its ampersand, which mostly ends a word ("camp;", "Kamp;").
+_CHARACTER_REFERENCE = re.compile(
+    r"&(?:#[0-9]{1,7}|#[xX][0-9A-Fa-f]{1,6}|[A-Za-z][A-Za-z0-9]{0,31});"
+)
+_LOST_AMPERSAND = re.compile(r"(?:[lr][sd]quo|[nm]dash|nbsp|hellip);")
+_NONSTANDARD_REFERENCES = {"&dquo;": '"', "&s;": "'"}
+# The end of an HTML entity left undecoded, whose semicolon is part of it.
+_ENTITY_END = re.compile(r"&#?[A-Za-z0-9]+$")
 
 
 def repair_text(raw: str) -> str:
     """The abstract without extraction artefacts, in Unicode normal form NFKC.
 
-    Line breaks, tabs, zero-width spaces and replacement characters become spaces; other control
-    and format characters (category Cc or Cf, such as the byte-order mark or the zero-width
-    joiner) are removed; soft hyphens rejoin the word they split; runs of whitespace collapse to
+    HTML character references are decoded first ("&rsquo;" and "rsquo;" to "’"). Line breaks,
+    tabs, zero-width spaces and replacement characters become spaces; other control and format
+    characters (category Cc or Cf, such as the byte-order mark or the zero-width joiner) are
+    removed; soft hyphens rejoin the word they split; runs of whitespace collapse to
     one space. NFKC also expands ligatures (*ﬁ* to *fi*), maps full-width punctuation and
     no-break spaces to their plain forms and writes superscripts as plain digits; the Unicode
     hyphen characters become the ASCII hyphen-minus. A space before a comma, full stop, semicolon
@@ -102,7 +116,7 @@ def repair_text(raw: str) -> str:
     and semicolons before a word, colons before a capitalised word; never inside web and e-mail
     addresses or HTML entities.
     """
-    text = _SOFT_HYPHEN.sub("", _LITERAL_NEWLINE.sub(" ", raw))
+    text = _SOFT_HYPHEN.sub("", _LITERAL_NEWLINE.sub(" ", _decode_references(raw)))
     kept = []
     for character in text:
         if character in _WHITESPACE_CONTROLS or character in _WORD_SEPARATORS:
@@ -116,6 +130,21 @@ def repair_text(raw: str) -> str:
     for pattern in _GLUED_PUNCTUATION:
         text = _add_missing_spaces(pattern, text)
     return text
+
+
+def _decode_references(text: str) -> str:
+    """The text with its HTML character references decoded, as far as they are known."""
+
+    def decoded(match: re.Match[str]) -> str:
+        reference = match.group()
+        if reference in _NONSTANDARD_REFERENCES:
+            return _NONSTANDARD_REFERENCES[reference]
+        if reference.startswith("&#") or reference[1:] in html5:
+            return html.unescape(reference)
+        return reference
+
+    text = _CHARACTER_REFERENCE.sub(decoded, text)
+    return _LOST_AMPERSAND.sub(lambda match: html5[match.group()], text)
 
 
 def _add_missing_spaces(pattern: re.Pattern[str], text: str) -> str:
