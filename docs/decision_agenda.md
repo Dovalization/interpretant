@@ -282,7 +282,7 @@ views (the full order is in step 9).
   7. glued words split (moved up from the word-repair step on 2026-11-15, the author): a
      lower-case letter run straight into a capital where both parts are words (*AbstractThe*,
      *ResultsThe*, *ObjectiveTo*, *ofThe*, *NewYork*, *To the EditorWe*); joins in lower case
-     (*ofthe*, *inthe*) follow as run 7b, since there the split point has to be searched and
+     (*ofthe*, *inthe*) follow as run 7c, since there the split point has to be searched and
      pairs such as *a broad* and *abroad* show the risk. On run 6c's kept works, 195,655 words
      hold a lower-case letter
      before a capital, in 65,890 works, most of them names and terms written that way (*mRNA*,
@@ -311,7 +311,13 @@ views (the full order is in step 9).
      spaces into the text). The counts are Polars expressions (Aho-Corasick for the phrases); the
      split is a dictionary lookup on each candidate word right after repair, since Polars'
      `str.replace_many` also matches inside longer words and cannot skip web addresses. Reruns the
-     spaCy pass;
+     spaCy pass. Run 7b (decided 2026-11-15, the author) puts three repair fixes in one spaCy
+     pass: HTML character references decoded (131 works hold them, nearly all SAGE's `&dquo;`;
+     about 20 more hold names that lost their ampersand), the web-address end fix (run 4, below)
+     and DOIs read as addresses, so no split or added space falls inside one. Each changes only
+     works holding its own pattern, so their effects are told apart by pattern in the diff, with
+     no review sample. Run 7c then splits the joins in lower case from their own counts and
+     sample, reading the repaired text;
   8. split words joined (moved up with run 7): words broken by a space or a line-break hyphen
      (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept records in run 2,
      4.1% of the 1950s), joined where the corpus writes the joined form far more often than
@@ -369,9 +375,8 @@ views (the full order is in step 9).
   *SIR,-A* and *Sir.—Many*), repeated sentences in the template rule, metadata in the record
   kinds, morphology from the cached spaCy documents in the cleaning stage; HTML entities such as
   `&dquo;` (95 kept works) are a character repair, not a removal, and repair comes before the
-  spaCy pass, so they take a spaCy-pass run of their own beside runs 7 and 8, as does the
-  web-address fix (run 4, below). Runs 7 and 8 rerun the spaCy pass; runs 6c, 6d and 9–17 do
-  not.
+  spaCy pass, so they go in run 7b with the web-address fix (run 4, below) and the DOI fix.
+  Runs 7, 7b, 7c and 8 rerun the spaCy pass; runs 6c, 6d and 9–17 do not.
 
   Not dropped by length: under 200 characters holds 35,261 kept works (13% of the 1950s, 2% of
   the 2020s), and random ones mix real short abstracts with titles and fragments; the finite-verb
