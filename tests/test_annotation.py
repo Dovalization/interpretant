@@ -142,6 +142,18 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
             "web_scrape",
         ),
         ("Get the latest brain dumps for certification exams here.", "exam_spam"),
+        (
+            "To the Editor.\u2014 The recent article by Parker and Brown deserves a comment.",
+            "letter",
+        ),
+        ("Abstract: To the Editor: We read with great interest the study by Yoo et al.", "letter"),
+        (
+            "SIR,-A scientific shrine of the greatest interest to geologists is Rugbourne Farm.",
+            "letter",
+        ),
+        ("Dear Editor, with great interest I read the meta-analysis by Michaud et al.", "letter"),
+        ("Sir.\u2014Many causes of sudden infant death syndrome have been proposed.", "letter"),
+        ("To the Editor.\u2014The report by Dr Gellert and colleagues deserves a reply.", "letter"),
         ("cafÃ© society in the 1920s and after the war.", "mojibake"),
         ("Abstract: Short note.", "too_short"),
         (f"{GERMAN_SENTENCE} {ENGLISH_SENTENCE[:30]}.", "not_english"),
@@ -153,6 +165,12 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         "web scrape",
         "page with no access glued",
         "exam spam",
+        "letter to the editor",
+        "letter after an abstract label",
+        "letter opening sir with a dash",
+        "letter opening dear editor",
+        "letter opening sir glued to its dash",
+        "letter opening to the editor glued to its dash",
         "mojibake",
         "too short",
         "mostly another language",
@@ -165,6 +183,21 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
     patterns: CleaningPatterns,
 ) -> None:
     assert annotate(text, nlp, patterns).dropped_reason == reason
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Sir Isaac Newton's correspondence with Cotes shows how the Principia was revised.",
+        "Letters to the editor are a neglected genre in the history of medicine.",
+        "We argue that to the editor of a journal the referee's report is advice, not a verdict.",
+    ],
+    ids=["a man named sir", "a study of letters", "to the editor mid-sentence"],
+)
+def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
+    text: str, nlp: Language, patterns: CleaningPatterns
+) -> None:
+    assert annotate(text, nlp, patterns).dropped_reason is None
 
 
 @pytest.mark.parametrize(

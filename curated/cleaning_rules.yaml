@@ -46,6 +46,12 @@ labels:
   copyright: rest_of_sentence
   # Letters, memos and similar catalogue records standing in for an abstract (start only).
   catalogue_record: abstract
+  # A letter to the editor: a text opening with a salutation, after an "Abstract" label if any
+  # ("To the Editor.— The recent article by…", "SIR,-A scientific shrine…", "Dear Editor,
+  # with great interest…"; start only). "Sir" needs punctuation after it, so "Sir Isaac" is
+  # not one. The record kinds find letters by their metadata (curated/record_types.yaml); the
+  # reason is the same. Moved here from the record kinds on 2026-11-15 (run 6c).
+  letter: abstract
   # A citation string standing in for an abstract ("Volume 3, Issue 2"), or a record that
   # starts with its year in brackets and a full stop, "(1985). Title. Journal: Vol. 5, No. 2,
   # pp. 143-196." (start only; added 2026-11-13: 4,292 such records were kept in run 2, none over
