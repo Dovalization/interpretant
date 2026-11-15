@@ -13,7 +13,7 @@
 # the literature on...").
 #
 # action: keep (counted, nothing changes), flag (left to the review) or drop (the kind's name
-# is the drop reason). Every kind is kept until the author decides it after run 3's review.
+# is the drop reason). Decided by the author after run 3's review (2026-11-15; agenda 2.3).
 #
 # Never grounds by themselves (the author, 2026-11-14): dissertations, theses, monographs and
 # historical articles count as the work's own writing, so OpenAlex's and Crossref's
@@ -27,7 +27,7 @@ kinds:
   # updates (125 kept records) are not notices; addenda are left out, since the authors' own
   # additions and research use the word ("Addenda to Newman's Hausa and Chadic bibliography").
   erratum:
-    action: keep
+    action: drop
     openalex_types: [erratum, retraction]
     crossref_update_types: [correction, erratum, corrigendum, retraction, partial_retraction,
       withdrawal, expression_of_concern, clarification, removal]
@@ -42,7 +42,7 @@ kinds:
   # 1907–7 April 1970"). A span after a phrase is a history period ("Canada's Immigration
   # Policy, 1957-1962") and is not taken.
   obituary:
-    action: keep
+    action: drop
     life_span_within_years: 2
     title_patterns:
       - '^\s*(obituar(y|ies)|necrology|necrologies|in memoriam)\s*[.:;,—–-]?\s*$'
@@ -51,7 +51,8 @@ kinds:
   # Book reviews: a section heading, a review of a named book or author ("Review of Dahl (1985):
   # Tense and Aspect Systems"), or a title citing the book with its pages or price ("THE
   # JUVENILE IN DELINQUENT SOCIETY. By Milton L. Barron. New York: Alfred A. Knopf, 1954. 349
-  # pp. $5.00"). Lower-case "pp." is left out: it cites an article's pages in comments.
+  # pp. $5.00"). Lower-case "pp." is left out: it cites an article's pages in comments. Kept:
+  # a review argues in the field's own terms.
   book_review:
     action: keep
     title_patterns:
@@ -70,7 +71,7 @@ kinds:
 
   # News sections and news items.
   news:
-    action: keep
+    action: drop
     pubmed_types: [News, Newspaper Article]
     title_patterns:
       - '^\s*(news|news (in brief|briefs?|notes|and notes|and views|and comments?|& comments?|and events)|notes and news|notes & news|newsletter)\s*[.:;,—–-]?\s*$'
@@ -79,7 +80,7 @@ kinds:
   # Letters: to the editor, and archive letters ("Letter from Dr. Koch to FA Davis Company",
   # "LETTER XXIV. Newton to Cotes, June 7, 1711").
   letter:
-    action: keep
+    action: drop
     openalex_types: [letter]
     pubmed_types: [Letter]
     title_patterns:
@@ -88,7 +89,7 @@ kinds:
       - '^\s*letter (from|to)\b'
       - '^\s*letter\s+([ivxlc]+|\d+)\b'
 
-  # Editorials and editors' notes.
+  # Editorials and editors' notes. Kept: substantive prose in the field's own terms.
   editorial:
     action: keep
     openalex_types: [editorial]
@@ -97,15 +98,16 @@ kinds:
       - '^\s*(editorial|guest editorial|editorial note|editor''?s''? note|editorial comment|from the editors?|editor''?s''? introduction|editor''?s''? preface)\s*[.:;,—–-]?\s*$'
       - '^\s*(editorial|guest editorial)\s*:'
 
-  # Comments on another record, replies and discussions.
+  # Comments on another record, replies and discussions. Kept: commentaries, replies and
+  # rejoinders argue in the field's own terms; correspondence is a letter, found first.
   comment:
     action: keep
     pubmed_types: [Comment]
     title_patterns:
       - '^\s*(comments?|reply|replies|rejoinder|response|authors?''?\s*reply|discussion)\s*[.:;,—–-]?\s*$'
 
-  # Records of at most two pages: research notes as well as short items, so the review's
-  # verdicts on short records decide whether length alone is grounds.
+  # Records of at most two pages: research notes as well as short items. Kept: 7 of the 10 in
+  # run 3's review were abstracts; the kind stays until page count is a combined-layer column.
   short_record:
     action: keep
     max_pages: 2

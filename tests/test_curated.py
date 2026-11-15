@@ -121,11 +121,13 @@ def test_load_doi_corrections_refuses_bad_entries(
         load_doi_corrections(catalog)
 
 
-def test_load_record_kinds_reads_the_repository_file_in_order_all_kept() -> None:
+def test_load_record_kinds_reads_the_repository_file_in_order_with_its_actions() -> None:
     kinds = load_record_kinds(read_catalog())
     names = list(kinds)
     assert (names[0], names[-1]) == ("erratum", "short_record")
-    assert {kind.action for kind in kinds.values()} == {"keep"}
+    dropped = {name for name, kind in kinds.items() if kind.action == "drop"}
+    assert dropped == {"erratum", "obituary", "news", "letter"}
+    assert {kinds[name].action for name in kinds.keys() - dropped} == {"keep"}
 
 
 @pytest.mark.parametrize(
