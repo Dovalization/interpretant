@@ -282,8 +282,9 @@ views (the full order is in step 9).
   7. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
      1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
-     citation after real prose is a removed range, not a drop, and the report counts how many
-     have a Crossref abstract;
+     citation standing for the abstract drops it (`citation_record`, abstract scope), one after
+     real prose is removed with a second label of its own, and the report counts how many have a
+     Crossref abstract;
   8. publisher page text the `web_scrape` patterns miss (*Get access*, *Preview this article*,
      *Restricted access… First published*; *was published in* only in De Gruyter's form, since
      it also opens real sentences: *Jan Herkel's Elementa… was published in Buda*);
@@ -295,29 +296,35 @@ views (the full order is in step 9).
       kept works), *Contains fulltext* (20), the machine-keywords notice glued to the sentence
       before it by a footnote number (91), and Frontiers' event, citation and date lines (about
       600);
-  11. the spaCy pass records each work's count of finite verbs (`VerbForm=Fin`; the small model
-      marks modals such as *may* finite too) and changes no rule, so the run shows that nothing
-      else moved;
-  12. no finite verb anywhere, dropped as `not_prose`: titles, citation lines, contents lists,
-      conference names and captions are phrases, an abstract has a verb (on run 3's sample it
-      caught 15 of the 30 non-abstracts and none of the 167 abstracts; checked on 30 drops,
-      more from the old decades, before it is kept, since the small tagger misreads OCR, text in
-      capitals and note-style structured abstracts);
-  13. book-review headers removed, a token pattern in the cleaning patterns (*By R. M. Williams.
+  11. no finite verb outside the removed ranges, dropped as `not_prose`, a keeping rule in the
+      cleaning stage beside *too short*: titles, citation lines, contents lists, conference names
+      and captions are phrases, an abstract has a verb (on run 3's sample it caught 15 of the 30
+      non-abstracts and none of the 167 abstracts; checked on 30 drops, more from the old
+      decades, before it is kept, since the small tagger misreads OCR, text in capitals and
+      note-style structured abstracts). The cleaning stage reads the cached spaCy documents,
+      whose `DocBin` keeps morphology by default (`VerbForm=Fin`, checked on a cached part; the
+      small model marks modals such as *may* finite too), so no rerun of the spaCy pass is
+      needed, and a removed citation or template sentence cannot supply the verb;
+  12. book-review headers removed, a token pattern in the cleaning patterns (*By R. M. Williams.
       New York: Knopf, 1951. 545 pp. $4.50*);
-  14. the language check for texts mostly in Chinese, Japanese or Korean script (about 400 kept
-      works, mostly 2000s–2010s);
-  15. a curated list of excluded venues, each entry with its evidence, starting with two police
+  13. texts mostly in Chinese, Japanese or Korean script (about 400 kept works, mostly
+      2000s–2010s), probably in the cleaning stage's not-English rule rather than the language
+      detector: the English tokenizer makes few words of text without spaces, so *more words
+      removed as another language than kept* may never hold; the cause is checked first;
+  14. a curated list of excluded venues, each entry with its evidence, starting with two police
       academies' journals (*Journal of the Chinese People's Armed Police Force Academy*, 13 kept
       works; *Journal of Liaoning Police Academy*, 14), and Zenodo if 20 of its 3,212 kept works
       say so (the review's spam page came from it);
-  16. the cut-off fragments as `cut_off_sentence` (above).
+  15. the cut-off fragments as `cut_off_sentence` (above), in the corpus build beside the
+      `truncated` flag, since a fragment ending in a template sentence is not judged and the
+      template removals exist only there.
 
   Where each rule lives (checked 2026-11-15): text patterns go in the spaCy cleaning patterns
   (token patterns, with `REGEX` on a token where the tokenizer keeps punctuation glued, as in
   *SIR,-A* and *Sir.—Many*), repeated sentences in the template rule, metadata in the record
-  kinds, morphology in the spaCy pass; HTML entities such as `&dquo;` (95 kept works) are a
-  character repair, not a removal.
+  kinds, morphology from the cached spaCy documents in the cleaning stage; HTML entities such as
+  `&dquo;` (95 kept works) are a character repair, not a removal, and repair comes before the
+  spaCy pass, so they ride with the word-repair run. None of runs 6c–15 reruns the spaCy pass.
 
   Not dropped by length: under 200 characters holds 35,261 kept works (13% of the 1950s, 2% of
   the 2020s), and random ones mix real short abstracts with titles and fragments; the finite-verb
