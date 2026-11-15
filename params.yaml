@@ -12,13 +12,17 @@ corpus:
 # letter run into a capital the spaCy pass splits. All three are provisional, set from a sample.
 count_glued_words:
   # Split when the corpus writes the two parts apart at least this many times as often as joined
-  # (10: 7,735 joins in 5,422 of run 6c's kept works; 3: 10,427 in 6,956).
+  # (10 on run 6d: 6,136 words, 9,632 uses; 3 would add 2,471 words, whose most frequent are
+  # names and acronyms written joined: "DataGlove", "RealSense", "ToS", "InR").
   apart_margin: 10
   # Or when the second part is one of this many most common sentence openers ("The", "In",
-  # "This") and the first part has at least this many letters: a heading run into the text
-  # ("EditorsThis"), joined in every issue of a journal.
+  # "This"), the first part has at least this many letters and the second part at least this
+  # many: a heading run into the text ("EditorsThis"), joined in every issue of a journal. A
+  # second part of one letter is mostly a final "l" read as "I" ("proposaI") or a name
+  # ("microA"), so it is never split off this way (608 words, 1,128 uses on run 6d).
   opener_count: 30
   opener_min_left_letters: 4
+  opener_min_right_letters: 2
 
 # Stage 2a, the spaCy pass (annotate-corpus).
 annotate_corpus:

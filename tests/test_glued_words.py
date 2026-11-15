@@ -31,12 +31,15 @@ def texts_table(texts: list[str]) -> pl.DataFrame:
     return pl.DataFrame({"work_id": [f"W{work}" for work in range(len(texts))], "text": texts})
 
 
-def decide(counts: pl.DataFrame, apart_margin: float = 2) -> pl.DataFrame:
+def decide(
+    counts: pl.DataFrame, apart_margin: float = 2, opener_min_right_letters: int = 2
+) -> pl.DataFrame:
     return decide_glued_word_splits(
         counts,
         apart_margin=apart_margin,
         opener_count=5,
         opener_min_left_letters=4,
+        opener_min_right_letters=opener_min_right_letters,
         kept_joined=["linkedin"],
     )
 
@@ -90,6 +93,12 @@ def test_decide_glued_word_splits_splits_a_word_written_apart_by_the_margin() ->
 def test_decide_glued_word_splits_needs_a_long_first_part_for_an_opener() -> None:
     counts = count_glued_words(texts_table(["The paper. ofThe paper. The end."]))
     assert decide(counts, apart_margin=100)["split"].to_list() == [False]
+
+
+def test_decide_glued_word_splits_needs_a_long_second_part_for_an_opener() -> None:
+    counts = count_glued_words(texts_table(["I agree. I think so. The proposaI holds. I see."]))
+    assert decide(counts, apart_margin=100)["split"].to_list() == [False]
+    assert decide(counts, apart_margin=100, opener_min_right_letters=1)["split"].to_list() == [True]
 
 
 def test_glued_word_splits_maps_each_split_word_to_its_parts() -> None:

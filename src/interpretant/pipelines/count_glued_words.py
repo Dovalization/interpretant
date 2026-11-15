@@ -34,6 +34,7 @@ class CountGluedWordsSettings(ParamsSettings):
     apart_margin: float = Field(gt=0)
     opener_count: int = Field(ge=0)
     opener_min_left_letters: int = Field(ge=2)
+    opener_min_right_letters: int = Field(ge=1)
 
 
 @dataclass(frozen=True)
@@ -84,6 +85,7 @@ def count_glued_words(
         apart_margin=settings.apart_margin,
         opener_count=settings.opener_count,
         opener_min_left_letters=settings.opener_min_left_letters,
+        opener_min_right_letters=settings.opener_min_right_letters,
         kept_joined=kept_joined,
     )
     save_glued_words(catalog, decisions)

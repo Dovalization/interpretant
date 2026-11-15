@@ -117,22 +117,26 @@ def decide_glued_word_splits(
     apart_margin: float,
     opener_count: int,
     opener_min_left_letters: int,
+    opener_min_right_letters: int,
     kept_joined: Collection[str],
 ) -> pl.DataFrame:
     """The counts with each glued word's decision: ``split``, and the ``reason`` for it.
 
     A word is split when the corpus writes its parts apart at least ``apart_margin`` times as
     often as joined (``apart``), or when its second part is among the ``opener_count`` most common
-    sentence openers and its first part has at least ``opener_min_left_letters`` letters
-    (``sentence_opener``: a heading run into the first word of the text, *EditorsThis*, joined in
-    every issue of a journal). A word in ``kept_joined`` (any case) stays joined whatever the
-    counts say (``kept_joined``).
+    sentence openers, its first part has at least ``opener_min_left_letters`` letters and its
+    second part at least ``opener_min_right_letters`` (``sentence_opener``: a heading run into the
+    first word of the text, *EditorsThis*, joined in every issue of a journal; a second part of
+    one letter is mostly a final "l" read as "I", *proposaI*). A word in ``kept_joined`` (any
+    case) stays joined whatever the counts say (``kept_joined``).
     """
     folded = sorted({word.lower() for word in kept_joined})
     is_kept = pl.col("word").str.to_lowercase().is_in(folded)
     is_apart = pl.col("apart") >= apart_margin * pl.max_horizontal(pl.col("joined"), 1)
-    opens_sentences = (pl.col("opener_rank") <= opener_count) & (
-        pl.col("left").str.len_chars() >= opener_min_left_letters
+    opens_sentences = (
+        (pl.col("opener_rank") <= opener_count)
+        & (pl.col("left").str.len_chars() >= opener_min_left_letters)
+        & (pl.col("right").str.len_chars() >= opener_min_right_letters)
     )
     reason = (
         pl.when(is_kept)

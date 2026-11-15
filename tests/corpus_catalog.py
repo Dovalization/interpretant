@@ -48,7 +48,7 @@ ANNOTATE_SETTINGS = AnnotateCorpusSettings(named_entity_recognition=False)
 LANGUAGE_SETTINGS = DetectLanguagesSettings(languages=("en", "de"))
 CLEAN_SETTINGS = CleanCorpusSettings()
 GLUED_WORDS_SETTINGS = CountGluedWordsSettings(
-    apart_margin=10, opener_count=30, opener_min_left_letters=4
+    apart_margin=10, opener_count=30, opener_min_left_letters=4, opener_min_right_letters=2
 )
 
 

@@ -12,3 +12,12 @@ words:
     evidence: >-
       The social network. In run 6c's kept works "linked in" is written apart 139 times, as an
       ordinary phrase, and the name joined 117 times (59 works), and "In" opens sentences.
+  - word: InDesign
+    evidence: >-
+      Adobe's page layout program. On run 6d's kept works "in design" is written apart 739
+      times, as an ordinary phrase, and the name joined 17 times (4 works).
+  - word: CatchIt
+    evidence: >-
+      A mobile application that records moments of its user's life, named in an HCI study.
+      Joined 16 times (2 works) and "It" is the 4th most common sentence opener, so the opener
+      test would split it.

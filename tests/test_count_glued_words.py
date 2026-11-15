@@ -77,3 +77,4 @@ def test_the_repository_params_file_is_valid_for_glued_words() -> None:
     settings = CountGluedWordsSettings()
     assert settings.apart_margin > 0
     assert settings.opener_min_left_letters >= 2
+    assert settings.opener_min_right_letters >= 1
