@@ -279,24 +279,56 @@ views (the full order is in step 9).
      it from the record kinds to the cleaning patterns (start-only token patterns with an
      optional *Abstract* label first, as `catalogue_record` catches archive letters), with the
      reason `letter`, so no record-kind code re-reads the text;
-  7. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
+  7. glued words split (moved up from the word-repair step on 2026-11-15, the author): a
+     lower-case letter run straight into a capital where both parts are words (*AbstractThe*,
+     *ResultsThe*, *ObjectiveTo*, *ofThe*, *NewYork*, *To the EditorWe*), and joins in lower
+     case (*ofthe*, *inthe*). On run 6c's kept works, 195,655 words hold a lower-case letter
+     before a capital, in 65,890 works, most of them names and terms written that way (*mRNA*,
+     *fMRI*, *PubMed*, *YouTube*, *McCarthy*, *pH*), so the corpus decides: a counting step
+     writes a table of each joined form, how often its parts appear apart (a space or
+     punctuation between, case folded) and how often joined, and repair adds the space where
+     apart is the more common by a margin set from a sample (10 times: 7,735 joins in 5,422
+     works; 3 times: 10,427 in 6,956; between 1 and 10 times are mostly names, *LinkedIn*,
+     *DuBois*, *WiFi*, *DeVries*). A first part of one letter is never split off (*mRNA*,
+     *eLearning*). A heading glued the same way in every issue of a journal is joined more often
+     than apart (*EditorsThis*, 57 works, 67 joined against 29 apart), so a second test splits a
+     form whose second part is a common sentence opener (*The*, *This*, *We*, *In*). The few the
+     counts get wrong (*LinkedIn*, since *linked in* is a common phrase) go in a short curated
+     list of words kept joined, each with its evidence, as the excluded venues are; the table
+     and the list are reviewed before the run. spaCy has no component that splits joined words,
+     and tokenizer special cases would split the tokens but leave the stored text joined, which
+     duplicate and template detection read by spaces (why run 4 wrote the punctuation spaces
+     into the text); the spaces go in with Polars' `str.replace_many`. Reruns the spaCy pass;
+  8. split words joined (moved up with run 7): words broken by a space or a line-break hyphen
+     (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept records in run 2,
+     4.1% of the 1950s), joined where the corpus writes the joined form far more often than
+     the parts in sequence, from the same counts, since a rule without them cannot tell *a void*
+     from *avoid*. Reruns the spaCy pass;
+  9. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
      1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
      citation standing for the abstract drops it (`citation_record`, abstract scope), one after
      real prose is removed with a second label of its own, and the report counts how many have a
      Crossref abstract;
-  8. publisher page text the `web_scrape` patterns miss (*Get access*, *Preview this article*,
-     *Restricted access… First published*; *was published in* only in De Gruyter's form, since
-     it also opens real sentences: *Jan Herkel's Elementa… was published in Buda*);
-  9. the template rule masks month names as well as digits, so *Received: 12 March 2010;
-     Accepted: 3 June 2010.* (134 kept works) and *Submitted on January 6, 1958* (66) become
-     template sentences; the rest of the planned boilerplate shares its sentence with a title,
-     names or a file name, so no masking makes it repeat;
-  10. footers the template rule cannot take, in the cleaning patterns: ERIC's document notes (42
+  10. publisher page text the `web_scrape` patterns miss (*Get access*, *Preview this article*,
+      *Restricted access… First published*; *was published in* only in De Gruyter's form, since
+      it also opens real sentences: *Jan Herkel's Elementa… was published in Buda*), and the
+      ACM Digital Library's page, found while counting glued words: 1,902 of run 6c's kept works
+      are only the page (title, authors with *View Profile*, venue, pages, download counts,
+      *Get Citation AlertsNew Citation Alert added!*), 7 of them with the word *abstract*, median
+      918 characters; computer science 965, HCI 634, AI 297; 735 from the 1990s. Only 2 of the
+      2,366 works holding these joined menu words have one of the phrases above, and the template
+      rule takes 7,589 of their sentences without dropping them. They drop as `web_scrape`
+      (decided 2026-11-15, the author), the largest group of publisher text;
+  11. the template rule masks month names as well as digits, so *Received: 12 March 2010;
+      Accepted: 3 June 2010.* (134 kept works) and *Submitted on January 6, 1958* (66) become
+      template sentences; the rest of the planned boilerplate shares its sentence with a title,
+      names or a file name, so no masking makes it repeat;
+  12. footers the template rule cannot take, in the cleaning patterns: ERIC's document notes (42
       kept works), *Contains fulltext* (20), the machine-keywords notice glued to the sentence
       before it by a footnote number (91), and Frontiers' event, citation and date lines (about
       600);
-  11. no finite verb outside the removed ranges, dropped as `not_prose`, a keeping rule in the
+  13. no finite verb outside the removed ranges, dropped as `not_prose`, a keeping rule in the
       cleaning stage beside *too short*: titles, citation lines, contents lists, conference names
       and captions are phrases, an abstract has a verb (on run 3's sample it caught 15 of the 30
       non-abstracts and none of the 167 abstracts; checked on 30 drops, more from the old
@@ -305,17 +337,17 @@ views (the full order is in step 9).
       whose `DocBin` keeps morphology by default (`VerbForm=Fin`, checked on a cached part; the
       small model marks modals such as *may* finite too), so no rerun of the spaCy pass is
       needed, and a removed citation or template sentence cannot supply the verb;
-  12. book-review headers removed, a token pattern in the cleaning patterns (*By R. M. Williams.
+  14. book-review headers removed, a token pattern in the cleaning patterns (*By R. M. Williams.
       New York: Knopf, 1951. 545 pp. $4.50*);
-  13. texts mostly in Chinese, Japanese or Korean script (about 400 kept works, mostly
+  15. texts mostly in Chinese, Japanese or Korean script (about 400 kept works, mostly
       2000s–2010s), probably in the cleaning stage's not-English rule rather than the language
       detector: the English tokenizer makes few words of text without spaces, so *more words
       removed as another language than kept* may never hold; the cause is checked first;
-  14. a curated list of excluded venues, each entry with its evidence, starting with two police
+  16. a curated list of excluded venues, each entry with its evidence, starting with two police
       academies' journals (*Journal of the Chinese People's Armed Police Force Academy*, 13 kept
       works; *Journal of Liaoning Police Academy*, 14), and Zenodo if 20 of its 3,212 kept works
       say so (the review's spam page came from it);
-  15. the cut-off fragments as `cut_off_sentence` (above), in the corpus build beside the
+  17. the cut-off fragments as `cut_off_sentence` (above), in the corpus build beside the
       `truncated` flag, since a fragment ending in a template sentence is not judged and the
       template removals exist only there.
 
@@ -324,7 +356,9 @@ views (the full order is in step 9).
   *SIR,-A* and *Sir.—Many*), repeated sentences in the template rule, metadata in the record
   kinds, morphology from the cached spaCy documents in the cleaning stage; HTML entities such as
   `&dquo;` (95 kept works) are a character repair, not a removal, and repair comes before the
-  spaCy pass, so they ride with the word-repair run. None of runs 6c–15 reruns the spaCy pass.
+  spaCy pass, so they take a spaCy-pass run of their own beside runs 7 and 8, as does the
+  web-address fix (run 4, below). Runs 7 and 8 rerun the spaCy pass; runs 6c, 6d and 9–17 do
+  not.
 
   Not dropped by length: under 200 characters holds 35,261 kept works (13% of the 1950s, 2% of
   the 2020s), and random ones mix real short abstracts with titles and fragments; the finite-verb
@@ -347,12 +381,26 @@ views (the full order is in step 9).
   stage reads, the whole pipeline reran; the spaCy pass, the language and the cleaning stages
   gave identical outputs (before a change to the catalog package, `dvc commit -f` the stages it
   does not affect).
+- *Runs 6–6d (2026-11-15)*, letters by their opening. Run 6: 639,948 kept, letter drops 1,094
+  (808 by the opening; 18 of 18 sampled were letters); run 6b read the opening after the
+  `abstract_label` removal instead of its own regex, with identical outputs. Run 6c moved the
+  openings into the cleaning patterns (start-only token patterns, label `letter`): 639,952
+  kept, letter drops 1,095, but 5 catalogue records were kept, since spaCy's first-longest filter
+  preferred a longer letter match from the second word (*Letter to the editor regarding…*),
+  which the start check then discarded. Run 6d sets start-only matches aside before the overlap
+  filter, in a spans filter registered with spaCy, and a start-only match counts at the first
+  token or right after the leading *Abstract* label: 639,944 kept, letter drops 1,093. The 5
+  records drop again, 4 openings glued to the next word drop as letters (*To the EditorWe*,
+  *Dear SirMultinational*, *Sir .—I*), a quotation opening *Sir,* is kept, 5 archive letters
+  after a label move to `catalogue_record`, and 43 kept works lose a second leading label too
+  (*Abstract SUMMARY*).
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
   and section headings run into the first word, *IntroductionThe*, *Author SummaryThe*, 548 kept
   works in run 4), both from a word list counted over the corpus itself, since a rule without one
-  cannot tell *a void* from *avoid*. Until then the affected records are flagged.
+  cannot tell *a void* from *avoid*. Moved up on 2026-11-15 as runs 7 and 8 of the cleaning runs
+  above.
 - *Sample audit first:* the old regexes and the new patterns run side by side and must catch the
   same abstracts before the regexes are deleted, apart from deliberate fixes (the exam-spam
   phrases "certification exam", "actual questions" and "exam questions and answers" were left out
