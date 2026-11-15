@@ -10,11 +10,14 @@ from interpretant.catalog import (
     CROSSREF_WORKS_COLUMNS,
     OPENALEX_WORKS_COLUMNS,
     PUBMED_WORKS_COLUMNS,
+    REMOVAL,
     RecordKind,
+    load_cleaning_patterns,
     load_record_kinds,
     read_catalog,
 )
 from interpretant.corpus.record_types import (
+    ABSTRACT_LABEL,
     RECORD_SIGNAL_COLUMNS,
     decide_record_types,
     join_record_signals,
@@ -39,7 +42,11 @@ def work(number: int) -> str:
 def test_join_record_signals_keeps_each_source_and_prefers_crossrefs_page_count() -> None:
     works = pl.DataFrame(
         {"work_id": [work(1), work(2), work(3)],
-         "text": ["In the article on p. 4, read 1974.", "To the Editor: " + "x" * 200, ""]}
+         "text": ["In the article on p. 4, read 1974.", "Abstract:  To the Editor: " + "x" * 200,
+                  ""],
+         "removals": [[{"start": 0, "end": 5, "reason": "url"}],
+                      [{"start": 0, "end": 9, "reason": ABSTRACT_LABEL}], []]},
+        schema_overrides={"removals": pl.List(REMOVAL)},
     )  # fmt: skip
     openalex = staging(
         OPENALEX_WORKS_COLUMNS,
@@ -79,8 +86,13 @@ def test_join_record_signals_keeps_each_source_and_prefers_crossrefs_page_count(
     assert (second["crossref_type"], second["pubmed_types"]) == (None, ["Letter"])
     assert (second["page_count"], second["page_count_source"]) == (2, "pubmed")
     assert (third["title"], third["page_count"], third["page_count_source"]) == ("Lost", None, None)
+    assert first["opening"] == "In the article on p. 4, read 1974."
     assert second["opening"] == "To the Editor: " + "x" * 85
     assert third["opening"] == ""
+
+
+def test_the_abstract_label_is_one_the_cleaning_patterns_remove() -> None:
+    assert ABSTRACT_LABEL in load_cleaning_patterns(read_catalog()).labels
 
 
 KINDS = {
@@ -215,7 +227,6 @@ def test_the_repository_kinds_take_a_pubmed_letter_only_as_a_reply(
     ("opening", "kind"),
     [
         ("To the Editor.\u2014 The recent article by Parker and Brown", "letter"),
-        ("Abstract To the Editor: We read with great interest", "letter"),
         ('SIR,-A " scientific shrine " of the greatest interest to geologists', "letter"),
         ("Dear Editor, with great interest I read the meta-analysis", "letter"),
         ("Sirs: Re Walter H. Oettinger's letter", "letter"),
@@ -225,7 +236,6 @@ def test_the_repository_kinds_take_a_pubmed_letter_only_as_a_reply(
     ],
     ids=[
         "to the editor",
-        "after an abstract label",
         "sir with a dash",
         "dear editor",
         "sirs with a colon",

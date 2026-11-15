@@ -34,9 +34,11 @@ RECORD_SIGNAL_COLUMNS = pl.Schema(
         "opening": pl.String(),
     }
 )
-# Enough of the text for a letter's salutation after an "Abstract" label.
+# Enough of the text for a letter's salutation.
 OPENING_LENGTH = 100
-_OPENING_LABEL = r"^\s*(?:abstract\W*)?"
+# The cleaning patterns' removal label for a leading "Abstract" or "Summary" and its punctuation
+# (curated/cleaning_rules.yaml), which the opening starts after.
+ABSTRACT_LABEL = "abstract_label"
 # An obituary's title is a name and a life span: "GEORGE ROSEN (1910–1977)", "Charles Donald
 # O'Malley. 1 April 1907–7 April 1970". A history title with a period has a phrase before it
 # ("Canada's Immigration Policy, 1957-1962"), told apart by its lower-case or function words.
@@ -60,8 +62,10 @@ def join_record_signals(
 ) -> pl.DataFrame:
     """Each work's record-type signals, one row per work in ``works`` and in its order.
 
-    ``works`` needs ``work_id`` and ``text`` columns; the other three are the staging tables. A
-    source that holds no record for a work, or did not find it, leaves its columns null.
+    ``works`` needs ``work_id``, ``text`` and ``removals`` columns; the other three are the
+    staging tables. A source that holds no record for a work, or did not find it, leaves its
+    columns null. The opening is the text's start after its leading label, if the cleaning
+    patterns removed one.
     """
     found_crossref = crossref.filter("is_found").select(
         "work_id", "crossref_type", "update_types", pl.col("page_count").alias("crossref_pages")
@@ -72,7 +76,7 @@ def join_record_signals(
         pl.col("page_count").alias("pubmed_pages"),
     )
     joined = (
-        works.select("work_id", pl.col("text").str.slice(0, OPENING_LENGTH).alias("opening"))
+        works.select("work_id", _opening().alias("opening"))
         .join(
             openalex.select("work_id", "title", "publication_year", "openalex_type", "is_paratext"),
             on="work_id",
@@ -159,13 +163,23 @@ def _shows(kind: RecordKind) -> pl.Expr:
     if kind.title_patterns:
         signals.append(pl.col("title").str.contains(f"(?i){_either(kind.title_patterns)}"))
     if kind.opening_patterns:
-        opens = f"(?i){_OPENING_LABEL}(?:{_either(kind.opening_patterns)})"
-        signals.append(pl.col("opening").str.contains(opens))
+        signals.append(pl.col("opening").str.contains(f"(?i)^(?:{_either(kind.opening_patterns)})"))
     if kind.life_span_within_years is not None:
         signals.append(_has_obituary_title(kind.life_span_within_years))
     if kind.max_pages is not None:
         signals.append(pl.col("page_count") <= kind.max_pages)
     return pl.any_horizontal(signal.fill_null(value=False) for signal in signals)
+
+
+def _opening() -> pl.Expr:
+    """The text's first characters after its leading label (the first removal, if a label)."""
+    first_removal = pl.col("removals").list.first()
+    label_end = (
+        pl.when(first_removal.struct.field("reason") == ABSTRACT_LABEL)
+        .then(first_removal.struct.field("end"))
+        .otherwise(0)
+    )
+    return pl.col("text").str.slice(label_end).str.strip_chars_start().str.head(OPENING_LENGTH)
 
 
 def _either(patterns: tuple[str, ...]) -> str:
