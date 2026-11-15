@@ -1,47 +1,47 @@
 {
   "abstracts": 705283,
-  "dropped": 65339,
+  "dropped": 65356,
   "dropped_by_reason": {
-    "author_cap": 179,
+    "author_cap": 181,
     "catalogue_record": 8037,
-    "citation_record": 14824,
+    "citation_record": 14838,
     "erratum": 128,
     "exam_spam": 61,
     "letter": 1093,
     "mojibake": 228,
-    "near_duplicate": 5435,
+    "near_duplicate": 5439,
     "news": 253,
-    "not_english": 18794,
+    "not_english": 18791,
     "obituary": 638,
     "template": 9273,
-    "too_short": 4007,
-    "web_scrape": 2389
+    "too_short": 4006,
+    "web_scrape": 2390
   },
   "flagged_by_flag": {
-    "malformed": 2127,
+    "malformed": 2130,
     "paratext": 9,
     "repository_only": 96267,
     "retracted": 147,
-    "truncated": 77470
+    "truncated": 77472
   },
-  "kept": 639944,
+  "kept": 639927,
   "removed_ranges_by_reason": {
-    "abstract_label": 37156,
+    "abstract_label": 37436,
     "catalogue_record": 8037,
-    "citation_record": 14923,
+    "citation_record": 14937,
     "copyright": 5322,
     "doi": 5767,
-    "download_stamp": 155,
+    "download_stamp": 156,
     "email": 1164,
     "encoded_link": 32,
     "exam_spam": 715,
-    "footer": 1768,
+    "footer": 1767,
     "latex": 10772,
     "letter": 833,
-    "not_english": 113049,
-    "repeated_sentence": 4783,
-    "template_sentence": 122461,
-    "url": 14206,
-    "web_scrape": 4340
+    "not_english": 112980,
+    "repeated_sentence": 4790,
+    "template_sentence": 122453,
+    "url": 14207,
+    "web_scrape": 4341
   }
 }
