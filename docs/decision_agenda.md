@@ -291,13 +291,18 @@ views (the full order is in step 9).
      punctuation between, case folded) and how often joined, and repair adds the space where
      apart is the more common by a margin set from a sample (10 times: 7,735 joins in 5,422
      works; 3 times: 10,427 in 6,956; between 1 and 10 times are mostly names, *LinkedIn*,
-     *DuBois*, *WiFi*, *DeVries*). A first part of one letter is never split off (*mRNA*,
-     *eLearning*). A heading glued the same way in every issue of a journal is joined more often
-     than apart (*EditorsThis*, 57 works, 67 joined against 29 apart), so a second test splits a
-     form whose second part is one of the corpus's most common sentence openers (*The*, *In*,
-     *This*) and whose first part has at least four letters: a stop-word test instead would split
-     abbreviations and names (*GaAs*, *TrkA*, *McCall*, *NoGo*). The few the counts get wrong
-     (*LinkedIn*, since *linked in* is a common phrase) go in a short curated list of words kept
+     *DuBois*, *WiFi*, *DeVries*). Run 6d's table kept 10: it splits 6,136 words (9,632 uses),
+     12 of 12 sampled right, and margin 3 would add 2,471 words whose most frequent are names
+     and acronyms (*DataGlove*, *RealSense*, *ToS*, *InR*). A first part of one letter is never
+     split off (*mRNA*, *eLearning*). A heading glued the same way in every issue of a journal is
+     joined more often than apart (*EditorsThis*, 57 works, 67 joined against 29 apart), so a
+     second test splits a form whose second part is one of the corpus's most common sentence
+     openers (*The*, *In*, *This*), whose first part has at least four letters and whose second
+     part at least two: a stop-word test instead would split abbreviations and names (*GaAs*,
+     *TrkA*, *McCall*, *NoGo*), and a one-letter second part is mostly a final *l* read as *I*
+     (*proposaI*, *shalI*) or a name (*microA*, *GlycA*), left for word repair. The few the
+     counts get wrong (*LinkedIn*, since *linked in* is a common phrase; *InDesign*; *CatchIt*)
+     go in a short curated list of words kept
      joined (`curated/kept_joined_words.yaml`), each with its evidence, as the excluded venues
      are; the table (`data/interim/glued_words.parquet`, written by the `count_glued_words`
      stage) and the list are reviewed before the run. spaCy has no component that splits joined
