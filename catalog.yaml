@@ -86,6 +86,17 @@ record_types:
   path: curated/record_types.yaml
   format: yaml
 
+# Glued words kept joined although the corpus counts would split them, each with its evidence.
+kept_joined_words:
+  path: curated/kept_joined_words.yaml
+  format: yaml
+
+# Every glued word of the repaired texts (a lower-case letter run into a capital), its counts
+# over the corpus and whether the spaCy pass splits it (decision agenda 2.3, run 7).
+glued_words:
+  path: data/interim/glued_words.parquet
+  format: parquet
+
 annotations:
   path: data/interim/annotations
   format: docbin

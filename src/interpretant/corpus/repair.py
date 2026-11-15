@@ -113,7 +113,7 @@ def repair_text(raw: str) -> str:
 
 def _add_missing_spaces(pattern: re.Pattern[str], text: str) -> str:
     def spaced(match: re.Match[str]) -> str:
-        if _inside_address(text, match.start(), match.end()):
+        if inside_address(text, match.start(), match.end()):
             return match.group()
         if _ENTITY_END.search(text, 0, match.start()):
             return match.group()
@@ -122,7 +122,7 @@ def _add_missing_spaces(pattern: re.Pattern[str], text: str) -> str:
     return pattern.sub(spaced, text)
 
 
-def _inside_address(text: str, start: int, end: int) -> bool:
+def inside_address(text: str, start: int, end: int) -> bool:
     """Whether the run of text between spaces around ``start:end`` is a web or e-mail address."""
     left = text.rfind(" ", 0, start) + 1
     right = text.find(" ", end)

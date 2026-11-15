@@ -20,8 +20,9 @@ from typing import TypeVar
 
 from pydantic_settings import SettingsConfigDict
 
-from interpretant.catalog import CatalogConfig, save_annotations
+from interpretant.catalog import CatalogConfig, load_glued_words, save_annotations
 from interpretant.corpus.annotation import annotate_texts, build_pipeline
+from interpretant.corpus.glued_words import glued_word_splits
 from interpretant.corpus.works import RawAbstract, part_of
 from interpretant.pipelines.corpus import (
     CorpusResult,
@@ -63,7 +64,9 @@ def annotate_corpus(
     Raises:
         ValueError: if no raw cell matches the selection or the given fields and decades, or a
             cell's metadata has not been fetched or is incomplete.
+        FileNotFoundError: if the glued words have not been counted.
     """
+    splits = glued_word_splits(load_glued_words(catalog))
     cells = corpus_cells(catalog, selection)
     chosen = {
         part_name(cell.field, cell.decade)
@@ -79,7 +82,13 @@ def annotate_corpus(
     progress.stage("loading the spaCy pipeline")
     nlp = build_pipeline(named_entity_recognition=settings.named_entity_recognition)
     progress.stage("spaCy pass", total=len(selected))
-    docs = annotate_texts(selected, nlp, batch_size=batch_size, process_count=process_count)
+    docs = annotate_texts(
+        selected,
+        nlp,
+        glued_word_splits=splits,
+        batch_size=batch_size,
+        process_count=process_count,
+    )
     # spaCy forks its worker processes when the stream starts. Frozen, the objects already alive
     # (the merged works, the pipeline) are never visited by the workers' garbage collection, so
     # the memory the workers inherit stays shared instead of being copied page by page (Python's

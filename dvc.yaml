@@ -40,17 +40,43 @@ stages:
       - ${crossref_works.path}
       - ${pubmed_works.path}
 
+  # Run 7 of the cleaning runs (decision agenda 2.3): the glued words of the repaired texts,
+  # counted over the corpus, and which of them the spaCy pass splits. A few minutes; its table is
+  # reviewed before the pass reads it.
+  count_glued_words:
+    cmd: interpretant count-glued-words
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/glued_words.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/count_glued_words.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - ${kept_joined_words.path}
+      - ${raw_abstracts.path}
+      - ${work_metadata.path}
+    params:
+      - corpus
+      - count_glued_words
+    outs:
+      - ${glued_words.path}
+
   annotate_corpus:
     cmd: interpretant annotate-corpus
     deps:
       - src/interpretant/catalog
       - src/interpretant/corpus/annotation.py
+      - src/interpretant/corpus/glued_words.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/annotate_corpus.py
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
+      - ${glued_words.path}
       - ${raw_abstracts.path}
       - ${work_metadata.path}
     params:

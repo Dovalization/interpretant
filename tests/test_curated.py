@@ -13,6 +13,7 @@ from interpretant.catalog import (
     CleaningPatterns,
     load_cleaning_patterns,
     load_doi_corrections,
+    load_kept_joined_words,
     load_record_kinds,
     read_catalog,
 )
@@ -154,3 +155,27 @@ def test_load_record_kinds_refuses_bad_kinds(
     catalog.record_types.path.write_text("kinds:\n  " + entry)
     with pytest.raises(pydantic.ValidationError, match=message):
         load_record_kinds(catalog)
+
+
+def test_load_kept_joined_words_reads_the_repository_file() -> None:
+    words = [entry.word for entry in load_kept_joined_words(read_catalog())]
+    assert "LinkedIn" in words
+
+
+@pytest.mark.parametrize(
+    ("words", "message"),
+    [
+        (["Linked"], "not letters with a lower-case letter before a capital"),
+        (["Wi-Fi"], "not letters with a lower-case letter before a capital"),
+        (["LinkedIn", "linkedIn"], "listed more than once"),
+    ],
+    ids=["no capital after a lower-case letter", "not only letters", "a word twice in two cases"],
+)
+def test_load_kept_joined_words_refuses_bad_entries(
+    catalog: CatalogConfig, words: list[str], message: str
+) -> None:
+    entries = "".join(f"  - word: {word}\n    evidence: seen\n" for word in words)
+    catalog.kept_joined_words.path.parent.mkdir(parents=True, exist_ok=True)
+    catalog.kept_joined_words.path.write_text("words:\n" + entries)
+    with pytest.raises(pydantic.ValidationError, match=message):
+        load_kept_joined_words(catalog)

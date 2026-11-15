@@ -8,6 +8,18 @@ corpus:
     philosophy, psychology, sociology]
   decades: [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020]
 
+# Run 7, the glued words (count-glued-words, decision agenda 2.3): which words with a lower-case
+# letter run into a capital the spaCy pass splits. All three are provisional, set from a sample.
+count_glued_words:
+  # Split when the corpus writes the two parts apart at least this many times as often as joined
+  # (10: 7,735 joins in 5,422 of run 6c's kept works; 3: 10,427 in 6,956).
+  apart_margin: 10
+  # Or when the second part is one of this many most common sentence openers ("The", "In",
+  # "This") and the first part has at least this many letters: a heading run into the text
+  # ("EditorsThis"), joined in every issue of a journal.
+  opener_count: 30
+  opener_min_left_letters: 4
+
 # Stage 2a, the spaCy pass (annotate-corpus).
 annotate_corpus:
   # Whether the pass runs spaCy's named entity recognition (ner, about 44% of a worker's time).

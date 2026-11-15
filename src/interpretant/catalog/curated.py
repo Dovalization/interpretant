@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from itertools import pairwise
 from typing import Any, Literal
 
 import polars as pl
@@ -196,3 +197,48 @@ def load_record_kinds(catalog: CatalogConfig) -> dict[str, RecordKind]:
     """
     document = yaml.safe_load(catalog.record_types.path.read_text(encoding="utf-8"))
     return dict(RecordKinds.model_validate(document).kinds)
+
+
+class KeptJoinedWord(BaseModel):
+    """A glued word that stays joined although the corpus counts would split it."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    word: str
+    evidence: str = Field(min_length=1)
+
+    @field_validator("word")
+    @classmethod
+    def _is_a_glued_word(cls, word: str) -> str:
+        has_boundary = any(first.islower() and second.isupper() for first, second in pairwise(word))
+        if not (word.isalpha() and has_boundary):
+            raise ValueError(f"{word!r} is not letters with a lower-case letter before a capital")
+        return word
+
+
+class KeptJoinedWords(BaseModel):
+    """The kept-joined words file: each word once, whatever its case."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    words: list[KeptJoinedWord]
+
+    @model_validator(mode="after")
+    def _each_word_once(self) -> KeptJoinedWords:
+        folded = [entry.word.lower() for entry in self.words]
+        repeated = sorted({word for word in folded if folded.count(word) > 1})
+        if repeated:
+            raise ValueError(f"words listed more than once: {repeated}")
+        return self
+
+
+def load_kept_joined_words(catalog: CatalogConfig) -> list[KeptJoinedWord]:
+    """The glued words kept joined, with their evidence (decision agenda 2.3, run 7).
+
+    Raises:
+        FileNotFoundError: if the kept-joined words file does not exist.
+        pydantic.ValidationError: if an entry has no evidence, is not a glued word or repeats
+            another in any case.
+    """
+    document = yaml.safe_load(catalog.kept_joined_words.path.read_text(encoding="utf-8"))
+    return KeptJoinedWords.model_validate(document).words

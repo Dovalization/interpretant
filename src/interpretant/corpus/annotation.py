@@ -11,7 +11,8 @@ documents from the annotation cache, so changing them does not rerun the models.
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable, Iterator, Mapping
+from types import MappingProxyType
 from typing import Any
 
 import spacy
@@ -28,6 +29,7 @@ from spacy.vocab import Vocab
 from srsly.msgpack import msgpack_decoders, msgpack_encoders
 
 from interpretant.catalog import WORK_ID
+from interpretant.corpus.glued_words import split_glued_words
 from interpretant.corpus.repair import repair_text
 from interpretant.corpus.works import RawAbstract
 
@@ -87,6 +89,8 @@ _DOI = r"^(?:doi:)?10\.\d{4,9}/\S+$"
 # spaCy's own URL rule extended with DOIs, as one compiled pattern so the tokenizer can still be
 # serialised to worker processes.
 URL_OR_DOI = re.compile(f"(?u)(?:{_DOI})|(?:{URL_PATTERN})")
+# No glued word is split unless the caller passes the splits.
+_NO_SPLITS: Mapping[str, str] = MappingProxyType({})
 
 
 def build_pipeline(
@@ -250,11 +254,19 @@ def annotate_texts(
     abstracts: Iterable[RawAbstract],
     nlp: Language,
     *,
+    glued_word_splits: Mapping[str, str] = _NO_SPLITS,
     batch_size: int = 256,
     process_count: int = 1,
 ) -> Iterator[Doc]:
-    """Repair and annotate each abstract, in order; each document carries its work id."""
-    pairs = ((repair_text(abstract.text), abstract.work_id) for abstract in abstracts)
+    """Repair and annotate each abstract, in order; each document carries its work id.
+
+    After repair, each glued word in ``glued_word_splits`` is written as its two parts (decision
+    agenda 2.3, run 7), so the stored text and every later step read two words.
+    """
+    pairs = (
+        (split_glued_words(repair_text(abstract.text), glued_word_splits), abstract.work_id)
+        for abstract in abstracts
+    )
     for doc, work_id in nlp.pipe(
         pairs, as_tuples=True, batch_size=batch_size, n_process=process_count
     ):

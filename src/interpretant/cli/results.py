@@ -5,6 +5,7 @@ from __future__ import annotations
 from rich.table import Table
 
 from interpretant.pipelines.corpus import CorpusResult
+from interpretant.pipelines.count_glued_words import GluedWordsResult
 from interpretant.pipelines.detect_languages import LanguageResult
 
 
@@ -45,4 +46,18 @@ def render_language_result(result: LanguageResult) -> Table:
     table.add_column("Share", justify="right")
     for language, count in result.sentence_counts.items():
         table.add_row(language, f"{count:,}", f"{count / total:.2%}")
+    return table
+
+
+def render_glued_words_result(result: GluedWordsResult) -> Table:
+    """One table: the glued words split for each reason, and how often they occur."""
+    split_words = sum(result.split_counts.values())
+    table = Table(
+        title=f"{split_words:,} of {result.word_count:,} glued words split "
+        f"({result.split_occurrences:,} occurrences) in {result.abstract_count:,} abstracts"
+    )
+    table.add_column("Reason")
+    table.add_column("Words", justify="right")
+    for reason, count in result.split_counts.items():
+        table.add_row(reason, f"{count:,}")
     return table

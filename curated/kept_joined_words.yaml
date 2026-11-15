@@ -1,0 +1,14 @@
+# Glued words that stay joined although the corpus counts would split them (decision agenda 2.3,
+# run 7). Read by count-glued-words; runs never write here.
+#
+# A word with a lower-case letter run straight into a capital is split before the spaCy pass
+# when the corpus writes its parts apart far more often than joined, or when its second part is
+# a common sentence opener (params.yaml, count_glued_words). The counts get a few names wrong,
+# mostly where the two parts also make an ordinary phrase. Each entry is matched in any case and
+# carries its evidence: the counts from the glued words table and what the word names.
+
+words:
+  - word: LinkedIn
+    evidence: >-
+      The social network. In run 6c's kept works "linked in" is written apart 139 times, as an
+      ordinary phrase, and the name joined 117 times (59 works), and "In" opens sentences.
