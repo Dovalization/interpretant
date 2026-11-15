@@ -148,6 +148,8 @@ def _shows(kind: RecordKind) -> pl.Expr:
         signals.append(_holds_any("update_types", kind.crossref_update_types))
     if kind.pubmed_types:
         signals.append(_holds_any("pubmed_types", kind.pubmed_types))
+    if kind.pubmed_types_together:
+        signals.append(_holds_all("pubmed_types", kind.pubmed_types_together))
     if kind.title_patterns:
         either = "|".join(f"(?:{pattern})" for pattern in kind.title_patterns)
         signals.append(pl.col("title").str.contains(f"(?i){either}"))
@@ -160,3 +162,7 @@ def _shows(kind: RecordKind) -> pl.Expr:
 
 def _holds_any(column: str, values: frozenset[str]) -> pl.Expr:
     return pl.col(column).list.eval(pl.element().is_in(sorted(values))).list.any()
+
+
+def _holds_all(column: str, values: frozenset[str]) -> pl.Expr:
+    return pl.all_horizontal(pl.col(column).list.contains(value) for value in sorted(values))

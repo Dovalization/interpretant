@@ -137,8 +137,15 @@ def test_load_record_kinds_reads_the_repository_file_in_order_with_its_actions()
         ("letter:\n    action: remove\n    max_pages: 2\n", "action"),
         ("letter:\n    action: keep\n    title_patterns: ['(']\n", "not a valid pattern"),
         ("Book Review:\n    action: keep\n    max_pages: 2\n", "lower-case words"),
+        ("letter:\n    action: keep\n    pubmed_types_together: [Letter]\n", "two or more"),
     ],
-    ids=["a kind without signals", "an unknown action", "a broken pattern", "a malformed name"],
+    ids=[
+        "a kind without signals",
+        "an unknown action",
+        "a broken pattern",
+        "a malformed name",
+        "a single type together",
+    ],
 )
 def test_load_record_kinds_refuses_bad_kinds(
     catalog: CatalogConfig, entry: str, message: str

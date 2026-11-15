@@ -177,3 +177,30 @@ def test_the_repository_kinds_read_titles_as_their_census_showed(
     table = signals([{"work_id": work(1), "title": title, "publication_year": year}])
     decided = decide_record_types(table, load_record_kinds(read_catalog()))
     assert decided["record_type"].to_list() == [kind]
+
+
+@pytest.mark.parametrize(
+    ("pubmed_types", "kind"),
+    [
+        (["Letter", "Comment"], "letter"),
+        (["Comment", "Journal Article", "Letter"], "letter"),
+        (["Letter"], None),
+        (["Letter", "Research Support, Non-U.S. Gov't"], None),
+        (["Comment"], "comment"),
+        (None, None),
+    ],
+    ids=[
+        "a reply to an article",
+        "a reply among other types",
+        "a research letter",
+        "a funded research letter",
+        "a commentary",
+        "not in PubMed",
+    ],
+)
+def test_the_repository_kinds_take_a_pubmed_letter_only_as_a_reply(
+    pubmed_types: list[str] | None, kind: str | None
+) -> None:
+    table = signals([{"work_id": work(1), "pubmed_types": pubmed_types}])
+    decided = decide_record_types(table, load_record_kinds(read_catalog()))
+    assert decided["record_type"].to_list() == [kind]

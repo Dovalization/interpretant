@@ -118,10 +118,10 @@ class RecordKind(BaseModel):
     """A kind of record that is not a work's own abstract: what shows it, and what is done.
 
     A record shows the kind when any one signal is present: an OpenAlex type, a Crossref update
-    type (the record is itself a notice about another), a PubMed publication type, a title
-    pattern (case-insensitive, Polars' regular expressions), a title made of a name and a life
-    span ending at most ``life_span_within_years`` before publication, or at most ``max_pages``
-    pages.
+    type (the record is itself a notice about another), a PubMed publication type, every one of
+    ``pubmed_types_together`` (a letter that is also a comment), a title pattern
+    (case-insensitive, Polars' regular expressions), a title made of a name and a life span
+    ending at most ``life_span_within_years`` before publication, or at most ``max_pages`` pages.
     """
 
     model_config = ConfigDict(extra="forbid", frozen=True)
@@ -130,9 +130,19 @@ class RecordKind(BaseModel):
     openalex_types: frozenset[str] = frozenset()
     crossref_update_types: frozenset[str] = frozenset()
     pubmed_types: frozenset[str] = frozenset()
+    pubmed_types_together: frozenset[str] = frozenset()
     title_patterns: tuple[str, ...] = ()
     life_span_within_years: int | None = Field(default=None, ge=0)
     max_pages: int | None = Field(default=None, ge=1)
+
+    @field_validator("pubmed_types_together")
+    @classmethod
+    def _together_means_two_or_more(cls, types: frozenset[str]) -> frozenset[str]:
+        if len(types) == 1:
+            raise ValueError(
+                "pubmed_types_together needs two or more types; one goes in pubmed_types"
+            )
+        return types
 
     @field_validator("title_patterns")
     @classmethod
@@ -150,6 +160,7 @@ class RecordKind(BaseModel):
             self.openalex_types,
             self.crossref_update_types,
             self.pubmed_types,
+            self.pubmed_types_together,
             self.title_patterns,
         )
         lengths = (self.life_span_within_years, self.max_pages)
@@ -180,7 +191,8 @@ def load_record_kinds(catalog: CatalogConfig) -> dict[str, RecordKind]:
     Raises:
         FileNotFoundError: if the record kinds file does not exist.
         pydantic.ValidationError: if a kind has no signal, an unknown action or field, a title
-            pattern Polars cannot read, or a name that cannot serve as a drop reason.
+            pattern Polars cannot read, a single type as PubMed types together, or a name that
+            cannot serve as a drop reason.
     """
     document = yaml.safe_load(catalog.record_types.path.read_text(encoding="utf-8"))
     return dict(RecordKinds.model_validate(document).kinds)

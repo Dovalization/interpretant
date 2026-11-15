@@ -78,11 +78,13 @@ kinds:
       - '^\s*news\s*:\s*(?-i:[A-Z])'
 
   # Letters: to the editor, and archive letters ("Letter from Dr. Koch to FA Davis Company",
-  # "LETTER XXIV. Newton to Cotes, June 7, 1711").
+  # "LETTER XXIV. Newton to Cotes, June 7, 1711"). PubMed's Letter alone also marks research
+  # letters (379 of run 5's 813 letter drops, mostly short research reports), so PubMed shows a
+  # letter only when it also types it a Comment, a reply to an article.
   letter:
     action: drop
     openalex_types: [letter]
-    pubmed_types: [Letter]
+    pubmed_types_together: [Letter, Comment]
     title_patterns:
       - '^\s*(letters?|letters? to the editors?|correspondence|readers''?\s*letters)\s*[.:;,—–-]?\s*$'
       - '^\s*(letters? to the editors?|correspondence)\s*:'
