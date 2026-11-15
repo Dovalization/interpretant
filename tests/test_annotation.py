@@ -638,3 +638,22 @@ def test_annotate_texts_gives_the_same_documents_in_worker_processes(nlp: Langua
         ]
 
     assert documents(2) == documents(1)
+
+
+def test_annotate_texts_ends_the_pass_before_raising_an_error_in_its_input(
+    nlp: Language, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def repair_or_fail(text: str) -> str:
+        if text.startswith("Broken"):
+            raise ValueError("cannot repair")
+        return text
+
+    monkeypatch.setattr("interpretant.corpus.annotation.repair_text", repair_or_fail)
+    abstracts = [raw(f"Models learn senses {work}.", work=work) for work in range(4)]
+    docs = annotate_texts(
+        [*abstracts, raw("Broken text.", work=9)], nlp, batch_size=2, process_count=2
+    )
+    work_ids = []
+    with pytest.raises(ValueError, match="cannot repair"):
+        work_ids.extend(doc.user_data[WORK_ID] for doc in docs)
+    assert len(work_ids) == len(abstracts)

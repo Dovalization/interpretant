@@ -260,14 +260,37 @@ def annotate_texts(
     """Repair and annotate each abstract, in order; each document carries its work id.
 
     After repair, each glued word in ``glued_word_splits`` is written as its two parts (decision
-    agenda 2.3, run 7), so the stored text and every later step read two words.
+    agenda 2.3, run 7), so the stored text and every later step read two words. An error while
+    repairing ends the stream of texts and is raised once the documents before it are given.
     """
-    pairs = (
-        (split_glued_words(repair_text(abstract.text), glued_word_splits), abstract.work_id)
-        for abstract in abstracts
+    errors: list[Exception] = []
+    pairs = _until_error(
+        (
+            (split_glued_words(repair_text(abstract.text), glued_word_splits), abstract.work_id)
+            for abstract in abstracts
+        ),
+        errors,
     )
     for doc, work_id in nlp.pipe(
         pairs, as_tuples=True, batch_size=batch_size, n_process=process_count
     ):
         doc.user_data[WORK_ID] = work_id
         yield doc
+    if errors:
+        raise errors[0]
+
+
+def _until_error(
+    pairs: Iterator[tuple[str, str]], errors: list[Exception]
+) -> Iterator[tuple[str, str]]:
+    """The pairs until one fails, the error kept in ``errors`` for the caller to raise.
+
+    With worker processes, an error inside ``nlp.pipe``'s input never reaches the caller: spaCy
+    (3.8, ``Language._multiprocessing_pipe``) joins its workers while they wait to send the
+    documents already made, and the pass hangs (run 7b's first attempt). Ending the input instead
+    lets spaCy finish what it was sent and stop its workers.
+    """
+    try:
+        yield from pairs
+    except Exception as exc:
+        errors.append(exc)
