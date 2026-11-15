@@ -15,8 +15,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 28f7a26725ce18ef4f6b47a630c31e10.dir
-      size: 45853
+      md5: 3e32fdbff7e79d8100daf4c3a2d8717b.dir
+      size: 46047
       nfiles: 14
     - path: src/interpretant/corpus/annotation.py
       hash: md5
@@ -83,8 +83,8 @@ stages:
     deps:
     - path: curated/record_types.yaml
       hash: md5
-      md5: 3e7897fe6ba57a65665676e109445951
-      size: 6448
+      md5: b6382e45a83b76bf6df4553c5b034c60
+      size: 6877
     - path: data/interim/annotated_abstracts
       hash: md5
       md5: f6103e9d348132add2984d3cf6479ae5.dir
@@ -114,8 +114,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 28f7a26725ce18ef4f6b47a630c31e10.dir
-      size: 45853
+      md5: 3e32fdbff7e79d8100daf4c3a2d8717b.dir
+      size: 46047
       nfiles: 14
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
@@ -135,8 +135,8 @@ stages:
       size: 9374
     - path: src/interpretant/corpus/record_types.py
       hash: md5
-      md5: 0af57a27edae71f165221fad3b769cf6
-      size: 7315
+      md5: 2280acdc41882e8cafe4839445e870ff
+      size: 7836
     - path: src/interpretant/corpus/removals.py
       hash: md5
       md5: 0dd5779e8854c5403913558ed275e210
@@ -201,16 +201,16 @@ stages:
     outs:
     - path: data/processed/abstracts
       hash: md5
-      md5: d1ea6664cd9d880af169fbfc030edf46.dir
-      size: 288386550
+      md5: ea3fbb2e48eec3359f192abdef5e6afb.dir
+      size: 288386346
       nfiles: 88
   report_corpus:
     cmd: interpretant report-corpus
     deps:
     - path: data/processed/abstracts
       hash: md5
-      md5: d1ea6664cd9d880af169fbfc030edf46.dir
-      size: 288386550
+      md5: ea3fbb2e48eec3359f192abdef5e6afb.dir
+      size: 288386346
       nfiles: 88
     - path: data/raw/openalex
       hash: md5
@@ -224,8 +224,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 28f7a26725ce18ef4f6b47a630c31e10.dir
-      size: 45853
+      md5: 3e32fdbff7e79d8100daf4c3a2d8717b.dir
+      size: 46047
       nfiles: 14
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
@@ -294,12 +294,12 @@ stages:
     outs:
     - path: data/processed/corpus_report.md
       hash: md5
-      md5: c03afdc1f523d84853eb334ba84a5117
-      size: 21577
+      md5: 56abf6001a39809b97bc7aeb266fc4c7
+      size: 21500
     - path: metrics/corpus.json
       hash: md5
-      md5: 85495a826f6c4420c8dc49e8d5b11cf4
-      size: 993
+      md5: 0148dfcf4f1caf91b45ddc7a4be299d0
+      size: 994
   detect_languages:
     cmd: interpretant detect-languages
     deps:
@@ -310,8 +310,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 28f7a26725ce18ef4f6b47a630c31e10.dir
-      size: 45853
+      md5: 3e32fdbff7e79d8100daf4c3a2d8717b.dir
+      size: 46047
       nfiles: 14
     - path: src/interpretant/corpus/language.py
       hash: md5
@@ -427,8 +427,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 28f7a26725ce18ef4f6b47a630c31e10.dir
-      size: 45853
+      md5: 3e32fdbff7e79d8100daf4c3a2d8717b.dir
+      size: 46047
       nfiles: 14
     - path: src/interpretant/corpus/language.py
       hash: md5
@@ -522,8 +522,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: 28f7a26725ce18ef4f6b47a630c31e10.dir
-      size: 45853
+      md5: 3e32fdbff7e79d8100daf4c3a2d8717b.dir
+      size: 46047
       nfiles: 14
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
