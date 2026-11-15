@@ -898,6 +898,12 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   work to the label rules (reference lists, *Submitted on January 6, 1958*, Frontiers event
   details), word repair (*M ovement*, *toocold*, *L1and*) and two checks (a text that does not
   match its title, a text that starts mid-word).
+- **Run 3's verdicts against run 7 (checked 2026-11-15).** Of the 30 records judged not
+  abstracts, 29 are still kept; only r186 (a letter) drops, by its opening. The rest wait for the
+  citation, publisher-text and finite-verb runs (9, 10, 13) and the venue list (16). One record
+  judged an abstract, r018 (*To the Editor:— In The Journal, Dec. 24, 1955…*), now drops as a
+  letter: it has r186's form, and the author decided on 2026-11-15 that it drops, so it counts
+  as a letter, not an abstract. `verdicts.jsonl` keeps the answers as given.
 - **The next review's rule (changed 2026-11-15, before that review is read, and prompted by run
   3's failure).** At most 2 non-abstracts in 200 fails a corpus at Layer 3's 2% target three
   times in four (it passes 68% of the time at 1%, 24% at 2%), while at most 2 in a decade's 25
