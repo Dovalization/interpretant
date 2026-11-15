@@ -310,6 +310,17 @@ views (the full order is in step 9).
   combined layer, and the analysis checks that results hold without them. Later, beside these
   runs: Crossref abstract recovery (about 15,000 dropped records with DOIs, and the fixed-length
   snippets).
+- *Run 5 (2026-11-15)*: 640,229 works kept, 1,795 fewer than run 4 (letters 813, obituaries 638,
+  news 253, errata 128; a few had been near-duplicate or template drops, now dropped first by
+  their kind). At most 0.6% of any decade; obituaries 572 in history and philosophy of science.
+  Its letters were 240 by title (correspondence and archive letters), 42 by PubMed's Letter with
+  Comment (replies to an article), and 527 by PubMed's Letter alone, mostly short research
+  reports (*Olfactory impairment in posterior cortical atrophy…*). *Run 5b*: a kind can name
+  PubMed types that must appear together, and the letter kind takes Letter only with Comment:
+  640,740 kept, letter drops 286. Since the kind model sits in the catalog package that every
+  stage reads, the whole pipeline reran; the spaCy pass, the language and the cleaning stages
+  gave identical outputs (before a change to the catalog package, `dvc commit -f` the stages it
+  does not affect).
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
