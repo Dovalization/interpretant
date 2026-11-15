@@ -407,6 +407,17 @@ views (the full order is in step 9).
   *Dear SirMultinational*, *Sir .—I*), a quotation opening *Sir,* is kept, 5 archive letters
   after a label move to `catalogue_record`, and 43 kept works lose a second leading label too
   (*Abstract SUMMARY*).
+- *Run 7 (2026-11-15)*, glued words split before the spaCy pass: 6,744 of 52,455 glued words
+  split (10,760 uses; 6,136 written apart at least 10 times as often, 608 by the opener test),
+  639,927 kept (17 fewer than run 6d). Split words left in kept texts fell from 9,692 to 47, all
+  inside web addresses. 280 more *Abstract* labels are removed (*AbstractThe*), 14 Wiley page
+  scrapes now match `citation_record` (*…p. 51-66 Article Free Access…*), 4 near-copies whose
+  twin was glued drop as near-duplicates, and 2 English titles stop dropping as not English.
+  Six kept works lose most of a non-English removal as segmentation shifts (an Occitan
+  bibliography, a German book title in a review header), and one Catalan text with OCR damage
+  is now kept, its only sentence read as English, both for the language and review-header
+  runs. One split fell inside a DOI (*10.21437/SpeechProsody*); the address check does not yet
+  cover DOIs, a fix for run 7b's pass.
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
