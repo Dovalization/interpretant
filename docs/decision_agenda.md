@@ -281,8 +281,10 @@ views (the full order is in step 9).
      reason `letter`, so no record-kind code re-reads the text;
   7. glued words split (moved up from the word-repair step on 2026-11-15, the author): a
      lower-case letter run straight into a capital where both parts are words (*AbstractThe*,
-     *ResultsThe*, *ObjectiveTo*, *ofThe*, *NewYork*, *To the EditorWe*), and joins in lower
-     case (*ofthe*, *inthe*). On run 6c's kept works, 195,655 words hold a lower-case letter
+     *ResultsThe*, *ObjectiveTo*, *ofThe*, *NewYork*, *To the EditorWe*); joins in lower case
+     (*ofthe*, *inthe*) follow as run 7b, since there the split point has to be searched and
+     pairs such as *a broad* and *abroad* show the risk. On run 6c's kept works, 195,655 words
+     hold a lower-case letter
      before a capital, in 65,890 works, most of them names and terms written that way (*mRNA*,
      *fMRI*, *PubMed*, *YouTube*, *McCarthy*, *pH*), so the corpus decides: a counting step
      writes a table of each joined form, how often its parts appear apart (a space or
@@ -292,13 +294,19 @@ views (the full order is in step 9).
      *DuBois*, *WiFi*, *DeVries*). A first part of one letter is never split off (*mRNA*,
      *eLearning*). A heading glued the same way in every issue of a journal is joined more often
      than apart (*EditorsThis*, 57 works, 67 joined against 29 apart), so a second test splits a
-     form whose second part is a common sentence opener (*The*, *This*, *We*, *In*). The few the
-     counts get wrong (*LinkedIn*, since *linked in* is a common phrase) go in a short curated
-     list of words kept joined, each with its evidence, as the excluded venues are; the table
-     and the list are reviewed before the run. spaCy has no component that splits joined words,
-     and tokenizer special cases would split the tokens but leave the stored text joined, which
-     duplicate and template detection read by spaces (why run 4 wrote the punctuation spaces
-     into the text); the spaces go in with Polars' `str.replace_many`. Reruns the spaCy pass;
+     form whose second part is one of the corpus's most common sentence openers (*The*, *In*,
+     *This*) and whose first part has at least four letters: a stop-word test instead would split
+     abbreviations and names (*GaAs*, *TrkA*, *McCall*, *NoGo*). The few the counts get wrong
+     (*LinkedIn*, since *linked in* is a common phrase) go in a short curated list of words kept
+     joined (`curated/kept_joined_words.yaml`), each with its evidence, as the excluded venues
+     are; the table (`data/interim/glued_words.parquet`, written by the `count_glued_words`
+     stage) and the list are reviewed before the run. spaCy has no component that splits joined
+     words, and tokenizer special cases would split the tokens but leave the stored text joined,
+     which duplicate and template detection read by spaces (why run 4 wrote the punctuation
+     spaces into the text). The counts are Polars expressions (Aho-Corasick for the phrases); the
+     split is a dictionary lookup on each candidate word right after repair, since Polars'
+     `str.replace_many` also matches inside longer words and cannot skip web addresses. Reruns the
+     spaCy pass;
   8. split words joined (moved up with run 7): words broken by a space or a line-break hyphen
      (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept records in run 2,
      4.1% of the 1950s), joined where the corpus writes the joined form far more often than
