@@ -249,11 +249,67 @@ views (the full order is in step 9).
   before they drop anything. The record type is recorded through the drop reason or a flag for
   now; a column beside each source's values waits for the combined layer (4.8, layers), since
   the abstracts table's schema is shared with earlier builds that the comparison reads.
-- *To decide: the unfinished last sentence of a cut-off record.* 70,276 of run 4's kept works end
-  mid-sentence (the `truncated` flag; 25% of the 1950s, 4.9% of the 2020s), often where the
-  source cut the text at a fixed length. Their sentences up to the last full stop are usable;
-  the fragment after it (*Some months before he had been seen by an*) would give half-sentence
-  usages. Proposed: mark it removed with its own reason, so the contextual view leaves it out.
+  Decided after run 3's review (the author, 2026-11-15): errata, obituaries, news and letters
+  drop; book reviews, editorials and comments stay, since a review, an editorial or a reply
+  argues in the field's own terms (of 12 sampled comments, all were commentaries such as
+  *Against medical ethics: opening the can of worms* or philosophers' replies and rejoinders,
+  none correspondence), and a book review's header (*By Robin M. Williams. New York: Alfred A.
+  Knopf, 1951. 545 pp. $4.50*) is removed so its prose stays without the book's title. Records
+  of at most two pages stay: 7 of the 10 in run 3's sample were abstracts. The kind stays in the
+  file until page count is a column of the combined layer.
+- *The unfinished last sentence of a cut-off record (decided 2026-11-15).* 70,276 of run 4's
+  kept works end without sentence punctuation (the `truncated` flag; 25% of the 1950s, 4.9% of
+  the 2020s), and the flag holds three things: real cuts (*Some months before he had been seen by
+  an*), often where the source cut the text at a fixed length (lengths pile up at exactly 160,
+  155, 300, 200 and 250 characters, about 3,000 works); text that never had a full stop (titles,
+  keyword and contents lists); and citation lines ending in page numbers (9,038 end in a digit).
+  The fragments hold 1.5% of the kept text, and 17,422 flagged works are one unfinished
+  sentence. Once the citation, publisher-text and finite-verb runs below have dropped the second
+  and third groups under their own reasons, the last fragment of each work still flagged is
+  marked removed as `cut_off_sentence`: its words are real uses up to the cut, so the static
+  view keeps them, and the contextual view draws no mention from it (so the mention draw, 4.3,
+  reads removals by reason). No work is dropped for being cut off; the fixed-length snippets
+  with a DOI go to the Crossref abstract recovery.
+- *The cleaning runs after run 3's review (decided 2026-11-15)*, one rule per run, each reported
+  against the run before (counts by field and decade, five random examples), specific rules
+  before general ones, so a work two rules match takes the specific reason:
+  5. record kinds: errata, obituaries, news and letters dropped;
+  6. a letter signal from the text: an opening *To the Editor*, *Sir,* or *Dear Editor* (794
+     kept works, 1,425 with the kind's other signals; 8 of 8 sampled were letters);
+  7. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
+     1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
+     125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
+     citation after real prose is a removed range, not a drop, and the report counts how many
+     have a Crossref abstract;
+  8. publisher page text the `web_scrape` patterns miss (*Get access*, *Preview this article*,
+     *Restricted access… First published*; *was published in* only in De Gruyter's form, since
+     it also opens real sentences: *Jan Herkel's Elementa… was published in Buda*);
+  9. the spaCy pass records each work's count of finite verbs (`VerbForm=Fin`) and changes no
+     rule, so the run shows that nothing else moved;
+  10. no finite verb anywhere, dropped as `not_prose`: titles, citation lines, contents lists,
+      conference names and captions are phrases, an abstract has a verb (on run 3's sample it
+      caught 15 of the 30 non-abstracts and none of the 167 abstracts; checked on 30 drops,
+      more from the old decades, before it is kept, since the small tagger misreads OCR, text in
+      capitals and note-style structured abstracts);
+  11. book-review headers removed;
+  12. the language check for texts mostly in Chinese, Japanese or Korean script (about 400 kept
+      works, mostly 2000s–2010s);
+  13. a curated list of excluded venues, each entry with its evidence, starting with two police
+      academies' journals (*Journal of the Chinese People's Armed Police Force Academy*, 13 kept
+      works; *Journal of Liaoning Police Academy*, 14), and Zenodo if 20 of its 3,212 kept works
+      say so (the review's spam page came from it);
+  14. the cut-off fragments as `cut_off_sentence` (above).
+
+  Not dropped by length: under 200 characters holds 35,261 kept works (13% of the 1950s, 2% of
+  the 2020s), and random ones mix real short abstracts with titles and fragments; the finite-verb
+  rule takes the short junk. Not dropped by venue name or indexing: *police* and *military* also
+  name *Military Psychology* and *Armed Forces & Society*, and the journals indexed nowhere but
+  OpenAlex (36,105 kept works in 7,741 venues) include *The Review of Metaphysics*. Those
+  journals hold 16% of the 2000s kept works (1–8% in the other decades), many of them Chinese
+  journals with translated English abstracts; they stay, an *indexed elsewhere* column joins the
+  combined layer, and the analysis checks that results hold without them. Later, beside these
+  runs: Crossref abstract recovery (about 15,000 dropped records with DOIs, and the fixed-length
+  snippets).
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
@@ -685,7 +741,7 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   saved; adapted from `scripts/review/judge_template.html`.
 - **When:** the first rebuild, and again only when cleaning rules or sources change; otherwise
   layers 1 and 2.
-- **Run 3's review (2026-11-14, under way).** About 200 judgements cannot show a share under 1%
+- **Run 3's review (2026-11-14).** About 200 judgements cannot show a share under 1%
   in each decade (none in 25 only puts it under about 12%), so the review asks what the author's
   hour can answer: 200 kept records, 25 per decade, each judged abstract, not an abstract, not
   English or unsure (an article's opening paragraphs count as an abstract: the two are often
@@ -696,6 +752,39 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   decade's 25; the detectors' counts under 1% of every decade's records; sentence-break precision
   of at least 98% on the 50. The answers set the order of the cleaning batches (2.3); run 4
   changed only spacing, so they hold for it.
+- **Run 3's results (read 2026-11-15; the answers, without the texts, in
+  `data/review/run3/verdicts.jsonl`).** Records: 30 not abstracts and 3 unsure in 200 (15%,
+  Wilson 95% interval 11–21%); by decade 7, 4 (+2 unsure), 5, 2, 4, 3 (+1), 2, 3, so six decades
+  over 2; by field sociology 10 of 32, history and philosophy of science 5 of 20, linguistics 5
+  of 21, AI, computer science and HCI none of 34. 26 of the 33 are not the work's own text:
+  citation lines and publisher pages (10); archive and repository items (photo captions,
+  newspaper pages, catalogue notes, a conference name, a spam page; 10); tables of contents (4);
+  a publisher's blurb and a borrowed chronology. Four are kinds (an obituary, a letter, two book
+  reviews), one is 55 characters, and one is a real abstract from a police academy's journal,
+  not a research venue. The record-type batch caught 3 of them, all by page count, which also
+  caught 7 abstracts; the labelled kinds caught none. Sentence breaks: 6 wrong cuts in 338
+  (98.2%), all in one OCR'd footnote block, only one of them plainly wrong (*5 Breviloquium, p.
+  7 | , c. 5*); 29 missed, 13 of them headings glued to the next sentence (*Methods:*,
+  *Results:*; only a leading *Abstract* or *Summary* is labelled), 8 in a book's contents list,
+  about 6 in damaged text and 2 the splitter's own (*metaphor... Our*, *mask\* Chapter Two*).
+  The stopping rule fails on the records and passes on the sentence breaks. The notes also give
+  work to the label rules (reference lists, *Submitted on January 6, 1958*, Frontiers event
+  details), word repair (*M ovement*, *toocold*, *L1and*) and two checks (a text that does not
+  match its title, a text that starts mid-word).
+- **The next review's rule (changed 2026-11-15, before that review is read, and prompted by run
+  3's failure).** At most 2 non-abstracts in 200 fails a corpus at Layer 3's 2% target three
+  times in four (it passes 68% of the time at 1%, 24% at 2%), while at most 2 in a decade's 25
+  lets a decade at 8% pass 68% of the time: the two parts agreed neither with each other nor
+  with the target. The next review: 200 kept records, 25 per decade, the 200 weighting the
+  decades equally since each decade is one point of the comparison; at most 6 failures in the
+  200 (a corpus at 2% passes 89% of the time, at 3% 61%, at 5% 12%) and at most 2 in any
+  decade's 25, a coarse warning (a decade at 15% fails 75% of the time); 10 random drops of each
+  new rule, 2 or more abstracts among them sending the rule back. A failure is text that is not
+  the work's own prose, a letter or obituary the detectors missed, or text not in English; an
+  unsure item is settled from the source page or counts as a failure; book reviews, editorials
+  and comments count as abstracts. The detectors' clause goes, since the kinds are now decided.
+  The sentence breaks are judged again only after word repair reruns the spaCy pass, since no
+  run before it moves a cut. Run 3 fails under both rules.
 - **After sign-off: abstracts against full texts** (assumption A6; decided 2026-11-14). Full
   texts do not become the corpus. Of run 4's kept works, 19–22% per decade before the 2010s have
   an open copy (42% in the 2010s, 67% in the 2020s), and 2–4% before 2000 carry a licence that
