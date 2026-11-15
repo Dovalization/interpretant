@@ -80,11 +80,18 @@ kinds:
   # Letters: to the editor, and archive letters ("Letter from Dr. Koch to FA Davis Company",
   # "LETTER XXIV. Newton to Cotes, June 7, 1711"). PubMed's Letter alone also marks research
   # letters (379 of run 5's 813 letter drops, mostly short research reports), so PubMed shows a
-  # letter only when it also types it a Comment, a reply to an article.
+  # letter only when it also types it a Comment, a reply to an article. A text opening with a
+  # salutation is a letter too ("To the Editor.— The recent article by…", "SIR,-A scientific
+  # shrine…", "Dear Editor, with great interest…"; 794 of run 4's kept works, 8 of 8 sampled
+  # were letters); "Sir" needs a comma, colon or dash after it, so "Sir Isaac" is not one.
   letter:
     action: drop
     openalex_types: [letter]
     pubmed_types_together: [Letter, Comment]
+    opening_patterns:
+      - 'to the editors?\b'
+      - 'dear (sirs?|editors?|madam)\b'
+      - 'sirs?\s*[,:;.—–-]'
     title_patterns:
       - '^\s*(letters?|letters? to the editors?|correspondence|readers''?\s*letters)\s*[.:;,—–-]?\s*$'
       - '^\s*(letters? to the editors?|correspondence)\s*:'

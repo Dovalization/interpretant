@@ -119,9 +119,10 @@ class RecordKind(BaseModel):
 
     A record shows the kind when any one signal is present: an OpenAlex type, a Crossref update
     type (the record is itself a notice about another), a PubMed publication type, every one of
-    ``pubmed_types_together`` (a letter that is also a comment), a title pattern
-    (case-insensitive, Polars' regular expressions), a title made of a name and a life span
-    ending at most ``life_span_within_years`` before publication, or at most ``max_pages`` pages.
+    ``pubmed_types_together`` (a letter that is also a comment), a title pattern, an opening
+    pattern matched at the start of the text (after an "Abstract" label, if any), a title made
+    of a name and a life span ending at most ``life_span_within_years`` before publication, or
+    at most ``max_pages`` pages. Patterns are case-insensitive, in Polars' regular expressions.
     """
 
     model_config = ConfigDict(extra="forbid", frozen=True)
@@ -132,6 +133,7 @@ class RecordKind(BaseModel):
     pubmed_types: frozenset[str] = frozenset()
     pubmed_types_together: frozenset[str] = frozenset()
     title_patterns: tuple[str, ...] = ()
+    opening_patterns: tuple[str, ...] = ()
     life_span_within_years: int | None = Field(default=None, ge=0)
     max_pages: int | None = Field(default=None, ge=1)
 
@@ -144,14 +146,14 @@ class RecordKind(BaseModel):
             )
         return types
 
-    @field_validator("title_patterns")
+    @field_validator("title_patterns", "opening_patterns")
     @classmethod
     def _patterns_are_regular_expressions(cls, patterns: tuple[str, ...]) -> tuple[str, ...]:
         for pattern in patterns:
             try:
                 pl.select(pl.lit("").str.contains(pattern))
             except pl.exceptions.ComputeError as exc:
-                raise ValueError(f"title pattern {pattern!r} is not a valid pattern") from exc
+                raise ValueError(f"pattern {pattern!r} is not a valid pattern") from exc
         return patterns
 
     @model_validator(mode="after")
@@ -162,6 +164,7 @@ class RecordKind(BaseModel):
             self.pubmed_types,
             self.pubmed_types_together,
             self.title_patterns,
+            self.opening_patterns,
         )
         lengths = (self.life_span_within_years, self.max_pages)
         if not any(signals) and all(length is None for length in lengths):
@@ -190,7 +193,7 @@ def load_record_kinds(catalog: CatalogConfig) -> dict[str, RecordKind]:
 
     Raises:
         FileNotFoundError: if the record kinds file does not exist.
-        pydantic.ValidationError: if a kind has no signal, an unknown action or field, a title
+        pydantic.ValidationError: if a kind has no signal, an unknown action or field, a
             pattern Polars cannot read, a single type as PubMed types together, or a name that
             cannot serve as a drop reason.
     """

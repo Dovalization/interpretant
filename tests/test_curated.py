@@ -138,6 +138,7 @@ def test_load_record_kinds_reads_the_repository_file_in_order_with_its_actions()
         ("letter:\n    action: keep\n    title_patterns: ['(']\n", "not a valid pattern"),
         ("Book Review:\n    action: keep\n    max_pages: 2\n", "lower-case words"),
         ("letter:\n    action: keep\n    pubmed_types_together: [Letter]\n", "two or more"),
+        ("letter:\n    action: keep\n    opening_patterns: ['(']\n", "not a valid pattern"),
     ],
     ids=[
         "a kind without signals",
@@ -145,6 +146,7 @@ def test_load_record_kinds_reads_the_repository_file_in_order_with_its_actions()
         "a broken pattern",
         "a malformed name",
         "a single type together",
+        "a broken opening pattern",
     ],
 )
 def test_load_record_kinds_refuses_bad_kinds(

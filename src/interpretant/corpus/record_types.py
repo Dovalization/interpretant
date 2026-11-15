@@ -3,10 +3,11 @@
 The record-type batch finds the kept works that are not the work's own abstract (errata,
 obituaries, book reviews, news, letters) from several sources that disagree, so each source's
 value is kept beside the others: OpenAlex's type and title, Crossref's type and whether the
-record is itself an update (a correction or retraction notice), PubMed's publication types, and
-the page count, Crossref's where it has one, PubMed's otherwise. The kinds, what shows each and
-what is done with it are in the curated record kinds file; a work showing several kinds takes
-the first in the file's order, and its kind's action keeps, flags or drops it.
+record is itself an update (a correction or retraction notice), PubMed's publication types, the
+page count, Crossref's where it has one, PubMed's otherwise, and how the text opens ("To the
+Editor"). The kinds, what shows each and what is done with it are in the curated record kinds
+file; a work showing several kinds takes the first in the file's order, and its kind's action
+keeps, flags or drops it.
 """
 
 from __future__ import annotations
@@ -30,8 +31,12 @@ RECORD_SIGNAL_COLUMNS = pl.Schema(
         "pubmed_types": pl.List(pl.String()),
         "page_count": pl.Int64(),
         "page_count_source": pl.String(),
+        "opening": pl.String(),
     }
 )
+# Enough of the text for a letter's salutation after an "Abstract" label.
+OPENING_LENGTH = 100
+_OPENING_LABEL = r"^\s*(?:abstract\W*)?"
 # An obituary's title is a name and a life span: "GEORGE ROSEN (1910–1977)", "Charles Donald
 # O'Malley. 1 April 1907–7 April 1970". A history title with a period has a phrase before it
 # ("Canada's Immigration Policy, 1957-1962"), told apart by its lower-case or function words.
@@ -55,8 +60,8 @@ def join_record_signals(
 ) -> pl.DataFrame:
     """Each work's record-type signals, one row per work in ``works`` and in its order.
 
-    ``works`` needs a ``work_id`` column; the other three are the staging tables. A source that
-    holds no record for a work, or did not find it, leaves its columns null.
+    ``works`` needs ``work_id`` and ``text`` columns; the other three are the staging tables. A
+    source that holds no record for a work, or did not find it, leaves its columns null.
     """
     found_crossref = crossref.filter("is_found").select(
         "work_id", "crossref_type", "update_types", pl.col("page_count").alias("crossref_pages")
@@ -67,7 +72,7 @@ def join_record_signals(
         pl.col("page_count").alias("pubmed_pages"),
     )
     joined = (
-        works.select("work_id")
+        works.select("work_id", pl.col("text").str.slice(0, OPENING_LENGTH).alias("opening"))
         .join(
             openalex.select("work_id", "title", "publication_year", "openalex_type", "is_paratext"),
             on="work_id",
@@ -91,6 +96,7 @@ def join_record_signals(
         .when(pl.col("pubmed_pages").is_not_null())
         .then(pl.lit("pubmed"))
         .alias("page_count_source"),
+        "opening",
     )
 
 
@@ -151,13 +157,19 @@ def _shows(kind: RecordKind) -> pl.Expr:
     if kind.pubmed_types_together:
         signals.append(_holds_all("pubmed_types", kind.pubmed_types_together))
     if kind.title_patterns:
-        either = "|".join(f"(?:{pattern})" for pattern in kind.title_patterns)
-        signals.append(pl.col("title").str.contains(f"(?i){either}"))
+        signals.append(pl.col("title").str.contains(f"(?i){_either(kind.title_patterns)}"))
+    if kind.opening_patterns:
+        opens = f"(?i){_OPENING_LABEL}(?:{_either(kind.opening_patterns)})"
+        signals.append(pl.col("opening").str.contains(opens))
     if kind.life_span_within_years is not None:
         signals.append(_has_obituary_title(kind.life_span_within_years))
     if kind.max_pages is not None:
         signals.append(pl.col("page_count") <= kind.max_pages)
     return pl.any_horizontal(signal.fill_null(value=False) for signal in signals)
+
+
+def _either(patterns: tuple[str, ...]) -> str:
+    return "|".join(f"(?:{pattern})" for pattern in patterns)
 
 
 def _holds_any(column: str, values: frozenset[str]) -> pl.Expr:

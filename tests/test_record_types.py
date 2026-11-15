@@ -37,7 +37,10 @@ def work(number: int) -> str:
 
 
 def test_join_record_signals_keeps_each_source_and_prefers_crossrefs_page_count() -> None:
-    works = pl.DataFrame({"work_id": [work(1), work(2), work(3)]})
+    works = pl.DataFrame(
+        {"work_id": [work(1), work(2), work(3)],
+         "text": ["In the article on p. 4, read 1974.", "To the Editor: " + "x" * 200, ""]}
+    )  # fmt: skip
     openalex = staging(
         OPENALEX_WORKS_COLUMNS,
         [
@@ -76,6 +79,8 @@ def test_join_record_signals_keeps_each_source_and_prefers_crossrefs_page_count(
     assert (second["crossref_type"], second["pubmed_types"]) == (None, ["Letter"])
     assert (second["page_count"], second["page_count_source"]) == (2, "pubmed")
     assert (third["title"], third["page_count"], third["page_count_source"]) == ("Lost", None, None)
+    assert second["opening"] == "To the Editor: " + "x" * 85
+    assert third["opening"] == ""
 
 
 KINDS = {
@@ -202,5 +207,34 @@ def test_the_repository_kinds_take_a_pubmed_letter_only_as_a_reply(
     pubmed_types: list[str] | None, kind: str | None
 ) -> None:
     table = signals([{"work_id": work(1), "pubmed_types": pubmed_types}])
+    decided = decide_record_types(table, load_record_kinds(read_catalog()))
+    assert decided["record_type"].to_list() == [kind]
+
+
+@pytest.mark.parametrize(
+    ("opening", "kind"),
+    [
+        ("To the Editor.\u2014 The recent article by Parker and Brown", "letter"),
+        ("Abstract To the Editor: We read with great interest", "letter"),
+        ('SIR,-A " scientific shrine " of the greatest interest to geologists', "letter"),
+        ("Dear Editor, with great interest I read the meta-analysis", "letter"),
+        ("Sirs: Re Walter H. Oettinger's letter", "letter"),
+        ("Sir Isaac Newton's correspondence with Cotes shows", None),
+        ("Sirtuins regulate ageing in yeast", None),
+        ("Letters to the editor are a neglected genre", None),
+    ],
+    ids=[
+        "to the editor",
+        "after an abstract label",
+        "sir with a dash",
+        "dear editor",
+        "sirs with a colon",
+        "a man named sir",
+        "a word starting with sir",
+        "a study of letters",
+    ],
+)
+def test_the_repository_kinds_take_a_salutation_as_a_letter(opening: str, kind: str | None) -> None:
+    table = signals([{"work_id": work(1), "opening": opening}])
     decided = decide_record_types(table, load_record_kinds(read_catalog()))
     assert decided["record_type"].to_list() == [kind]
