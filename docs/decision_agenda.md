@@ -275,7 +275,10 @@ views (the full order is in step 9).
   before general ones, so a work two rules match takes the specific reason:
   5. record kinds: errata, obituaries, news and letters dropped;
   6. a letter signal from the text: an opening *To the Editor*, *Sir,* or *Dear Editor* (794
-     kept works, 1,425 with the kind's other signals; 8 of 8 sampled were letters);
+     kept works, 1,425 with the kind's other signals; 8 of 8 sampled were letters); run 6c moves
+     it from the record kinds to the cleaning patterns (start-only token patterns with an
+     optional *Abstract* label first, as `catalogue_record` catches archive letters), with the
+     reason `letter`, so no record-kind code re-reads the text;
   7. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
      1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
@@ -284,21 +287,37 @@ views (the full order is in step 9).
   8. publisher page text the `web_scrape` patterns miss (*Get access*, *Preview this article*,
      *Restricted access… First published*; *was published in* only in De Gruyter's form, since
      it also opens real sentences: *Jan Herkel's Elementa… was published in Buda*);
-  9. the spaCy pass records each work's count of finite verbs (`VerbForm=Fin`) and changes no
-     rule, so the run shows that nothing else moved;
-  10. no finite verb anywhere, dropped as `not_prose`: titles, citation lines, contents lists,
+  9. the template rule masks month names as well as digits, so *Received: 12 March 2010;
+     Accepted: 3 June 2010.* (134 kept works) and *Submitted on January 6, 1958* (66) become
+     template sentences; the rest of the planned boilerplate shares its sentence with a title,
+     names or a file name, so no masking makes it repeat;
+  10. footers the template rule cannot take, in the cleaning patterns: ERIC's document notes (42
+      kept works), *Contains fulltext* (20), the machine-keywords notice glued to the sentence
+      before it by a footnote number (91), and Frontiers' event, citation and date lines (about
+      600);
+  11. the spaCy pass records each work's count of finite verbs (`VerbForm=Fin`; the small model
+      marks modals such as *may* finite too) and changes no rule, so the run shows that nothing
+      else moved;
+  12. no finite verb anywhere, dropped as `not_prose`: titles, citation lines, contents lists,
       conference names and captions are phrases, an abstract has a verb (on run 3's sample it
       caught 15 of the 30 non-abstracts and none of the 167 abstracts; checked on 30 drops,
       more from the old decades, before it is kept, since the small tagger misreads OCR, text in
       capitals and note-style structured abstracts);
-  11. book-review headers removed;
-  12. the language check for texts mostly in Chinese, Japanese or Korean script (about 400 kept
+  13. book-review headers removed, a token pattern in the cleaning patterns (*By R. M. Williams.
+      New York: Knopf, 1951. 545 pp. $4.50*);
+  14. the language check for texts mostly in Chinese, Japanese or Korean script (about 400 kept
       works, mostly 2000s–2010s);
-  13. a curated list of excluded venues, each entry with its evidence, starting with two police
+  15. a curated list of excluded venues, each entry with its evidence, starting with two police
       academies' journals (*Journal of the Chinese People's Armed Police Force Academy*, 13 kept
       works; *Journal of Liaoning Police Academy*, 14), and Zenodo if 20 of its 3,212 kept works
       say so (the review's spam page came from it);
-  14. the cut-off fragments as `cut_off_sentence` (above).
+  16. the cut-off fragments as `cut_off_sentence` (above).
+
+  Where each rule lives (checked 2026-11-15): text patterns go in the spaCy cleaning patterns
+  (token patterns, with `REGEX` on a token where the tokenizer keeps punctuation glued, as in
+  *SIR,-A* and *Sir.—Many*), repeated sentences in the template rule, metadata in the record
+  kinds, morphology in the spaCy pass; HTML entities such as `&dquo;` (95 kept works) are a
+  character repair, not a removal.
 
   Not dropped by length: under 200 characters holds 35,261 kept works (13% of the 1950s, 2% of
   the 2020s), and random ones mix real short abstracts with titles and fragments; the finite-verb
