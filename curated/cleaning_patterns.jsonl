@@ -17,10 +17,10 @@
 {"label":"copyright","pattern":[{"LOWER":"copyright"},{"SHAPE":"dddd"}]}
 {"label":"copyright","pattern":[{"TEXT":"("},{"LOWER":"c"},{"TEXT":")"},{"SHAPE":"dddd"}]}
 {"label":"catalogue_record","pattern":[{"LOWER":{"IN":["letter","script","telegram","memo","memorandum","postcard","note"]}},{"LOWER":{"IN":["from","to","by"]}}],"id":"start"}
-{"label":"letter","pattern":[{"LOWER":{"IN":["abstract","summary"]},"OP":"?"},{"IS_PUNCT":true,"OP":"*"},{"LOWER":"to"},{"LOWER":"the"},{"LOWER":{"REGEX":"^editors?(\\W|$)"}}],"id":"start"}
-{"label":"letter","pattern":[{"LOWER":{"IN":["abstract","summary"]},"OP":"?"},{"IS_PUNCT":true,"OP":"*"},{"LOWER":"dear"},{"LOWER":{"REGEX":"^(sirs?|editors?|madam)(\\W|$)"}}],"id":"start"}
-{"label":"letter","pattern":[{"LOWER":{"IN":["abstract","summary"]},"OP":"?"},{"IS_PUNCT":true,"OP":"*"},{"LOWER":{"IN":["sir","sirs"]}},{"IS_PUNCT":true}],"id":"start"}
-{"label":"letter","pattern":[{"LOWER":{"IN":["abstract","summary"]},"OP":"?"},{"IS_PUNCT":true,"OP":"*"},{"LOWER":{"REGEX":"^sirs?[,.:;—–-]"}}],"id":"start"}
+{"label":"letter","pattern":[{"TEXT":"(","OP":"?"},{"LOWER":"to"},{"LOWER":"the"},{"TEXT":{"REGEX":"^(?:(?i:editors?)(?:\\W|$)|[Ee]ditors?(?=[A-Z]))"}}],"id":"start"}
+{"label":"letter","pattern":[{"LOWER":"dear"},{"TEXT":{"REGEX":"^(?:(?i:sirs?|editors?|madam)(?:\\W|$)|(?:[Ss]irs?|[Ee]ditors?|[Mm]adam)(?=[A-Z]))"}}],"id":"start"}
+{"label":"letter","pattern":[{"LOWER":{"IN":["sir","sirs"]}},{"TEXT":{"REGEX":"^[,.:;—–-]"}}],"id":"start"}
+{"label":"letter","pattern":[{"LOWER":{"REGEX":"^sirs?[,.:;—–-]"}}],"id":"start"}
 {"label":"citation_record","pattern":[{"LOWER":"volume"},{"LIKE_NUM":true},{"TEXT":",","OP":"?"},{"LOWER":{"IN":["issue","number"]}},{"LIKE_NUM":true}]}
 {"label":"citation_record","pattern":[{"TEXT":"("},{"SHAPE":"dddd"},{"TEXT":")"},{"TEXT":"."}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":{"IN":["noaccess","no-access"]}}],"id":"start"}

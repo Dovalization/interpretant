@@ -154,6 +154,21 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         ("Dear Editor, with great interest I read the meta-analysis by Michaud et al.", "letter"),
         ("Sir.\u2014Many causes of sudden infant death syndrome have been proposed.", "letter"),
         ("To the Editor.\u2014The report by Dr Gellert and colleagues deserves a reply.", "letter"),
+        ("Sir .—I was amused to read the note on the habits of the cuckoo.", "letter"),
+        ("To the EditorWe read with interest the article by Yoo and colleagues.", "letter"),
+        ("Dear SirMultinational companies now set the terms of the debate.", "letter"),
+        (
+            "(To the Editor of ‘The Daily News’.) Sir, the harvest was poor this year.",
+            "letter",
+        ),
+        (
+            "Letter to the editor regarding the use of placebo in surgical trials.",
+            "catalogue_record",
+        ),
+        (
+            "Abstract: Letter from Charles Darwin to Joseph Hooker, 1858, on the species question.",
+            "catalogue_record",
+        ),
         ("cafÃ© society in the 1920s and after the war.", "mojibake"),
         ("Abstract: Short note.", "too_short"),
         (f"{GERMAN_SENTENCE} {ENGLISH_SENTENCE[:30]}.", "not_english"),
@@ -171,6 +186,12 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         "letter opening dear editor",
         "letter opening sir glued to its dash",
         "letter opening to the editor glued to its dash",
+        "letter opening sir with a dash glued to the next word",
+        "letter opening to the editor glued to the next word",
+        "letter opening dear sir glued to the next word",
+        "letter opening to the editor in brackets",
+        "catalogue letter that also holds to the editor",
+        "catalogue letter after an abstract label",
         "mojibake",
         "too short",
         "mostly another language",
@@ -191,8 +212,16 @@ def test_annotate_abstracts_drops_records_that_are_not_abstracts(
         "Sir Isaac Newton's correspondence with Cotes shows how the Principia was revised.",
         "Letters to the editor are a neglected genre in the history of medicine.",
         "We argue that to the editor of a journal the referee's report is advice, not a verdict.",
+        "“ Sir, we know our will is free, and there's an end on't,” Johnson told Boswell.",
+        "SirJohn Herschel's correspondence with Babbage shows how the society began.",
     ],
-    ids=["a man named sir", "a study of letters", "to the editor mid-sentence"],
+    ids=[
+        "a man named sir",
+        "a study of letters",
+        "to the editor mid-sentence",
+        "a quotation opening with sir",
+        "a man named sir glued to his name",
+    ],
 )
 def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
     text: str, nlp: Language, patterns: CleaningPatterns

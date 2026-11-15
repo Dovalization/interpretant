@@ -19,7 +19,9 @@ mojibake_signatures:
 #             before a notice survives; until 2026-11-13 the whole sentence went, and run 1
 #             lost the text glued before 1,885 copyright notices and 280 JSTOR stamps);
 #   abstract: the whole abstract, dropped with the label as its reason.
-# A pattern with "id": "start" counts only when it begins the abstract.
+# A pattern with "id": "start" counts only when it begins the abstract or follows its leading
+# "Abstract" label ("Abstract: To the Editor…"); other matches of it are set aside before
+# overlapping matches are filtered, so they cannot hide a match that does count (run 6d).
 labels:
   # Links and identifiers (spaCy's like_url and like_email; DOIs kept whole by the tokenizer).
   # A url match also needs a scheme, "www." or a slash, or a last dotted part from spaCy's list
@@ -47,10 +49,13 @@ labels:
   # Letters, memos and similar catalogue records standing in for an abstract (start only).
   catalogue_record: abstract
   # A letter to the editor: a text opening with a salutation, after an "Abstract" label if any
-  # ("To the Editor.— The recent article by…", "SIR,-A scientific shrine…", "Dear Editor,
-  # with great interest…"; start only). "Sir" needs punctuation after it, so "Sir Isaac" is
-  # not one. The record kinds find letters by their metadata (curated/record_types.yaml); the
-  # reason is the same. Moved here from the record kinds on 2026-11-15 (run 6c).
+  # ("To the Editor.— The recent article by…", "(To the Editor of 'The Daily News'.)", "SIR,-A
+  # scientific shrine…", "Dear Editor, with great interest…"; start only). "Sir" needs
+  # punctuation after it, also glued to the next word ("Sir .—I was amused"), so "Sir Isaac"
+  # is not one. A salutation glued to a capitalised word counts after "To the" or "Dear" ("To
+  # the EditorWe", "Dear SirMultinational"), a bare "Sir" glued to one does not ("SirJohn
+  # Herschel"). The record kinds find letters by their metadata (curated/record_types.yaml);
+  # the reason is the same. Moved here from the record kinds on 2026-11-15 (run 6c).
   letter: abstract
   # A citation string standing in for an abstract ("Volume 3, Issue 2"), or a record that
   # starts with its year in brackets and a full stop, "(1985). Title. Journal: Vol. 5, No. 2,

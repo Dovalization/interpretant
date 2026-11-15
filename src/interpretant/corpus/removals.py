@@ -11,20 +11,26 @@ is never edited (2.2).
 from __future__ import annotations
 
 import re
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 
 import spacy
 from spacy.language import Language
 from spacy.pipeline import SpanRuler
-from spacy.tokens import Doc, Token
+from spacy.tokens import Doc, Span, Token
+from spacy.util import filter_spans, registry
 
 from interpretant.catalog import START_ID, CleaningPatterns, Scope
 from interpretant.corpus.language import ENGLISH, UNDETERMINED, SentenceLanguage
 from interpretant.corpus.repair import has_mojibake
 from interpretant.corpus.works import RawAbstract
 
+SpansFilter = Callable[[Iterable[Span], Iterable[Span]], list[Span]]
+
 SPANS_KEY = "removals"
+# The label of the leading "Abstract" or "Summary" label; a start-only match may follow it.
+LEADING_LABEL = "abstract_label"
+START_AWARE_SPANS_FILTER = "interpretant.start_aware_spans_filter.v1"
 # The keeping rules of decision agenda 2.3: an abstract needs five words outside the removed
 # ranges, and a "sentence" longer than about 150 words means missing sentence punctuation.
 MIN_WORDS = 5
@@ -71,14 +77,44 @@ class AnnotatedAbstract:
     duplicate_of: str | None = None
 
 
+def make_start_aware_spans_filter(start_id: str, leading_label: str) -> SpansFilter:
+    """The first-longest spans filter, after dropping start-only matches away from the start.
+
+    A match of a pattern with the id ``start_id`` counts when it begins at the first token or
+    right after the longest ``leading_label`` match there ("Abstract: To the Editor…"). The check
+    comes before the overlap filter, so a start-only match cannot lose to a longer match that is
+    not allowed where it begins: in run 6c, the letter match of "to the editor" from the second
+    word beat the catalogue match of "Letter to" and was then discarded, keeping the record.
+    """
+
+    def start_aware_spans_filter(existing: Iterable[Span], matches: Iterable[Span]) -> list[Span]:
+        candidates = [*existing, *matches]
+        label_ends = [
+            span.end for span in candidates if span.label_ == leading_label and span.start == 0
+        ]
+        openings = {0, max(label_ends, default=0)}
+        return filter_spans(
+            span for span in candidates if span.id_ != start_id or span.start in openings
+        )
+
+    return start_aware_spans_filter
+
+
+# Registered by a call rather than as a decorator, since catalogue's decorator is untyped.
+registry.misc.register(START_AWARE_SPANS_FILTER, func=make_start_aware_spans_filter)
+
+
 def build_cleaning_pipeline(patterns: CleaningPatterns) -> Language:
     """A blank English pipeline whose only component matches the cleaning patterns.
 
-    Overlapping matches keep the first longest, with spaCy's registered filter (the entity
+    Start-only matches count only at the start of the text or after its leading label, and
+    overlapping matches then keep the first longest, as in spaCy's registered filter (the entity
     ruler's default), so "Abstract:" wins over "Abstract"; matches already on a document are
     replaced. Documents read from the annotation cache with this pipeline's vocabulary can be
     passed to it.
     """
+    if LEADING_LABEL not in patterns.labels:
+        raise ValueError(f"the cleaning rules declare no {LEADING_LABEL!r} label")
     nlp = spacy.blank("en")
     ruler = nlp.add_pipe(
         "span_ruler",
@@ -86,7 +122,11 @@ def build_cleaning_pipeline(patterns: CleaningPatterns) -> Language:
             "spans_key": SPANS_KEY,
             "overwrite": True,
             "validate": True,
-            "spans_filter": {"@misc": "spacy.first_longest_spans_filter.v1"},
+            "spans_filter": {
+                "@misc": START_AWARE_SPANS_FILTER,
+                "start_id": START_ID,
+                "leading_label": LEADING_LABEL,
+            },
         },
     )
     if not isinstance(ruler, SpanRuler):
@@ -158,16 +198,14 @@ def find_removals(
 
     A tokens-scope match removes its own characters; a rest-of-sentence match removes from its
     start to the end of its sentence, so text before a notice survives; an abstract-scope match
-    removes its characters and drops the abstract. Matches of patterns with the id ``start``
-    count only at the first token. A sentence lingua reads as another language is removed with
-    the reason ``not_english``. A range inside another range with the same reason is left out,
-    as when one notice holds several matches ("(PsycINFO Database Record (c) 2006").
+    removes its characters and drops the abstract (start-only matches away from the start are
+    already filtered out by the cleaning pipeline). A sentence lingua reads as another language
+    is removed with the reason ``not_english``. A range inside another range with the same reason
+    is left out, as when one notice holds several matches ("(PsycINFO Database Record (c) 2006").
     """
     removals: set[Removal] = set()
     drop_reasons: list[str] = []
     for span in doc.spans[SPANS_KEY]:
-        if span.id_ == START_ID and span.start != 0:
-            continue
         label = span.label_
         if scopes[label] == "rest_of_sentence":
             removals.add(Removal(span.start_char, span.sent.end_char, label))
