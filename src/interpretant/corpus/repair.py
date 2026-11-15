@@ -185,7 +185,13 @@ def inside_address(text: str, start: int, end: int) -> bool:
 
 
 def _is_address(text: str) -> bool:
-    """Whether the text is a web or e-mail address or a DOI."""
+    """Whether the text is a web or e-mail address or a DOI (never the empty text).
+
+    ``like_url`` reads the first character, so the empty text before a word that opens an address
+    ("TheDial.world", "SeeFig.no") is answered here.
+    """
+    if not text:
+        return False
     return like_url(text) or like_email(text) or _DOI.match(text) is not None
 
 
