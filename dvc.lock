@@ -570,3 +570,90 @@ stages:
       hash: md5
       md5: 038f43b5cebbecf5ff9cf4ebdbeba525
       size: 42808151
+  count_glued_words:
+    cmd: interpretant count-glued-words
+    deps:
+    - path: curated/kept_joined_words.yaml
+      hash: md5
+      md5: 2178582e5deb25b36b0a7f487dbff639
+      size: 857
+    - path: data/raw/openalex
+      hash: md5
+      md5: fbf24c1c9c7cc37cf59d7557ae74020c.dir
+      size: 293915470
+      nfiles: 90
+    - path: data/raw/openalex_metadata
+      hash: md5
+      md5: edda602f82c1254c4f857f845f249ea5.dir
+      size: 631283086
+      nfiles: 88
+    - path: src/interpretant/catalog
+      hash: md5
+      md5: c3149af85fc9fb389945da7c79f52bef.dir
+      size: 49735
+      nfiles: 15
+    - path: src/interpretant/corpus/glued_words.py
+      hash: md5
+      md5: 1b8046261e63c0aa875a898de3d2c221
+      size: 8218
+    - path: src/interpretant/corpus/repair.py
+      hash: md5
+      md5: 0bc6a95b26b4fbe4161e2c230b49515a
+      size: 7576
+    - path: src/interpretant/corpus/works.py
+      hash: md5
+      md5: 98807f8702604472c4c6ea00ecb1321f
+      size: 1891
+    - path: src/interpretant/pipelines/corpus.py
+      hash: md5
+      md5: 78b775dac9246795248f19d6ee6624ed
+      size: 4982
+    - path: src/interpretant/pipelines/count_glued_words.py
+      hash: md5
+      md5: c1e9a59afc4eb3088731453bc37e7b96
+      size: 4051
+    - path: src/interpretant/pipelines/params.py
+      hash: md5
+      md5: 3948a4fd681587ab2f99892050d25b62
+      size: 1593
+    - path: src/interpretant/pipelines/progress.py
+      hash: md5
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
+    - path: src/interpretant/pipelines/workers.py
+      hash: md5
+      md5: b1f43f70a990c6814549a2e0cc8dd81c
+      size: 1805
+    params:
+      params.yaml:
+        corpus:
+          fields:
+          - ai
+          - cogpsych
+          - communication
+          - compsci
+          - hci
+          - histphilsci
+          - linguistics
+          - neuroscience
+          - philosophy
+          - psychology
+          - sociology
+          decades:
+          - 1950
+          - 1960
+          - 1970
+          - 1980
+          - 1990
+          - 2000
+          - 2010
+          - 2020
+        count_glued_words:
+          apart_margin: 10
+          opener_count: 30
+          opener_min_left_letters: 4
+    outs:
+    - path: data/interim/glued_words.parquet
+      hash: md5
+      md5: 1bfbc78d01741ee70eb4c88f80a16cc6
+      size: 947614
