@@ -30,7 +30,7 @@ from srsly.msgpack import msgpack_decoders, msgpack_encoders
 
 from interpretant.catalog import WORK_ID
 from interpretant.corpus.glued_words import split_glued_words
-from interpretant.corpus.repair import repair_text
+from interpretant.corpus.repair import DOI_PATTERN, repair_text
 from interpretant.corpus.works import RawAbstract
 
 # Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md; "viz." to "ca."
@@ -85,10 +85,9 @@ _BRACKET_GROUPS: list[list[dict[str, Any]]] = [
 _BRACKET_GROUP_CHARACTERS = 42
 # The component setting the sentence boundaries the sentence model misses, before ``senter``.
 SENTENCE_RULES = "sentence_rules"
-_DOI = r"^(?:doi:)?10\.\d{4,9}/\S+$"
 # spaCy's own URL rule extended with DOIs, as one compiled pattern so the tokenizer can still be
 # serialised to worker processes.
-URL_OR_DOI = re.compile(f"(?u)(?:{_DOI})|(?:{URL_PATTERN})")
+URL_OR_DOI = re.compile(f"(?u)(?:{DOI_PATTERN})|(?:{URL_PATTERN})")
 # No glued word is split unless the caller passes the splits.
 _NO_SPLITS: Mapping[str, str] = MappingProxyType({})
 

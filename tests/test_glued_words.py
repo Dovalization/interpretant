@@ -115,9 +115,17 @@ def test_glued_word_splits_maps_each_split_word_to_its_parts() -> None:
         ("See www.EditorWe.org today.", "See www.EditorWe.org today."),
         ("The EditorWeekly is a journal.", "The EditorWeekly is a journal."),
         ("Write to someone@EditorWe.org now.", "Write to someone@EditorWe.org now."),
+        ("See doi:10.1000/EditorWe.2020-1 now.", "See doi:10.1000/EditorWe.2020-1 now."),
         ("We searched PubMed.", "We searched PubMed."),
     ],
-    ids=["a listed word", "inside a web address", "a longer word", "inside an e-mail", "unlisted"],
+    ids=[
+        "a listed word",
+        "inside a web address",
+        "a longer word",
+        "inside an e-mail",
+        "inside a DOI",
+        "unlisted",
+    ],
 )
 def test_split_glued_words_replaces_whole_listed_words_outside_addresses(
     text: str, expected: str

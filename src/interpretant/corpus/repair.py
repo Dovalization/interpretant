@@ -78,6 +78,10 @@ _ADDRESS_EDGES = "\"'\u201c\u201d\u2018\u2019\u00ab\u00bb()[]{}<>,;:.!?"
 # The original generic domains, which end addresses written with capitals ("Berkeley.Edu") and
 # never begin an English sentence; spaCy's longer list holds country codes such as "in" and "it".
 _GENERIC_DOMAINS = frozenset({"com", "org", "net", "edu", "gov", "int", "mil", "info"})
+# A DOI, bare or after "doi:", which spaCy's URL test does not know ("10.21437/SpeechProsody.2020-
+# 122"); the spaCy pass's tokenizer keeps one as a single token with the same pattern.
+DOI_PATTERN = r"^(?:doi:)?10\.\d{4,9}/\S+$"
+_DOI = re.compile(DOI_PATTERN)
 # The end of an HTML entity, whole or with its ampersand lost ("&rsquo;s", "Hegelrsquo;s"), whose
 # semicolon is part of it.
 _ENTITY_END = re.compile(r"(?:&#?[A-Za-z0-9]+|[lr][sd]quo|dquo|nbsp|[nm]dash|hellip)$")
@@ -126,19 +130,19 @@ def _add_missing_spaces(pattern: re.Pattern[str], text: str) -> str:
 
 
 def inside_address(text: str, start: int, end: int) -> bool:
-    """Whether the punctuation or word at ``start:end`` lies inside a web or e-mail address.
+    """Whether the punctuation or word at ``start:end`` lies inside a web or e-mail address or DOI.
 
     It does when the run of text between spaces around it is an address, unless the address ends
     there: the text before it is a whole address (not just a scheme or "www") and a plain word
     follows that is no generic domain ("www.comphistsem.org).The best" ends before "The"; 26
     removals in 21 of run 4's kept works took such a word with the address). So "www.Nature.com",
-    "http://www.ArsDisputandi" and "TTyler@Garnet.Berkeley.Edu" stay whole.
+    "http://www.ArsDisputandi", "TTyler@Garnet.Berkeley.Edu" and "10.21437/SpeechProsody.2020-122"
+    stay whole.
     """
     left = text.rfind(" ", 0, start) + 1
     right = text.find(" ", end)
     stop = len(text) if right == -1 else right
-    chunk = text[left:stop].strip(_ADDRESS_EDGES)
-    if not (like_url(chunk) or like_email(chunk)):
+    if not _is_address(text[left:stop].strip(_ADDRESS_EDGES)):
         return False
     before = text[left:start].strip(_ADDRESS_EDGES)
     after = text[end:stop].strip(_ADDRESS_EDGES)
@@ -146,9 +150,14 @@ def inside_address(text: str, start: int, end: int) -> bool:
         after.isalpha()
         and after.lower() not in _GENERIC_DOMAINS
         and not before.lower().endswith("www")
-        and (like_url(before) or like_email(before))
+        and _is_address(before)
     )
     return not ends_here
+
+
+def _is_address(text: str) -> bool:
+    """Whether the text is a web or e-mail address or a DOI."""
+    return like_url(text) or like_email(text) or _DOI.match(text) is not None
 
 
 def compile_signatures(patterns: Sequence[str]) -> re.Pattern[str]:
