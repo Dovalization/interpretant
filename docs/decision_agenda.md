@@ -423,6 +423,19 @@ views (the full order is in step 9).
   is now kept, its only sentence read as English, both for the language and review-header
   runs. One split fell inside a DOI (*10.21437/SpeechProsody*); the address check does not yet
   cover DOIs, a fix for run 7b's pass.
+- *Run 7b (2026-11-15)*, three repair fixes in one spaCy pass: 639,927 kept (unchanged), no drop
+  reason changed, no glued-word decision changed; 199 works' texts changed, each put down to its
+  pattern: 137 HTML references (*the &dquo;aesthetic triad&dquo;* now *the "aesthetic triad"*),
+  33 web addresses ending before a glued sentence (*vowel_harmony.The* now *vowel_harmony. The*),
+  3 DOIs (*SpeechProsody* whole again), and 26 Japanese texts (24 already dropped as not
+  English, 2 kept OCR noise for the CJK run): spaCy's letter classes and ``like_url`` read a run
+  of Japanese text with a full stop as an address, so runs 4–7 left its full stops glued, and
+  the address-end check now spaces them. One address broken by spaces in the source
+  (*Template.cfm?Section = Home*, a dropped web scrape) took a space after its *?*. The first
+  attempt stopped at 48% of the pass: the merged check gave ``like_url`` an empty text when a
+  glued word opened an address (*TheDial.world*), and an error in the pass's input stream left
+  spaCy's worker processes blocked (spaCy 3.8 joins them while they still send) instead of
+  raising. Fixed, and repair with the split now runs over every raw text before a pass.
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
