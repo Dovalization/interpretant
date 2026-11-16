@@ -123,3 +123,22 @@ pipeline (the author):
   measures directly.
 - **Reported, not decisive:** the decision tables and drop verdicts against run 8, the size of
   the population, and the abstracts whose foreign text cleaning now removes.
+
+## Outcome (2026-11-16): reverted
+
+The test above passed as written (67 of the 71 kept regions that differ from run 8, 94.4%, lie in
+sentences the repairs skip; runs 7 and 7c decide as run 8 does, run 8 differs on 3 words), but
+its premise did not hold: leaving those sentences alone is not better by itself. The change
+altered the final text of 49 kept abstracts (0.008%); of the sampled ones, 3 were better (foreign
+words left as written: Spanish *se representan*, Polish *Jest ona*, Catalan *incorrecta*) and 6
+worse (English text in sentences read as foreign left glued, *typeofneural network isutilized*,
+*UniversityThis paper*; OCR-split words run 8 joined left apart, *Proc edural*). It cost 2.5
+minutes a run and a second sentence split that cleaning had to match. The author chose to revert
+to run 8's pipeline (code identical to `abd16663`), overriding the test with this reason.
+
+Along the way: the first cleaning rule (a pass sentence takes the language of the base sentences
+it overlaps) was worse than the late stage; the 9 foreign words still needed the kept-joined list,
+since foreign words also occur quoted in English sentences; and counting only English sentences
+flipped decisions at the margins and split foreign words such as *forma* in Latin terms. The
+lesson recorded for later work: measure how much a change moves the kept corpus, and the
+measurements after it, before building it.

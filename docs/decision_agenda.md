@@ -367,7 +367,12 @@ views (the full order is in step 9).
      sentence could make lingua read it as English. The remaining errors are mostly foreign
      words ending in *a* (*performa*, *playa*, *conducta*; 462 content-word-plus-*a* words, 781
      uses) and OCR (*lowa* for *Iowa* into *low a*): reasons for language data before the word
-     repairs (step 9, the early language stage);
+     repairs (step 9, the early language stage). *Tried and reverted 2026-11-16*
+     (`docs/plan_early_languages.md`; records `9262b8c6`, `1591ac54`, `e07c4506`): with the
+     languages detected first and the repairs changing only English sentences, the final text of
+     49 kept abstracts differed from run 8's, more of the sampled ones worse than better (English
+     text in sentences read as foreign left glued, OCR-split words left apart), for 2.5 more
+     minutes a run; the pipeline is run 8's again and the kept-joined list stays as above;
   9. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
      1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
