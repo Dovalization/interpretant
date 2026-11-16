@@ -6,13 +6,12 @@ from __future__ import annotations
 import polars as pl
 import pytest
 
-from interpretant.catalog import (
+from interpretant.catalog.config import read_catalog
+from interpretant.catalog.curated import RecordKind, load_record_kinds
+from interpretant.catalog.schemas import (
     CROSSREF_WORKS_COLUMNS,
     OPENALEX_WORKS_COLUMNS,
     PUBMED_WORKS_COLUMNS,
-    RecordKind,
-    load_record_kinds,
-    read_catalog,
 )
 from interpretant.corpus.record_types import (
     RECORD_SIGNAL_COLUMNS,

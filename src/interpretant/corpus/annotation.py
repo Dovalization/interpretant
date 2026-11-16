@@ -26,7 +26,7 @@ from spacy.tokens import Doc, Token
 from spacy.util import compile_infix_regex
 from spacy.vocab import Vocab
 
-from interpretant.catalog import WORK_ID, cache_serialiser_extensions
+from interpretant.catalog.annotations import WORK_ID, cache_serialiser_extensions
 from interpretant.corpus.attribute_rules import LOOKUP_ATTRIBUTE_RULER, LookupAttributeRuler
 from interpretant.corpus.repair import DOI_PATTERN
 

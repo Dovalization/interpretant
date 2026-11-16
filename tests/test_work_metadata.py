@@ -12,7 +12,8 @@ import polars as pl
 import pytest
 from pyalex import config
 
-from interpretant.catalog import DOICorrection, WorkMetadata
+from interpretant.catalog.curated import DOICorrection
+from interpretant.catalog.metadata import WorkMetadata
 from interpretant.corpus import work_metadata
 from interpretant.corpus.removals import MALFORMED
 from interpretant.corpus.work_metadata import (

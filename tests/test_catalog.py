@@ -14,24 +14,17 @@ import pytest
 from spacy.language import Language
 from srsly.msgpack import msgpack_decoders, msgpack_encoders
 
-from interpretant.catalog import (
-    CATALOG_FILE,
-    CatalogConfig,
-    RawCell,
-    append_run_record,
+from interpretant.catalog.abstracts import load_abstracts, save_abstracts
+from interpretant.catalog.annotations import load_annotations, save_annotations
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, read_catalog
+from interpretant.catalog.metadata import (
     append_work_metadata,
     fetched_work_ids,
-    list_raw_cells,
-    load_abstracts,
-    load_annotations,
-    load_raw_cell,
     load_work_metadata,
     metadata_work_ids,
-    read_catalog,
-    save_abstracts,
-    save_annotations,
-    save_corpus_metrics,
 )
+from interpretant.catalog.raw import RawCell, list_raw_cells, load_raw_cell
+from interpretant.catalog.reports import append_run_record, save_corpus_metrics
 from tests.abstracts_tables import abstract_row, abstracts_table
 from tests.metadata_records import metadata_record, missing_record
 

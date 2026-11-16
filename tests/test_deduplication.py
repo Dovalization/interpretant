@@ -6,7 +6,7 @@ import numpy as np
 import polars as pl
 import pytest
 
-from interpretant.catalog import RawWork
+from interpretant.catalog.raw import RawWork
 from interpretant.corpus.deduplication import (
     NEAR_DUPLICATE,
     build_shingles,

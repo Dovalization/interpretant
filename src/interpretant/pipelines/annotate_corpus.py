@@ -18,12 +18,9 @@ from functools import cache
 from pydantic_settings import SettingsConfigDict
 from spacy.language import Language
 
-from interpretant.catalog import (
-    CatalogConfig,
-    count_repaired_texts,
-    load_repaired_texts,
-    save_annotations,
-)
+from interpretant.catalog.annotations import save_annotations
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.repaired_texts import count_repaired_texts, load_repaired_texts
 from interpretant.corpus.annotation import annotate_texts, build_pipeline
 from interpretant.pipelines.corpus import CorpusResult, corpus_cells, part_name
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings

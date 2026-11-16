@@ -9,12 +9,8 @@ import pytest
 from lingua import LanguageDetector
 from spacy.language import Language
 
-from interpretant.catalog import (
-    CatalogConfig,
-    CleaningPatterns,
-    load_cleaning_patterns,
-    read_catalog,
-)
+from interpretant.catalog.config import CatalogConfig, read_catalog
+from interpretant.catalog.curated import CleaningPatterns, load_cleaning_patterns
 from interpretant.corpus.annotation import build_pipeline
 from interpretant.corpus.language import build_language_detector
 from interpretant.corpus.removals import build_cleaning_pipeline

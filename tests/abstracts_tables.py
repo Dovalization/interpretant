@@ -7,7 +7,7 @@ from typing import Any
 
 import polars as pl
 
-from interpretant.catalog import ABSTRACTS_COLUMNS
+from interpretant.catalog.schemas import ABSTRACTS_COLUMNS
 
 
 def abstract_row(work: int, sentences: Sequence[str], /, **changes: Any) -> dict[str, Any]:

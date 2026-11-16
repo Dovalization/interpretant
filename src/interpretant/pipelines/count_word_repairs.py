@@ -21,16 +21,12 @@ import polars as pl
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic_settings import SettingsConfigDict
 
-from interpretant.catalog import (
-    REPAIRED_TEXTS_SCHEMA,
-    CatalogConfig,
-    load_kept_apart_words,
-    load_kept_joined_words,
-    save_glued_words,
-    save_lower_glued_words,
-    save_repaired_texts,
-    save_split_words,
-)
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.curated import load_kept_apart_words, load_kept_joined_words
+from interpretant.catalog.glued_words import save_glued_words
+from interpretant.catalog.lower_glued_words import save_lower_glued_words
+from interpretant.catalog.repaired_texts import REPAIRED_TEXTS_SCHEMA, save_repaired_texts
+from interpretant.catalog.split_words import save_split_words
 from interpretant.corpus.glued_words import (
     count_glued_words,
     decide_glued_word_splits,

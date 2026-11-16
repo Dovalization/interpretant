@@ -4,13 +4,11 @@ from __future__ import annotations
 
 import pytest
 
-from interpretant.catalog import (
-    CatalogConfig,
-    RawCell,
-    append_linked_records,
-    append_work_metadata,
-    load_staging_table,
-)
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.linked_records import append_linked_records
+from interpretant.catalog.metadata import append_work_metadata
+from interpretant.catalog.raw import RawCell
+from interpretant.catalog.staging import load_staging_table
 from interpretant.pipelines.build_linked_tables import build_linked_tables
 from tests.metadata_records import linked_metadata_record, missing_record
 from tests.raw_cells import write_raw_cell

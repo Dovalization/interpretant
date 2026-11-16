@@ -9,12 +9,9 @@ from pathlib import Path
 
 import polars as pl
 
-from interpretant.catalog import (
-    CatalogConfig,
-    load_abstracts_at,
-    load_decision_tables_at,
-    save_abstracts,
-)
+from interpretant.catalog.abstracts import save_abstracts
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.revisions import load_abstracts_at, load_decision_tables_at
 from interpretant.pipelines.compare_corpus import compare_corpus
 from interpretant.review.run_comparison import compare_runs, render_comparison
 from tests.abstracts_tables import abstract_row, abstracts_table

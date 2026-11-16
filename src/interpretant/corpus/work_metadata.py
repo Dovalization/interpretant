@@ -15,7 +15,8 @@ from typing import Any
 import polars as pl
 from pyalex import Works, config
 
-from interpretant.catalog import DOICorrection, WorkMetadata
+from interpretant.catalog.curated import DOICorrection
+from interpretant.catalog.metadata import WorkMetadata
 from interpretant.corpus.bibliographic import is_valid_issn
 from interpretant.corpus.cleaning import add_flag
 

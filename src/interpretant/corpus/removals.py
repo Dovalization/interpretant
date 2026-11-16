@@ -20,7 +20,7 @@ from spacy.pipeline import SpanRuler
 from spacy.tokens import Doc, Span, Token
 from spacy.util import filter_spans, registry
 
-from interpretant.catalog import START_ID, CleaningPatterns, Scope
+from interpretant.catalog.curated import START_ID, CleaningPatterns, Scope
 from interpretant.corpus.language import ENGLISH, UNDETERMINED, SentenceLanguage
 from interpretant.corpus.repair import has_mojibake
 from interpretant.corpus.works import RawAbstract

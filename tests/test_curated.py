@@ -8,15 +8,14 @@ import pydantic
 import pytest
 from spacy.lang.lex_attrs import _tlds
 
-from interpretant.catalog import (
-    CatalogConfig,
+from interpretant.catalog.config import CatalogConfig, read_catalog
+from interpretant.catalog.curated import (
     CleaningPatterns,
     load_cleaning_patterns,
     load_doi_corrections,
     load_kept_apart_words,
     load_kept_joined_words,
     load_record_kinds,
-    read_catalog,
 )
 
 # The url pattern for a last dotted part from spaCy's list of domain endings, around the list.

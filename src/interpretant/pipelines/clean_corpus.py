@@ -18,16 +18,12 @@ import polars as pl
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
-from interpretant.catalog import (
-    ABSTRACTS_COLUMNS,
-    WORK_ID,
-    CatalogConfig,
-    CleaningPatterns,
-    load_annotations,
-    load_cleaning_patterns,
-    load_sentence_languages,
-    save_annotated_abstracts,
-)
+from interpretant.catalog.abstracts import save_annotated_abstracts
+from interpretant.catalog.annotations import WORK_ID, load_annotations
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.curated import CleaningPatterns, load_cleaning_patterns
+from interpretant.catalog.languages import load_sentence_languages
+from interpretant.catalog.schemas import ABSTRACTS_COLUMNS
 from interpretant.corpus.language import SentenceLanguage
 from interpretant.corpus.removals import AnnotatedAbstract, build_cleaning_pipeline, clean_abstract
 from interpretant.corpus.repair import compile_signatures

@@ -7,7 +7,8 @@ from pathlib import Path
 
 import polars as pl
 
-from interpretant.catalog import read_catalog, save_corpus_metrics
+from interpretant.catalog.config import read_catalog
+from interpretant.catalog.reports import save_corpus_metrics
 from interpretant.corpus.work_metadata import REPOSITORY_ONLY
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.report_corpus import report_corpus

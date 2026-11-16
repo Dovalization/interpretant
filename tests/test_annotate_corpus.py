@@ -10,7 +10,8 @@ from click.testing import CliRunner
 from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import WORK_ID, load_annotations, read_catalog
+from interpretant.catalog.annotations import WORK_ID, load_annotations
+from interpretant.catalog.config import read_catalog
 from interpretant.cli.options import default_process_count
 from interpretant.corpus.removals import SPANS_KEY
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus

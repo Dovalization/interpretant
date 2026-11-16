@@ -12,14 +12,12 @@ from click.testing import CliRunner
 from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import (
-    load_annotations,
-    load_glued_words,
-    load_lower_glued_words,
-    load_repaired_texts,
-    load_split_words,
-    read_catalog,
-)
+from interpretant.catalog.annotations import load_annotations
+from interpretant.catalog.config import read_catalog
+from interpretant.catalog.glued_words import load_glued_words
+from interpretant.catalog.lower_glued_words import load_lower_glued_words
+from interpretant.catalog.repaired_texts import load_repaired_texts
+from interpretant.catalog.split_words import load_split_words
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.count_word_repairs import CountWordRepairsSettings, count_word_repairs
 from interpretant.pipelines.params import CorpusSelection

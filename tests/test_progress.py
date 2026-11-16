@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from rich.console import Console
 
-from interpretant.catalog import read_catalog
+from interpretant.catalog.config import read_catalog
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus

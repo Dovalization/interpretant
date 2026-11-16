@@ -9,7 +9,9 @@ from click.testing import CliRunner
 from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import load_annotated_abstracts, load_annotations, read_catalog
+from interpretant.catalog.abstracts import load_annotated_abstracts
+from interpretant.catalog.annotations import load_annotations
+from interpretant.catalog.config import read_catalog
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus
 from interpretant.pipelines.detect_languages import detect_languages

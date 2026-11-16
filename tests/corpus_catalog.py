@@ -12,7 +12,9 @@ import json
 from collections.abc import Sequence
 from pathlib import Path
 
-from interpretant.catalog import CatalogConfig, RawCell, append_work_metadata, read_catalog
+from interpretant.catalog.config import CatalogConfig, read_catalog
+from interpretant.catalog.metadata import append_work_metadata
+from interpretant.catalog.raw import RawCell
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
 from interpretant.pipelines.build_linked_tables import build_linked_tables
 from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus

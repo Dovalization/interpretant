@@ -9,7 +9,8 @@ import pytest
 from click.testing import CliRunner
 
 from interpretant.__main__ import cli
-from interpretant.catalog import load_abstracts, read_catalog
+from interpretant.catalog.abstracts import load_abstracts
+from interpretant.catalog.config import read_catalog
 from interpretant.corpus.work_metadata import REPOSITORY_ONLY
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.params import CorpusSelection

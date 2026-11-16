@@ -17,15 +17,9 @@ from spacy.language import Language
 from spacy.pipeline import AttributeRuler
 from spacy.tokens import Doc, Span
 
-from interpretant.catalog import (
-    WORK_ID,
-    CatalogConfig,
-    CleaningPatterns,
-    load_annotations,
-    load_cleaning_patterns,
-    read_catalog,
-    save_annotations,
-)
+from interpretant.catalog.annotations import WORK_ID, load_annotations, save_annotations
+from interpretant.catalog.config import CatalogConfig, read_catalog
+from interpretant.catalog.curated import CleaningPatterns, load_cleaning_patterns
 from interpretant.corpus.annotation import annotate_texts, build_pipeline
 from interpretant.corpus.language import (
     SentenceLanguage,
@@ -361,7 +355,8 @@ def test_find_removals_takes_a_notice_to_the_end_of_the_sentence_it_ends_in(
     nlp: Language,
 ) -> None:
     words = ["Models", "learn", "senses", ".", "(", "c", ")", "2006", "APA", "press", "."]
-    starts = [True, False, False, False, True, False, False, True, False, False, False]
+    starts: list[bool | int | None] = [True, False, False, False, True]
+    starts += [False, False, True, False, False, False]
     doc = Doc(nlp.vocab, words=words, sent_starts=starts)
     doc.spans[SPANS_KEY] = [Span(doc, 4, 8, label="copyright")]
     english = [SentenceLanguage("en", 1.0)] * len(list(doc.sents))

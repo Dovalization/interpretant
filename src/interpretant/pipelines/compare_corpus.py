@@ -12,16 +12,13 @@ from pathlib import Path
 
 import polars as pl
 
-from interpretant.catalog import (
-    CatalogConfig,
-    load_abstracts,
-    load_abstracts_at,
-    load_decision_tables_at,
-    load_glued_words,
-    load_lower_glued_words,
-    load_split_words,
-    save_corpus_comparison,
-)
+from interpretant.catalog.abstracts import load_abstracts
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.glued_words import load_glued_words
+from interpretant.catalog.lower_glued_words import load_lower_glued_words
+from interpretant.catalog.reports import save_corpus_comparison
+from interpretant.catalog.revisions import load_abstracts_at, load_decision_tables_at
+from interpretant.catalog.split_words import load_split_words
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.review.run_comparison import compare_runs, render_comparison
 

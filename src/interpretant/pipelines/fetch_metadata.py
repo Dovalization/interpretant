@@ -18,14 +18,9 @@ from typing import Any
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from interpretant.catalog import (
-    CatalogConfig,
-    RawCell,
-    append_work_metadata,
-    fetched_work_ids,
-    list_raw_cells,
-    load_raw_cell,
-)
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.metadata import append_work_metadata, fetched_work_ids
+from interpretant.catalog.raw import RawCell, list_raw_cells, load_raw_cell
 from interpretant.corpus.work_metadata import (
     IDS_PER_REQUEST,
     configure_openalex,

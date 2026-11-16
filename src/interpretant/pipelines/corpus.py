@@ -8,13 +8,9 @@ from dataclasses import dataclass
 
 import polars as pl
 
-from interpretant.catalog import (
-    CatalogConfig,
-    RawCell,
-    list_raw_cells,
-    load_raw_cell,
-    metadata_work_ids,
-)
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.metadata import metadata_work_ids
+from interpretant.catalog.raw import RawCell, list_raw_cells, load_raw_cell
 from interpretant.corpus.works import RawAbstract, merge_cells, part_of
 from interpretant.pipelines.params import CorpusSelection
 from interpretant.pipelines.progress import Progress

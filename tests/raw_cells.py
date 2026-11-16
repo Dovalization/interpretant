@@ -6,7 +6,7 @@ import gzip
 import json
 from collections.abc import Iterable
 
-from interpretant.catalog import CatalogConfig
+from interpretant.catalog.config import CatalogConfig
 
 
 def write_raw_cell(catalog: CatalogConfig, field: str, decade: int, works: Iterable[int]) -> None:

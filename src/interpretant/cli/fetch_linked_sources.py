@@ -8,13 +8,9 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog import (
-    CATALOG_FILE,
-    LINKED_SOURCES,
-    LinkedSource,
-    load_doi_corrections,
-    read_catalog,
-)
+from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.curated import load_doi_corrections
+from interpretant.catalog.linked_records import LINKED_SOURCES, LinkedSource
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.fetch_linked_sources import (
     LinkedSourcesSettings,

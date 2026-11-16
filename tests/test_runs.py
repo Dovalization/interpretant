@@ -8,7 +8,7 @@ import platform
 import subprocess
 from pathlib import Path
 
-from interpretant.catalog import CatalogConfig
+from interpretant.catalog.config import CatalogConfig
 from interpretant.pipelines.runs import checkout_state, record_run
 
 

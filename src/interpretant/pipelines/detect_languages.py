@@ -21,13 +21,9 @@ from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 from spacy.vocab import Vocab
 
-from interpretant.catalog import (
-    SENTENCE_LANGUAGES_SCHEMA,
-    WORK_ID,
-    CatalogConfig,
-    load_annotations,
-    save_sentence_languages,
-)
+from interpretant.catalog.annotations import WORK_ID, load_annotations
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.languages import SENTENCE_LANGUAGES_SCHEMA, save_sentence_languages
 from interpretant.corpus.language import build_language_detector, detect_sentence_languages
 from interpretant.pipelines.corpus import corpus_cells, corpus_parts
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings

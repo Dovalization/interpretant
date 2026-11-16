@@ -15,12 +15,8 @@ from typing import Any
 import polars as pl
 from Bio import Entrez
 
-from interpretant.catalog import (
-    LinkedWork,
-    WorkMetadata,
-    build_linked_record,
-    select_linked_works,
-)
+from interpretant.catalog.linked_records import LinkedWork, build_linked_record, select_linked_works
+from interpretant.catalog.metadata import WorkMetadata
 from interpretant.corpus.bibliographic import count_pages
 
 PMIDS_PER_REQUEST = 200

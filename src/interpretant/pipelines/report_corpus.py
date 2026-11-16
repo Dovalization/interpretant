@@ -9,14 +9,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from interpretant.catalog import (
-    CatalogConfig,
-    load_abstracts,
+from interpretant.catalog.abstracts import load_abstracts
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.reports import (
     load_corpus_metrics,
-    load_staging_table,
     save_corpus_metrics,
     save_corpus_report,
 )
+from interpretant.catalog.staging import load_staging_table
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.review.corpus_report import (
     build_corpus_report,

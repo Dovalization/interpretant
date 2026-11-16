@@ -13,14 +13,11 @@ from dataclasses import dataclass
 
 import polars as pl
 
-from interpretant.catalog import (
-    CatalogConfig,
-    LinkedSource,
-    load_doi_corrections,
-    load_linked_records_table,
-    load_work_metadata_table,
-    save_staging_table,
-)
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.curated import load_doi_corrections
+from interpretant.catalog.linked_records import LinkedSource, load_linked_records_table
+from interpretant.catalog.metadata import load_work_metadata_table
+from interpretant.catalog.staging import save_staging_table
 from interpretant.corpus.crossref import CROSSREF_RECORD_SCHEMA, build_crossref_works
 from interpretant.corpus.pubmed import PUBMED_RECORD_SCHEMA, build_pubmed_works
 from interpretant.corpus.work_metadata import OPENALEX_METADATA_SCHEMA, build_openalex_works

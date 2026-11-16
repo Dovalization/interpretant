@@ -9,7 +9,8 @@ from typing import Any
 import pytest
 from Bio import Entrez
 
-from interpretant.catalog import LinkedWork, WorkMetadata
+from interpretant.catalog.linked_records import LinkedWork
+from interpretant.catalog.metadata import WorkMetadata
 from interpretant.corpus.pubmed import (
     PUBMED_RECORD_SCHEMA,
     build_pubmed_works,

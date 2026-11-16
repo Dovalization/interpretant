@@ -16,14 +16,11 @@ from Bio.Entrez.Parser import CorruptedXMLError
 from click.testing import CliRunner
 
 from interpretant.__main__ import cli
-from interpretant.catalog import (
-    CatalogConfig,
-    DOICorrection,
-    LinkedWork,
-    RawCell,
-    append_work_metadata,
-    fetched_linked_work_ids,
-)
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.curated import DOICorrection
+from interpretant.catalog.linked_records import LinkedWork, fetched_linked_work_ids
+from interpretant.catalog.metadata import append_work_metadata
+from interpretant.catalog.raw import RawCell
 from interpretant.cli import fetch_linked_sources as fetch_linked_sources_cli
 from interpretant.corpus.crossref import batch_crossref_works, select_crossref_works
 from interpretant.corpus.pubmed import batch_pubmed_works, select_pubmed_works

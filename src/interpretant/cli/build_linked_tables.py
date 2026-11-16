@@ -7,7 +7,7 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, read_catalog
 from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.build_linked_tables import build_linked_tables
 from interpretant.pipelines.progress import StageTimer

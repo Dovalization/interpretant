@@ -28,17 +28,16 @@ from habanero import Crossref
 from habanero.exceptions import RequestError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from interpretant.catalog import (
-    CatalogConfig,
-    DOICorrection,
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.curated import DOICorrection
+from interpretant.catalog.linked_records import (
     LinkedSource,
     LinkedWork,
-    RawCell,
-    WorkMetadata,
     append_linked_records,
     fetched_linked_work_ids,
-    load_work_metadata,
 )
+from interpretant.catalog.metadata import WorkMetadata, load_work_metadata
+from interpretant.catalog.raw import RawCell
 from interpretant.corpus.crossref import (
     batch_crossref_works,
     fetch_crossref_records,

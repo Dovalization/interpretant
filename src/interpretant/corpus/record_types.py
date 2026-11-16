@@ -15,7 +15,7 @@ from collections.abc import Mapping
 
 import polars as pl
 
-from interpretant.catalog import RecordKind
+from interpretant.catalog.curated import RecordKind
 from interpretant.corpus.cleaning import add_flag, mark_dropped
 
 RECORD_SIGNAL_COLUMNS = pl.Schema(

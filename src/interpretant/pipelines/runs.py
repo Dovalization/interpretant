@@ -17,7 +17,8 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 
-from interpretant.catalog import CatalogConfig, append_run_record
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.reports import append_run_record
 
 REPOSITORY = Path(__file__).resolve().parents[3]
 # Files a run itself changes; they do not make the code it ran from "uncommitted".

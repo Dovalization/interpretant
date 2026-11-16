@@ -36,7 +36,7 @@ import polars as pl
 from spacy.lang.en.stop_words import STOP_WORDS
 from symspellpy import SymSpell
 
-from interpretant.catalog import LOWER_GLUED_WORDS_SCHEMA
+from interpretant.catalog.lower_glued_words import LOWER_GLUED_WORDS_SCHEMA
 from interpretant.corpus.dictionary import is_dictionary_word
 from interpretant.corpus.phrase_counts import count_forms
 from interpretant.corpus.repair import inside_address

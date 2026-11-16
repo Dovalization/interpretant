@@ -11,7 +11,9 @@ from click.testing import CliRunner
 from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import load_annotations, load_sentence_languages, read_catalog
+from interpretant.catalog.annotations import load_annotations
+from interpretant.catalog.config import read_catalog
+from interpretant.catalog.languages import load_sentence_languages
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from tests.corpus_catalog import ANNOTATE_SETTINGS, LANGUAGE_SETTINGS, SELECTION

@@ -11,7 +11,9 @@ import pytest
 from click.testing import CliRunner
 
 from interpretant.__main__ import cli
-from interpretant.catalog import CatalogConfig, RawCell, fetched_work_ids, load_work_metadata
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.metadata import fetched_work_ids, load_work_metadata
+from interpretant.catalog.raw import RawCell
 from interpretant.cli import fetch_metadata as fetch_metadata_cli
 from interpretant.pipelines.fetch_metadata import (
     OpenAlexSettings,

@@ -7,7 +7,8 @@ from typing import Any
 
 import pytest
 
-from interpretant.catalog import LinkedWork, WorkMetadata
+from interpretant.catalog.linked_records import LinkedWork
+from interpretant.catalog.metadata import WorkMetadata
 from interpretant.corpus.crossref import (
     CROSSREF_RECORD_SCHEMA,
     batch_crossref_works,

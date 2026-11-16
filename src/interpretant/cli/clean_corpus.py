@@ -7,7 +7,7 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, read_catalog
 from interpretant.cli.options import default_process_count, process_count_option
 from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_result, result_counts

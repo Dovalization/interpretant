@@ -17,14 +17,10 @@ import polars as pl
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
-from interpretant.catalog import (
-    CatalogConfig,
-    StagingSource,
-    load_annotated_abstracts,
-    load_record_kinds,
-    load_staging_table,
-    save_abstracts,
-)
+from interpretant.catalog.abstracts import load_annotated_abstracts, save_abstracts
+from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.curated import load_record_kinds
+from interpretant.catalog.staging import StagingSource, load_staging_table
 from interpretant.corpus.cleaning import (
     mark_author_cap,
     mark_repeated_sentences,

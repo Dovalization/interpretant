@@ -23,13 +23,19 @@ stages:
   build_linked_tables:
     cmd: interpretant build-linked-tables
     deps:
-      - src/interpretant/catalog
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/linked_records.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/staging.py
       - src/interpretant/cli/build_linked_tables.py
       - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/crossref.py
       - src/interpretant/corpus/pubmed.py
-      - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/work_metadata.py
       - src/interpretant/pipelines/build_linked_tables.py
       - src/interpretant/pipelines/progress.py
@@ -48,7 +54,16 @@ stages:
   count_word_repairs:
     cmd: interpretant count-word-repairs
     deps:
-      - src/interpretant/catalog
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/glued_words.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/lower_glued_words.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/repaired_texts.py
+      - src/interpretant/catalog/split_words.py
       - src/interpretant/cli/count_word_repairs.py
       - src/interpretant/corpus/dictionary.py
       - src/interpretant/corpus/glued_words.py
@@ -82,7 +97,13 @@ stages:
   annotate_corpus:
     cmd: interpretant annotate-corpus
     deps:
-      - src/interpretant/catalog
+      - src/interpretant/catalog/annotations.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/repaired_texts.py
       - src/interpretant/cli/annotate_corpus.py
       - src/interpretant/corpus/annotation.py
       - src/interpretant/corpus/attribute_rules.py
@@ -108,10 +129,15 @@ stages:
   detect_languages:
     cmd: interpretant detect-languages
     deps:
-      - src/interpretant/catalog
+      - src/interpretant/catalog/annotations.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/languages.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
       - src/interpretant/cli/detect_languages.py
       - src/interpretant/corpus/language.py
-      - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/detect_languages.py
@@ -128,7 +154,16 @@ stages:
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:
-      - src/interpretant/catalog
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/annotations.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/languages.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/schemas.py
       - src/interpretant/cli/clean_corpus.py
       - src/interpretant/corpus/language.py
       - src/interpretant/corpus/removals.py
@@ -154,7 +189,15 @@ stages:
   build_corpus:
     cmd: interpretant build-corpus
     deps:
-      - src/interpretant/catalog
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/staging.py
       - src/interpretant/cli/build_corpus.py
       - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
@@ -185,11 +228,19 @@ stages:
   report_corpus:
     cmd: interpretant report-corpus
     deps:
-      - src/interpretant/catalog
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/reports.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/staging.py
       - src/interpretant/cli/report_corpus.py
       - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
-      - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/work_metadata.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/report_corpus.py

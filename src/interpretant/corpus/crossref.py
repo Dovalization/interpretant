@@ -19,12 +19,8 @@ from urllib.parse import quote
 import polars as pl
 from habanero import Crossref
 
-from interpretant.catalog import (
-    LinkedWork,
-    WorkMetadata,
-    build_linked_record,
-    select_linked_works,
-)
+from interpretant.catalog.linked_records import LinkedWork, build_linked_record, select_linked_works
+from interpretant.catalog.metadata import WorkMetadata
 from interpretant.corpus.bibliographic import count_pages, is_valid_issn
 
 # Crossref's works route rejects a field it does not offer. Reference lists are left out:
