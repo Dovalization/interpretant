@@ -87,7 +87,7 @@ def count_glued_words(texts: pl.DataFrame) -> pl.DataFrame:
         left_phrase=pl.col("left").str.to_lowercase(),
     )
     counts = _count_phrases(
-        texts["text"],
+        texts,
         pl.concat(
             [phrases["joined_phrase"], phrases["apart_phrase"], phrases["left_phrase"]]
         ).unique(),
@@ -103,7 +103,7 @@ def count_glued_words(texts: pl.DataFrame) -> pl.DataFrame:
         )
     return (
         forms.join(table.select("word", "joined", "apart", "left_alone"), on="word")
-        .join(_rank_sentence_openers(texts["text"]), left_on="right", right_on="opener", how="left")
+        .join(_rank_sentence_openers(texts), left_on="right", right_on="opener", how="left")
         .with_columns(pl.col("joined", "apart", "left_alone").fill_null(0))
         .select(GLUED_WORD_COUNTS_SCHEMA.names())
         .cast(GLUED_WORD_COUNTS_SCHEMA)
@@ -172,20 +172,34 @@ def split_glued_words(text: str, splits: Mapping[str, str]) -> str:
     return _GLUED_WORD.sub(split, text)
 
 
-def _count_phrases(texts: pl.Series, phrases: pl.Series) -> pl.DataFrame:
-    """How often each phrase appears as whole words, case folded, separators read as spaces."""
-    normalised = " " + texts.str.to_lowercase().str.replace_all(_SEPARATORS_PATTERN, " ") + " "
+def _count_phrases(texts: pl.DataFrame, phrases: pl.Series) -> pl.DataFrame:
+    """How often each phrase appears as whole words, case folded, separators read as spaces.
+
+    One lazy query: Polars runs a query's expressions in parallel, where the same steps as
+    ``Series`` methods ran on one core, four to eight times slower on the corpus.
+    """
+    folded = pl.col("text").str.to_lowercase().str.replace_all(_SEPARATORS_PATTERN, " ")
     patterns = (" " + phrases + " ").to_list()
-    hits = normalised.str.extract_many(patterns, overlapping=True).explode().drop_nulls()
-    return hits.str.strip_chars(" ").rename("phrase").value_counts()
-
-
-def _rank_sentence_openers(texts: pl.Series) -> pl.DataFrame:
-    """Each capitalised word that opens a sentence, ranked by how often (1 for the most)."""
-    openers = texts.str.extract_all(_SENTENCE_OPENER_PATTERN).explode().drop_nulls()
     return (
-        openers.str.strip_chars_start(".!? ")
-        .rename("opener")
-        .value_counts()
+        texts.lazy()
+        .select(phrase=(" " + folded + " ").str.extract_many(patterns, overlapping=True))
+        .explode("phrase")
+        .drop_nulls()
+        .group_by(pl.col("phrase").str.strip_chars(" "))
+        .len("count")
+        .collect(engine="streaming")
+    )
+
+
+def _rank_sentence_openers(texts: pl.DataFrame) -> pl.DataFrame:
+    """Each capitalised word that opens a sentence, ranked by how often (1 for the most)."""
+    return (
+        texts.lazy()
+        .select(opener=pl.col("text").str.extract_all(_SENTENCE_OPENER_PATTERN))
+        .explode("opener")
+        .drop_nulls()
+        .group_by(pl.col("opener").str.strip_chars_start(".!? "))
+        .len("count")
         .select("opener", opener_rank=pl.col("count").rank("min", descending=True))
+        .collect(engine="streaming")
     )

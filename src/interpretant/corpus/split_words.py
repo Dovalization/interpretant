@@ -110,7 +110,7 @@ def count_split_words(texts: pl.DataFrame, *, min_word_count: int) -> pl.DataFra
             for kind, separator in _SEPARATORS.items()
         },
     )
-    found = _count_forms(texts["text"], pl.concat([forms[kind] for kind in _SEPARATORS]))
+    found = _count_forms(texts, pl.concat([forms[kind] for kind in _SEPARATORS]))
     table = cuts.join(words, on="word")
     for kind in _SEPARATORS:
         table = table.join(
@@ -213,18 +213,29 @@ def _cuts(
                 yield word, left, right, left_is_word, right_is_word
 
 
-def _count_forms(texts: pl.Series, forms: pl.Series) -> pl.DataFrame:
-    """How often each form appears between spaces, case folded, other characters as spaces."""
+def _count_forms(texts: pl.DataFrame, forms: pl.Series) -> pl.DataFrame:
+    """How often each form appears between spaces, case folded, other characters as spaces.
+
+    One lazy query, which Polars runs in parallel (as ``Series`` methods it ran on one core).
+    """
     normalised = (
         " "
-        + texts.str.to_lowercase()
+        + pl.col("text")
+        .str.to_lowercase()
         .str.replace_all(_NOT_TEXT_PATTERN, " ")
         .str.replace_all(_SPACES_PATTERN, " ")
         + " "
     )
     patterns = (" " + forms.unique() + " ").to_list()
-    hits = normalised.str.extract_many(patterns, overlapping=True).explode().drop_nulls()
-    return hits.str.strip_chars(" ").rename("form").value_counts()
+    return (
+        texts.lazy()
+        .select(form=normalised.str.extract_many(patterns, overlapping=True))
+        .explode("form")
+        .drop_nulls()
+        .group_by(pl.col("form").str.strip_chars(" "))
+        .len("count")
+        .collect(engine="streaming")
+    )
 
 
 def _pairs(decisions: pl.DataFrame) -> dict[str, frozenset[str]]:
