@@ -44,6 +44,7 @@ class CatalogConfig(BaseModel):
     record_types: DatasetEntry
     kept_joined_words: DatasetEntry
     glued_words: DatasetEntry
+    split_words: DatasetEntry
     annotations: DatasetEntry
     sentence_languages: DatasetEntry
 

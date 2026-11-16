@@ -20,6 +20,7 @@ from interpretant.pipelines.corpus import CorpusResult
 from interpretant.pipelines.count_word_repairs import (
     CountWordRepairsSettings,
     GluedWordSettings,
+    SplitWordSettings,
     count_word_repairs,
 )
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
@@ -54,7 +55,8 @@ CLEAN_SETTINGS = CleanCorpusSettings()
 WORD_REPAIRS_SETTINGS = CountWordRepairsSettings(
     glued_words=GluedWordSettings(
         apart_margin=10, opener_count=30, opener_min_left_letters=4, opener_min_right_letters=2
-    )
+    ),
+    split_words=SplitWordSettings(min_word_count=2, join_margin=10, hyphen_margin=100),
 )
 
 
@@ -90,6 +92,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"record_types:\n  path: '{repository.record_types.path}'\n  format: yaml\n"
         f"kept_joined_words:\n  path: '{repository.kept_joined_words.path}'\n  format: yaml\n"
         "glued_words:\n  path: glued_words.parquet\n  format: parquet\n"
+        "split_words:\n  path: split_words.parquet\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"

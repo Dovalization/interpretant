@@ -1,23 +1,43 @@
 """The word repairs of the cleaning runs (decision agenda 2.3), counted over the whole corpus.
 
 Every selected cell's works are merged and repaired as the spaCy pass repairs them, part by part
-in worker processes. The glued words of the repaired texts (run 7) are counted over the whole
-corpus and each is decided: split before the spaCy pass, or kept joined. Each table is written
+in worker processes. Each repair is then decided in the order the pass makes them, each from
+counts over the whole corpus of the text the earlier ones produce: the glued words of the
+repaired texts (run 7), split or kept joined; then the words broken by a space or a line-end
+hyphen in the texts with those splits made (run 7c), joined or kept apart. Each table is written
 whole, so the decisions can be reviewed before the pass reads them.
 """
 
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Mapping
 from dataclasses import dataclass
 
 import polars as pl
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic_settings import SettingsConfigDict
 
-from interpretant.catalog import CatalogConfig, load_kept_joined_words, save_glued_words
-from interpretant.corpus.glued_words import count_glued_words, decide_glued_word_splits
+from interpretant.catalog import (
+    CatalogConfig,
+    load_kept_joined_words,
+    save_glued_words,
+    save_split_words,
+)
+from interpretant.corpus.glued_words import (
+    count_glued_words,
+    decide_glued_word_splits,
+    glued_word_splits,
+    split_glued_words,
+)
 from interpretant.corpus.repair import repair_text
+from interpretant.corpus.split_words import (
+    HYPHEN,
+    HYPHEN_SPACE,
+    SPACE,
+    count_split_words,
+    decide_split_word_joins,
+)
 from interpretant.corpus.works import part_of
 from interpretant.pipelines.corpus import corpus_cells, load_corpus_works, part_name
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
@@ -36,22 +56,40 @@ class GluedWordSettings(BaseModel):
     opener_min_right_letters: int = Field(ge=1)
 
 
+class SplitWordSettings(BaseModel):
+    """When a word broken by a space or a line-end hyphen is joined (run 7c)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    min_word_count: int = Field(ge=1)
+    join_margin: float = Field(gt=0)
+    hyphen_margin: float = Field(gt=0)
+
+
 class CountWordRepairsSettings(ParamsSettings):
     """The ``count_word_repairs`` section of ``params.yaml``: which words repair changes."""
 
     model_config = SettingsConfigDict(yaml_config_section="count_word_repairs")
 
     glued_words: GluedWordSettings
+    split_words: SplitWordSettings
 
 
 @dataclass(frozen=True)
 class WordRepairsResult:
-    """What the stage wrote: the abstracts read, the glued words found and those split."""
+    """What the stage wrote: the abstracts read and each repair's words found and changed.
+
+    The broken words joined are counted after a space or a hyphen and a space (``spaced``) and
+    after a hyphen alone (``hyphenated``).
+    """
 
     abstract_count: int
     glued_word_count: int
     glued_split_counts: dict[str, int]
     glued_split_occurrences: int
+    split_word_count: int
+    split_join_counts: dict[str, int]
+    split_join_occurrences: int
 
 
 def count_word_repairs(
@@ -98,14 +136,50 @@ def count_word_repairs(
     )
     save_glued_words(catalog, decisions)
     split = decisions.filter(pl.col("split"))
+    splits = glued_word_splits(decisions)
+    progress.stage("splitting the glued words", total=len(repaired))
+    split_texts = map_parts(
+        _split_part,
+        {part: (rows, splits) for part, rows in repaired.items()},
+        process_count=process_count,
+        progress=progress,
+    )
+    del repaired, texts
+    texts = pl.DataFrame(
+        [row for rows in split_texts.values() for row in rows],
+        schema={"work_id": pl.String(), "text": pl.String()},
+        orient="row",
+    )
+    progress.stage("counting split words")
+    broken = settings.split_words
+    split_counts = count_split_words(texts, min_word_count=broken.min_word_count)
+    progress.stage("deciding the joins")
+    joins = decide_split_word_joins(
+        split_counts, join_margin=broken.join_margin, hyphen_margin=broken.hyphen_margin
+    )
+    save_split_words(catalog, joins)
+    spaced = joins.filter(pl.col("join"))
+    hyphenated = joins.filter(pl.col("join_hyphenated"))
     return WordRepairsResult(
         abstract_count=texts.height,
         glued_word_count=decisions.height,
         glued_split_counts=dict(split["reason"].value_counts(sort=True).iter_rows()),
         glued_split_occurrences=int(split["occurrences"].sum()),
+        split_word_count=joins.height,
+        split_join_counts={"spaced": spaced.height, "hyphenated": hyphenated.height},
+        split_join_occurrences=int((spaced[SPACE] + spaced[HYPHEN_SPACE]).sum())
+        + int(hyphenated[HYPHEN].sum()),
     )
 
 
 def _repair_part(_part: str, works: list[tuple[str, str]]) -> list[tuple[str, str]]:
     """One part's works with their texts repaired as the spaCy pass repairs them."""
     return [(work_id, repair_text(text)) for work_id, text in works]
+
+
+def _split_part(
+    _part: str, works_and_splits: tuple[list[tuple[str, str]], Mapping[str, str]]
+) -> list[tuple[str, str]]:
+    """One part's repaired works with their glued words split, as the spaCy pass splits them."""
+    works, splits = works_and_splits
+    return [(work_id, split_glued_words(text, splits)) for work_id, text in works]

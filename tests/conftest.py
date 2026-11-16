@@ -68,6 +68,7 @@ def catalog_text() -> str:
         "record_types:\n  path: curated/record_types.yaml\n  format: yaml\n"
         "kept_joined_words:\n  path: curated/kept_joined_words.yaml\n  format: yaml\n"
         "glued_words:\n  path: data/glued_words.parquet\n  format: parquet\n"
+        "split_words:\n  path: data/split_words.parquet\n  format: parquet\n"
         "annotations:\n  path: data/annotations\n  format: docbin\n"
         "sentence_languages:\n  path: data/sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: data/corpus_report.md\n  format: markdown\n"

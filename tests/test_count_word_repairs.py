@@ -5,12 +5,18 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import polars as pl
 import pytest
 from click.testing import CliRunner
 from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import load_annotations, load_glued_words, read_catalog
+from interpretant.catalog import (
+    load_annotations,
+    load_glued_words,
+    load_split_words,
+    read_catalog,
+)
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.count_word_repairs import CountWordRepairsSettings, count_word_repairs
 from interpretant.pipelines.params import CorpusSelection
@@ -26,6 +32,15 @@ GLUED_CELL = [
     for work in range(3)
 ]
 GLUED_SELECTION = CorpusSelection(fields=("hci",), decades=(2010,))
+# A cell of its own: a word written whole in thirty works and broken at a line end in two,
+# fifteen times as often.
+SPLIT_CELL = [
+    (10 + work, f"The information study {work} looks at models and their uses.", 2012)
+    for work in range(30)
+] + [
+    (50 + work, f"The infor- mation study {work} looks at records of research.", 2012)
+    for work in range(2)
+]
 
 
 def test_count_word_repairs_writes_each_glued_word_with_its_decision(
@@ -54,6 +69,44 @@ def test_annotate_corpus_splits_the_glued_words_before_the_pass(
     assert "Abstract The study 0 looks at PubMed records of attention research." in texts
 
 
+def test_count_word_repairs_writes_each_broken_word_with_its_decision(
+    corpus_catalog_file: Path,
+) -> None:
+    write_raw_cell(corpus_catalog_file, "hci", 2010, SPLIT_CELL)
+    catalog = read_catalog(corpus_catalog_file)
+    result = count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    table = load_split_words(catalog).filter(pl.col("word") == "information")
+    row = table.row(0, named=True)
+    assert (row["left"], row["right"], row["joined"], row["hyphen_space"]) == (
+        "infor",
+        "mation",
+        30,
+        2,
+    )
+    assert row["join"]
+    assert result.split_join_counts["spaced"] >= 1
+    assert result.split_join_occurrences >= 2
+
+
+def test_annotate_corpus_joins_the_broken_words_before_the_pass(
+    corpus_catalog_file: Path, nlp: Language
+) -> None:
+    write_raw_cell(corpus_catalog_file, "hci", 2010, SPLIT_CELL)
+    catalog = read_catalog(corpus_catalog_file)
+    count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
+    texts = [doc.text for doc in load_annotations(catalog, "hci_2010", nlp.vocab)]
+    assert "The infor- mation study 0 looks at records of research." not in texts
+    assert "The information study 0 looks at records of research." in texts
+
+
+def test_annotate_corpus_needs_the_split_words(corpus_catalog_file: Path) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    catalog.split_words.path.unlink()
+    with pytest.raises(FileNotFoundError, match="no split words table"):
+        annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
+
+
 def test_annotate_corpus_needs_the_glued_words(corpus_catalog_file: Path) -> None:
     catalog = read_catalog(corpus_catalog_file)
     catalog.glued_words.path.unlink()
@@ -76,7 +129,8 @@ def test_count_word_repairs_command_records_the_run(corpus_catalog_file: Path) -
 
 
 def test_the_repository_params_file_is_valid_for_word_repairs() -> None:
-    glued = CountWordRepairsSettings().glued_words
-    assert glued.apart_margin > 0
-    assert glued.opener_min_left_letters >= 2
-    assert glued.opener_min_right_letters >= 1
+    settings = CountWordRepairsSettings()
+    assert settings.glued_words.apart_margin > 0
+    assert settings.glued_words.opener_min_left_letters >= 2
+    assert settings.glued_words.opener_min_right_letters >= 1
+    assert settings.split_words.hyphen_margin >= settings.split_words.join_margin

@@ -72,6 +72,11 @@ from interpretant.catalog.schemas import (
     REMOVAL,
     SENTENCE,
 )
+from interpretant.catalog.split_words import (
+    SPLIT_WORDS_SCHEMA,
+    load_split_words,
+    save_split_words,
+)
 from interpretant.catalog.staging import StagingSource, load_staging_table, save_staging_table
 
 __all__ = [
@@ -86,6 +91,7 @@ __all__ = [
     "REMOVAL",
     "SENTENCE",
     "SENTENCE_LANGUAGES_SCHEMA",
+    "SPLIT_WORDS_SCHEMA",
     "START_ID",
     "WORK_ID",
     "CatalogConfig",
@@ -124,6 +130,7 @@ __all__ = [
     "load_raw_cell",
     "load_record_kinds",
     "load_sentence_languages",
+    "load_split_words",
     "load_staging_table",
     "load_work_metadata",
     "load_work_metadata_table",
@@ -136,6 +143,7 @@ __all__ = [
     "save_corpus_report",
     "save_glued_words",
     "save_sentence_languages",
+    "save_split_words",
     "save_staging_table",
     "select_linked_works",
 ]

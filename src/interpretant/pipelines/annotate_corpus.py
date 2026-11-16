@@ -20,9 +20,15 @@ from typing import TypeVar
 
 from pydantic_settings import SettingsConfigDict
 
-from interpretant.catalog import CatalogConfig, load_glued_words, save_annotations
+from interpretant.catalog import (
+    CatalogConfig,
+    load_glued_words,
+    load_split_words,
+    save_annotations,
+)
 from interpretant.corpus.annotation import annotate_texts, build_pipeline
 from interpretant.corpus.glued_words import glued_word_splits
+from interpretant.corpus.split_words import split_word_joins
 from interpretant.corpus.works import RawAbstract, part_of
 from interpretant.pipelines.corpus import (
     CorpusResult,
@@ -64,9 +70,10 @@ def annotate_corpus(
     Raises:
         ValueError: if no raw cell matches the selection or the given fields and decades, or a
             cell's metadata has not been fetched or is incomplete.
-        FileNotFoundError: if the glued words have not been counted.
+        FileNotFoundError: if the glued words or the split words have not been counted.
     """
     splits = glued_word_splits(load_glued_words(catalog))
+    joins = split_word_joins(load_split_words(catalog))
     cells = corpus_cells(catalog, selection)
     chosen = {
         part_name(cell.field, cell.decade)
@@ -86,6 +93,7 @@ def annotate_corpus(
         selected,
         nlp,
         glued_word_splits=splits,
+        split_word_joins=joins,
         batch_size=batch_size,
         process_count=process_count,
     )

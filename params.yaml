@@ -26,6 +26,20 @@ count_word_repairs:
     opener_count: 30
     opener_min_left_letters: 4
     opener_min_right_letters: 2
+  # Run 7c, the split words: which words broken by a space or a line-end hyphen are joined, after
+  # the glued-word splits. Both margins provisional, set from a sample.
+  split_words:
+    # A word is a candidate only when the corpus writes it whole at least this many times.
+    min_word_count: 20
+    # A break by a space, or by a hyphen and a space, is joined when the corpus writes the word
+    # whole at least this many times as often as broken in any way (the survey: real breaks are
+    # written whole hundreds of times as often, "infor-mation" 1,629, "sys tem" 2,228; real
+    # hyphenated words far less, "co-operation" 8, "multi-modal" 6, "self-esteem" 0).
+    join_margin: 10
+    # A break by a hyphen alone, more often a real hyphenated word ("pre-schoolers" 23,
+    # "trans-disciplinarity" 27), is joined only above this margin and when its second piece is
+    # not a word spaCy knows.
+    hyphen_margin: 100
 
 # Stage 2a, the spaCy pass (annotate-corpus).
 annotate_corpus:

@@ -31,6 +31,7 @@ from srsly.msgpack import msgpack_decoders, msgpack_encoders
 from interpretant.catalog import WORK_ID
 from interpretant.corpus.glued_words import split_glued_words
 from interpretant.corpus.repair import DOI_PATTERN, repair_text
+from interpretant.corpus.split_words import SplitWordJoins, join_split_words
 from interpretant.corpus.works import RawAbstract
 
 # Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md; "viz." to "ca."
@@ -90,6 +91,7 @@ SENTENCE_RULES = "sentence_rules"
 URL_OR_DOI = re.compile(f"(?u)(?:{DOI_PATTERN})|(?:{URL_PATTERN})")
 # No glued word is split unless the caller passes the splits.
 _NO_SPLITS: Mapping[str, str] = MappingProxyType({})
+_NO_JOINS = SplitWordJoins()
 
 
 def build_pipeline(
@@ -254,19 +256,27 @@ def annotate_texts(
     nlp: Language,
     *,
     glued_word_splits: Mapping[str, str] = _NO_SPLITS,
+    split_word_joins: SplitWordJoins = _NO_JOINS,
     batch_size: int = 256,
     process_count: int = 1,
 ) -> Iterator[Doc]:
     """Repair and annotate each abstract, in order; each document carries its work id.
 
     After repair, each glued word in ``glued_word_splits`` is written as its two parts (decision
-    agenda 2.3, run 7), so the stored text and every later step read two words. An error while
-    repairing ends the stream of texts and is raised once the documents before it are given.
+    agenda 2.3, run 7), then each broken word in ``split_word_joins`` is written whole (run 7c),
+    so the stored text and every later step read the repaired words. An error while repairing
+    ends the stream of texts and is raised once the documents before it are given.
     """
     errors: list[Exception] = []
     pairs = _until_error(
         (
-            (split_glued_words(repair_text(abstract.text), glued_word_splits), abstract.work_id)
+            (
+                join_split_words(
+                    split_glued_words(repair_text(abstract.text), glued_word_splits),
+                    split_word_joins,
+                ),
+                abstract.work_id,
+            )
             for abstract in abstracts
         ),
         errors,
