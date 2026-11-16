@@ -413,4 +413,23 @@ Each change judged as its proposal says; estimates set against what was measured
 | B2 close calls and unscored sentences | `631fb445` | Measured before changing: of 1,482 close calls in kept abstracts, the 484 of seven words or more are nearly all foreign and the 998 shorter ones mostly names and citation pieces, so returning `und` would keep both: that half dropped. The 196 sentences no candidate scores keep being removed, labelled `mis` instead of `ar`. In the next run. |
 | B3 lower-case abbreviations | `87f83624` | About 100 kept abstracts had a sentence cut after "fig.", "sect.", "Pp." and the like; "Al." left out (OCR for "AI." at a real sentence end). In the next run. |
 | C8 sentence rules in one array write | `8339af31` | Old and new rules on all 705,283 repaired texts: 0 differ, 3.3 times faster (624 to 190 CPU s). In the next run. |
-| C10 garbage collector paused for the LSH loop | `32710b37` | In the next run (outputs cannot change). |
+| C10 garbage collector paused for the LSH loop | `32710b37` | Near-duplicates 30 s to 24 s, marks unchanged (record `f62d8c3`). Kept. |
+| B2a, B3, C8 on a run | | Record `f62d8c3`: 191 sentences `ar` to `mis` and no other label; 117 kept works with new sentence breaks; the pass 646 s to 616 s (C8). B3's "Pp." kept book-review page counts that the template rule had removed, so "Pp." was taken off the list again (`6bd098ae`). |
+| C3, C9 cleaning patterns | `a8baef03`, `3150f5f4` | Identical spans on all 705,283 texts; cleaning 202 s to 173 s (run 2, record `c79ff55`). Kept. |
+| C4 dictionary checks in batches | `4ce15592` | Decision tables byte-identical; the lower-case count 84 s to 64 s, less than hoped: the segmentation stays in one process. Kept. |
+| C7, D29 one pool, one Polars thread per worker | `5689201b` | The three later rounds of the word repairs 41 s to 30 s; the stage 221 s to 188 s with C4. Kept. |
+| C5 the pass's sentence table | `489e4c90` | No language label changed; the language stage 114 s to 93 s, half the estimate (lingua's own time is most of it now). Kept. |
+| C6 reusing cached documents | `8339b2e4` | Run 2, the first with keys, 24 s slower (the old cache read, nothing to reuse). Run 3, the pass forced with unchanged inputs: 61 s instead of 640, the cache byte-identical, languages and cleaning skipped by DVC (record `2e20238`). Kept. |
+| D25 the build loads only the signal columns | `d3f81669` | Same abstracts table; the build's peak memory 11.7 GB to 11.2 GB. Kept. |
+| D30 lazy reads in the report | | Not done: the report runs in 1 s and its 4.6 GB peak is below the build's. |
+
+### The typical changes after the review
+
+| Change | Before (run 8) | After | How |
+|---|---|---|---|
+| A cleaning pattern or threshold | 4.6 min | 3.9 min | measured stage times (run 2) |
+| A language setting | 6.6 min | 5.5 min | measured stage times |
+| A word repair | 21.1 min | about 10 min | measured stage times, with the pass reusing all but the changed texts (61 s plus about a second per 1,000 changed texts, an estimate for a real change) |
+| A corpus-level rule | 1.1 min | 1.0 min | measured |
+| A shared module | every stage for 43 of 80 recent commits | every stage for 24 | replay of the commits (C1) |
+| A full run with nothing cached | 21.3 min | 19.5 min | run 2's stages |
