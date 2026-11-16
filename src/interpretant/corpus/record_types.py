@@ -50,6 +50,14 @@ _NAME_WORDS = (1, 8)
 _LIFE_SPAN_YEARS = (20, 110)
 
 
+# The columns ``join_record_signals`` reads from Crossref's and PubMed's staging tables, so a
+# caller can load only these (the tables also hold abstracts, licences and MeSH lists).
+SIGNAL_COLUMNS: dict[str, tuple[str, ...]] = {
+    "crossref": ("work_id", "is_found", "crossref_type", "update_types", "page_count"),
+    "pubmed": ("work_id", "is_found", "publication_types", "page_count"),
+}
+
+
 def join_record_signals(
     works: pl.DataFrame, openalex: pl.DataFrame, crossref: pl.DataFrame, pubmed: pl.DataFrame
 ) -> pl.DataFrame:

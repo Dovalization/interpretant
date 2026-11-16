@@ -29,6 +29,7 @@ from interpretant.corpus.cleaning import (
 )
 from interpretant.corpus.deduplication import mark_near_duplicates, minhash_signatures
 from interpretant.corpus.record_types import (
+    SIGNAL_COLUMNS,
     decide_record_types,
     join_record_signals,
     mark_record_types,
@@ -81,7 +82,12 @@ def build_corpus(
         part.with_columns(pl.lit(name).alias(_PART)) for name, part in annotated.items()
     )
     progress.stage("loading the staging tables")
-    staging = {source: load_staging_table(catalog, source).collect() for source in _STAGING_SOURCES}
+    staging = {
+        source: load_staging_table(catalog, source)
+        .select(SIGNAL_COLUMNS.get(source, "*"))
+        .collect()
+        for source in _STAGING_SOURCES
+    }
     check_work_metadata(table, staging["openalex"])
     progress.stage("record types")
     kinds = load_record_kinds(catalog)
