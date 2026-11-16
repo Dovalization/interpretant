@@ -5,11 +5,13 @@
 # its parts apart far more often than joined, or when its second part is a common sentence opener;
 # run 8 splits a lower-case word the lemma index does not know when the corpus writes its parts
 # apart far more often than joined (params.yaml, count_word_repairs). The counts get some words
-# wrong, mostly where the parts also make an ordinary phrase: names and real words the lemma
-# index lacks. Foreign words need no entry: the word repairs change only English sentences, as
-# the language stage before them reads them. Each entry is matched in any case and carries its
-# evidence: the counts from the glued words tables (run 8's: the word whole, its parts apart, on
-# the count of 2026-11-16) and what the word names.
+# wrong, mostly where the parts also make an ordinary phrase: names, real words the lemma index
+# lacks, and foreign words. The repairs change only the sentences read as English, but foreign
+# words occur there too, quoted or in a sentence that runs into foreign text: with the nine
+# foreign words off this list, the run of 2026-11-16 split them 54 times, 33 of them foreign
+# words and 11 broken English words, against 10 real repairs. Each entry is matched in any case
+# and carries its evidence: the counts from the glued words tables (run 8's: the word whole, its
+# parts apart, on the count of 2026-11-16) and what the word names.
 
 words:
   - word: LinkedIn
@@ -114,3 +116,34 @@ words:
   - word: Theall
     evidence: >-
       A surname (Donald Theall, the Joyce scholar), 9 capitalised uses. "the all" 230.
+  - word: todo
+    evidence: >-
+      Spanish and Portuguese for "all", in the foreign sentences of kept works (185 lower-case
+      uses). Whole 198 times, "to do" 11,195.
+  - word: presenta
+    evidence: >-
+      A Spanish, Catalan and Portuguese verb form ("presents"). Whole 155 times, "present a"
+      8,423.
+  - word: presentan
+    evidence: >-
+      A Spanish verb form ("they present"). Whole 53 times, "present an" 2,449.
+  - word: representa
+    evidence: >-
+      A Spanish, Catalan and Portuguese verb form ("represents"). Whole 51 times, "represent
+      a" 2,003.
+  - word: considera
+    evidence: >-
+      A Spanish, Catalan, Italian and Portuguese verb form ("considers"). Whole 50 times,
+      "consider a" 895.
+  - word: muchas
+    evidence: >-
+      Spanish for "many". Whole 47 times, "much as" 2,040.
+  - word: Verband
+    evidence: >-
+      German for "association". Whole 42 times, "verb and" 474.
+  - word: Bestand
+    evidence: >-
+      German for "stock, holdings". Whole 31 times, "best and" 346.
+  - word: Themen
+    evidence: >-
+      German plural of "Thema", 41 of its 42 uses capitalised. "the men" 837.
