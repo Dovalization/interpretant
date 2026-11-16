@@ -1,6 +1,6 @@
 {
   "abstracts": 705283,
-  "dropped": 65374,
+  "dropped": 65385,
   "dropped_by_reason": {
     "author_cap": 180,
     "catalogue_record": 8037,
@@ -9,7 +9,7 @@
     "exam_spam": 61,
     "letter": 1093,
     "mojibake": 228,
-    "near_duplicate": 5453,
+    "near_duplicate": 5464,
     "news": 253,
     "not_english": 18791,
     "obituary": 638,
@@ -24,7 +24,7 @@
     "retracted": 147,
     "truncated": 77464
   },
-  "kept": 639909,
+  "kept": 639898,
   "removed_ranges_by_reason": {
     "abstract_label": 37815,
     "catalogue_record": 8037,
