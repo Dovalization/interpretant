@@ -43,9 +43,12 @@ labels:
   # metadata of ASHA's publishing platform ("Additional Resources FiguresReferences..."), and
   # the start or end of a JSTOR download stamp whose other half is missing. Added 2026-11-16 (run
   # 12): ERIC's "Documents acquired by ERIC…", "Contains fulltext", the notice "These keywords
-  # were added by machine…", and a Frontiers citation line ("Citation: …" opening the record, or
-  # "Citation: … Frontiers in …"); 163 kept works in the build of record 2e20238, no lost prose
-  # in 30 sampled removals (calibrated agent judges).
+  # were added by machine…", and a Frontiers citation line opening the record ("Citation: …");
+  # 163 kept works in the build of record 2e20238, no lost prose in 30 sampled removals
+  # (calibrated agent judges). A citation line later in the text, "Citation: … Frontiers in …",
+  # needs a wildcard run that spaCy expands into a chain of optional tokens: it made the
+  # cleaning stage about 17 times slower, and the sentence splitter ends the line at its year
+  # anyway, so it is left out.
   footer: rest_of_sentence
   # Frontiers' conference-abstract header, "Event Abstract Back to Event", removed exactly: the
   # sentence splitter runs it, the title, the authors and their affiliations into the abstract's
@@ -86,7 +89,11 @@ labels:
   # (run 9): in the build of record 2e20238, 1,660 and 1,068 kept works were such a line with
   # fewer than 30 words before it and 198 and 17 had one after real prose; none of run 3's 167
   # judged abstracts holds one, and agent judges calibrated on run 3's verdicts found no real
-  # abstract and no lost prose in 30 sampled works of each.
+  # abstract and no lost prose in 30 sampled works of each. Between "No." and the bracketed date
+  # the JSTOR pattern takes any tokens but a sentence's final mark, a "+" run rather than a
+  # bounded one (spaCy expands {n,m} into a chain of optional tokens, which made the stage many
+  # times slower), so a line cannot run on into prose; an issue title holding a full stop is
+  # missed (53 of the 1,894 lines the checked regex found).
   citation_line: abstract_or_sentence
   # A library catalogue's thesis notes at the start of the record, "Thesis (M.A.)--Georgetown
   # University, 2009.;", with an "Includes bibliographical references" or "Advisor:" note that

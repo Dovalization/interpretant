@@ -176,6 +176,11 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
             "citation_line",
         ),
         (
+            "Canada and the World. International Journal, Vol. 41, No. 1, Canada in the World "
+            "(Winter, 1985/1986), pp. 189-220",
+            "citation_line",
+        ),
+        (
             "Notes on the Psalms. The Journal of Theological Studies, Volume XXVII, Issue 2, "
             "1 April 1991, Pages 100–112",
             "citation_line",
@@ -242,6 +247,7 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         "citation record",
         "citation stub starting with its year",
         "jstor citation line",
+        "jstor citation line with a year range",
         "oup citation line",
         "oup citation line with a month for its issue",
         "web scrape",
@@ -312,6 +318,7 @@ def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
         "The first survey of the dialect (1985). A second one followed a decade later.",
         "The thesis (Ph.D. work by the author) argues that the dialect survived the war.",
         "Get access to care early, the campaign told rural families in its first year.",
+        "See Vol. 10, No. 3 of the series on kingship. The king resolved it (1992), pp. 4.",
     ],
     ids=[
         "letter mid-sentence",
@@ -323,6 +330,7 @@ def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
         "a bracketed year not at the start",
         "a thesis mentioned after the first word",
         "get access to in a real sentence",
+        "a volume number and a later year in other sentences",
     ],
 )
 def test_annotate_abstracts_keeps_look_alikes_of_the_rules(

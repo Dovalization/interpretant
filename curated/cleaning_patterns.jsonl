@@ -14,7 +14,6 @@
 {"label":"footer","pattern":[{"LOWER":"contains"},{"LOWER":"fulltext"}]}
 {"label":"footer","pattern":[{"LOWER":"these"},{"LOWER":"keywords"},{"LOWER":"were"},{"LOWER":"added"},{"LOWER":"by"},{"LOWER":"machine"}]}
 {"label":"footer","pattern":[{"LOWER":"citation"},{"TEXT":":"}],"id":"start"}
-{"label":"footer","pattern":[{"LOWER":"citation"},{"TEXT":":"},{"OP":"{1,30}"},{"LOWER":"frontiers"},{"LOWER":"in"}]}
 {"label":"review_header","pattern":[{"SHAPE":{"IN":["dd","ddd","dddd"]}},{"LOWER":{"IN":["pp.","pp"]}},{"TEXT":".","OP":"?"},{"TEXT":{"IN":["$","£","DM","Price"]}}]}
 {"label":"review_header","pattern":[{"LOWER":{"REGEX":"^\\d{2,4}pp\\.?$"}},{"TEXT":".","OP":"?"},{"TEXT":{"IN":["$","£","DM","Price"]}}]}
 {"label":"review_header","pattern":[{"TEXT":{"IN":["Pp","Pp."]}},{"TEXT":".","OP":"?"},{"LOWER":{"REGEX":"^[ivxlcm]+$"}},{"TEXT":"+"},{"LIKE_NUM":true}]}
@@ -33,7 +32,7 @@
 {"label":"letter","pattern":[{"LOWER":{"REGEX":"^sirs?[,.:;—–-]"}}],"id":"start"}
 {"label":"citation_record","pattern":[{"LOWER":"volume"},{"LIKE_NUM":true},{"TEXT":",","OP":"?"},{"LOWER":{"IN":["issue","number"]}},{"LIKE_NUM":true}]}
 {"label":"citation_record","pattern":[{"TEXT":"("},{"SHAPE":"dddd"},{"TEXT":")"},{"TEXT":"."}],"id":"start"}
-{"label":"citation_line","pattern":[{"TEXT":"Vol."},{"LIKE_NUM":true},{"TEXT":","},{"TEXT":{"IN":["No","No."]}},{"TEXT":".","OP":"?"},{"OP":"{1,20}"},{"TEXT":"("},{"OP":"{0,6}"},{"SHAPE":"dddd"},{"TEXT":")"},{"TEXT":","},{"TEXT":"pp."},{"LIKE_NUM":true}]}
+{"label":"citation_line","pattern":[{"TEXT":"Vol."},{"LIKE_NUM":true},{"TEXT":","},{"TEXT":"No"},{"TEXT":"."},{"TEXT":{"NOT_IN":[".","?","!"]},"OP":"+"},{"TEXT":"("},{"TEXT":{"NOT_IN":["(",")"]},"OP":"*"},{"TEXT":{"REGEX":"\\d{4}$"}},{"TEXT":")"},{"TEXT":","},{"TEXT":"pp."},{"LIKE_NUM":true}]}
 {"label":"citation_line","pattern":[{"TEXT":"Volume"},{"TEXT":{"REGEX":"^[IVXLCDM]+$"}},{"TEXT":","},{"TEXT":"Issue"},{"TEXT":{"NOT_IN":[","]},"OP":"{1,4}"},{"TEXT":","},{"OP":"{0,8}"},{"SHAPE":"dddd"},{"TEXT":","},{"TEXT":{"IN":["Page","Pages"]}},{"TEXT":{"REGEX":"^\\d"}}]}
 {"label":"citation_line","pattern":[{"TEXT":"Volume"},{"LIKE_NUM":true},{"TEXT":","},{"TEXT":"Issue"},{"TEXT":{"NOT_IN":[","]},"LIKE_NUM":false},{"TEXT":{"NOT_IN":[","]},"OP":"{0,3}"},{"TEXT":","},{"OP":"{0,8}"},{"SHAPE":"dddd"},{"TEXT":","},{"TEXT":{"IN":["Page","Pages"]}},{"TEXT":{"REGEX":"^\\d"}}]}
 {"label":"thesis_notes","pattern":[{"LOWER":{"IN":["thesis","dissertation"]}},{"TEXT":"("},{"LOWER":{"REGEX":"^(?:ph|m\\.?[as]|ed|d\\.?phil)"}}],"id":"start"}
