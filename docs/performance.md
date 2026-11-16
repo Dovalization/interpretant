@@ -61,6 +61,7 @@ up the stages.
 | First round's check | 2026-11-16 | 28.9 min | 145 | 942 | 246 | 214 | 157 | 27 |
 | Staging-table check (build and report only) | 2026-11-16 | – | – | – | – | – | 128 | 1 |
 | Second round's check | 2026-11-16 | 19.3 min | 115 | 657 | 122 | 211 | 51 | 1 |
+| Exact near-duplicate check (build and report only) | 2026-11-16 | – | – | – | – | – | 62 | 1 |
 
 Earlier runs, as recorded at the time:
 
@@ -196,6 +197,13 @@ In the profile, the spaCy workers used 6,423 CPU seconds, 98% of their ten proce
 round's used about 7,950 and the main process about 650 more). The attribute ruler now takes 4.7%
 of them; tok2vec's layers about 40%, the project's sentence rules 6.5%, the tokenizer 6.1%. The
 pass is limited by its workers alone.
+
+Because a new hash moved decisions near the threshold, and the LSH index tuned for 0.8 proposed
+a pair of similarity 0.8 only 40% of the time, near-duplicates are now decided on the exact
+Jaccard similarity of candidate pairs from an index tuned for 0.6 (decision agenda 2.5,
+`788ca521`). The near-duplicate step took 30 s instead of 17, the build 62 s; 5,709
+near-duplicates instead of 5,464, every newly marked pair at an exact similarity of 0.80 or more
+(`6cda1e15`).
 
 ## The vector store's encoding
 
