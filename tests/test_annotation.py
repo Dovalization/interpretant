@@ -395,6 +395,19 @@ def test_annotate_abstracts_keeps_the_audit_abbreviations_inside_sentences(
     assert sentences == [text.removesuffix(" It is robust."), "It is robust."]
 
 
+def test_annotate_abstracts_keeps_lower_case_figure_and_section_references_inside_sentences(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    text = (
+        "The system is shown as a block schematic in fig. 1. and figs. 2-3, derived in "
+        "sect. 4 from eq. 5 and eqs. 6-7 of the model. It is robust."
+    )
+    row = annotate(text, nlp, patterns)
+    sentences = [row.text[sentence.start : sentence.end] for sentence in row.sentences]
+    assert sentences[-1] == "It is robust."
+    assert all(not sentence.startswith(("1.", "2-3", "4 ", "5 ", "6-7")) for sentence in sentences)
+
+
 @pytest.mark.parametrize(
     ("text", "first"),
     [

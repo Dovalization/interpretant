@@ -34,23 +34,36 @@ from interpretant.corpus.attribute_rules import LOOKUP_ATTRIBUTE_RULER, LookupAt
 from interpretant.corpus.repair import DOI_PATTERN
 
 # Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md; "viz." to "ca."
-# added after the corpus audit, decision agenda 2.3).
+# added after the corpus audit, decision agenda 2.3). Special cases match their exact spelling,
+# so each form a kept abstract uses is listed: the lower-case "fig." to "eqs." and the
+# capitalised "Approx." to "Pp." ended a sentence in about 100 kept abstracts of run 8
+# (docs/pipeline_review.md, B3). Not "Al.": in the corpus it is OCR for "AI." ending a sentence.
 ABBREVIATIONS = (
     "cf.",
     "Cf.",
     "Fig.",
+    "fig.",
     "Figs.",
+    "figs.",
     "Sect.",
+    "sect.",
     "Eq.",
+    "eq.",
     "Eqs.",
+    "eqs.",
     "al.",
     "approx.",
+    "Approx.",
     "viz.",
+    "Viz.",
     "pp.",
+    "Pp.",
     "resp.",
+    "Resp.",
     "Vol.",
     "vol.",
     "ca.",
+    "Ca.",
 )
 # English's infix rule for a hyphen after a letter or digit and before a letter
 # (spacy/lang/en/punctuation.py); removing it keeps *self-attention* one token (decision agenda
