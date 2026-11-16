@@ -1747,6 +1747,18 @@ work ids in order, so tokenizing moves to the workers; write the repaired texts 
 wherever cached documents are read; reuse MinHash permutations; one metadata check; then the
 reuse of unchanged documents.
 
+*Done and checked, 2026-11-16 (the author):* the registry cache wherever the annotation cache is
+read, one MinHash's permutations for every signature, the texts repaired once by
+`count_word_repairs` (`data/interim/repaired_texts`, kept out of the DVC store) and sent to
+spaCy as plain strings, and the metadata checked from its ids with Polars (3 s for the corpus
+instead of about 30). A full profiled run gave every stage's outputs with the same hashes as run
+7c's in 28.9 minutes instead of 42.4: the pass 942 s (1,482), sentence languages 246 (347),
+cleaning 214 (272), the corpus build 157 (219), the word repairs 145 (155). The pass's main
+process is now 69% busy and the workers 84%, so the workers are its limit; in them the attribute
+ruler still takes 30%, the next thing to study. The corpus build now spends 24% in datasketch's
+default SHA-1 hash; a faster hash would change the signatures, so it needs its own check. The
+corpus build and the report still validate the full metadata records (28 and 24 s).
+
 **DVC** for pipelines and provenance, after comparing it with Snakemake (runs steps, no data
 versioning or lock file), Kedro (a full framework to restructure around), Hydra (configuration
 only; pydantic settings already exist), MLflow (experiment tracking at a scale the Markdown
