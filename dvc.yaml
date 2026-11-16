@@ -66,8 +66,8 @@ stages:
   # lingua's language for every sentence of the base texts, split by spaCy's rule-based
   # sentencizer behind the pass's tokenizer settings and sentence rules: language data before
   # the word repairs and the spaCy pass (docs/plan_early_languages.md).
-  detect_base_languages:
-    cmd: interpretant detect-base-languages
+  detect_languages:
+    cmd: interpretant detect-languages
     deps:
       - src/interpretant/catalog
       - src/interpretant/corpus/annotation.py
@@ -76,7 +76,6 @@ stages:
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/corpus.py
-      - src/interpretant/pipelines/detect_base_languages.py
       - src/interpretant/pipelines/detect_languages.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
@@ -151,29 +150,12 @@ stages:
           cache: false
           persist: true
 
-  detect_languages:
-    cmd: interpretant detect-languages
-    deps:
-      - src/interpretant/catalog
-      - src/interpretant/corpus/language.py
-      - src/interpretant/corpus/repair.py
-      - src/interpretant/corpus/works.py
-      - src/interpretant/pipelines/corpus.py
-      - src/interpretant/pipelines/detect_languages.py
-      - src/interpretant/pipelines/params.py
-      - src/interpretant/pipelines/progress.py
-      - src/interpretant/pipelines/workers.py
-      - ${annotations.path}
-    params:
-      - corpus
-      - detect_languages
-    outs:
-      - ${sentence_languages.path}
-
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:
       - src/interpretant/catalog
+      - src/interpretant/corpus/annotation.py
+      - src/interpretant/corpus/attribute_rules.py
       - src/interpretant/corpus/language.py
       - src/interpretant/corpus/removals.py
       - src/interpretant/corpus/repair.py

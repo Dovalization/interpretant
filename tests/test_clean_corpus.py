@@ -12,7 +12,6 @@ from interpretant.__main__ import cli
 from interpretant.catalog import load_annotated_abstracts, load_annotations, read_catalog
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus
-from interpretant.pipelines.detect_languages import detect_languages
 from interpretant.pipelines.params import CorpusSelection
 from tests.corpus_catalog import (
     ANNOTATE_SETTINGS,
@@ -63,7 +62,6 @@ def test_clean_corpus_refuses_a_cache_older_than_the_raw_cells(
 ) -> None:
     catalog = read_catalog(corpus_catalog_file)
     annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
-    detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS)
     write_raw_cell(corpus_catalog_file, "compsci", 2010, [(4, SHARED, 2015), (6, SHARED, 2016)])
     with pytest.raises(ValueError, match="rerun annotate-corpus"):
         clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
@@ -85,7 +83,6 @@ def test_clean_corpus_command_prints_what_each_rule_took(corpus_catalog_file: Pa
     workers = ["--process-count", "1"]
     runner = CliRunner()
     assert runner.invoke(cli, ["annotate-corpus", *catalog_option, *workers]).exit_code == 0
-    assert runner.invoke(cli, ["detect-languages", *catalog_option, *workers]).exit_code == 0
     outcome = runner.invoke(cli, ["clean-corpus", *catalog_option, *workers])
     assert outcome.exit_code == 0, outcome.output
     assert "5 abstracts in 3 parts" in outcome.output

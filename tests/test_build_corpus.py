@@ -53,8 +53,10 @@ def test_build_corpus_command_runs_after_the_earlier_stages(corpus_catalog_file:
     runner = CliRunner()
     for command, options in (
         ("build-linked-tables", []),
-        ("annotate-corpus", ["--process-count", "1"]),
+        ("repair-texts", ["--process-count", "1"]),
         ("detect-languages", ["--process-count", "1"]),
+        ("count-word-repairs", ["--process-count", "1"]),
+        ("annotate-corpus", ["--process-count", "1"]),
         ("clean-corpus", ["--process-count", "1"]),
     ):
         earlier = runner.invoke(cli, [command, *catalog_option, *options])
@@ -67,8 +69,10 @@ def test_build_corpus_command_runs_after_the_earlier_stages(corpus_catalog_file:
     runs = [json.loads(line) for line in run_log]
     assert [run["command"] for run in runs] == [
         "build-linked-tables",
-        "annotate-corpus",
+        "repair-texts",
         "detect-languages",
+        "count-word-repairs",
+        "annotate-corpus",
         "clean-corpus",
         "build-corpus",
     ]

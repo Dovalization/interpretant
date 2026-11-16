@@ -77,7 +77,6 @@ def catalog_text() -> str:
         "base_sentence_languages:\n  path: data/base_sentence_languages\n  format: parquet\n"
         "repaired_sentence_languages:\n"
         "  path: data/repaired_sentence_languages\n  format: parquet\n"
-        "sentence_languages:\n  path: data/sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: data/corpus_report.md\n  format: markdown\n"
         "corpus_comparison:\n  path: data/corpus_comparison.md\n  format: markdown\n"
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"

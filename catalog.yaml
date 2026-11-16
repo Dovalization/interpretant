@@ -145,8 +145,3 @@ base_sentence_languages:
 repaired_sentence_languages:
   path: data/interim/repaired_sentence_languages
   format: parquet
-
-# lingua's language for every sentence of the annotation cache, one part per field and decade.
-sentence_languages:
-  path: data/interim/sentence_languages
-  format: parquet

@@ -1,4 +1,4 @@
-"""The detect-languages stage: lingua on every cached sentence, and its command."""
+"""The detect-languages stage: the rule-based sentence split and lingua on the base texts."""
 
 from __future__ import annotations
 
@@ -8,64 +8,72 @@ from pathlib import Path
 
 import pytest
 from click.testing import CliRunner
-from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import load_annotations, load_sentence_languages, read_catalog
-from interpretant.pipelines.annotate_corpus import annotate_corpus
+from interpretant.catalog import load_base_sentence_languages, load_base_texts, read_catalog
+from interpretant.corpus.annotation import build_sentence_splitter
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
-from tests.corpus_catalog import ANNOTATE_SETTINGS, LANGUAGE_SETTINGS, SELECTION
+from interpretant.pipelines.repair_texts import repair_texts
+from tests.corpus_catalog import LANGUAGE_SETTINGS, SELECTION
 
 
-def test_detect_languages_writes_a_row_per_cached_sentence(
-    corpus_catalog_file: Path, nlp: Language
+def test_build_sentence_splitter_keeps_abbreviations_and_brackets_inside_sentences() -> None:
+    splitter = build_sentence_splitter()
+    doc = splitter("See Vol. 15, No. 1, pp. 79-88 [cf. Fig. 2. Left]. The effect is large.")
+    assert [sentence.text for sentence in doc.sents] == [
+        "See Vol. 15, No. 1, pp. 79-88 [cf. Fig. 2. Left].",
+        "The effect is large.",
+    ]
+
+
+def test_detect_languages_writes_a_row_per_sentence_of_the_base_texts(
+    corpus_catalog_file: Path,
 ) -> None:
     catalog = read_catalog(corpus_catalog_file)
-    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    repair_texts(catalog, SELECTION)
     result = detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS)
+    splitter = build_sentence_splitter()
+    texts = load_base_texts(catalog, "ai_2010")
     sentences = [
-        (sentence.start_char, sentence.end_char)
-        for doc in load_annotations(catalog, "ai_2010", nlp.vocab)
-        for sentence in doc.sents
+        (work_id, sentence.start_char, sentence.end_char)
+        for work_id, text in texts.iter_rows()
+        for sentence in splitter(text).sents
     ]
-    table = load_sentence_languages(catalog, "ai_2010")
-    assert list(zip(table["start"], table["end"], strict=True)) == sentences
+    table = load_base_sentence_languages(catalog, "ai_2010")
+    assert list(table.select("work_id", "start", "end").iter_rows()) == sentences
     assert set(table["language"]) <= {"en", "de", "und"}
     assert result.abstract_count == 4
-    heights = sum(load_sentence_languages(catalog, part).height for part in result.parts)
-    assert sum(result.sentence_counts.values()) == heights
 
 
 def test_detect_languages_writes_the_same_rows_in_worker_processes(
     corpus_catalog_file: Path,
 ) -> None:
     catalog = read_catalog(corpus_catalog_file)
-    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    repair_texts(catalog, SELECTION)
     alone = detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS)
-    tables = {part: load_sentence_languages(catalog, part) for part in alone.parts}
+    tables = {part: load_base_sentence_languages(catalog, part) for part in alone.parts}
     in_workers = detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS, process_count=2)
     assert in_workers == alone
-    assert all(load_sentence_languages(catalog, part).equals(tables[part]) for part in tables)
+    assert all(load_base_sentence_languages(catalog, part).equals(tables[part]) for part in tables)
     assert "RAYON_NUM_THREADS" not in os.environ
 
 
-def test_detect_languages_needs_the_annotation_cache(corpus_catalog_file: Path) -> None:
-    with pytest.raises(FileNotFoundError, match="no cached annotations"):
-        detect_languages(read_catalog(corpus_catalog_file), SELECTION, LANGUAGE_SETTINGS)
-
-
-def test_detect_languages_command_counts_the_sentences(corpus_catalog_file: Path) -> None:
-    catalog_option = ["--catalog", str(corpus_catalog_file)]
+def test_detect_languages_command_records_the_run(corpus_catalog_file: Path) -> None:
+    options = ["--catalog", str(corpus_catalog_file), "--process-count", "1"]
     runner = CliRunner()
-    annotated = runner.invoke(cli, ["annotate-corpus", *catalog_option, "--process-count", "1"])
-    assert annotated.exit_code == 0
-    outcome = runner.invoke(cli, ["detect-languages", *catalog_option, "--process-count", "1"])
+    assert runner.invoke(cli, ["repair-texts", *options]).exit_code == 0
+    outcome = runner.invoke(cli, ["detect-languages", *options])
     assert outcome.exit_code == 0, outcome.output
-    assert "sentences of" in outcome.output
-    run_log = read_catalog(corpus_catalog_file).run_log.path.read_text().splitlines()
-    record = json.loads(run_log[-1])
+    record = json.loads(read_catalog(corpus_catalog_file).run_log.path.read_text().splitlines()[-1])
     assert record["command"] == "detect-languages"
     assert record["counts"]["abstracts"] == 5
+
+
+def test_detect_languages_needs_the_base_texts(corpus_catalog_file: Path) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    (catalog.base_texts.path / "ai_2010.parquet").unlink()
+    with pytest.raises(FileNotFoundError, match="no texts for part 'ai_2010'"):
+        detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS)
 
 
 def test_the_repository_params_file_is_valid_for_languages() -> None:

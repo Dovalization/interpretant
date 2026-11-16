@@ -42,10 +42,8 @@ from interpretant.catalog.languages import (
     SENTENCE_LANGUAGES_SCHEMA,
     load_base_sentence_languages,
     load_repaired_sentence_languages,
-    load_sentence_languages,
     save_base_sentence_languages,
     save_repaired_sentence_languages,
-    save_sentence_languages,
 )
 from interpretant.catalog.linked_records import (
     LINKED_SOURCES,
@@ -161,7 +159,6 @@ __all__ = [
     "load_record_kinds",
     "load_repaired_sentence_languages",
     "load_repaired_texts",
-    "load_sentence_languages",
     "load_split_words",
     "load_staging_table",
     "load_work_metadata",
@@ -180,7 +177,6 @@ __all__ = [
     "save_lower_glued_words",
     "save_repaired_sentence_languages",
     "save_repaired_texts",
-    "save_sentence_languages",
     "save_split_words",
     "save_staging_table",
     "select_linked_works",

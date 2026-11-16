@@ -25,7 +25,6 @@ from interpretant.pipelines.count_word_repairs import (
     WordRepairsResult,
     count_word_repairs,
 )
-from interpretant.pipelines.detect_base_languages import detect_base_languages
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from interpretant.pipelines.params import CorpusSelection
 from interpretant.pipelines.repair_texts import repair_texts
@@ -75,7 +74,7 @@ def repair_and_count(
     """Repair the texts, read their languages and count the word repairs, as ``dvc repro`` runs
     the three stages."""
     repair_texts(catalog, selection)
-    detect_base_languages(catalog, selection, LANGUAGE_SETTINGS)
+    detect_languages(catalog, selection, LANGUAGE_SETTINGS)
     return count_word_repairs(catalog, selection, settings)
 
 
@@ -83,12 +82,11 @@ def prepare_annotated_corpus(
     catalog: CatalogConfig, selection: CorpusSelection = SELECTION
 ) -> CorpusResult:
     """Run the stages before the corpus-level rules, as ``dvc repro`` does: the staging tables,
-    the word repairs, the spaCy pass, the sentence languages and the cleaning; return the
-    cleaning's result."""
+    the text repair, the sentence languages, the word repairs, the spaCy pass and the cleaning;
+    return the cleaning's result."""
     build_linked_tables(catalog)
     repair_and_count(catalog, selection)
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
-    detect_languages(catalog, selection, LANGUAGE_SETTINGS)
     return clean_corpus(catalog, selection, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
 
 
@@ -121,7 +119,6 @@ def write_corpus_catalog(folder: Path) -> Path:
         "annotations:\n  path: annotations\n  format: docbin\n"
         "base_sentence_languages:\n  path: base_sentence_languages\n  format: parquet\n"
         "repaired_sentence_languages:\n  path: repaired_sentence_languages\n  format: parquet\n"
-        "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
         "corpus_comparison:\n  path: corpus_comparison.md\n  format: markdown\n"
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"

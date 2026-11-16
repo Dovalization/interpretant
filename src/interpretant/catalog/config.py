@@ -52,7 +52,6 @@ class CatalogConfig(BaseModel):
     annotations: DatasetEntry
     base_sentence_languages: DatasetEntry
     repaired_sentence_languages: DatasetEntry
-    sentence_languages: DatasetEntry
 
 
 def read_catalog(catalog_file: Path = CATALOG_FILE) -> CatalogConfig:
