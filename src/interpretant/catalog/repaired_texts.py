@@ -43,10 +43,25 @@ def load_repaired_texts(catalog: CatalogConfig, part: str) -> pl.DataFrame:
         ValueError: if the part name is not safe as a file name.
         FileNotFoundError: if the part's texts have not been repaired.
     """
+    return pl.read_parquet(_existing_path(catalog, part))
+
+
+def count_repaired_texts(catalog: CatalogConfig, part: str) -> int:
+    """How many repaired texts a part holds, read from the file's metadata.
+
+    Raises:
+        ValueError: if the part name is not safe as a file name.
+        FileNotFoundError: if the part's texts have not been repaired.
+    """
+    count: int = pl.scan_parquet(_existing_path(catalog, part)).select(pl.len()).collect().item()
+    return count
+
+
+def _existing_path(catalog: CatalogConfig, part: str) -> Path:
     path = part_path(catalog.repaired_texts.path, part, _SUFFIX)
     if not path.exists():
         raise FileNotFoundError(
             f"no repaired texts for part {part!r} at {path}; "
             "run `interpretant count-word-repairs` first"
         )
-    return pl.read_parquet(path)
+    return path

@@ -11,7 +11,6 @@ documents from the annotation cache, so changing them does not rerun the models.
 from __future__ import annotations
 
 import re
-from collections import deque
 from collections.abc import Iterable, Iterator
 from typing import Any
 
@@ -252,49 +251,17 @@ def _is_lowercase_word(token: Token) -> bool:
 
 
 def annotate_texts(
-    works: Iterable[tuple[str, str]],
-    nlp: Language,
-    *,
-    batch_size: int = 256,
-    process_count: int = 1,
+    works: Iterable[tuple[str, str]], nlp: Language, *, batch_size: int = 256
 ) -> Iterator[Doc]:
     """Annotate each work's repaired text, in order; each document carries its work id.
 
     ``works`` gives each work's id and its text with every repair made (decision agenda 2.3:
-    the count-word-repairs stage repairs, splits glued words and joins split words). The texts go
-    to spaCy as plain strings, so its worker processes tokenize them: given (text, context) pairs,
-    spaCy 3.8's ``Language.pipe`` makes every document in this process and
-    ``_multiprocessing_pipe`` sends each one packed, a fifth of the main process in run 7c's
-    profile. spaCy gives the documents back in order, and each takes the next work id. An error
-    while reading the works ends the stream of texts and is raised once the documents before it
-    are given.
+    the count-word-repairs stage repairs, splits glued words and joins split words). It runs in
+    this process: the pass gives each worker process whole parts to annotate and save, so no
+    document crosses processes (spaCy's own ``n_process`` sent every document back to be cached,
+    which kept the main process 69% busy in the last profile).
     """
-    errors: list[Exception] = []
-    work_ids: deque[str] = deque()
-
-    def texts() -> Iterator[str]:
-        for work_id, text in works:
-            work_ids.append(work_id)
-            yield text
-
-    for doc in nlp.pipe(
-        _until_error(texts(), errors), batch_size=batch_size, n_process=process_count
-    ):
-        doc.user_data[WORK_ID] = work_ids.popleft()
+    pairs = ((text, work_id) for work_id, text in works)
+    for doc, work_id in nlp.pipe(pairs, as_tuples=True, batch_size=batch_size):
+        doc.user_data[WORK_ID] = work_id
         yield doc
-    if errors:
-        raise errors[0]
-
-
-def _until_error(texts: Iterator[str], errors: list[Exception]) -> Iterator[str]:
-    """The texts until reading one fails, the error kept in ``errors`` for the caller to raise.
-
-    With worker processes, an error inside ``nlp.pipe``'s input never reaches the caller: spaCy
-    (3.8, ``Language._multiprocessing_pipe``) joins its workers while they wait to send the
-    documents already made, and the pass hangs (run 7b's first attempt). Ending the input instead
-    lets spaCy finish what it was sent and stop its workers.
-    """
-    try:
-        yield from texts
-    except Exception as exc:
-        errors.append(exc)

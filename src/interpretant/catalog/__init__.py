@@ -64,6 +64,7 @@ from interpretant.catalog.metadata import (
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
 from interpretant.catalog.repaired_texts import (
     REPAIRED_TEXTS_SCHEMA,
+    count_repaired_texts,
     load_repaired_texts,
     save_repaired_texts,
 )
@@ -126,6 +127,7 @@ __all__ = [
     "append_work_metadata",
     "build_linked_record",
     "cache_serialiser_extensions",
+    "count_repaired_texts",
     "fetched_linked_work_ids",
     "fetched_work_ids",
     "list_raw_cells",

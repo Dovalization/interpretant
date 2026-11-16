@@ -25,24 +25,31 @@ def map_parts(
     *,
     process_count: int,
     progress: Progress,
+    sizes: Mapping[str, int] | None = None,
 ) -> dict[str, _Result]:
-    """Run ``function(part, input)`` for every part, advancing once per finished part.
+    """Run ``function(part, input)`` for every part, advancing as each part finishes.
 
+    The progress advances by one per part, or by the part's size when ``sizes`` gives each
+    part's, and the parts then start largest first, so that a long part does not start last.
     Returns each part's result, in part order. A worker's exception is raised here.
     """
+    order = sorted(inputs, key=lambda part: -sizes[part]) if sizes is not None else list(inputs)
+
+    def advance(part: str) -> None:
+        progress.advance(1 if sizes is None else sizes[part])
+
     if process_count == 1:
         results: dict[str, _Result] = {}
-        for part, part_input in inputs.items():
-            results[part] = function(part, part_input)
-            progress.advance()
-        return results
+        for part in order:
+            results[part] = function(part, inputs[part])
+            advance(part)
+        return {part: results[part] for part in inputs}
     context = multiprocessing.get_context("spawn")
     with ProcessPoolExecutor(max_workers=process_count, mp_context=context) as pool:
-        futures = {
-            pool.submit(function, part, part_input): part for part, part_input in inputs.items()
-        }
+        futures = {pool.submit(function, part, inputs[part]): part for part in order}
         finished = {}
         for future in as_completed(futures):
-            finished[futures[future]] = future.result()
-            progress.advance()
+            part = futures[future]
+            finished[part] = future.result()
+            advance(part)
     return {part: finished[part] for part in inputs}

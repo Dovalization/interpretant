@@ -84,6 +84,7 @@ stages:
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
       - ${repaired_texts.path}
     params:
       - corpus

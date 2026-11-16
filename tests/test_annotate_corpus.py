@@ -43,6 +43,22 @@ def test_annotate_corpus_merges_works_and_caches_every_part(
     assert cached_work_ids(corpus_catalog_file, "compsci_2010", nlp) == ["https://openalex.org/W4"]
 
 
+def test_annotate_corpus_writes_the_same_cache_in_worker_processes(
+    corpus_catalog_file: Path,
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+
+    def cache_files() -> dict[str, bytes]:
+        files = sorted(catalog.annotations.path.rglob("*.spacy"))
+        return {path.name: path.read_bytes() for path in files}
+
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    alone = cache_files()
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS, process_count=2)
+    assert list(alone) == ["ai_2010.spacy", "compsci_2010.spacy"]
+    assert cache_files() == alone
+
+
 def test_annotate_corpus_caches_sentences_and_lemmas_without_cleaning(
     corpus_catalog_file: Path, nlp: Language
 ) -> None:

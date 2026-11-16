@@ -646,37 +646,11 @@ def test_annotation_cache_keeps_sentences_norms_lemmas_and_the_work_id(
     assert SPANS_KEY not in cached.spans
 
 
-def test_annotate_texts_gives_the_same_documents_in_worker_processes(nlp: Language) -> None:
-    works = [
-        repaired(raw("Abstract: Self-attention helps. See https://example.org now.", work=1)),
-        repaired(raw("As shown in Fig. 2, doi:10.1000/xyz123 holds the data.", work=2)),
-        repaired(raw("Models learn senses. The effect is large.", work=3)),
-    ]
-
-    def documents(process_count: int) -> list[tuple[object, ...]]:
-        docs = annotate_texts(works, nlp, batch_size=2, process_count=process_count)
-        return [
-            (
-                doc.user_data[WORK_ID],
-                [sentence.text for sentence in doc.sents],
-                [token.lemma_ for token in doc],
-            )
-            for doc in docs
-        ]
-
-    assert documents(2) == documents(1)
-
-
-def test_annotate_texts_ends_the_pass_before_raising_an_error_in_its_input(
-    nlp: Language,
-) -> None:
+def test_annotate_texts_raises_an_error_in_its_input(nlp: Language) -> None:
     def works_then_failure() -> Iterator[tuple[str, str]]:
         for work in range(4):
             yield f"https://openalex.org/W{work}", f"Models learn senses {work}."
         raise ValueError("cannot read the next text")
 
-    docs = annotate_texts(works_then_failure(), nlp, batch_size=2, process_count=2)
-    work_ids: list[str] = []
     with pytest.raises(ValueError, match="cannot read the next text"):
-        work_ids.extend(doc.user_data[WORK_ID] for doc in docs)
-    assert work_ids == [f"https://openalex.org/W{work}" for work in range(4)]
+        list(annotate_texts(works_then_failure(), nlp, batch_size=2))
