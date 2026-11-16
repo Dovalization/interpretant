@@ -109,9 +109,14 @@ class _LanguageJob:
 
 def _detect_part(part: str, job: _LanguageJob) -> tuple[int, Counter[str]]:
     """Detect one part's sentence languages, write them, and count its abstracts and languages."""
-    detector = _detector(job.languages, job.minimum_relative_distance)
+    detector = _detector(job.languages)
     docs = list(load_annotations(job.catalog, part, Vocab()))
-    labels = detect_sentence_languages(docs, detector, english_threshold=job.english_threshold)
+    labels = detect_sentence_languages(
+        docs,
+        detector,
+        english_threshold=job.english_threshold,
+        minimum_relative_distance=job.minimum_relative_distance,
+    )
     rows = [
         (
             doc.user_data[WORK_ID],
@@ -129,9 +134,9 @@ def _detect_part(part: str, job: _LanguageJob) -> tuple[int, Counter[str]]:
 
 
 @cache
-def _detector(languages: tuple[str, ...], minimum_relative_distance: float) -> LanguageDetector:
+def _detector(languages: tuple[str, ...]) -> LanguageDetector:
     """Lingua's detector, built once per process."""
-    return build_language_detector(languages, minimum_relative_distance=minimum_relative_distance)
+    return build_language_detector(languages)
 
 
 @contextmanager

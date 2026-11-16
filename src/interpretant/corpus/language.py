@@ -89,28 +89,29 @@ class SentenceLanguage:
 _NO_LANGUAGE = SentenceLanguage(UNDETERMINED, 0.0)
 
 
-def build_language_detector(
-    languages: Sequence[str], *, minimum_relative_distance: float
-) -> LanguageDetector:
+def build_language_detector(languages: Sequence[str]) -> LanguageDetector:
     """A lingua detector restricted to the given ISO 639-1 codes, which must include English.
 
     Restricting the candidates improves accuracy when the text's languages are among them
-    (lingua's documentation). Below ``minimum_relative_distance`` between the two likeliest
-    languages, detecting a text's language gives no verdict; confidence values are unaffected.
+    (lingua's documentation). The minimum relative distance between the two likeliest languages
+    is applied by ``detect_sentence_languages``, which reads each text's confidence values once.
 
     Raises:
         ValueError: if English is missing or a code is not an ISO 639-1 code lingua knows.
     """
     return (
         LanguageDetectorBuilder.from_iso_codes_639_1(*_iso_codes(languages))
-        .with_minimum_relative_distance(minimum_relative_distance)
         .with_preloaded_language_models()
         .build()
     )
 
 
 def detect_sentence_languages(
-    docs: Sequence[Doc], detector: LanguageDetector, *, english_threshold: float
+    docs: Sequence[Doc],
+    detector: LanguageDetector,
+    *,
+    english_threshold: float,
+    minimum_relative_distance: float,
 ) -> list[list[SentenceLanguage]]:
     """Each document's sentence languages, with lingua's confidence in each, in order.
 
@@ -119,8 +120,8 @@ def detect_sentence_languages(
     another script, or long with no English function word) that lingua reads as another
     language: in another script at any confidence, in the Latin script at
     ``FOREIGN_CONFIDENCE``. Otherwise each sentence is detected on its own, with lingua's
-    confidence for the language found. When its two likeliest languages are closer than the
-    detector's minimum relative distance, it is undetermined if one of them is English (short
+    confidence for the language found. When its two likeliest languages are closer than
+    ``minimum_relative_distance``, it is undetermined if one of them is English (short
     English fragments, headings, references) and takes the likelier one if neither is (Croatian
     and Bosnian, Indonesian and Malay). A sentence without letters is undetermined. (Until
     2026-11-13 lingua's experimental detection of several languages in one text split such
@@ -150,7 +151,9 @@ def detect_sentence_languages(
             if not is_english or _is_worth_checking(text):
                 checks.append((doc_index, sentence_index, text, is_english))
         labels.append(row)
-    detected = _detect_texts([text for _, _, text, _ in checks], detector)
+    detected = _detect_texts(
+        [text for _, _, text, _ in checks], detector, minimum_relative_distance
+    )
     for (doc_index, sentence_index, text, in_english), language in zip(
         checks, detected, strict=True
     ):
@@ -160,27 +163,23 @@ def detect_sentence_languages(
     return labels
 
 
-def _detect_texts(texts: list[str], detector: LanguageDetector) -> list[SentenceLanguage]:
-    """Each text's language and lingua's confidence in it; close calls as the docstring above."""
-    results = [_NO_LANGUAGE] * len(texts)
-    found_by_code: dict[str, tuple[LinguaLanguage, list[int]]] = {}
-    undecided: list[int] = []
-    for index, language in enumerate(detector.detect_languages_in_parallel_of(texts)):
-        if language is None:
-            undecided.append(index)
-            continue
-        found_by_code.setdefault(_code(language), (language, []))[1].append(index)
-    for language, indexes in found_by_code.values():
-        confidences = detector.compute_language_confidence_in_parallel(
-            [texts[index] for index in indexes], language
-        )
-        for index, confidence in zip(indexes, confidences, strict=True):
-            results[index] = _sentence_language_of(language, confidence)
-    close_calls = detector.compute_language_confidence_values_in_parallel(
-        [texts[index] for index in undecided]
-    )
-    for index, values in zip(undecided, close_calls, strict=True):
-        results[index] = _close_call(values)
+def _detect_texts(
+    texts: list[str], detector: LanguageDetector, minimum_relative_distance: float
+) -> list[SentenceLanguage]:
+    """Each text's language and lingua's confidence in it; close calls as the docstring above.
+
+    One call reads each text's confidence values; the likeliest language is the verdict unless
+    the second is as likely or within ``minimum_relative_distance`` of it, the rule lingua's own
+    detection applies, which would read every text a second time.
+    """
+    results = []
+    for values in detector.compute_language_confidence_values_in_parallel(texts):
+        top = values[0]
+        second = values[1].value if len(values) > 1 else 0.0
+        if top.value == second or top.value - second < minimum_relative_distance:
+            results.append(_close_call(values))
+        else:
+            results.append(_sentence_language_of(top.language, top.value))
     return results
 
 

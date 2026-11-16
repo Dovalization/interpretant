@@ -106,7 +106,7 @@ def nlp() -> Language:
 @pytest.fixture(scope="session")
 def detector() -> LanguageDetector:
     """A lingua detector for English, German, French and Spanish, built once."""
-    return build_language_detector(["en", "de", "fr", "es"], minimum_relative_distance=0.1)
+    return build_language_detector(["en", "de", "fr", "es"])
 
 
 @pytest.fixture(scope="session")

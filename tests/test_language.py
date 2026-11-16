@@ -28,12 +28,12 @@ def sentences_doc(nlp: Language, sentences: list[str]) -> Doc:
 
 def test_build_language_detector_requires_english() -> None:
     with pytest.raises(ValueError, match="English"):
-        build_language_detector(["de", "fr"], minimum_relative_distance=0.1)
+        build_language_detector(["de", "fr"])
 
 
 def test_build_language_detector_rejects_an_unknown_code() -> None:
     with pytest.raises(ValueError, match="xx"):
-        build_language_detector(["en", "xx"], minimum_relative_distance=0.1)
+        build_language_detector(["en", "xx"])
 
 
 def test_detect_sentence_languages_leaves_sentences_without_letters_undetermined(
@@ -42,7 +42,9 @@ def test_detect_sentence_languages_leaves_sentences_without_letters_undetermined
     doc = sentences_doc(
         nlp, ["Attention mechanisms improve machine translation in many settings .", "12 34 ."]
     )
-    ((english, numbers),) = detect_sentence_languages([doc], detector, english_threshold=0.9)
+    ((english, numbers),) = detect_sentence_languages(
+        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+    )
     assert english.language == "en"
     assert numbers == SentenceLanguage(UNDETERMINED, 0.0)
 
@@ -58,16 +60,20 @@ def test_detect_sentence_languages_labels_each_sentence_of_a_mixed_abstract(
             "Les mécanismes d'attention améliorent la traduction automatique .",
         ],
     )
-    (languages,) = detect_sentence_languages([doc], detector, english_threshold=0.9)
+    (languages,) = detect_sentence_languages(
+        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+    )
     assert [language.language for language in languages] == ["en", "de", "fr"]
 
 
 def test_detect_sentence_languages_leaves_a_too_close_call_undetermined(nlp: Language) -> None:
-    strict = build_language_detector(["en", "de", "fr"], minimum_relative_distance=0.9)
+    strict = build_language_detector(["en", "de", "fr"])
     doc = sentences_doc(
         nlp, ["Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung .", "prologue ."]
     )
-    (languages,) = detect_sentence_languages([doc], strict, english_threshold=0.9)
+    (languages,) = detect_sentence_languages(
+        [doc], strict, english_threshold=0.9, minimum_relative_distance=0.9
+    )
     assert languages[1] == SentenceLanguage(UNDETERMINED, 0.0)
 
 
@@ -77,7 +83,7 @@ ENGLISH = "Attention mechanisms improve machine translation in many settings and
 def test_detect_sentence_languages_takes_the_likelier_of_two_close_foreign_languages(
     nlp: Language,
 ) -> None:
-    detector = build_language_detector(["en", "hr", "bs"], minimum_relative_distance=0.1)
+    detector = build_language_detector(["en", "hr", "bs"])
     doc = sentences_doc(
         nlp,
         [
@@ -85,17 +91,21 @@ def test_detect_sentence_languages_takes_the_likelier_of_two_close_foreign_langu
             "Rad je zamisljen kao prilog suvremenim istrazivanjima strucnih terminologija .",
         ],
     )
-    (languages,) = detect_sentence_languages([doc], detector, english_threshold=0.9)
+    (languages,) = detect_sentence_languages(
+        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+    )
     assert {language.language for language in languages} <= {"hr", "bs"}
 
 
 def test_detect_sentence_languages_finds_another_script_in_an_english_abstract(
     nlp: Language,
 ) -> None:
-    detector = build_language_detector(["en", "ko", "de"], minimum_relative_distance=0.1)
+    detector = build_language_detector(["en", "ko", "de"])
     korean = "또한 다중 CPU를 사용한 MPI 병렬프로그램과 비교하였다 ."
     doc = sentences_doc(nlp, [ENGLISH, ENGLISH, ENGLISH, ENGLISH, korean])
-    (languages,) = detect_sentence_languages([doc], detector, english_threshold=0.9)
+    (languages,) = detect_sentence_languages(
+        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+    )
     assert [language.language for language in languages] == ["en", "en", "en", "en", "ko"]
 
 
@@ -106,7 +116,9 @@ def test_detect_sentence_languages_finds_a_long_foreign_sentence_in_an_english_a
         "Man fand , daß weder die visuell evozierten Reaktionen noch die Latenzen sich änderten ."
     )
     doc = sentences_doc(nlp, [ENGLISH] * 5 + [german])
-    (languages,) = detect_sentence_languages([doc], detector, english_threshold=0.9)
+    (languages,) = detect_sentence_languages(
+        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+    )
     assert [language.language for language in languages] == ["en"] * 5 + ["de"]
 
 
@@ -116,5 +128,7 @@ def test_detect_sentence_languages_leaves_english_headings_and_references_englis
     doc = sentences_doc(
         nlp, [ENGLISH, "Four pages .", "Acta Oto-Laryngologica : Vol. 45 , No. 2 , pp. 1-10 ."]
     )
-    (languages,) = detect_sentence_languages([doc], detector, english_threshold=0.9)
+    (languages,) = detect_sentence_languages(
+        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+    )
     assert [language.language for language in languages] == ["en", "en", "en"]

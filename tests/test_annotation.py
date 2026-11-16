@@ -68,7 +68,9 @@ def annotate(text: str, nlp: Language, patterns: CleaningPatterns) -> AnnotatedA
     """One abstract through the spaCy pass, the sentence languages and the cleaning."""
     abstract = raw(text)
     (doc,) = annotate_texts([repaired(abstract)], nlp)
-    (languages,) = detect_sentence_languages([doc], language_detector(), english_threshold=0.9)
+    (languages,) = detect_sentence_languages(
+        [doc], language_detector(), english_threshold=0.9, minimum_relative_distance=0.1
+    )
     return clean_abstract(
         doc,
         abstract,
@@ -82,7 +84,7 @@ def annotate(text: str, nlp: Language, patterns: CleaningPatterns) -> AnnotatedA
 
 @cache
 def language_detector() -> LanguageDetector:
-    return build_language_detector(["en", "de", "fr", "es"], minimum_relative_distance=0.1)
+    return build_language_detector(["en", "de", "fr", "es"])
 
 
 @cache
