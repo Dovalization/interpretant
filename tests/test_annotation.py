@@ -176,6 +176,16 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
             "William R. Tiffany Google Scholar More articles by this author",
             "web_scrape",
         ),
+        (
+            "Designing for users Ann Smith View Profile Authors Info & Claims CHI '91: Proceedings "
+            "of the conference on human factors in computing systems 2Downloads",
+            "web_scrape",
+        ),
+        (
+            "Preview this article: Digitalis in heart failure, a review of the evidence",
+            "web_scrape",
+        ),
+        ("Get access Share Icon Share The museum and its public in the 1850s", "web_scrape"),
         ("Get the latest brain dumps for certification exams here.", "exam_spam"),
         (
             "To the Editor.\u2014 The recent article by Parker and Brown deserves a comment.",
@@ -221,6 +231,9 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         "oup citation line with a month for its issue",
         "web scrape",
         "page with no access glued",
+        "acm digital library page",
+        "publisher preview",
+        "publisher access prompt",
         "exam spam",
         "letter to the editor",
         "letter after an abstract label",
@@ -283,6 +296,7 @@ def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
         "No accessible records of the dialect survive from before the war.",
         "The first survey of the dialect (1985). A second one followed a decade later.",
         "The thesis (Ph.D. work by the author) argues that the dialect survived the war.",
+        "Get access to care early, the campaign told rural families in its first year.",
     ],
     ids=[
         "letter mid-sentence",
@@ -293,6 +307,7 @@ def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
         "no accessible at the start",
         "a bracketed year not at the start",
         "a thesis mentioned after the first word",
+        "get access to in a real sentence",
     ],
 )
 def test_annotate_abstracts_keeps_look_alikes_of_the_rules(

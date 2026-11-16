@@ -86,7 +86,13 @@ labels:
   # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
   # alone: social media are a research topic. "No Access" glued to the journal name
   # ("No AccessJournal of Speech...") was added on 2026-11-13: 547 ASHA pages, title, authors,
-  # page tools and citing works with no abstract, were kept in run 1.
+  # page tools and citing works with no abstract, were kept in run 1. Added 2026-11-16 (run 10):
+  # the ACM Digital Library's page ("Authors Info & Claims", "Get Citation Alerts", "Citation
+  # Alert added", "Publication History 2010", "2Downloads", "Total Citations12"; 1,917 kept works
+  # in the build of record 2e20238), "Preview this article" and a capitalised "Get access" not
+  # followed by "to" (2,102; "get access to" opens real sentences: all 9 drops of the first
+  # version that matched a publisher abstract were "patients will get access to the program").
+  # Calibrated agent judges found no real abstract in 30 sampled drops of each.
   web_scrape: abstract
   # A library link with an OpenURL key (rft_id) or percent-encoding: the whole link, the run of
   # tokens with no space between them around the encoded token. Until 2026-11-13 these patterns

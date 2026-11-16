@@ -42,6 +42,14 @@
 {"label":"web_scrape","pattern":[{"LOWER":"download"},{"LOWER":"citation"},{"LOWER":"file"}]}
 {"label":"web_scrape","pattern":[{"LOWER":{"IN":["easybib","refworks"]}}]}
 {"label":"web_scrape","pattern":[{"LOWER":"request"},{"LOWER":"reuse"},{"LOWER":"permissions"}]}
+{"label":"web_scrape","pattern":[{"TEXT":"Authors"},{"TEXT":"Info"},{"TEXT":"&"},{"TEXT":"Claims"}]}
+{"label":"web_scrape","pattern":[{"TEXT":"Get"},{"TEXT":"Citation"},{"TEXT":{"REGEX":"^Alerts?"}}]}
+{"label":"web_scrape","pattern":[{"TEXT":"Citation"},{"TEXT":"Alert"},{"TEXT":"added"}]}
+{"label":"web_scrape","pattern":[{"TEXT":"Publication"},{"TEXT":"History"},{"TEXT":{"REGEX":"^\\d"}}]}
+{"label":"web_scrape","pattern":[{"TEXT":{"REGEX":"\\dDownloads"}}]}
+{"label":"web_scrape","pattern":[{"TEXT":"Total"},{"TEXT":{"REGEX":"^Citations\\d"}}]}
+{"label":"web_scrape","pattern":[{"LOWER":"preview"},{"LOWER":"this"},{"LOWER":"article"}]}
+{"label":"web_scrape","pattern":[{"TEXT":"Get"},{"TEXT":"access"},{"LOWER":{"NOT_IN":["to"]}}]}
 {"label":"encoded_link","pattern":[{"SPACY":false,"OP":"*"},{"LOWER":{"REGEX":"rft_id|(?:%2[0-9a-f]){3}"},"SPACY":false},{"SPACY":false,"OP":"*"},{}]}
 {"label":"encoded_link","pattern":[{"SPACY":false,"OP":"*"},{"LOWER":{"REGEX":"rft_id|(?:%2[0-9a-f]){3}"}}]}
 {"label":"exam_spam","pattern":[{"LOWER":{"REGEX":"^(brain-?dumps?|dumps4\\w*|pass4sure)$"}}]}
