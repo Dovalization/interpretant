@@ -91,6 +91,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"doi_corrections:\n  path: '{repository.doi_corrections.path}'\n  format: yaml\n"
         f"record_types:\n  path: '{repository.record_types.path}'\n  format: yaml\n"
         f"kept_joined_words:\n  path: '{repository.kept_joined_words.path}'\n  format: yaml\n"
+        f"kept_apart_words:\n  path: '{repository.kept_apart_words.path}'\n  format: yaml\n"
         "glued_words:\n  path: glued_words.parquet\n  format: parquet\n"
         "split_words:\n  path: split_words.parquet\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"

@@ -57,6 +57,7 @@ stages:
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/workers.py
+      - ${kept_apart_words.path}
       - ${kept_joined_words.path}
       - ${raw_abstracts.path}
       - ${work_metadata.path}

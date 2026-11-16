@@ -242,3 +242,48 @@ def load_kept_joined_words(catalog: CatalogConfig) -> list[KeptJoinedWord]:
     """
     document = yaml.safe_load(catalog.kept_joined_words.path.read_text(encoding="utf-8"))
     return KeptJoinedWords.model_validate(document).words
+
+
+class KeptApartPair(BaseModel):
+    """Two words written apart that stay apart although the corpus counts would join them."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    first: str
+    second: str
+    evidence: str = Field(min_length=1)
+
+    @field_validator("first", "second")
+    @classmethod
+    def _is_a_word(cls, piece: str) -> str:
+        if not piece.isalpha():
+            raise ValueError(f"{piece!r} is not a word of letters")
+        return piece
+
+
+class KeptApartPairs(BaseModel):
+    """The kept-apart words file: each pair once, whatever its case."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    pairs: list[KeptApartPair]
+
+    @model_validator(mode="after")
+    def _each_pair_once(self) -> KeptApartPairs:
+        folded = [f"{entry.first} {entry.second}".lower() for entry in self.pairs]
+        repeated = sorted({pair for pair in folded if folded.count(pair) > 1})
+        if repeated:
+            raise ValueError(f"pairs listed more than once: {repeated}")
+        return self
+
+
+def load_kept_apart_words(catalog: CatalogConfig) -> list[KeptApartPair]:
+    """The broken-word pairs kept apart, with their evidence (decision agenda 2.3, run 7c).
+
+    Raises:
+        FileNotFoundError: if the kept-apart words file does not exist.
+        pydantic.ValidationError: if an entry has no evidence, a piece is not letters, or a pair
+            repeats another in any case.
+    """
+    document = yaml.safe_load(catalog.kept_apart_words.path.read_text(encoding="utf-8"))
+    return KeptApartPairs.model_validate(document).pairs

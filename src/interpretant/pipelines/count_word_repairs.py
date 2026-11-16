@@ -20,6 +20,7 @@ from pydantic_settings import SettingsConfigDict
 
 from interpretant.catalog import (
     CatalogConfig,
+    load_kept_apart_words,
     load_kept_joined_words,
     save_glued_words,
     save_split_words,
@@ -107,9 +108,10 @@ def count_word_repairs(
     Raises:
         ValueError: if no raw cell matches the selection, or a cell's metadata has not been
             fetched or is incomplete.
-        FileNotFoundError: if the kept-joined words file does not exist.
+        FileNotFoundError: if the kept-joined or kept-apart words file does not exist.
     """
     kept_joined = [entry.word for entry in load_kept_joined_words(catalog)]
+    kept_apart = [(entry.first, entry.second) for entry in load_kept_apart_words(catalog)]
     abstracts = load_corpus_works(catalog, corpus_cells(catalog, selection), progress)
     by_part: defaultdict[str, list[tuple[str, str]]] = defaultdict(list)
     for abstract in abstracts:
@@ -157,7 +159,10 @@ def count_word_repairs(
     split_counts = count_split_words(texts, min_word_count=broken.min_word_count)
     progress.stage("deciding the joins")
     joins = decide_split_word_joins(
-        split_counts, join_margin=broken.join_margin, hyphen_margin=broken.hyphen_margin
+        split_counts,
+        join_margin=broken.join_margin,
+        hyphen_margin=broken.hyphen_margin,
+        kept_apart=kept_apart,
     )
     save_split_words(catalog, joins)
     spaced = joins.filter(pl.col("join"))

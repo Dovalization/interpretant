@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import re
 from collections import defaultdict
-from collections.abc import Iterator, Mapping
+from collections.abc import Collection, Iterator, Mapping
 from dataclasses import dataclass, field
 
 import polars as pl
@@ -41,8 +41,12 @@ MIN_HYPHENATED_PIECE_LETTERS = 2
 _WORD_PATTERN = r"\p{L}+"
 _NOT_TEXT_PATTERN = r"[^\p{L}\p{N}\s-]+"
 _SPACES_PATTERN = r"\s+"
-# A word in Python's syntax: letters only.
+# A word in Python's syntax: letters only. A word is a run of letters, so what touches it is not
+# a letter, but it can be a digit (*1st*, *3rd*), and such a piece is never joined.
 _WORD = re.compile(r"[^\W\d_]+")
+# The citation formula "et al.": a name before it is never joined to its "et" (*Bull et al.*).
+_CITATION_ET = "et"
+_CITATION_AL = re.compile(r"\s*al\b")
 
 SPLIT_WORD_COUNTS_SCHEMA = pl.Schema(
     {
@@ -125,27 +129,35 @@ def count_split_words(texts: pl.DataFrame, *, min_word_count: int) -> pl.DataFra
 
 
 def decide_split_word_joins(
-    counts: pl.DataFrame, *, join_margin: float, hyphen_margin: float
+    counts: pl.DataFrame,
+    *,
+    join_margin: float,
+    hyphen_margin: float,
+    kept_apart: Collection[tuple[str, str]],
 ) -> pl.DataFrame:
-    """The counts with each break's decisions: ``join`` and ``join_hyphenated``.
+    """The counts with each break's decisions: ``kept_apart``, ``join`` and ``join_hyphenated``.
 
     A break by a space, or by a hyphen and a space, is joined when the corpus writes the word
     whole at least ``join_margin`` times as often as broken in any of the three ways (``join``),
     so a word often hyphenated (*multi-modal*) is a real hyphenated word and stays apart. A break
     by a hyphen alone is joined only when its second piece is not a word spaCy knows, both pieces
     have at least two letters (*x-ray*, *t-test* stay) and the corpus writes the word whole at
-    least ``hyphen_margin`` times as often (``join_hyphenated``).
+    least ``hyphen_margin`` times as often (``join_hyphenated``). A pair of pieces in
+    ``kept_apart`` (any case) is a real phrase and stays apart whatever the counts say.
     """
+    folded = sorted(f"{first.lower()} {second.lower()}" for first, second in kept_apart)
+    is_kept_apart = pl.concat_str(pl.col("left"), pl.col("right"), separator=" ").is_in(folded)
     whole = pl.col("joined")
     broken = pl.col(SPACE) + pl.col(HYPHEN_SPACE) + pl.col(HYPHEN)
     pieces_long_enough = (pl.col("left").str.len_chars() >= MIN_HYPHENATED_PIECE_LETTERS) & (
         pl.col("right").str.len_chars() >= MIN_HYPHENATED_PIECE_LETTERS
     )
-    return counts.with_columns(
-        join=whole >= join_margin * broken,
+    return counts.with_columns(kept_apart=is_kept_apart).with_columns(
+        join=(whole >= join_margin * broken) & ~pl.col("kept_apart"),
         join_hyphenated=(whole >= hyphen_margin * broken)
         & ~pl.col("right_is_word")
-        & pieces_long_enough,
+        & pieces_long_enough
+        & ~pl.col("kept_apart"),
     )
 
 
@@ -238,4 +250,13 @@ def _joins(text: str, left: re.Match[str], right: re.Match[str], joins: SplitWor
     first = left.group()
     if not (first.islower() or first.istitle()) or first.lower() not in firsts:
         return False
+    if _touches_a_digit(text, left.start(), right.end()):
+        return False
+    if right.group() == _CITATION_ET and _CITATION_AL.match(text, right.end()):
+        return False
     return not inside_address(text, left.start(), right.end())
+
+
+def _touches_a_digit(text: str, start: int, end: int) -> bool:
+    """Whether a digit comes right before ``start`` or right after ``end``."""
+    return (start > 0 and text[start - 1].isdigit()) or (end < len(text) and text[end].isdigit())

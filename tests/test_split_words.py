@@ -31,6 +31,12 @@ def texts_table(texts: list[str]) -> pl.DataFrame:
     return pl.DataFrame({"work_id": [f"W{work}" for work in range(len(texts))], "text": texts})
 
 
+def decide(counts: pl.DataFrame, kept_apart: list[tuple[str, str]] | None = None) -> pl.DataFrame:
+    return decide_split_word_joins(
+        counts, join_margin=10, hyphen_margin=100, kept_apart=kept_apart or []
+    )
+
+
 def counts_row(
     word: str,
     left: str,
@@ -100,7 +106,7 @@ def test_decide_joins_a_break_written_whole_far_more_often() -> None:
         ],
         schema=SPLIT_WORD_COUNTS_SCHEMA,
     )
-    decisions = decide_split_word_joins(counts, join_margin=10, hyphen_margin=100)
+    decisions = decide(counts)
     joins = dict(decisions.select("word", "join").rows())
     assert joins == {"information": True, "multimodal": False}
 
@@ -117,7 +123,7 @@ def test_decide_joins_a_hyphen_alone_only_above_its_margin_with_a_second_piece_s
         ],
         schema=SPLIT_WORD_COUNTS_SCHEMA,
     )
-    decisions = decide_split_word_joins(counts, join_margin=10, hyphen_margin=100)
+    decisions = decide(counts)
     hyphenated = dict(decisions.select("word", "join_hyphenated").rows())
     assert hyphenated == {
         "information": True,
@@ -125,6 +131,16 @@ def test_decide_joins_a_hyphen_alone_only_above_its_margin_with_a_second_piece_s
         "selfesteem": False,
         "xray": False,
     }
+
+
+def test_decide_keeps_a_listed_phrase_apart_whatever_the_counts() -> None:
+    counts = pl.DataFrame(
+        [counts_row("aphasic", "a", "phasic", joined=555, space=33)],
+        schema=SPLIT_WORD_COUNTS_SCHEMA,
+    )
+    row = decide(counts, kept_apart=[("A", "Phasic")]).row(0, named=True)
+    assert row["kept_apart"]
+    assert not (row["join"] or row["join_hyphenated"])
 
 
 def test_split_word_joins_index_the_pieces_by_their_second_piece() -> None:
@@ -135,7 +151,7 @@ def test_split_word_joins_index_the_pieces_by_their_second_piece() -> None:
         ],
         schema=SPLIT_WORD_COUNTS_SCHEMA,
     )
-    joins = split_word_joins(decide_split_word_joins(counts, join_margin=10, hyphen_margin=100))
+    joins = split_word_joins(decide(counts))
     assert joins.spaced == {"mation": frozenset({"infor", "for"})}
     assert joins.hyphenated == {"mation": frozenset({"infor", "for"})}
 
@@ -172,6 +188,17 @@ def test_join_split_words_keeps_initials_and_capitals_apart() -> None:
     joins = SplitWordJoins(spaced={"s": frozenset({"william"}), "ummary": frozenset({"s"})})
     assert join_split_words("By William S. Wang.", joins) == "By William S. Wang."
     assert join_split_words("S ummary of the work.", joins) == "Summary of the work."
+
+
+def test_join_split_words_leaves_pieces_touching_a_digit_apart() -> None:
+    joins = SplitWordJoins(spaced={"and": frozenset({"st"})})
+    assert join_split_words("the 1st and 3rd questions", joins) == "the 1st and 3rd questions"
+
+
+def test_join_split_words_leaves_a_name_before_et_al_apart() -> None:
+    joins = SplitWordJoins(spaced={"et": frozenset({"bull"})})
+    assert join_split_words("as Bull et al. found", joins) == "as Bull et al. found"
+    assert join_split_words("the bull et the cow", joins) == "the bullet the cow"
 
 
 def test_join_split_words_does_not_join_a_joined_word_again() -> None:

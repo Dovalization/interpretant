@@ -43,6 +43,7 @@ class CatalogConfig(BaseModel):
     doi_corrections: DatasetEntry
     record_types: DatasetEntry
     kept_joined_words: DatasetEntry
+    kept_apart_words: DatasetEntry
     glued_words: DatasetEntry
     split_words: DatasetEntry
     annotations: DatasetEntry

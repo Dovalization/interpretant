@@ -91,6 +91,12 @@ kept_joined_words:
   path: curated/kept_joined_words.yaml
   format: yaml
 
+# Broken-word pairs kept apart although the corpus counts would join them, each with its
+# evidence.
+kept_apart_words:
+  path: curated/kept_apart_words.yaml
+  format: yaml
+
 # Every glued word of the repaired texts (a lower-case letter run into a capital), its counts
 # over the corpus and whether the spaCy pass splits it (decision agenda 2.3, run 7).
 glued_words:

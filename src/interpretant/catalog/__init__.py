@@ -24,6 +24,7 @@ from interpretant.catalog.curated import (
     Scope,
     load_cleaning_patterns,
     load_doi_corrections,
+    load_kept_apart_words,
     load_kept_joined_words,
     load_record_kinds,
 )
@@ -125,6 +126,7 @@ __all__ = [
     "load_corpus_metrics",
     "load_doi_corrections",
     "load_glued_words",
+    "load_kept_apart_words",
     "load_kept_joined_words",
     "load_linked_records_table",
     "load_raw_cell",

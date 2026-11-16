@@ -1,8 +1,8 @@
 """The split words table: every broken word of the corpus, its counts and whether it is joined.
 
 Written by the count-word-repairs stage and read by the spaCy pass, which joins the breaks marked
-``join`` or ``join_hyphenated`` before annotating (decision agenda 2.3, run 7c). One file,
-written whole or not at all.
+``join`` or ``join_hyphenated`` before annotating (decision agenda 2.3, run 7c); a break marked
+``kept_apart`` is on the curated list of real phrases. One file, written whole or not at all.
 """
 
 from __future__ import annotations
@@ -24,6 +24,7 @@ SPLIT_WORDS_SCHEMA = pl.Schema(
         "space": pl.Int64(),
         "hyphen_space": pl.Int64(),
         "hyphen": pl.Int64(),
+        "kept_apart": pl.Boolean(),
         "join": pl.Boolean(),
         "join_hyphenated": pl.Boolean(),
     }

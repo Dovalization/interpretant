@@ -1,0 +1,23 @@
+# Broken-word pairs that stay apart although the corpus counts would join them (decision agenda
+# 2.3, run 7c). Read by count-word-repairs; runs never write here.
+#
+# Two neighbouring words, at least one not a word spaCy knows, are joined before the spaCy pass
+# when the corpus writes them as one word far more often than apart (params.yaml,
+# count_word_repairs). The counts join a few real phrases whose second word spaCy's dictionary
+# lacks. Each entry gives the two words as written apart, matched in any case, and its evidence:
+# the counts from the split words table and what the phrase is.
+
+pairs:
+  - first: a
+    second: phasic
+    evidence: >-
+      "A phasic burst", "a phasic response": the adjective (in short bursts), which spaCy's
+      lemma index lacks. On run 7b's texts "aphasic" is written 555 times and "a phasic" 33; all
+      29 kept works holding "a phasic" use the phrase.
+  - first: in
+    second: formants
+    evidence: >-
+      "Shift in formants": the resonances of the vocal tract, a phonetics term the lemma index
+      lacks. On run 7b's texts "informants" is written 1,185 times and "in formants" 6; of 55
+      kept works holding "in formant" or "in formants", 53 use the phrase and 2 break
+      "informant".

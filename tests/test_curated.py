@@ -13,6 +13,7 @@ from interpretant.catalog import (
     CleaningPatterns,
     load_cleaning_patterns,
     load_doi_corrections,
+    load_kept_apart_words,
     load_kept_joined_words,
     load_record_kinds,
     read_catalog,
@@ -179,3 +180,29 @@ def test_load_kept_joined_words_refuses_bad_entries(
     catalog.kept_joined_words.path.write_text("words:\n" + entries)
     with pytest.raises(pydantic.ValidationError, match=message):
         load_kept_joined_words(catalog)
+
+
+def test_load_kept_apart_words_reads_the_repository_file() -> None:
+    pairs = [(entry.first, entry.second) for entry in load_kept_apart_words(read_catalog())]
+    assert ("a", "phasic") in pairs
+
+
+@pytest.mark.parametrize(
+    ("entries", "message"),
+    [
+        ("  - first: in\n    second: formant-s\n    evidence: e\n", "not a word of letters"),
+        (
+            "  - first: a\n    second: phasic\n    evidence: e\n"
+            "  - first: A\n    second: Phasic\n    evidence: e\n",
+            "listed more than once",
+        ),
+    ],
+    ids=["a piece not letters", "a pair twice in two cases"],
+)
+def test_load_kept_apart_words_refuses_bad_entries(
+    catalog: CatalogConfig, entries: str, message: str
+) -> None:
+    catalog.kept_apart_words.path.parent.mkdir(parents=True, exist_ok=True)
+    catalog.kept_apart_words.path.write_text("pairs:\n" + entries)
+    with pytest.raises(pydantic.ValidationError, match=message):
+        load_kept_apart_words(catalog)
