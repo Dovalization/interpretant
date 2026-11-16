@@ -1,11 +1,15 @@
-# Glued words that stay joined although the corpus counts would split them (decision agenda 2.3,
-# run 7). Read by count-word-repairs; runs never write here.
+# Words that stay joined although the corpus counts would split them (decision agenda 2.3, runs 7
+# and 8). Read by count-word-repairs; runs never write here.
 #
-# A word with a lower-case letter run straight into a capital is split before the spaCy pass
-# when the corpus writes its parts apart far more often than joined, or when its second part is
-# a common sentence opener (params.yaml, count_word_repairs). The counts get a few names wrong,
-# mostly where the two parts also make an ordinary phrase. Each entry is matched in any case and
-# carries its evidence: the counts from the glued words table and what the word names.
+# Run 7 splits a word with a lower-case letter run straight into a capital when the corpus writes
+# its parts apart far more often than joined, or when its second part is a common sentence opener;
+# run 8 splits a lower-case word the lemma index does not know when the corpus writes its parts
+# apart far more often than joined (params.yaml, count_word_repairs). The counts get some words
+# wrong, mostly where the parts also make an ordinary phrase: names, real words the lemma index
+# lacks, and foreign words, which split into English words could make lingua read their sentence
+# as English. Each entry is matched in any case and carries its evidence: the counts from the
+# glued words tables (run 8's: the word whole, its parts apart, on the count of 2026-11-16) and
+# what the word names.
 
 words:
   - word: LinkedIn
@@ -21,3 +25,123 @@ words:
       A mobile application that records moments of its user's life, named in an HCI study.
       Joined 16 times (2 works) and "It" is the 4th most common sentence opener, so the opener
       test would split it.
+  - word: inline
+    evidence: >-
+      Written as one word (inline code, inline skating), while "in line" is also an ordinary
+      phrase. Whole 118 times, "in line" 1,899.
+  - word: oris
+    evidence: >-
+      Latin, in the muscle orbicularis oris; "or is" is an ordinary phrase. Whole 44 times,
+      "or is" 1,260.
+  - word: ordo
+    evidence: >-
+      Latin for order (ordo salutis, the ordo of a liturgy). Whole 33 times, "or do" 439.
+  - word: ita
+    evidence: >-
+      Latin and Italian for "thus" in quotations, and the abbreviation ITA. Whole 167 times,
+      "it a" 2,195.
+  - word: partis
+    evidence: >-
+      Latin "of the part" and French "parties". Whole 32 times, "part is" 633.
+  - word: thema
+    evidence: >-
+      German, Dutch and Latin for "theme" (47 of its uses capitalised). Whole 78 times, "them
+      a" 868.
+  - word: borna
+    evidence: >-
+      Borna disease virus and the German town of Borna. Whole 6 times, "born a" 61.
+  - word: formalist
+    evidence: >-
+      A real English word (Russian formalism, a legal formalist) that the lemma index lacks;
+      segmentation reads it as "form a list". Whole 153 times, the pairs apart 2,188.
+  - word: developmentalist
+    evidence: >-
+      A real English word (the developmentalist state) that the lemma index lacks;
+      segmentation reads it as "development a list". Whole 24 times, the pairs apart 377.
+  - word: amoral
+    evidence: >-
+      A real word with the privative "a-" that the lemma index lacks. Whole 89 times, "a
+      moral" 1,499.
+  - word: acausal
+    evidence: >-
+      A real word with the privative "a-" that the lemma index lacks. Whole 23 times, "a
+      causal" 1,030.
+  - word: atheoretical
+    evidence: >-
+      A real word with the privative "a-" that the lemma index lacks. Whole 49 times, "a
+      theoretical" 3,640.
+  - word: asystematic
+    evidence: >-
+      A real word with the privative "a-" that the lemma index lacks. Whole 2 times, "a
+      systematic" 3,904.
+  - word: atemporal
+    evidence: >-
+      A real word with the privative "a-" that the lemma index lacks. Whole 69 times, "a
+      temporal" 713.
+  - word: athematic
+    evidence: >-
+      A real word with the privative "a-" (athematic verbs, athematic music) that the lemma
+      index lacks. Whole 20 times, "a thematic" 316.
+  - word: atopic
+    evidence: >-
+      The medical term (atopic eczema, atopic dermatitis). Whole 36 times, "a topic" 1,061.
+  - word: goto
+    evidence: >-
+      The programming statement ("Go To Statement Considered Harmful"). Whole 48 times, "go
+      to" 1,124.
+  - word: inconsecutive
+    evidence: >-
+      A real, rare word (not consecutive; incoherent in argument). Whole 2 times, "in
+      consecutive" 54.
+  - word: Hasan
+    evidence: >-
+      A personal name, mostly in author lists (130 of its 131 uses capitalised). "has an"
+      2,712.
+  - word: Byne
+    evidence: >-
+      Byne's disease, the decay of shells in museum collections, and a surname. "by ne" 15.
+  - word: Wason
+    evidence: >-
+      Peter Wason, of the Wason selection task in reasoning research (76 capitalised uses).
+      "was on" 1,232.
+  - word: Andover
+    evidence: >-
+      A place name (Andover, Massachusetts; Phillips Academy Andover), 35 of its 36 uses
+      capitalised. "and over" 996.
+  - word: Botha
+    evidence: >-
+      A surname (P. W. Botha), 55 of its 58 uses capitalised. "both a" 2,756.
+  - word: Theall
+    evidence: >-
+      A surname (Donald Theall, the Joyce scholar), 9 capitalised uses. "the all" 230.
+  - word: todo
+    evidence: >-
+      Spanish and Portuguese for "all", in the foreign sentences of kept works (185 lower-case
+      uses). Whole 198 times, "to do" 11,195.
+  - word: presenta
+    evidence: >-
+      A Spanish, Catalan and Portuguese verb form ("presents"). Whole 155 times, "present a"
+      8,423.
+  - word: presentan
+    evidence: >-
+      A Spanish verb form ("they present"). Whole 53 times, "present an" 2,449.
+  - word: representa
+    evidence: >-
+      A Spanish, Catalan and Portuguese verb form ("represents"). Whole 51 times, "represent
+      a" 2,003.
+  - word: considera
+    evidence: >-
+      A Spanish, Catalan, Italian and Portuguese verb form ("considers"). Whole 50 times,
+      "consider a" 895.
+  - word: muchas
+    evidence: >-
+      Spanish for "many". Whole 47 times, "much as" 2,040.
+  - word: Verband
+    evidence: >-
+      German for "association". Whole 42 times, "verb and" 474.
+  - word: Bestand
+    evidence: >-
+      German for "stock, holdings". Whole 31 times, "best and" 346.
+  - word: Themen
+    evidence: >-
+      German plural of "Thema", 41 of its 42 uses capitalised. "the men" 837.
