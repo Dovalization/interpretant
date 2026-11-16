@@ -563,10 +563,15 @@ otherwise more are reviewed. Approved corrections go into the exceptions file.
 (it also holds informal norms such as *cos* → *because*); undocumented, so it is read once,
 filtered and saved as a versioned data file, and a spaCy update cannot change it silently. The
 project's rules are the backstop for derived words the table lacks (*personalisation*,
-*operationalise*, *judgement*). Words written with and without a hyphen (*multi-modal* and
-*multimodal*, *co-operation* and *cooperation*) are spelling variants too: the stored text keeps
-the authors' hyphen (decided 2026-11-15, the author, for run 7c) and this step maps the
-variants to one standard spelling.
+*operationalise*, *judgement*). A compound's spaced, hyphenated and solid forms (*self esteem*,
+*self-esteem*, *selfesteem*; *multi modal*, *multi-modal*, *multimodal*) are spelling variants
+too: the stored text keeps the authors' forms (decided 2026-11-15, the author, for run 7c), and
+this step maps them to one standard spelling, the corpus's most frequent form (decided
+2026-11-15, the author), as run 8 chooses a split's separator. The tokenizer keeps hyphenated
+words whole, so the spaced form is two tokens and the others one: the mapping works on token
+sequences (the `PhraseMatcher`, as for compounds in 4.2), not through the norm table. A solid
+form the corpus writes apart or hyphenated at least ten times as often is damage, not a
+variant, and run 8 repairs it before the pass (*selfesteem* into *self-esteem*).
 
 **3.5 Phrases** (static pipeline). Term candidates from spaCy's `Matcher` on tags and morphology
 (adjectives and nouns ending in a noun, up to four words), scored by **C-value** with a frequency
