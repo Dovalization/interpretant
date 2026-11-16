@@ -11,8 +11,8 @@ documents from the annotation cache, so changing them does not rerun the models.
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable, Iterator, Mapping
-from types import MappingProxyType
+from collections import deque
+from collections.abc import Iterable, Iterator
 from typing import Any
 
 import spacy
@@ -28,10 +28,7 @@ from spacy.util import compile_infix_regex
 from spacy.vocab import Vocab
 
 from interpretant.catalog import WORK_ID, cache_serialiser_extensions
-from interpretant.corpus.glued_words import split_glued_words
-from interpretant.corpus.repair import DOI_PATTERN, repair_text
-from interpretant.corpus.split_words import SplitWordJoins, join_split_words
-from interpretant.corpus.works import RawAbstract
+from interpretant.corpus.repair import DOI_PATTERN
 
 # Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md; "viz." to "ca."
 # added after the corpus audit, decision agenda 2.3).
@@ -88,9 +85,6 @@ SENTENCE_RULES = "sentence_rules"
 # spaCy's own URL rule extended with DOIs, as one compiled pattern so the tokenizer can still be
 # serialised to worker processes.
 URL_OR_DOI = re.compile(f"(?u)(?:{DOI_PATTERN})|(?:{URL_PATTERN})")
-# No glued word is split unless the caller passes the splits.
-_NO_SPLITS: Mapping[str, str] = MappingProxyType({})
-_NO_JOINS = SplitWordJoins()
 
 
 def build_pipeline(
@@ -235,48 +229,42 @@ def _is_lowercase_word(token: Token) -> bool:
 
 
 def annotate_texts(
-    abstracts: Iterable[RawAbstract],
+    works: Iterable[tuple[str, str]],
     nlp: Language,
     *,
-    glued_word_splits: Mapping[str, str] = _NO_SPLITS,
-    split_word_joins: SplitWordJoins = _NO_JOINS,
     batch_size: int = 256,
     process_count: int = 1,
 ) -> Iterator[Doc]:
-    """Repair and annotate each abstract, in order; each document carries its work id.
+    """Annotate each work's repaired text, in order; each document carries its work id.
 
-    After repair, each glued word in ``glued_word_splits`` is written as its two parts (decision
-    agenda 2.3, run 7), then each broken word in ``split_word_joins`` is written whole (run 7c),
-    so the stored text and every later step read the repaired words. An error while repairing
-    ends the stream of texts and is raised once the documents before it are given.
+    ``works`` gives each work's id and its text with every repair made (decision agenda 2.3:
+    the count-word-repairs stage repairs, splits glued words and joins split words). The texts go
+    to spaCy as plain strings, so its worker processes tokenize them: given (text, context) pairs,
+    spaCy 3.8's ``Language.pipe`` makes every document in this process and
+    ``_multiprocessing_pipe`` sends each one packed, a fifth of the main process in run 7c's
+    profile. spaCy gives the documents back in order, and each takes the next work id. An error
+    while reading the works ends the stream of texts and is raised once the documents before it
+    are given.
     """
     errors: list[Exception] = []
-    pairs = _until_error(
-        (
-            (
-                join_split_words(
-                    split_glued_words(repair_text(abstract.text), glued_word_splits),
-                    split_word_joins,
-                ),
-                abstract.work_id,
-            )
-            for abstract in abstracts
-        ),
-        errors,
-    )
-    for doc, work_id in nlp.pipe(
-        pairs, as_tuples=True, batch_size=batch_size, n_process=process_count
+    work_ids: deque[str] = deque()
+
+    def texts() -> Iterator[str]:
+        for work_id, text in works:
+            work_ids.append(work_id)
+            yield text
+
+    for doc in nlp.pipe(
+        _until_error(texts(), errors), batch_size=batch_size, n_process=process_count
     ):
-        doc.user_data[WORK_ID] = work_id
+        doc.user_data[WORK_ID] = work_ids.popleft()
         yield doc
     if errors:
         raise errors[0]
 
 
-def _until_error(
-    pairs: Iterator[tuple[str, str]], errors: list[Exception]
-) -> Iterator[tuple[str, str]]:
-    """The pairs until one fails, the error kept in ``errors`` for the caller to raise.
+def _until_error(texts: Iterator[str], errors: list[Exception]) -> Iterator[str]:
+    """The texts until reading one fails, the error kept in ``errors`` for the caller to raise.
 
     With worker processes, an error inside ``nlp.pipe``'s input never reaches the caller: spaCy
     (3.8, ``Language._multiprocessing_pipe``) joins its workers while they wait to send the
@@ -284,6 +272,6 @@ def _until_error(
     lets spaCy finish what it was sent and stop its workers.
     """
     try:
-        yield from pairs
+        yield from texts
     except Exception as exc:
         errors.append(exc)

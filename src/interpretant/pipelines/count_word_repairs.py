@@ -5,7 +5,9 @@ in worker processes. Each repair is then decided in the order the pass makes the
 counts over the whole corpus of the text the earlier ones produce: the glued words of the
 repaired texts (run 7), split or kept joined; then the words broken by a space or a line-end
 hyphen in the texts with those splits made (run 7c), joined or kept apart. Each table is written
-whole, so the decisions can be reviewed before the pass reads them.
+whole, so the decisions can be reviewed before the pass reads them, and so are the texts with
+every repair made, one part per field and decade, which the spaCy pass reads instead of
+repairing in its main process (run 7c's profile, decision agenda step 9).
 """
 
 from __future__ import annotations
@@ -19,10 +21,12 @@ from pydantic import BaseModel, ConfigDict, Field
 from pydantic_settings import SettingsConfigDict
 
 from interpretant.catalog import (
+    REPAIRED_TEXTS_SCHEMA,
     CatalogConfig,
     load_kept_apart_words,
     load_kept_joined_words,
     save_glued_words,
+    save_repaired_texts,
     save_split_words,
 )
 from interpretant.corpus.glued_words import (
@@ -36,11 +40,14 @@ from interpretant.corpus.split_words import (
     HYPHEN,
     HYPHEN_SPACE,
     SPACE,
+    SplitWordJoins,
     count_split_words,
     decide_split_word_joins,
+    join_split_words,
+    split_word_joins,
 )
 from interpretant.corpus.works import part_of
-from interpretant.pipelines.corpus import corpus_cells, load_corpus_works, part_name
+from interpretant.pipelines.corpus import corpus_cells, corpus_parts, load_corpus_works, part_name
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts
@@ -112,7 +119,8 @@ def count_word_repairs(
     """
     kept_joined = [entry.word for entry in load_kept_joined_words(catalog)]
     kept_apart = [(entry.first, entry.second) for entry in load_kept_apart_words(catalog)]
-    abstracts = load_corpus_works(catalog, corpus_cells(catalog, selection), progress)
+    cells = corpus_cells(catalog, selection)
+    abstracts = load_corpus_works(catalog, cells, progress)
     by_part: defaultdict[str, list[tuple[str, str]]] = defaultdict(list)
     for abstract in abstracts:
         by_part[part_name(*part_of(abstract))].append((abstract.work_id, abstract.text))
@@ -165,6 +173,21 @@ def count_word_repairs(
         kept_apart=kept_apart,
     )
     save_split_words(catalog, joins)
+    word_joins = split_word_joins(joins)
+    progress.stage("joining the split words", total=len(split_texts))
+    joined_texts = map_parts(
+        _join_part,
+        {part: (rows, word_joins) for part, rows in split_texts.items()},
+        process_count=process_count,
+        progress=progress,
+    )
+    del split_texts
+    progress.stage("writing the repaired texts")
+    for part in corpus_parts(cells):
+        rows = joined_texts.get(part, [])
+        save_repaired_texts(
+            catalog, pl.DataFrame(rows, schema=REPAIRED_TEXTS_SCHEMA, orient="row"), part
+        )
     spaced = joins.filter(pl.col("join"))
     hyphenated = joins.filter(pl.col("join_hyphenated"))
     return WordRepairsResult(
@@ -181,13 +204,21 @@ def count_word_repairs(
 
 
 def _repair_part(_part: str, works: list[tuple[str, str]]) -> list[tuple[str, str]]:
-    """One part's works with their texts repaired as the spaCy pass repairs them."""
+    """One part's works with their texts repaired."""
     return [(work_id, repair_text(text)) for work_id, text in works]
 
 
 def _split_part(
     _part: str, works_and_splits: tuple[list[tuple[str, str]], Mapping[str, str]]
 ) -> list[tuple[str, str]]:
-    """One part's repaired works with their glued words split, as the spaCy pass splits them."""
+    """One part's repaired works with their glued words split."""
     works, splits = works_and_splits
     return [(work_id, split_glued_words(text, splits)) for work_id, text in works]
+
+
+def _join_part(
+    _part: str, works_and_joins: tuple[list[tuple[str, str]], SplitWordJoins]
+) -> list[tuple[str, str]]:
+    """One part's works with their split words joined, the last of the word repairs."""
+    works, joins = works_and_joins
+    return [(work_id, join_split_words(text, joins)) for work_id, text in works]

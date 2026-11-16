@@ -62,6 +62,11 @@ from interpretant.catalog.metadata import (
     load_work_metadata_table,
 )
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
+from interpretant.catalog.repaired_texts import (
+    REPAIRED_TEXTS_SCHEMA,
+    load_repaired_texts,
+    save_repaired_texts,
+)
 from interpretant.catalog.reports import (
     append_run_record,
     load_corpus_metrics,
@@ -95,6 +100,7 @@ __all__ = [
     "OPENALEX_WORKS_COLUMNS",
     "PUBMED_WORKS_COLUMNS",
     "REMOVAL",
+    "REPAIRED_TEXTS_SCHEMA",
     "SENTENCE",
     "SENTENCE_LANGUAGES_SCHEMA",
     "SPLIT_WORDS_SCHEMA",
@@ -137,6 +143,7 @@ __all__ = [
     "load_linked_records_table",
     "load_raw_cell",
     "load_record_kinds",
+    "load_repaired_texts",
     "load_sentence_languages",
     "load_split_words",
     "load_staging_table",
@@ -150,6 +157,7 @@ __all__ = [
     "save_corpus_metrics",
     "save_corpus_report",
     "save_glued_words",
+    "save_repaired_texts",
     "save_sentence_languages",
     "save_split_words",
     "save_staging_table",

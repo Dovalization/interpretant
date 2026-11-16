@@ -6,6 +6,7 @@ conftest.py; each test runs an abstract through the three steps the corpus stage
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from functools import cache
 
 import pytest
@@ -54,10 +55,15 @@ def raw(text: str, work: int = 1) -> RawAbstract:
     )
 
 
+def repaired(abstract: RawAbstract) -> tuple[str, str]:
+    """A work's id and its text repaired, as the count-word-repairs stage gives them to the pass."""
+    return abstract.work_id, repair_text(abstract.text)
+
+
 def annotate(text: str, nlp: Language, patterns: CleaningPatterns) -> AnnotatedAbstract:
     """One abstract through the spaCy pass, the sentence languages and the cleaning."""
     abstract = raw(text)
-    (doc,) = annotate_texts([abstract], nlp)
+    (doc,) = annotate_texts([repaired(abstract)], nlp)
     (languages,) = detect_sentence_languages([doc], language_detector(), english_threshold=0.9)
     return clean_abstract(
         doc,
@@ -609,7 +615,7 @@ def test_annotation_cache_keeps_sentences_norms_lemmas_and_the_work_id(
     catalog: CatalogConfig, nlp: Language
 ) -> None:
     text = f"Abstract: Models use senses. See https://example.org now. {GERMAN_SENTENCE}"
-    (original,) = annotate_texts([raw(text, work=7)], nlp)
+    (original,) = annotate_texts([repaired(raw(text, work=7))], nlp)
     save_annotations(catalog, [original], part="ai_2010")
     (cached,) = load_annotations(catalog, "ai_2010", nlp.vocab)
     assert [sentence.text for sentence in cached.sents] == [s.text for s in original.sents]
@@ -620,14 +626,14 @@ def test_annotation_cache_keeps_sentences_norms_lemmas_and_the_work_id(
 
 
 def test_annotate_texts_gives_the_same_documents_in_worker_processes(nlp: Language) -> None:
-    abstracts = [
-        raw("Abstract: Self-attention helps. See https://example.org now.", work=1),
-        raw("As shown in Fig. 2, doi:10.1000/xyz123 holds the data.", work=2),
-        raw("Models learn senses. The effect is large.", work=3),
+    works = [
+        repaired(raw("Abstract: Self-attention helps. See https://example.org now.", work=1)),
+        repaired(raw("As shown in Fig. 2, doi:10.1000/xyz123 holds the data.", work=2)),
+        repaired(raw("Models learn senses. The effect is large.", work=3)),
     ]
 
     def documents(process_count: int) -> list[tuple[object, ...]]:
-        docs = annotate_texts(abstracts, nlp, batch_size=2, process_count=process_count)
+        docs = annotate_texts(works, nlp, batch_size=2, process_count=process_count)
         return [
             (
                 doc.user_data[WORK_ID],
@@ -641,19 +647,15 @@ def test_annotate_texts_gives_the_same_documents_in_worker_processes(nlp: Langua
 
 
 def test_annotate_texts_ends_the_pass_before_raising_an_error_in_its_input(
-    nlp: Language, monkeypatch: pytest.MonkeyPatch
+    nlp: Language,
 ) -> None:
-    def repair_or_fail(text: str) -> str:
-        if text.startswith("Broken"):
-            raise ValueError("cannot repair")
-        return text
+    def works_then_failure() -> Iterator[tuple[str, str]]:
+        for work in range(4):
+            yield f"https://openalex.org/W{work}", f"Models learn senses {work}."
+        raise ValueError("cannot read the next text")
 
-    monkeypatch.setattr("interpretant.corpus.annotation.repair_text", repair_or_fail)
-    abstracts = [raw(f"Models learn senses {work}.", work=work) for work in range(4)]
-    docs = annotate_texts(
-        [*abstracts, raw("Broken text.", work=9)], nlp, batch_size=2, process_count=2
-    )
+    docs = annotate_texts(works_then_failure(), nlp, batch_size=2, process_count=2)
     work_ids = []
-    with pytest.raises(ValueError, match="cannot repair"):
+    with pytest.raises(ValueError, match="cannot read the next text"):
         work_ids.extend(doc.user_data[WORK_ID] for doc in docs)
-    assert len(work_ids) == len(abstracts)
+    assert work_ids == [f"https://openalex.org/W{work}" for work in range(4)]

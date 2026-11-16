@@ -67,25 +67,24 @@ stages:
     outs:
       - ${glued_words.path}
       - ${split_words.path}
+      # The texts with every repair made, read by the spaCy pass: about as large as the corpus,
+      # remade in under three minutes, so kept on the machine that ran the stage, never in the
+      # DVC store.
+      - ${repaired_texts.path}:
+          cache: false
 
   annotate_corpus:
     cmd: interpretant annotate-corpus
     deps:
       - src/interpretant/catalog
       - src/interpretant/corpus/annotation.py
-      - src/interpretant/corpus/dictionary.py
-      - src/interpretant/corpus/glued_words.py
       - src/interpretant/corpus/repair.py
-      - src/interpretant/corpus/split_words.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/annotate_corpus.py
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
-      - ${glued_words.path}
-      - ${raw_abstracts.path}
-      - ${split_words.path}
-      - ${work_metadata.path}
+      - ${repaired_texts.path}
     params:
       - corpus
       - annotate_corpus

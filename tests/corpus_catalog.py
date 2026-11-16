@@ -64,8 +64,10 @@ def prepare_annotated_corpus(
     catalog: CatalogConfig, selection: CorpusSelection = SELECTION
 ) -> CorpusResult:
     """Run the stages before the corpus-level rules, as ``dvc repro`` does: the staging tables,
-    the spaCy pass, the sentence languages and the cleaning; return the cleaning's result."""
+    the word repairs, the spaCy pass, the sentence languages and the cleaning; return the
+    cleaning's result."""
     build_linked_tables(catalog)
+    count_word_repairs(catalog, selection, WORD_REPAIRS_SETTINGS)
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
     detect_languages(catalog, selection, LANGUAGE_SETTINGS)
     return clean_corpus(catalog, selection, CLEAN_SETTINGS)
@@ -94,6 +96,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"kept_apart_words:\n  path: '{repository.kept_apart_words.path}'\n  format: yaml\n"
         "glued_words:\n  path: glued_words.parquet\n  format: parquet\n"
         "split_words:\n  path: split_words.parquet\n  format: parquet\n"
+        "repaired_texts:\n  path: repaired_texts\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"

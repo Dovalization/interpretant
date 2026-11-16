@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 
 import polars as pl
@@ -14,6 +15,7 @@ from interpretant.__main__ import cli
 from interpretant.catalog import (
     load_annotations,
     load_glued_words,
+    load_repaired_texts,
     load_split_words,
     read_catalog,
 )
@@ -101,18 +103,26 @@ def test_annotate_corpus_joins_the_broken_words_before_the_pass(
     assert "The information study 0 looks at records of research." in texts
 
 
-def test_annotate_corpus_needs_the_split_words(corpus_catalog_file: Path) -> None:
+def test_count_word_repairs_writes_every_part_s_texts_with_the_repairs_made(
+    corpus_catalog_file: Path,
+) -> None:
+    write_raw_cell(corpus_catalog_file, "hci", 2010, SPLIT_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    catalog.split_words.path.unlink()
-    with pytest.raises(FileNotFoundError, match="no split words table"):
-        annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
+    selection = CorpusSelection(fields=("ai", "hci"), decades=(2010,))
+    count_word_repairs(catalog, selection, WORD_REPAIRS_SETTINGS)
+    hci = load_repaired_texts(catalog, "hci_2010")
+    assert hci["work_id"].to_list()[:2] == ["https://openalex.org/W10", "https://openalex.org/W11"]
+    assert "The information study 0 looks at records of research." in hci["text"].to_list()
+    assert load_repaired_texts(catalog, "ai_2010").height == 3
 
 
-def test_annotate_corpus_needs_the_glued_words(corpus_catalog_file: Path) -> None:
+def test_count_word_repairs_stops_before_counting_without_metadata(
+    corpus_catalog_file: Path,
+) -> None:
     catalog = read_catalog(corpus_catalog_file)
-    catalog.glued_words.path.unlink()
-    with pytest.raises(FileNotFoundError, match="no glued words table"):
-        annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
+    shutil.rmtree(catalog.work_metadata.path / "compsci")
+    with pytest.raises(ValueError, match="compsci 2010: run `interpretant fetch-metadata`"):
+        count_word_repairs(catalog, CorpusSelection(), WORD_REPAIRS_SETTINGS)
 
 
 def test_count_word_repairs_command_records_the_run(corpus_catalog_file: Path) -> None:

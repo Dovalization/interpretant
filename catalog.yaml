@@ -110,6 +110,12 @@ split_words:
   path: data/interim/split_words.parquet
   format: parquet
 
+# Each work's text after repair, the glued-word splits and the split-word joins, one part per
+# field and decade, written by count-word-repairs and read by the spaCy pass.
+repaired_texts:
+  path: data/interim/repaired_texts
+  format: parquet
+
 annotations:
   path: data/interim/annotations
   format: docbin
