@@ -204,8 +204,8 @@ stages:
       size: 9737
     - path: src/interpretant/corpus/record_types.py
       hash: md5
-      md5: 0c41bf7863576cc00bb9fe803e70513f
-      size: 7404
+      md5: 11e8071e397884c7684d393e59ab96ee
+      size: 7799
     - path: src/interpretant/corpus/removals.py
       hash: md5
       md5: fd306e60320b67f0c527201a434a9595
@@ -224,8 +224,8 @@ stages:
       size: 1895
     - path: src/interpretant/pipelines/build_corpus.py
       hash: md5
-      md5: 71552fa38a253cf989e05ae78c36592b
-      size: 6574
+      md5: b6835ec7fc44d87807571e473737afda
+      size: 6674
     - path: src/interpretant/pipelines/corpus.py
       hash: md5
       md5: 7d3eb9ce0103d26080bfe5fba4ced20b
