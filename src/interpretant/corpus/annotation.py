@@ -49,6 +49,11 @@ ABBREVIATIONS = (
     "vol.",
     "ca.",
 )
+# Abbreviations the sentence splitter keeps whole beside the pass's: the rule-based sentencizer
+# ends a sentence at their full stop, where the pass's statistical senter mostly does not. After
+# "No." it cut 2,346 of the 2,548 sentences only the early languages read as foreign, citation
+# fragments such as "1, pp. 1-13." (read as Italian at 0.21; decided 2026-11-16, the author).
+SPLITTER_ABBREVIATIONS = ("No.", "Nos.")
 # English's infix rule for a hyphen after a letter or digit and before a letter
 # (spacy/lang/en/punctuation.py); removing it keeps *self-attention* one token (decision agenda
 # 2.3), as spaCy's documentation shows under "Modifying existing rule sets".
@@ -131,6 +136,11 @@ def build_sentence_splitter() -> Language:
     """
     nlp = spacy.blank("en")
     _configure_tokenizer(nlp)
+    tokenizer = nlp.tokenizer
+    if not isinstance(tokenizer, Tokenizer):
+        raise TypeError(f"expected spaCy's rule-based tokenizer, got {type(tokenizer).__name__}")
+    for abbreviation in SPLITTER_ABBREVIATIONS:
+        tokenizer.add_special_case(abbreviation, [{ORTH: abbreviation}])
     nlp.add_pipe(SENTENCE_RULES)
     nlp.add_pipe("sentencizer")
     return nlp

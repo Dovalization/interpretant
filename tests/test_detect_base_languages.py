@@ -18,9 +18,9 @@ from tests.corpus_catalog import LANGUAGE_SETTINGS, SELECTION
 
 def test_build_sentence_splitter_keeps_abbreviations_and_brackets_inside_sentences() -> None:
     splitter = build_sentence_splitter()
-    doc = splitter("See Vol. 15, pp. 79-88 for details [cf. Fig. 2. Left]. The effect is large.")
+    doc = splitter("See Vol. 15, No. 1, pp. 79-88 [cf. Fig. 2. Left]. The effect is large.")
     assert [sentence.text for sentence in doc.sents] == [
-        "See Vol. 15, pp. 79-88 for details [cf. Fig. 2. Left].",
+        "See Vol. 15, No. 1, pp. 79-88 [cf. Fig. 2. Left].",
         "The effect is large.",
     ]
 
