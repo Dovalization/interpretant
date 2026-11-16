@@ -8,10 +8,13 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from functools import cache
+from typing import Any
 
 import pytest
+import spacy
 from lingua import LanguageDetector
 from spacy.language import Language
+from spacy.pipeline import AttributeRuler
 
 from interpretant.catalog import (
     WORK_ID,
@@ -544,6 +547,24 @@ def test_build_pipeline_ends_by_dropping_the_tensors(nlp: Language) -> None:
     assert nlp.pipe_names[-1] == "doc_cleaner"
     assert "span_ruler" not in nlp.pipe_names
     assert nlp("Attention helps models.").tensor is None
+
+
+def attribute_rules(pipeline: Language) -> list[dict[str, Any]]:
+    ruler = pipeline.get_pipe("attribute_ruler")
+    assert isinstance(ruler, AttributeRuler)
+    return ruler.patterns
+
+
+def test_build_pipeline_drops_only_the_attribute_rules_that_need_the_parser(
+    nlp: Language,
+) -> None:
+    stock = spacy.load("en_core_web_sm", exclude=["parser", "ner"])
+    rules = attribute_rules(nlp)
+    assert len(rules) == len(attribute_rules(stock)) - 13
+    assert not any("DEP" in token for rule in rules for p in rule["patterns"] for token in p)
+    text = "It is not what I said, but they do have to be there."
+    annotated = [(t.tag_, t.pos_, str(t.morph), t.lemma_) for t in nlp(text)]
+    assert annotated == [(t.tag_, t.pos_, str(t.morph), t.lemma_) for t in stock(text)]
 
 
 def test_build_pipeline_runs_named_entity_recognition_only_when_asked(nlp: Language) -> None:

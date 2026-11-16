@@ -20,7 +20,7 @@ from spacy.lang.char_classes import ALPHA, ALPHA_LOWER, ALPHA_UPPER, HYPHENS
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
 from spacy.matcher import Matcher
-from spacy.pipeline import Sentencizer
+from spacy.pipeline import AttributeRuler, Sentencizer
 from spacy.symbols import ORTH
 from spacy.tokenizer import Tokenizer
 from spacy.tokens import Doc, Token
@@ -119,12 +119,35 @@ def build_pipeline(
     infixes += [GLUED_FOOTNOTE_INFIX, DASH_INFIX]
     tokenizer.infix_finditer = compile_infix_regex(infixes).finditer
     tokenizer.url_match = URL_OR_DOI.match
+    _drop_dependency_rules(nlp)
     nlp.add_pipe(SENTENCE_RULES, before="senter")
     # The tok2vec vectors left on each document are neither cached nor read later; dropping them
     # makes a document about a third the size to hold and to pass between worker processes
     # (spaCy's documentation, "Memory management").
     nlp.add_pipe("doc_cleaner", config={"attrs": {"tensor": None}})
     return nlp
+
+
+def _drop_dependency_rules(nlp: Language) -> None:
+    """Remove the attribute ruler's rules that test a token's dependency label.
+
+    Only the parser sets that label, and the pass leaves the parser out, so these rules never
+    match; the matcher still tries every rule at every token. Without them (13 of the model's
+    179) the ruler took 13% less time on 3,000 abstracts, every token's tag, part of speech,
+    morphology and lemma unchanged (timed on bazzite).
+    """
+    ruler = nlp.get_pipe("attribute_ruler")
+    if not isinstance(ruler, AttributeRuler):
+        raise TypeError(f"expected spaCy's attribute ruler, got {type(ruler).__name__}")
+    rules = ruler.patterns
+    ruler.clear()
+    ruler.add_patterns(rule for rule in rules if not _tests_dependency(rule))
+
+
+def _tests_dependency(rule: dict[str, Any]) -> bool:
+    """Whether one of an attribute rule's token patterns tests the dependency label."""
+    patterns: list[list[dict[str, Any]]] = rule["patterns"]
+    return any("DEP" in token for pattern in patterns for token in pattern)
 
 
 @Language.factory(SENTENCE_RULES, requires=["token.is_sent_start"])
