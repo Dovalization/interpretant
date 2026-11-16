@@ -332,3 +332,68 @@ changes agenda 9.1's order, which puts the corpus sign-off before any experiment
 
 Suggested order: A1, then B1 to B5 (small, and each measured with A1), C1, C2 to C5, C6, D; the
 measurement question whenever the author wants to take it up.
+
+## More performance tips from the libraries' documentation
+
+Asked for by the author after the proposals were approved. Timings are from synthetic runs on the
+Mac unless stated; each is to be measured on a real run before it is kept.
+
+**Polars, multiprocessing and DVC:**
+
+28. **Every new worker re-imports the whole command line.** Spawned workers import
+    `interpretant.__main__`, which imports every command and spaCy: 2 to 3 s per worker (the
+    signature workers' 22% importing modules in run 8's profile). `count_word_repairs` opens a new
+    10-worker pool four times (`pipelines/workers.py:47-48`); one pool reused for the four rounds
+    took 11 s instead of 48 in the test (about 10 s on the run machine), with the same outputs.
+    Lighter imports in `__main__` would shorten every worker's start in every stage.
+29. **`POLARS_MAX_THREADS=1` in worker processes** (Polars' `thread_pool_size` notes), set in
+    the parent's environment before the pool starts: worker peak memory fell from about 290 MB to
+    180 MB in a 10-worker test (about 1 GB in all), time within noise, parquet bytes identical.
+30. **Explode lazily** (Polars 2.0 upgrade guide: lazy queries drop unused columns and stream):
+    the report explodes the whole abstracts table, text and sentences included
+    (`review/corpus_report.py:46` and others); lazily, a 0.9 GB test table peaked at 1.28 GB
+    instead of 2.11 GB, five times faster. Expected: the report's 4.6 GB peak to about 1 GB.
+31. **One scan for the 88 annotated parts** (`scan_parquet` with `include_file_paths`) instead of
+    88 reads: 2.2 s to 0.9 s on a test table, identical frames.
+32. **DVC's hashing needs no tuning**: a full run's outputs hash in a few seconds; on the run
+    machine's btrfs, outputs are reflinked into the cache.
+
+Checked and not worth it: parquet codec, level and row groups (one or two seconds, and they change
+the bytes DVC hashes), `sink_parquet` (`write_parquet` already streams), categoricals (tens of MB
+against gigabytes of text), `engine="streaming"` (lazy queries already stream in Polars 2).
+
+**spaCy, lingua and datasketch** (timed on the Mac with 1,000 to 3,000 real abstracts; ratios
+only):
+
+33. **The sentence rules set each sentence start one token at a time**, and each
+    `token.is_sent_start =` calls `doc.has_annotation("DEP")`, which scans the whole document when
+    there is no parser (spaCy's source), so the cost grows with the square of an abstract's length.
+    Setting all starts in one `Doc.from_array` write ran 5.4 times faster with identical sentence
+    starts on 2,000 documents: about 30 s of the pass.
+34. **Exact-word cleaning patterns as phrase patterns** (spaCy's rule-based matching docs,
+    "Efficient phrase matching"; `phrase_matcher_attr: "LOWER"`): `{"IN": ...}` predicates are
+    Python calls on every token; 18 patterns as 43 phrases cut the SpanRuler's time by 29% with
+    identical spans. Two patterns with hyphens stay token patterns, since the blank tokenizer splits
+    hyphens and the pass does not.
+35. **The other single-token regexes off the per-token path** (docs: matching regular expressions
+    on the full text): regex predicates are 63% of the SpanRuler's time; one scan of the text per
+    document, then the token regex only where it overlaps, gives the same matches. Up to about 30%
+    more of cleaning; not prototyped.
+36. **`gc.freeze()` and `gc.disable()` around the LSH loop** (Python's `gc` docs): each insert
+    creates about 18 sets; on 300,000 synthetic signatures, query and insert took 30 µs instead of
+    57 to 69. Perhaps 10 s of the build.
+37. **Minor:** once the sentence table exists (C5), the language stage in one process on lingua's
+    multi-threaded methods (one copy of the models instead of ten); DocBin `attrs` without the empty
+    parser and entity attributes (files 16% smaller); the cleaning pipeline built once per worker
+    instead of once per part.
+
+Checked and not applying: the GPU (spaCy's figures give a CNN pipeline about 1.5 times on one GPU,
+less than ten CPU workers, and GPU arithmetic could change tags or sentence starts); BLIS threads
+(each operation is single-threaded already); `nlp.pipe` batch sizes (within noise); a smaller
+model (none smaller than `sm`, and a different model changes outputs); datasketch's insertion
+sessions (only for Redis or Cassandra storage).
+
+These extend proposals C and D: **C7**, one worker pool per stage and lighter worker start-up (28);
+**C8**, the sentence rules in one array write (33); **C9**, phrase patterns and full-text regexes in
+cleaning (34, 35, beside C3); **C10**, the garbage collector frozen around the LSH loop (36); **D**
+gains 29, 30, 31 and 37.
