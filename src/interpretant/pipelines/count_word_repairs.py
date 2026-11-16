@@ -17,6 +17,7 @@ from collections import Counter, defaultdict
 from collections.abc import Mapping
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
+from functools import partial
 
 import polars as pl
 from pydantic import BaseModel, ConfigDict, Field
@@ -37,6 +38,7 @@ from interpretant.corpus.glued_words import (
 from interpretant.corpus.lower_glued_words import (
     HYPHENATED_CHUNK,
     LowerGluedSplits,
+    check_dictionary_words,
     count_lower_glued_words,
     decide_hyphenated_chunks,
     decide_lower_glued_word_splits,
@@ -236,6 +238,7 @@ def _count_word_repairs(
         texts,
         min_part_count=lower.min_part_count,
         min_first_part_letters=lower.min_first_part_letters,
+        dictionary_words=partial(_dictionary_words, pool=pool, process_count=process_count),
     )
     progress.stage("deciding the lower-case splits")
     lower_decisions = decide_lower_glued_word_splits(
@@ -284,6 +287,24 @@ def _count_word_repairs(
         ),
         lower_glued_split_occurrences=dict(occurrences.most_common()),
     )
+
+
+def _dictionary_words(
+    words: list[str], *, pool: ProcessPoolExecutor | None, process_count: int
+) -> set[str]:
+    """Of the words, those spaCy's lemma index knows, checked in the stage's workers."""
+    if pool is None:
+        return check_dictionary_words(words)
+    chunks = {str(index): words[index::process_count] for index in range(process_count)}
+    found = map_parts(
+        _dictionary_chunk, chunks, process_count=process_count, progress=SILENT, pool=pool
+    )
+    return set().union(*found.values())
+
+
+def _dictionary_chunk(_chunk: str, words: list[str]) -> set[str]:
+    """One worker's share of a dictionary check; its lemmatizer is loaded once per process."""
+    return check_dictionary_words(words)
 
 
 def _repair_part(_part: str, works: list[tuple[str, str]]) -> list[tuple[str, str]]:

@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter
-from collections.abc import Collection, Mapping
+from collections.abc import Callable, Collection, Mapping
 from dataclasses import dataclass, field
 from itertools import pairwise
 
@@ -98,8 +98,17 @@ class LowerGluedSplits:
     chunks: Mapping[str, str] = field(default_factory=dict)
 
 
+def check_dictionary_words(words: list[str]) -> set[str]:
+    """Of the words, those spaCy's lemma index knows (``is_dictionary_word``), one by one."""
+    return {word for word in words if is_dictionary_word(word)}
+
+
 def count_lower_glued_words(
-    texts: pl.DataFrame, *, min_part_count: int, min_first_part_letters: int
+    texts: pl.DataFrame,
+    *,
+    min_part_count: int,
+    min_first_part_letters: int,
+    dictionary_words: Callable[[list[str]], set[str]] = check_dictionary_words,
 ) -> pl.DataFrame:
     """Each candidate glued word of the texts, folded, with the counts that decide its split.
 
@@ -112,6 +121,10 @@ def count_lower_glued_words(
     stop word. ``joined`` counts the word whole; ``apart`` its parts written apart, with a space
     or a hyphen (the weakest pair of three or more); ``uses`` and ``capitalised_uses`` its uses
     in lower case and capitalised. Sorted by uses.
+
+    ``dictionary_words`` checks a batch of words against spaCy's lemma index, which is most of
+    the work: twice, once for the corpus's words frequent enough to be parts and once for the
+    candidates, so a caller can spread each batch over worker processes.
     """
     words: dict[str, int] = dict(
         texts.lazy()
@@ -135,7 +148,8 @@ def count_lower_glued_words(
         )
         .collect(engine="streaming")
     )
-    parts = _PartChecker(words, min_part_count)
+    frequent = [word for word, count in words.items() if count >= min_part_count and len(word) > 1]
+    parts = _PartChecker(dictionary_words(frequent))
     segmenter = _segmenter(words, parts)
     candidates: list[tuple[str, str, tuple[str, ...], int, int]] = []
     for word, uses, capitalised_uses in forms.iter_rows():
@@ -162,7 +176,8 @@ def count_lower_glued_words(
         )
         if len(found) >= 3 and all(_is_segment(part, parts) for part in found):
             candidates.append((word, THREE_OR_MORE_WORDS, found, uses, capitalised_uses))
-    candidates = [row for row in candidates if not is_dictionary_word(row[0])]
+    known = dictionary_words(sorted({row[0] for row in candidates}))
+    candidates = [row for row in candidates if row[0] not in known]
     pairs = {
         (row[2][index], row[2][index + 1]) for row in candidates for index in range(len(row[2]) - 1)
     }
@@ -346,22 +361,17 @@ def _is_segment(part: str, parts: _PartChecker) -> bool:
 class _PartChecker:
     """Whether a piece of a glued word can be a part.
 
-    A part is *a*, or a word spaCy knows that the corpus uses at least ``min_part_count`` times.
+    A part is *a*, or a word spaCy knows that the corpus uses at least ``min_part_count`` times:
+    one of ``known``, those words checked in one batch.
     """
 
-    def __init__(self, words: Mapping[str, int], min_part_count: int) -> None:
-        self._words = words
-        self._min_part_count = min_part_count
-        self._known: dict[str, bool] = {}
+    def __init__(self, known: Collection[str]) -> None:
+        self._known = frozenset(known)
 
     def is_part(self, piece: str) -> bool:
         if len(piece) == 1:
             return piece == _ONE_LETTER_PART
-        if piece not in self._known:
-            self._known[piece] = self._words.get(
-                piece, 0
-            ) >= self._min_part_count and is_dictionary_word(piece)
-        return self._known[piece]
+        return piece in self._known
 
 
 def _segmenter(words: Mapping[str, int], parts: _PartChecker) -> SymSpell:

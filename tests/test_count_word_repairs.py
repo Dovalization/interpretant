@@ -90,6 +90,18 @@ def test_count_word_repairs_splits_lower_case_glued_words_and_writes_their_decis
     assert "the role of the models in research" in texts["text"].str.join(" ").item()
 
 
+def test_count_word_repairs_decides_the_same_in_worker_processes(
+    corpus_catalog_file: Path,
+) -> None:
+    write_raw_cell(corpus_catalog_file, "hci", 2010, LOWER_GLUED_CELL)
+    catalog = read_catalog(corpus_catalog_file)
+    count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    alone = load_lower_glued_words(catalog), load_repaired_texts(catalog, "hci_2010")
+    count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS, process_count=2)
+    assert load_lower_glued_words(catalog).equals(alone[0])
+    assert load_repaired_texts(catalog, "hci_2010").equals(alone[1])
+
+
 def test_count_word_repairs_writes_each_broken_word_with_its_decision(
     corpus_catalog_file: Path,
 ) -> None:
