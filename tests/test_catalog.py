@@ -210,12 +210,15 @@ def test_load_annotations_looks_the_serialiser_extensions_up_once(
     save_annotations(catalog, [nlp.make_doc("A short text."), nlp.make_doc("Another.")], "ai_2010")
     lookups: list[str] = []
     for registry in (msgpack_encoders, msgpack_decoders):
-        functions = registry.get_all()
-        monkeypatch.setattr(
-            registry,
-            "get_all",
-            lambda functions=functions, name=registry.namespace: lookups.append(name) or functions,
-        )
+        registered = registry.get_all()
+
+        def counted_get_all(
+            functions: dict[str, Any] = registered, name: str = registry.namespace
+        ) -> dict[str, Any]:
+            lookups.append(name)
+            return functions
+
+        monkeypatch.setattr(registry, "get_all", counted_get_all)
     texts = [doc.text for doc in load_annotations(catalog, "ai_2010", nlp.vocab)]
     assert texts == ["A short text.", "Another."]
     assert len(lookups) == 2

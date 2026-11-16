@@ -25,7 +25,7 @@ class TestCosineDistance:
         b = np.array([-1.0, 0.0, 0.0])
         assert cosine_distance(a, b) == pytest.approx(2.0, abs=1e-6)
 
-    def test_result_in_range(self, synthetic_model: dict) -> None:
+    def test_result_in_range(self, synthetic_model: dict[int, dict[str, np.ndarray]]) -> None:
         decades = sorted(synthetic_model.keys())
         for word in list(synthetic_model[decades[0]].keys())[:3]:
             v1 = synthetic_model[decades[0]][word]
@@ -38,7 +38,9 @@ class TestCosineDistance:
         b = np.ones(10)
         assert cosine_distance(a, b) == pytest.approx(1.0)
 
-    def test_synthetic_drift_is_positive(self, synthetic_model: dict) -> None:
+    def test_synthetic_drift_is_positive(
+        self, synthetic_model: dict[int, dict[str, np.ndarray]]
+    ) -> None:
         decades = sorted(synthetic_model.keys())
         t0 = decades[0]
         t1 = decades[-1]

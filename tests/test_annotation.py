@@ -655,7 +655,7 @@ def test_annotate_texts_ends_the_pass_before_raising_an_error_in_its_input(
         raise ValueError("cannot read the next text")
 
     docs = annotate_texts(works_then_failure(), nlp, batch_size=2, process_count=2)
-    work_ids = []
+    work_ids: list[str] = []
     with pytest.raises(ValueError, match="cannot read the next text"):
         work_ids.extend(doc.user_data[WORK_ID] for doc in docs)
     assert work_ids == [f"https://openalex.org/W{work}" for work in range(4)]
