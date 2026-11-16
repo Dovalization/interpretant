@@ -562,7 +562,7 @@ def test_build_pipeline_drops_only_the_attribute_rules_that_need_the_parser(
     rules = attribute_rules(nlp)
     assert len(rules) == len(attribute_rules(stock)) - 13
     assert not any("DEP" in token for rule in rules for p in rule["patterns"] for token in p)
-    text = "It is not what I said, but they do have to be there."
+    text = "It is not what I said, but they do have to be there. Y'all ain't seen nothin' yet."
     annotated = [(t.tag_, t.pos_, str(t.morph), t.lemma_) for t in nlp(text)]
     assert annotated == [(t.tag_, t.pos_, str(t.morph), t.lemma_) for t in stock(text)]
 

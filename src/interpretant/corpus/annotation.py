@@ -27,6 +27,7 @@ from spacy.util import compile_infix_regex
 from spacy.vocab import Vocab
 
 from interpretant.catalog import WORK_ID, cache_serialiser_extensions
+from interpretant.corpus.attribute_rules import LOOKUP_ATTRIBUTE_RULER, LookupAttributeRuler
 from interpretant.corpus.repair import DOI_PATTERN
 
 # Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md; "viz." to "ca."
@@ -118,7 +119,7 @@ def build_pipeline(
     infixes += [GLUED_FOOTNOTE_INFIX, DASH_INFIX]
     tokenizer.infix_finditer = compile_infix_regex(infixes).finditer
     tokenizer.url_match = URL_OR_DOI.match
-    _drop_dependency_rules(nlp)
+    _use_lookup_attribute_ruler(nlp)
     nlp.add_pipe(SENTENCE_RULES, before="senter")
     # The tok2vec vectors left on each document are neither cached nor read later; dropping them
     # makes a document about a third the size to hold and to pass between worker processes
@@ -127,20 +128,21 @@ def build_pipeline(
     return nlp
 
 
-def _drop_dependency_rules(nlp: Language) -> None:
-    """Remove the attribute ruler's rules that test a token's dependency label.
+def _use_lookup_attribute_ruler(nlp: Language) -> None:
+    """Replace the model's attribute ruler with the lookup one, without the parser's rules.
 
-    Only the parser sets that label, and the pass leaves the parser out, so these rules never
-    match; the matcher still tries every rule at every token. Without them (13 of the model's
-    179) the ruler took 13% less time on 3,000 abstracts, every token's tag, part of speech,
-    morphology and lemma unchanged (timed on bazzite).
+    13 of the model's 179 rules test a token's dependency label, which only the parser sets; the
+    pass leaves the parser out, so they never match. The lookup ruler
+    (``corpus.attribute_rules``) gives the same matches as spaCy's, five times faster.
     """
     ruler = nlp.get_pipe("attribute_ruler")
     if not isinstance(ruler, AttributeRuler):
         raise TypeError(f"expected spaCy's attribute ruler, got {type(ruler).__name__}")
-    rules = ruler.patterns
-    ruler.clear()
-    ruler.add_patterns(rule for rule in rules if not _tests_dependency(rule))
+    rules = [rule for rule in ruler.patterns if not _tests_dependency(rule)]
+    lookup = nlp.replace_pipe("attribute_ruler", LOOKUP_ATTRIBUTE_RULER)
+    if not isinstance(lookup, LookupAttributeRuler):
+        raise TypeError(f"expected the lookup attribute ruler, got {type(lookup).__name__}")
+    lookup.add_patterns(rules)
 
 
 def _tests_dependency(rule: dict[str, Any]) -> bool:

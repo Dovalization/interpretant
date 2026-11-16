@@ -78,6 +78,7 @@ stages:
     deps:
       - src/interpretant/catalog
       - src/interpretant/corpus/annotation.py
+      - src/interpretant/corpus/attribute_rules.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/annotate_corpus.py
