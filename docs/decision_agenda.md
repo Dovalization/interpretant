@@ -381,7 +381,14 @@ views (the full order is in step 9).
      Crossref abstract. It also checks the catalogue lines the exact near-duplicate check now
      groups (thesis lines such as *Thesis (Ph. D.)--Massachusetts Institute of Technology, …,
      1993.*, proceedings lines, library newsletters; 2.5), which keep only their earliest work
-     until a rule of their own drops them;
+     until a rule of their own drops them. *Done 2026-11-16* (`d78aff9a`, `d5645e8e`,
+     `b525c23e`; record `75f36a82`): JSTOR's and OUP's lines are `citation_line`, with a new
+     scope, `abstract_or_sentence` (the abstract when fewer than 30 words come before the line,
+     otherwise the line's sentences): 2,323 kept works dropped, 434 keep their text without the
+     line and 134 are then too short; 52 lines whose issue title holds a full stop are missed.
+     Thesis notes are removed rather than dropped (`thesis_notes`, 371 works; dropping every
+     record that opens with them dropped 2 real abstracts in 30), and the 301 left with nothing
+     fall to *too short*;
   10. publisher page text the `web_scrape` patterns miss (*Get access*, *Preview this article*,
       *Restricted access… First published*; *was published in* only in De Gruyter's form, since
       it also opens real sentences: *Jan Herkel's Elementa… was published in Buda*), and the
@@ -391,15 +398,28 @@ views (the full order is in step 9).
       918 characters; computer science 965, HCI 634, AI 297; 735 from the 1990s. Only 2 of the
       2,366 works holding these joined menu words have one of the phrases above, and the template
       rule takes 7,589 of their sentences without dropping them. They drop as `web_scrape`
-      (decided 2026-11-15, the author), the largest group of publisher text;
+      (decided 2026-11-15, the author), the largest group of publisher text. *Done 2026-11-16*
+      (`35550491`): 4,008 kept works dropped (the ACM page, *Preview this article*, and a
+      capitalised *Get access* not followed by *to*, since a first pattern also took *patients
+      will get access to the program*); *Restricted access… First published* matched none;
   11. the template rule masks month names as well as digits, so *Received: 12 March 2010;
       Accepted: 3 June 2010.* (134 kept works) and *Submitted on January 6, 1958* (66) become
       template sentences; the rest of the planned boilerplate shares its sentence with a title,
-      names or a file name, so no masking makes it repeat;
+      names or a file name, so no masking makes it repeat. *Sent back 2026-11-16*: with the
+      month names masked exactly (the exploration's mask also took *decrease*, *market* and
+      *may*), 755 kept works gain template sentences, but 2 of 30 sampled removals were archive
+      items' descriptions, the record's own text;
   12. footers the template rule cannot take, in the cleaning patterns: ERIC's document notes (42
       kept works), *Contains fulltext* (20), the machine-keywords notice glued to the sentence
       before it by a footnote number (91), and Frontiers' event, citation and date lines (about
-      600);
+      600). *Done 2026-11-16* (`a9dfd9b3`, `b525c23e`): Frontiers' *Event Abstract Back to
+      Event* is removed exactly (`event_header`, 193 works; removing to the end of the sentence
+      took the abstract's first sentence in 13 of 30), ERIC's notes, *Contains fulltext*, the
+      machine-keywords notice and a citation line opening the record as `footer` (356 works
+      changed, 21 then too short; the label also falls on 4,937 works whose sentence the template
+      rule already removed, the machine-keywords notice in 30 of 30 sampled); a Frontiers
+      citation line later in the text is left, since its pattern needed
+      a wide wildcard that made the stage many times slower;
   13. no finite verb outside the removed ranges, dropped as `not_prose`, a keeping rule in the
       cleaning stage beside *too short*: titles, citation lines, contents lists, conference names
       and captions are phrases, an abstract has a verb (on run 3's sample it caught 15 of the 30
@@ -408,20 +428,49 @@ views (the full order is in step 9).
       note-style structured abstracts). The cleaning stage reads the cached spaCy documents,
       whose `DocBin` keeps morphology by default (`VerbForm=Fin`, checked on a cached part; the
       small model marks modals such as *may* finite too), so no rerun of the spaCy pass is
-      needed, and a removed citation or template sentence cannot supply the verb;
+      needed, and a removed citation or template sentence cannot supply the verb. *Sent back
+      2026-11-16*: 23,355 kept works have no finite verb outside the removals; 1 of 30 sampled
+      drops was a real abstract, then 10 of 129 on a larger sample (about 8%, some 1,800
+      works), mostly one-sentence summaries with no verb (*An analysis of the process of the
+      emergence… of Whitehead's conceptions of God*);
   14. book-review headers removed, a token pattern in the cleaning patterns (*By R. M. Williams.
-      New York: Knopf, 1951. 545 pp. $4.50*);
+      New York: Knopf, 1951. 545 pp. $4.50*). *Done 2026-11-16* (`617942ca`, `01b8206b`): the
+      page count and price are removed exactly (`review_header`, 878 works changed); removing to
+      the end of the sentence took the review's first sentence where no full stop follows the
+      price (2 of 25);
   15. texts mostly in Chinese, Japanese or Korean script (about 400 kept works, mostly
       2000s–2010s), probably in the cleaning stage's not-English rule rather than the language
       detector: the English tokenizer makes few words of text without spaces, so *more words
-      removed as another language than kept* may never hold; the cause is checked first;
+      removed as another language than kept* may never hold; the cause is checked first.
+      *Dropped 2026-11-16*: only 10 kept works are now more than a fifth CJK script, one of them
+      an English grammar chapter with Korean examples;
   16. a curated list of excluded venues, each entry with its evidence, starting with two police
       academies' journals (*Journal of the Chinese People's Armed Police Force Academy*, 13 kept
       works; *Journal of Liaoning Police Academy*, 14), and Zenodo if 20 of its 3,212 kept works
-      say so (the review's spam page came from it);
+      say so (the review's spam page came from it). *Sent back 2026-11-16*: all 27 police-academy
+      works and 24 of 30 sampled Zenodo works (3,219 kept, under the name *Zenodo (CERN European
+      Organization for Nuclear Research)*) are real abstracts;
   17. the cut-off fragments as `cut_off_sentence` (above), in the corpus build beside the
       `truncated` flag, since a fragment ending in a template sentence is not judged and the
-      template removals exist only there.
+      template removals exist only there. *Sent back 2026-11-16*: even narrowed to texts ending
+      on a word no sentence ends on (10,275 kept works), 5 of 30 sampled removals took most of a
+      real sentence.
+
+  *Checked and run 2026-11-16*, with no manual review, at the author's request: each rule was
+  sized on the build of record `2e20238`, then judged before any code by two agent judges
+  (Sonnet, blind to the rule, with 4b's failure definition) calibrated on run 3's 200 judged
+  records. Against the author's verdicts they agreed on 94.5% and 95.0%; a blind Opus
+  adjudicator, agreeing with the author on 19 of 20 controls, overturned 7 of those verdicts
+  where all three models disagreed with them (three records marked unsure, a workshop abstract,
+  a book description and two judged non-abstracts), and against the corrected verdicts the two
+  judges with the adjudicator on their disagreements agreed on 99.0% and missed no failure. A
+  rule was sent back at 2 real abstracts in 30 sampled drops, or 2 removals in 30 that lose the
+  work's own prose. The planned external check (a Crossref or PubMed abstract matching a dropped
+  text) was set aside: OpenAlex takes its abstracts from those sources, so 98% of works with
+  such an abstract match it whatever the text is. Runs 9, 10, 12 and 14 ran as one batch (record
+  `75f36a82`): 8,103 of 639,640 kept works changed, 6,800 of them dropped, and every change the
+  checked definitions did not predict was judged again (no real abstract among 31 drops, no lost
+  prose in 66 removals).
 
   Where each rule lives (checked 2026-11-15): text patterns go in the spaCy cleaning patterns
   (token patterns, with `REGEX` on a token where the tokenizer keeps punctuation glued, as in
