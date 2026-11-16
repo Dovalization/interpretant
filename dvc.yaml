@@ -2,8 +2,9 @@
 # code, curated files or settings changed since `dvc.lock` was written, and `dvc.lock` records
 # what each output was made from. Paths come from catalog.yaml, written there once.
 #
-# Each stage lists the exact modules it imports (tests/test_dvc_stages.py checks this), so a
-# change reruns only what it can affect. Stage 2 is split three ways so the costly spaCy models
+# Each stage lists the exact modules its pipeline imports and its own command module, which builds
+# its settings (tests/test_dvc_stages.py checks both, and the params sections), so a change reruns
+# only what it can affect. Stage 2 is split three ways so the costly spaCy models
 # rerun only for tokenizer, sentence-rule or model changes: a language setting reruns from
 # detect_languages, a cleaning pattern or threshold from clean_corpus. A catalog change that
 # cannot affect outputs (a dataset added for a later step) is recorded with `dvc commit <stage>`
@@ -23,6 +24,7 @@ stages:
     cmd: interpretant build-linked-tables
     deps:
       - src/interpretant/catalog
+      - src/interpretant/cli/build_linked_tables.py
       - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/crossref.py
@@ -47,6 +49,7 @@ stages:
     cmd: interpretant count-word-repairs
     deps:
       - src/interpretant/catalog
+      - src/interpretant/cli/count_word_repairs.py
       - src/interpretant/corpus/dictionary.py
       - src/interpretant/corpus/glued_words.py
       - src/interpretant/corpus/lower_glued_words.py
@@ -80,6 +83,7 @@ stages:
     cmd: interpretant annotate-corpus
     deps:
       - src/interpretant/catalog
+      - src/interpretant/cli/annotate_corpus.py
       - src/interpretant/corpus/annotation.py
       - src/interpretant/corpus/attribute_rules.py
       - src/interpretant/corpus/repair.py
@@ -105,6 +109,7 @@ stages:
     cmd: interpretant detect-languages
     deps:
       - src/interpretant/catalog
+      - src/interpretant/cli/detect_languages.py
       - src/interpretant/corpus/language.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/works.py
@@ -124,6 +129,7 @@ stages:
     cmd: interpretant clean-corpus
     deps:
       - src/interpretant/catalog
+      - src/interpretant/cli/clean_corpus.py
       - src/interpretant/corpus/language.py
       - src/interpretant/corpus/removals.py
       - src/interpretant/corpus/repair.py
@@ -149,6 +155,7 @@ stages:
     cmd: interpretant build-corpus
     deps:
       - src/interpretant/catalog
+      - src/interpretant/cli/build_corpus.py
       - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/deduplication.py
@@ -179,6 +186,7 @@ stages:
     cmd: interpretant report-corpus
     deps:
       - src/interpretant/catalog
+      - src/interpretant/cli/report_corpus.py
       - src/interpretant/corpus/bibliographic.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/repair.py

@@ -1,4 +1,4 @@
-"""The DVC stages: each lists exactly the modules its pipeline imports (decision agenda, step 9).
+"""The DVC stages: each lists exactly the modules it imports and the params it reads (step 9).
 
 A stage that misses a module it imports would not rerun when that module changes; a stage that
 lists a module it does not import would rerun for nothing. Package ``__init__.py`` files are left
@@ -8,9 +8,12 @@ out: they only re-export, and the modules they import are in the list themselves
 from __future__ import annotations
 
 import ast
+import importlib
 from pathlib import Path
 
 import yaml
+
+from interpretant.pipelines.params import ParamsSettings
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 SOURCE = REPOSITORY / "src"
@@ -85,10 +88,40 @@ def test_each_stage_runs_its_own_command() -> None:
 
 
 def test_each_stage_lists_exactly_the_modules_it_imports() -> None:
+    """Its pipeline's import closure, and its own command module, which builds its settings.
+
+    The helpers the command imports (live progress, the run record, the printed result) are left
+    out: they cannot change an output.
+    """
     for name, stage in stages().items():
         dependencies = stage["deps"]
         assert isinstance(dependencies, list)
         imported = import_closure(f"{PACKAGE}.pipelines.{name}")
+        imported.add(SOURCE / PACKAGE / "cli" / f"{name}.py")
         listed = listed_modules(dependencies)
         relative = sorted(str(file.relative_to(REPOSITORY)) for file in imported ^ listed)
         assert listed == imported, f"{name}: listed or imported only once: {relative}"
+
+
+def built_settings_sections(name: str) -> set[str]:
+    """The ``params.yaml`` sections of the settings a stage's command builds (``Name()`` calls)."""
+    module = importlib.import_module(f"{PACKAGE}.cli.{name}")
+    tree = ast.parse((SOURCE / PACKAGE / "cli" / f"{name}.py").read_text(encoding="utf-8"))
+    called = {
+        node.func.id
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+    }
+    sections = set()
+    for called_name in called:
+        value = getattr(module, called_name, None)
+        if isinstance(value, type) and issubclass(value, ParamsSettings):
+            sections.add(str(value.model_config["yaml_config_section"]))
+    return sections
+
+
+def test_each_stage_lists_the_params_sections_its_command_reads() -> None:
+    for name, stage in stages().items():
+        params = stage.get("params", [])
+        assert isinstance(params, list)
+        assert set(params) == built_settings_sections(name), name
