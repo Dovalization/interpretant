@@ -17,7 +17,11 @@ from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annot
 from interpretant.pipelines.build_linked_tables import build_linked_tables
 from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus
 from interpretant.pipelines.corpus import CorpusResult
-from interpretant.pipelines.count_glued_words import CountGluedWordsSettings, count_glued_words
+from interpretant.pipelines.count_word_repairs import (
+    CountWordRepairsSettings,
+    GluedWordSettings,
+    count_word_repairs,
+)
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from interpretant.pipelines.params import CorpusSelection
 from tests.metadata_records import metadata_record
@@ -47,8 +51,10 @@ SELECTION = CorpusSelection(fields=("ai", "compsci"), decades=(2010,))
 ANNOTATE_SETTINGS = AnnotateCorpusSettings(named_entity_recognition=False)
 LANGUAGE_SETTINGS = DetectLanguagesSettings(languages=("en", "de"))
 CLEAN_SETTINGS = CleanCorpusSettings()
-GLUED_WORDS_SETTINGS = CountGluedWordsSettings(
-    apart_margin=10, opener_count=30, opener_min_left_letters=4, opener_min_right_letters=2
+WORD_REPAIRS_SETTINGS = CountWordRepairsSettings(
+    glued_words=GluedWordSettings(
+        apart_margin=10, opener_count=30, opener_min_left_letters=4, opener_min_right_letters=2
+    )
 )
 
 
@@ -65,7 +71,7 @@ def prepare_annotated_corpus(
 
 def write_corpus_catalog(folder: Path) -> Path:
     """Write the catalog file, the raw cells and their metadata under ``folder``, and count the
-    glued words, which the spaCy pass reads."""
+    word repairs, which the spaCy pass reads."""
     repository = read_catalog()
     catalog_file = folder / "catalog.yaml"
     catalog_file.write_text(
@@ -93,7 +99,7 @@ def write_corpus_catalog(folder: Path) -> Path:
     )
     for (field, decade), works in CELLS.items():
         write_raw_cell(catalog_file, field, decade, works)
-    count_glued_words(read_catalog(catalog_file), CorpusSelection(), GLUED_WORDS_SETTINGS)
+    count_word_repairs(read_catalog(catalog_file), CorpusSelection(), WORD_REPAIRS_SETTINGS)
     return catalog_file
 
 

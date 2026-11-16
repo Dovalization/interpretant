@@ -43,15 +43,15 @@ stages:
   # Run 7 of the cleaning runs (decision agenda 2.3): the glued words of the repaired texts,
   # counted over the corpus, and which of them the spaCy pass splits. A few minutes; its table is
   # reviewed before the pass reads it.
-  count_glued_words:
-    cmd: interpretant count-glued-words
+  count_word_repairs:
+    cmd: interpretant count-word-repairs
     deps:
       - src/interpretant/catalog
       - src/interpretant/corpus/glued_words.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/corpus.py
-      - src/interpretant/pipelines/count_glued_words.py
+      - src/interpretant/pipelines/count_word_repairs.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/workers.py
@@ -60,7 +60,7 @@ stages:
       - ${work_metadata.path}
     params:
       - corpus
-      - count_glued_words
+      - count_word_repairs
     outs:
       - ${glued_words.path}
 

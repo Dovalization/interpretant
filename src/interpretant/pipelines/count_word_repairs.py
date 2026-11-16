@@ -1,9 +1,9 @@
-"""Run 7 of the cleaning runs (decision agenda 2.3): the corpus's glued words and their splits.
+"""The word repairs of the cleaning runs (decision agenda 2.3), counted over the whole corpus.
 
 Every selected cell's works are merged and repaired as the spaCy pass repairs them, part by part
-in worker processes; the glued words of the repaired texts are counted over the whole corpus
-and each is decided: split before the spaCy pass, or kept joined. The table is written whole,
-so the decisions can be reviewed before the pass reads them.
+in worker processes. The glued words of the repaired texts (run 7) are counted over the whole
+corpus and each is decided: split before the spaCy pass, or kept joined. Each table is written
+whole, so the decisions can be reviewed before the pass reads them.
 """
 
 from __future__ import annotations
@@ -12,12 +12,11 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 import polars as pl
-from pydantic import Field
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic_settings import SettingsConfigDict
 
 from interpretant.catalog import CatalogConfig, load_kept_joined_words, save_glued_words
-from interpretant.corpus.glued_words import count_glued_words as count_words
-from interpretant.corpus.glued_words import decide_glued_word_splits
+from interpretant.corpus.glued_words import count_glued_words, decide_glued_word_splits
 from interpretant.corpus.repair import repair_text
 from interpretant.corpus.works import part_of
 from interpretant.pipelines.corpus import corpus_cells, load_corpus_works, part_name
@@ -26,10 +25,10 @@ from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts
 
 
-class CountGluedWordsSettings(ParamsSettings):
-    """The ``count_glued_words`` section of ``params.yaml``: when a glued word is split."""
+class GluedWordSettings(BaseModel):
+    """When a glued word is split (run 7)."""
 
-    model_config = SettingsConfigDict(yaml_config_section="count_glued_words")
+    model_config = ConfigDict(extra="forbid", frozen=True)
 
     apart_margin: float = Field(gt=0)
     opener_count: int = Field(ge=0)
@@ -37,25 +36,33 @@ class CountGluedWordsSettings(ParamsSettings):
     opener_min_right_letters: int = Field(ge=1)
 
 
+class CountWordRepairsSettings(ParamsSettings):
+    """The ``count_word_repairs`` section of ``params.yaml``: which words repair changes."""
+
+    model_config = SettingsConfigDict(yaml_config_section="count_word_repairs")
+
+    glued_words: GluedWordSettings
+
+
 @dataclass(frozen=True)
-class GluedWordsResult:
+class WordRepairsResult:
     """What the stage wrote: the abstracts read, the glued words found and those split."""
 
     abstract_count: int
-    word_count: int
-    split_counts: dict[str, int]
-    split_occurrences: int
+    glued_word_count: int
+    glued_split_counts: dict[str, int]
+    glued_split_occurrences: int
 
 
-def count_glued_words(
+def count_word_repairs(
     catalog: CatalogConfig,
     selection: CorpusSelection,
-    settings: CountGluedWordsSettings,
+    settings: CountWordRepairsSettings,
     *,
     process_count: int = 1,
     progress: Progress = SILENT,
-) -> GluedWordsResult:
-    """Count the glued words of the selected cells' repaired texts and write their decisions.
+) -> WordRepairsResult:
+    """Count the word repairs of the selected cells' repaired texts and write their decisions.
 
     Raises:
         ValueError: if no raw cell matches the selection, or a cell's metadata has not been
@@ -78,23 +85,24 @@ def count_glued_words(
         orient="row",
     )
     progress.stage("counting glued words")
-    counts = count_words(texts)
+    counts = count_glued_words(texts)
     progress.stage("deciding the splits")
+    glued = settings.glued_words
     decisions = decide_glued_word_splits(
         counts,
-        apart_margin=settings.apart_margin,
-        opener_count=settings.opener_count,
-        opener_min_left_letters=settings.opener_min_left_letters,
-        opener_min_right_letters=settings.opener_min_right_letters,
+        apart_margin=glued.apart_margin,
+        opener_count=glued.opener_count,
+        opener_min_left_letters=glued.opener_min_left_letters,
+        opener_min_right_letters=glued.opener_min_right_letters,
         kept_joined=kept_joined,
     )
     save_glued_words(catalog, decisions)
     split = decisions.filter(pl.col("split"))
-    return GluedWordsResult(
+    return WordRepairsResult(
         abstract_count=texts.height,
-        word_count=decisions.height,
-        split_counts=dict(split["reason"].value_counts(sort=True).iter_rows()),
-        split_occurrences=int(split["occurrences"].sum()),
+        glued_word_count=decisions.height,
+        glued_split_counts=dict(split["reason"].value_counts(sort=True).iter_rows()),
+        glued_split_occurrences=int(split["occurrences"].sum()),
     )
 
 

@@ -1,6 +1,6 @@
 """The glued words table: every glued word of the corpus, its counts and whether it is split.
 
-Written by the count-glued-words stage and read by the spaCy pass, which splits the words marked
+Written by the count-word-repairs stage and read by the spaCy pass, which splits the words marked
 ``split`` before annotating (decision agenda 2.3, run 7). One file, written whole or not at all.
 """
 
@@ -54,6 +54,6 @@ def load_glued_words(catalog: CatalogConfig) -> pl.DataFrame:
     path = catalog.glued_words.path
     if not path.exists():
         raise FileNotFoundError(
-            f"no glued words table at {path}; run `interpretant count-glued-words` first"
+            f"no glued words table at {path}; run `interpretant count-word-repairs` first"
         )
     return pl.read_parquet(path)

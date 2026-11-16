@@ -304,7 +304,7 @@ views (the full order is in step 9).
      counts get wrong (*LinkedIn*, since *linked in* is a common phrase; *InDesign*; *CatchIt*)
      go in a short curated list of words kept
      joined (`curated/kept_joined_words.yaml`), each with its evidence, as the excluded venues
-     are; the table (`data/interim/glued_words.parquet`, written by the `count_glued_words`
+     are; the table (`data/interim/glued_words.parquet`, written by the `count_word_repairs`
      stage) and the list are reviewed before the run. spaCy has no component that splits joined
      words, and tokenizer special cases would split the tokens but leave the stored text joined,
      which duplicate and template detection read by spaces (why run 4 wrote the punctuation

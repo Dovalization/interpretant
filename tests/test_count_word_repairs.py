@@ -1,4 +1,4 @@
-"""The count-glued-words stage and its command, and the spaCy pass reading its splits."""
+"""The count-word-repairs stage and its command, and the spaCy pass reading its decisions."""
 
 from __future__ import annotations
 
@@ -12,9 +12,9 @@ from spacy.language import Language
 from interpretant.__main__ import cli
 from interpretant.catalog import load_annotations, load_glued_words, read_catalog
 from interpretant.pipelines.annotate_corpus import annotate_corpus
-from interpretant.pipelines.count_glued_words import CountGluedWordsSettings, count_glued_words
+from interpretant.pipelines.count_word_repairs import CountWordRepairsSettings, count_word_repairs
 from interpretant.pipelines.params import CorpusSelection
-from tests.corpus_catalog import ANNOTATE_SETTINGS, GLUED_WORDS_SETTINGS, write_raw_cell
+from tests.corpus_catalog import ANNOTATE_SETTINGS, WORD_REPAIRS_SETTINGS, write_raw_cell
 
 # A cell of its own: a heading run into the text three times and written apart in thirty works,
 # ten times as often, and a name written only joined.
@@ -28,16 +28,18 @@ GLUED_CELL = [
 GLUED_SELECTION = CorpusSelection(fields=("hci",), decades=(2010,))
 
 
-def test_count_glued_words_writes_each_word_with_its_decision(corpus_catalog_file: Path) -> None:
+def test_count_word_repairs_writes_each_glued_word_with_its_decision(
+    corpus_catalog_file: Path,
+) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, GLUED_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    result = count_glued_words(catalog, GLUED_SELECTION, GLUED_WORDS_SETTINGS)
+    result = count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
     table = load_glued_words(catalog)
     decisions = dict(table.select("word", "split").rows())
     assert decisions == {"AbstractThe": True, "PubMed": False}
-    assert (result.abstract_count, result.word_count) == (33, 2)
-    assert result.split_counts == {"apart": 1}
-    assert result.split_occurrences == 3
+    assert (result.abstract_count, result.glued_word_count) == (33, 2)
+    assert result.glued_split_counts == {"apart": 1}
+    assert result.glued_split_occurrences == 3
 
 
 def test_annotate_corpus_splits_the_glued_words_before_the_pass(
@@ -45,7 +47,7 @@ def test_annotate_corpus_splits_the_glued_words_before_the_pass(
 ) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, GLUED_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    count_glued_words(catalog, GLUED_SELECTION, GLUED_WORDS_SETTINGS)
+    count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
     annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
     texts = [doc.text for doc in load_annotations(catalog, "hci_2010", nlp.vocab)]
     assert "AbstractThe study 0 looks at PubMed records of attention research." not in texts
@@ -59,22 +61,22 @@ def test_annotate_corpus_needs_the_glued_words(corpus_catalog_file: Path) -> Non
         annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
 
 
-def test_count_glued_words_command_records_the_run(corpus_catalog_file: Path) -> None:
+def test_count_word_repairs_command_records_the_run(corpus_catalog_file: Path) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, GLUED_CELL)
     outcome = CliRunner().invoke(
         cli,
-        ["count-glued-words", "--catalog", str(corpus_catalog_file), "--process-count", "1"],
+        ["count-word-repairs", "--catalog", str(corpus_catalog_file), "--process-count", "1"],
     )
     assert outcome.exit_code == 0, outcome.output
     assert "Reason" in outcome.output
     run_log = read_catalog(corpus_catalog_file).run_log.path.read_text().splitlines()
     record = json.loads(run_log[-1])
-    assert record["command"] == "count-glued-words"
-    assert record["counts"]["split_words"] == 1
+    assert record["command"] == "count-word-repairs"
+    assert record["counts"]["glued_words_split"] == 1
 
 
-def test_the_repository_params_file_is_valid_for_glued_words() -> None:
-    settings = CountGluedWordsSettings()
-    assert settings.apart_margin > 0
-    assert settings.opener_min_left_letters >= 2
-    assert settings.opener_min_right_letters >= 1
+def test_the_repository_params_file_is_valid_for_word_repairs() -> None:
+    glued = CountWordRepairsSettings().glued_words
+    assert glued.apart_margin > 0
+    assert glued.opener_min_left_letters >= 2
+    assert glued.opener_min_right_letters >= 1
