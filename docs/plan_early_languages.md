@@ -1,7 +1,7 @@
 # Plan: language detection before the word repairs and the spaCy pass
 
-*Proposed 2026-11-16, awaiting the author's approval. Measured on the corpus after run 8
-(`abd16663`); the scripts are read-only and their numbers are below.*
+*Approved 2026-11-16 by the author, with the changes below the design. Measured on the corpus
+after run 8 (`abd16663`); the scripts are read-only and their numbers are below.*
 
 ## Why
 
@@ -43,43 +43,47 @@ longest stage. Three problems follow:
    and sentence rules with spaCy's rule-based `sentencizer` (no models) split the base texts;
    lingua reads them as today (19 candidates, full accuracy, one thread per worker). A sentence
    too short to be read on its own takes its abstract's verdict instead (the threshold to be
-   measured; the fragments above are mostly under 20 characters). It writes each sentence's
-   language on base-text offsets.
+   measured with the project's tokenizer settings, which stop the cuts the fragments came from;
+   if one is needed it reads lingua's confidence, 0.15-0.43 for the fragments, not a length). It
+   writes each sentence's language on base-text offsets.
 3. **`count_word_repairs`, guarded.** Runs 7, 7c and 8 count and change only sentences read as
-   English (or undetermined in an English abstract). The stage records each text's edits and
-   writes the language spans moved to the final text's offsets, so later stages read them on the
-   text they annotate.
-4. **`annotate_corpus` skips works with no English sentence.** Their rows are still written,
-   dropped as `not_english`, from the language table alone.
+   English (or undetermined in an English abstract), and run 8's damaged-text guard counts only
+   splits in English sentences. The stage records each text's edits (a position and a change of
+   length) and moves the language spans through them, so later stages read them on the text they
+   annotate; tests check that every sentence the repairs leave alone maps to the same text,
+   after joins that delete characters and splits that add them.
+4. **The spaCy pass annotates every work, as now.** Skipping works with no English sentence
+   would save about 20 s: 21,633 works (3.1%) have none in the early check, but 410 of them are
+   kept in the final build, so the rule needs cleaning's own `not_english` decision moved early;
+   left for a change of its own.
 5. **`clean_corpus` gives each spaCy sentence a language.** A spaCy sentence takes the language
    of the early sentences it overlaps; one that spans two languages (0.13%) is read again by
    lingua. Removals and the `not_english` rule work as now.
 6. **Today's late language stage goes;** its code is reused by the early one.
 
-## For the author to decide
+## Decisions
 
-- The fragment rule's threshold (characters or words), measured before it is set.
-- Whether undetermined sentences in an English abstract get the word repairs (proposed: yes).
-- The skip rule: only works with no English sentence at all (proposed), or the full
-  `not_english` rule moved early, which would need word counts without the cleaning patterns'
-  removals.
-- Whether the 9 foreign words leave the kept-joined list once the guard runs (proposed: yes,
-  each checked in the run).
+- A fragment rule only if the improved sentence split still needs one (measured in step 3).
+- Undetermined sentences in an English abstract get the word repairs (decided: yes).
+- No skipping in the spaCy pass for now (decided, see design point 4).
+- The 9 foreign words leave the kept-joined list once the guard runs (decided: yes, each checked
+  in the run).
 
 ## Steps (one commit each)
 
 1. The tokenizer settings and sentence rules shared between the spaCy pass and the early
    sentence split.
 2. `repair_texts` split from `count_word_repairs`, outputs identical.
-3. `detect_languages` on the base texts, with the fragment rule; measured against today's.
+3. `detect_languages` on the base texts (a fragment rule if step 3 shows one is needed),
+   measured against today's.
 4. The guard in the word repairs and the language spans moved to final offsets.
 5. `clean_corpus` gives spaCy sentences their language, with the re-check.
-6. `annotate_corpus` skips works with no English sentence; `clean_corpus` writes their rows.
-7. `dvc.yaml` reordered, tests, a full profiled run, the agenda and `docs/performance.md`.
+6. `dvc.yaml` reordered, tests, a full profiled run that compares all three word-repair decision
+   tables (their counts now read English text only) as well as the outputs, the agenda and
+   `docs/performance.md`.
 
 ## Expected effect
 
 Foreign sentences stay as written; the 462 content-word-plus-*a* errors and the foreign keep-list
-entries go; language data is available to every stage; the run takes about the same time (the
-early stage costs about a minute more than today's, the spaCy pass and cleaning skip about 3% of
-the works).
+entries go; language data is available to every stage. A run takes about a minute longer (about
+22 minutes): the early stage costs a little more than today's late one.
