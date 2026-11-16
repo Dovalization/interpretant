@@ -110,13 +110,16 @@ pipeline (the author):
 
 - **Population:** abstracts kept by cleaning in both run 8 and the check run whose final text
   (the text outside the removals) differs.
-- **Sample:** 40 drawn uniformly at random with seed 20261116; all of them if there are fewer.
-- **Blind comparison:** for each, the first differing passage of both versions with context,
-  labelled A and B in an order drawn with the same seed; the author judges A better, B better
-  or no difference, without knowing which version is run 8's.
-- **Rule:** keep the change if a one-sided sign test on the samples that are not ties favours the
-  check run at p < 0.05, and the samples where run 8 is better share no systematic cause (one
-  cause in 3 or more of them). Otherwise revert to run 8's pipeline: the late language stage, no
-  guard, the kept-joined list as it is.
+- **Test (automatic):** each region where an abstract's repaired text differs from run 8's and
+  that is kept in either run's final text, located in the check run's sentence languages. The
+  change stays if (1) at least 90% of those regions lie in sentences the repairs may not change
+  (read as foreign, or undetermined in a mostly foreign abstract), so the change does only what
+  it is for; (2) run 7's split decisions equal run 8's; and (3) run 7c's joins and run 8's
+  lower-case splits differ from run 8's by under 1% (words decided differently, over run 8's
+  count). Otherwise revert to run 8's pipeline: the late language stage, no guard, the
+  kept-joined list as it is.
+- *Amended 2026-11-16 before the results (the author):* this test replaces a blind comparison of
+  40 samples by the author, which would have cost the author's time to measure what the test
+  measures directly.
 - **Reported, not decisive:** the decision tables and drop verdicts against run 8, the size of
   the population, and the abstracts whose foreign text cleaning now removes.
