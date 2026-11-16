@@ -7,6 +7,10 @@ stages:
       hash: md5
       md5: f3bbd8d22739b084a062ba4371f2fa54
       size: 946995
+    - path: data/interim/split_words.parquet
+      hash: md5
+      md5: 70a3616732f2a3b25b39530607317b55
+      size: 389520
     - path: data/raw/openalex
       hash: md5
       md5: fbf24c1c9c7cc37cf59d7557ae74020c.dir
@@ -19,13 +23,17 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: c3149af85fc9fb389945da7c79f52bef.dir
-      size: 49735
-      nfiles: 15
+      md5: 65fd776c9df24bd9a7e01d068a3ea26d.dir
+      size: 53607
+      nfiles: 16
     - path: src/interpretant/corpus/annotation.py
       hash: md5
-      md5: 0785b903ff4f4e22772f1d9fcbabb7c1
-      size: 12980
+      md5: 84d3f6954334f8e9ced43c964e04c27c
+      size: 14249
+    - path: src/interpretant/corpus/dictionary.py
+      hash: md5
+      md5: 4f7ca84fdbd2e558bdd9edf3faf1ad6c
+      size: 2330
     - path: src/interpretant/corpus/glued_words.py
       hash: md5
       md5: b2cb5a87056912062b04468a3eac558f
@@ -34,14 +42,18 @@ stages:
       hash: md5
       md5: a59cf74f837451d4f20e3579bbeb72b2
       size: 10875
+    - path: src/interpretant/corpus/split_words.py
+      hash: md5
+      md5: dfc0b8f0ae0c15c4aac10caddaa4b9f1
+      size: 11270
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
       size: 1891
     - path: src/interpretant/pipelines/annotate_corpus.py
       hash: md5
-      md5: 8e2321503da923745f55fa0f13443dbc
-      size: 5041
+      md5: e00779b6544238e311a6871be0f2f2cf
+      size: 5248
     - path: src/interpretant/pipelines/corpus.py
       hash: md5
       md5: 78b775dac9246795248f19d6ee6624ed
@@ -83,8 +95,8 @@ stages:
     outs:
     - path: data/interim/annotations
       hash: md5
-      md5: 1654e9002c879ec3fca049e5b2718f79.dir
-      size: 1110926876
+      md5: c070c3e7b74d716d8efdea7b5af26a3a.dir
+      size: 1110172414
       nfiles: 88
   build_corpus:
     cmd: interpretant build-corpus
@@ -95,8 +107,8 @@ stages:
       size: 6583
     - path: data/interim/annotated_abstracts
       hash: md5
-      md5: 43c4c467b0876eca4b11c5ca1a59d00d.dir
-      size: 282250092
+      md5: 6de52cb19a68719a7b2cd386d4054178.dir
+      size: 282130425
       nfiles: 88
     - path: data/interim/crossref_works.parquet
       hash: md5
@@ -122,9 +134,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: c3149af85fc9fb389945da7c79f52bef.dir
-      size: 49735
-      nfiles: 15
+      md5: 65fd776c9df24bd9a7e01d068a3ea26d.dir
+      size: 53607
+      nfiles: 16
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
@@ -209,16 +221,16 @@ stages:
     outs:
     - path: data/processed/abstracts
       hash: md5
-      md5: f67b70908f03a8834b1c7ffe75f5fff8.dir
-      size: 288389728
+      md5: 35e7050d7969a5f3a6f77705c6374485.dir
+      size: 288268478
       nfiles: 88
   report_corpus:
     cmd: interpretant report-corpus
     deps:
     - path: data/processed/abstracts
       hash: md5
-      md5: f67b70908f03a8834b1c7ffe75f5fff8.dir
-      size: 288389728
+      md5: 35e7050d7969a5f3a6f77705c6374485.dir
+      size: 288268478
       nfiles: 88
     - path: data/raw/openalex
       hash: md5
@@ -232,9 +244,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: c3149af85fc9fb389945da7c79f52bef.dir
-      size: 49735
-      nfiles: 15
+      md5: 65fd776c9df24bd9a7e01d068a3ea26d.dir
+      size: 53607
+      nfiles: 16
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
@@ -302,25 +314,25 @@ stages:
     outs:
     - path: data/processed/corpus_report.md
       hash: md5
-      md5: 666659152b169528f895afde0e93fef4
-      size: 21135
+      md5: 8b82b292283dc73326d6571a7cd14804
+      size: 22237
     - path: metrics/corpus.json
       hash: md5
-      md5: 5f08368664b03b1382667b905e0aec3c
+      md5: ec7ff89ff063805b9741bb922009028a
       size: 1013
   detect_languages:
     cmd: interpretant detect-languages
     deps:
     - path: data/interim/annotations
       hash: md5
-      md5: 1654e9002c879ec3fca049e5b2718f79.dir
-      size: 1110926876
+      md5: c070c3e7b74d716d8efdea7b5af26a3a.dir
+      size: 1110172414
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: c3149af85fc9fb389945da7c79f52bef.dir
-      size: 49735
-      nfiles: 15
+      md5: 65fd776c9df24bd9a7e01d068a3ea26d.dir
+      size: 53607
+      nfiles: 16
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -399,8 +411,8 @@ stages:
     outs:
     - path: data/interim/sentence_languages
       hash: md5
-      md5: e671b30dfb0126602510396a7e3ec064.dir
-      size: 23449091
+      md5: 4a4254fd2984d0ed3b0eaef0f60a66df.dir
+      size: 23444878
       nfiles: 88
   clean_corpus:
     cmd: interpretant clean-corpus
@@ -415,13 +427,13 @@ stages:
       size: 5320
     - path: data/interim/annotations
       hash: md5
-      md5: 1654e9002c879ec3fca049e5b2718f79.dir
-      size: 1110926876
+      md5: c070c3e7b74d716d8efdea7b5af26a3a.dir
+      size: 1110172414
       nfiles: 88
     - path: data/interim/sentence_languages
       hash: md5
-      md5: e671b30dfb0126602510396a7e3ec064.dir
-      size: 23449091
+      md5: 4a4254fd2984d0ed3b0eaef0f60a66df.dir
+      size: 23444878
       nfiles: 88
     - path: data/raw/openalex
       hash: md5
@@ -435,9 +447,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: c3149af85fc9fb389945da7c79f52bef.dir
-      size: 49735
-      nfiles: 15
+      md5: 65fd776c9df24bd9a7e01d068a3ea26d.dir
+      size: 53607
+      nfiles: 16
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -503,8 +515,8 @@ stages:
     outs:
     - path: data/interim/annotated_abstracts
       hash: md5
-      md5: 43c4c467b0876eca4b11c5ca1a59d00d.dir
-      size: 282250092
+      md5: 6de52cb19a68719a7b2cd386d4054178.dir
+      size: 282130425
       nfiles: 88
   build_linked_tables:
     cmd: interpretant build-linked-tables
@@ -530,9 +542,9 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: c3149af85fc9fb389945da7c79f52bef.dir
-      size: 49735
-      nfiles: 15
+      md5: 65fd776c9df24bd9a7e01d068a3ea26d.dir
+      size: 53607
+      nfiles: 16
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
@@ -666,3 +678,112 @@ stages:
       hash: md5
       md5: f3bbd8d22739b084a062ba4371f2fa54
       size: 946995
+  count_word_repairs:
+    cmd: interpretant count-word-repairs
+    deps:
+    - path: curated/kept_apart_words.yaml
+      hash: md5
+      md5: 30c967dd7a03f75ec3d785543e49d274
+      size: 1246
+    - path: curated/kept_joined_words.yaml
+      hash: md5
+      md5: 1fd93960c957438384eda769cfe4299b
+      size: 1310
+    - path: data/raw/openalex
+      hash: md5
+      md5: fbf24c1c9c7cc37cf59d7557ae74020c.dir
+      size: 293915470
+      nfiles: 90
+    - path: data/raw/openalex_metadata
+      hash: md5
+      md5: edda602f82c1254c4f857f845f249ea5.dir
+      size: 631283086
+      nfiles: 88
+    - path: src/interpretant/catalog
+      hash: md5
+      md5: 65fd776c9df24bd9a7e01d068a3ea26d.dir
+      size: 53607
+      nfiles: 16
+    - path: src/interpretant/corpus/dictionary.py
+      hash: md5
+      md5: 4f7ca84fdbd2e558bdd9edf3faf1ad6c
+      size: 2330
+    - path: src/interpretant/corpus/glued_words.py
+      hash: md5
+      md5: b2cb5a87056912062b04468a3eac558f
+      size: 8469
+    - path: src/interpretant/corpus/repair.py
+      hash: md5
+      md5: a59cf74f837451d4f20e3579bbeb72b2
+      size: 10875
+    - path: src/interpretant/corpus/split_words.py
+      hash: md5
+      md5: dfc0b8f0ae0c15c4aac10caddaa4b9f1
+      size: 11270
+    - path: src/interpretant/corpus/works.py
+      hash: md5
+      md5: 98807f8702604472c4c6ea00ecb1321f
+      size: 1891
+    - path: src/interpretant/pipelines/corpus.py
+      hash: md5
+      md5: 78b775dac9246795248f19d6ee6624ed
+      size: 4982
+    - path: src/interpretant/pipelines/count_word_repairs.py
+      hash: md5
+      md5: feb1de8886b09ff0f51c07368fa7b4bd
+      size: 7385
+    - path: src/interpretant/pipelines/params.py
+      hash: md5
+      md5: 3948a4fd681587ab2f99892050d25b62
+      size: 1593
+    - path: src/interpretant/pipelines/progress.py
+      hash: md5
+      md5: 22394da32ea7c6b1bae98d4ea88baa5c
+      size: 2694
+    - path: src/interpretant/pipelines/workers.py
+      hash: md5
+      md5: b1f43f70a990c6814549a2e0cc8dd81c
+      size: 1805
+    params:
+      params.yaml:
+        corpus:
+          fields:
+          - ai
+          - cogpsych
+          - communication
+          - compsci
+          - hci
+          - histphilsci
+          - linguistics
+          - neuroscience
+          - philosophy
+          - psychology
+          - sociology
+          decades:
+          - 1950
+          - 1960
+          - 1970
+          - 1980
+          - 1990
+          - 2000
+          - 2010
+          - 2020
+        count_word_repairs:
+          glued_words:
+            apart_margin: 10
+            opener_count: 30
+            opener_min_left_letters: 4
+            opener_min_right_letters: 2
+          split_words:
+            min_word_count: 20
+            join_margin: 10
+            hyphen_margin: 100
+    outs:
+    - path: data/interim/glued_words.parquet
+      hash: md5
+      md5: f3bbd8d22739b084a062ba4371f2fa54
+      size: 946995
+    - path: data/interim/split_words.parquet
+      hash: md5
+      md5: 70a3616732f2a3b25b39530607317b55
+      size: 389520
