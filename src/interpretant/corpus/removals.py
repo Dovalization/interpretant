@@ -10,6 +10,7 @@ is never edited (2.2).
 
 from __future__ import annotations
 
+import itertools
 import re
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
@@ -129,11 +130,14 @@ def build_cleaning_pipeline(patterns: CleaningPatterns) -> Language:
     passed to it. A one-token pattern that pairs ``LIKE_URL`` with a regular expression on the
     text matches on the flag alone, and the filter checks the expression on those matches: spaCy's
     matcher evaluates every regular expression of a pattern on every token before its plain
-    attributes (docs/pipeline_review.md, C3); the matches are the same.
+    attributes (docs/pipeline_review.md, C3). A pattern of exact lower-case words becomes phrase
+    patterns, since an ``IN`` set is a Python call on every token (spaCy's rule-based matching
+    documentation, "Efficient phrase matching"; C9). The matches are the same.
     """
     if LEADING_LABEL not in patterns.labels:
         raise ValueError(f"the cleaning rules declare no {LEADING_LABEL!r} label")
     ruler_patterns, checked = _match_url_patterns_on_the_flag(patterns.span_ruler_patterns())
+    ruler_patterns = _match_exact_words_as_phrases(ruler_patterns)
     nlp = spacy.blank("en")
     ruler = nlp.add_pipe(
         "span_ruler",
@@ -141,6 +145,7 @@ def build_cleaning_pipeline(patterns: CleaningPatterns) -> Language:
             "spans_key": SPANS_KEY,
             "overwrite": True,
             "validate": True,
+            "phrase_matcher_attr": "LOWER",
             "spans_filter": {
                 "@misc": START_AWARE_SPANS_FILTER,
                 "start_id": START_ID,
@@ -153,6 +158,37 @@ def build_cleaning_pipeline(patterns: CleaningPatterns) -> Language:
         raise TypeError(f"expected a SpanRuler, got {type(ruler).__name__}")
     ruler.add_patterns(ruler_patterns)
     return nlp
+
+
+def _match_exact_words_as_phrases(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """The patterns with each one of exact lower-case words (or sets of them) as phrase patterns.
+
+    One phrase per combination of the words; a word with a hyphen stays a token pattern, since
+    the blank pipeline's tokenizer, which reads the phrases, splits hyphens and the pass does not.
+    """
+    rewritten = []
+    for entry in entries:
+        choices = [_lower_words(token) for token in entry["pattern"]]
+        if not all(choices):
+            rewritten.append(entry)
+            continue
+        rewritten.extend(
+            {**entry, "pattern": " ".join(words)} for words in itertools.product(*choices)
+        )
+    return rewritten
+
+
+def _lower_words(token: dict[str, Any]) -> list[str]:
+    """The words a token pattern accepts if it tests only exact lower-case words, else none."""
+    if set(token) != {"LOWER"}:
+        return []
+    value = token["LOWER"]
+    words = [value] if isinstance(value, str) else None
+    if isinstance(value, dict) and set(value) == {"IN"}:
+        words = list(value["IN"])
+    if not words or any("-" in word or " " in word for word in words):
+        return []
+    return words
 
 
 def _match_url_patterns_on_the_flag(
