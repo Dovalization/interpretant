@@ -101,3 +101,22 @@ longest stage. Three problems follow:
 Foreign sentences stay as written; the 462 content-word-plus-*a* errors and the foreign keep-list
 entries go; language data is available to every stage. A run takes about a minute longer (about
 22 minutes): the early stage costs a little more than today's late one.
+
+## Keep or revert (written 2026-11-16, before the third check run's results)
+
+The third check run counts the word repairs over every sentence, as run 8 did, and applies them
+only to English sentences. The change stays only if it is objectively better than run 8's
+pipeline (the author):
+
+- **Population:** abstracts kept by cleaning in both run 8 and the check run whose final text
+  (the text outside the removals) differs.
+- **Sample:** 40 drawn uniformly at random with seed 20261116; all of them if there are fewer.
+- **Blind comparison:** for each, the first differing passage of both versions with context,
+  labelled A and B in an order drawn with the same seed; the author judges A better, B better
+  or no difference, without knowing which version is run 8's.
+- **Rule:** keep the change if a one-sided sign test on the samples that are not ties favours the
+  check run at p < 0.05, and the samples where run 8 is better share no systematic cause (one
+  cause in 3 or more of them). Otherwise revert to run 8's pipeline: the late language stage, no
+  guard, the kept-joined list as it is.
+- **Reported, not decisive:** the decision tables and drop verdicts against run 8, the size of
+  the population, and the abstracts whose foreign text cleaning now removes.
