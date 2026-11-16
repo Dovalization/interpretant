@@ -10,9 +10,13 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: f3f8a9e86c755efb7d0b9f14eb0b9b6a.dir
-      size: 59691
-      nfiles: 18
+      md5: 8df62931fcdead75aae16ce929584a9e.dir
+      size: 62279
+      nfiles: 19
+    - path: src/interpretant/cli/annotate_corpus.py
+      hash: md5
+      md5: 3fe89b4be4760fe801c2ba0835267d51
+      size: 2411
     - path: src/interpretant/corpus/annotation.py
       hash: md5
       md5: a852c80c75686ff84f058a40236cd711
@@ -112,17 +116,21 @@ stages:
       nfiles: 90
     - path: src/interpretant/catalog
       hash: md5
-      md5: f3f8a9e86c755efb7d0b9f14eb0b9b6a.dir
-      size: 59691
-      nfiles: 18
+      md5: 8df62931fcdead75aae16ce929584a9e.dir
+      size: 62279
+      nfiles: 19
+    - path: src/interpretant/cli/build_corpus.py
+      hash: md5
+      md5: 6c77068b4c75bacc1c14029167a0b8cd
+      size: 1769
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
       size: 1847
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
-      md5: f4a17b8fa31c6666cea4572ed76ba510
-      size: 8779
+      md5: 1608ee959caae88b72fb7692165a8bc6
+      size: 8800
     - path: src/interpretant/corpus/deduplication.py
       hash: md5
       md5: a9930b9207a2b17d26653de53a2900d6
@@ -133,8 +141,8 @@ stages:
       size: 9374
     - path: src/interpretant/corpus/record_types.py
       hash: md5
-      md5: 0af57a27edae71f165221fad3b769cf6
-      size: 7315
+      md5: f6f26fc1c80053bea94394cec5490c12
+      size: 7396
     - path: src/interpretant/corpus/removals.py
       hash: md5
       md5: 508f02adc6a782d9fa79e1c383062f13
@@ -145,8 +153,8 @@ stages:
       size: 10875
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
-      md5: e1b1a6eca9337115e3e22b1ae3b8628b
-      size: 8596
+      md5: 489e8c26c24a320dfb425aeece4455d5
+      size: 8619
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: 98807f8702604472c4c6ea00ecb1321f
@@ -221,25 +229,29 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: f3f8a9e86c755efb7d0b9f14eb0b9b6a.dir
-      size: 59691
-      nfiles: 18
+      md5: 8df62931fcdead75aae16ce929584a9e.dir
+      size: 62279
+      nfiles: 19
+    - path: src/interpretant/cli/report_corpus.py
+      hash: md5
+      md5: ce544af5d9a96d5090a2a8a5cca4c25b
+      size: 1295
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
       size: 1847
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
-      md5: f4a17b8fa31c6666cea4572ed76ba510
-      size: 8779
+      md5: 1608ee959caae88b72fb7692165a8bc6
+      size: 8800
     - path: src/interpretant/corpus/repair.py
       hash: md5
       md5: a59cf74f837451d4f20e3579bbeb72b2
       size: 10875
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
-      md5: e1b1a6eca9337115e3e22b1ae3b8628b
-      size: 8596
+      md5: 489e8c26c24a320dfb425aeece4455d5
+      size: 8619
     - path: src/interpretant/pipelines/progress.py
       hash: md5
       md5: 22394da32ea7c6b1bae98d4ea88baa5c
@@ -250,13 +262,13 @@ stages:
       size: 1724
     - path: src/interpretant/review/corpus_report.py
       hash: md5
-      md5: 073e99679c435a92571efa3df9118d97
-      size: 12895
+      md5: e74f70b4997e5f929f6de839fbc5c894
+      size: 13073
     outs:
     - path: data/processed/corpus_report.md
       hash: md5
-      md5: c831aed339106f5696f47dfa23ab4476
-      size: 21698
+      md5: 6e0afbca74cbce228bb12bbf60a952dd
+      size: 20923
     - path: metrics/corpus.json
       hash: md5
       md5: dd25060ff147a1e469bd63dc7919384a
@@ -271,9 +283,13 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: f3f8a9e86c755efb7d0b9f14eb0b9b6a.dir
-      size: 59691
-      nfiles: 18
+      md5: 8df62931fcdead75aae16ce929584a9e.dir
+      size: 62279
+      nfiles: 19
+    - path: src/interpretant/cli/detect_languages.py
+      hash: md5
+      md5: 17f06dd0f9ce451429b78de2711b5331
+      size: 1912
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -392,9 +408,13 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: f3f8a9e86c755efb7d0b9f14eb0b9b6a.dir
-      size: 59691
-      nfiles: 18
+      md5: 8df62931fcdead75aae16ce929584a9e.dir
+      size: 62279
+      nfiles: 19
+    - path: src/interpretant/cli/clean_corpus.py
+      hash: md5
+      md5: 4658e07da8e02763a170a1f4f3a5c507
+      size: 1774
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -487,17 +507,21 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: f3f8a9e86c755efb7d0b9f14eb0b9b6a.dir
-      size: 59691
-      nfiles: 18
+      md5: 8df62931fcdead75aae16ce929584a9e.dir
+      size: 62279
+      nfiles: 19
+    - path: src/interpretant/cli/build_linked_tables.py
+      hash: md5
+      md5: 74b8147ce7fd5768101db28cf43617d3
+      size: 1508
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
       size: 1847
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
-      md5: f4a17b8fa31c6666cea4572ed76ba510
-      size: 8779
+      md5: 1608ee959caae88b72fb7692165a8bc6
+      size: 8800
     - path: src/interpretant/corpus/crossref.py
       hash: md5
       md5: 3e1b9243fee4988d796ef08a56fc329d
@@ -512,8 +536,8 @@ stages:
       size: 10875
     - path: src/interpretant/corpus/work_metadata.py
       hash: md5
-      md5: e1b1a6eca9337115e3e22b1ae3b8628b
-      size: 8596
+      md5: 489e8c26c24a320dfb425aeece4455d5
+      size: 8619
     - path: src/interpretant/pipelines/build_linked_tables.py
       hash: md5
       md5: 4b1a489d906590056f5298b631b583e2
@@ -558,9 +582,13 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
-      md5: f3f8a9e86c755efb7d0b9f14eb0b9b6a.dir
-      size: 59691
-      nfiles: 18
+      md5: 8df62931fcdead75aae16ce929584a9e.dir
+      size: 62279
+      nfiles: 19
+    - path: src/interpretant/cli/count_word_repairs.py
+      hash: md5
+      md5: 63424c3f7cdce5a238cc0090da086cad
+      size: 2312
     - path: src/interpretant/corpus/dictionary.py
       hash: md5
       md5: 4f7ca84fdbd2e558bdd9edf3faf1ad6c
