@@ -145,22 +145,10 @@ of up to 300 per cell for 137 long-list words, and the word-targeted cells, all 
 version 2. Each usage's word, field, decade, year and source are in its manifest, and the settings
 that made the vectors are recorded beside them (`data/store/encoding.json`).
 
-It was encoded on a home GPU (an NVIDIA RTX 4070 SUPER, 12 GB), with the text work done on its CPU
-first (the manifest, in parallel by field). The same sentences, encoded different ways:
-
-| Setup | Sentences per second | The whole store |
-|---|---|---|
-| Laptop GPU (Apple M3, full precision) | about 20 | about 25 hours |
-| RTX 4070 SUPER, full precision | about 490 | about 60 minutes |
-| RTX 4070 SUPER, float16 autocast on its tensor cores | about 1,600 | about 20 minutes |
-
-Float16 changes the vectors very little: on 20,000 of the store's sentences, the mean cosine
-similarity with full precision is 0.9999993 and the lowest 0.99925. One store is encoded at one
-precision throughout. The gains came from the hardware and the arithmetic. Of the pipeline changes,
-batching sentences of similar length and building the next batch's token ids in worker processes
-removed idle time between batches, but added about 5%, because the GPU's arithmetic was the
-bottleneck, not the tokeniser; that was measured only after the change was made. Batching by a
-token budget and writing shards on a background thread followed for later stores.
+It was encoded on a home GPU (an NVIDIA RTX 4070 SUPER, 12 GB) with float16 autocast on its
+tensor cores; how fast each setup encodes is in `docs/performance.md`. Float16 changes the
+vectors very little: on 20,000 of the store's sentences, the mean cosine similarity with full
+precision is 0.9999993 and the lowest 0.99925. One store is encoded at one precision throughout.
 
 ## Pre-registration
 

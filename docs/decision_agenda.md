@@ -490,8 +490,8 @@ views (the full order is in step 9).
   notices as templates, 2 fragments as too short, and one letter returns from the author cap; 332
   openings *S ummary.* now read *Summary.* and leave as a label instead of a template sentence.
   Foreign pairs (*qui ne*, *com o*) are joined in text that cleaning drops or removes; spaced-out
-  OCR text is mended only in part (*underst and ing* into *understand ing*). The join takes 43 s
-  on one process over all texts. The pipeline ran under py-spy (step 9).
+  OCR text is mended only in part (*underst and ing* into *understand ing*). Its timings are in
+  `docs/performance.md`.
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
@@ -853,15 +853,12 @@ other sources, fetched the same way (by hand, once, stored beside each cell, reg
 - Crossref and NCBI both ask heavy users for a contact address; which one is used is the
   author's choice, asked before the first run.
 
-**4.9 Models and running time.** The small model (`en_core_web_sm`) for the whole corpus:
-cleaning, sentences, the static view (the last full pass, lemma votes with tagger and lemmatizer,
-read 1,274,029 abstracts, 206 million tokens, in 30 minutes on 10 CPU processes; `senter`, lingua
-and the `SpanRuler` keep it under an hour). `senter` ships disabled in the small model and is
-enabled for the pass, with abbreviation special cases (it matched the parser on the sample).
-Named entity recognition is left out of the pass (`named_entity_recognition: false` in
-`params.yaml`): nothing in cleaning reads entities, and it took about 44% of a worker's time
-(profiled 2026-11-13; on bazzite a 10,000-abstract part took 30 s instead of 44 s, and the 705,283
-abstracts about 27 minutes instead of 40). Matching recognises entities on target sentences (4.1).
+**4.9 Models.** The small model (`en_core_web_sm`) for the whole corpus: cleaning, sentences,
+the static view. `senter` ships disabled in the small model and is enabled for the pass, with
+abbreviation special cases (it matched the parser on the sample). Named entity recognition is
+left out of the pass (`named_entity_recognition: false` in `params.yaml`): nothing in cleaning
+reads entities, and it took about 44% of a worker's time. Running times are in
+`docs/performance.md`. Matching recognises entities on target sentences (4.1).
 The
 transformer model (`en_core_web_trf`) is a candidate for target sentences only, re-annotating
 tags, morphology and entities (and dependencies if step 7 needs them) within the small model's
@@ -1690,77 +1687,22 @@ which `dvc metrics diff` compares between commits; and every corpus command appe
 `metrics/runs.jsonl` (when, which commit, whether tracked files differed from it, the machine as
 system, architecture and CPU count, each stage's seconds, the headline counts). The baseline
 metrics are those of run 1, the first full build (705,283 abstracts, 653,005 kept). Run 1 has no
-record in the log: it was put together from several partial runs before the log existed. On
-bazzite (12 CPUs) its spaCy pass took about 47 minutes across restarts, and
-`build-corpus` about 4.5 minutes, of which near-duplicates took 2 min 54 s.
+record in the log: it was put together from several partial runs before the log existed. Its
+timings, and every later run's, are in `docs/performance.md`.
 
 *Stage 2 split three ways, 2026-11-13, after run 2:* `annotate_corpus` (repair, the tokenizer
 and sentence rules, the spaCy models; it writes only the `DocBin` cache, whose documents carry
 their work id in `user_data`), `detect_languages` (lingua on the cached sentences, one row per
 sentence in `data/interim/sentence_languages`) and `clean_corpus` (the `SpanRuler` patterns on a
-blank English pipeline, the removal ranges and keeping rules, the annotated table). Measured on
-bazzite: lingua is 10% of the pass (about 1.2 minutes over 10 processes as its own stage), and
-the patterns and keeping rules run at 725 cached documents a second in one process (about 1.6
-minutes over 10). A pattern or threshold change now reruns about 6–7 minutes of stages instead
-of 30, a language setting about 8. The language stage reads each part with lingua's
-multi-threaded methods (one copy of the models, every core); the cleaning stage runs its parts in
-worker processes started with `spawn`, as Polars' documentation requires; the spaCy pass still
-forks its workers through spaCy, which works but is the case that documentation warns about, to
-be measured. The
-run log records each run's peak memory (main process and largest worker, from `getrusage`). A
-catalog change that cannot affect a stage's outputs is recorded with `dvc commit <stage>`.
+blank English pipeline, the removal ranges and keeping rules, the annotated table). A pattern or
+threshold change no longer reruns the spaCy models; what each stage costs, and how each uses
+worker processes, is in `docs/performance.md`. The run log records each run's peak memory (main
+process and largest worker, from `getrusage`). A catalog change that cannot affect a stage's
+outputs is recorded with `dvc commit <stage>`.
 
-*Planned: reuse for unchanged texts, measured first (2026-11-15, the author).* A full run takes
-about 40 minutes on bazzite (run 7b: the spaCy pass 23.6, sentence languages 5.9, cleaning 4.5,
-the corpus build 3.6 with near-duplicates 2.9, the glued-word count 2.0, and the same 31-second
-metadata check in four stages), while run 7b changed 199 of 705,283 texts. Reading cached
-documents runs at 7,600–13,000 a second and writing them at 2,500–4,400 a second on one process,
-so copying unchanged documents costs under a minute over 10 processes. The plan: each cached
-document keyed by the hash of its repaired text and a fingerprint of the pipeline (spaCy and
-model versions, the annotation code, the stage's settings), and only changed texts annotated,
-as the vector store reuses vectors by text hash (below); the same for sentence languages; one
-metadata check; the repaired texts written once for the count and the pass. A full pass without
-reuse must give identical documents. Known non-English works need no rule of their own: their
-documents are reused while their text is unchanged, and no language decision is frozen. The
-next pass (run 7c) is profiled first, with py-spy launched as the run's parent (every process,
-20 samples a second, non-blocking; bazzite lets it trace only processes it starts) and a
-per-process CPU sampler, and the plan follows the profile. Two passes remain in the cleaning
-runs (7c and 8), so the reuse itself waits until more passes are expected.
-
-*Profile of run 7c (2026-11-15, py-spy on every process, 236,841 samples).* The spaCy pass's
-main process is its limit: 1,507 CPU seconds in a pass of 1,482 (100% of a core, matching the
-CPU snapshots), while the ten workers used 7,663 together, about half of each core. In the main
-process, tokenizing takes 22%: with `as_tuples=True`, spaCy 3.8's `Language.pipe` makes every
-`Doc` in the calling process and `_multiprocessing_pipe` sends it packed with `Doc.to_bytes`
-(spaCy's source), so the workers never tokenize; plain texts would be sent as they are. Repair
-takes 21.5%, unpacking the workers' documents (`Doc.from_bytes`) about 12%, the `DocBin` cache
-about 20%, the glued-word split and the join 4%. In the workers, tok2vec takes 39% and the
-attribute ruler 30%, a cost not yet understood. The srsly registry lookups that the pass caches
-(2026-11-13) still cost 28% of the language stage and 10% of the cleaning workers, which do not
-cache them; the language stage spends 54% of its time loading cached documents, in one process;
-near-duplicates spend 29% of the corpus build creating each of 645,542 MinHashes' permutations
-again (datasketch takes `permutations` from another MinHash, or `MinHash.bulk`, "for faster
-initialization") and 17% in its default SHA-1 hash; the repeated metadata check is pydantic's
-JSON validation and gzip. Proposed changes, by measured share: send plain texts and attach the
-work ids in order, so tokenizing moves to the workers; write the repaired texts once in
-`count_word_repairs` (already parallel, 47 s) for the pass to read; cache the registry lookups
-wherever cached documents are read; reuse MinHash permutations; one metadata check; then the
-reuse of unchanged documents.
-
-*Done and checked, 2026-11-16 (the author):* the registry cache wherever the annotation cache is
-read, one MinHash's permutations for every signature, the texts repaired once by
-`count_word_repairs` (`data/interim/repaired_texts`, kept out of the DVC store) and sent to
-spaCy as plain strings, and the metadata checked from its ids with Polars (3 s for the corpus
-instead of about 30). A full profiled run gave every stage's outputs with the same hashes as run
-7c's in 28.9 minutes instead of 42.4: the pass 942 s (1,482), sentence languages 246 (347),
-cleaning 214 (272), the corpus build 157 (219), the word repairs 145 (155). The pass's main
-process is now 69% busy and the workers 84%, so the workers are its limit; in them the attribute
-ruler still takes 30%, the next thing to study. The corpus build now spends 24% in datasketch's
-default SHA-1 hash; a faster hash would change the signatures, so it needs its own check. The
-corpus build and the report still validate the full metadata records (28 and 24 s).
-
-*From 2026-11-16 the speed work, its full runs and its open candidates are recorded in
-[`docs/performance.md`](performance.md).*
+*Speed work.* Run 7b's timings, the plan to reuse unchanged documents (2026-11-15, the author),
+run 7c's profile, the changes made since and the open candidates are recorded in
+[`docs/performance.md`](performance.md).
 
 **DVC** for pipelines and provenance, after comparing it with Snakemake (runs steps, no data
 versioning or lock file), Kedro (a full framework to restructure around), Hydra (configuration
@@ -1937,10 +1879,6 @@ The sized tasks come to about 4 hours; three are not yet sized.
 - [ ] Push: the local commits wait for the author's go.
 - [ ] Devlog 07: waiting for the author's review.
 - [ ] bazzite's copy of the repository: behind the Mac; sync before any GPU run.
-- [ ] Speed up `detect-languages` (5 min 30 s in run 3, against about 1 min hoped for): only
-  lingua's own calls run in parallel; loading each part's documents from the cache and walking
-  their sentences happens on one core. Overlap the loading with lingua's calls, or load parts
-  in worker processes and keep lingua's batches in the main one.
 - [ ] Progress lines show "0/s" for stages that finish fewer than one item a second (the
   language and cleaning stages count parts): show decimals, or items a minute, there.
 - [ ] Docs pass: go through the 23 documents in `docs/`, merge what overlaps, retire what is no
