@@ -397,3 +397,20 @@ These extend proposals C and D: **C7**, one worker pool per stage and lighter wo
 **C8**, the sentence rules in one array write (33); **C9**, phrase patterns and full-text regexes in
 cleaning (34, 35, beside C3); **C10**, the garbage collector frozen around the LSH loop (36); **D**
 gains 29, 30, 31 and 37.
+
+## Results so far (2026-11-17)
+
+Each change judged as its proposal says; estimates set against what was measured.
+
+| Proposal | Commit | Result |
+|---|---|---|
+| A1 run comparison by git revision | `d800433d` | Reproduced the one-off scripts' finding (48 kept abstracts with a different final text at the build level, 49 at the cleaning level; 3 decisions of run 8's rule) in 11 s. Kept. |
+| B4 pins, explicit order, null spans | `f82a66f3` | Every data output byte-identical (record `c8b8587`); no tie reordered the report. Kept. |
+| B5 command modules as dependencies | `2603c585` | Same run; the params test now checks each stage. Kept. |
+| B1 rest-of-sentence end | `22ab0351` | Every output identical (record `fe11d90`): no copyright or footer match in the corpus crosses a sentence start. Kept as right by design; no effect on the data. |
+| C1 narrow imports | `a4f0b826` | Outputs identical. Replaying the 80 commits since 2026-11-13: full reruns 43 → 24, stage-minutes triggered 1,142 → 981 (14%), about a third of the estimate; `catalog/config.py` causes 19 of the 24 (a follow-up, C1b: a catalog configuration that adding a dataset does not change). Kept. |
+| C2 lingua once per sentence | `251eb07c` | Sentence languages byte-identical; the language stage 121 s → 116 s, far less than the test's halving of lingua's time: reading the DocBins is most of the stage (C5). Kept. |
+| B2 close calls and unscored sentences | `631fb445` | Measured before changing: of 1,482 close calls in kept abstracts, the 484 of seven words or more are nearly all foreign and the 998 shorter ones mostly names and citation pieces, so returning `und` would keep both: that half dropped. The 196 sentences no candidate scores keep being removed, labelled `mis` instead of `ar`. In the next run. |
+| B3 lower-case abbreviations | `87f83624` | About 100 kept abstracts had a sentence cut after "fig.", "sect.", "Pp." and the like; "Al." left out (OCR for "AI." at a real sentence end). In the next run. |
+| C8 sentence rules in one array write | `8339af31` | Old and new rules on all 705,283 repaired texts: 0 differ, 3.3 times faster (624 to 190 CPU s). In the next run. |
+| C10 garbage collector paused for the LSH loop | `32710b37` | In the next run (outputs cannot change). |
