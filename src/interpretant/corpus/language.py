@@ -150,7 +150,7 @@ def detect_sentence_languages(
             if not is_english or _is_worth_checking(text):
                 checks.append((doc_index, sentence_index, text, is_english))
         labels.append(row)
-    detected = _detect_texts([text for _, _, text, _ in checks], detector)
+    detected = detect_texts([text for _, _, text, _ in checks], detector)
     for (doc_index, sentence_index, text, in_english), language in zip(
         checks, detected, strict=True
     ):
@@ -160,8 +160,13 @@ def detect_sentence_languages(
     return labels
 
 
-def _detect_texts(texts: list[str], detector: LanguageDetector) -> list[SentenceLanguage]:
-    """Each text's language and lingua's confidence in it; close calls as the docstring above."""
+def detect_texts(texts: list[str], detector: LanguageDetector) -> list[SentenceLanguage]:
+    """Each text's language and lingua's confidence in it, each read on its own.
+
+    When a text's two likeliest languages are closer than the detector's minimum relative
+    distance, it is undetermined if one of them is English and takes the likelier otherwise
+    (``detect_sentence_languages``).
+    """
     results = [_NO_LANGUAGE] * len(texts)
     found_by_code: dict[str, tuple[LinguaLanguage, list[int]]] = {}
     undecided: list[int] = []
@@ -217,6 +222,33 @@ def _top_language(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
         return _NO_LANGUAGE
     best = values[0]
     return _sentence_language_of(best.language, best.value)
+
+
+def languages_by_overlap(
+    sentences: Sequence[tuple[int, int]], early: Sequence[tuple[int, int, str, float]]
+) -> list[SentenceLanguage | None]:
+    """Each sentence's language from the earlier sentences it overlaps, None where they disagree.
+
+    The language stage reads sentences split before the spaCy pass (docs/plan_early_languages.md);
+    the pass's own sentences have the same boundaries in 94% of cases. A pass sentence takes the
+    one language of the earlier sentences it overlaps, undetermined ones aside, with the highest
+    confidence among them; it is undetermined when they all are or none overlaps; and None when
+    they name two languages or more (0.03% of the corpus's sentences), for lingua to read the
+    sentence itself.
+    """
+    languages: list[SentenceLanguage | None] = []
+    for start, end in sentences:
+        overlapping = [
+            (language, confidence) for s, e, language, confidence in early if s < end and e > start
+        ]
+        named = {language for language, _ in overlapping if language != UNDETERMINED}
+        if len(named) > 1:
+            languages.append(None)
+            continue
+        language = named.pop() if named else UNDETERMINED
+        confidences = [confidence for name, confidence in overlapping if name == language]
+        languages.append(SentenceLanguage(language, max(confidences, default=0.0)))
+    return languages
 
 
 def _sentence_language_of(language: LinguaLanguage, confidence: float) -> SentenceLanguage:

@@ -12,6 +12,7 @@ from interpretant.corpus.language import (
     SentenceLanguage,
     build_language_detector,
     detect_sentence_languages,
+    languages_by_overlap,
 )
 
 
@@ -118,3 +119,23 @@ def test_detect_sentence_languages_leaves_english_headings_and_references_englis
     )
     (languages,) = detect_sentence_languages([doc], detector, english_threshold=0.9)
     assert [language.language for language in languages] == ["en", "en", "en"]
+
+
+EARLY = [(0, 20, "en", 0.99), (21, 40, "de", 0.9), (41, 50, "und", 0.4), (51, 70, "en", 0.95)]
+
+
+def test_languages_by_overlap_takes_the_one_language_of_the_overlapped_sentences() -> None:
+    languages = languages_by_overlap([(0, 20), (41, 70), (45, 50)], EARLY)
+    assert languages == [
+        SentenceLanguage("en", 0.99),
+        SentenceLanguage("en", 0.95),
+        SentenceLanguage(UNDETERMINED, 0.4),
+    ]
+
+
+def test_languages_by_overlap_leaves_two_languages_to_lingua() -> None:
+    assert languages_by_overlap([(10, 30)], EARLY) == [None]
+
+
+def test_languages_by_overlap_reads_a_sentence_outside_every_early_one_as_undetermined() -> None:
+    assert languages_by_overlap([(80, 90)], EARLY) == [SentenceLanguage(UNDETERMINED, 0.0)]

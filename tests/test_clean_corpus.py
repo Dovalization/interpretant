@@ -66,7 +66,7 @@ def test_clean_corpus_refuses_a_cache_older_than_the_raw_cells(
     detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS)
     write_raw_cell(corpus_catalog_file, "compsci", 2010, [(4, SHARED, 2015), (6, SHARED, 2016)])
     with pytest.raises(ValueError, match="rerun annotate-corpus"):
-        clean_corpus(catalog, SELECTION, CLEAN_SETTINGS)
+        clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
 
 
 def test_clean_corpus_gives_the_same_rows_in_worker_processes(
@@ -75,7 +75,7 @@ def test_clean_corpus_gives_the_same_rows_in_worker_processes(
     catalog = read_catalog(corpus_catalog_file)
     result = prepare_annotated_corpus(catalog)
     alone = load_annotated_abstracts(catalog, result.parts)
-    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, process_count=2)
+    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS, process_count=2)
     in_workers = load_annotated_abstracts(catalog, result.parts)
     assert all(in_workers[part].equals(alone[part]) for part in result.parts)
 

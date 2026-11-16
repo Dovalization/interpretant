@@ -180,6 +180,7 @@ stages:
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/clean_corpus.py
       - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/detect_languages.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/workers.py
@@ -188,10 +189,11 @@ stages:
       - ${raw_abstracts.path}
       - ${work_metadata.path}
       - ${annotations.path}
-      - ${sentence_languages.path}
+      - ${repaired_sentence_languages.path}
     params:
       - corpus
       - clean_corpus
+      - detect_languages
     outs:
       - ${annotated_abstracts.path}
 

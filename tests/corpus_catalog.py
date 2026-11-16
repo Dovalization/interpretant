@@ -89,7 +89,7 @@ def prepare_annotated_corpus(
     repair_and_count(catalog, selection)
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
     detect_languages(catalog, selection, LANGUAGE_SETTINGS)
-    return clean_corpus(catalog, selection, CLEAN_SETTINGS)
+    return clean_corpus(catalog, selection, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
 
 
 def write_corpus_catalog(folder: Path) -> Path:
