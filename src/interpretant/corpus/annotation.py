@@ -36,8 +36,10 @@ from interpretant.corpus.repair import DOI_PATTERN
 # Abbreviations whose full stop would otherwise end a sentence (docs/spacy.md; "viz." to "ca."
 # added after the corpus audit, decision agenda 2.3). Special cases match their exact spelling,
 # so each form a kept abstract uses is listed: the lower-case "fig." to "eqs." and the
-# capitalised "Approx." to "Pp." ended a sentence in about 100 kept abstracts of run 8
+# capitalised "Approx." to "Ca." ended a sentence in about 100 kept abstracts of run 8
 # (docs/pipeline_review.md, B3). Not "Al.": in the corpus it is OCR for "AI." ending a sentence.
+# Not "Pp.": it heads the page counts of book-review headers, and kept with the count ("Pp. xi +
+# 264.") it escapes the template rule that removes a lone "Pp." (record f62d8c3).
 ABBREVIATIONS = (
     "cf.",
     "Cf.",
@@ -57,7 +59,6 @@ ABBREVIATIONS = (
     "viz.",
     "Viz.",
     "pp.",
-    "Pp.",
     "resp.",
     "Resp.",
     "Vol.",
