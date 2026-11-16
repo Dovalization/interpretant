@@ -159,6 +159,7 @@ stages:
       - src/interpretant/pipelines/corpus.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
       - ${record_types.path}
       - ${annotated_abstracts.path}
       - ${raw_abstracts.path}

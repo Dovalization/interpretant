@@ -6,22 +6,29 @@ MinHash and locality-sensitive hashing (``datasketch``) on word 5-shingles of th
 design's starting point; the earliest work of each group is kept and every later one is dropped
 with the work it duplicates recorded. Shingles are hashed with MurmurHash3 (``mmh3``), the faster
 hash datasketch's documentation shows in place of its default SHA-1, which took 24% of the
-corpus build.
+corpus build. Each abstract's signature depends on its text alone, so signatures are made apart
+(``minhash_signatures``, by part in worker processes) and only the comparison runs in order.
 """
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 import mmh3
+import numpy as np
 import polars as pl
-from datasketch import MinHash, MinHashLSH
+from datasketch import LeanMinHash, MinHash, MinHashLSH
 
 from interpretant.corpus.removals import Removal, kept_text
 
 NEAR_DUPLICATE = "near_duplicate"
 SHINGLE_WORDS = 5
 PERMUTATION_COUNT = 128
+# datasketch's default seed and permutation scheme, stated because a signature made apart is
+# read back with them.
+SEED = 1
+SCHEME = "affine32"
 
 
 def build_shingles(text: str, removals: Sequence[Removal]) -> set[bytes]:
@@ -40,48 +47,63 @@ def build_shingles(text: str, removals: Sequence[Removal]) -> set[bytes]:
     }
 
 
+def minhash_signatures(
+    texts: Sequence[str], removals: Sequence[Sequence[Mapping[str, Any]]]
+) -> tuple[np.ndarray, np.ndarray]:
+    """Each text's MinHash signature, a row per text, and whether the text has any shingles.
+
+    The shingles are those of the text outside its removed ranges (``build_shingles``); a text
+    without any has an unused row.
+    """
+    minhash = MinHash(
+        num_perm=PERMUTATION_COUNT, seed=SEED, hashfunc=mmh3.mmh3_32_uintdigest, scheme=SCHEME
+    )
+    signatures = np.empty((len(texts), PERMUTATION_COUNT), dtype=minhash.hashvalues.dtype)
+    has_shingles = np.zeros(len(texts), dtype=bool)
+    for row, (text, text_removals) in enumerate(zip(texts, removals, strict=True)):
+        shingles = build_shingles(text, [Removal(**removal) for removal in text_removals])
+        if not shingles:
+            continue
+        # One MinHash reset for each text: making one per text parsed its permutations again
+        # each time (29% of the corpus build before datasketch could reuse them).
+        minhash.clear()
+        minhash.update_batch(list(shingles))
+        signatures[row] = minhash.hashvalues
+        has_shingles[row] = True
+    return signatures, has_shingles
+
+
 def mark_near_duplicates(
     abstracts: pl.DataFrame,
     *,
     threshold: float,
+    signatures: Mapping[str, np.ndarray],
     advance: Callable[[int], None] | None = None,
 ) -> pl.DataFrame:
     """Drop each abstract too similar to an earlier kept one, recording that work.
 
     An abstract is a near-duplicate when its estimated Jaccard similarity to a kept abstract
     reaches ``threshold``; the kept work goes into ``duplicate_of``. Only abstracts not already
-    dropped take part. They are visited earliest first (year, then work id); each is compared
-    with the kept abstracts the LSH index proposes and, if it matches, is marked a duplicate of
-    its most similar match (the earliest on a tie); otherwise it is kept and indexed. Exact
-    duplicates are the special case of similarity 1. ``advance`` is called with 1 as each
-    abstract is visited, for a progress display.
+    dropped take part, each with its signature from ``signatures`` (``minhash_signatures``, by
+    work id; an abstract without shingles has none and is left as it is). They are visited
+    earliest first (year, then work id); each is compared with the kept abstracts the LSH index
+    proposes and, if it matches, is marked a duplicate of its most similar match (the earliest
+    on a tie); otherwise it is kept and indexed. Exact duplicates are the special case of
+    similarity 1. ``advance`` is called with 1 as each abstract is visited, for a progress
+    display.
     """
     candidates = abstracts.filter(pl.col("dropped_reason").is_null()).sort("year", "work_id")
     order = {work_id: position for position, work_id in enumerate(candidates["work_id"])}
     lsh_index = MinHashLSH(threshold=threshold, num_perm=PERMUTATION_COUNT)
-    # Every signature reuses the first MinHash's permutations and scheme, the same for one seed:
-    # made again for each abstract they took 29% of the corpus build (run 7c's profile), and
-    # datasketch takes them from another MinHash for faster initialization (with its scheme
-    # named, since version 2.0.0).
-    first = MinHash(num_perm=PERMUTATION_COUNT, hashfunc=mmh3.mmh3_32_uintdigest)
-    kept: dict[str, MinHash] = {}
+    kept: dict[str, LeanMinHash] = {}
     duplicate_of: dict[str, str] = {}
-    # Each abstract's shingles are built as it is visited and only its signature is kept: held
-    # all at once, the shingles of the whole corpus take about 15 GB.
-    rows = zip(candidates["work_id"], candidates["text"], candidates["removals"], strict=True)
-    for work_id, text, removals in rows:
+    for work_id in candidates["work_id"]:
         if advance is not None:
             advance(1)
-        shingles = build_shingles(text, [Removal(**removal) for removal in removals])
-        if not shingles:
+        signature = signatures.get(work_id)
+        if signature is None:
             continue
-        minhash = MinHash(
-            num_perm=PERMUTATION_COUNT,
-            hashfunc=mmh3.mmh3_32_uintdigest,
-            permutations=first.permutations,
-            scheme=first.scheme,
-        )
-        minhash.update_batch(list(shingles))
+        minhash = LeanMinHash(seed=SEED, hashvalues=signature, scheme=SCHEME)
         similarities = [(minhash.jaccard(kept[key]), key) for key in lsh_index.query(minhash)]
         matches = [match for match in similarities if match[0] >= threshold]
         if matches:

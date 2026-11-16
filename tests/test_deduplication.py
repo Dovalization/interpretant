@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
+import numpy as np
+import polars as pl
+
 from interpretant.catalog import RawWork
 from interpretant.corpus.deduplication import (
     NEAR_DUPLICATE,
     build_shingles,
     mark_near_duplicates,
+    minhash_signatures,
 )
 from interpretant.corpus.removals import Removal
 from interpretant.corpus.works import merge_cells
@@ -61,6 +65,21 @@ def test_build_shingles_makes_one_shingle_of_a_short_text_and_none_of_an_empty_o
     assert build_shingles("", []) == set()
 
 
+def signatures_of(table: pl.DataFrame) -> dict[str, np.ndarray]:
+    """Every row's signature by work id, as the build makes them in its workers."""
+    signatures, has_shingles = minhash_signatures(
+        table["text"].to_list(), table["removals"].to_list()
+    )
+    rows = zip(table["work_id"], signatures, has_shingles, strict=True)
+    return {work_id: signature for work_id, signature, has_any in rows if has_any}
+
+
+def test_minhash_signatures_match_for_the_same_text_and_skip_an_empty_one() -> None:
+    signatures, has_shingles = minhash_signatures([ORIGINAL, "", ORIGINAL], [[], [], []])
+    assert has_shingles.tolist() == [True, False, True]
+    assert (signatures[0] == signatures[2]).all()
+
+
 def test_mark_near_duplicates_keeps_the_earliest_and_records_it() -> None:
     table = abstracts_table(
         [
@@ -69,7 +88,7 @@ def test_mark_near_duplicates_keeps_the_earliest_and_records_it() -> None:
             abstract_row(3, [UNRELATED], year=2016),
         ]
     )
-    marked = mark_near_duplicates(table, threshold=0.8)
+    marked = mark_near_duplicates(table, threshold=0.8, signatures=signatures_of(table))
     assert dropped_reasons(marked) == {1: NEAR_DUPLICATE, 2: None, 3: None}
     assert marked["duplicate_of"].to_list() == [table["work_id"][1], None, None]
 
@@ -81,7 +100,7 @@ def test_mark_near_duplicates_ignores_abstracts_already_dropped() -> None:
             abstract_row(2, [REVISED], year=2019),
         ]
     )
-    marked = mark_near_duplicates(table, threshold=0.8)
+    marked = mark_near_duplicates(table, threshold=0.8, signatures=signatures_of(table))
     assert dropped_reasons(marked) == {1: "web_scrape", 2: None}
 
 
@@ -94,5 +113,6 @@ def test_mark_near_duplicates_compares_the_kept_text_only() -> None:
         row["removals"] = [
             {"start": footer_range["start"], "end": footer_range["end"], "reason": "footer"}
         ]
-    marked = mark_near_duplicates(abstracts_table([first, second]), threshold=0.5)
+    table = abstracts_table([first, second])
+    marked = mark_near_duplicates(table, threshold=0.5, signatures=signatures_of(table))
     assert dropped_reasons(marked) == {1: None, 2: None}

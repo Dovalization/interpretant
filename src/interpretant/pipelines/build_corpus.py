@@ -12,6 +12,7 @@ threshold never redoes the pass.
 
 from __future__ import annotations
 
+import numpy as np
 import polars as pl
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
@@ -30,7 +31,7 @@ from interpretant.corpus.cleaning import (
     mark_template_sentences,
     mark_truncated,
 )
-from interpretant.corpus.deduplication import mark_near_duplicates
+from interpretant.corpus.deduplication import mark_near_duplicates, minhash_signatures
 from interpretant.corpus.record_types import (
     decide_record_types,
     join_record_signals,
@@ -40,6 +41,7 @@ from interpretant.corpus.work_metadata import check_work_metadata, mark_metadata
 from interpretant.pipelines.corpus import CorpusResult, corpus_cells, part_name, summarise
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
+from interpretant.pipelines.workers import map_parts
 
 _PART = "part"
 _STAGING_SOURCES: tuple[StagingSource, ...] = ("openalex", "crossref", "pubmed")
@@ -61,9 +63,12 @@ def build_corpus(
     selection: CorpusSelection,
     settings: BuildCorpusSettings,
     *,
+    process_count: int = 1,
     progress: Progress = SILENT,
 ) -> CorpusResult:
     """Apply the corpus-level rules and the review flags to every annotated part, and save them.
+
+    The near-duplicate signatures are made by part in ``process_count`` worker processes.
 
     Raises:
         ValueError: if no raw cell matches the selection, or a work has no row in OpenAlex's
@@ -91,9 +96,15 @@ def build_corpus(
     table = mark_template_sentences(table, min_abstracts=settings.template_min_abstracts)
     progress.stage("repeated sentences")
     table = mark_repeated_sentences(table)
-    progress.stage("near-duplicates", total=table["dropped_reason"].null_count())
+    candidates = table.filter(pl.col("dropped_reason").is_null())
+    progress.stage("near-duplicate signatures", total=candidates.height)
+    signatures = _signatures(candidates, process_count=process_count, progress=progress)
+    progress.stage("near-duplicates", total=candidates.height)
     table = mark_near_duplicates(
-        table, threshold=settings.near_duplicate_threshold, advance=progress.advance
+        table,
+        threshold=settings.near_duplicate_threshold,
+        signatures=signatures,
+        advance=progress.advance,
     )
     progress.stage("author cap")
     table = mark_author_cap(
@@ -107,3 +118,37 @@ def build_corpus(
         save_abstracts(catalog, rows, part=part)
         progress.advance()
     return summarise(tables)
+
+
+def _signatures(
+    candidates: pl.DataFrame, *, process_count: int, progress: Progress
+) -> dict[str, np.ndarray]:
+    """Each candidate's MinHash signature by work id, made by part in worker processes."""
+    by_part = candidates.partition_by(_PART, as_dict=True, maintain_order=True)
+    inputs = {
+        str(part): (rows["work_id"].to_list(), rows["text"].to_list(), rows["removals"].to_list())
+        for (part,), rows in by_part.items()
+    }
+    results = map_parts(
+        _part_signatures,
+        inputs,
+        process_count=process_count,
+        progress=progress,
+        sizes={part: len(rows[0]) for part, rows in inputs.items()},
+    )
+    return {
+        work_id: signature
+        for (work_ids, _, _), (signatures, has_shingles) in zip(
+            inputs.values(), results.values(), strict=True
+        )
+        for work_id, signature, has_any in zip(work_ids, signatures, has_shingles, strict=True)
+        if has_any
+    }
+
+
+def _part_signatures(
+    part: str, rows: tuple[list[str], list[str], list[list[dict[str, object]]]]
+) -> tuple[np.ndarray, np.ndarray]:
+    """One part's signatures (``minhash_signatures``), in a worker process."""
+    _, texts, removals = rows
+    return minhash_signatures(texts, removals)

@@ -179,6 +179,7 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
         "record types",
         "template sentences",
         "repeated sentences",
+        "near-duplicate signatures",
         "near-duplicates",
         "author cap",
         "review flags",

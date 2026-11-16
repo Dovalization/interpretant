@@ -30,6 +30,17 @@ def test_build_corpus_applies_the_corpus_rules_and_the_review_flags(
     assert table["flags"].to_list() == [[], [], [REPOSITORY_ONLY], []]
 
 
+def test_build_corpus_gives_the_same_table_with_signatures_made_in_workers(
+    corpus_catalog_file: Path,
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    prepare_annotated_corpus(catalog)
+    build_corpus(catalog, SELECTION, BuildCorpusSettings())
+    alone = load_abstracts(catalog).collect()
+    build_corpus(catalog, SELECTION, BuildCorpusSettings(), process_count=2)
+    assert load_abstracts(catalog).collect().equals(alone)
+
+
 def test_build_corpus_names_the_parts_not_yet_annotated(corpus_catalog_file: Path) -> None:
     catalog = read_catalog(corpus_catalog_file)
     prepare_annotated_corpus(catalog, CorpusSelection(fields=("ai",), decades=(2010,)))
@@ -48,7 +59,7 @@ def test_build_corpus_command_runs_after_the_earlier_stages(corpus_catalog_file:
     ):
         earlier = runner.invoke(cli, [command, *catalog_option, *options])
         assert earlier.exit_code == 0, earlier.output
-    built = runner.invoke(cli, ["build-corpus", *catalog_option])
+    built = runner.invoke(cli, ["build-corpus", *catalog_option, "--process-count", "1"])
     assert built.exit_code == 0, built.output
     assert "5 abstracts in 3 parts" in built.output
     assert "near_duplicate" in built.output

@@ -8,6 +8,7 @@ import click
 from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
+from interpretant.cli.options import default_process_count, process_count_option
 from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_result, result_counts
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
@@ -25,7 +26,8 @@ from interpretant.pipelines.runs import record_run
     show_default=True,
     help="The catalog file naming the inputs and outputs.",
 )
-def build_corpus_command(catalog_file: Path) -> None:
+@process_count_option
+def build_corpus_command(catalog_file: Path, process_count: int | None) -> None:
     """Apply the corpus-level rules to every annotated part and write the abstracts table.
 
     Progress is shown live: a bar in a terminal, a line every half minute in a log file.
@@ -34,6 +36,12 @@ def build_corpus_command(catalog_file: Path) -> None:
     catalog = read_catalog(catalog_file)
     with LiveProgress(console) as live:
         timer = StageTimer(live)
-        result = build_corpus(catalog, CorpusSelection(), BuildCorpusSettings(), progress=timer)
+        result = build_corpus(
+            catalog,
+            CorpusSelection(),
+            BuildCorpusSettings(),
+            process_count=process_count or default_process_count(),
+            progress=timer,
+        )
     record_run(catalog, command="build-corpus", stages=timer.finish(), counts=result_counts(result))
     console.print(render_result(result))
