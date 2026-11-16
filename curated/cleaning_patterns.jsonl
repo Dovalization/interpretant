@@ -15,6 +15,10 @@
 {"label":"footer","pattern":[{"LOWER":"these"},{"LOWER":"keywords"},{"LOWER":"were"},{"LOWER":"added"},{"LOWER":"by"},{"LOWER":"machine"}]}
 {"label":"footer","pattern":[{"LOWER":"citation"},{"TEXT":":"}],"id":"start"}
 {"label":"footer","pattern":[{"LOWER":"citation"},{"TEXT":":"},{"OP":"{1,30}"},{"LOWER":"frontiers"},{"LOWER":"in"}]}
+{"label":"review_header","pattern":[{"SHAPE":{"IN":["dd","ddd","dddd"]}},{"LOWER":{"IN":["pp.","pp"]}},{"TEXT":".","OP":"?"},{"TEXT":{"IN":["$","£","DM","Price"]}}]}
+{"label":"review_header","pattern":[{"LOWER":{"REGEX":"^\\d{2,4}pp\\.?$"}},{"TEXT":".","OP":"?"},{"TEXT":{"IN":["$","£","DM","Price"]}}]}
+{"label":"review_header","pattern":[{"TEXT":{"IN":["Pp","Pp."]}},{"TEXT":".","OP":"?"},{"LOWER":{"REGEX":"^[ivxlcm]+$"}},{"TEXT":"+"},{"LIKE_NUM":true}]}
+{"label":"review_header","pattern":[{"TEXT":{"IN":["Pp","Pp."]}},{"TEXT":".","OP":"?"},{"LOWER":{"REGEX":"^[ivxlcm]+\\+\\d+$"}}]}
 {"label":"event_header","pattern":[{"TEXT":"Event"},{"TEXT":"Abstract"},{"TEXT":"Back"},{"LOWER":"to"},{"TEXT":"Event"}]}
 {"label":"copyright","pattern":[{"LOWER":"all"},{"LOWER":"rights"},{"LOWER":"reserved"}]}
 {"label":"copyright","pattern":[{"TEXT":"\u00a9"}]}
