@@ -418,12 +418,18 @@ STAMP = (
         (
             f"{ENGLISH_SENTENCE} By R. M. Williams. New York: Knopf, 1951. 545 pp. $4.50.",
             "review_header",
-            "545 pp. $4.50.",
+            "545 pp. $4.50",
         ),
         (
             f"{ENGLISH_SENTENCE} Leiden: Brill, 2003. Pp. xv+234. £15.99.",
             "review_header",
-            "Pp. xv+234.",
+            "Pp. xv+234. £15.99",
+        ),
+        (
+            f"{ENGLISH_SENTENCE} Oxford: Voltaire Foundation, 2000. 355PP £69 This is a welcome "
+            "addition to modern studies of genre in France.",
+            "review_header",
+            "355PP £69",
         ),
     ],
     ids=[
@@ -436,6 +442,7 @@ STAMP = (
         "machine keywords notice",
         "book review price",
         "book review roman pages",
+        "book review price run into the review",
     ],
 )
 def test_annotate_abstracts_removes_a_notice_and_keeps_the_text_before_it(
