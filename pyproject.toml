@@ -95,8 +95,8 @@ ignore_missing_imports = true
 # datasketch, pyalex, symspellpy, DVC.
 [[tool.mypy.overrides]]
 module = [
-    "spacy.symbols", "spacy.tokenizer", "srsly", "srsly.*", "datasketch", "pyalex", "symspellpy",
-    "dvc.*",
+    "spacy.attrs", "spacy.symbols", "spacy.tokenizer", "srsly", "srsly.*", "datasketch", "pyalex",
+    "symspellpy", "dvc.*",
 ]
 ignore_missing_imports = true
 

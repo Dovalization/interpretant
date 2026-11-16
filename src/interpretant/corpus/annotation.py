@@ -12,9 +12,11 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable, Iterator
-from typing import Any
+from typing import Any, cast
 
+import numpy as np
 import spacy
+from spacy.attrs import IS_BRACKET, IS_LEFT_PUNCT, IS_LOWER, SENT_START, SHAPE, SPACY
 from spacy.lang.char_classes import ALPHA, ALPHA_LOWER, ALPHA_UPPER, HYPHENS
 from spacy.lang.tokenizer_exceptions import URL_PATTERN
 from spacy.language import Language
@@ -25,6 +27,7 @@ from spacy.tokenizer import Tokenizer
 from spacy.tokens import Doc, Token
 from spacy.util import compile_infix_regex
 from spacy.vocab import Vocab
+from thinc.types import Ints2d
 
 from interpretant.catalog.annotations import WORK_ID, cache_serialiser_extensions
 from interpretant.corpus.attribute_rules import LOOKUP_ATTRIBUTE_RULER, LookupAttributeRuler
@@ -151,6 +154,10 @@ def _tests_dependency(rule: dict[str, Any]) -> bool:
     return any("DEP" in token for pattern in patterns for token in pattern)
 
 
+# The token attributes the sentence rules read, in the order they are unpacked, and the starts.
+_RULE_ATTRIBUTES = [ORTH, SPACY, IS_LOWER, SHAPE, IS_BRACKET, IS_LEFT_PUNCT, SENT_START]
+
+
 @Language.factory(SENTENCE_RULES, requires=["token.is_sent_start"])
 def create_sentence_rules(nlp: Language, name: str) -> SentenceRules:
     """The factory spaCy calls to add the sentence rules; the matcher needs the vocabulary."""
@@ -183,36 +190,65 @@ class SentenceRules:
     """
 
     def __init__(self, vocab: Vocab) -> None:
-        """Build the matcher for the bracket groups."""
+        """Build the matcher for the bracket groups and the hashes of sentence-final marks."""
         self.matcher = Matcher(vocab, validate=True)
         self.matcher.add("bracket_group", _BRACKET_GROUPS)
+        self.strings = vocab.strings
+        self.final_marks = np.array([vocab.strings.add(mark) for mark in _SENTENCE_FINAL])
+        self.lowercase_shapes: dict[int, bool] = {}
 
     def __call__(self, doc: Doc) -> Doc:
-        """Set the sentence starts the rules decide, leaving the rest to ``senter``."""
-        for token in _sentence_starts_after_footnotes(doc):
-            token.is_sent_start = True
+        """Set the sentence starts the rules decide, leaving the rest to ``senter``.
+
+        The starts are read and written once as an array (``Doc.to_array``, ``Doc.from_array``):
+        setting ``Token.is_sent_start`` one token at a time made spaCy check the whole document
+        for a parse at every token. A start the footnote rule sets is undone where a later rule
+        says no sentence starts; 1 marks a start, -1 no start, 0 leaves it to ``senter``.
+        """
+        if len(doc) < 2:
+            return doc
+        orth, space_after, is_lower, shape, is_bracket, is_left_punct, sent_start = doc.to_array(
+            _RULE_ATTRIBUTES
+        ).T
+        starts = sent_start.view(np.int64).copy()
+        is_final = np.isin(orth, self.final_marks)
+        for index in np.flatnonzero(is_final[:-1] & (space_after[:-1] == 0)):
+            for token in _sentence_start_after_footnote(doc[int(index)]):
+                starts[token.i] = 1
         for _, start, end in self.matcher(doc):
             group = doc[start:end]
-            if group.end_char - group.start_char > _BRACKET_GROUP_CHARACTERS:
-                continue
-            for token in group[1:]:
-                token.is_sent_start = False
-        for token in doc[1:]:
-            if _is_opening_bracket(token):
-                _join_opening_bracket(token)
-            elif _is_lowercase_word(token):
-                token.is_sent_start = False
+            if group.end_char - group.start_char <= _BRACKET_GROUP_CHARACTERS:
+                starts[start + 1 : end] = -1
+        opening = (is_bracket == 1) & (is_left_punct == 1)
+        opening[0] = False
+        brackets = np.flatnonzero(opening)
+        following = brackets + 1
+        starts[following[following < len(doc)]] = -1
+        starts[brackets[~is_final[brackets - 1]]] = -1
+        lowercase = (is_lower == 1) & ~opening
+        lowercase[0] = False
+        if lowercase.any():
+            shapes, positions = np.unique(shape, return_inverse=True)
+            word_shapes = np.array([self._is_word_shape(int(value)) for value in shapes])
+            starts[lowercase & word_shapes[positions]] = -1
+        doc.from_array([SENT_START], cast(Ints2d, starts.view(np.uint64).reshape(-1, 1)))
         return doc
 
+    def _is_word_shape(self, shape: int) -> bool:
+        """Whether a word shape starts with a lowercase letter and holds no digit ("mRNA" no)."""
+        known = self.lowercase_shapes.get(shape)
+        if known is None:
+            text = self.strings[shape]
+            known = text[:1] == "x" and "d" not in text
+            self.lowercase_shapes[shape] = known
+        return known
 
-def _sentence_starts_after_footnotes(doc: Doc) -> Iterator[Token]:
-    """The first words of sentences after a footnote number glued to their stop ("weeks.4 Just")."""
-    for token in doc[:-1]:
-        if token.text not in _SENTENCE_FINAL or token.whitespace_:
-            continue
-        following = token.nbor()
-        if _is_footnote_number(following) and _ends_in_lowercase_word(token):
-            yield from _title_after_footnote(following)
+
+def _sentence_start_after_footnote(punctuation: Token) -> Iterator[Token]:
+    """The first word of a sentence after a footnote number glued to the stop ("weeks.4 Just")."""
+    following = punctuation.nbor()
+    if _is_footnote_number(following) and _ends_in_lowercase_word(punctuation):
+        yield from _title_after_footnote(following)
 
 
 def _is_footnote_number(token: Token) -> bool:
@@ -233,23 +269,6 @@ def _title_after_footnote(number: Token) -> Iterator[Token]:
         after += 1
     if after < len(doc) and doc[after - 1].whitespace_ and _SENTENCE_OPENING.match(doc[after].text):
         yield doc[after]
-
-
-def _is_opening_bracket(token: Token) -> bool:
-    return token.is_bracket and token.is_left_punct
-
-
-def _join_opening_bracket(bracket: Token) -> None:
-    doc = bracket.doc
-    if bracket.i + 1 < len(doc):
-        doc[bracket.i + 1].is_sent_start = False
-    if doc[bracket.i - 1].text not in _SENTENCE_FINAL:
-        bracket.is_sent_start = False
-
-
-def _is_lowercase_word(token: Token) -> bool:
-    shape = token.shape_
-    return token.is_lower and shape[:1] == "x" and "d" not in shape
 
 
 def annotate_texts(
