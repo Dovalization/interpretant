@@ -282,7 +282,7 @@ views (the full order is in step 9).
   7. glued words split (moved up from the word-repair step on 2026-11-15, the author): a
      lower-case letter run straight into a capital where both parts are words (*AbstractThe*,
      *ResultsThe*, *ObjectiveTo*, *ofThe*, *NewYork*, *To the EditorWe*); joins in lower case
-     (*ofthe*, *inthe*) follow as run 7c, since there the split point has to be searched and
+     (*ofthe*, *inthe*) follow as run 8, since there the split point has to be searched and
      pairs such as *a broad* and *abroad* show the risk. On run 6c's kept works, 195,655 words
      hold a lower-case letter
      before a capital, in 65,890 works, most of them names and terms written that way (*mRNA*,
@@ -316,13 +316,39 @@ views (the full order is in step 9).
      about 20 more hold names that lost their ampersand), the web-address end fix (run 4, below)
      and DOIs read as addresses, so no split or added space falls inside one. Each changes only
      works holding its own pattern, so their effects are told apart by pattern in the diff, with
-     no review sample. Run 7c then splits the joins in lower case from their own counts and
-     sample, reading the repaired text;
-  8. split words joined (moved up with run 7): words broken by a space or a line-break hyphen
-     (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept records in run 2,
-     4.1% of the 1950s), joined where the corpus writes the joined form far more often than
-     the parts in sequence, from the same counts, since a rule without them cannot tell *a void*
-     from *avoid*. Reruns the spaCy pass;
+     no review sample. Run 7c joins split words (moved before the joins in lower case on
+     2026-11-15, the author, since a split in lower case first cuts fragments of broken words
+     that the join could then not mend: *representa-tions* into *represent a-tions*,
+     *considera tions* into *consider a tions*; 49 words, 174 uses): words broken by a space or
+     a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
+     records in run 2, 4.1% of the 1950s), joined where the corpus writes the joined form far
+     more often than the parts in sequence, from the same counts, since a rule without them
+     cannot tell *a void* from *avoid*. Reruns the spaCy pass, the first pass profiled (step 9);
+  8. joins in lower case split (decided 2026-11-15, the author, after a survey of every word
+     form the lemma index does not know, with samples read on the text that survives cleaning):
+     a lower-case word the index does not know that splits into two known words, the first of
+     two letters or more, which the corpus writes apart at least 10 times as often as joined,
+     is split with the separator the corpus uses more, a space or a hyphen (*ofthe* into *of
+     the*, *socalled* into *so-called*, *realtime* into *real-time*): 33,226 surviving uses with
+     a function word (37 of 40 sampled right) and 13,610 of two content words (40 of 40; the
+     corpus writes them apart, mostly hyphenated, while solid compounds such as *login* fall
+     below the margin). In a text where that rule splits at least two words (4,737 works,
+     mostly OCR text), three more patterns apply: glue of three or more words, split by
+     symspellpy's `word_segmentation` on the corpus's word counts with spelling correction
+     off, every neighbouring pair written apart 10 times as often and every part of one or two
+     letters a function word (*oftheproposed*; 2,844 uses, 40 of 40); *a* and a word
+     (*asubstantial*; 597, 36 of 40); and capitalised glue, the capital kept on the first part
+     (*Thestudy*, *Bulgariaand*; 1,971, 39 of 40). Outside such texts these patterns mostly
+     hit real words, foreign words and names (*histotechnology*, *aspecific*, *Hasan*).
+     Margins of 3 to 10 times are mostly real words or French (*login*, *frontend*, *soit*; 9
+     of 40), so 10 stays. Nothing right after a backslash is split (LaTeX's `\forall`); the
+     curated list keeps *inline*, *oris* (*orbicularis oris*), *ordo*, *ita*, *partis*,
+     *thema* and *borna* joined, each with its evidence; splits in foreign text are accepted,
+     since that text is dropped or removed (556 of the main rule's uses in kept works). spaCy
+     has no component for this, and the word-frequency table its documentation names
+     (`lexeme_prob` in `spacy-lookups-data`) does not name its source, so the counts are the
+     corpus's own and the dictionary is the lemma index that ships with `en_core_web_sm`.
+     Reruns the spaCy pass;
   9. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
      1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
@@ -441,7 +467,7 @@ views (the full order is in step 9).
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
   and section headings run into the first word, *IntroductionThe*, *Author SummaryThe*, 548 kept
   works in run 4), both from a word list counted over the corpus itself, since a rule without one
-  cannot tell *a void* from *avoid*. Moved up on 2026-11-15 as runs 7 and 8 of the cleaning runs
+  cannot tell *a void* from *avoid*. Moved up on 2026-11-15 as runs 7, 7c and 8 of the cleaning runs
   above.
 - *Sample audit first:* the old regexes and the new patterns run side by side and must catch the
   same abstracts before the regexes are deleted, apart from deliberate fixes (the exam-spam
@@ -1645,6 +1671,23 @@ forks its workers through spaCy, which works but is the case that documentation 
 be measured. The
 run log records each run's peak memory (main process and largest worker, from `getrusage`). A
 catalog change that cannot affect a stage's outputs is recorded with `dvc commit <stage>`.
+
+*Planned: reuse for unchanged texts, measured first (2026-11-15, the author).* A full run takes
+about 40 minutes on bazzite (run 7b: the spaCy pass 23.6, sentence languages 5.9, cleaning 4.5,
+the corpus build 3.6 with near-duplicates 2.9, the glued-word count 2.0, and the same 31-second
+metadata check in four stages), while run 7b changed 199 of 705,283 texts. Reading cached
+documents runs at 7,600–13,000 a second and writing them at 2,500–4,400 a second on one process,
+so copying unchanged documents costs under a minute over 10 processes. The plan: each cached
+document keyed by the hash of its repaired text and a fingerprint of the pipeline (spaCy and
+model versions, the annotation code, the stage's settings), and only changed texts annotated,
+as the vector store reuses vectors by text hash (below); the same for sentence languages; one
+metadata check; the repaired texts written once for the count and the pass. A full pass without
+reuse must give identical documents. Known non-English works need no rule of their own: their
+documents are reused while their text is unchanged, and no language decision is frozen. The
+next pass (run 7c) is profiled first, with py-spy launched as the run's parent (every process,
+20 samples a second, non-blocking; bazzite lets it trace only processes it starts) and a
+per-process CPU sampler, and the plan follows the profile. Two passes remain in the cleaning
+runs (7c and 8), so the reuse itself waits until more passes are expected.
 
 **DVC** for pipelines and provenance, after comparing it with Snakemake (runs steps, no data
 versioning or lock file), Kedro (a full framework to restructure around), Hydra (configuration
