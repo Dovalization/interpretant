@@ -75,6 +75,14 @@ labels:
   # judged abstracts holds one, and agent judges calibrated on run 3's verdicts found no real
   # abstract and no lost prose in 30 sampled works of each.
   citation_line: abstract_or_sentence
+  # A library catalogue's thesis notes at the start of the record, "Thesis (M.A.)--Georgetown
+  # University, 2009.;", with an "Includes bibliographical references" or "Advisor:" note that
+  # follows them (start only). Removed rather than dropped: what is left is kept if it is an
+  # abstract and falls to too_short if nothing is. Added 2026-11-16 (run 9): of 339 kept works
+  # opening with such notes in the build of record 2e20238, 296 had fewer than 10 words left;
+  # dropping all of them would have dropped real abstracts (2 of 30 sampled), removing the notes
+  # lost no prose in 30 sampled works (calibrated agent judges).
+  thesis_notes: rest_of_sentence
   # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
   # alone: social media are a research topic. "No Access" glued to the journal name
   # ("No AccessJournal of Speech...") was added on 2026-11-13: 547 ASHA pages, title, authors,

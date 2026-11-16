@@ -204,6 +204,10 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
             "Abstract: Letter from Charles Darwin to Joseph Hooker, 1858, on the species question.",
             "catalogue_record",
         ),
+        (
+            "Thesis (Ph.D.)--Massachusetts Institute of Technology, Dept. of Physics, 1980.",
+            "too_short",
+        ),
         ("cafÃ© society in the 1920s and after the war.", "mojibake"),
         ("Abstract: Short note.", "too_short"),
         (f"{GERMAN_SENTENCE} {ENGLISH_SENTENCE[:30]}.", "not_english"),
@@ -230,6 +234,7 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         "letter opening to the editor in brackets",
         "catalogue letter that also holds to the editor",
         "catalogue letter after an abstract label",
+        "thesis notes alone",
         "mojibake",
         "too short",
         "mostly another language",
@@ -277,6 +282,7 @@ def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
         "This paper concentrates on two actual questions of nerve growth factor research.",
         "No accessible records of the dialect survive from before the war.",
         "The first survey of the dialect (1985). A second one followed a decade later.",
+        "The thesis (Ph.D. work by the author) argues that the dialect survived the war.",
     ],
     ids=[
         "letter mid-sentence",
@@ -286,6 +292,7 @@ def test_annotate_abstracts_keeps_texts_that_only_mention_letters(
         "actual questions meaning current ones",
         "no accessible at the start",
         "a bracketed year not at the start",
+        "a thesis mentioned after the first word",
     ],
 )
 def test_annotate_abstracts_keeps_look_alikes_of_the_rules(
@@ -385,6 +392,16 @@ def test_annotate_abstracts_removes_a_citation_line_after_real_prose(
     citation = "Child Development, Vol. 55, No. 4 (Aug., 1984), pp. 1479-1485."
     row = annotate(f"{ENGLISH_SENTENCE} " * 4 + citation, nlp, patterns)
     assert removed_texts(row) == {"citation_line": [citation]}
+    assert row.dropped_reason is None
+
+
+def test_annotate_abstracts_removes_thesis_notes_and_keeps_the_abstract_after_them(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    notes = "Thesis (M.A.)--Georgetown University, 2009.; Includes bibliographical references."
+    abstract = "This study reads the cyborg of science fiction film as a figure of identity."
+    row = annotate(f"{notes} {abstract}", nlp, patterns)
+    assert removed_texts(row) == {"thesis_notes": [notes]}
     assert row.dropped_reason is None
 
 
