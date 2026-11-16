@@ -469,6 +469,29 @@ views (the full order is in step 9).
   glued word opened an address (*TheDial.world*), and an error in the pass's input stream left
   spaCy's worker processes blocked (spaCy 3.8 joins them while they still send) instead of
   raising. Fixed, and repair with the split now runs over every raw text before a pass.
+- *Run 7c (2026-11-15)*, words broken by a space or a line-end hyphen joined before the spaCy
+  pass: 639,909 kept (18 fewer than run 7b). The glued-word stage became `count_word_repairs`,
+  which repairs the texts once and decides each repair in turn on the text the earlier ones
+  produce. It cuts each word the corpus writes at least 20 times into two pieces that occur as
+  words, at least one not a word spaCy knows (its stop words and the lemma index, through the
+  rule lemmatizer: `corpus/dictionary.py`), and counts each cut broken by a space, by a hyphen
+  and a space, and by a hyphen: 24,862 breaks. The margins held in the review: a spaced break
+  joins when the word is written whole 10 times as often (23,664 breaks; 58 of 60 sampled joins
+  right after a space, 40 of 40 after a hyphen and a space), a hyphen alone at 100 times and only
+  when its second piece is not a word (10,842 breaks; 40 of 40); between the two margins the
+  hyphen-only breaks are real hyphenated words (*GABA-ergic*, *co-ordinator*). The review found
+  three kinds of false join, fixed before the run: a piece touching a digit (*1st and 3rd*, 122
+  joins), a name before *et al.* (*Bull et al.*, 27 joins), and two real phrases whose second
+  word the lemma index lacks, kept apart by a curated list (`curated/kept_apart_words.yaml`: *a
+  phasic*, all 29 kept works; *in formants*, 53 of 55). Two guards from the counts alone (a
+  piece's uses beyond its breaks, as a share of the whole word's or of its own) were tried and
+  dropped: they kept apart more real breaks (*search ing*, *com-munications*, *fro m*) than false
+  joins. 17,019 texts changed (15,834 kept): 14 works drop as near-duplicates of a twin, 3 ERIC
+  notices as templates, 2 fragments as too short, and one letter returns from the author cap; 332
+  openings *S ummary.* now read *Summary.* and leave as a label instead of a template sentence.
+  Foreign pairs (*qui ne*, *com o*) are joined in text that cleaning drops or removes; spaced-out
+  OCR text is mended only in part (*underst and ing* into *understand ing*). The join takes 43 s
+  on one process over all texts. The pipeline ran under py-spy (step 9).
 - *Planned: a word-repair step* (after run 3, its own design): joining words split by a space or
   a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
   records in run 2, 4.1% of the 1950s) and splitting glued words (*ofthe*, *inthe*; about 9,800;
@@ -1703,6 +1726,26 @@ next pass (run 7c) is profiled first, with py-spy launched as the run's parent (
 20 samples a second, non-blocking; bazzite lets it trace only processes it starts) and a
 per-process CPU sampler, and the plan follows the profile. Two passes remain in the cleaning
 runs (7c and 8), so the reuse itself waits until more passes are expected.
+
+*Profile of run 7c (2026-11-15, py-spy on every process, 236,841 samples).* The spaCy pass's
+main process is its limit: 1,507 CPU seconds in a pass of 1,482 (100% of a core, matching the
+CPU snapshots), while the ten workers used 7,663 together, about half of each core. In the main
+process, tokenizing takes 22%: with `as_tuples=True`, spaCy 3.8's `Language.pipe` makes every
+`Doc` in the calling process and `_multiprocessing_pipe` sends it packed with `Doc.to_bytes`
+(spaCy's source), so the workers never tokenize; plain texts would be sent as they are. Repair
+takes 21.5%, unpacking the workers' documents (`Doc.from_bytes`) about 12%, the `DocBin` cache
+about 20%, the glued-word split and the join 4%. In the workers, tok2vec takes 39% and the
+attribute ruler 30%, a cost not yet understood. The srsly registry lookups that the pass caches
+(2026-11-13) still cost 28% of the language stage and 10% of the cleaning workers, which do not
+cache them; the language stage spends 54% of its time loading cached documents, in one process;
+near-duplicates spend 29% of the corpus build creating each of 645,542 MinHashes' permutations
+again (datasketch takes `permutations` from another MinHash, or `MinHash.bulk`, "for faster
+initialization") and 17% in its default SHA-1 hash; the repeated metadata check is pydantic's
+JSON validation and gzip. Proposed changes, by measured share: send plain texts and attach the
+work ids in order, so tokenizing moves to the workers; write the repaired texts once in
+`count_word_repairs` (already parallel, 47 s) for the pass to read; cache the registry lookups
+wherever cached documents are read; reuse MinHash permutations; one metadata check; then the
+reuse of unchanged documents.
 
 **DVC** for pipelines and provenance, after comparing it with Snakemake (runs steps, no data
 versioning or lock file), Kedro (a full framework to restructure around), Hydra (configuration
