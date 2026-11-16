@@ -80,6 +80,11 @@ from interpretant.catalog.reports import (
     save_corpus_metrics,
     save_corpus_report,
 )
+from interpretant.catalog.revisions import (
+    DECISION_TABLES,
+    load_abstracts_at,
+    load_decision_tables_at,
+)
 from interpretant.catalog.schemas import (
     ABSTRACTS_COLUMNS,
     ABSTRACTS_SCHEMA,
@@ -101,6 +106,7 @@ __all__ = [
     "ABSTRACTS_SCHEMA",
     "CATALOG_FILE",
     "CROSSREF_WORKS_COLUMNS",
+    "DECISION_TABLES",
     "GLUED_WORDS_SCHEMA",
     "LINKED_SOURCES",
     "LOWER_GLUED_WORDS_SCHEMA",
@@ -138,11 +144,13 @@ __all__ = [
     "fetched_work_ids",
     "list_raw_cells",
     "load_abstracts",
+    "load_abstracts_at",
     "load_abstracts_from",
     "load_annotated_abstracts",
     "load_annotations",
     "load_cleaning_patterns",
     "load_corpus_metrics",
+    "load_decision_tables_at",
     "load_doi_corrections",
     "load_glued_words",
     "load_kept_apart_words",
