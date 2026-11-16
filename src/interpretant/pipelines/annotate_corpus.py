@@ -11,19 +11,24 @@ this stage. A run may annotate some parts only.
 
 from __future__ import annotations
 
+import hashlib
+import inspect
 from collections.abc import Collection, Iterator
 from dataclasses import dataclass
 from functools import cache
+from importlib import metadata
+from pathlib import Path
 
 import polars as pl
 from pydantic_settings import SettingsConfigDict
 from spacy.language import Language
 from spacy.tokens import Doc
 
-from interpretant.catalog.annotations import WORK_ID, save_annotations
+from interpretant.catalog.annotations import TEXT_KEY, WORK_ID, load_annotations, save_annotations
 from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.repaired_texts import count_repaired_texts, load_repaired_texts
 from interpretant.catalog.sentences import SENTENCES_SCHEMA, save_sentences
+from interpretant.corpus import annotation, attribute_rules, repair
 from interpretant.corpus.annotation import annotate_texts, build_pipeline
 from interpretant.pipelines.corpus import CorpusResult, corpus_cells, part_name
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
@@ -73,7 +78,12 @@ def annotate_corpus(
     progress.stage("counting the repaired texts")
     sizes = {part: count_repaired_texts(catalog, part) for part in chosen}
     progress.stage("spaCy pass", total=sum(sizes.values()))
-    job = _PassJob(catalog, settings.named_entity_recognition, batch_size)
+    job = _PassJob(
+        catalog,
+        settings.named_entity_recognition,
+        batch_size,
+        pass_fingerprint(named_entity_recognition=settings.named_entity_recognition),
+    )
     map_parts(
         _annotate_part,
         dict.fromkeys(chosen, job),
@@ -97,24 +107,78 @@ class _PassJob:
     catalog: CatalogConfig
     named_entity_recognition: bool
     batch_size: int
+    fingerprint: str
+
+
+# The modules whose code shapes a cached document; a change to one makes every document stale.
+# tests/test_annotate_corpus.py checks the list against the pass's imports.
+FINGERPRINT_MODULES = (annotation, attribute_rules, repair)
+
+
+def pass_fingerprint(*, named_entity_recognition: bool) -> str:
+    """A hash of what makes the pass's documents: its modules' code, its setting, spaCy, the model.
+
+    A cached document is reused only when this and its text are what made it (``_annotate_part``).
+    """
+    digest = hashlib.sha256()
+    for module in FINGERPRINT_MODULES:
+        digest.update(Path(inspect.getfile(module)).read_bytes())
+    model = build_pipeline(named_entity_recognition=named_entity_recognition).meta
+    for value in (
+        metadata.version("spacy"),
+        model["name"],
+        model["version"],
+        named_entity_recognition,
+    ):
+        digest.update(f"\0{value}".encode())
+    return digest.hexdigest()
 
 
 def _annotate_part(part: str, job: _PassJob) -> None:
-    """Annotate one part's repaired texts in this process; write the cache and the sentences."""
+    """Annotate one part's repaired texts in this process; write the cache and the sentences.
+
+    A document already cached for the same work, made by the same pass from the same text (its
+    ``TEXT_KEY``), is reused instead of annotated again: a word repair changes a few percent of
+    the texts, and the pass was half of a run (docs/pipeline_review.md, C6).
+    """
     texts = load_repaired_texts(job.catalog, part)
     nlp = _pipeline(named_entity_recognition=job.named_entity_recognition)
-    docs = annotate_texts(texts.iter_rows(), nlp, batch_size=job.batch_size)
+    previous = _cached_documents(job.catalog, part, nlp)
+    keyed = [
+        (work_id, text, _text_key(job.fingerprint, text)) for work_id, text in texts.iter_rows()
+    ]
+    stale = [
+        (work_id, text)
+        for work_id, text, key in keyed
+        if work_id not in previous or previous[work_id].user_data.get(TEXT_KEY) != key
+    ]
+    fresh = annotate_texts(stale, nlp, batch_size=job.batch_size)
     sentences: list[tuple[str, int, int]] = []
 
-    def with_sentences_recorded(annotated: Iterator[Doc]) -> Iterator[Doc]:
-        for doc in annotated:
-            work_id = doc.user_data[WORK_ID]
+    def documents() -> Iterator[Doc]:
+        for work_id, _, key in keyed:
+            doc = previous.get(work_id)
+            if doc is None or doc.user_data.get(TEXT_KEY) != key:
+                doc = next(fresh)
+                doc.user_data[TEXT_KEY] = key
             sentences.extend((work_id, span.start_char, span.end_char) for span in doc.sents)
             yield doc
 
-    save_annotations(job.catalog, with_sentences_recorded(docs), part=part)
+    save_annotations(job.catalog, documents(), part=part)
     table = pl.DataFrame(sentences, schema=SENTENCES_SCHEMA, orient="row")
     save_sentences(job.catalog, table, part=part)
+
+
+def _cached_documents(catalog: CatalogConfig, part: str, nlp: Language) -> dict[str, Doc]:
+    """The part's documents the cache holds, by work id; none before the part's first pass."""
+    try:
+        return {doc.user_data[WORK_ID]: doc for doc in load_annotations(catalog, part, nlp.vocab)}
+    except FileNotFoundError:
+        return {}
+
+
+def _text_key(fingerprint: str, text: str) -> str:
+    return hashlib.sha256(f"{fingerprint}\0{text}".encode()).hexdigest()
 
 
 @cache

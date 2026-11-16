@@ -2,20 +2,31 @@
 
 from __future__ import annotations
 
+import inspect
 import os
+from collections.abc import Iterator
 from pathlib import Path
 
+import polars as pl
 import pytest
 from click.testing import CliRunner
 from spacy.language import Language
+from spacy.tokens import Doc
 
 from interpretant.__main__ import cli
 from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import read_catalog
+from interpretant.catalog.repaired_texts import load_repaired_texts, save_repaired_texts
 from interpretant.catalog.sentences import load_sentences
 from interpretant.cli.options import default_process_count
+from interpretant.corpus.annotation import annotate_texts
 from interpretant.corpus.removals import SPANS_KEY
-from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
+from interpretant.pipelines import annotate_corpus as annotate_corpus_module
+from interpretant.pipelines.annotate_corpus import (
+    FINGERPRINT_MODULES,
+    AnnotateCorpusSettings,
+    annotate_corpus,
+)
 from interpretant.pipelines.count_word_repairs import count_word_repairs
 from interpretant.pipelines.params import CorpusSelection
 from tests.corpus_catalog import (
@@ -25,6 +36,7 @@ from tests.corpus_catalog import (
     WORD_REPAIRS_SETTINGS,
     write_raw_cell,
 )
+from tests.test_dvc_stages import PACKAGE, SOURCE, import_closure
 
 
 def cached_work_ids(catalog_file: Path, part: str, nlp: Language) -> list[str]:
@@ -132,3 +144,64 @@ def test_the_default_process_count_leaves_two_cpus_free() -> None:
 def test_the_repository_params_file_is_valid_for_the_pass() -> None:
     assert AnnotateCorpusSettings().named_entity_recognition is False
     assert "ai" in CorpusSelection().fields
+
+
+def cache_files(catalog_folder: Path) -> dict[str, bytes]:
+    return {path.name: path.read_bytes() for path in sorted(catalog_folder.glob("annotations/*"))}
+
+
+def counting_annotations(monkeypatch: pytest.MonkeyPatch) -> list[int]:
+    """Count the texts each part's pass sends to spaCy (the pass runs in this process)."""
+    sent: list[int] = []
+    original = annotate_texts
+
+    def counted(works: list[tuple[str, str]], nlp: Language, *, batch_size: int) -> Iterator[Doc]:
+        sent.append(len(works))
+        return original(works, nlp, batch_size=batch_size)
+
+    monkeypatch.setattr(annotate_corpus_module, "annotate_texts", counted)
+    return sent
+
+
+def test_annotate_corpus_reuses_every_document_whose_text_is_unchanged(
+    corpus_catalog_file: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    first = cache_files(corpus_catalog_file.parent)
+    sent = counting_annotations(monkeypatch)
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    assert sum(sent) == 0
+    assert cache_files(corpus_catalog_file.parent) == first
+
+
+def test_annotate_corpus_annotates_again_only_a_changed_text(
+    corpus_catalog_file: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    texts = load_repaired_texts(catalog, "ai_2010")
+    changed = texts.with_columns(
+        pl.when(pl.int_range(pl.len()) == 0)
+        .then(pl.col("text") + " A sentence added later.")
+        .otherwise(pl.col("text"))
+        .alias("text")
+    )
+    save_repaired_texts(catalog, changed, "ai_2010")
+    sent = counting_annotations(monkeypatch)
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    assert sum(sent) == 1
+    reused = cache_files(corpus_catalog_file.parent)
+    for path in catalog.annotations.path.glob("*"):
+        path.unlink()
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    assert cache_files(corpus_catalog_file.parent) == reused
+
+
+def test_the_pass_fingerprint_covers_every_corpus_module_the_annotation_imports() -> None:
+    corpus = SOURCE / PACKAGE / "corpus"
+    imported = {
+        path for path in import_closure(f"{PACKAGE}.corpus.annotation") if path.parent == corpus
+    }
+    listed = {Path(inspect.getfile(module)).resolve() for module in FINGERPRINT_MODULES}
+    assert listed == {path.resolve() for path in imported}

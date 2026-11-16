@@ -21,6 +21,9 @@ from interpretant.catalog.parts import part_path
 _SUFFIX = ".spacy"
 # The key of ``Doc.user_data`` holding each cached document's work id.
 WORK_ID = "work_id"
+# The key of ``Doc.user_data`` holding the hash of the pass and the text a document was made from,
+# by which a later pass reuses it (pipelines.annotate_corpus).
+TEXT_KEY = "text_key"
 
 
 def save_annotations(catalog: CatalogConfig, docs: Iterable[Doc], part: str) -> Path:
