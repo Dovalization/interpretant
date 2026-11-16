@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from collections.abc import Mapping
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
 
 import polars as pl
@@ -57,7 +58,7 @@ from interpretant.corpus.works import part_of
 from interpretant.pipelines.corpus import corpus_cells, corpus_parts, load_corpus_works, part_name
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
-from interpretant.pipelines.workers import map_parts
+from interpretant.pipelines.workers import map_parts, worker_pool
 
 
 class GluedWordSettings(BaseModel):
@@ -141,6 +142,22 @@ def count_word_repairs(
             fetched or is incomplete.
         FileNotFoundError: if the kept-joined or kept-apart words file does not exist.
     """
+    with worker_pool(process_count) as pool:
+        return _count_word_repairs(
+            catalog, selection, settings, process_count=process_count, progress=progress, pool=pool
+        )
+
+
+def _count_word_repairs(
+    catalog: CatalogConfig,
+    selection: CorpusSelection,
+    settings: CountWordRepairsSettings,
+    *,
+    process_count: int,
+    progress: Progress,
+    pool: ProcessPoolExecutor | None,
+) -> WordRepairsResult:
+    """The stage's work, its four rounds of parts in one pool of workers (``worker_pool``)."""
     kept_joined = [entry.word for entry in load_kept_joined_words(catalog)]
     kept_apart = [(entry.first, entry.second) for entry in load_kept_apart_words(catalog)]
     cells = corpus_cells(catalog, selection)
@@ -151,7 +168,7 @@ def count_word_repairs(
     del abstracts
     progress.stage("repairing the texts", total=len(by_part))
     repaired = map_parts(
-        _repair_part, dict(by_part), process_count=process_count, progress=progress
+        _repair_part, dict(by_part), process_count=process_count, pool=pool, progress=progress
     )
     texts = pl.DataFrame(
         [row for rows in repaired.values() for row in rows],
@@ -178,6 +195,7 @@ def count_word_repairs(
         _split_part,
         {part: (rows, splits) for part, rows in repaired.items()},
         process_count=process_count,
+        pool=pool,
         progress=progress,
     )
     del repaired, texts
@@ -203,6 +221,7 @@ def count_word_repairs(
         _join_part,
         {part: (rows, word_joins) for part, rows in split_texts.items()},
         process_count=process_count,
+        pool=pool,
         progress=progress,
     )
     del split_texts
@@ -230,6 +249,7 @@ def count_word_repairs(
         _lower_split_part,
         {part: (rows, lower_splits, lower.min_dense_splits) for part, rows in joined_texts.items()},
         process_count=process_count,
+        pool=pool,
         progress=progress,
     )
     del joined_texts

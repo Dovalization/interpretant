@@ -1,8 +1,11 @@
-"""Running a stage's parts one per task: the order the parts start in and the progress."""
+"""Running a stage's parts one per task: the order, the progress and the shared worker pool."""
 
 from __future__ import annotations
 
-from interpretant.pipelines.workers import map_parts
+import os
+
+from interpretant.pipelines.progress import SILENT
+from interpretant.pipelines.workers import map_parts, worker_pool
 from tests.test_progress import RecordingProgress
 
 
@@ -31,3 +34,26 @@ def test_map_parts_advances_once_per_part_without_sizes() -> None:
     )
     assert results == {"a": 1, "b": 2}
     assert progress.stages == [("parts", 2, 2)]
+
+
+def worker_view(part: str, _value: int) -> tuple[int, str | None]:
+    """The worker's process id and its Polars thread setting (importable, for spawned workers)."""
+    return os.getpid(), os.environ.get("POLARS_MAX_THREADS")
+
+
+def test_worker_pool_keeps_its_workers_for_several_rounds_with_one_polars_thread() -> None:
+    inputs = {"a": 1, "b": 2, "c": 3}
+    with worker_pool(2) as pool:
+        first = map_parts(worker_view, inputs, process_count=2, progress=SILENT, pool=pool)
+        second = map_parts(worker_view, inputs, process_count=2, progress=SILENT, pool=pool)
+    workers = {pid for pid, _ in first.values()}
+    assert {pid for pid, _ in second.values()} <= workers
+    assert len(workers) <= 2
+    assert os.getpid() not in workers
+    assert {setting for _, setting in [*first.values(), *second.values()]} == {"1"}
+    assert "POLARS_MAX_THREADS" not in os.environ
+
+
+def test_worker_pool_runs_in_this_process_with_one_process() -> None:
+    with worker_pool(1) as pool:
+        assert pool is None
