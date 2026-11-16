@@ -1,19 +1,19 @@
 """Stage 2c of the run order (decision agenda 9.1, 2.3): the cleaning patterns and keeping rules.
 
 Each part's cached documents are matched against the cleaning patterns, in worker processes,
-with their sentence languages: each of the pass's sentences takes the language of the base
-sentences it overlaps, as the word repairs moved them onto the repaired text, and lingua reads
-the few that overlap two languages (docs/plan_early_languages.md). Each abstract gets its
-removal ranges, flags and drop reason, and the part's rows go to the annotated table that the
-corpus-level rules read. The
-raw cells are merged again for each work's metadata and raw text (the mojibake check reads the
-raw text). Only this stage and the ones after it rerun when a pattern, a scope or a keeping
-threshold changes.
+with their sentence languages: a pass sentence with the same boundaries as a base sentence, as
+the word repairs moved it onto the repaired text, takes its language; lingua reads the others
+(6% of the pass's sentences, in 13% of the abstracts) as the language stage reads sentences
+(docs/plan_early_languages.md). Each abstract gets its removal ranges, flags and drop reason,
+and the part's rows go to the annotated table that the corpus-level rules read. The raw cells
+are merged again for each work's metadata and raw text (the mojibake check reads the raw text).
+Only this stage and the ones after it rerun when a pattern, a scope, a keeping threshold or a
+language setting changes.
 """
 
 from __future__ import annotations
 
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from functools import cache, partial
 from typing import Any
 
@@ -36,8 +36,8 @@ from interpretant.catalog import (
 from interpretant.corpus.language import (
     SentenceLanguage,
     build_language_detector,
-    detect_texts,
-    languages_by_overlap,
+    detect_sentence_languages,
+    languages_by_boundaries,
 )
 from interpretant.corpus.removals import AnnotatedAbstract, build_cleaning_pipeline, clean_abstract
 from interpretant.corpus.repair import compile_signatures
@@ -51,7 +51,10 @@ from interpretant.pipelines.corpus import (
     summarise,
     works_by_part,
 )
-from interpretant.pipelines.detect_languages import DetectLanguagesSettings
+from interpretant.pipelines.detect_languages import (
+    DetectLanguagesSettings,
+    one_lingua_thread_per_worker,
+)
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts
@@ -76,8 +79,9 @@ def clean_corpus(
 ) -> CorpusResult:
     """Apply the cleaning patterns and keeping rules to every part and write the annotated table.
 
-    ``language_settings`` are lingua's, for the sentences whose overlapped base sentences name
-    two languages.
+    ``language_settings`` are lingua's, for the pass sentences no base sentence matches. With
+    worker processes, each one that needs lingua holds its own copy of the language models and
+    runs lingua on one core.
 
     Raises:
         ValueError: if no raw cell matches the selection, a cell's metadata is missing, or a
@@ -89,44 +93,56 @@ def clean_corpus(
     patterns = load_cleaning_patterns(catalog)
     parts = corpus_parts(cells)
     progress.stage("cleaning the parts", total=len(parts))
-    results = map_parts(
-        partial(
-            _clean_part,
-            catalog,
-            patterns,
-            settings.min_english_words,
-            (language_settings.languages, language_settings.minimum_relative_distance),
-        ),
-        {part: abstracts.get(part, []) for part in parts},
-        process_count=process_count,
-        progress=progress,
+    check = _LanguageCheck(
+        language_settings.languages,
+        language_settings.english_threshold,
+        language_settings.minimum_relative_distance,
     )
+    with one_lingua_thread_per_worker(process_count):
+        results = map_parts(
+            partial(_clean_part, catalog, patterns, settings.min_english_words, check),
+            {part: abstracts.get(part, []) for part in parts},
+            process_count=process_count,
+            progress=progress,
+        )
     return combine_results(results.values())
+
+
+@dataclass(frozen=True)
+class _LanguageCheck:
+    """lingua's settings, for the pass sentences no base sentence matches."""
+
+    languages: tuple[str, ...]
+    english_threshold: float
+    minimum_relative_distance: float
 
 
 def _clean_part(
     catalog: CatalogConfig,
     patterns: CleaningPatterns,
     min_english_words: int,
-    detector_settings: tuple[tuple[str, ...], float],
+    check: _LanguageCheck,
     part: str,
     abstracts: list[RawAbstract],
 ) -> CorpusResult:
     """One part's annotated rows, written to the catalog; the part's counts."""
     cleaning = build_cleaning_pipeline(patterns)
     signatures = compile_signatures(patterns.mojibake_signatures)
-    early = _early_languages_by_work(load_repaired_sentence_languages(catalog, part))
     by_work = {abstract.work_id: abstract for abstract in abstracts}
+    docs = list(load_annotations(catalog, part, cleaning.vocab))
+    for doc in docs:
+        if doc.user_data[WORK_ID] not in by_work:
+            raise ValueError(
+                f"part {part!r}: {doc.user_data[WORK_ID]} is cached but not in the part's works"
+            )
+    early = _early_languages_by_work(load_repaired_sentence_languages(catalog, part))
     rows = []
-    for doc in load_annotations(catalog, part, cleaning.vocab):
-        work_id = doc.user_data[WORK_ID]
-        if work_id not in by_work:
-            raise ValueError(f"part {part!r}: {work_id} is cached but not in the part's works")
+    for doc, languages in zip(docs, _sentence_languages(docs, early, check), strict=True):
         rows.append(
             clean_abstract(
                 doc,
-                by_work[work_id],
-                _sentence_languages(doc, early.get(work_id, []), detector_settings),
+                by_work[doc.user_data[WORK_ID]],
+                languages,
                 cleaning=cleaning,
                 patterns=patterns,
                 signatures=signatures,
@@ -153,26 +169,39 @@ def _early_languages_by_work(
 
 
 def _sentence_languages(
-    doc: Doc,
-    early: list[tuple[int, int, str, float]],
-    detector_settings: tuple[tuple[str, ...], float],
-) -> list[SentenceLanguage]:
-    """Each of the document's sentences' language, from the base sentences it overlaps.
+    docs: list[Doc],
+    early: dict[str, list[tuple[int, int, str, float]]],
+    check: _LanguageCheck,
+) -> list[list[SentenceLanguage]]:
+    """Each document's sentence languages: a base sentence's where the boundaries are the same.
 
-    lingua reads the sentences whose overlapped base sentences name two languages.
+    The documents with a sentence no base sentence matches are read by lingua as the language
+    stage reads them, the whole abstract first (``detect_sentence_languages``), and those
+    sentences take lingua's verdict.
     """
-    sentences = list(doc.sents)
-    languages = languages_by_overlap(
-        [(sentence.start_char, sentence.end_char) for sentence in sentences], early
-    )
-    unsettled = [index for index, language in enumerate(languages) if language is None]
-    if unsettled:
-        detected = detect_texts(
-            [sentences[index].text for index in unsettled], _detector(*detector_settings)
+    matched = [
+        languages_by_boundaries(
+            [(sentence.start_char, sentence.end_char) for sentence in doc.sents],
+            early.get(doc.user_data[WORK_ID], []),
         )
-        for index, language in zip(unsettled, detected, strict=True):
-            languages[index] = language
-    return [language for language in languages if language is not None]
+        for doc in docs
+    ]
+    unsettled = [index for index, languages in enumerate(matched) if None in languages]
+    read: dict[int, list[SentenceLanguage]] = {}
+    if unsettled:
+        detected = detect_sentence_languages(
+            [docs[index] for index in unsettled],
+            _detector(check.languages, check.minimum_relative_distance),
+            english_threshold=check.english_threshold,
+        )
+        read = dict(zip(unsettled, detected, strict=True))
+    return [
+        [
+            language if language is not None else read[index][position]
+            for position, language in enumerate(languages)
+        ]
+        for index, languages in enumerate(matched)
+    ]
 
 
 @cache

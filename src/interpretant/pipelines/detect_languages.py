@@ -87,7 +87,7 @@ def detect_languages(
         settings.minimum_relative_distance,
     )
     progress.stage("detecting sentence languages", total=len(parts))
-    with _one_lingua_thread_per_worker(process_count):
+    with one_lingua_thread_per_worker(process_count):
         results = map_parts(
             _detect_part, dict.fromkeys(parts, job), process_count=process_count, progress=progress
         )
@@ -140,7 +140,7 @@ def _detector(languages: tuple[str, ...], minimum_relative_distance: float) -> L
 
 
 @contextmanager
-def _one_lingua_thread_per_worker(process_count: int) -> Iterator[None]:
+def one_lingua_thread_per_worker(process_count: int) -> Iterator[None]:
     """Start worker processes with rayon limited to one thread; the main process is unchanged."""
     if process_count == 1:
         yield

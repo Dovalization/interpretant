@@ -58,7 +58,13 @@ longest stage. Three problems follow:
    left for a change of its own.
 5. **`clean_corpus` gives each spaCy sentence a language.** A spaCy sentence takes the language
    of the early sentences it overlaps; one that spans two languages (0.13%) is read again by
-   lingua. Removals and the `not_english` rule work as now.
+   lingua. Removals and the `not_english` rule work as now. *Changed after the check run
+   (2026-11-16, the author):* a spaCy sentence inside a longer early sentence took that
+   sentence's language, so foreign titles in English text were kept and some English sentences
+   next to foreign text removed (about 14 of 20 sampled changes of 80+ characters were worse).
+   Now a spaCy sentence takes an early sentence's language only when their boundaries are the
+   same (93.9% of the 4,584,546 sentences); lingua reads the other 278,657 in their abstracts
+   (88,652, 12.6%) as the language stage reads sentences, the whole abstract first.
 6. **Today's late language stage goes;** its code is reused by the early one.
 
 ## Decisions
@@ -67,7 +73,9 @@ longest stage. Three problems follow:
 - Undetermined sentences in an English abstract get the word repairs (decided: yes).
 - No skipping in the spaCy pass for now (decided, see design point 4).
 - The 9 foreign words leave the kept-joined list once the guard runs (decided: yes, each checked
-  in the run).
+  in the run). *Reversed after the check run (2026-11-16, the author):* off the list, they were
+  split 54 times in sentences read as English, 33 of them foreign words in quotes or in
+  sentences that run into foreign text and 11 broken English words, against 10 real repairs.
 
 ## Steps (one commit each)
 
