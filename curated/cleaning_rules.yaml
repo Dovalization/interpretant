@@ -41,8 +41,17 @@ labels:
   abstract_label: tokens
   # Footers appended to real abstracts: purchase and login prompts, the start of the page
   # metadata of ASHA's publishing platform ("Additional Resources FiguresReferences..."), and
-  # the start or end of a JSTOR download stamp whose other half is missing.
+  # the start or end of a JSTOR download stamp whose other half is missing. Added 2026-11-16 (run
+  # 12): ERIC's "Documents acquired by ERIC…", "Contains fulltext", the notice "These keywords
+  # were added by machine…", and a Frontiers citation line ("Citation: …" opening the record, or
+  # "Citation: … Frontiers in …"); 163 kept works in the build of record 2e20238, no lost prose
+  # in 30 sampled removals (calibrated agent judges).
   footer: rest_of_sentence
+  # Frontiers' conference-abstract header, "Event Abstract Back to Event", removed exactly: the
+  # sentence splitter runs it, the title, the authors and their affiliations into the abstract's
+  # first sentence, so removing to the end of the sentence took that sentence too (13 of 30
+  # sampled). Added 2026-11-16 (run 12): 193 kept works, no lost prose in 30 sampled removals.
+  event_header: tokens
   # JSTOR's download stamp, which sits at page breaks mid-text: "This content downloaded from
   # <address> on <date> <time> UTC All use subject to <terms>", removed exactly.
   download_stamp: tokens

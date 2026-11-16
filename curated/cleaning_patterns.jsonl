@@ -10,6 +10,12 @@
 {"label":"footer","pattern":[{"LOWER":"click"},{"LOWER":"here"}]}
 {"label":"footer","pattern":[{"LOWER":"to"},{"LOWER":"register"},{"LOWER":"or"},{"LOWER":{"IN":["login","log"]}}]}
 {"label":"footer","pattern":[{"LOWER":"additional"},{"LOWER":"resources"},{"LOWER":{"REGEX":"^figuresreferences"}}]}
+{"label":"footer","pattern":[{"LOWER":"documents"},{"LOWER":"acquired"},{"LOWER":"by"},{"LOWER":"eric"}]}
+{"label":"footer","pattern":[{"LOWER":"contains"},{"LOWER":"fulltext"}]}
+{"label":"footer","pattern":[{"LOWER":"these"},{"LOWER":"keywords"},{"LOWER":"were"},{"LOWER":"added"},{"LOWER":"by"},{"LOWER":"machine"}]}
+{"label":"footer","pattern":[{"LOWER":"citation"},{"TEXT":":"}],"id":"start"}
+{"label":"footer","pattern":[{"LOWER":"citation"},{"TEXT":":"},{"OP":"{1,30}"},{"LOWER":"frontiers"},{"LOWER":"in"}]}
+{"label":"event_header","pattern":[{"TEXT":"Event"},{"TEXT":"Abstract"},{"TEXT":"Back"},{"LOWER":"to"},{"TEXT":"Event"}]}
 {"label":"copyright","pattern":[{"LOWER":"all"},{"LOWER":"rights"},{"LOWER":"reserved"}]}
 {"label":"copyright","pattern":[{"TEXT":"\u00a9"}]}
 {"label":"copyright","pattern":[{"LOWER":{"REGEX":"copyright$"}},{"TEXT":"\u00a9"}]}

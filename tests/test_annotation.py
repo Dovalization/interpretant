@@ -130,8 +130,23 @@ def removed_texts(row: AnnotatedAbstract) -> dict[str, list[str]]:
             "footer",
             "This content downloaded from 128.0.0.1 on Tue, 01 Jan 2019.",
         ),
+        (
+            "Event Abstract Back to Event Sky compass orientation in the beetle brain. Dung "
+            "beetles roll their balls along straight paths by the polarised light of the sky.",
+            "event_header",
+            "Event Abstract Back to Event",
+        ),
     ],
-    ids=["url", "email", "doi", "latex", "leading label", "copyright", "jstor footer"],
+    ids=[
+        "url",
+        "email",
+        "doi",
+        "latex",
+        "leading label",
+        "copyright",
+        "jstor footer",
+        "frontiers event header",
+    ],
 )
 def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
     text: str,
@@ -382,6 +397,16 @@ STAMP = (
             "Additional Resources FiguresReferencesRelatedDetailsCited by Richard Luchsinger "
             "and Gottfried E. Arnold (1970).",
         ),
+        (
+            f"{ENGLISH_SENTENCE} Documents acquired by ERIC include many informal materials.",
+            "footer",
+            "Documents acquired by ERIC include many informal materials.",
+        ),
+        (
+            f"{ENGLISH_SENTENCE} These keywords were added by machine and not by the authors.",
+            "footer",
+            "These keywords were added by machine and not by the authors.",
+        ),
     ],
     ids=[
         "copyright after text",
@@ -389,6 +414,8 @@ STAMP = (
         "login prompt",
         "jstor stamp mid-text",
         "platform page metadata",
+        "eric document note",
+        "machine keywords notice",
     ],
 )
 def test_annotate_abstracts_removes_a_notice_and_keeps_the_text_before_it(
