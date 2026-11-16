@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, get_args
 
 import pydantic
 import pytest
@@ -11,6 +11,7 @@ from spacy.lang.lex_attrs import _tlds
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.curated import (
     CleaningPatterns,
+    Scope,
     load_cleaning_patterns,
     load_doi_corrections,
     load_kept_apart_words,
@@ -74,7 +75,7 @@ def test_cleaning_patterns_reject_a_malformed_set(changes: dict[str, Any]) -> No
 
 def test_the_repository_cleaning_rules_and_patterns_are_valid() -> None:
     patterns = load_cleaning_patterns(read_catalog())
-    assert {"tokens", "rest_of_sentence", "abstract"} == set(patterns.labels.values())
+    assert set(get_args(Scope)) == set(patterns.labels.values())
     assert any(pattern.id == "start" for pattern in patterns.patterns)
 
 

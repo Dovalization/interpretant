@@ -23,6 +23,9 @@
 {"label":"letter","pattern":[{"LOWER":{"REGEX":"^sirs?[,.:;—–-]"}}],"id":"start"}
 {"label":"citation_record","pattern":[{"LOWER":"volume"},{"LIKE_NUM":true},{"TEXT":",","OP":"?"},{"LOWER":{"IN":["issue","number"]}},{"LIKE_NUM":true}]}
 {"label":"citation_record","pattern":[{"TEXT":"("},{"SHAPE":"dddd"},{"TEXT":")"},{"TEXT":"."}],"id":"start"}
+{"label":"citation_line","pattern":[{"TEXT":"Vol."},{"LIKE_NUM":true},{"TEXT":","},{"TEXT":{"IN":["No","No."]}},{"TEXT":".","OP":"?"},{"OP":"{1,20}"},{"TEXT":"("},{"OP":"{0,6}"},{"SHAPE":"dddd"},{"TEXT":")"},{"TEXT":","},{"TEXT":"pp."},{"LIKE_NUM":true}]}
+{"label":"citation_line","pattern":[{"TEXT":"Volume"},{"TEXT":{"REGEX":"^[IVXLCDM]+$"}},{"TEXT":","},{"TEXT":"Issue"},{"TEXT":{"NOT_IN":[","]},"OP":"{1,4}"},{"TEXT":","},{"OP":"{0,8}"},{"SHAPE":"dddd"},{"TEXT":","},{"TEXT":{"IN":["Page","Pages"]}},{"TEXT":{"REGEX":"^\\d"}}]}
+{"label":"citation_line","pattern":[{"TEXT":"Volume"},{"LIKE_NUM":true},{"TEXT":","},{"TEXT":"Issue"},{"TEXT":{"NOT_IN":[","]},"LIKE_NUM":false},{"TEXT":{"NOT_IN":[","]},"OP":"{0,3}"},{"TEXT":","},{"OP":"{0,8}"},{"SHAPE":"dddd"},{"TEXT":","},{"TEXT":{"IN":["Page","Pages"]}},{"TEXT":{"REGEX":"^\\d"}}]}
 {"label":"web_scrape","pattern":[{"LOWER":{"IN":["noaccess","no-access"]}}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":"no"},{"LOWER":"access"}],"id":"start"}
 {"label":"web_scrape","pattern":[{"LOWER":"no"},{"TEXT":{"REGEX":"^Access[A-Z]"}}],"id":"start"}

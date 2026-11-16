@@ -18,7 +18,10 @@ mojibake_signatures:
 #   rest_of_sentence: from the match to the end of its sentence, dropped from both views (text
 #             before a notice survives; until 2026-11-13 the whole sentence went, and run 1
 #             lost the text glued before 1,885 copyright notices and 280 JSTOR stamps);
-#   abstract: the whole abstract, dropped with the label as its reason.
+#   abstract: the whole abstract, dropped with the label as its reason;
+#   abstract_or_sentence: as abstract when fewer than 30 words come before the match (the line
+#             stands for the abstract), otherwise the sentences the match is in, from the first
+#             one's start (a reference after real prose).
 # A pattern with "id": "start" counts only when it begins the abstract or follows its leading
 # "Abstract" label ("Abstract: To the Editor…"); other matches of it are set aside before
 # overlapping matches are filtered, so they cannot hide a match that does count (run 6d).
@@ -63,6 +66,15 @@ labels:
   # 60 words, and 899 more were dropped as not_english only because lingua read the journal
   # line as Latin or French).
   citation_record: abstract
+  # JSTOR's and OUP's citation lines, which citation_record misses: "…, Vol. 15, No. 1 (Feb.,
+  # 1950), pp. 79-88" and "…, Volume X, Issue 1, January 1955, Pages 125–126" (a Roman volume,
+  # or a numbered one with an issue that is not a number, so citation_record keeps the lines it
+  # already drops). Added 2026-11-16
+  # (run 9): in the build of record 2e20238, 1,660 and 1,068 kept works were such a line with
+  # fewer than 30 words before it and 198 and 17 had one after real prose; none of run 3's 167
+  # judged abstracts holds one, and agent judges calibrated on run 3's verdicts found no real
+  # abstract and no lost prose in 30 sampled works of each.
+  citation_line: abstract_or_sentence
   # Publisher pages scraped in place of an abstract. A lone "Twitter" or "Facebook" is left
   # alone: social media are a research topic. "No Access" glued to the journal name
   # ("No AccessJournal of Speech...") was added on 2026-11-13: 547 ASHA pages, title, authors,

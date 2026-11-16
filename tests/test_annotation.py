@@ -155,6 +155,21 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
             "Linguistics: Vol. 5, No. 2, pp. 143-196.",
             "citation_record",
         ),
+        (
+            "The Origins of Modern Sociology. Journal of Sociology, Vol. 21, No. 2 (Apr., 1993), "
+            "pp. 166-171",
+            "citation_line",
+        ),
+        (
+            "Notes on the Psalms. The Journal of Theological Studies, Volume XXVII, Issue 2, "
+            "1 April 1991, Pages 100–112",
+            "citation_line",
+        ),
+        (
+            "Notes on the Psalms. The Journal of Theological Studies, Volume 8, Issue January, "
+            "January 1953, Pages 91–93",
+            "citation_line",
+        ),
         ("Export citation. Save to Binder. Track citations.", "web_scrape"),
         (
             "No AccessJournal of Speech and Hearing DisordersArticle1 Dec 1954A Simple Adapter "
@@ -197,6 +212,9 @@ def test_annotate_abstracts_removes_each_kind_of_text_with_its_reason(
         "catalogue record",
         "citation record",
         "citation stub starting with its year",
+        "jstor citation line",
+        "oup citation line",
+        "oup citation line with a month for its issue",
         "web scrape",
         "page with no access glued",
         "exam spam",
@@ -358,6 +376,15 @@ def test_annotate_abstracts_removes_a_notice_and_keeps_the_text_before_it(
     assert removed_texts(row)[reason] == [removed]
     kept = kept_text(row.text, row.removals)
     assert kept.split() == text.replace(removed, " ").split()
+    assert row.dropped_reason is None
+
+
+def test_annotate_abstracts_removes_a_citation_line_after_real_prose(
+    nlp: Language, patterns: CleaningPatterns
+) -> None:
+    citation = "Child Development, Vol. 55, No. 4 (Aug., 1984), pp. 1479-1485."
+    row = annotate(f"{ENGLISH_SENTENCE} " * 4 + citation, nlp, patterns)
+    assert removed_texts(row) == {"citation_line": [citation]}
     assert row.dropped_reason is None
 
 

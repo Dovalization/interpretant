@@ -39,6 +39,9 @@ START_AWARE_SPANS_FILTER = "interpretant.start_aware_spans_filter.v1"
 # ranges, and a "sentence" longer than about 150 words means missing sentence punctuation.
 MIN_WORDS = 5
 MALFORMED_SENTENCE_WORDS = 150
+# An abstract-or-sentence match with fewer words than this before it stands for the abstract and
+# drops it; after more, it trails real prose and only its sentences are removed.
+PROSE_BEFORE_WORDS = 30
 MALFORMED = "malformed"
 NOT_ENGLISH = "not_english"
 
@@ -278,7 +281,9 @@ def find_removals(
     (spaCy's ``span.sent`` is only the first sentence of a span that crosses a sentence start, as
     "(c) 2006" can when the year starts one); an abstract-scope match
     removes its characters and drops the abstract (start-only matches away from the start are
-    already filtered out by the cleaning pipeline). A sentence lingua reads as another language
+    already filtered out by the cleaning pipeline); an abstract-or-sentence match does the same
+    when fewer than ``PROSE_BEFORE_WORDS`` words come before it, and otherwise removes the
+    sentences it is in, from the first one's start. A sentence lingua reads as another language
     is removed with the reason ``not_english``. A range inside another range with the same reason
     is left out, as when one notice holds several matches ("(PsycINFO Database Record (c) 2006").
     """
@@ -286,11 +291,15 @@ def find_removals(
     drop_reasons: list[str] = []
     for span in doc.spans[SPANS_KEY]:
         label = span.label_
-        if scopes[label] == "rest_of_sentence":
+        scope = scopes[label]
+        if scope == "rest_of_sentence":
             removals.add(Removal(span.start_char, span[-1].sent.end_char, label))
             continue
+        if scope == "abstract_or_sentence" and _words_before(doc, span) >= PROSE_BEFORE_WORDS:
+            removals.add(Removal(span[0].sent.start_char, span[-1].sent.end_char, label))
+            continue
         removals.add(Removal(span.start_char, span.end_char, label))
-        if scopes[label] == "abstract" and label not in drop_reasons:
+        if scope in ("abstract", "abstract_or_sentence") and label not in drop_reasons:
             drop_reasons.append(label)
     for sentence, language in zip(doc.sents, languages, strict=True):
         if language.language not in (ENGLISH, UNDETERMINED):
@@ -326,6 +335,10 @@ def _count_words_inside(doc: Doc, removals: Sequence[Removal]) -> int:
         for token in doc
         if _is_word(token) and any(removal.start <= token.idx < removal.end for removal in removals)
     )
+
+
+def _words_before(doc: Doc, span: Span) -> int:
+    return sum(1 for token in doc[: span.start] if _is_word(token))
 
 
 def _outermost(removals: set[Removal]) -> list[Removal]:
