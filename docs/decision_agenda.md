@@ -355,7 +355,19 @@ views (the full order is in step 9).
      Where the word touches a hyphen, the separator follows how the corpus writes the whole
      hyphenated chunk (*stateof-the-art* into *state-of-the-art*, *ofman-machine* into *of
      man-machine*), since the tokenizer keeps hyphenated words whole (4.2). Reruns the spaCy
-     pass;
+     pass. *Done 2026-11-16* (code `38bca0bb`, keep list `709085be`, record `abd16663`): of
+     168,146 candidates, 34,132 words are split (two words 28,149, three or more 5,116, *a* and
+     a word 867), 54,046 splits made; 22,202 texts changed (21,129 kept); 10 works became
+     near-duplicates of a twin now written alike. Before the run the author reviewed the splits
+     made in kept texts (about 97% of 200 sampled right; errors in words the corpus often writes
+     whole) and put 26 more words on the kept-joined list beside the 7 above: real words the
+     index lacks (*formalist*, the privative *amoral*, *atopic*, *goto*), names (*Hasan*,
+     *Wason*) and foreign words split 10 times or more in kept works (*todo*, *considera*,
+     *Verband*), since run 8 runs before language detection and English words put into a foreign
+     sentence could make lingua read it as English. The remaining errors are mostly foreign
+     words ending in *a* (*performa*, *playa*, *conducta*; 462 content-word-plus-*a* words, 781
+     uses) and OCR (*lowa* for *Iowa* into *low a*): reasons for language data before the word
+     repairs (step 9, the early language stage);
   9. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
      1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a

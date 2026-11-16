@@ -62,6 +62,7 @@ up the stages.
 | Staging-table check (build and report only) | 2026-11-16 | – | – | – | – | – | 128 | 1 |
 | Second round's check | 2026-11-16 | 19.3 min | 115 | 657 | 122 | 211 | 51 | 1 |
 | Exact near-duplicate check (build and report only) | 2026-11-16 | – | – | – | – | – | 62 | 1 |
+| Run 8 (lower-case glued words) | 2026-11-16 | 21.1 min | 220 | 654 | 121 | 210 | 62 | 1 |
 
 Earlier runs, as recorded at the time:
 
@@ -204,6 +205,13 @@ Jaccard similarity of candidate pairs from an index tuned for 0.6 (decision agen
 `788ca521`). The near-duplicate step took 30 s instead of 17, the build 62 s; 5,709
 near-duplicates instead of 5,464, every newly marked pair at an exact similarity of 0.80 or more
 (`6cda1e15`).
+
+### Run 8 (2026-11-16)
+
+The lower-case glued words added a count over the corpus to the word repairs: 84 s, so the
+stage took 220 s instead of 115 (`abd16663`). The count's candidates (168,146 words) are cut at
+every place and the parts checked against spaCy's lemma index; symspellpy segments the words
+with no two-part cut.
 
 ## The vector store's encoding
 
