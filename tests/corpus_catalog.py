@@ -25,6 +25,7 @@ from interpretant.pipelines.count_word_repairs import (
     WordRepairsResult,
     count_word_repairs,
 )
+from interpretant.pipelines.detect_base_languages import detect_base_languages
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from interpretant.pipelines.params import CorpusSelection
 from interpretant.pipelines.repair_texts import repair_texts
@@ -71,8 +72,10 @@ def repair_and_count(
     selection: CorpusSelection = SELECTION,
     settings: CountWordRepairsSettings = WORD_REPAIRS_SETTINGS,
 ) -> WordRepairsResult:
-    """Repair the texts and count the word repairs, as ``dvc repro`` runs the two stages."""
+    """Repair the texts, read their languages and count the word repairs, as ``dvc repro`` runs
+    the three stages."""
     repair_texts(catalog, selection)
+    detect_base_languages(catalog, selection, LANGUAGE_SETTINGS)
     return count_word_repairs(catalog, selection, settings)
 
 
@@ -117,6 +120,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "repaired_texts:\n  path: repaired_texts\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "base_sentence_languages:\n  path: base_sentence_languages\n  format: parquet\n"
+        "repaired_sentence_languages:\n  path: repaired_sentence_languages\n  format: parquet\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
         "corpus_comparison:\n  path: corpus_comparison.md\n  format: markdown\n"

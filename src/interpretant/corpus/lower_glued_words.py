@@ -292,28 +292,33 @@ def lower_glued_word_splits(decisions: pl.DataFrame) -> LowerGluedSplits:
     return LowerGluedSplits(two_words=two_words, guarded=guarded, chunks=chunks)
 
 
+def count_two_word_splits(text: str, splits: LowerGluedSplits) -> int:
+    """How many lower-case two-word glues ``split_lower_glued_words`` would split in the text.
+
+    A text with at least ``min_dense_splits`` of them, counted over the text's English sentences,
+    is damaged: the guarded patterns apply there too.
+    """
+    return sum(
+        1
+        for word in _words(text)
+        if word.group() in splits.two_words and word.group().islower() and _may_split(text, word)
+    )
+
+
 def split_lower_glued_words(
-    text: str, splits: LowerGluedSplits, *, min_dense_splits: int
+    text: str, splits: LowerGluedSplits, *, is_damaged: bool
 ) -> tuple[str, Counter[str]]:
     """The text with its glued words split, and how many were split by pattern.
 
-    A lower-case two-word glue is split everywhere; when at least ``min_dense_splits`` of them
-    are split in the text, so are the guarded patterns in lower case and the capitalised
-    two-word glue (counted as ``capitalised``), the capital kept on the first part. A word right
-    after a backslash, touching a digit or inside a web address is left whole; a word touching a
-    hyphen takes its hyphenated chunk's separator when the chunk has one.
+    A lower-case two-word glue is split everywhere; in a damaged text (``count_two_word_splits``)
+    so are the guarded patterns in lower case and the capitalised two-word glue (counted as
+    ``capitalised``), the capital kept on the first part. A word right after a backslash,
+    touching a digit or inside a web address is left whole; a word touching a hyphen takes its
+    hyphenated chunk's separator when the chunk has one.
     """
     if not (splits.two_words or splits.guarded):
         return text, Counter()
-    words = [
-        word for word in _WORD.finditer(text) if len(word.group().lower()) == len(word.group())
-    ]
-    lower_two_word = sum(
-        1
-        for word in words
-        if word.group() in splits.two_words and word.group().islower() and _may_split(text, word)
-    )
-    is_damaged = lower_two_word >= min_dense_splits
+    words = _words(text)
     pieces: list[str] = []
     counts: Counter[str] = Counter()
     position = 0
@@ -332,6 +337,11 @@ def split_lower_glued_words(
         counts[label] += 1
     pieces.append(text[position:])
     return "".join(pieces), counts
+
+
+def _words(text: str) -> list[re.Match[str]]:
+    """The text's words whose lower case has their length (letters only)."""
+    return [word for word in _WORD.finditer(text) if len(word.group().lower()) == len(word.group())]
 
 
 def _two_part_pattern(left: str) -> str:

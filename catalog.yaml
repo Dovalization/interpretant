@@ -140,6 +140,12 @@ base_sentence_languages:
   path: data/interim/base_sentence_languages
   format: parquet
 
+# The same sentences' languages moved onto the repaired texts by count-word-repairs, which
+# repairs only the English sentences; one part per field and decade.
+repaired_sentence_languages:
+  path: data/interim/repaired_sentence_languages
+  format: parquet
+
 # lingua's language for every sentence of the annotation cache, one part per field and decade.
 sentence_languages:
   path: data/interim/sentence_languages

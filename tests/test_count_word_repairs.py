@@ -144,6 +144,11 @@ def test_count_word_repairs_command_records_the_run(corpus_catalog_file: Path) -
     assert outcome.exit_code == 0, outcome.output
     outcome = CliRunner().invoke(
         cli,
+        ["detect-base-languages", "--catalog", str(corpus_catalog_file), "--process-count", "1"],
+    )
+    assert outcome.exit_code == 0, outcome.output
+    outcome = CliRunner().invoke(
+        cli,
         ["count-word-repairs", "--catalog", str(corpus_catalog_file), "--process-count", "1"],
     )
     assert outcome.exit_code == 0, outcome.output

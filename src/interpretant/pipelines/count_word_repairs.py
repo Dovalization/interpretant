@@ -16,6 +16,7 @@ from __future__ import annotations
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass
+from functools import partial
 
 import polars as pl
 from pydantic import BaseModel, ConfigDict, Field
@@ -23,12 +24,15 @@ from pydantic_settings import SettingsConfigDict
 
 from interpretant.catalog import (
     REPAIRED_TEXTS_SCHEMA,
+    SENTENCE_LANGUAGES_SCHEMA,
     CatalogConfig,
+    load_base_sentence_languages,
     load_base_texts,
     load_kept_apart_words,
     load_kept_joined_words,
     save_glued_words,
     save_lower_glued_words,
+    save_repaired_sentence_languages,
     save_repaired_texts,
     save_split_words,
 )
@@ -42,10 +46,17 @@ from interpretant.corpus.lower_glued_words import (
     HYPHENATED_CHUNK,
     LowerGluedSplits,
     count_lower_glued_words,
+    count_two_word_splits,
     decide_hyphenated_chunks,
     decide_lower_glued_word_splits,
     lower_glued_word_splits,
     split_lower_glued_words,
+)
+from interpretant.corpus.sentence_pieces import (
+    PiecedText,
+    pieced_texts,
+    repair_pieces,
+    sentence_ranges,
 )
 from interpretant.corpus.split_words import (
     HYPHEN,
@@ -148,18 +159,15 @@ def count_word_repairs(
     kept_apart = [(entry.first, entry.second) for entry in load_kept_apart_words(catalog)]
     cells = corpus_cells(catalog, selection)
     parts = corpus_parts(cells)
-    progress.stage("reading the base texts", total=len(parts))
-    repaired: dict[str, list[tuple[str, str]]] = {}
+    progress.stage("reading the base texts and their languages", total=len(parts))
+    works: dict[str, list[PiecedText]] = {}
     for part in parts:
         base_texts = load_base_texts(catalog, part)
         if base_texts.height:
-            repaired[part] = list(base_texts.iter_rows())
+            languages = load_base_sentence_languages(catalog, part)
+            works[part] = pieced_texts(base_texts.iter_rows(), list(languages.iter_rows()))
         progress.advance()
-    texts = pl.DataFrame(
-        [row for rows in repaired.values() for row in rows],
-        schema={"work_id": pl.String(), "text": pl.String()},
-        orient="row",
-    )
+    texts = _repairable_texts(works)
     progress.stage("counting glued words")
     counts = count_glued_words(texts)
     progress.stage("deciding the splits")
@@ -175,19 +183,14 @@ def count_word_repairs(
     save_glued_words(catalog, decisions)
     split = decisions.filter(pl.col("split"))
     splits = glued_word_splits(decisions)
-    progress.stage("splitting the glued words", total=len(repaired))
-    split_texts = map_parts(
+    progress.stage("splitting the glued words", total=len(works))
+    works = map_parts(
         _split_part,
-        {part: (rows, splits) for part, rows in repaired.items()},
+        {part: (part_works, splits) for part, part_works in works.items()},
         process_count=process_count,
         progress=progress,
     )
-    del repaired, texts
-    texts = pl.DataFrame(
-        [row for rows in split_texts.values() for row in rows],
-        schema={"work_id": pl.String(), "text": pl.String()},
-        orient="row",
-    )
+    texts = _repairable_texts(works)
     progress.stage("counting split words")
     broken = settings.split_words
     split_counts = count_split_words(texts, min_word_count=broken.min_word_count)
@@ -200,19 +203,14 @@ def count_word_repairs(
     )
     save_split_words(catalog, joins)
     word_joins = split_word_joins(joins)
-    progress.stage("joining the split words", total=len(split_texts))
-    joined_texts = map_parts(
+    progress.stage("joining the split words", total=len(works))
+    works = map_parts(
         _join_part,
-        {part: (rows, word_joins) for part, rows in split_texts.items()},
+        {part: (part_works, word_joins) for part, part_works in works.items()},
         process_count=process_count,
         progress=progress,
     )
-    del split_texts
-    texts = pl.DataFrame(
-        [row for rows in joined_texts.values() for row in rows],
-        schema={"work_id": pl.String(), "text": pl.String()},
-        orient="row",
-    )
+    texts = _repairable_texts(works)
     progress.stage("counting lower-case glued words")
     lower = settings.lower_glued_words
     lower_counts = count_lower_glued_words(
@@ -227,27 +225,39 @@ def count_word_repairs(
     lower_decisions = pl.concat([lower_decisions, decide_hyphenated_chunks(texts, lower_decisions)])
     save_lower_glued_words(catalog, lower_decisions)
     lower_splits = lower_glued_word_splits(lower_decisions)
-    progress.stage("splitting the lower-case glued words", total=len(joined_texts))
+    progress.stage("splitting the lower-case glued words", total=len(works))
     lower_split = map_parts(
         _lower_split_part,
-        {part: (rows, lower_splits, lower.min_dense_splits) for part, rows in joined_texts.items()},
+        {
+            part: (part_works, lower_splits, lower.min_dense_splits)
+            for part, part_works in works.items()
+        },
         process_count=process_count,
         progress=progress,
     )
-    del joined_texts
     occurrences: Counter[str] = Counter()
     for _, part_counts in lower_split.values():
         occurrences.update(part_counts)
-    progress.stage("writing the repaired texts")
+    progress.stage("writing the repaired texts and their languages", total=len(parts))
     for part in parts:
-        rows = lower_split[part][0] if part in lower_split else []
+        part_works = lower_split[part][0] if part in lower_split else []
+        repaired_texts = [(work.work_id, work.text) for work in part_works]
         save_repaired_texts(
-            catalog, pl.DataFrame(rows, schema=REPAIRED_TEXTS_SCHEMA, orient="row"), part
+            catalog,
+            pl.DataFrame(repaired_texts, schema=REPAIRED_TEXTS_SCHEMA, orient="row"),
+            part,
         )
+        moved = [
+            (work.work_id, *sentence) for work in part_works for sentence in sentence_ranges(work)
+        ]
+        save_repaired_sentence_languages(
+            catalog, pl.DataFrame(moved, schema=SENTENCE_LANGUAGES_SCHEMA, orient="row"), part
+        )
+        progress.advance()
     spaced = joins.filter(pl.col("join"))
     hyphenated = joins.filter(pl.col("join_hyphenated"))
     return WordRepairsResult(
-        abstract_count=texts.height,
+        abstract_count=sum(len(part_works) for part_works in works.values()),
         glued_word_count=decisions.height,
         glued_split_counts=dict(split["reason"].value_counts(sort=True).iter_rows()),
         glued_split_occurrences=int(split["occurrences"].sum()),
@@ -268,34 +278,62 @@ def count_word_repairs(
     )
 
 
+def _repairable_texts(works: Mapping[str, list[PiecedText]]) -> pl.DataFrame:
+    """The pieces the repairs may change, one row each with its work: what the counts read."""
+    return pl.DataFrame(
+        [
+            (work.work_id, piece)
+            for part_works in works.values()
+            for work in part_works
+            for piece in work.repairable_pieces()
+        ],
+        schema={"work_id": pl.String(), "text": pl.String()},
+        orient="row",
+    )
+
+
 def _split_part(
-    _part: str, works_and_splits: tuple[list[tuple[str, str]], Mapping[str, str]]
-) -> list[tuple[str, str]]:
-    """One part's repaired works with their glued words split."""
+    _part: str, works_and_splits: tuple[list[PiecedText], Mapping[str, str]]
+) -> list[PiecedText]:
+    """One part's works with the glued words of their English sentences split."""
     works, splits = works_and_splits
-    return [(work_id, split_glued_words(text, splits)) for work_id, text in works]
+    return [repair_pieces(work, lambda text: split_glued_words(text, splits)) for work in works]
 
 
 def _join_part(
-    _part: str, works_and_joins: tuple[list[tuple[str, str]], SplitWordJoins]
-) -> list[tuple[str, str]]:
-    """One part's works with their split words joined."""
+    _part: str, works_and_joins: tuple[list[PiecedText], SplitWordJoins]
+) -> list[PiecedText]:
+    """One part's works with the split words of their English sentences joined."""
     works, joins = works_and_joins
-    return [(work_id, join_split_words(text, joins)) for work_id, text in works]
+    return [repair_pieces(work, lambda text: join_split_words(text, joins)) for work in works]
 
 
 def _lower_split_part(
-    _part: str, works_and_splits: tuple[list[tuple[str, str]], LowerGluedSplits, int]
-) -> tuple[list[tuple[str, str]], Counter[str]]:
-    """One part's works with their lower-case glued words split, and the splits made by pattern.
+    _part: str, works_and_splits: tuple[list[PiecedText], LowerGluedSplits, int]
+) -> tuple[list[PiecedText], Counter[str]]:
+    """One part's works with their English sentences' lower-case glue split, and the splits.
 
-    The last of the word repairs.
+    The last of the word repairs. A work is damaged when its English sentences hold at least
+    ``min_dense_splits`` two-word glues; the guarded patterns apply only there. The splits made
+    are counted by pattern.
     """
     works, splits, min_dense_splits = works_and_splits
-    rows: list[tuple[str, str]] = []
+    repaired: list[PiecedText] = []
     counts: Counter[str] = Counter()
-    for work_id, text in works:
-        repaired, made = split_lower_glued_words(text, splits, min_dense_splits=min_dense_splits)
-        rows.append((work_id, repaired))
-        counts.update(made)
-    return rows, counts
+    for work in works:
+        two_words = sum(count_two_word_splits(piece, splits) for piece in work.repairable_pieces())
+        is_damaged = two_words >= min_dense_splits
+
+        repaired.append(
+            repair_pieces(work, partial(_split_counted, splits, counts, is_damaged=is_damaged))
+        )
+    return repaired, counts
+
+
+def _split_counted(
+    splits: LowerGluedSplits, counts: Counter[str], text: str, *, is_damaged: bool
+) -> str:
+    """One piece with its lower-case glue split, the splits added to ``counts``."""
+    split_text, made = split_lower_glued_words(text, splits, is_damaged=is_damaged)
+    counts.update(made)
+    return split_text

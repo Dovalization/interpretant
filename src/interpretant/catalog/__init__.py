@@ -41,8 +41,10 @@ from interpretant.catalog.glued_words import (
 from interpretant.catalog.languages import (
     SENTENCE_LANGUAGES_SCHEMA,
     load_base_sentence_languages,
+    load_repaired_sentence_languages,
     load_sentence_languages,
     save_base_sentence_languages,
+    save_repaired_sentence_languages,
     save_sentence_languages,
 )
 from interpretant.catalog.linked_records import (
@@ -157,6 +159,7 @@ __all__ = [
     "load_lower_glued_words",
     "load_raw_cell",
     "load_record_kinds",
+    "load_repaired_sentence_languages",
     "load_repaired_texts",
     "load_sentence_languages",
     "load_split_words",
@@ -175,6 +178,7 @@ __all__ = [
     "save_corpus_report",
     "save_glued_words",
     "save_lower_glued_words",
+    "save_repaired_sentence_languages",
     "save_repaired_texts",
     "save_sentence_languages",
     "save_split_words",
