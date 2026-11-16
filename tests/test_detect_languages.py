@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -35,6 +36,19 @@ def test_detect_languages_writes_a_row_per_cached_sentence(
     assert sum(result.sentence_counts.values()) == heights
 
 
+def test_detect_languages_writes_the_same_rows_in_worker_processes(
+    corpus_catalog_file: Path,
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    alone = detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS)
+    tables = {part: load_sentence_languages(catalog, part) for part in alone.parts}
+    in_workers = detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS, process_count=2)
+    assert in_workers == alone
+    assert all(load_sentence_languages(catalog, part).equals(tables[part]) for part in tables)
+    assert "RAYON_NUM_THREADS" not in os.environ
+
+
 def test_detect_languages_needs_the_annotation_cache(corpus_catalog_file: Path) -> None:
     with pytest.raises(FileNotFoundError, match="no cached annotations"):
         detect_languages(read_catalog(corpus_catalog_file), SELECTION, LANGUAGE_SETTINGS)
@@ -45,7 +59,7 @@ def test_detect_languages_command_counts_the_sentences(corpus_catalog_file: Path
     runner = CliRunner()
     annotated = runner.invoke(cli, ["annotate-corpus", *catalog_option, "--process-count", "1"])
     assert annotated.exit_code == 0
-    outcome = runner.invoke(cli, ["detect-languages", *catalog_option])
+    outcome = runner.invoke(cli, ["detect-languages", *catalog_option, "--process-count", "1"])
     assert outcome.exit_code == 0, outcome.output
     assert "sentences of" in outcome.output
     run_log = read_catalog(corpus_catalog_file).run_log.path.read_text().splitlines()

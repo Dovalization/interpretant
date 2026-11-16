@@ -1,16 +1,22 @@
 """Stage 2b of the run order (decision agenda 9.1, 2.4): each cached sentence's language.
 
-lingua reads the sentences of the annotation cache, part by part with its multi-threaded
-methods, and writes one row per sentence. Only this stage and the ones after it rerun when the
-candidate languages, the English threshold or the minimum relative distance change.
+Each worker process takes whole parts: it reads a part's documents from the annotation cache,
+has lingua read their sentences and writes one row per sentence. Only this stage and the ones
+after it rerun when the candidate languages, the English threshold or the minimum relative
+distance change.
 """
 
 from __future__ import annotations
 
+import os
 from collections import Counter
+from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass
+from functools import cache
 
 import polars as pl
+from lingua import LanguageDetector
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 from spacy.vocab import Vocab
@@ -26,6 +32,11 @@ from interpretant.corpus.language import build_language_detector, detect_sentenc
 from interpretant.pipelines.corpus import corpus_cells, corpus_parts
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
+from interpretant.pipelines.workers import map_parts
+
+# lingua runs its parallel methods on rayon's thread pool, which takes every core unless this
+# variable says otherwise (rayon's documentation); a worker process uses one.
+_RAYON_THREADS = "RAYON_NUM_THREADS"
 
 
 class DetectLanguagesSettings(ParamsSettings):
@@ -52,46 +63,93 @@ def detect_languages(
     selection: CorpusSelection,
     settings: DetectLanguagesSettings,
     *,
+    process_count: int = 1,
     progress: Progress = SILENT,
 ) -> LanguageResult:
     """Detect the language of every cached sentence of the corpus and write it per part.
 
-    The parts are read one after another; lingua's multi-threaded methods use every core on each
-    part, with one copy of the language models.
+    With worker processes, each holds its own copy of lingua's language models (about 690 MB)
+    and runs lingua on one core: reading the documents and walking their sentences, which lingua
+    cannot share, then run in every process. With one process lingua uses every core.
 
     Raises:
         ValueError: if no raw cell matches the selection.
         FileNotFoundError: if a part has not been annotated.
     """
     parts = corpus_parts(corpus_cells(catalog, selection))
-    progress.stage("loading lingua")
-    detector = build_language_detector(
-        settings.languages, minimum_relative_distance=settings.minimum_relative_distance
+    job = _LanguageJob(
+        catalog,
+        settings.languages,
+        settings.english_threshold,
+        settings.minimum_relative_distance,
     )
     progress.stage("detecting sentence languages", total=len(parts))
-    counts: Counter[str] = Counter()
-    abstract_count = 0
-    for part in parts:
-        docs = list(load_annotations(catalog, part, Vocab()))
-        labels = detect_sentence_languages(
-            docs, detector, english_threshold=settings.english_threshold
+    with _one_lingua_thread_per_worker(process_count):
+        results = map_parts(
+            _detect_part,
+            dict.fromkeys(parts, job),
+            process_count=process_count,
+            progress=progress,
         )
-        rows = [
-            (
-                doc.user_data[WORK_ID],
-                sentence.start_char,
-                sentence.end_char,
-                language.language,
-                language.confidence,
-            )
-            for doc, languages in zip(docs, labels, strict=True)
-            for sentence, language in zip(doc.sents, languages, strict=True)
-        ]
-        table = pl.DataFrame(rows, schema=SENTENCE_LANGUAGES_SCHEMA, orient="row")
-        save_sentence_languages(catalog, table, part=part)
-        counts.update(table["language"].to_list())
-        abstract_count += len(docs)
-        progress.advance()
+    counts: Counter[str] = Counter()
+    for _, part_counts in results.values():
+        counts.update(part_counts)
     return LanguageResult(
-        abstract_count=abstract_count, parts=parts, sentence_counts=dict(counts.most_common())
+        abstract_count=sum(abstract_count for abstract_count, _ in results.values()),
+        parts=parts,
+        sentence_counts=dict(counts.most_common()),
     )
+
+
+@dataclass(frozen=True)
+class _LanguageJob:
+    """What a worker needs to detect a part's sentence languages."""
+
+    catalog: CatalogConfig
+    languages: tuple[str, ...]
+    english_threshold: float
+    minimum_relative_distance: float
+
+
+def _detect_part(part: str, job: _LanguageJob) -> tuple[int, Counter[str]]:
+    """Detect one part's sentence languages, write them, and count its abstracts and languages."""
+    detector = _detector(job.languages, job.minimum_relative_distance)
+    docs = list(load_annotations(job.catalog, part, Vocab()))
+    labels = detect_sentence_languages(docs, detector, english_threshold=job.english_threshold)
+    rows = [
+        (
+            doc.user_data[WORK_ID],
+            sentence.start_char,
+            sentence.end_char,
+            language.language,
+            language.confidence,
+        )
+        for doc, languages in zip(docs, labels, strict=True)
+        for sentence, language in zip(doc.sents, languages, strict=True)
+    ]
+    table = pl.DataFrame(rows, schema=SENTENCE_LANGUAGES_SCHEMA, orient="row")
+    save_sentence_languages(job.catalog, table, part=part)
+    return len(docs), Counter(table["language"].to_list())
+
+
+@cache
+def _detector(languages: tuple[str, ...], minimum_relative_distance: float) -> LanguageDetector:
+    """Lingua's detector, built once per process."""
+    return build_language_detector(languages, minimum_relative_distance=minimum_relative_distance)
+
+
+@contextmanager
+def _one_lingua_thread_per_worker(process_count: int) -> Iterator[None]:
+    """Start worker processes with rayon limited to one thread; the main process is unchanged."""
+    if process_count == 1:
+        yield
+        return
+    previous = os.environ.get(_RAYON_THREADS)
+    os.environ[_RAYON_THREADS] = "1"
+    try:
+        yield
+    finally:
+        if previous is None:
+            del os.environ[_RAYON_THREADS]
+        else:
+            os.environ[_RAYON_THREADS] = previous

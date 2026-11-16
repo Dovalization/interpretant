@@ -85,7 +85,7 @@ def test_clean_corpus_command_prints_what_each_rule_took(corpus_catalog_file: Pa
     workers = ["--process-count", "1"]
     runner = CliRunner()
     assert runner.invoke(cli, ["annotate-corpus", *catalog_option, *workers]).exit_code == 0
-    assert runner.invoke(cli, ["detect-languages", *catalog_option]).exit_code == 0
+    assert runner.invoke(cli, ["detect-languages", *catalog_option, *workers]).exit_code == 0
     outcome = runner.invoke(cli, ["clean-corpus", *catalog_option, *workers])
     assert outcome.exit_code == 0, outcome.output
     assert "5 abstracts in 3 parts" in outcome.output
