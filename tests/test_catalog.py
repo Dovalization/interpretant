@@ -26,6 +26,7 @@ from interpretant.catalog import (
     load_annotations,
     load_raw_cell,
     load_work_metadata,
+    metadata_work_ids,
     read_catalog,
     save_abstracts,
     save_annotations,
@@ -218,3 +219,20 @@ def test_load_annotations_looks_the_serialiser_extensions_up_once(
     texts = [doc.text for doc in load_annotations(catalog, "ai_2010", nlp.vocab)]
     assert texts == ["A short text.", "Another."]
     assert len(lookups) == 2
+
+
+def test_metadata_work_ids_reads_every_cell_s_ids(catalog: CatalogConfig) -> None:
+    append_work_metadata(catalog, RawCell("ai", 2010), [metadata_record(1), missing_record(3)])
+    append_work_metadata(catalog, RawCell("compsci", 2010), [metadata_record(2)])
+    cells = [RawCell("ai", 2010), RawCell("compsci", 2010)]
+    assert metadata_work_ids(catalog, cells) == {
+        "https://openalex.org/W1",
+        "https://openalex.org/W2",
+        "https://openalex.org/W3",
+    }
+
+
+def test_metadata_work_ids_refuses_a_cell_never_fetched(catalog: CatalogConfig) -> None:
+    append_work_metadata(catalog, RawCell("ai", 2010), [metadata_record(1)])
+    with pytest.raises(FileNotFoundError, match="no work metadata for compsci 2010"):
+        metadata_work_ids(catalog, [RawCell("ai", 2010), RawCell("compsci", 2010)])

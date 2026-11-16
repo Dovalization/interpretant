@@ -12,10 +12,10 @@ from interpretant.catalog import (
     CatalogConfig,
     RawCell,
     WorkMetadata,
-    index_work_metadata,
     list_raw_cells,
     load_raw_cell,
     load_work_metadata,
+    metadata_work_ids,
 )
 from interpretant.corpus.works import RawAbstract, merge_cells, part_of
 from interpretant.pipelines.params import CorpusSelection
@@ -72,9 +72,15 @@ def load_corpus_works(
         ((cell.field, load_raw_cell(catalog, cell)) for cell in cells), source=REGULAR
     )
     progress.stage("checking the work metadata")
-    index_work_metadata(
-        load_corpus_metadata(catalog, cells), (abstract.work_id for abstract in abstracts)
-    )
+    try:
+        fetched = metadata_work_ids(catalog, cells)
+    except FileNotFoundError as exc:
+        raise ValueError(f"{exc}: run `interpretant fetch-metadata`") from exc
+    unfetched = {abstract.work_id for abstract in abstracts} - fetched
+    if unfetched:
+        raise ValueError(
+            f"{len(unfetched)} works have no metadata record: run `interpretant fetch-metadata`"
+        )
     return abstracts
 
 

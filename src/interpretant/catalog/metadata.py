@@ -9,7 +9,7 @@ stopped.
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Iterator, Mapping
+from collections.abc import Iterable, Iterator, Mapping, Sequence
 from datetime import date
 from pathlib import Path
 
@@ -94,6 +94,25 @@ def load_work_metadata(catalog: CatalogConfig, cell: RawCell) -> Iterator[WorkMe
     """
     for line in read_json_lines(_path(catalog, cell)):
         yield WorkMetadata.model_validate_json(line)
+
+
+def metadata_work_ids(catalog: CatalogConfig, cells: Sequence[RawCell]) -> set[str]:
+    """The work ids of the cells' metadata records, read by Polars without checking the records.
+
+    A stage that only needs to know every work has a record reads the ids alone: about 3 s for
+    the whole corpus where checking every record takes about 30 (run 7c's profile).
+
+    Raises:
+        FileNotFoundError: if a cell's metadata has not been fetched (the first such cell).
+    """
+    paths = [_path(catalog, cell) for cell in cells]
+    for cell, path in zip(cells, paths, strict=True):
+        if not path.exists():
+            raise FileNotFoundError(f"no work metadata for {cell.field} {cell.decade}")
+    if not paths:
+        return set()
+    ids = pl.read_ndjson(paths, schema=pl.Schema({"id": pl.String()}))["id"]
+    return set(ids.drop_nulls().to_list())
 
 
 def load_work_metadata_table(catalog: CatalogConfig, schema: pl.Schema) -> pl.DataFrame:

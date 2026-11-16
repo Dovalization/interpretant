@@ -60,6 +60,7 @@ from interpretant.catalog.metadata import (
     index_work_metadata,
     load_work_metadata,
     load_work_metadata_table,
+    metadata_work_ids,
 )
 from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_cell
 from interpretant.catalog.repaired_texts import (
@@ -149,6 +150,7 @@ __all__ = [
     "load_staging_table",
     "load_work_metadata",
     "load_work_metadata_table",
+    "metadata_work_ids",
     "read_catalog",
     "save_abstracts",
     "save_annotated_abstracts",
