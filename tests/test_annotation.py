@@ -15,6 +15,7 @@ import spacy
 from lingua import LanguageDetector
 from spacy.language import Language
 from spacy.pipeline import AttributeRuler
+from spacy.tokens import Doc, Span
 
 from interpretant.catalog import (
     WORK_ID,
@@ -26,13 +27,19 @@ from interpretant.catalog import (
     save_annotations,
 )
 from interpretant.corpus.annotation import annotate_texts, build_pipeline
-from interpretant.corpus.language import build_language_detector, detect_sentence_languages
+from interpretant.corpus.language import (
+    SentenceLanguage,
+    build_language_detector,
+    detect_sentence_languages,
+)
 from interpretant.corpus.removals import (
     MALFORMED,
     SPANS_KEY,
     AnnotatedAbstract,
+    Removal,
     build_cleaning_pipeline,
     clean_abstract,
+    find_removals,
     kept_text,
 )
 from interpretant.corpus.repair import compile_signatures, repair_text
@@ -348,6 +355,18 @@ def test_annotate_abstracts_removes_a_notice_and_keeps_the_text_before_it(
     kept = kept_text(row.text, row.removals)
     assert kept.split() == text.replace(removed, " ").split()
     assert row.dropped_reason is None
+
+
+def test_find_removals_takes_a_notice_to_the_end_of_the_sentence_it_ends_in(
+    nlp: Language,
+) -> None:
+    words = ["Models", "learn", "senses", ".", "(", "c", ")", "2006", "APA", "press", "."]
+    starts = [True, False, False, False, True, False, False, True, False, False, False]
+    doc = Doc(nlp.vocab, words=words, sent_starts=starts)
+    doc.spans[SPANS_KEY] = [Span(doc, 4, 8, label="copyright")]
+    english = [SentenceLanguage("en", 1.0)] * len(list(doc.sents))
+    removals, _ = find_removals(doc, {"copyright": "rest_of_sentence"}, english)
+    assert removals == [Removal(doc[4].idx, doc[-1].idx + len(doc[-1]), "copyright")]
 
 
 def test_annotate_abstracts_removes_an_encoded_library_link_and_keeps_the_abstract(

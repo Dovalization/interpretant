@@ -197,7 +197,9 @@ def find_removals(
     """The removal ranges of one abstract, sorted, and the labels that drop it whole.
 
     A tokens-scope match removes its own characters; a rest-of-sentence match removes from its
-    start to the end of its sentence, so text before a notice survives; an abstract-scope match
+    start to the end of the sentence its last token is in, so text before a notice survives
+    (spaCy's ``span.sent`` is only the first sentence of a span that crosses a sentence start, as
+    "(c) 2006" can when the year starts one); an abstract-scope match
     removes its characters and drops the abstract (start-only matches away from the start are
     already filtered out by the cleaning pipeline). A sentence lingua reads as another language
     is removed with the reason ``not_english``. A range inside another range with the same reason
@@ -208,7 +210,7 @@ def find_removals(
     for span in doc.spans[SPANS_KEY]:
         label = span.label_
         if scopes[label] == "rest_of_sentence":
-            removals.add(Removal(span.start_char, span.sent.end_char, label))
+            removals.add(Removal(span.start_char, span[-1].sent.end_char, label))
             continue
         removals.add(Removal(span.start_char, span.end_char, label))
         if scopes[label] == "abstract" and label not in drop_reasons:
