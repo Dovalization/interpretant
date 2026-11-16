@@ -56,6 +56,11 @@ def mark_near_duplicates(
     candidates = abstracts.filter(pl.col("dropped_reason").is_null()).sort("year", "work_id")
     order = {work_id: position for position, work_id in enumerate(candidates["work_id"])}
     lsh_index = MinHashLSH(threshold=threshold, num_perm=PERMUTATION_COUNT)
+    # Every signature reuses the first MinHash's permutations and scheme, the same for one seed:
+    # made again for each abstract they took 29% of the corpus build (run 7c's profile), and
+    # datasketch takes them from another MinHash for faster initialization (with its scheme
+    # named, since version 2.0.0).
+    first = MinHash(num_perm=PERMUTATION_COUNT)
     kept: dict[str, MinHash] = {}
     duplicate_of: dict[str, str] = {}
     # Each abstract's shingles are built as it is visited and only its signature is kept: held
@@ -67,7 +72,9 @@ def mark_near_duplicates(
         shingles = build_shingles(text, [Removal(**removal) for removal in removals])
         if not shingles:
             continue
-        minhash = MinHash(num_perm=PERMUTATION_COUNT)
+        minhash = MinHash(
+            num_perm=PERMUTATION_COUNT, permutations=first.permutations, scheme=first.scheme
+        )
         minhash.update_batch(list(shingles))
         similarities = [(minhash.jaccard(kept[key]), key) for key in lsh_index.query(minhash)]
         matches = [match for match in similarities if match[0] >= threshold]
