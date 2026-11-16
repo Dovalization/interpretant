@@ -1,4 +1,4 @@
-"""The ``detect-languages`` command: lingua on every sentence of the base texts."""
+"""The ``detect-languages`` command: lingua on every cached sentence, part by part."""
 
 from __future__ import annotations
 
@@ -28,9 +28,7 @@ from interpretant.pipelines.runs import record_run
 )
 @process_count_option
 def detect_languages_command(catalog_file: Path, process_count: int | None) -> None:
-    """Detect each base sentence's language with the settings in params.yaml.
-
-    The base texts are split before the word repairs and the spaCy pass, which read the result.
+    """Detect each cached sentence's language with the settings in params.yaml.
 
     Each worker process takes whole parts. Progress is shown live: a bar in a terminal, a line
     every half minute in a log file.

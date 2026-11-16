@@ -40,56 +40,9 @@ stages:
       - ${crossref_works.path}
       - ${pubmed_works.path}
 
-  # The works merged into one record per work and their texts repaired (spacing around
-  # punctuation, HTML entities, web addresses), part by part; the word repairs read the result.
-  repair_texts:
-    cmd: interpretant repair-texts
-    deps:
-      - src/interpretant/catalog
-      - src/interpretant/corpus/repair.py
-      - src/interpretant/corpus/works.py
-      - src/interpretant/pipelines/corpus.py
-      - src/interpretant/pipelines/params.py
-      - src/interpretant/pipelines/progress.py
-      - src/interpretant/pipelines/repair_texts.py
-      - src/interpretant/pipelines/workers.py
-      - ${raw_abstracts.path}
-      - ${work_metadata.path}
-    params:
-      - corpus
-    outs:
-      # About as large as the corpus and remade in about a minute, so kept on the machine that
-      # ran the stage, never in the DVC store.
-      - ${base_texts.path}:
-          cache: false
-
-  # lingua's language for every sentence of the base texts, split by spaCy's rule-based
-  # sentencizer behind the pass's tokenizer settings and sentence rules: language data before
-  # the word repairs and the spaCy pass (docs/plan_early_languages.md).
-  detect_languages:
-    cmd: interpretant detect-languages
-    deps:
-      - src/interpretant/catalog
-      - src/interpretant/corpus/annotation.py
-      - src/interpretant/corpus/attribute_rules.py
-      - src/interpretant/corpus/language.py
-      - src/interpretant/corpus/repair.py
-      - src/interpretant/corpus/works.py
-      - src/interpretant/pipelines/corpus.py
-      - src/interpretant/pipelines/detect_languages.py
-      - src/interpretant/pipelines/params.py
-      - src/interpretant/pipelines/progress.py
-      - src/interpretant/pipelines/workers.py
-      - ${base_texts.path}
-    params:
-      - corpus
-      - detect_languages
-    outs:
-      - ${base_sentence_languages.path}
-
-  # The word repairs of the cleaning runs (decision agenda 2.3, runs 7, 7c and 8), counted over
-  # the corpus's base texts and decided; their tables are reviewed before the pass reads the
-  # texts with every repair made.
+  # Run 7 of the cleaning runs (decision agenda 2.3): the glued words of the repaired texts,
+  # counted over the corpus, and which of them the spaCy pass splits. A few minutes; its table is
+  # reviewed before the pass reads it.
   count_word_repairs:
     cmd: interpretant count-word-repairs
     deps:
@@ -99,7 +52,6 @@ stages:
       - src/interpretant/corpus/lower_glued_words.py
       - src/interpretant/corpus/phrase_counts.py
       - src/interpretant/corpus/repair.py
-      - src/interpretant/corpus/sentence_pieces.py
       - src/interpretant/corpus/split_words.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/corpus.py
@@ -109,8 +61,8 @@ stages:
       - src/interpretant/pipelines/workers.py
       - ${kept_apart_words.path}
       - ${kept_joined_words.path}
-      - ${base_texts.path}
-      - ${base_sentence_languages.path}
+      - ${raw_abstracts.path}
+      - ${work_metadata.path}
     params:
       - corpus
       - count_word_repairs
@@ -118,7 +70,6 @@ stages:
       - ${glued_words.path}
       - ${split_words.path}
       - ${lower_glued_words.path}
-      - ${repaired_sentence_languages.path}
       # The texts with every repair made, read by the spaCy pass: about as large as the corpus,
       # remade in under three minutes, so kept on the machine that ran the stage, never in the
       # DVC store.
@@ -150,19 +101,35 @@ stages:
           cache: false
           persist: true
 
+  detect_languages:
+    cmd: interpretant detect-languages
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/detect_languages.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - ${annotations.path}
+    params:
+      - corpus
+      - detect_languages
+    outs:
+      - ${sentence_languages.path}
+
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:
       - src/interpretant/catalog
-      - src/interpretant/corpus/annotation.py
-      - src/interpretant/corpus/attribute_rules.py
       - src/interpretant/corpus/language.py
       - src/interpretant/corpus/removals.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/clean_corpus.py
       - src/interpretant/pipelines/corpus.py
-      - src/interpretant/pipelines/detect_languages.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/workers.py
@@ -171,11 +138,10 @@ stages:
       - ${raw_abstracts.path}
       - ${work_metadata.path}
       - ${annotations.path}
-      - ${repaired_sentence_languages.path}
+      - ${sentence_languages.path}
     params:
       - corpus
       - clean_corpus
-      - detect_languages
     outs:
       - ${annotated_abstracts.path}
 

@@ -219,26 +219,6 @@ def _top_language(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
     return _sentence_language_of(best.language, best.value)
 
 
-def languages_by_boundaries(
-    sentences: Sequence[tuple[int, int]], early: Sequence[tuple[int, int, str, float]]
-) -> list[SentenceLanguage | None]:
-    """Each sentence's language from the earlier sentence with the same boundaries, else None.
-
-    The language stage reads sentences split before the spaCy pass (docs/plan_early_languages.md);
-    the pass's own sentences have the same boundaries in 94% of cases. Those take the earlier
-    sentence's language; the others (None) are for lingua to read in their own document
-    (``detect_sentence_languages``). Taking the language of the earlier sentences a pass sentence
-    overlaps was tried first: a pass sentence inside a longer earlier sentence took that
-    sentence's language, so foreign titles in English text were kept and English sentences next
-    to foreign text removed (the check run of 2026-11-16).
-    """
-    by_range = {
-        (start, end): SentenceLanguage(language, confidence)
-        for start, end, language, confidence in early
-    }
-    return [by_range.get(sentence) for sentence in sentences]
-
-
 def _sentence_language_of(language: LinguaLanguage, confidence: float) -> SentenceLanguage:
     return SentenceLanguage(_code(language), round(confidence, CONFIDENCE_DECIMALS))
 

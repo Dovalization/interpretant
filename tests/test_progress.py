@@ -169,7 +169,7 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
     detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS, progress=detected)
     assert detected.stages == [("detecting sentence languages", 2, 2)]
     cleaned = RecordingProgress()
-    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS, progress=cleaned)
+    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, progress=cleaned)
     assert cleaned.stages[-1] == ("cleaning the parts", 2, 2)
     built = RecordingProgress()
     build_corpus(catalog, SELECTION, BuildCorpusSettings(), progress=built)

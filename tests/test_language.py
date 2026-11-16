@@ -12,7 +12,6 @@ from interpretant.corpus.language import (
     SentenceLanguage,
     build_language_detector,
     detect_sentence_languages,
-    languages_by_boundaries,
 )
 
 
@@ -119,21 +118,3 @@ def test_detect_sentence_languages_leaves_english_headings_and_references_englis
     )
     (languages,) = detect_sentence_languages([doc], detector, english_threshold=0.9)
     assert [language.language for language in languages] == ["en", "en", "en"]
-
-
-EARLY = [(0, 20, "en", 0.99), (21, 40, "de", 0.9), (41, 50, "und", 0.4)]
-
-
-def test_languages_by_boundaries_takes_the_language_of_the_same_range() -> None:
-    assert languages_by_boundaries([(0, 20), (41, 50), (21, 40)], EARLY) == [
-        SentenceLanguage("en", 0.99),
-        SentenceLanguage(UNDETERMINED, 0.4),
-        SentenceLanguage("de", 0.9),
-    ]
-
-
-@pytest.mark.parametrize("sentence", [(0, 40), (5, 20), (21, 45), (60, 70)])
-def test_languages_by_boundaries_leaves_any_other_range_to_lingua(
-    sentence: tuple[int, int],
-) -> None:
-    assert languages_by_boundaries([sentence], EARLY) == [None]

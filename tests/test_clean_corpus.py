@@ -4,22 +4,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import polars as pl
 import pytest
 from click.testing import CliRunner
 from spacy.language import Language
 
 from interpretant.__main__ import cli
-from interpretant.catalog import (
-    SENTENCE_LANGUAGES_SCHEMA,
-    load_annotated_abstracts,
-    load_annotations,
-    read_catalog,
-    save_repaired_sentence_languages,
-)
-from interpretant.corpus.language import build_language_detector, detect_sentence_languages
+from interpretant.catalog import load_annotated_abstracts, load_annotations, read_catalog
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus
+from interpretant.pipelines.detect_languages import detect_languages
 from interpretant.pipelines.params import CorpusSelection
 from tests.corpus_catalog import (
     ANNOTATE_SETTINGS,
@@ -70,9 +63,10 @@ def test_clean_corpus_refuses_a_cache_older_than_the_raw_cells(
 ) -> None:
     catalog = read_catalog(corpus_catalog_file)
     annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    detect_languages(catalog, SELECTION, LANGUAGE_SETTINGS)
     write_raw_cell(corpus_catalog_file, "compsci", 2010, [(4, SHARED, 2015), (6, SHARED, 2016)])
     with pytest.raises(ValueError, match="rerun annotate-corpus"):
-        clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
+        clean_corpus(catalog, SELECTION, CLEAN_SETTINGS)
 
 
 def test_clean_corpus_gives_the_same_rows_in_worker_processes(
@@ -81,54 +75,9 @@ def test_clean_corpus_gives_the_same_rows_in_worker_processes(
     catalog = read_catalog(corpus_catalog_file)
     result = prepare_annotated_corpus(catalog)
     alone = load_annotated_abstracts(catalog, result.parts)
-    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS, process_count=2)
+    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, process_count=2)
     in_workers = load_annotated_abstracts(catalog, result.parts)
     assert all(in_workers[part].equals(alone[part]) for part in result.parts)
-
-
-def test_clean_corpus_takes_the_language_of_a_base_sentence_with_the_same_boundaries(
-    corpus_catalog_file: Path,
-) -> None:
-    catalog = read_catalog(corpus_catalog_file)
-    prepare_annotated_corpus(catalog)
-    sentences = (
-        load_annotated_abstracts(catalog, ["ai_2010"])["ai_2010"]
-        .select("work_id", "sentences")
-        .explode("sentences")
-        .unnest("sentences")
-        .select("work_id", "start", "end")
-        .with_columns(pl.lit("de").alias("language"), pl.lit(0.9).alias("confidence"))
-    )
-    save_repaired_sentence_languages(
-        catalog, sentences.cast(SENTENCE_LANGUAGES_SCHEMA), part="ai_2010"
-    )
-    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
-    rows = load_annotated_abstracts(catalog, ["ai_2010"])["ai_2010"]
-    languages = rows["sentences"].list.eval(pl.element().struct.field("language")).explode()
-    assert set(languages.to_list()) == {"de"}
-    assert set(rows["dropped_reason"].to_list()) == {"not_english"}
-
-
-def test_clean_corpus_reads_the_sentences_no_base_sentence_matches_as_the_stage_would(
-    corpus_catalog_file: Path, nlp: Language
-) -> None:
-    catalog = read_catalog(corpus_catalog_file)
-    prepare_annotated_corpus(catalog)
-    save_repaired_sentence_languages(
-        catalog, pl.DataFrame(schema=SENTENCE_LANGUAGES_SCHEMA), part="ai_2010"
-    )
-    clean_corpus(catalog, SELECTION, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
-    rows = load_annotated_abstracts(catalog, ["ai_2010"])["ai_2010"]
-    detector = build_language_detector(
-        LANGUAGE_SETTINGS.languages,
-        minimum_relative_distance=LANGUAGE_SETTINGS.minimum_relative_distance,
-    )
-    docs = list(load_annotations(catalog, "ai_2010", nlp.vocab))
-    expected = detect_sentence_languages(
-        docs, detector, english_threshold=LANGUAGE_SETTINGS.english_threshold
-    )
-    found = [[sentence["language"] for sentence in row] for row in rows["sentences"].to_list()]
-    assert found == [[language.language for language in doc] for doc in expected]
 
 
 def test_clean_corpus_command_prints_what_each_rule_took(corpus_catalog_file: Path) -> None:
@@ -136,6 +85,7 @@ def test_clean_corpus_command_prints_what_each_rule_took(corpus_catalog_file: Pa
     workers = ["--process-count", "1"]
     runner = CliRunner()
     assert runner.invoke(cli, ["annotate-corpus", *catalog_option, *workers]).exit_code == 0
+    assert runner.invoke(cli, ["detect-languages", *catalog_option, *workers]).exit_code == 0
     outcome = runner.invoke(cli, ["clean-corpus", *catalog_option, *workers])
     assert outcome.exit_code == 0, outcome.output
     assert "5 abstracts in 3 parts" in outcome.output

@@ -47,11 +47,9 @@ class CatalogConfig(BaseModel):
     glued_words: DatasetEntry
     split_words: DatasetEntry
     lower_glued_words: DatasetEntry
-    base_texts: DatasetEntry
     repaired_texts: DatasetEntry
     annotations: DatasetEntry
-    base_sentence_languages: DatasetEntry
-    repaired_sentence_languages: DatasetEntry
+    sentence_languages: DatasetEntry
 
 
 def read_catalog(catalog_file: Path = CATALOG_FILE) -> CatalogConfig:

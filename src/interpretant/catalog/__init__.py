@@ -40,10 +40,8 @@ from interpretant.catalog.glued_words import (
 )
 from interpretant.catalog.languages import (
     SENTENCE_LANGUAGES_SCHEMA,
-    load_base_sentence_languages,
-    load_repaired_sentence_languages,
-    save_base_sentence_languages,
-    save_repaired_sentence_languages,
+    load_sentence_languages,
+    save_sentence_languages,
 )
 from interpretant.catalog.linked_records import (
     LINKED_SOURCES,
@@ -72,9 +70,7 @@ from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_
 from interpretant.catalog.repaired_texts import (
     REPAIRED_TEXTS_SCHEMA,
     count_repaired_texts,
-    load_base_texts,
     load_repaired_texts,
-    save_base_texts,
     save_repaired_texts,
 )
 from interpretant.catalog.reports import (
@@ -145,8 +141,6 @@ __all__ = [
     "load_abstracts_from",
     "load_annotated_abstracts",
     "load_annotations",
-    "load_base_sentence_languages",
-    "load_base_texts",
     "load_cleaning_patterns",
     "load_corpus_metrics",
     "load_doi_corrections",
@@ -157,8 +151,8 @@ __all__ = [
     "load_lower_glued_words",
     "load_raw_cell",
     "load_record_kinds",
-    "load_repaired_sentence_languages",
     "load_repaired_texts",
+    "load_sentence_languages",
     "load_split_words",
     "load_staging_table",
     "load_work_metadata",
@@ -168,15 +162,13 @@ __all__ = [
     "save_abstracts",
     "save_annotated_abstracts",
     "save_annotations",
-    "save_base_sentence_languages",
-    "save_base_texts",
     "save_corpus_comparison",
     "save_corpus_metrics",
     "save_corpus_report",
     "save_glued_words",
     "save_lower_glued_words",
-    "save_repaired_sentence_languages",
     "save_repaired_texts",
+    "save_sentence_languages",
     "save_split_words",
     "save_staging_table",
     "select_linked_works",

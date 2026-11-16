@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from collections import Counter
-
 import polars as pl
 import pytest
 
@@ -15,7 +13,6 @@ from interpretant.corpus.lower_glued_words import (
     TWO_WORDS,
     LowerGluedSplits,
     count_lower_glued_words,
-    count_two_word_splits,
     decide_hyphenated_chunks,
     decide_lower_glued_word_splits,
     lower_glued_word_splits,
@@ -44,13 +41,6 @@ def decisions_for(texts: list[str], kept_joined: tuple[str, ...] = ()) -> pl.Dat
 
 def splits_for(texts: list[str]) -> LowerGluedSplits:
     return lower_glued_word_splits(decisions_for(texts))
-
-
-def split_whole(text: str) -> tuple[str, Counter[str]]:
-    """The text split as one English sentence, damaged with two or more two-word glues."""
-    splits = splits_for(CLEAN + GLUED)
-    is_damaged = count_two_word_splits(text, splits) >= 2
-    return split_lower_glued_words(text, splits, is_damaged=is_damaged)
 
 
 def test_count_lower_glued_words_finds_each_pattern_and_leaves_known_words_out() -> None:
@@ -86,7 +76,7 @@ def test_decide_lower_glued_word_splits_needs_the_margin() -> None:
 
 
 def test_split_lower_glued_words_splits_every_pattern_in_a_damaged_text() -> None:
-    text, counts = split_whole(GLUED[0])
+    text, counts = split_lower_glued_words(GLUED[0], splits_for(CLEAN + GLUED), min_dense_splits=2)
     expected = (
         "Of the results, the results of the a substantial of the proposed model show real-time"
     )
@@ -95,7 +85,7 @@ def test_split_lower_glued_words_splits_every_pattern_in_a_damaged_text() -> Non
 
 
 def test_split_lower_glued_words_spares_guarded_patterns_outside_damaged_texts() -> None:
-    text, counts = split_whole(GLUED[2])
+    text, counts = split_lower_glued_words(GLUED[2], splits_for(CLEAN + GLUED), min_dense_splits=2)
     assert text == "A single of the here, and Thestudy stays whole."
     assert counts == {TWO_WORDS: 1}
 
@@ -106,10 +96,12 @@ def test_split_lower_glued_words_spares_guarded_patterns_outside_damaged_texts()
     ids=["after a backslash", "touching a digit", "inside a web address"],
 )
 def test_split_lower_glued_words_leaves_some_places_alone(glued: str, kept: str) -> None:
-    text, _ = split_whole(f"See {glued} now.")
+    text, _ = split_lower_glued_words(
+        f"See {glued} now.", splits_for(CLEAN + GLUED), min_dense_splits=2
+    )
     assert text == f"See {kept} now."
 
 
 def test_split_lower_glued_words_takes_a_hyphenated_chunk_s_separator() -> None:
-    text, _ = split_whole(GLUED[1])
+    text, _ = split_lower_glued_words(GLUED[1], splits_for(CLEAN + GLUED), min_dense_splits=2)
     assert "state-of-the-art work" in text

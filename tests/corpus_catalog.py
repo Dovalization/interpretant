@@ -22,12 +22,10 @@ from interpretant.pipelines.count_word_repairs import (
     GluedWordSettings,
     LowerGluedWordSettings,
     SplitWordSettings,
-    WordRepairsResult,
     count_word_repairs,
 )
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from interpretant.pipelines.params import CorpusSelection
-from interpretant.pipelines.repair_texts import repair_texts
 from tests.metadata_records import metadata_record
 
 PARAGRAPH = (
@@ -66,28 +64,17 @@ WORD_REPAIRS_SETTINGS = CountWordRepairsSettings(
 )
 
 
-def repair_and_count(
-    catalog: CatalogConfig,
-    selection: CorpusSelection = SELECTION,
-    settings: CountWordRepairsSettings = WORD_REPAIRS_SETTINGS,
-) -> WordRepairsResult:
-    """Repair the texts, read their languages and count the word repairs, as ``dvc repro`` runs
-    the three stages."""
-    repair_texts(catalog, selection)
-    detect_languages(catalog, selection, LANGUAGE_SETTINGS)
-    return count_word_repairs(catalog, selection, settings)
-
-
 def prepare_annotated_corpus(
     catalog: CatalogConfig, selection: CorpusSelection = SELECTION
 ) -> CorpusResult:
     """Run the stages before the corpus-level rules, as ``dvc repro`` does: the staging tables,
-    the text repair, the sentence languages, the word repairs, the spaCy pass and the cleaning;
-    return the cleaning's result."""
+    the word repairs, the spaCy pass, the sentence languages and the cleaning; return the
+    cleaning's result."""
     build_linked_tables(catalog)
-    repair_and_count(catalog, selection)
+    count_word_repairs(catalog, selection, WORD_REPAIRS_SETTINGS)
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
-    return clean_corpus(catalog, selection, CLEAN_SETTINGS, LANGUAGE_SETTINGS)
+    detect_languages(catalog, selection, LANGUAGE_SETTINGS)
+    return clean_corpus(catalog, selection, CLEAN_SETTINGS)
 
 
 def write_corpus_catalog(folder: Path) -> Path:
@@ -114,11 +101,9 @@ def write_corpus_catalog(folder: Path) -> Path:
         "glued_words:\n  path: glued_words.parquet\n  format: parquet\n"
         "split_words:\n  path: split_words.parquet\n  format: parquet\n"
         "lower_glued_words:\n  path: lower_glued_words.parquet\n  format: parquet\n"
-        "base_texts:\n  path: base_texts\n  format: parquet\n"
         "repaired_texts:\n  path: repaired_texts\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
-        "base_sentence_languages:\n  path: base_sentence_languages\n  format: parquet\n"
-        "repaired_sentence_languages:\n  path: repaired_sentence_languages\n  format: parquet\n"
+        "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
         "corpus_comparison:\n  path: corpus_comparison.md\n  format: markdown\n"
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
@@ -126,7 +111,7 @@ def write_corpus_catalog(folder: Path) -> Path:
     )
     for (field, decade), works in CELLS.items():
         write_raw_cell(catalog_file, field, decade, works)
-    repair_and_count(read_catalog(catalog_file), CorpusSelection())
+    count_word_repairs(read_catalog(catalog_file), CorpusSelection(), WORD_REPAIRS_SETTINGS)
     return catalog_file
 
 

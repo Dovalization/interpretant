@@ -14,12 +14,13 @@ from interpretant.catalog import WORK_ID, load_annotations, read_catalog
 from interpretant.cli.options import default_process_count
 from interpretant.corpus.removals import SPANS_KEY
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
+from interpretant.pipelines.count_word_repairs import count_word_repairs
 from interpretant.pipelines.params import CorpusSelection
 from tests.corpus_catalog import (
     ANNOTATE_SETTINGS,
     SELECTION,
     SHARED,
-    repair_and_count,
+    WORD_REPAIRS_SETTINGS,
     write_raw_cell,
 )
 
@@ -82,7 +83,7 @@ def test_annotate_corpus_saves_a_part_whose_works_all_list_an_earlier_field(
     write_raw_cell(corpus_catalog_file, "hci", 2010, [(1, SHARED, 2012)])
     selection = CorpusSelection(fields=("ai", "compsci", "hci"), decades=(2010,))
     catalog = read_catalog(corpus_catalog_file)
-    repair_and_count(catalog, selection)
+    count_word_repairs(catalog, selection, WORD_REPAIRS_SETTINGS)
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
     assert cached_work_ids(corpus_catalog_file, "hci_2010", nlp) == []
 
@@ -90,7 +91,7 @@ def test_annotate_corpus_saves_a_part_whose_works_all_list_an_earlier_field(
 def test_annotate_corpus_needs_each_part_s_repaired_texts(corpus_catalog_file: Path) -> None:
     catalog = read_catalog(corpus_catalog_file)
     (catalog.repaired_texts.path / "compsci_2010.parquet").unlink()
-    with pytest.raises(FileNotFoundError, match="no texts for part 'compsci_2010'"):
+    with pytest.raises(FileNotFoundError, match="no repaired texts for part 'compsci_2010'"):
         annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
     assert not catalog.annotations.path.exists()
 

@@ -12,7 +12,6 @@ from interpretant.cli.options import default_process_count, process_count_option
 from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_result, result_counts
 from interpretant.pipelines.clean_corpus import CleanCorpusSettings, clean_corpus
-from interpretant.pipelines.detect_languages import DetectLanguagesSettings
 from interpretant.pipelines.params import CorpusSelection
 from interpretant.pipelines.progress import StageTimer
 from interpretant.pipelines.runs import record_run
@@ -41,7 +40,6 @@ def clean_corpus_command(catalog_file: Path, process_count: int | None) -> None:
             catalog,
             CorpusSelection(),
             CleanCorpusSettings(),
-            DetectLanguagesSettings(),
             process_count=process_count or default_process_count(),
             progress=timer,
         )

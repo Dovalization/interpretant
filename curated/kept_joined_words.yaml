@@ -6,12 +6,10 @@
 # run 8 splits a lower-case word the lemma index does not know when the corpus writes its parts
 # apart far more often than joined (params.yaml, count_word_repairs). The counts get some words
 # wrong, mostly where the parts also make an ordinary phrase: names, real words the lemma index
-# lacks, and foreign words. The repairs change only the sentences read as English, but foreign
-# words occur there too, quoted or in a sentence that runs into foreign text: with the nine
-# foreign words off this list, the run of 2026-11-16 split them 54 times, 33 of them foreign
-# words and 11 broken English words, against 10 real repairs. Each entry is matched in any case
-# and carries its evidence: the counts from the glued words tables (run 8's: the word whole, its
-# parts apart, on the count of 2026-11-16) and what the word names.
+# lacks, and foreign words, which split into English words could make lingua read their sentence
+# as English. Each entry is matched in any case and carries its evidence: the counts from the
+# glued words tables (run 8's: the word whole, its parts apart, on the count of 2026-11-16) and
+# what the word names.
 
 words:
   - word: LinkedIn
