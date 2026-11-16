@@ -1759,6 +1759,9 @@ ruler still takes 30%, the next thing to study. The corpus build now spends 24% 
 default SHA-1 hash; a faster hash would change the signatures, so it needs its own check. The
 corpus build and the report still validate the full metadata records (28 and 24 s).
 
+*From 2026-11-16 the speed work, its full runs and its open candidates are recorded in
+[`docs/performance.md`](performance.md).*
+
 **DVC** for pipelines and provenance, after comparing it with Snakemake (runs steps, no data
 versioning or lock file), Kedro (a full framework to restructure around), Hydra (configuration
 only; pydantic settings already exist), MLflow (experiment tracking at a scale the Markdown
