@@ -157,7 +157,7 @@ git log --oneline -- scripts/score_predictions.py
 | `scikit-learn`         | Sense classifier, cross-validation                    |
 | `spaCy` (`en_core_web_sm`, `en_core_web_trf`) | Sentences, part of speech, lemmas and named entities of target occurrences |
 | `lingua`               | Language identification, per sentence                 |
-| `datasketch`           | Near-duplicate abstracts (MinHash with locality-sensitive hashing) |
+| `datasketch`, `mmh3`   | Near-duplicate abstracts (MinHash with locality-sensitive hashing, MurmurHash3 for the shingles) |
 | `Polars` / Parquet     | Every table: store manifest, metadata, audit and drift tables |
 | `pandera`              | Data checks run on every rebuild                      |
 | `matplotlib`           | Figures                                               |

@@ -37,6 +37,7 @@ dependencies = [
     "dvc[ssh]>=3.67.1",
     "biopython>=1.88",
     "habanero>=2.9.2",
+    "mmh3>=5.3.1",
 ]
 
 [project.optional-dependencies]

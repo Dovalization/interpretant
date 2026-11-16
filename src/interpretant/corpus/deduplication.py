@@ -4,13 +4,16 @@ Exact duplicates, the same work in two cells, are merged earlier (``corpus.works
 Near-duplicates (a preprint and its published version) are found with
 MinHash and locality-sensitive hashing (``datasketch``) on word 5-shingles of the kept text, the
 design's starting point; the earliest work of each group is kept and every later one is dropped
-with the work it duplicates recorded.
+with the work it duplicates recorded. Shingles are hashed with MurmurHash3 (``mmh3``), the faster
+hash datasketch's documentation shows in place of its default SHA-1, which took 24% of the
+corpus build.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 
+import mmh3
 import polars as pl
 from datasketch import MinHash, MinHashLSH
 
@@ -60,7 +63,7 @@ def mark_near_duplicates(
     # made again for each abstract they took 29% of the corpus build (run 7c's profile), and
     # datasketch takes them from another MinHash for faster initialization (with its scheme
     # named, since version 2.0.0).
-    first = MinHash(num_perm=PERMUTATION_COUNT)
+    first = MinHash(num_perm=PERMUTATION_COUNT, hashfunc=mmh3.mmh3_32_uintdigest)
     kept: dict[str, MinHash] = {}
     duplicate_of: dict[str, str] = {}
     # Each abstract's shingles are built as it is visited and only its signature is kept: held
@@ -73,7 +76,10 @@ def mark_near_duplicates(
         if not shingles:
             continue
         minhash = MinHash(
-            num_perm=PERMUTATION_COUNT, permutations=first.permutations, scheme=first.scheme
+            num_perm=PERMUTATION_COUNT,
+            hashfunc=mmh3.mmh3_32_uintdigest,
+            permutations=first.permutations,
+            scheme=first.scheme,
         )
         minhash.update_batch(list(shingles))
         similarities = [(minhash.jaccard(kept[key]), key) for key in lsh_index.query(minhash)]
