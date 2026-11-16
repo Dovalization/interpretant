@@ -1,9 +1,9 @@
 """Stage 2b of the run order (decision agenda 9.1, 2.4): each cached sentence's language.
 
-Each worker process takes whole parts: it reads a part's documents from the annotation cache,
-has lingua read their sentences and writes one row per sentence. Only this stage and the ones
-after it rerun when the candidate languages, the English threshold or the minimum relative
-distance change.
+Each worker process takes whole parts: it reads a part's repaired texts and the spaCy pass's
+sentence table (not the DocBins), has lingua read the sentences and writes one row per sentence.
+Only this stage and the ones after it rerun when the candidate languages, the English threshold
+or the minimum relative distance change.
 """
 
 from __future__ import annotations
@@ -19,11 +19,11 @@ import polars as pl
 from lingua import LanguageDetector
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
-from spacy.vocab import Vocab
 
-from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.languages import SENTENCE_LANGUAGES_SCHEMA, save_sentence_languages
+from interpretant.catalog.repaired_texts import load_repaired_texts
+from interpretant.catalog.sentences import load_sentences
 from interpretant.corpus.language import build_language_detector, detect_sentence_languages
 from interpretant.pipelines.corpus import corpus_cells, corpus_parts
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
@@ -108,29 +108,35 @@ class _LanguageJob:
 
 
 def _detect_part(part: str, job: _LanguageJob) -> tuple[int, Counter[str]]:
-    """Detect one part's sentence languages, write them, and count its abstracts and languages."""
+    """Detect one part's sentence languages, write them, and count its abstracts and languages.
+
+    The repaired texts and the pass's sentence table are in the cache's order; reading them
+    instead of the DocBins took the documents' deserialising out of the stage.
+    """
     detector = _detector(job.languages)
-    docs = list(load_annotations(job.catalog, part, Vocab()))
+    texts = load_repaired_texts(job.catalog, part)
+    sentences = load_sentences(job.catalog, part)
+    by_work: dict[str, list[tuple[int, int]]] = {}
+    for work_id, start, end in sentences.iter_rows():
+        by_work.setdefault(work_id, []).append((start, end))
+    work_ids = texts["work_id"].to_list()
+    if set(by_work) != set(work_ids):
+        raise ValueError(f"part {part!r}: the sentences and the repaired texts name other works")
+    documents = [(text, by_work[work_id]) for work_id, text in texts.iter_rows()]
     labels = detect_sentence_languages(
-        docs,
+        documents,
         detector,
         english_threshold=job.english_threshold,
         minimum_relative_distance=job.minimum_relative_distance,
     )
     rows = [
-        (
-            doc.user_data[WORK_ID],
-            sentence.start_char,
-            sentence.end_char,
-            language.language,
-            language.confidence,
-        )
-        for doc, languages in zip(docs, labels, strict=True)
-        for sentence, language in zip(doc.sents, languages, strict=True)
+        (work_id, start, end, language.language, language.confidence)
+        for work_id, (_, ranges), languages in zip(work_ids, documents, labels, strict=True)
+        for (start, end), language in zip(ranges, languages, strict=True)
     ]
     table = pl.DataFrame(rows, schema=SENTENCE_LANGUAGES_SCHEMA, orient="row")
     save_sentence_languages(job.catalog, table, part=part)
-    return len(docs), Counter(table["language"].to_list())
+    return len(documents), Counter(table["language"].to_list())
 
 
 @cache

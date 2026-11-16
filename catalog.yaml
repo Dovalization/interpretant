@@ -126,6 +126,13 @@ annotations:
   path: data/interim/annotations
   format: docbin
 
+# Each cached document's sentences as the spaCy pass split them (work id, start, end), in the
+# cache's order, one part per field and decade: the language stage reads these with the repaired
+# texts instead of the DocBins.
+sentences:
+  path: data/interim/sentences
+  format: parquet
+
 # lingua's language for every sentence of the annotation cache, one part per field and decade.
 sentence_languages:
   path: data/interim/sentence_languages

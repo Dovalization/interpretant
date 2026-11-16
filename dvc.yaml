@@ -104,6 +104,7 @@ stages:
       - src/interpretant/catalog/parts.py
       - src/interpretant/catalog/raw.py
       - src/interpretant/catalog/repaired_texts.py
+      - src/interpretant/catalog/sentences.py
       - src/interpretant/cli/annotate_corpus.py
       - src/interpretant/corpus/annotation.py
       - src/interpretant/corpus/attribute_rules.py
@@ -125,17 +126,23 @@ stages:
       - ${annotations.path}:
           cache: false
           persist: true
+      # Each document's sentence ranges, which the language stage reads instead of the DocBins;
+      # kept beside the cache, as it is.
+      - ${sentences.path}:
+          cache: false
+          persist: true
 
   detect_languages:
     cmd: interpretant detect-languages
     deps:
-      - src/interpretant/catalog/annotations.py
       - src/interpretant/catalog/config.py
       - src/interpretant/catalog/json_lines.py
       - src/interpretant/catalog/languages.py
       - src/interpretant/catalog/metadata.py
       - src/interpretant/catalog/parts.py
       - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/repaired_texts.py
+      - src/interpretant/catalog/sentences.py
       - src/interpretant/cli/detect_languages.py
       - src/interpretant/corpus/language.py
       - src/interpretant/corpus/works.py
@@ -144,7 +151,8 @@ stages:
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/workers.py
-      - ${annotations.path}
+      - ${repaired_texts.path}
+      - ${sentences.path}
     params:
       - corpus
       - detect_languages

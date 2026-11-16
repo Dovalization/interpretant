@@ -15,7 +15,6 @@ from dataclasses import dataclass
 
 from lingua import ConfidenceValue, IsoCode639_1, LanguageDetector, LanguageDetectorBuilder
 from lingua import Language as LinguaLanguage
-from spacy.tokens import Doc
 
 ENGLISH = "en"
 # ISO 639-2's code for an undetermined language: a sentence with no letters, or no verdict.
@@ -112,13 +111,16 @@ def build_language_detector(languages: Sequence[str]) -> LanguageDetector:
 
 
 def detect_sentence_languages(
-    docs: Sequence[Doc],
+    documents: Sequence[tuple[str, Sequence[tuple[int, int]]]],
     detector: LanguageDetector,
     *,
     english_threshold: float,
     minimum_relative_distance: float,
 ) -> list[list[SentenceLanguage]]:
     """Each document's sentence languages, with lingua's confidence in each, in order.
+
+    A document is its text and its sentences' character ranges, as the spaCy pass split them
+    (the language stage reads them from the pass's sentence table, not from the DocBins).
 
     When lingua gives English at least ``english_threshold`` confidence for the whole abstract,
     every sentence with letters takes that verdict, except a sentence worth checking (mostly in
@@ -139,16 +141,16 @@ def detect_sentence_languages(
     wholes = [
         _top_language(values)
         for values in detector.compute_language_confidence_values_in_parallel(
-            [doc.text for doc in docs]
+            [text for text, _ in documents]
         )
     ]
     labels: list[list[SentenceLanguage]] = []
     checks: list[tuple[int, int, str, bool]] = []
-    for doc_index, (doc, whole) in enumerate(zip(docs, wholes, strict=True)):
+    for doc_index, ((document, sentences), whole) in enumerate(zip(documents, wholes, strict=True)):
         is_english = whole.language == ENGLISH and whole.confidence >= english_threshold
         row: list[SentenceLanguage] = []
-        for sentence_index, sentence in enumerate(doc.sents):
-            text = sentence.text
+        for sentence_index, (start, end) in enumerate(sentences):
+            text = document[start:end]
             if not _LETTER.search(text):
                 row.append(_NO_LANGUAGE)
                 continue

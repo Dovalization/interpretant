@@ -51,8 +51,8 @@ def test_detect_languages_writes_the_same_rows_in_worker_processes(
     assert "RAYON_NUM_THREADS" not in os.environ
 
 
-def test_detect_languages_needs_the_annotation_cache(corpus_catalog_file: Path) -> None:
-    with pytest.raises(FileNotFoundError, match="no cached annotations"):
+def test_detect_languages_needs_the_pass_s_sentences(corpus_catalog_file: Path) -> None:
+    with pytest.raises(FileNotFoundError, match="no sentences for part"):
         detect_languages(read_catalog(corpus_catalog_file), SELECTION, LANGUAGE_SETTINGS)
 
 

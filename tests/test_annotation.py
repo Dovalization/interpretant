@@ -47,6 +47,11 @@ GERMAN_SENTENCE = "Die Aufmerksamkeit ist für die Übersetzung von großer Bede
 WHOLE_TOKENS = ("0.05", "U.S.", "Fig.", "Eq.", "0.922", "3.5")
 
 
+def as_document(doc: Doc) -> tuple[str, list[tuple[int, int]]]:
+    """A document as the language stage reads it: its text and its sentences' ranges."""
+    return doc.text, [(sentence.start_char, sentence.end_char) for sentence in doc.sents]
+
+
 def raw(text: str, work: int = 1) -> RawAbstract:
     return RawAbstract(
         work_id=f"https://openalex.org/W{work}",
@@ -69,7 +74,10 @@ def annotate(text: str, nlp: Language, patterns: CleaningPatterns) -> AnnotatedA
     abstract = raw(text)
     (doc,) = annotate_texts([repaired(abstract)], nlp)
     (languages,) = detect_sentence_languages(
-        [doc], language_detector(), english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)],
+        language_detector(),
+        english_threshold=0.9,
+        minimum_relative_distance=0.1,
     )
     return clean_abstract(
         doc,

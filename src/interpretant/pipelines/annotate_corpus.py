@@ -11,16 +11,19 @@ this stage. A run may annotate some parts only.
 
 from __future__ import annotations
 
-from collections.abc import Collection
+from collections.abc import Collection, Iterator
 from dataclasses import dataclass
 from functools import cache
 
+import polars as pl
 from pydantic_settings import SettingsConfigDict
 from spacy.language import Language
+from spacy.tokens import Doc
 
-from interpretant.catalog.annotations import save_annotations
+from interpretant.catalog.annotations import WORK_ID, save_annotations
 from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.repaired_texts import count_repaired_texts, load_repaired_texts
+from interpretant.catalog.sentences import SENTENCES_SCHEMA, save_sentences
 from interpretant.corpus.annotation import annotate_texts, build_pipeline
 from interpretant.pipelines.corpus import CorpusResult, corpus_cells, part_name
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
@@ -97,11 +100,21 @@ class _PassJob:
 
 
 def _annotate_part(part: str, job: _PassJob) -> None:
-    """Annotate one part's repaired texts in this process and write them to the cache."""
+    """Annotate one part's repaired texts in this process; write the cache and the sentences."""
     texts = load_repaired_texts(job.catalog, part)
     nlp = _pipeline(named_entity_recognition=job.named_entity_recognition)
     docs = annotate_texts(texts.iter_rows(), nlp, batch_size=job.batch_size)
-    save_annotations(job.catalog, docs, part=part)
+    sentences: list[tuple[str, int, int]] = []
+
+    def with_sentences_recorded(annotated: Iterator[Doc]) -> Iterator[Doc]:
+        for doc in annotated:
+            work_id = doc.user_data[WORK_ID]
+            sentences.extend((work_id, span.start_char, span.end_char) for span in doc.sents)
+            yield doc
+
+    save_annotations(job.catalog, with_sentences_recorded(docs), part=part)
+    table = pl.DataFrame(sentences, schema=SENTENCES_SCHEMA, orient="row")
+    save_sentences(job.catalog, table, part=part)
 
 
 @cache

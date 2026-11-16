@@ -16,6 +16,11 @@ from interpretant.corpus.language import (
 )
 
 
+def as_document(doc: Doc) -> tuple[str, list[tuple[int, int]]]:
+    """A document as the language stage reads it: its text and its sentences' ranges."""
+    return doc.text, [(sentence.start_char, sentence.end_char) for sentence in doc.sents]
+
+
 def sentences_doc(nlp: Language, sentences: list[str]) -> Doc:
     """A document whose sentences are exactly the given ones, split into words on spaces."""
     words: list[str] = []
@@ -44,7 +49,7 @@ def test_detect_sentence_languages_leaves_sentences_without_letters_undetermined
         nlp, ["Attention mechanisms improve machine translation in many settings .", "12 34 ."]
     )
     ((english, numbers),) = detect_sentence_languages(
-        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)], detector, english_threshold=0.9, minimum_relative_distance=0.1
     )
     assert english.language == "en"
     assert numbers == SentenceLanguage(UNDETERMINED, 0.0)
@@ -55,7 +60,7 @@ def test_detect_sentence_languages_marks_a_script_no_candidate_covers(
 ) -> None:
     doc = sentences_doc(nlp, ["Δεν παρατίθεται περίληψη .", "Η μελέτη εξετάζει τη γλώσσα ."])
     (languages,) = detect_sentence_languages(
-        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)], detector, english_threshold=0.9, minimum_relative_distance=0.1
     )
     assert languages == [SentenceLanguage(UNSCORED, 0.0)] * 2
 
@@ -72,7 +77,7 @@ def test_detect_sentence_languages_labels_each_sentence_of_a_mixed_abstract(
         ],
     )
     (languages,) = detect_sentence_languages(
-        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)], detector, english_threshold=0.9, minimum_relative_distance=0.1
     )
     assert [language.language for language in languages] == ["en", "de", "fr"]
 
@@ -83,7 +88,7 @@ def test_detect_sentence_languages_leaves_a_too_close_call_undetermined(nlp: Lan
         nlp, ["Die Aufmerksamkeit ist für die Übersetzung von großer Bedeutung .", "prologue ."]
     )
     (languages,) = detect_sentence_languages(
-        [doc], strict, english_threshold=0.9, minimum_relative_distance=0.9
+        [as_document(doc)], strict, english_threshold=0.9, minimum_relative_distance=0.9
     )
     assert languages[1] == SentenceLanguage(UNDETERMINED, 0.0)
 
@@ -103,7 +108,7 @@ def test_detect_sentence_languages_takes_the_likelier_of_two_close_foreign_langu
         ],
     )
     (languages,) = detect_sentence_languages(
-        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)], detector, english_threshold=0.9, minimum_relative_distance=0.1
     )
     assert {language.language for language in languages} <= {"hr", "bs"}
 
@@ -115,7 +120,7 @@ def test_detect_sentence_languages_finds_another_script_in_an_english_abstract(
     korean = "또한 다중 CPU를 사용한 MPI 병렬프로그램과 비교하였다 ."
     doc = sentences_doc(nlp, [ENGLISH, ENGLISH, ENGLISH, ENGLISH, korean])
     (languages,) = detect_sentence_languages(
-        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)], detector, english_threshold=0.9, minimum_relative_distance=0.1
     )
     assert [language.language for language in languages] == ["en", "en", "en", "en", "ko"]
 
@@ -128,7 +133,7 @@ def test_detect_sentence_languages_finds_a_long_foreign_sentence_in_an_english_a
     )
     doc = sentences_doc(nlp, [ENGLISH] * 5 + [german])
     (languages,) = detect_sentence_languages(
-        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)], detector, english_threshold=0.9, minimum_relative_distance=0.1
     )
     assert [language.language for language in languages] == ["en"] * 5 + ["de"]
 
@@ -140,6 +145,6 @@ def test_detect_sentence_languages_leaves_english_headings_and_references_englis
         nlp, [ENGLISH, "Four pages .", "Acta Oto-Laryngologica : Vol. 45 , No. 2 , pp. 1-10 ."]
     )
     (languages,) = detect_sentence_languages(
-        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+        [as_document(doc)], detector, english_threshold=0.9, minimum_relative_distance=0.1
     )
     assert [language.language for language in languages] == ["en", "en", "en"]

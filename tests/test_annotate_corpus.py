@@ -12,6 +12,7 @@ from spacy.language import Language
 from interpretant.__main__ import cli
 from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import read_catalog
+from interpretant.catalog.sentences import load_sentences
 from interpretant.cli.options import default_process_count
 from interpretant.corpus.removals import SPANS_KEY
 from interpretant.pipelines.annotate_corpus import AnnotateCorpusSettings, annotate_corpus
@@ -69,6 +70,20 @@ def test_annotate_corpus_caches_sentences_and_lemmas_without_cleaning(
     assert len(list(doc.sents)) > 1
     assert doc.has_annotation("LEMMA")
     assert SPANS_KEY not in doc.spans
+
+
+def test_annotate_corpus_writes_each_cached_document_s_sentences(
+    corpus_catalog_file: Path, nlp: Language
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    result = annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    for part in result.parts:
+        cached = [
+            (doc.user_data[WORK_ID], sentence.start_char, sentence.end_char)
+            for doc in load_annotations(catalog, part, nlp.vocab)
+            for sentence in doc.sents
+        ]
+        assert list(load_sentences(catalog, part).iter_rows()) == cached
 
 
 def test_annotate_corpus_annotates_only_the_parts_asked_for(corpus_catalog_file: Path) -> None:
