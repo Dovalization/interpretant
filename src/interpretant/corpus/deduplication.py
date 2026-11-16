@@ -15,7 +15,9 @@ corpus build. Each abstract's signature depends on its text alone, so signatures
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, Sequence
+import gc
+from collections.abc import Callable, Iterator, Mapping, Sequence
+from contextlib import contextmanager
 from functools import lru_cache
 from typing import Any
 
@@ -126,23 +128,24 @@ def mark_near_duplicates(
 
     lsh_index = MinHashLSH(threshold=candidate_threshold, num_perm=PERMUTATION_COUNT)
     duplicate_of: dict[str, str] = {}
-    for work_id in candidates["work_id"]:
-        if advance is not None:
-            advance(1)
-        signature = signatures.get(work_id)
-        if signature is None:
-            continue
-        minhash = LeanMinHash(seed=SEED, hashvalues=signature, scheme=SCHEME)
-        proposed = lsh_index.query(minhash)
-        if proposed:
-            own = shingles_of(work_id)
-            similarities = [(_jaccard(own, shingles_of(key)), key) for key in proposed]
-            matches = [match for match in similarities if match[0] >= threshold]
-            if matches:
-                _, original = max(matches, key=lambda match: (match[0], -order[match[1]]))
-                duplicate_of[work_id] = original
+    with _collector_paused():
+        for work_id in candidates["work_id"]:
+            if advance is not None:
+                advance(1)
+            signature = signatures.get(work_id)
+            if signature is None:
                 continue
-        lsh_index.insert(work_id, minhash)
+            minhash = LeanMinHash(seed=SEED, hashvalues=signature, scheme=SCHEME)
+            proposed = lsh_index.query(minhash)
+            if proposed:
+                own = shingles_of(work_id)
+                similarities = [(_jaccard(own, shingles_of(key)), key) for key in proposed]
+                matches = [match for match in similarities if match[0] >= threshold]
+                if matches:
+                    _, original = max(matches, key=lambda match: (match[0], -order[match[1]]))
+                    duplicate_of[work_id] = original
+                    continue
+            lsh_index.insert(work_id, minhash)
     found = pl.DataFrame(
         {"work_id": list(duplicate_of), "original": list(duplicate_of.values())},
         schema={"work_id": pl.String(), "original": pl.String()},
@@ -158,3 +161,20 @@ def mark_near_duplicates(
         )
         .drop("original")
     )
+
+
+@contextmanager
+def _collector_paused() -> Iterator[None]:
+    """Python's cyclic garbage collector paused while the index grows, the objects alive frozen.
+
+    Each insert creates about 18 sets (one per band), so the collector's full passes over the
+    growing index dominated the loop (Python's ``gc`` documentation: ``freeze`` moves live objects
+    out of its view); reference counting still frees everything the loop discards.
+    """
+    gc.freeze()
+    gc.disable()
+    try:
+        yield
+    finally:
+        gc.enable()
+        gc.unfreeze()
