@@ -13,6 +13,7 @@ from pathlib import Path
 
 from spacy.tokens import Doc, DocBin
 from spacy.vocab import Vocab
+from srsly.msgpack import msgpack_decoders, msgpack_encoders
 
 from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.parts import part_path
@@ -46,4 +47,23 @@ def load_annotations(catalog: CatalogConfig, part: str, vocab: Vocab) -> Iterato
     path = part_path(catalog.annotations.path, part, _SUFFIX)
     if not path.exists():
         raise FileNotFoundError(f"no cached annotations for part {part!r} at {path}")
+    cache_serialiser_extensions()
     yield from DocBin().from_disk(path).get_docs(vocab)
+
+
+def cache_serialiser_extensions() -> None:
+    """Look srsly's msgpack extensions up once in this process, instead of on every unpack.
+
+    srsly asks its two catalogue registries for extension encoders and decoders each time it
+    packs or unpacks, and each ask rescans the installed packages' entry points and filters
+    catalogue's global registry, where spaCy keeps thousands of functions: about a third of the
+    spaCy pass's main process, which unpacks every finished document (profiled 2026-11-13), and
+    in run 7c's profile 28% of the language stage and 10% of the cleaning workers, which read
+    the cache. The two registries' contents (srsly's numpy functions; no installed package adds
+    any) are read once and served from then on; a function registered later would be missed.
+    Worker processes started by fork inherit the cache; those started by spawn set it again when
+    they read the cache. Calling it again changes nothing.
+    """
+    for registry in (msgpack_encoders, msgpack_decoders):
+        functions = registry.get_all()
+        registry.get_all = lambda functions=functions: functions

@@ -11,7 +11,12 @@ from interpretant.catalog.abstracts import (
     save_abstracts,
     save_annotated_abstracts,
 )
-from interpretant.catalog.annotations import WORK_ID, load_annotations, save_annotations
+from interpretant.catalog.annotations import (
+    WORK_ID,
+    cache_serialiser_extensions,
+    load_annotations,
+    save_annotations,
+)
 from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, DatasetEntry, read_catalog
 from interpretant.catalog.curated import (
     START_ID,
@@ -114,6 +119,7 @@ __all__ = [
     "append_run_record",
     "append_work_metadata",
     "build_linked_record",
+    "cache_serialiser_extensions",
     "fetched_linked_work_ids",
     "fetched_work_ids",
     "index_work_metadata",

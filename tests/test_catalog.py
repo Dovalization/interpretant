@@ -11,6 +11,8 @@ import pandera.errors
 import polars as pl
 import pydantic
 import pytest
+from spacy.language import Language
+from srsly.msgpack import msgpack_decoders, msgpack_encoders
 
 from interpretant.catalog import (
     CATALOG_FILE,
@@ -21,10 +23,12 @@ from interpretant.catalog import (
     fetched_work_ids,
     list_raw_cells,
     load_abstracts,
+    load_annotations,
     load_raw_cell,
     load_work_metadata,
     read_catalog,
     save_abstracts,
+    save_annotations,
     save_corpus_metrics,
 )
 from tests.abstracts_tables import abstract_row, abstracts_table
@@ -197,3 +201,20 @@ def test_save_rejects_an_unsafe_part_name(catalog: CatalogConfig) -> None:
 def test_load_without_saved_parts_raises(catalog: CatalogConfig) -> None:
     with pytest.raises(FileNotFoundError):
         load_abstracts(catalog)
+
+
+def test_load_annotations_looks_the_serialiser_extensions_up_once(
+    catalog: CatalogConfig, nlp: Language, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    save_annotations(catalog, [nlp.make_doc("A short text."), nlp.make_doc("Another.")], "ai_2010")
+    lookups: list[str] = []
+    for registry in (msgpack_encoders, msgpack_decoders):
+        functions = registry.get_all()
+        monkeypatch.setattr(
+            registry,
+            "get_all",
+            lambda functions=functions, name=registry.namespace: lookups.append(name) or functions,
+        )
+    texts = [doc.text for doc in load_annotations(catalog, "ai_2010", nlp.vocab)]
+    assert texts == ["A short text.", "Another."]
+    assert len(lookups) == 2
