@@ -840,8 +840,8 @@ stages:
       nfiles: 18
     - path: src/interpretant/corpus/annotation.py
       hash: md5
-      md5: dff59ddbf59e3cf38a1433374ee87235
-      size: 14147
+      md5: 1e4fb560e2e915ffb76bdf8306b9e72f
+      size: 14864
     - path: src/interpretant/corpus/attribute_rules.py
       hash: md5
       md5: 8f2a4ff368b001823a7932053e6274fc
@@ -932,6 +932,6 @@ stages:
     outs:
     - path: data/interim/base_sentence_languages
       hash: md5
-      md5: 8737675b96a003db872f45f179a5c60e.dir
-      size: 23520823
+      md5: daa698feb4489e94321ee2c7ff2cee3c.dir
+      size: 23442662
       nfiles: 88
