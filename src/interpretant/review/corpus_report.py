@@ -154,7 +154,12 @@ def _dropped_by(abstracts: pl.DataFrame, column: str) -> ReportSection:
     table = (
         counts.select("dropped_reason", *groups)
         .with_columns(pl.sum_horizontal(groups).alias("all"))
-        .sort(pl.col("dropped_reason") == _KEPT, "all", descending=[False, True])
+        .sort(
+            pl.col("dropped_reason") == _KEPT,
+            "all",
+            "dropped_reason",
+            descending=[False, True, False],
+        )
         .rename({"dropped_reason": "reason"})
     )
     note = f"Abstracts by why they were dropped, per {label}; the last row counts those kept." + (
@@ -171,7 +176,7 @@ def _removals(abstracts: pl.DataFrame) -> ReportSection:
         .unnest("removals")
         .group_by("reason")
         .agg(pl.len().alias("ranges"), pl.col("work_id").n_unique().alias("abstracts"))
-        .sort("ranges", descending=True)
+        .sort("ranges", "reason", descending=[True, False])
     )
     note = "Ranges of text the views leave out, by reason, and how many abstracts hold one."
     return ReportSection("Removed ranges", note, table)
@@ -221,7 +226,7 @@ def _flags_by_decade(abstracts: pl.DataFrame) -> ReportSection:
     table = (
         counts.select("flags", *decades)
         .with_columns(pl.sum_horizontal(decades).alias("all"))
-        .sort("all", descending=True)
+        .sort("all", "flags", descending=[True, False])
         .rename({"flags": "flag"})
     )
     note = "Abstracts flagged for the review, kept or dropped, by decade."
@@ -235,7 +240,7 @@ def _repository_outcomes(abstracts: pl.DataFrame) -> ReportSection:
         .len()
         .rename({"len": "works"})
         .with_columns((pl.col("works") / max(repository.height, 1)).round(3).alias("share"))
-        .sort("works", descending=True)
+        .sort("works", "outcome", descending=[True, False])
     )
     note = (
         "What the text rules did with the repository-only works (a repository source, listed by "
@@ -307,7 +312,7 @@ def _near_duplicates(abstracts: pl.DataFrame) -> ReportSection:
         .group_by("fields", "decades")
         .len()
         .rename({"len": "pairs"})
-        .sort("pairs", descending=True)
+        .sort("pairs", "fields", "decades", descending=[True, False, False])
     )
     note = (
         "Near-duplicate pairs (the dropped work and the work it duplicates) by whether they share "

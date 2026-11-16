@@ -35,7 +35,11 @@ def _spans_are_valid(column: str) -> list[pl.Expr]:
     span = pl.element().struct
     starts_before_ends = (
         pl.col(column)
-        .list.eval((span.field("start") >= 0) & (span.field("start") < span.field("end")))
+        .list.eval(
+            ((span.field("start") >= 0) & (span.field("start") < span.field("end"))).fill_null(
+                value=False
+            )
+        )
         .list.all()
         .alias(f"{column}_start_before_end")
     )

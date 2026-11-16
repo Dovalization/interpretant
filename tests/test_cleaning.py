@@ -58,6 +58,13 @@ def test_mark_template_sentences_does_not_count_dropped_abstracts() -> None:
     assert removals_of(marked, 7) == []
 
 
+def test_mark_template_sentences_leaves_abstracts_without_sentences_alone() -> None:
+    rows = [abstract_row(work, []) for work in range(1, 26)]
+    marked = mark_template_sentences(abstracts_table(rows), min_abstracts=20)
+    assert marked["dropped_reason"].null_count() == 25
+    assert marked["removals"].list.len().sum() == 0
+
+
 def test_mark_template_sentences_drops_an_abstract_made_mostly_of_templates() -> None:
     rows = [
         abstract_row(

@@ -155,7 +155,7 @@ def _sentence_rows(abstracts: pl.DataFrame) -> pl.DataFrame:
     """One row per sentence: work id, start, end, length and the sentence's text."""
     return (
         abstracts.select("work_id", "text", "sentences")
-        .explode("sentences")
+        .explode("sentences", empty_as_null=False)
         .unnest("sentences")
         .select(
             "work_id",

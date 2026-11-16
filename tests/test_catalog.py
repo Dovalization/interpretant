@@ -171,6 +171,7 @@ def test_saving_a_part_again_replaces_it(catalog: CatalogConfig) -> None:
     "changes",
     [
         {"removals": [{"start": 21, "end": 400, "reason": "url"}]},
+        {"removals": [{"start": None, "end": None, "reason": "template_sentence"}]},
         {"sentences": [{"start": 10, "end": 5, "language": "en", "confidence": 0.9}]},
         {"decade": 2000},
         {"fields": []},
@@ -178,8 +179,8 @@ def test_saving_a_part_again_replaces_it(catalog: CatalogConfig) -> None:
         {"work_id": "W1"},
         {"duplicate_of": "W2"},
     ],
-    ids=["span past the text", "span ending before it starts", "decade", "no field", "source",
-         "work id", "duplicate of"],
+    ids=["span past the text", "span with no offsets", "span ending before it starts", "decade",
+         "no field", "source", "work id", "duplicate of"],
 )  # fmt: skip
 def test_save_rejects_rows_that_break_the_schema(
     catalog: CatalogConfig, changes: dict[str, Any]

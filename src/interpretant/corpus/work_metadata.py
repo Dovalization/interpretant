@@ -152,7 +152,7 @@ def build_openalex_works(
     pmid = pl.col("ids").struct.field("pmid").str.split("/").list.last()
     pmcid = pl.col("ids").struct.field("pmcid").str.split("/").list.last().str.strip_prefix("PMC")
     issn_l = source.struct.field("issn_l")
-    return metadata.join(corrected, on="id", how="left").select(
+    return metadata.join(corrected, on="id", how="left", maintain_order="left").select(
         pl.col("id").alias("work_id"),
         pl.col("missing").fill_null(value=False).alias("is_missing"),
         pl.when(normalised_doi != "").then(normalised_doi).alias("doi"),

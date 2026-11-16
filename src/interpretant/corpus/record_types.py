@@ -72,9 +72,10 @@ def join_record_signals(
             openalex.select("work_id", "title", "publication_year", "openalex_type", "is_paratext"),
             on="work_id",
             how="left",
+            maintain_order="left",
         )
-        .join(found_crossref, on="work_id", how="left")
-        .join(found_pubmed, on="work_id", how="left")
+        .join(found_crossref, on="work_id", how="left", maintain_order="left")
+        .join(found_pubmed, on="work_id", how="left", maintain_order="left")
     )
     return joined.select(
         "work_id",
