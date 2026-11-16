@@ -18,11 +18,11 @@
     "web_scrape": 2390
   },
   "flagged_by_flag": {
-    "malformed": 2118,
+    "malformed": 2119,
     "paratext": 9,
     "repository_only": 96267,
     "retracted": 147,
-    "truncated": 77464
+    "truncated": 77463
   },
   "kept": 639637,
   "removed_ranges_by_reason": {
@@ -38,8 +38,8 @@
     "footer": 1767,
     "latex": 10772,
     "letter": 833,
-    "not_english": 113070,
-    "repeated_sentence": 4806,
+    "not_english": 113076,
+    "repeated_sentence": 4807,
     "template_sentence": 122157,
     "url": 14207,
     "web_scrape": 4341
