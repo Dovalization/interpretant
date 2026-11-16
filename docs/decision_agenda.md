@@ -323,7 +323,11 @@ views (the full order is in step 9).
      a line-break hyphen (*in vestigation*, *fol- lowing*, *mor-phological*; about 13,000 kept
      records in run 2, 4.1% of the 1950s), joined where the corpus writes the joined form far
      more often than the parts in sequence, from the same counts, since a rule without them
-     cannot tell *a void* from *avoid*. Reruns the spaCy pass, the first pass profiled (step 9);
+     cannot tell *a void* from *avoid*. Real hyphenated words stay as the authors wrote them
+     (*multi-modal*, *socio-economic*, *co-operation*; decided 2026-11-15, the author) and take
+     the standard spelling in the spellings step (3.4): a word written with a hyphen and no space
+     is joined only when its second piece is not a word (*infor-mation*). Reruns the spaCy pass,
+     the first pass profiled (step 9);
   8. joins in lower case split (decided 2026-11-15, the author, after a survey of every word
      form the lemma index does not know, with samples read on the text that survives cleaning):
      a lower-case word the index does not know that splits into two known words, the first of
@@ -348,7 +352,10 @@ views (the full order is in step 9).
      has no component for this, and the word-frequency table its documentation names
      (`lexeme_prob` in `spacy-lookups-data`) does not name its source, so the counts are the
      corpus's own and the dictionary is the lemma index that ships with `en_core_web_sm`.
-     Reruns the spaCy pass;
+     Where the word touches a hyphen, the separator follows how the corpus writes the whole
+     hyphenated chunk (*stateof-the-art* into *state-of-the-art*, *ofman-machine* into *of
+     man-machine*), since the tokenizer keeps hyphenated words whole (4.2). Reruns the spaCy
+     pass;
   9. citation lines the `citation_record` patterns miss: JSTOR's *…, Vol. 15, No. 1 (Feb.,
      1950), pp. 79-88* (1,852 kept works) and OUP's *…, Volume X, Issue 1, January 1955, Pages
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
@@ -556,7 +563,10 @@ otherwise more are reviewed. Approved corrections go into the exceptions file.
 (it also holds informal norms such as *cos* → *because*); undocumented, so it is read once,
 filtered and saved as a versioned data file, and a spaCy update cannot change it silently. The
 project's rules are the backstop for derived words the table lacks (*personalisation*,
-*operationalise*, *judgement*).
+*operationalise*, *judgement*). Words written with and without a hyphen (*multi-modal* and
+*multimodal*, *co-operation* and *cooperation*) are spelling variants too: the stored text keeps
+the authors' hyphen (decided 2026-11-15, the author, for run 7c) and this step maps the
+variants to one standard spelling.
 
 **3.5 Phrases** (static pipeline). Term candidates from spaCy's `Matcher` on tags and morphology
 (adjectives and nouns ending in a noun, up to four words), scored by **C-value** with a frequency
