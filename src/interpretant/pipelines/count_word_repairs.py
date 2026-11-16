@@ -1,7 +1,7 @@
 """The word repairs of the cleaning runs (decision agenda 2.3), counted over the whole corpus.
 
-Every selected cell's works are merged and repaired as the spaCy pass repairs them, part by part
-in worker processes. Each repair is then decided in the order the pass makes them, each from
+The repair-texts stage has merged the works and repaired their texts; this stage reads those base
+texts, part by part. Each word repair is decided in turn, each from
 counts over the whole corpus of the text the earlier ones produce: the glued words of the
 repaired texts (run 7), split or kept joined; then the words broken by a space or a line-end
 hyphen in the texts with those splits made (run 7c), joined or kept apart; then the lower-case
@@ -13,7 +13,7 @@ repairing in its main process (run 7c's profile, decision agenda step 9).
 
 from __future__ import annotations
 
-from collections import Counter, defaultdict
+from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass
 
@@ -24,6 +24,7 @@ from pydantic_settings import SettingsConfigDict
 from interpretant.catalog import (
     REPAIRED_TEXTS_SCHEMA,
     CatalogConfig,
+    load_base_texts,
     load_kept_apart_words,
     load_kept_joined_words,
     save_glued_words,
@@ -46,7 +47,6 @@ from interpretant.corpus.lower_glued_words import (
     lower_glued_word_splits,
     split_lower_glued_words,
 )
-from interpretant.corpus.repair import repair_text
 from interpretant.corpus.split_words import (
     HYPHEN,
     HYPHEN_SPACE,
@@ -57,8 +57,7 @@ from interpretant.corpus.split_words import (
     join_split_words,
     split_word_joins,
 )
-from interpretant.corpus.works import part_of
-from interpretant.pipelines.corpus import corpus_cells, corpus_parts, load_corpus_works, part_name
+from interpretant.pipelines.corpus import corpus_cells, corpus_parts
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts
@@ -138,25 +137,24 @@ def count_word_repairs(
     process_count: int = 1,
     progress: Progress = SILENT,
 ) -> WordRepairsResult:
-    """Count the word repairs of the selected cells' repaired texts and write their decisions.
+    """Count the word repairs of the selected cells' base texts and write their decisions.
 
     Raises:
-        ValueError: if no raw cell matches the selection, or a cell's metadata has not been
-            fetched or is incomplete.
-        FileNotFoundError: if the kept-joined or kept-apart words file does not exist.
+        ValueError: if no raw cell matches the selection.
+        FileNotFoundError: if the kept-joined or kept-apart words file does not exist, or a
+            part's texts have not been repaired.
     """
     kept_joined = [entry.word for entry in load_kept_joined_words(catalog)]
     kept_apart = [(entry.first, entry.second) for entry in load_kept_apart_words(catalog)]
     cells = corpus_cells(catalog, selection)
-    abstracts = load_corpus_works(catalog, cells, progress)
-    by_part: defaultdict[str, list[tuple[str, str]]] = defaultdict(list)
-    for abstract in abstracts:
-        by_part[part_name(*part_of(abstract))].append((abstract.work_id, abstract.text))
-    del abstracts
-    progress.stage("repairing the texts", total=len(by_part))
-    repaired = map_parts(
-        _repair_part, dict(by_part), process_count=process_count, progress=progress
-    )
+    parts = corpus_parts(cells)
+    progress.stage("reading the base texts", total=len(parts))
+    repaired: dict[str, list[tuple[str, str]]] = {}
+    for part in parts:
+        base_texts = load_base_texts(catalog, part)
+        if base_texts.height:
+            repaired[part] = list(base_texts.iter_rows())
+        progress.advance()
     texts = pl.DataFrame(
         [row for rows in repaired.values() for row in rows],
         schema={"work_id": pl.String(), "text": pl.String()},
@@ -241,7 +239,7 @@ def count_word_repairs(
     for _, part_counts in lower_split.values():
         occurrences.update(part_counts)
     progress.stage("writing the repaired texts")
-    for part in corpus_parts(cells):
+    for part in parts:
         rows = lower_split[part][0] if part in lower_split else []
         save_repaired_texts(
             catalog, pl.DataFrame(rows, schema=REPAIRED_TEXTS_SCHEMA, orient="row"), part
@@ -268,11 +266,6 @@ def count_word_repairs(
         ),
         lower_glued_split_occurrences=dict(occurrences.most_common()),
     )
-
-
-def _repair_part(_part: str, works: list[tuple[str, str]]) -> list[tuple[str, str]]:
-    """One part's works with their texts repaired."""
-    return [(work_id, repair_text(text)) for work_id, text in works]
 
 
 def _split_part(

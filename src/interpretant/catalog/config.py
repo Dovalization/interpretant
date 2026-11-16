@@ -47,6 +47,7 @@ class CatalogConfig(BaseModel):
     glued_words: DatasetEntry
     split_words: DatasetEntry
     lower_glued_words: DatasetEntry
+    base_texts: DatasetEntry
     repaired_texts: DatasetEntry
     annotations: DatasetEntry
     sentence_languages: DatasetEntry

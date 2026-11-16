@@ -3,11 +3,9 @@
 from __future__ import annotations
 
 import json
-import shutil
 from pathlib import Path
 
 import polars as pl
-import pytest
 from click.testing import CliRunner
 from spacy.language import Language
 
@@ -21,9 +19,9 @@ from interpretant.catalog import (
     read_catalog,
 )
 from interpretant.pipelines.annotate_corpus import annotate_corpus
-from interpretant.pipelines.count_word_repairs import CountWordRepairsSettings, count_word_repairs
+from interpretant.pipelines.count_word_repairs import CountWordRepairsSettings
 from interpretant.pipelines.params import CorpusSelection
-from tests.corpus_catalog import ANNOTATE_SETTINGS, WORD_REPAIRS_SETTINGS, write_raw_cell
+from tests.corpus_catalog import ANNOTATE_SETTINGS, repair_and_count, write_raw_cell
 
 # A cell of its own: a heading run into the text three times and written apart in thirty works,
 # ten times as often, and a name written only joined.
@@ -51,7 +49,7 @@ def test_count_word_repairs_writes_each_glued_word_with_its_decision(
 ) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, GLUED_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    result = count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    result = repair_and_count(catalog, GLUED_SELECTION)
     table = load_glued_words(catalog)
     decisions = dict(table.select("word", "split").rows())
     assert decisions == {"AbstractThe": True, "PubMed": False}
@@ -65,7 +63,7 @@ def test_annotate_corpus_splits_the_glued_words_before_the_pass(
 ) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, GLUED_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    repair_and_count(catalog, GLUED_SELECTION)
     annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
     texts = [doc.text for doc in load_annotations(catalog, "hci_2010", nlp.vocab)]
     assert "AbstractThe study 0 looks at PubMed records of attention research." not in texts
@@ -84,7 +82,7 @@ def test_count_word_repairs_splits_lower_case_glued_words_and_writes_their_decis
 ) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, LOWER_GLUED_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    result = count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    result = repair_and_count(catalog, GLUED_SELECTION)
     row = load_lower_glued_words(catalog).filter(pl.col("word") == "ofthe").row(0, named=True)
     assert (row["parts"], row["joined"], row["split"]) == (["of", "the"], 1, True)
     assert result.lower_glued_split_occurrences == {"two_words": 1}
@@ -97,7 +95,7 @@ def test_count_word_repairs_writes_each_broken_word_with_its_decision(
 ) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, SPLIT_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    result = count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    result = repair_and_count(catalog, GLUED_SELECTION)
     table = load_split_words(catalog).filter(pl.col("word") == "information")
     row = table.row(0, named=True)
     assert (row["left"], row["right"], row["joined"], row["hyphen_space"]) == (
@@ -117,7 +115,7 @@ def test_annotate_corpus_joins_the_broken_words_before_the_pass(
 ) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, SPLIT_CELL)
     catalog = read_catalog(corpus_catalog_file)
-    count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    repair_and_count(catalog, GLUED_SELECTION)
     annotate_corpus(catalog, GLUED_SELECTION, ANNOTATE_SETTINGS)
     texts = [doc.text for doc in load_annotations(catalog, "hci_2010", nlp.vocab)]
     assert "The infor- mation study 0 looks at records of research." not in texts
@@ -130,24 +128,20 @@ def test_count_word_repairs_writes_every_part_s_texts_with_the_repairs_made(
     write_raw_cell(corpus_catalog_file, "hci", 2010, SPLIT_CELL)
     catalog = read_catalog(corpus_catalog_file)
     selection = CorpusSelection(fields=("ai", "hci"), decades=(2010,))
-    count_word_repairs(catalog, selection, WORD_REPAIRS_SETTINGS)
+    repair_and_count(catalog, selection)
     hci = load_repaired_texts(catalog, "hci_2010")
     assert hci["work_id"].to_list()[:2] == ["https://openalex.org/W10", "https://openalex.org/W11"]
     assert "The information study 0 looks at records of research." in hci["text"].to_list()
     assert load_repaired_texts(catalog, "ai_2010").height == 3
 
 
-def test_count_word_repairs_stops_before_counting_without_metadata(
-    corpus_catalog_file: Path,
-) -> None:
-    catalog = read_catalog(corpus_catalog_file)
-    shutil.rmtree(catalog.work_metadata.path / "compsci")
-    with pytest.raises(ValueError, match="compsci 2010: run `interpretant fetch-metadata`"):
-        count_word_repairs(catalog, CorpusSelection(), WORD_REPAIRS_SETTINGS)
-
-
 def test_count_word_repairs_command_records_the_run(corpus_catalog_file: Path) -> None:
     write_raw_cell(corpus_catalog_file, "hci", 2010, GLUED_CELL)
+    outcome = CliRunner().invoke(
+        cli,
+        ["repair-texts", "--catalog", str(corpus_catalog_file), "--process-count", "1"],
+    )
+    assert outcome.exit_code == 0, outcome.output
     outcome = CliRunner().invoke(
         cli,
         ["count-word-repairs", "--catalog", str(corpus_catalog_file), "--process-count", "1"],

@@ -71,6 +71,7 @@ def catalog_text() -> str:
         "glued_words:\n  path: data/glued_words.parquet\n  format: parquet\n"
         "split_words:\n  path: data/split_words.parquet\n  format: parquet\n"
         "lower_glued_words:\n  path: data/lower_glued_words.parquet\n  format: parquet\n"
+        "base_texts:\n  path: data/base_texts\n  format: parquet\n"
         "repaired_texts:\n  path: data/repaired_texts\n  format: parquet\n"
         "annotations:\n  path: data/annotations\n  format: docbin\n"
         "sentence_languages:\n  path: data/sentence_languages\n  format: parquet\n"

@@ -18,6 +18,7 @@ from interpretant.cli.count_word_repairs import count_word_repairs_command
 from interpretant.cli.detect_languages import detect_languages_command
 from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
+from interpretant.cli.repair_texts import repair_texts_command
 from interpretant.cli.report_corpus import report_corpus_command
 
 console = Console()
@@ -32,6 +33,7 @@ def cli() -> None:
 cli.add_command(fetch_metadata_command)
 cli.add_command(fetch_linked_sources_command)
 cli.add_command(build_linked_tables_command)
+cli.add_command(repair_texts_command)
 cli.add_command(count_word_repairs_command)
 cli.add_command(annotate_corpus_command)
 cli.add_command(detect_languages_command)

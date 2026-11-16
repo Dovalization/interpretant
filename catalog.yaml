@@ -116,8 +116,15 @@ lower_glued_words:
   path: data/interim/lower_glued_words.parquet
   format: parquet
 
-# Each work's text after repair, the glued-word splits and the split-word joins, one part per
-# field and decade, written by count-word-repairs and read by the spaCy pass.
+# Each work's text after repair (spacing around punctuation, HTML entities, web addresses), one
+# part per field and decade, written by repair-texts and read by the word repairs.
+base_texts:
+  path: data/interim/base_texts
+  format: parquet
+
+# Each work's text with every word repair made (the glued-word splits, the split-word joins, the
+# lower-case splits), one part per field and decade, written by count-word-repairs and read by
+# the spaCy pass.
 repaired_texts:
   path: data/interim/repaired_texts
   format: parquet

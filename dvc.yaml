@@ -40,9 +40,32 @@ stages:
       - ${crossref_works.path}
       - ${pubmed_works.path}
 
-  # Run 7 of the cleaning runs (decision agenda 2.3): the glued words of the repaired texts,
-  # counted over the corpus, and which of them the spaCy pass splits. A few minutes; its table is
-  # reviewed before the pass reads it.
+  # The works merged into one record per work and their texts repaired (spacing around
+  # punctuation, HTML entities, web addresses), part by part; the word repairs read the result.
+  repair_texts:
+    cmd: interpretant repair-texts
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/repair_texts.py
+      - src/interpretant/pipelines/workers.py
+      - ${raw_abstracts.path}
+      - ${work_metadata.path}
+    params:
+      - corpus
+    outs:
+      # About as large as the corpus and remade in about a minute, so kept on the machine that
+      # ran the stage, never in the DVC store.
+      - ${base_texts.path}:
+          cache: false
+
+  # The word repairs of the cleaning runs (decision agenda 2.3, runs 7, 7c and 8), counted over
+  # the corpus's base texts and decided; their tables are reviewed before the pass reads the
+  # texts with every repair made.
   count_word_repairs:
     cmd: interpretant count-word-repairs
     deps:
@@ -61,8 +84,7 @@ stages:
       - src/interpretant/pipelines/workers.py
       - ${kept_apart_words.path}
       - ${kept_joined_words.path}
-      - ${raw_abstracts.path}
-      - ${work_metadata.path}
+      - ${base_texts.path}
     params:
       - corpus
       - count_word_repairs

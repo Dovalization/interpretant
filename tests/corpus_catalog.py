@@ -22,10 +22,12 @@ from interpretant.pipelines.count_word_repairs import (
     GluedWordSettings,
     LowerGluedWordSettings,
     SplitWordSettings,
+    WordRepairsResult,
     count_word_repairs,
 )
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from interpretant.pipelines.params import CorpusSelection
+from interpretant.pipelines.repair_texts import repair_texts
 from tests.metadata_records import metadata_record
 
 PARAGRAPH = (
@@ -64,6 +66,16 @@ WORD_REPAIRS_SETTINGS = CountWordRepairsSettings(
 )
 
 
+def repair_and_count(
+    catalog: CatalogConfig,
+    selection: CorpusSelection = SELECTION,
+    settings: CountWordRepairsSettings = WORD_REPAIRS_SETTINGS,
+) -> WordRepairsResult:
+    """Repair the texts and count the word repairs, as ``dvc repro`` runs the two stages."""
+    repair_texts(catalog, selection)
+    return count_word_repairs(catalog, selection, settings)
+
+
 def prepare_annotated_corpus(
     catalog: CatalogConfig, selection: CorpusSelection = SELECTION
 ) -> CorpusResult:
@@ -71,7 +83,7 @@ def prepare_annotated_corpus(
     the word repairs, the spaCy pass, the sentence languages and the cleaning; return the
     cleaning's result."""
     build_linked_tables(catalog)
-    count_word_repairs(catalog, selection, WORD_REPAIRS_SETTINGS)
+    repair_and_count(catalog, selection)
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
     detect_languages(catalog, selection, LANGUAGE_SETTINGS)
     return clean_corpus(catalog, selection, CLEAN_SETTINGS)
@@ -101,6 +113,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "glued_words:\n  path: glued_words.parquet\n  format: parquet\n"
         "split_words:\n  path: split_words.parquet\n  format: parquet\n"
         "lower_glued_words:\n  path: lower_glued_words.parquet\n  format: parquet\n"
+        "base_texts:\n  path: base_texts\n  format: parquet\n"
         "repaired_texts:\n  path: repaired_texts\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
@@ -111,7 +124,7 @@ def write_corpus_catalog(folder: Path) -> Path:
     )
     for (field, decade), works in CELLS.items():
         write_raw_cell(catalog_file, field, decade, works)
-    count_word_repairs(read_catalog(catalog_file), CorpusSelection(), WORD_REPAIRS_SETTINGS)
+    repair_and_count(read_catalog(catalog_file), CorpusSelection())
     return catalog_file
 
 

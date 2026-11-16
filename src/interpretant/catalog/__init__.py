@@ -70,7 +70,9 @@ from interpretant.catalog.raw import RawCell, RawWork, list_raw_cells, load_raw_
 from interpretant.catalog.repaired_texts import (
     REPAIRED_TEXTS_SCHEMA,
     count_repaired_texts,
+    load_base_texts,
     load_repaired_texts,
+    save_base_texts,
     save_repaired_texts,
 )
 from interpretant.catalog.reports import (
@@ -141,6 +143,7 @@ __all__ = [
     "load_abstracts_from",
     "load_annotated_abstracts",
     "load_annotations",
+    "load_base_texts",
     "load_cleaning_patterns",
     "load_corpus_metrics",
     "load_doi_corrections",
@@ -162,6 +165,7 @@ __all__ = [
     "save_abstracts",
     "save_annotated_abstracts",
     "save_annotations",
+    "save_base_texts",
     "save_corpus_comparison",
     "save_corpus_metrics",
     "save_corpus_report",
