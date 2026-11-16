@@ -126,8 +126,8 @@ stages:
       size: 6583
     - path: data/interim/annotated_abstracts
       hash: md5
-      md5: 41e41d2e0c46fb0511a4a7c864c9789c.dir
-      size: 282091422
+      md5: 0d072c1056d1c84b3b33eef68a436889.dir
+      size: 282275997
       nfiles: 88
     - path: data/interim/crossref_works.parquet
       hash: md5
@@ -156,8 +156,8 @@ stages:
       size: 2217
     - path: src/interpretant/catalog/curated.py
       hash: md5
-      md5: fe29ba1b825a91206c13ad675b0a1e5e
-      size: 11060
+      md5: f8f421d986229c8be503688b79f5089d
+      size: 11084
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -208,8 +208,8 @@ stages:
       size: 7799
     - path: src/interpretant/corpus/removals.py
       hash: md5
-      md5: fd306e60320b67f0c527201a434a9595
-      size: 14354
+      md5: 0b121ee2e6457b7528907c8e35371a34
+      size: 15107
     - path: src/interpretant/corpus/repair.py
       hash: md5
       md5: a59cf74f837451d4f20e3579bbeb72b2
@@ -275,8 +275,8 @@ stages:
     outs:
     - path: data/processed/abstracts
       hash: md5
-      md5: b4942bd7988d77115628a340698afd97.dir
-      size: 288229859
+      md5: 468c90361d4c9d5c82b0552272ea318e.dir
+      size: 288325283
       nfiles: 88
   report_corpus:
     cmd: interpretant report-corpus
@@ -287,8 +287,8 @@ stages:
       size: 38380657
     - path: data/processed/abstracts
       hash: md5
-      md5: b4942bd7988d77115628a340698afd97.dir
-      size: 288229859
+      md5: 468c90361d4c9d5c82b0552272ea318e.dir
+      size: 288325283
       nfiles: 88
     - path: src/interpretant/catalog/abstracts.py
       hash: md5
@@ -300,8 +300,8 @@ stages:
       size: 2217
     - path: src/interpretant/catalog/curated.py
       hash: md5
-      md5: fe29ba1b825a91206c13ad675b0a1e5e
-      size: 11060
+      md5: f8f421d986229c8be503688b79f5089d
+      size: 11084
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -361,12 +361,12 @@ stages:
     outs:
     - path: data/processed/corpus_report.md
       hash: md5
-      md5: 59c8693f9b51abdb906edd8e313ca620
-      size: 21159
+      md5: cc8d3f95fc3083d4fdfc1b2c19add8b1
+      size: 21954
     - path: metrics/corpus.json
       hash: md5
-      md5: 94bae999758e30a0a19f5bcc8cb14068
-      size: 1013
+      md5: 9fbe32a575df5ff97810beaf4c4cdaa3
+      size: 1145
   detect_languages:
     cmd: interpretant detect-languages
     deps:
@@ -502,12 +502,12 @@ stages:
     deps:
     - path: curated/cleaning_patterns.jsonl
       hash: md5
-      md5: b465d320b89765bc4478ba448653dcf9
-      size: 5444
+      md5: 53c9deddd628072ec0b2eac458358a46
+      size: 9024
     - path: curated/cleaning_rules.yaml
       hash: md5
-      md5: 33a52ab537e2f1ec23cad3e81109f88a
-      size: 5320
+      md5: b3cfda6188888337bc8962eb9d2d0532
+      size: 9415
     - path: data/interim/annotations
       hash: md5
       md5: 5296686b29af5701b256720b3a61006d.dir
@@ -542,8 +542,8 @@ stages:
       size: 2217
     - path: src/interpretant/catalog/curated.py
       hash: md5
-      md5: fe29ba1b825a91206c13ad675b0a1e5e
-      size: 11060
+      md5: f8f421d986229c8be503688b79f5089d
+      size: 11084
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -578,8 +578,8 @@ stages:
       size: 9737
     - path: src/interpretant/corpus/removals.py
       hash: md5
-      md5: fd306e60320b67f0c527201a434a9595
-      size: 14354
+      md5: 0b121ee2e6457b7528907c8e35371a34
+      size: 15107
     - path: src/interpretant/corpus/repair.py
       hash: md5
       md5: a59cf74f837451d4f20e3579bbeb72b2
@@ -637,8 +637,8 @@ stages:
     outs:
     - path: data/interim/annotated_abstracts
       hash: md5
-      md5: 41e41d2e0c46fb0511a4a7c864c9789c.dir
-      size: 282091422
+      md5: 0d072c1056d1c84b3b33eef68a436889.dir
+      size: 282275997
       nfiles: 88
   build_linked_tables:
     cmd: interpretant build-linked-tables
@@ -668,8 +668,8 @@ stages:
       size: 2217
     - path: src/interpretant/catalog/curated.py
       hash: md5
-      md5: fe29ba1b825a91206c13ad675b0a1e5e
-      size: 11060
+      md5: f8f421d986229c8be503688b79f5089d
+      size: 11084
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -766,8 +766,8 @@ stages:
       size: 2217
     - path: src/interpretant/catalog/curated.py
       hash: md5
-      md5: fe29ba1b825a91206c13ad675b0a1e5e
-      size: 11060
+      md5: f8f421d986229c8be503688b79f5089d
+      size: 11084
     - path: src/interpretant/catalog/glued_words.py
       hash: md5
       md5: 1e4aa007e29a4054e77b02d8c5e15d20
