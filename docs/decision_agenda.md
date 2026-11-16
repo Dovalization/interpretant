@@ -361,7 +361,10 @@ views (the full order is in step 9).
      125–126* (1,154; 8 of 8 sampled of each were citation lines, nearly all before 2000); a
      citation standing for the abstract drops it (`citation_record`, abstract scope), one after
      real prose is removed with a second label of its own, and the report counts how many have a
-     Crossref abstract;
+     Crossref abstract. It also checks the catalogue lines the exact near-duplicate check now
+     groups (thesis lines such as *Thesis (Ph. D.)--Massachusetts Institute of Technology, …,
+     1993.*, proceedings lines, library newsletters; 2.5), which keep only their earliest work
+     until a rule of their own drops them;
   10. publisher page text the `web_scrape` patterns miss (*Get access*, *Preview this article*,
       *Restricted access… First published*; *was published in* only in De Gruyter's form, since
       it also opens real sentences: *Jan Herkel's Elementa… was published in Buda*), and the
@@ -548,7 +551,16 @@ pair of similarity 0.8 only 40% of the time and one of 0.85 69% (datasketch's 9 
 rows). The index now proposes candidates tuned for 0.6 (98.6% and 99.9% of such pairs), and each
 candidate's exact Jaccard similarity on the shingles of the kept text decides at 0.8, as
 datasketch's documentation advises for exact results. The decisions now depend on the texts
-alone, not on the hash or the permutations.
+alone, not on the hash or the permutations. Kept by the author after a sample (2026-11-16): 5,709
+near-duplicates instead of 5,464. Of 12 of the 239 works newly marked in the weakest band (exact
+similarity 0.80–0.85), 6 are the same abstract published twice (two HCI papers a year apart, a
+1957 acoustics abstract in two versions, a 1998 paper again in 1999 with *Abstract* in front, a
+1989 philosophy text reprinted in 2019), which the old rule missed; the other 6 are short
+catalogue lines that differ in a year or page range only (two MIT and two La Trobe thesis lines,
+a Berkeley proceedings line, a library newsletter of 1964 and 1968): different works sharing a
+template, where one different token reaches 0.8. They are text that is not an abstract, for the
+citation-line run (run 9) to check; a minimum length for near-duplicates would be a decision of
+its own. The threshold of 0.8 stays provisional.
 
 Replaces: four cleaning rule sets, three language checks, two sentence splitters, two URL
 regexes, the mojibake table, six duplicate and shared-text rules.
