@@ -295,8 +295,8 @@ def lower_glued_word_splits(decisions: pl.DataFrame) -> LowerGluedSplits:
 def count_two_word_splits(text: str, splits: LowerGluedSplits) -> int:
     """How many lower-case two-word glues ``split_lower_glued_words`` would split in the text.
 
-    A text with at least ``min_dense_splits`` of them, counted over the text's English sentences,
-    is damaged: the guarded patterns apply there too.
+    A text with at least ``min_dense_splits`` of them is damaged: the guarded patterns apply
+    there too.
     """
     return sum(
         1

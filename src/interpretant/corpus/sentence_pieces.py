@@ -45,10 +45,6 @@ class PiecedText:
         """The text the pieces make."""
         return "".join(self.pieces)
 
-    def repairable_pieces(self) -> list[str]:
-        """The pieces the repairs may change, in order."""
-        return [piece for piece, may in zip(self.pieces, self.repairable, strict=True) if may]
-
 
 def cut_into_pieces(work_id: str, text: str, sentences: Iterable[SentenceLanguage]) -> PiecedText:
     """The text cut at its sentences' edges, each piece marked repairable or not.

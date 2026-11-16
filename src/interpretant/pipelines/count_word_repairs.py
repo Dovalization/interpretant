@@ -1,8 +1,10 @@
 """The word repairs of the cleaning runs (decision agenda 2.3), counted over the whole corpus.
 
 The repair-texts stage has merged the works and repaired their texts; this stage reads those base
-texts, part by part. Each word repair is decided in turn, each from
-counts over the whole corpus of the text the earlier ones produce: the glued words of the
+texts and their sentence languages, part by part. Each word repair is decided in turn, each from
+counts over the whole corpus of the text the earlier ones produce, and changes only English
+sentences and undetermined ones in mostly English abstracts (``sentence_pieces``); the counts read
+every sentence (``_whole_texts``). The repairs are: the glued words of the
 repaired texts (run 7), split or kept joined; then the words broken by a space or a line-end
 hyphen in the texts with those splits made (run 7c), joined or kept apart; then the lower-case
 glued words of the texts with those joins made (run 8), split or kept joined. Each table is written
@@ -167,7 +169,7 @@ def count_word_repairs(
             languages = load_base_sentence_languages(catalog, part)
             works[part] = pieced_texts(base_texts.iter_rows(), list(languages.iter_rows()))
         progress.advance()
-    texts = _repairable_texts(works)
+    texts = _whole_texts(works)
     progress.stage("counting glued words")
     counts = count_glued_words(texts)
     progress.stage("deciding the splits")
@@ -190,7 +192,7 @@ def count_word_repairs(
         process_count=process_count,
         progress=progress,
     )
-    texts = _repairable_texts(works)
+    texts = _whole_texts(works)
     progress.stage("counting split words")
     broken = settings.split_words
     split_counts = count_split_words(texts, min_word_count=broken.min_word_count)
@@ -210,7 +212,7 @@ def count_word_repairs(
         process_count=process_count,
         progress=progress,
     )
-    texts = _repairable_texts(works)
+    texts = _whole_texts(works)
     progress.stage("counting lower-case glued words")
     lower = settings.lower_glued_words
     lower_counts = count_lower_glued_words(
@@ -278,15 +280,16 @@ def count_word_repairs(
     )
 
 
-def _repairable_texts(works: Mapping[str, list[PiecedText]]) -> pl.DataFrame:
-    """The pieces the repairs may change, one row each with its work: what the counts read."""
+def _whole_texts(works: Mapping[str, list[PiecedText]]) -> pl.DataFrame:
+    """Each work's whole text, what the counts read.
+
+    The counts read every sentence, foreign ones too, although the repairs change only English
+    ones: counting English sentences alone flipped decisions at the margins (one use fewer of
+    "robotic and") and took away the joined uses that keep foreign words whole (*forma* in Latin
+    terms), which made more kept abstracts worse than better (the check run of 2026-11-16).
+    """
     return pl.DataFrame(
-        [
-            (work.work_id, piece)
-            for part_works in works.values()
-            for work in part_works
-            for piece in work.repairable_pieces()
-        ],
+        [(work.work_id, work.text) for part_works in works.values() for work in part_works],
         schema={"work_id": pl.String(), "text": pl.String()},
         orient="row",
     )
@@ -313,7 +316,7 @@ def _lower_split_part(
 ) -> tuple[list[PiecedText], Counter[str]]:
     """One part's works with their English sentences' lower-case glue split, and the splits.
 
-    The last of the word repairs. A work is damaged when its English sentences hold at least
+    The last of the word repairs. A work is damaged when its text holds at least
     ``min_dense_splits`` two-word glues; the guarded patterns apply only there. The splits made
     are counted by pattern.
     """
@@ -321,8 +324,7 @@ def _lower_split_part(
     repaired: list[PiecedText] = []
     counts: Counter[str] = Counter()
     for work in works:
-        two_words = sum(count_two_word_splits(piece, splits) for piece in work.repairable_pieces())
-        is_damaged = two_words >= min_dense_splits
+        is_damaged = count_two_word_splits(work.text, splits) >= min_dense_splits
 
         repaired.append(
             repair_pieces(work, partial(_split_counted, splits, counts, is_damaged=is_damaged))

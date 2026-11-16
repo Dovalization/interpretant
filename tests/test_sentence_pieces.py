@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 from interpretant.corpus.sentence_pieces import (
+    PiecedText,
     cut_into_pieces,
     pieced_texts,
     repair_pieces,
@@ -15,6 +16,11 @@ ENGLISH_ONE = "The study looks at ofthe models."
 GERMAN = "Die Studie zeigt ofthe Modelle."
 ENGLISH_TWO = "Its infor- mation is new."
 TEXT = f"{ENGLISH_ONE} {GERMAN}  {ENGLISH_TWO}"
+
+
+def repairable_pieces(pieced: PiecedText) -> list[str]:
+    """The pieces the repairs may change, in order."""
+    return [piece for piece, may in zip(pieced.pieces, pieced.repairable, strict=True) if may]
 
 
 def sentences(language_two: str = "de") -> list[tuple[int, int, str, float]]:
@@ -33,7 +39,7 @@ def sentences(language_two: str = "de") -> list[tuple[int, int, str, float]]:
 def test_cut_into_pieces_marks_english_sentences_repairable_and_keeps_the_text() -> None:
     pieced = cut_into_pieces("W1", TEXT, sentences())
     assert pieced.text == TEXT
-    assert pieced.repairable_pieces() == [ENGLISH_ONE, ENGLISH_TWO]
+    assert repairable_pieces(pieced) == [ENGLISH_ONE, ENGLISH_TWO]
 
 
 @pytest.mark.parametrize(
@@ -43,7 +49,7 @@ def test_cut_into_pieces_marks_english_sentences_repairable_and_keeps_the_text()
 def test_cut_into_pieces_repairs_undetermined_sentences_only_in_english_abstracts(
     language: str, expected: list[str]
 ) -> None:
-    assert cut_into_pieces("W1", TEXT, sentences(language)).repairable_pieces() == expected
+    assert repairable_pieces(cut_into_pieces("W1", TEXT, sentences(language))) == expected
 
 
 def test_cut_into_pieces_leaves_a_mostly_foreign_abstract_s_undetermined_sentences() -> None:
@@ -52,7 +58,7 @@ def test_cut_into_pieces_leaves_a_mostly_foreign_abstract_s_undetermined_sentenc
     pieced = cut_into_pieces(
         "W1", text, [(0, split - 1, "de", 0.9), (split, len(text), "und", 0.5)]
     )
-    assert pieced.repairable_pieces() == []
+    assert repairable_pieces(pieced) == []
 
 
 def test_sentence_ranges_follow_the_repairs_and_keep_untouched_sentences_whole() -> None:
@@ -82,4 +88,4 @@ def test_pieced_texts_gives_a_work_without_sentences_one_piece_left_alone() -> N
     )
     assert [work.work_id for work in works] == ["W1", "W2"]
     assert works[1].pieces == ("Untouched text.",)
-    assert works[1].repairable_pieces() == []
+    assert repairable_pieces(works[1]) == []

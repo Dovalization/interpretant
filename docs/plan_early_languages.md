@@ -51,7 +51,14 @@ longest stage. Three problems follow:
    splits in English sentences. The stage records each text's edits (a position and a change of
    length) and moves the language spans through them, so later stages read them on the text they
    annotate; tests check that every sentence the repairs leave alone maps to the same text,
-   after joins that delete characters and splits that add them.
+   after joins that delete characters and splits that add them. *Changed after the second check
+   run (2026-11-16, the author):* counting English sentences only made more kept abstracts worse
+   than better (1,025 kept abstracts' final text differed from run 8's; about 20 of 30 samples
+   worse). Decisions at the margins flipped ("roboticand", 10 uses apart to 1 joined in run 8,
+   9 apart now) and foreign words lost the joined uses that kept them whole (*forma*, 497 joined
+   uses in run 8, 92), so they were split in Latin terms of English texts. The counts and the
+   damaged-text guard read every sentence again, as in run 8; only the changes are limited to
+   English sentences.
 4. **The spaCy pass annotates every work, as now.** Skipping works with no English sentence
    would save about 20 s: 21,633 works (3.1%) have none in the early check, but 410 of them are
    kept in the final build, so the rule needs cleaning's own `not_english` decision moved early;
@@ -87,8 +94,7 @@ longest stage. Three problems follow:
 4. The guard in the word repairs and the language spans moved to final offsets.
 5. `clean_corpus` gives spaCy sentences their language, with the re-check.
 6. `dvc.yaml` reordered, tests, a full profiled run that compares all three word-repair decision
-   tables (their counts now read English text only) as well as the outputs, the agenda and
-   `docs/performance.md`.
+   tables as well as the outputs, the agenda and `docs/performance.md`.
 
 ## Expected effect
 
