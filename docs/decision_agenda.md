@@ -1067,6 +1067,19 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   and comments count as abstracts. The detectors' clause goes, since the kinds are now decided.
   The sentence breaks are judged again only after word repair reruns the spaCy pass, since no
   run before it moves a cut. Run 3 fails under both rules.
+- **A provisional check after the cleaning batch (2026-11-16; agent judges, not the author's
+  review).** A fresh 200 kept records of record `75f36a82`, 25 per decade, none of run 3's 200
+  (seed 20261122), judged by the two agent judges calibrated on run 3's verdicts (2.3, runs
+  9–17), with the rule above: 16 failures in 200 (8%, Wilson 95% interval 5–13%; one record the
+  judges split on left unsettled, since it cannot change the outcome), by decade 3, 3, 1, 0, 3,
+  1, 5, 0, so the corpus fails provisionally, on both parts. Against run 3's 30 non-abstracts the
+  batch roughly halved the share. The failures: lists of reviewed books (*Book reviews in this
+  article: …*, 2), archive descriptions (a photograph, a newspaper clipping; 2), an obituary
+  and a list of death notices the detectors missed (2), cut-off fragments with no sentence of
+  their own (2), citation lines in forms the new rules miss (an OUP line cut before its pages, a
+  Frontiers line; 2), a thesis note written *Thesis: Ph. D., …* (1), a table of contents, a
+  keyword jumble, a lone quotation, interviewee biographies and a list of Hungarian verb
+  examples (5). The author's review and sign-off stay open.
 - **After sign-off: abstracts against full texts** (assumption A6; decided 2026-11-14). Full
   texts do not become the corpus. Of run 4's kept works, 19–22% per decade before the 2010s have
   an open copy (42% in the 2010s, 67% in the 2020s), and 2–4% before 2000 carry a licence that
