@@ -20,6 +20,11 @@ from spacy.tokens import Doc
 ENGLISH = "en"
 # ISO 639-2's code for an undetermined language: a sentence with no letters, or no verdict.
 UNDETERMINED = "und"
+# ISO 639-2's code for a language without a code of its own: here a sentence none of the
+# candidates' alphabets cover (Greek, Tamil, Thai), whose every confidence value is 0. Neither
+# English nor undetermined, so cleaning removes it as before; until 2026-11-17 it took the
+# alphabetically first candidate, Arabic.
+UNSCORED = "mis"
 # lingua's confidence for the same text varies in its last digits from call to call, so it is
 # rounded where it is read: the threshold decision and the stored table then reproduce.
 CONFIDENCE_DECIMALS = 4
@@ -184,6 +189,8 @@ def _detect_texts(
 
 
 def _close_call(values: Sequence[ConfidenceValue]) -> SentenceLanguage:
+    if values and values[0].value == 0:
+        return SentenceLanguage(UNSCORED, 0.0)
     if len(values) < 2 or ENGLISH in (_code(values[0].language), _code(values[1].language)):
         return _NO_LANGUAGE
     return _sentence_language_of(values[0].language, values[0].value)

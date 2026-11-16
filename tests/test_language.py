@@ -9,6 +9,7 @@ from spacy.tokens import Doc
 
 from interpretant.corpus.language import (
     UNDETERMINED,
+    UNSCORED,
     SentenceLanguage,
     build_language_detector,
     detect_sentence_languages,
@@ -47,6 +48,16 @@ def test_detect_sentence_languages_leaves_sentences_without_letters_undetermined
     )
     assert english.language == "en"
     assert numbers == SentenceLanguage(UNDETERMINED, 0.0)
+
+
+def test_detect_sentence_languages_marks_a_script_no_candidate_covers(
+    nlp: Language, detector: LanguageDetector
+) -> None:
+    doc = sentences_doc(nlp, ["Δεν παρατίθεται περίληψη .", "Η μελέτη εξετάζει τη γλώσσα ."])
+    (languages,) = detect_sentence_languages(
+        [doc], detector, english_threshold=0.9, minimum_relative_distance=0.1
+    )
+    assert languages == [SentenceLanguage(UNSCORED, 0.0)] * 2
 
 
 def test_detect_sentence_languages_labels_each_sentence_of_a_mixed_abstract(
