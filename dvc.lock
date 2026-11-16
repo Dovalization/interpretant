@@ -125,8 +125,8 @@ stages:
       size: 8779
     - path: src/interpretant/corpus/deduplication.py
       hash: md5
-      md5: 23bdfef5e3d19f934ffb18fecbe927bb
-      size: 5863
+      md5: a9930b9207a2b17d26653de53a2900d6
+      size: 7298
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: 4370dc3e95593f84fd157d8b3709fbaf
@@ -153,8 +153,8 @@ stages:
       size: 1891
     - path: src/interpretant/pipelines/build_corpus.py
       hash: md5
-      md5: 965a80587f4804367a57b5bbfc61b773
-      size: 6335
+      md5: 52b79874893c7f4e03d9ce3699365ce4
+      size: 6474
     - path: src/interpretant/pipelines/corpus.py
       hash: md5
       md5: 3c8b5cb09f69a3069c02a0c0ae6d80d1
@@ -176,6 +176,7 @@ stages:
         build_corpus:
           template_min_abstracts: 20
           near_duplicate_threshold: 0.8
+          near_duplicate_candidate_threshold: 0.6
           author_cap_share: 0.01
           author_cap_floor: 5
         corpus:
@@ -203,8 +204,8 @@ stages:
     outs:
     - path: data/processed/abstracts
       hash: md5
-      md5: 1b08ef57b9d18c3c32874d4f1c3ae791.dir
-      size: 288268627
+      md5: cb7d5bc7bcdefd305b4f487f036f143a.dir
+      size: 288270430
       nfiles: 88
   report_corpus:
     cmd: interpretant report-corpus
@@ -215,8 +216,8 @@ stages:
       size: 38380657
     - path: data/processed/abstracts
       hash: md5
-      md5: 1b08ef57b9d18c3c32874d4f1c3ae791.dir
-      size: 288268627
+      md5: cb7d5bc7bcdefd305b4f487f036f143a.dir
+      size: 288270430
       nfiles: 88
     - path: src/interpretant/catalog
       hash: md5
@@ -254,11 +255,11 @@ stages:
     outs:
     - path: data/processed/corpus_report.md
       hash: md5
-      md5: f1081d6bf5987e735f170e2d5eca1298
-      size: 21186
+      md5: c606e34e6bed142073b2a2ba407804af
+      size: 21253
     - path: metrics/corpus.json
       hash: md5
-      md5: 8707650a48951b4948e145dd38fa0ec3
+      md5: f15f02f084d982e4bf57b2478737f34c
       size: 1013
   detect_languages:
     cmd: interpretant detect-languages

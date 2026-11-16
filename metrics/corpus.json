@@ -1,15 +1,15 @@
 {
   "abstracts": 705283,
-  "dropped": 65385,
+  "dropped": 65633,
   "dropped_by_reason": {
-    "author_cap": 180,
+    "author_cap": 183,
     "catalogue_record": 8037,
     "citation_record": 14838,
     "erratum": 128,
     "exam_spam": 61,
     "letter": 1093,
     "mojibake": 228,
-    "near_duplicate": 5464,
+    "near_duplicate": 5709,
     "news": 253,
     "not_english": 18791,
     "obituary": 638,
@@ -24,7 +24,7 @@
     "retracted": 147,
     "truncated": 77464
   },
-  "kept": 639898,
+  "kept": 639650,
   "removed_ranges_by_reason": {
     "abstract_label": 37815,
     "catalogue_record": 8037,
