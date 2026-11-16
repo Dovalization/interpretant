@@ -80,9 +80,13 @@ clean_corpus:
 build_corpus:
   # A sentence shared by this many abstracts, digits masked, is a template (2.3).
   template_min_abstracts: 20
-  # Estimated Jaccard similarity of word 5-shingles from which an abstract is a near-duplicate
-  # (provisional, 2.5).
+  # Jaccard similarity of word 5-shingles from which an abstract is a near-duplicate, computed
+  # exactly for each candidate pair (provisional, 2.5).
   near_duplicate_threshold: 0.8
+  # The similarity the MinHash LSH index is tuned for when it proposes candidate pairs. At 0.6 it
+  # proposes a pair of similarity 0.8 98.6% of the time and one of 0.85 99.9%; tuned for 0.8 it
+  # proposed them 40% and 69% of the time (datasketch's bands and rows for 128 permutations).
+  near_duplicate_candidate_threshold: 0.6
   # No author holds more than this share of a cell's works, nor fewer than the floor (2.3).
   author_cap_share: 0.01
   author_cap_floor: 5

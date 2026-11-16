@@ -540,6 +540,16 @@ whether the kept work should instead take the fields of the works it replaces wi
 (as one work downloaded in two cells does) is decided once the sample audit has counted such
 pairs (2.3). Each dropped near-duplicate names the work it duplicates (`duplicate_of`).
 
+*Exact similarity for candidate pairs, 2026-11-16 (the author).* MinHash estimates a similarity
+of 0.8 from 128 permutations with a standard error of about 0.035, so decisions near the
+threshold move whenever the estimate does: the faster shingle hash of the second speed round
+changed 491 of them, all near 0.8, on both sides. And the LSH index, tuned for 0.8, proposed a
+pair of similarity 0.8 only 40% of the time and one of 0.85 69% (datasketch's 9 bands of 13
+rows). The index now proposes candidates tuned for 0.6 (98.6% and 99.9% of such pairs), and each
+candidate's exact Jaccard similarity on the shingles of the kept text decides at 0.8, as
+datasketch's documentation advises for exact results. The decisions now depend on the texts
+alone, not on the hash or the permutations.
+
 Replaces: four cleaning rule sets, three language checks, two sentence splitters, two URL
 regexes, the mojibake table, six duplicate and shared-text rules.
 

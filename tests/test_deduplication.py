@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import polars as pl
+import pytest
 
 from interpretant.catalog import RawWork
 from interpretant.corpus.deduplication import (
@@ -88,9 +89,35 @@ def test_mark_near_duplicates_keeps_the_earliest_and_records_it() -> None:
             abstract_row(3, [UNRELATED], year=2016),
         ]
     )
-    marked = mark_near_duplicates(table, threshold=0.8, signatures=signatures_of(table))
+    marked = mark_near_duplicates(
+        table, threshold=0.8, candidate_threshold=0.6, signatures=signatures_of(table)
+    )
     assert dropped_reasons(marked) == {1: NEAR_DUPLICATE, 2: None, 3: None}
     assert marked["duplicate_of"].to_list() == [table["work_id"][1], None, None]
+
+
+def exact_jaccard(first: str, second: str) -> float:
+    left, right = build_shingles(first, []), build_shingles(second, [])
+    return len(left & right) / len(left | right)
+
+
+@pytest.mark.parametrize(("extra_words", "expected"), [(10, NEAR_DUPLICATE), (30, None)])
+def test_mark_near_duplicates_decides_on_the_exact_similarity(
+    extra_words: int, expected: str | None
+) -> None:
+    longer = ORIGINAL.removesuffix(".") + " " + " ".join(f"extra{n}" for n in range(extra_words))
+    assert (exact_jaccard(ORIGINAL, longer) >= 0.8) == (expected is not None)
+    table = abstracts_table([abstract_row(1, [ORIGINAL], year=2015), abstract_row(2, [longer])])
+    marked = mark_near_duplicates(
+        table, threshold=0.8, candidate_threshold=0.5, signatures=signatures_of(table)
+    )
+    assert dropped_reasons(marked)[2] == expected
+
+
+def test_mark_near_duplicates_refuses_a_candidate_threshold_above_the_threshold() -> None:
+    table = abstracts_table([abstract_row(1, [ORIGINAL])])
+    with pytest.raises(ValueError, match="candidate threshold"):
+        mark_near_duplicates(table, threshold=0.6, candidate_threshold=0.8, signatures={})
 
 
 def test_mark_near_duplicates_ignores_abstracts_already_dropped() -> None:
@@ -100,7 +127,9 @@ def test_mark_near_duplicates_ignores_abstracts_already_dropped() -> None:
             abstract_row(2, [REVISED], year=2019),
         ]
     )
-    marked = mark_near_duplicates(table, threshold=0.8, signatures=signatures_of(table))
+    marked = mark_near_duplicates(
+        table, threshold=0.8, candidate_threshold=0.6, signatures=signatures_of(table)
+    )
     assert dropped_reasons(marked) == {1: "web_scrape", 2: None}
 
 
@@ -114,5 +143,7 @@ def test_mark_near_duplicates_compares_the_kept_text_only() -> None:
             {"start": footer_range["start"], "end": footer_range["end"], "reason": "footer"}
         ]
     table = abstracts_table([first, second])
-    marked = mark_near_duplicates(table, threshold=0.5, signatures=signatures_of(table))
+    marked = mark_near_duplicates(
+        table, threshold=0.5, candidate_threshold=0.4, signatures=signatures_of(table)
+    )
     assert dropped_reasons(marked) == {1: None, 2: None}

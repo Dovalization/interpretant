@@ -1,10 +1,13 @@
 """Near-duplicates (decision agenda 2.5), found by MinHash.
 
 Exact duplicates, the same work in two cells, are merged earlier (``corpus.works``).
-Near-duplicates (a preprint and its published version) are found with
-MinHash and locality-sensitive hashing (``datasketch``) on word 5-shingles of the kept text, the
-design's starting point; the earliest work of each group is kept and every later one is dropped
-with the work it duplicates recorded. Shingles are hashed with MurmurHash3 (``mmh3``), the faster
+Near-duplicates (a preprint and its published version) are found on word 5-shingles of the kept
+text: MinHash and locality-sensitive hashing (``datasketch``) propose candidate pairs, and each
+candidate's exact Jaccard similarity decides, as datasketch's documentation advises for exact
+results (decided 2026-11-16, the author: estimated from 128 permutations, a similarity of 0.8 has
+a standard error of about 0.035, so decisions near the threshold changed with the hash). The
+earliest work of each group is kept and every later one is dropped with the work it duplicates
+recorded. Shingles are hashed with MurmurHash3 (``mmh3``), the faster
 hash datasketch's documentation shows in place of its default SHA-1, which took 24% of the
 corpus build. Each abstract's signature depends on its text alone, so signatures are made apart
 (``minhash_signatures``, by part in worker processes) and only the comparison runs in order.
@@ -13,6 +16,7 @@ corpus build. Each abstract's signature depends on its text alone, so signatures
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
+from functools import lru_cache
 from typing import Any
 
 import mmh3
@@ -29,6 +33,7 @@ PERMUTATION_COUNT = 128
 # read back with them.
 SEED = 1
 SCHEME = "affine32"
+_SHINGLE_CACHE_SIZE = 50_000
 
 
 def build_shingles(text: str, removals: Sequence[Removal]) -> set[bytes]:
@@ -45,6 +50,10 @@ def build_shingles(text: str, removals: Sequence[Removal]) -> set[bytes]:
         " ".join(words[start : start + SHINGLE_WORDS]).encode()
         for start in range(len(words) - SHINGLE_WORDS + 1)
     }
+
+
+def _jaccard(first: frozenset[bytes], second: frozenset[bytes]) -> float:
+    return len(first & second) / len(first | second)
 
 
 def minhash_signatures(
@@ -77,25 +86,45 @@ def mark_near_duplicates(
     abstracts: pl.DataFrame,
     *,
     threshold: float,
+    candidate_threshold: float,
     signatures: Mapping[str, np.ndarray],
     advance: Callable[[int], None] | None = None,
 ) -> pl.DataFrame:
     """Drop each abstract too similar to an earlier kept one, recording that work.
 
-    An abstract is a near-duplicate when its estimated Jaccard similarity to a kept abstract
-    reaches ``threshold``; the kept work goes into ``duplicate_of``. Only abstracts not already
-    dropped take part, each with its signature from ``signatures`` (``minhash_signatures``, by
-    work id; an abstract without shingles has none and is left as it is). They are visited
-    earliest first (year, then work id); each is compared with the kept abstracts the LSH index
-    proposes and, if it matches, is marked a duplicate of its most similar match (the earliest
-    on a tie); otherwise it is kept and indexed. Exact duplicates are the special case of
-    similarity 1. ``advance`` is called with 1 as each abstract is visited, for a progress
-    display.
+    An abstract is a near-duplicate when the exact Jaccard similarity of its shingles with a kept
+    abstract's reaches ``threshold``; the kept work goes into ``duplicate_of``. Only abstracts
+    not already dropped take part, each with its signature from ``signatures``
+    (``minhash_signatures``, by work id; an abstract without shingles has none and is left as it
+    is). They are visited earliest first (year, then work id); the LSH index, tuned for
+    ``candidate_threshold``, proposes kept abstracts, and if any reaches ``threshold`` the
+    abstract is marked a duplicate of the most similar (the earliest on a tie); otherwise it is
+    kept and indexed. Exact duplicates are the special case of similarity 1. ``advance`` is
+    called with 1 as each abstract is visited, for a progress display.
+
+    Raises:
+        ValueError: if ``candidate_threshold`` is above ``threshold``.
     """
+    if candidate_threshold > threshold:
+        raise ValueError("the candidate threshold must not be above the near-duplicate threshold")
     candidates = abstracts.filter(pl.col("dropped_reason").is_null()).sort("year", "work_id")
     order = {work_id: position for position, work_id in enumerate(candidates["work_id"])}
-    lsh_index = MinHashLSH(threshold=threshold, num_perm=PERMUTATION_COUNT)
-    kept: dict[str, LeanMinHash] = {}
+    rows = dict(
+        zip(
+            candidates["work_id"],
+            zip(candidates["text"], candidates["removals"], strict=True),
+            strict=True,
+        )
+    )
+
+    # Each abstract's shingles are made when a comparison needs them; a bounded cache keeps those
+    # of the abstracts most recently compared, where held for every abstract they took 15 GB.
+    @lru_cache(maxsize=_SHINGLE_CACHE_SIZE)
+    def shingles_of(work_id: str) -> frozenset[bytes]:
+        text, removals = rows[work_id]
+        return frozenset(build_shingles(text, [Removal(**removal) for removal in removals]))
+
+    lsh_index = MinHashLSH(threshold=candidate_threshold, num_perm=PERMUTATION_COUNT)
     duplicate_of: dict[str, str] = {}
     for work_id in candidates["work_id"]:
         if advance is not None:
@@ -104,14 +133,16 @@ def mark_near_duplicates(
         if signature is None:
             continue
         minhash = LeanMinHash(seed=SEED, hashvalues=signature, scheme=SCHEME)
-        similarities = [(minhash.jaccard(kept[key]), key) for key in lsh_index.query(minhash)]
-        matches = [match for match in similarities if match[0] >= threshold]
-        if matches:
-            _, original = max(matches, key=lambda match: (match[0], -order[match[1]]))
-            duplicate_of[work_id] = original
-            continue
+        proposed = lsh_index.query(minhash)
+        if proposed:
+            own = shingles_of(work_id)
+            similarities = [(_jaccard(own, shingles_of(key)), key) for key in proposed]
+            matches = [match for match in similarities if match[0] >= threshold]
+            if matches:
+                _, original = max(matches, key=lambda match: (match[0], -order[match[1]]))
+                duplicate_of[work_id] = original
+                continue
         lsh_index.insert(work_id, minhash)
-        kept[work_id] = minhash
     found = pl.DataFrame(
         {"work_id": list(duplicate_of), "original": list(duplicate_of.values())},
         schema={"work_id": pl.String(), "original": pl.String()},

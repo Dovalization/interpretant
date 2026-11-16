@@ -54,6 +54,7 @@ class BuildCorpusSettings(ParamsSettings):
 
     template_min_abstracts: int = Field(ge=2)
     near_duplicate_threshold: float = Field(gt=0, le=1)
+    near_duplicate_candidate_threshold: float = Field(gt=0, le=1)
     author_cap_share: float = Field(gt=0, le=1)
     author_cap_floor: int = Field(ge=1)
 
@@ -103,6 +104,7 @@ def build_corpus(
     table = mark_near_duplicates(
         table,
         threshold=settings.near_duplicate_threshold,
+        candidate_threshold=settings.near_duplicate_candidate_threshold,
         signatures=signatures,
         advance=progress.advance,
     )
