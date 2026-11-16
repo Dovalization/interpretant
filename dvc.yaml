@@ -159,7 +159,6 @@ stages:
       - ${record_types.path}
       - ${annotated_abstracts.path}
       - ${raw_abstracts.path}
-      - ${work_metadata.path}
       - ${openalex_works.path}
       - ${crossref_works.path}
       - ${pubmed_works.path}
@@ -177,17 +176,11 @@ stages:
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/work_metadata.py
-      - src/interpretant/corpus/works.py
-      - src/interpretant/pipelines/corpus.py
-      - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/report_corpus.py
       - src/interpretant/review/corpus_report.py
       - ${abstracts.path}
-      - ${raw_abstracts.path}
-      - ${work_metadata.path}
-    params:
-      - corpus
+      - ${openalex_works.path}
     outs:
       - ${corpus_report.path}
     metrics:

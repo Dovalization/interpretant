@@ -19,7 +19,6 @@ from pydantic_settings import SettingsConfigDict
 from interpretant.catalog import (
     CatalogConfig,
     StagingSource,
-    index_work_metadata,
     load_annotated_abstracts,
     load_record_kinds,
     load_staging_table,
@@ -37,14 +36,8 @@ from interpretant.corpus.record_types import (
     join_record_signals,
     mark_record_types,
 )
-from interpretant.corpus.work_metadata import mark_metadata_flags
-from interpretant.pipelines.corpus import (
-    CorpusResult,
-    corpus_cells,
-    load_corpus_metadata,
-    part_name,
-    summarise,
-)
+from interpretant.corpus.work_metadata import check_work_metadata, mark_metadata_flags
+from interpretant.pipelines.corpus import CorpusResult, corpus_cells, part_name, summarise
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 
@@ -73,8 +66,8 @@ def build_corpus(
     """Apply the corpus-level rules and the review flags to every annotated part, and save them.
 
     Raises:
-        ValueError: if no raw cell matches the selection, or a cell's metadata has not been
-            fetched or is incomplete.
+        ValueError: if no raw cell matches the selection, or a work has no row in OpenAlex's
+            staging table (its metadata has not been fetched).
         FileNotFoundError: naming the parts the spaCy pass has not annotated yet, or if the
             staging tables have not been built.
     """
@@ -85,13 +78,13 @@ def build_corpus(
     table = pl.concat(
         part.with_columns(pl.lit(name).alias(_PART)) for name, part in annotated.items()
     )
-    progress.stage("checking the work metadata")
-    metadata = index_work_metadata(load_corpus_metadata(catalog, cells), table["work_id"])
+    progress.stage("loading the staging tables")
+    staging = {source: load_staging_table(catalog, source).collect() for source in _STAGING_SOURCES}
+    check_work_metadata(table, staging["openalex"])
     progress.stage("record types")
     kinds = load_record_kinds(catalog)
     signals = join_record_signals(
-        table,
-        *(load_staging_table(catalog, source).collect() for source in _STAGING_SOURCES),
+        table, staging["openalex"], staging["crossref"], staging["pubmed"]
     )
     table = mark_record_types(table, decide_record_types(signals, kinds), kinds)
     progress.stage("template sentences")
@@ -107,7 +100,7 @@ def build_corpus(
         table, max_share=settings.author_cap_share, floor=settings.author_cap_floor
     )
     progress.stage("review flags")
-    table = mark_truncated(mark_metadata_flags(table, metadata))
+    table = mark_truncated(mark_metadata_flags(table, staging["openalex"]))
     tables = {part: table.filter(pl.col(_PART) == part).drop(_PART) for part in parts}
     progress.stage("saving the parts", total=len(tables))
     for part, rows in tables.items():

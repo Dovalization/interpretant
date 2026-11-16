@@ -23,29 +23,14 @@ from interpretant.catalog.raw import RawCell
 _SUFFIX = ".jsonl.gz"
 
 
-class Source(BaseModel):
-    """Where a copy of a work is hosted: a journal, a repository, a conference and so on."""
-
-    # The file keeps OpenAlex's whole record; the models read only what the rules use.
-    model_config = ConfigDict(extra="ignore", frozen=True)
-
-    display_name: str | None = None
-    type: str | None = None
-    issn_l: str | None = None
-    issn: tuple[str, ...] | None = None
-
-
-class Location(BaseModel):
-    """One copy of a work and its source."""
-
-    model_config = ConfigDict(extra="ignore", frozen=True)
-
-    source: Source | None = None
-
-
 class WorkMetadata(BaseModel):
-    """The parts of a work's OpenAlex record the corpus rules read."""
+    """The parts of a work's OpenAlex record the Crossref and PubMed lookups read.
 
+    The corpus rules and the report read OpenAlex's staging table instead, which Polars builds
+    from these files (``build-linked-tables``).
+    """
+
+    # The file keeps OpenAlex's whole record; the model reads only what the lookups use.
     model_config = ConfigDict(extra="ignore", frozen=True)
 
     work_id: str = Field(alias="id", pattern=r"^https://openalex\.org/W\d+$")
@@ -54,14 +39,6 @@ class WorkMetadata(BaseModel):
     doi: str | None = None
     # The work's identifiers in other systems by system ("doi", "pmid", "pmcid", "mag").
     ids: Mapping[str, str] = Field(default_factory=dict)
-    title: str | None = None
-    type: str | None = None
-    publication_date: date | None = None
-    language: str | None = None
-    indexed_in: tuple[str, ...] = ()
-    primary_location: Location | None = None
-    is_paratext: bool = False
-    is_retracted: bool = False
 
 
 def fetched_work_ids(catalog: CatalogConfig, cell: RawCell) -> set[str]:
@@ -125,20 +102,3 @@ def load_work_metadata_table(catalog: CatalogConfig, schema: pl.Schema) -> pl.Da
 
 def _path(catalog: CatalogConfig, cell: RawCell) -> Path:
     return catalog.work_metadata.path / cell.field / f"{cell.decade}{_SUFFIX}"
-
-
-def index_work_metadata(
-    records: Iterable[WorkMetadata], work_ids: Iterable[str]
-) -> dict[str, WorkMetadata]:
-    """Each work's metadata record, by work id.
-
-    Raises:
-        ValueError: if a work has no record (its cell's fetch did not finish).
-    """
-    by_work = {record.work_id: record for record in records}
-    unfetched = set(work_ids) - by_work.keys()
-    if unfetched:
-        raise ValueError(
-            f"{len(unfetched)} works have no metadata record: run `interpretant fetch-metadata`"
-        )
-    return by_work

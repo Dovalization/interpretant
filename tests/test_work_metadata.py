@@ -8,10 +8,11 @@ from __future__ import annotations
 from datetime import date
 from typing import Any
 
+import polars as pl
 import pytest
 from pyalex import config
 
-from interpretant.catalog import DOICorrection, WorkMetadata, index_work_metadata
+from interpretant.catalog import DOICorrection, WorkMetadata
 from interpretant.corpus import work_metadata
 from interpretant.corpus.removals import MALFORMED
 from interpretant.corpus.work_metadata import (
@@ -23,6 +24,7 @@ from interpretant.corpus.work_metadata import (
     REPOSITORY_ONLY,
     RETRACTED,
     build_openalex_works,
+    check_work_metadata,
     configure_openalex,
     correct_dois,
     fetch_work_metadata,
@@ -55,8 +57,9 @@ class FakeQuery:
         return [self.known[short_id] for short_id in self.ids if short_id in self.known]
 
 
-def metadata(record: dict[str, Any]) -> WorkMetadata:
-    return WorkMetadata.model_validate(record)
+def openalex_works(records: list[dict[str, Any]]) -> pl.DataFrame:
+    """OpenAlex's staging table built from the given metadata records."""
+    return build_openalex_works(read_records(records, OPENALEX_METADATA_SCHEMA), {})
 
 
 def test_fetch_work_metadata_asks_by_short_id_and_dates_every_record(
@@ -97,7 +100,7 @@ def test_is_repository_only_flags_a_repository_copy_no_scholarly_index_lists(
     indexed_in: tuple[str, ...],
 ) -> None:
     record = metadata_record(1, source_type="repository", indexed_in=indexed_in)
-    assert is_repository_only(metadata(record))
+    assert openalex_works([record]).filter(is_repository_only()).height == 1
 
 
 @pytest.mark.parametrize(
@@ -111,14 +114,13 @@ def test_is_repository_only_flags_a_repository_copy_no_scholarly_index_lists(
     ids=["arXiv preprint", "journal", "no source", "missing work"],
 )
 def test_is_repository_only_spares_other_works(record: dict[str, Any]) -> None:
-    assert not is_repository_only(metadata(record))
+    assert openalex_works([record]).filter(is_repository_only()).is_empty()
 
 
-def test_index_work_metadata_refuses_a_work_without_a_record() -> None:
-    with pytest.raises(ValueError, match="fetch-metadata"):
-        index_work_metadata(
-            [metadata(metadata_record(1))], ["https://openalex.org/W1", "https://openalex.org/W2"]
-        )
+def test_check_work_metadata_refuses_a_work_without_a_record() -> None:
+    table = abstracts_table([abstract_row(work, ["Models learn senses."]) for work in (1, 2)])
+    with pytest.raises(ValueError, match="1 works have no metadata record"):
+        check_work_metadata(table, openalex_works([metadata_record(1)]))
 
 
 def test_mark_metadata_flags_adds_flags_and_keeps_the_existing_ones() -> None:
@@ -129,22 +131,23 @@ def test_mark_metadata_flags_adds_flags_and_keeps_the_existing_ones() -> None:
             abstract_row(3, ["Models learn senses."]),
         ]
     )
-    records = [
-        metadata(metadata_record(1, source_type="repository", indexed_in=())),
-        metadata(metadata_record(2)),
-        metadata(missing_record(3)),
-    ]
-    flagged = mark_metadata_flags(table, index_work_metadata(records, table["work_id"]))
+    works = openalex_works(
+        [
+            metadata_record(1, source_type="repository", indexed_in=()),
+            metadata_record(2),
+            missing_record(3),
+        ]
+    )
+    flagged = mark_metadata_flags(table, works)
     assert flagged["flags"].to_list() == [[MALFORMED, REPOSITORY_ONLY], [], [NOT_IN_OPENALEX]]
 
 
 def test_mark_metadata_flags_marks_front_matter_and_retracted_works() -> None:
     table = abstracts_table([abstract_row(work, ["Models learn senses."]) for work in (1, 2)])
-    records = [
-        metadata({**metadata_record(1), "is_paratext": True}),
-        metadata({**metadata_record(2), "is_retracted": True}),
-    ]
-    flagged = mark_metadata_flags(table, index_work_metadata(records, table["work_id"]))
+    works = openalex_works(
+        [{**metadata_record(1), "is_paratext": True}, {**metadata_record(2), "is_retracted": True}]
+    )
+    flagged = mark_metadata_flags(table, works)
     assert flagged["flags"].to_list() == [[PARATEXT], [RETRACTED]]
 
 

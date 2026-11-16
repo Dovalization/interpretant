@@ -175,7 +175,7 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
     build_corpus(catalog, SELECTION, BuildCorpusSettings(), progress=built)
     assert [name for name, _, _ in built.stages] == [
         "loading the annotated parts",
-        "checking the work metadata",
+        "loading the staging tables",
         "record types",
         "template sentences",
         "repeated sentences",

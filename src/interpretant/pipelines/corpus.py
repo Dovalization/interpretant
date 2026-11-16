@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Iterable, Iterator, Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 
 import polars as pl
@@ -11,10 +11,8 @@ import polars as pl
 from interpretant.catalog import (
     CatalogConfig,
     RawCell,
-    WorkMetadata,
     list_raw_cells,
     load_raw_cell,
-    load_work_metadata,
     metadata_work_ids,
 )
 from interpretant.corpus.works import RawAbstract, merge_cells, part_of
@@ -95,24 +93,6 @@ def works_by_part(abstracts: Iterable[RawAbstract]) -> dict[str, list[RawAbstrac
 def part_name(field: str, decade: int) -> str:
     """A part of the corpus tables: the abstracts whose first field is ``field``, in a decade."""
     return f"{field}_{decade}"
-
-
-def load_corpus_metadata(
-    catalog: CatalogConfig, cells: Sequence[RawCell]
-) -> Iterator[WorkMetadata]:
-    """Every cell's metadata records, cell after cell.
-
-    Raises:
-        ValueError: if a cell's metadata has not been fetched.
-    """
-    for cell in cells:
-        try:
-            yield from load_work_metadata(catalog, cell)
-        except FileNotFoundError as exc:
-            raise ValueError(
-                f"no work metadata for {cell.field} {cell.decade}: "
-                "run `interpretant fetch-metadata`"
-            ) from exc
 
 
 def summarise(tables: Mapping[str, pl.DataFrame]) -> CorpusResult:

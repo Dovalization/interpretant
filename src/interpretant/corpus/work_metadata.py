@@ -179,27 +179,40 @@ def build_openalex_works(
     )
 
 
-def is_repository_only(metadata: WorkMetadata) -> bool:
-    """Whether a work's primary copy is in a repository and no scholarly index lists it."""
-    location = metadata.primary_location
-    source_type = location.source.type if location and location.source else None
-    return source_type == "repository" and not SCHOLARLY_INDEXES.intersection(metadata.indexed_in)
+def is_repository_only() -> pl.Expr:
+    """Whether a staging row's primary copy is in a repository and no scholarly index lists it."""
+    listed = pl.col("indexed_in").list.eval(pl.element().is_in(sorted(SCHOLARLY_INDEXES)))
+    return (pl.col("source_type") == "repository") & ~listed.list.any()
 
 
-def mark_metadata_flags(
-    abstracts: pl.DataFrame, metadata: Mapping[str, WorkMetadata]
-) -> pl.DataFrame:
-    """Flag works for the review from their metadata.
+def check_work_metadata(abstracts: pl.DataFrame, openalex_works: pl.DataFrame) -> None:
+    """Check that every abstract's work has a row in OpenAlex's staging table.
+
+    Raises:
+        ValueError: if a work has no metadata record (its cell's fetch did not finish).
+    """
+    unfetched = abstracts.select("work_id").join(
+        openalex_works.select("work_id"), on="work_id", how="anti"
+    )
+    if unfetched.height:
+        raise ValueError(
+            f"{unfetched.height} works have no metadata record: run `interpretant fetch-metadata`"
+        )
+
+
+def mark_metadata_flags(abstracts: pl.DataFrame, openalex_works: pl.DataFrame) -> pl.DataFrame:
+    """Flag works for the review from OpenAlex's staging table.
 
     The flags: repository-only, no longer returned by OpenAlex, front matter (OpenAlex's
     ``is_paratext``: tables of contents, editorial boards) and retracted.
     """
     flags = {
-        REPOSITORY_ONLY: [work for work, record in metadata.items() if is_repository_only(record)],
-        NOT_IN_OPENALEX: [work for work, record in metadata.items() if record.missing],
-        PARATEXT: [work for work, record in metadata.items() if record.is_paratext],
-        RETRACTED: [work for work, record in metadata.items() if record.is_retracted],
+        REPOSITORY_ONLY: is_repository_only(),
+        NOT_IN_OPENALEX: pl.col("is_missing"),
+        PARATEXT: pl.col("is_paratext"),
+        RETRACTED: pl.col("is_retracted"),
     }
-    for flag, work_ids in flags.items():
+    for flag, condition in flags.items():
+        work_ids = openalex_works.filter(condition)["work_id"].to_list()
         abstracts = add_flag(abstracts, work_ids, flag=flag)
     return abstracts

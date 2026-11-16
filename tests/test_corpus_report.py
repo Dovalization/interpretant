@@ -21,6 +21,7 @@ from tests.abstracts_tables import abstract_row, abstracts_table
 from tests.corpus_catalog import SELECTION, prepare_annotated_corpus
 
 TEMPLATE = {"start": 0, "end": 8, "reason": "template_sentence"}
+NO_SOURCES = pl.DataFrame(schema={"work_id": pl.String(), "source_name": pl.String()})
 
 
 def report_table() -> pl.DataFrame:
@@ -45,7 +46,12 @@ def report_table() -> pl.DataFrame:
 
 
 def section_tables(table: pl.DataFrame) -> dict[str, pl.DataFrame]:
-    sources = {"https://openalex.org/W2": "Papers", "https://openalex.org/W5": "Archive"}
+    sources = pl.DataFrame(
+        {
+            "work_id": ["https://openalex.org/W2", "https://openalex.org/W5"],
+            "source_name": ["Papers", "Archive"],
+        }
+    )
     return {section.title: section.table for section in build_corpus_report(table, sources)}
 
 
@@ -76,7 +82,7 @@ def test_build_corpus_report_places_near_duplicates_across_fields() -> None:
 
 
 def test_render_markdown_writes_unwrapped_tables() -> None:
-    text = render_markdown(build_corpus_report(report_table(), {}), title="Corpus report")
+    text = render_markdown(build_corpus_report(report_table(), NO_SOURCES), title="Corpus report")
     assert text.startswith("# Corpus report\n")
     assert "## Totals" in text
     rows = [line for line in text.splitlines() if line.startswith("| reason ")]
@@ -89,7 +95,7 @@ def test_report_corpus_writes_the_report_after_the_build(corpus_catalog_file: Pa
     catalog = read_catalog(corpus_catalog_file)
     prepare_annotated_corpus(catalog)
     build_corpus(catalog, SELECTION, BuildCorpusSettings())
-    written = report_corpus(catalog, SELECTION)
+    written = report_corpus(catalog)
     assert written == catalog.corpus_report.path
     assert "## Repository-only works by repository" in written.read_text()
     metrics = json.loads(catalog.corpus_metrics.path.read_text())
@@ -124,9 +130,9 @@ def test_report_corpus_compares_the_run_with_the_metrics_it_replaces(
     catalog = read_catalog(corpus_catalog_file)
     prepare_annotated_corpus(catalog)
     build_corpus(catalog, SELECTION, BuildCorpusSettings())
-    first = report_corpus(catalog, SELECTION).read_text()
+    first = report_corpus(catalog).read_text()
     assert "## Compared with the previous run" not in first
     save_corpus_metrics(catalog, {"abstracts": 9})
-    second = report_corpus(catalog, SELECTION).read_text()
+    second = report_corpus(catalog).read_text()
     assert "## Compared with the previous run" in second
     assert "| abstracts" in second

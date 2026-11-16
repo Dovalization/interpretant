@@ -33,9 +33,13 @@ class ReportSection:
 
 
 def build_corpus_report(
-    abstracts: pl.DataFrame, sources: Mapping[str, str | None], *, top: int = TOP_ROWS
+    abstracts: pl.DataFrame, sources: pl.DataFrame, *, top: int = TOP_ROWS
 ) -> list[ReportSection]:
-    """Every section of the report, from the abstracts table and each work's primary source."""
+    """Every section of the report, from the abstracts table and each work's primary source.
+
+    ``sources`` has a row per work with its ``work_id`` and ``source_name``, as OpenAlex's
+    staging table has them.
+    """
     return [
         _totals(abstracts),
         _dropped_by(abstracts, "decade"),
@@ -240,15 +244,18 @@ def _repository_outcomes(abstracts: pl.DataFrame) -> ReportSection:
     return ReportSection("Repository-only works by outcome", note, table)
 
 
-def _repositories(
-    abstracts: pl.DataFrame, sources: Mapping[str, str | None], top: int
-) -> ReportSection:
-    repository = abstracts.filter(pl.col("flags").list.contains(REPOSITORY_ONLY)).with_columns(
-        pl.col("work_id")
-        .replace_strict(dict(sources), default=None, return_dtype=pl.String())
-        .fill_null("(no source)")
-        .alias("repository"),
-        pl.col("dropped_reason").is_null().alias("is_kept"),
+def _repositories(abstracts: pl.DataFrame, sources: pl.DataFrame, top: int) -> ReportSection:
+    repository = (
+        abstracts.filter(pl.col("flags").list.contains(REPOSITORY_ONLY))
+        .join(
+            sources.select("work_id", pl.col("source_name").alias("repository")),
+            on="work_id",
+            how="left",
+        )
+        .with_columns(
+            pl.col("repository").fill_null("(no source)"),
+            pl.col("dropped_reason").is_null().alias("is_kept"),
+        )
     )
     table = (
         repository.group_by("repository")

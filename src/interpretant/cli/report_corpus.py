@@ -9,7 +9,6 @@ from rich.console import Console
 
 from interpretant.catalog import CATALOG_FILE, read_catalog
 from interpretant.cli.progress import LiveProgress
-from interpretant.pipelines.params import CorpusSelection
 from interpretant.pipelines.progress import StageTimer
 from interpretant.pipelines.report_corpus import report_corpus
 from interpretant.pipelines.runs import record_run
@@ -30,7 +29,7 @@ def report_corpus_command(catalog_file: Path) -> None:
     catalog = read_catalog(catalog_file)
     with LiveProgress(console) as live:
         timer = StageTimer(live)
-        written = report_corpus(catalog, CorpusSelection(), progress=timer)
+        written = report_corpus(catalog, progress=timer)
     record_run(catalog, command="report-corpus", stages=timer.finish(), counts={})
     console.print(
         f"Corpus report written to {written}, its metrics to {catalog.corpus_metrics.path}"
