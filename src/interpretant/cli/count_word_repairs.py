@@ -50,7 +50,7 @@ def count_word_repairs_command(catalog_file: Path, process_count: int | None) ->
         "glued_words_split": sum(result.glued_split_counts.values()),
         "glued_split_occurrences": result.glued_split_occurrences,
         "split_words": result.split_word_count,
-        "split_words_joined": sum(result.split_join_counts.values()),
+        "split_words_joined": result.split_joined_count,
         "split_join_occurrences": result.split_join_occurrences,
     }
     record_run(catalog, command="count-word-repairs", stages=timer.finish(), counts=counts)

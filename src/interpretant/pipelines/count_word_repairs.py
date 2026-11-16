@@ -79,8 +79,9 @@ class CountWordRepairsSettings(ParamsSettings):
 class WordRepairsResult:
     """What the stage wrote: the abstracts read and each repair's words found and changed.
 
-    The broken words joined are counted after a space or a hyphen and a space (``spaced``) and
-    after a hyphen alone (``hyphenated``).
+    A broken word can be joined in both ways, so ``split_joined_count`` counts each once and
+    ``split_join_counts`` counts those joined after a space or a hyphen and a space (``spaced``)
+    and after a hyphen alone (``hyphenated``).
     """
 
     abstract_count: int
@@ -88,6 +89,7 @@ class WordRepairsResult:
     glued_split_counts: dict[str, int]
     glued_split_occurrences: int
     split_word_count: int
+    split_joined_count: int
     split_join_counts: dict[str, int]
     split_join_occurrences: int
 
@@ -166,6 +168,7 @@ def count_word_repairs(
         glued_split_counts=dict(split["reason"].value_counts(sort=True).iter_rows()),
         glued_split_occurrences=int(split["occurrences"].sum()),
         split_word_count=joins.height,
+        split_joined_count=joins.filter(pl.col("join") | pl.col("join_hyphenated")).height,
         split_join_counts={"spaced": spaced.height, "hyphenated": hyphenated.height},
         split_join_occurrences=int((spaced[SPACE] + spaced[HYPHEN_SPACE]).sum())
         + int(hyphenated[HYPHEN].sum()),

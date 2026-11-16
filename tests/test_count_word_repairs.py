@@ -85,6 +85,7 @@ def test_count_word_repairs_writes_each_broken_word_with_its_decision(
     )
     assert row["join"]
     assert result.split_join_counts["spaced"] >= 1
+    assert result.split_joined_count <= result.split_word_count
     assert result.split_join_occurrences >= 2
 
 

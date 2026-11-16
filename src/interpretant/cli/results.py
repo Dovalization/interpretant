@@ -52,7 +52,7 @@ def render_language_result(result: LanguageResult) -> Table:
 def render_word_repairs_result(result: WordRepairsResult) -> Table:
     """One table: the glued words split and the broken words joined, for each reason."""
     split = sum(result.glued_split_counts.values())
-    joined = sum(result.split_join_counts.values())
+    joined = result.split_joined_count
     table = Table(
         title=f"{result.abstract_count:,} abstracts: {split:,} of {result.glued_word_count:,} "
         f"glued words split ({result.glued_split_occurrences:,} occurrences), {joined:,} of "
