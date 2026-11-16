@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import os
 from collections import Counter
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from functools import cache
@@ -19,6 +19,7 @@ import polars as pl
 from lingua import LanguageDetector
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
+from spacy.tokens import Doc
 from spacy.vocab import Vocab
 
 from interpretant.catalog import (
@@ -76,20 +77,42 @@ def detect_languages(
         ValueError: if no raw cell matches the selection.
         FileNotFoundError: if a part has not been annotated.
     """
+    return detect_parts(
+        "detecting sentence languages",
+        _detect_part,
+        catalog,
+        selection,
+        settings,
+        process_count=process_count,
+        progress=progress,
+    )
+
+
+def detect_parts(
+    stage: str,
+    detect_part: Callable[[str, LanguageJob], tuple[int, Counter[str]]],
+    catalog: CatalogConfig,
+    selection: CorpusSelection,
+    settings: DetectLanguagesSettings,
+    *,
+    process_count: int,
+    progress: Progress,
+) -> LanguageResult:
+    """Run ``detect_part`` on every part in worker processes and add up their counts.
+
+    Shared with the base-language stage, which reads the base texts instead of the cache.
+    """
     parts = corpus_parts(corpus_cells(catalog, selection))
-    job = _LanguageJob(
+    job = LanguageJob(
         catalog,
         settings.languages,
         settings.english_threshold,
         settings.minimum_relative_distance,
     )
-    progress.stage("detecting sentence languages", total=len(parts))
+    progress.stage(stage, total=len(parts))
     with _one_lingua_thread_per_worker(process_count):
         results = map_parts(
-            _detect_part,
-            dict.fromkeys(parts, job),
-            process_count=process_count,
-            progress=progress,
+            detect_part, dict.fromkeys(parts, job), process_count=process_count, progress=progress
         )
     counts: Counter[str] = Counter()
     for _, part_counts in results.values():
@@ -102,8 +125,8 @@ def detect_languages(
 
 
 @dataclass(frozen=True)
-class _LanguageJob:
-    """What a worker needs to detect a part's sentence languages."""
+class LanguageJob:
+    """What a worker needs to detect a part's sentence languages (both language stages)."""
 
     catalog: CatalogConfig
     languages: tuple[str, ...]
@@ -111,25 +134,24 @@ class _LanguageJob:
     minimum_relative_distance: float
 
 
-def _detect_part(part: str, job: _LanguageJob) -> tuple[int, Counter[str]]:
-    """Detect one part's sentence languages, write them, and count its abstracts and languages."""
-    detector = _detector(job.languages, job.minimum_relative_distance)
+def _detect_part(part: str, job: LanguageJob) -> tuple[int, Counter[str]]:
+    """Detect one part's cached sentence languages, write them, and count works and languages."""
     docs = list(load_annotations(job.catalog, part, Vocab()))
-    labels = detect_sentence_languages(docs, detector, english_threshold=job.english_threshold)
-    rows = [
-        (
-            doc.user_data[WORK_ID],
-            sentence.start_char,
-            sentence.end_char,
-            language.language,
-            language.confidence,
-        )
-        for doc, languages in zip(docs, labels, strict=True)
-        for sentence, language in zip(doc.sents, languages, strict=True)
-    ]
-    table = pl.DataFrame(rows, schema=SENTENCE_LANGUAGES_SCHEMA, orient="row")
+    table = language_table([doc.user_data[WORK_ID] for doc in docs], docs, job)
     save_sentence_languages(job.catalog, table, part=part)
     return len(docs), Counter(table["language"].to_list())
+
+
+def language_table(work_ids: list[str], docs: list[Doc], job: LanguageJob) -> pl.DataFrame:
+    """One row per sentence of the documents: its work, character range and language."""
+    detector = _detector(job.languages, job.minimum_relative_distance)
+    labels = detect_sentence_languages(docs, detector, english_threshold=job.english_threshold)
+    rows = [
+        (work_id, sentence.start_char, sentence.end_char, language.language, language.confidence)
+        for work_id, doc, languages in zip(work_ids, docs, labels, strict=True)
+        for sentence, language in zip(doc.sents, languages, strict=True)
+    ]
+    return pl.DataFrame(rows, schema=SENTENCE_LANGUAGES_SCHEMA, orient="row")
 
 
 @cache

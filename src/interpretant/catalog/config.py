@@ -50,6 +50,7 @@ class CatalogConfig(BaseModel):
     base_texts: DatasetEntry
     repaired_texts: DatasetEntry
     annotations: DatasetEntry
+    base_sentence_languages: DatasetEntry
     sentence_languages: DatasetEntry
 
 

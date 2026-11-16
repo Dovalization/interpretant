@@ -40,7 +40,9 @@ from interpretant.catalog.glued_words import (
 )
 from interpretant.catalog.languages import (
     SENTENCE_LANGUAGES_SCHEMA,
+    load_base_sentence_languages,
     load_sentence_languages,
+    save_base_sentence_languages,
     save_sentence_languages,
 )
 from interpretant.catalog.linked_records import (
@@ -143,6 +145,7 @@ __all__ = [
     "load_abstracts_from",
     "load_annotated_abstracts",
     "load_annotations",
+    "load_base_sentence_languages",
     "load_base_texts",
     "load_cleaning_patterns",
     "load_corpus_metrics",
@@ -165,6 +168,7 @@ __all__ = [
     "save_abstracts",
     "save_annotated_abstracts",
     "save_annotations",
+    "save_base_sentence_languages",
     "save_base_texts",
     "save_corpus_comparison",
     "save_corpus_metrics",

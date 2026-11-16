@@ -133,6 +133,13 @@ annotations:
   path: data/interim/annotations
   format: docbin
 
+# lingua's language for every sentence of the base texts, split by spaCy's rule-based sentencizer
+# behind the pass's tokenizer settings and sentence rules, before the word repairs; one part per
+# field and decade.
+base_sentence_languages:
+  path: data/interim/base_sentence_languages
+  format: parquet
+
 # lingua's language for every sentence of the annotation cache, one part per field and decade.
 sentence_languages:
   path: data/interim/sentence_languages

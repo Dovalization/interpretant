@@ -63,6 +63,31 @@ stages:
       - ${base_texts.path}:
           cache: false
 
+  # lingua's language for every sentence of the base texts, split by spaCy's rule-based
+  # sentencizer behind the pass's tokenizer settings and sentence rules: language data before
+  # the word repairs and the spaCy pass (docs/plan_early_languages.md).
+  detect_base_languages:
+    cmd: interpretant detect-base-languages
+    deps:
+      - src/interpretant/catalog
+      - src/interpretant/corpus/annotation.py
+      - src/interpretant/corpus/attribute_rules.py
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/detect_base_languages.py
+      - src/interpretant/pipelines/detect_languages.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - ${base_texts.path}
+    params:
+      - corpus
+      - detect_languages
+    outs:
+      - ${base_sentence_languages.path}
+
   # The word repairs of the cleaning runs (decision agenda 2.3, runs 7, 7c and 8), counted over
   # the corpus's base texts and decided; their tables are reviewed before the pass reads the
   # texts with every repair made.
