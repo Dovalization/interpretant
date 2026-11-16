@@ -15,6 +15,7 @@ from interpretant.__main__ import cli
 from interpretant.catalog import (
     load_annotations,
     load_glued_words,
+    load_lower_glued_words,
     load_repaired_texts,
     load_split_words,
     read_catalog,
@@ -69,6 +70,26 @@ def test_annotate_corpus_splits_the_glued_words_before_the_pass(
     texts = [doc.text for doc in load_annotations(catalog, "hci_2010", nlp.vocab)]
     assert "AbstractThe study 0 looks at PubMed records of attention research." not in texts
     assert "Abstract The study 0 looks at PubMed records of attention research." in texts
+
+
+# A cell of its own: "of the" written apart in thirty works and glued once.
+LOWER_GLUED_CELL = [
+    (10 + work, f"The study {work} looks at the role of the models and their uses.", 2012)
+    for work in range(30)
+] + [(50, "The study looks at the role ofthe models in research.", 2012)]
+
+
+def test_count_word_repairs_splits_lower_case_glued_words_and_writes_their_decisions(
+    corpus_catalog_file: Path,
+) -> None:
+    write_raw_cell(corpus_catalog_file, "hci", 2010, LOWER_GLUED_CELL)
+    catalog = read_catalog(corpus_catalog_file)
+    result = count_word_repairs(catalog, GLUED_SELECTION, WORD_REPAIRS_SETTINGS)
+    row = load_lower_glued_words(catalog).filter(pl.col("word") == "ofthe").row(0, named=True)
+    assert (row["parts"], row["joined"], row["split"]) == (["of", "the"], 1, True)
+    assert result.lower_glued_split_occurrences == {"two_words": 1}
+    texts = load_repaired_texts(catalog, "hci_2010")
+    assert "the role of the models in research" in texts["text"].str.join(" ").item()
 
 
 def test_count_word_repairs_writes_each_broken_word_with_its_decision(

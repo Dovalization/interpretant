@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-from itertools import pairwise
 from typing import Any, Literal
 
 import polars as pl
@@ -200,7 +199,7 @@ def load_record_kinds(catalog: CatalogConfig) -> dict[str, RecordKind]:
 
 
 class KeptJoinedWord(BaseModel):
-    """A glued word that stays joined although the corpus counts would split it."""
+    """A word that stays joined although the corpus counts would split it (runs 7 and 8)."""
 
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -209,10 +208,9 @@ class KeptJoinedWord(BaseModel):
 
     @field_validator("word")
     @classmethod
-    def _is_a_glued_word(cls, word: str) -> str:
-        has_boundary = any(first.islower() and second.isupper() for first, second in pairwise(word))
-        if not (word.isalpha() and has_boundary):
-            raise ValueError(f"{word!r} is not letters with a lower-case letter before a capital")
+    def _is_a_word_of_letters(cls, word: str) -> str:
+        if not word.isalpha():
+            raise ValueError(f"{word!r} is not a word of letters")
         return word
 
 
@@ -233,12 +231,12 @@ class KeptJoinedWords(BaseModel):
 
 
 def load_kept_joined_words(catalog: CatalogConfig) -> list[KeptJoinedWord]:
-    """The glued words kept joined, with their evidence (decision agenda 2.3, run 7).
+    """The words kept joined, with their evidence (decision agenda 2.3, runs 7 and 8).
 
     Raises:
         FileNotFoundError: if the kept-joined words file does not exist.
-        pydantic.ValidationError: if an entry has no evidence, is not a glued word or repeats
-            another in any case.
+        pydantic.ValidationError: if an entry has no evidence, is not a word of letters or
+            repeats another in any case.
     """
     document = yaml.safe_load(catalog.kept_joined_words.path.read_text(encoding="utf-8"))
     return KeptJoinedWords.model_validate(document).words

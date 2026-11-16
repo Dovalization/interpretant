@@ -38,6 +38,7 @@ dependencies = [
     "biopython>=1.88",
     "habanero>=2.9.2",
     "mmh3>=5.3.1",
+    "symspellpy>=6.10.2",
 ]
 
 [project.optional-dependencies]
@@ -91,9 +92,9 @@ module = ["gensim.*", "scipy.*", "sklearn.*", "tqdm.*", "networkx.*", "habanero.
 ignore_missing_imports = true
 
 # Libraries without type hints and with no stubs package: compiled spaCy modules, srsly,
-# datasketch, pyalex.
+# datasketch, pyalex, symspellpy.
 [[tool.mypy.overrides]]
-module = ["spacy.symbols", "spacy.tokenizer", "srsly", "srsly.*", "datasketch", "pyalex"]
+module = ["spacy.symbols", "spacy.tokenizer", "srsly", "srsly.*", "datasketch", "pyalex", "symspellpy"]
 ignore_missing_imports = true
 
 # pydantic-settings calls settings_customise_sources with these keyword arguments, so an override

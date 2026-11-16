@@ -2201,6 +2201,7 @@ dependencies = [
     { name = "sentencepiece" },
     { name = "simplemma" },
     { name = "spacy" },
+    { name = "symspellpy" },
     { name = "torch" },
     { name = "tqdm" },
     { name = "transformers" },
@@ -2258,6 +2259,7 @@ requires-dist = [
     { name = "sentencepiece", specifier = ">=0.2" },
     { name = "simplemma", specifier = ">=2.0" },
     { name = "spacy", specifier = ">=3.8" },
+    { name = "symspellpy", specifier = ">=6.10.2" },
     { name = "torch", specifier = ">=2.4" },
     { name = "tqdm", specifier = ">=4.65" },
     { name = "transformers", specifier = ">=4.48" },
@@ -5140,6 +5142,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/83/d3/803453b36afefb7c2bb238361cd4ae6125a569b4db67cd9e79846ba2d68c/sympy-1.14.0.tar.gz", hash = "sha256:d3d3fe8df1e5a0b42f0e7bdf50541697dbe7d23746e894990c030e2b05e72517", size = 7793921, upload-time = "2025-04-27T18:05:01.611Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a2/09/77d55d46fd61b4a135c444fc97158ef34a095e5681d0a6c10b75bf356191/sympy-1.14.0-py3-none-any.whl", hash = "sha256:e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5", size = 6299353, upload-time = "2025-04-27T18:04:59.103Z" },
+]
+
+[[package]]
+name = "symspellpy"
+version = "6.10.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e2/34/c7f195d5f22adfcccf5d661d7e902d1f802d09e877566fc798874ac93670/symspellpy-6.10.2.tar.gz", hash = "sha256:9f456c6fe374ec2a8bd5476ce7a81e6ab00d7e26ecbfb754dbf42c9d42db182e", size = 2617920, upload-time = "2026-11-07T01:07:00.021Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a8/e7/a685e9d0e90eecc832f2249946dde9e69c23d49a6ca1d23fd949d6ed0554/symspellpy-6.10.2-py3-none-any.whl", hash = "sha256:5a7cee286ef16e9ee25913ea5b9fb42ebc51ced60ce2b85c4d4be30ac3e81a51", size = 2612512, upload-time = "2026-11-07T01:06:57.442Z" },
 ]
 
 [[package]]

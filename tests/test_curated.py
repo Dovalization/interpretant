@@ -166,11 +166,10 @@ def test_load_kept_joined_words_reads_the_repository_file() -> None:
 @pytest.mark.parametrize(
     ("words", "message"),
     [
-        (["Linked"], "not letters with a lower-case letter before a capital"),
-        (["Wi-Fi"], "not letters with a lower-case letter before a capital"),
+        (["Wi-Fi"], "not a word of letters"),
         (["LinkedIn", "linkedIn"], "listed more than once"),
     ],
-    ids=["no capital after a lower-case letter", "not only letters", "a word twice in two cases"],
+    ids=["not only letters", "a word twice in two cases"],
 )
 def test_load_kept_joined_words_refuses_bad_entries(
     catalog: CatalogConfig, words: list[str], message: str

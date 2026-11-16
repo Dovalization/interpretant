@@ -53,10 +53,14 @@ def render_word_repairs_result(result: WordRepairsResult) -> Table:
     """One table: the glued words split and the broken words joined, for each reason."""
     split = sum(result.glued_split_counts.values())
     joined = result.split_joined_count
+    lower = sum(result.lower_glued_split_counts.values())
+    lower_made = sum(result.lower_glued_split_occurrences.values())
     table = Table(
         title=f"{result.abstract_count:,} abstracts: {split:,} of {result.glued_word_count:,} "
         f"glued words split ({result.glued_split_occurrences:,} occurrences), {joined:,} of "
-        f"{result.split_word_count:,} broken words joined ({result.split_join_occurrences:,})"
+        f"{result.split_word_count:,} broken words joined ({result.split_join_occurrences:,}), "
+        f"{lower:,} of {result.lower_glued_word_count:,} lower-case glued words split "
+        f"({lower_made:,} splits made)"
     )
     table.add_column("Repair")
     table.add_column("Reason")
@@ -64,6 +68,8 @@ def render_word_repairs_result(result: WordRepairsResult) -> Table:
     for repair, counts in (
         ("glued word split", result.glued_split_counts),
         ("broken word joined", result.split_join_counts),
+        ("lower-case glued word split", result.lower_glued_split_counts),
+        ("lower-case split made", result.lower_glued_split_occurrences),
     ):
         for reason, count in counts.items():
             table.add_row(repair, reason, f"{count:,}")

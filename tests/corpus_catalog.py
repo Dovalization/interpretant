@@ -20,6 +20,7 @@ from interpretant.pipelines.corpus import CorpusResult
 from interpretant.pipelines.count_word_repairs import (
     CountWordRepairsSettings,
     GluedWordSettings,
+    LowerGluedWordSettings,
     SplitWordSettings,
     count_word_repairs,
 )
@@ -57,6 +58,9 @@ WORD_REPAIRS_SETTINGS = CountWordRepairsSettings(
         apart_margin=10, opener_count=30, opener_min_left_letters=4, opener_min_right_letters=2
     ),
     split_words=SplitWordSettings(min_word_count=2, join_margin=10, hyphen_margin=100),
+    lower_glued_words=LowerGluedWordSettings(
+        apart_margin=10, min_part_count=2, min_first_part_letters=2, min_dense_splits=2
+    ),
 )
 
 
@@ -96,6 +100,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"kept_apart_words:\n  path: '{repository.kept_apart_words.path}'\n  format: yaml\n"
         "glued_words:\n  path: glued_words.parquet\n  format: parquet\n"
         "split_words:\n  path: split_words.parquet\n  format: parquet\n"
+        "lower_glued_words:\n  path: lower_glued_words.parquet\n  format: parquet\n"
         "repaired_texts:\n  path: repaired_texts\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"

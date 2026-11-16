@@ -4,7 +4,8 @@ Every selected cell's works are merged and repaired as the spaCy pass repairs th
 in worker processes. Each repair is then decided in the order the pass makes them, each from
 counts over the whole corpus of the text the earlier ones produce: the glued words of the
 repaired texts (run 7), split or kept joined; then the words broken by a space or a line-end
-hyphen in the texts with those splits made (run 7c), joined or kept apart. Each table is written
+hyphen in the texts with those splits made (run 7c), joined or kept apart; then the lower-case
+glued words of the texts with those joins made (run 8), split or kept joined. Each table is written
 whole, so the decisions can be reviewed before the pass reads them, and so are the texts with
 every repair made, one part per field and decade, which the spaCy pass reads instead of
 repairing in its main process (run 7c's profile, decision agenda step 9).
@@ -12,7 +13,7 @@ repairing in its main process (run 7c's profile, decision agenda step 9).
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Mapping
 from dataclasses import dataclass
 
@@ -26,6 +27,7 @@ from interpretant.catalog import (
     load_kept_apart_words,
     load_kept_joined_words,
     save_glued_words,
+    save_lower_glued_words,
     save_repaired_texts,
     save_split_words,
 )
@@ -34,6 +36,15 @@ from interpretant.corpus.glued_words import (
     decide_glued_word_splits,
     glued_word_splits,
     split_glued_words,
+)
+from interpretant.corpus.lower_glued_words import (
+    HYPHENATED_CHUNK,
+    LowerGluedSplits,
+    count_lower_glued_words,
+    decide_hyphenated_chunks,
+    decide_lower_glued_word_splits,
+    lower_glued_word_splits,
+    split_lower_glued_words,
 )
 from interpretant.corpus.repair import repair_text
 from interpretant.corpus.split_words import (
@@ -74,6 +85,17 @@ class SplitWordSettings(BaseModel):
     hyphen_margin: float = Field(gt=0)
 
 
+class LowerGluedWordSettings(BaseModel):
+    """When a lower-case glued word is split (run 8)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    apart_margin: float = Field(gt=0)
+    min_part_count: int = Field(ge=1)
+    min_first_part_letters: int = Field(ge=2)
+    min_dense_splits: int = Field(ge=1)
+
+
 class CountWordRepairsSettings(ParamsSettings):
     """The ``count_word_repairs`` section of ``params.yaml``: which words repair changes."""
 
@@ -81,6 +103,7 @@ class CountWordRepairsSettings(ParamsSettings):
 
     glued_words: GluedWordSettings
     split_words: SplitWordSettings
+    lower_glued_words: LowerGluedWordSettings
 
 
 @dataclass(frozen=True)
@@ -89,7 +112,9 @@ class WordRepairsResult:
 
     A broken word can be joined in both ways, so ``split_joined_count`` counts each once and
     ``split_join_counts`` counts those joined after a space or a hyphen and a space (``spaced``)
-    and after a hyphen alone (``hyphenated``).
+    and after a hyphen alone (``hyphenated``). ``lower_glued_split_counts`` counts the
+    lower-case glued words decided split by pattern, ``lower_glued_split_occurrences`` the splits
+    made in the texts by pattern (the guarded patterns only in damaged texts).
     """
 
     abstract_count: int
@@ -100,6 +125,9 @@ class WordRepairsResult:
     split_joined_count: int
     split_join_counts: dict[str, int]
     split_join_occurrences: int
+    lower_glued_word_count: int
+    lower_glued_split_counts: dict[str, int]
+    lower_glued_split_occurrences: dict[str, int]
 
 
 def count_word_repairs(
@@ -182,9 +210,39 @@ def count_word_repairs(
         progress=progress,
     )
     del split_texts
+    texts = pl.DataFrame(
+        [row for rows in joined_texts.values() for row in rows],
+        schema={"work_id": pl.String(), "text": pl.String()},
+        orient="row",
+    )
+    progress.stage("counting lower-case glued words")
+    lower = settings.lower_glued_words
+    lower_counts = count_lower_glued_words(
+        texts,
+        min_part_count=lower.min_part_count,
+        min_first_part_letters=lower.min_first_part_letters,
+    )
+    progress.stage("deciding the lower-case splits")
+    lower_decisions = decide_lower_glued_word_splits(
+        lower_counts, apart_margin=lower.apart_margin, kept_joined=kept_joined
+    )
+    lower_decisions = pl.concat([lower_decisions, decide_hyphenated_chunks(texts, lower_decisions)])
+    save_lower_glued_words(catalog, lower_decisions)
+    lower_splits = lower_glued_word_splits(lower_decisions)
+    progress.stage("splitting the lower-case glued words", total=len(joined_texts))
+    lower_split = map_parts(
+        _lower_split_part,
+        {part: (rows, lower_splits, lower.min_dense_splits) for part, rows in joined_texts.items()},
+        process_count=process_count,
+        progress=progress,
+    )
+    del joined_texts
+    occurrences: Counter[str] = Counter()
+    for _, part_counts in lower_split.values():
+        occurrences.update(part_counts)
     progress.stage("writing the repaired texts")
     for part in corpus_parts(cells):
-        rows = joined_texts.get(part, [])
+        rows = lower_split[part][0] if part in lower_split else []
         save_repaired_texts(
             catalog, pl.DataFrame(rows, schema=REPAIRED_TEXTS_SCHEMA, orient="row"), part
         )
@@ -200,6 +258,15 @@ def count_word_repairs(
         split_join_counts={"spaced": spaced.height, "hyphenated": hyphenated.height},
         split_join_occurrences=int((spaced[SPACE] + spaced[HYPHEN_SPACE]).sum())
         + int(hyphenated[HYPHEN].sum()),
+        lower_glued_word_count=lower_counts.height,
+        lower_glued_split_counts=dict(
+            lower_decisions.filter(pl.col("split") & (pl.col("pattern") != HYPHENATED_CHUNK))[
+                "pattern"
+            ]
+            .value_counts(sort=True)
+            .iter_rows()
+        ),
+        lower_glued_split_occurrences=dict(occurrences.most_common()),
     )
 
 
@@ -219,6 +286,23 @@ def _split_part(
 def _join_part(
     _part: str, works_and_joins: tuple[list[tuple[str, str]], SplitWordJoins]
 ) -> list[tuple[str, str]]:
-    """One part's works with their split words joined, the last of the word repairs."""
+    """One part's works with their split words joined."""
     works, joins = works_and_joins
     return [(work_id, join_split_words(text, joins)) for work_id, text in works]
+
+
+def _lower_split_part(
+    _part: str, works_and_splits: tuple[list[tuple[str, str]], LowerGluedSplits, int]
+) -> tuple[list[tuple[str, str]], Counter[str]]:
+    """One part's works with their lower-case glued words split, and the splits made by pattern.
+
+    The last of the word repairs.
+    """
+    works, splits, min_dense_splits = works_and_splits
+    rows: list[tuple[str, str]] = []
+    counts: Counter[str] = Counter()
+    for work_id, text in works:
+        repaired, made = split_lower_glued_words(text, splits, min_dense_splits=min_dense_splits)
+        rows.append((work_id, repaired))
+        counts.update(made)
+    return rows, counts

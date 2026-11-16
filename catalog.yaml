@@ -110,6 +110,12 @@ split_words:
   path: data/interim/split_words.parquet
   format: parquet
 
+# Every candidate lower-case glued word of the texts after the split-word joins, its counts over
+# the corpus and whether it is split before the spaCy pass (decision agenda 2.3, run 8).
+lower_glued_words:
+  path: data/interim/lower_glued_words.parquet
+  format: parquet
+
 # Each work's text after repair, the glued-word splits and the split-word joins, one part per
 # field and decade, written by count-word-repairs and read by the spaCy pass.
 repaired_texts:

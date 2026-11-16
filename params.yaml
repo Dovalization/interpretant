@@ -40,6 +40,21 @@ count_word_repairs:
     # "trans-disciplinarity" 27), is joined only above this margin and when its second piece is
     # not a word spaCy knows.
     hyphen_margin: 100
+  # Run 8, the lower-case glued words (decided 2026-11-15 after a survey of every word form the
+  # lemma index does not know, samples read on the text that survives cleaning).
+  lower_glued_words:
+    # Split when the corpus writes the parts apart, with a space or a hyphen, at least this many
+    # times as often as joined (margins of 3 to 10 were mostly real words or French: "login",
+    # "frontend", "soit"; 9 of 40 right).
+    apart_margin: 10
+    # A part is a word spaCy knows that the corpus uses at least this many times.
+    min_part_count: 20
+    # The first of two parts has at least this many letters ("a" and a word is a guarded pattern).
+    min_first_part_letters: 2
+    # The guarded patterns ("a" and a word, three or more words, capitalised glue) apply only in
+    # a text where at least this many two-word glues are split: outside such texts they mostly
+    # hit real words, foreign words and names ("histotechnology", "aspecific", "Hasan").
+    min_dense_splits: 2
 
 # Stage 2a, the spaCy pass (annotate-corpus).
 annotate_corpus:

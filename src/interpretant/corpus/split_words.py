@@ -24,6 +24,7 @@ from dataclasses import dataclass, field
 import polars as pl
 
 from interpretant.corpus.dictionary import is_dictionary_word
+from interpretant.corpus.phrase_counts import count_forms
 from interpretant.corpus.repair import inside_address
 
 # The three ways a word is broken, by what separates its pieces.
@@ -36,11 +37,8 @@ MIN_WORD_LETTERS = 4
 # A hyphen alone joins only pieces of at least this many letters (*x-ray*, *t-test*, *k-means*).
 MIN_HYPHENATED_PIECE_LETTERS = 2
 
-# In Polars' syntax (the regex crate): a word, the characters the counts read as a space, and
-# runs of white space.
+# A word in Polars' syntax (the regex crate).
 _WORD_PATTERN = r"\p{L}+"
-_NOT_TEXT_PATTERN = r"[^\p{L}\p{N}\s-]+"
-_SPACES_PATTERN = r"\s+"
 # A word in Python's syntax: letters only. A word is a run of letters, so what touches it is not
 # a letter, but it can be a digit (*1st*, *3rd*), and such a piece is never joined.
 _WORD = re.compile(r"[^\W\d_]+")
@@ -110,7 +108,7 @@ def count_split_words(texts: pl.DataFrame, *, min_word_count: int) -> pl.DataFra
             for kind, separator in _SEPARATORS.items()
         },
     )
-    found = _count_forms(texts, pl.concat([forms[kind] for kind in _SEPARATORS]))
+    found = count_forms(texts, pl.concat([forms[kind] for kind in _SEPARATORS]))
     table = cuts.join(words, on="word")
     for kind in _SEPARATORS:
         table = table.join(
@@ -211,31 +209,6 @@ def _cuts(
             left_is_word, right_is_word = is_dictionary_word(left), is_dictionary_word(right)
             if not (left_is_word and right_is_word):
                 yield word, left, right, left_is_word, right_is_word
-
-
-def _count_forms(texts: pl.DataFrame, forms: pl.Series) -> pl.DataFrame:
-    """How often each form appears between spaces, case folded, other characters as spaces.
-
-    One lazy query, which Polars runs in parallel (as ``Series`` methods it ran on one core).
-    """
-    normalised = (
-        " "
-        + pl.col("text")
-        .str.to_lowercase()
-        .str.replace_all(_NOT_TEXT_PATTERN, " ")
-        .str.replace_all(_SPACES_PATTERN, " ")
-        + " "
-    )
-    patterns = (" " + forms.unique() + " ").to_list()
-    return (
-        texts.lazy()
-        .select(form=normalised.str.extract_many(patterns, overlapping=True))
-        .explode("form")
-        .drop_nulls()
-        .group_by(pl.col("form").str.strip_chars(" "))
-        .len("count")
-        .collect(engine="streaming")
-    )
 
 
 def _pairs(decisions: pl.DataFrame) -> dict[str, frozenset[str]]:

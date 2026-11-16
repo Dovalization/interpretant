@@ -53,6 +53,11 @@ from interpretant.catalog.linked_records import (
     load_linked_records_table,
     select_linked_works,
 )
+from interpretant.catalog.lower_glued_words import (
+    LOWER_GLUED_WORDS_SCHEMA,
+    load_lower_glued_words,
+    save_lower_glued_words,
+)
 from interpretant.catalog.metadata import (
     WorkMetadata,
     append_work_metadata,
@@ -98,6 +103,7 @@ __all__ = [
     "CROSSREF_WORKS_COLUMNS",
     "GLUED_WORDS_SCHEMA",
     "LINKED_SOURCES",
+    "LOWER_GLUED_WORDS_SCHEMA",
     "OPENALEX_WORKS_COLUMNS",
     "PUBMED_WORKS_COLUMNS",
     "REMOVAL",
@@ -142,6 +148,7 @@ __all__ = [
     "load_kept_apart_words",
     "load_kept_joined_words",
     "load_linked_records_table",
+    "load_lower_glued_words",
     "load_raw_cell",
     "load_record_kinds",
     "load_repaired_texts",
@@ -159,6 +166,7 @@ __all__ = [
     "save_corpus_metrics",
     "save_corpus_report",
     "save_glued_words",
+    "save_lower_glued_words",
     "save_repaired_texts",
     "save_sentence_languages",
     "save_split_words",
