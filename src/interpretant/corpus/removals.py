@@ -13,6 +13,7 @@ from __future__ import annotations
 import re
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
+from typing import Any
 
 import spacy
 from spacy.language import Language
@@ -28,6 +29,8 @@ from interpretant.corpus.works import RawAbstract
 SpansFilter = Callable[[Iterable[Span], Iterable[Span]], list[Span]]
 
 SPANS_KEY = "removals"
+# The id prefix of the web-address patterns matched on spaCy's flag, their regex checked after.
+_CHECKED_ID_PREFIX = "checked-url-"
 # The label of the leading "Abstract" or "Summary" label; a start-only match may follow it.
 LEADING_LABEL = "abstract_label"
 START_AWARE_SPANS_FILTER = "interpretant.start_aware_spans_filter.v1"
@@ -77,18 +80,30 @@ class AnnotatedAbstract:
     duplicate_of: str | None = None
 
 
-def make_start_aware_spans_filter(start_id: str, leading_label: str) -> SpansFilter:
+def make_start_aware_spans_filter(
+    start_id: str, leading_label: str, checked_patterns: Mapping[str, str]
+) -> SpansFilter:
     """The first-longest spans filter, after dropping start-only matches away from the start.
 
     A match of a pattern with the id ``start_id`` counts when it begins at the first token or
     right after the longest ``leading_label`` match there ("Abstract: To the Editor…"). The check
     comes before the overlap filter, so a start-only match cannot lose to a longer match that is
     not allowed where it begins: in run 6c, the letter match of "to the editor" from the second
-    word beat the catalogue match of "Letter to" and was then discarded, keeping the record.
+    word beat the catalogue match of "Letter to" and was then discarded, keeping the record. A
+    match of a pattern whose id is in ``checked_patterns`` counts only where that regular
+    expression finds its text (``build_cleaning_pipeline``).
     """
+    compiled = {pattern_id: re.compile(regex) for pattern_id, regex in checked_patterns.items()}
 
     def start_aware_spans_filter(existing: Iterable[Span], matches: Iterable[Span]) -> list[Span]:
-        candidates = [*existing, *matches]
+        candidates = [
+            *existing,
+            *(
+                span
+                for span in matches
+                if span.id_ not in compiled or compiled[span.id_].search(span.text)
+            ),
+        ]
         label_ends = [
             span.end for span in candidates if span.label_ == leading_label and span.start == 0
         ]
@@ -111,10 +126,14 @@ def build_cleaning_pipeline(patterns: CleaningPatterns) -> Language:
     overlapping matches then keep the first longest, as in spaCy's registered filter (the entity
     ruler's default), so "Abstract:" wins over "Abstract"; matches already on a document are
     replaced. Documents read from the annotation cache with this pipeline's vocabulary can be
-    passed to it.
+    passed to it. A one-token pattern that pairs ``LIKE_URL`` with a regular expression on the
+    text matches on the flag alone, and the filter checks the expression on those matches: spaCy's
+    matcher evaluates every regular expression of a pattern on every token before its plain
+    attributes (docs/pipeline_review.md, C3); the matches are the same.
     """
     if LEADING_LABEL not in patterns.labels:
         raise ValueError(f"the cleaning rules declare no {LEADING_LABEL!r} label")
+    ruler_patterns, checked = _match_url_patterns_on_the_flag(patterns.span_ruler_patterns())
     nlp = spacy.blank("en")
     ruler = nlp.add_pipe(
         "span_ruler",
@@ -126,13 +145,35 @@ def build_cleaning_pipeline(patterns: CleaningPatterns) -> Language:
                 "@misc": START_AWARE_SPANS_FILTER,
                 "start_id": START_ID,
                 "leading_label": LEADING_LABEL,
+                "checked_patterns": checked,
             },
         },
     )
     if not isinstance(ruler, SpanRuler):
         raise TypeError(f"expected a SpanRuler, got {type(ruler).__name__}")
-    ruler.add_patterns(patterns.span_ruler_patterns())
+    ruler.add_patterns(ruler_patterns)
     return nlp
+
+
+def _match_url_patterns_on_the_flag(
+    entries: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, str]]:
+    """The patterns with each one-token ``LIKE_URL`` and regex pattern reduced to the flag.
+
+    Each such pattern gets an id; the ids and their regular expressions go to the spans filter.
+    """
+    rewritten = []
+    checked: dict[str, str] = {}
+    for index, entry in enumerate(entries):
+        tokens = entry["pattern"]
+        text = tokens[0].get("TEXT") if len(tokens) == 1 else None
+        if "id" in entry or tokens[0].get("LIKE_URL") is not True or not isinstance(text, dict):
+            rewritten.append(entry)
+            continue
+        pattern_id = f"{_CHECKED_ID_PREFIX}{index}"
+        checked[pattern_id] = text["REGEX"]
+        rewritten.append({**entry, "id": pattern_id, "pattern": [{"LIKE_URL": True}]})
+    return rewritten, checked
 
 
 def clean_abstract(
