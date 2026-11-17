@@ -672,8 +672,10 @@ otherwise more are reviewed. Approved corrections go into the exceptions file. *
 the list, the judges and the rules are in `docs/lemma_review.md`, pre-registered before judging;
 since the static view writes spaCy's lemma, the list also takes spaCy's own merges (homographs,
 suspect merges and the override file's forms), judged by calibrated agents. *Result
-(2026-11-17):* the exceptions file holds 1,966 forms (`curated/lemma_exceptions.tsv`); the
-results and the author's decisions after them are in `docs/lemma_review.md`.
+(2026-11-17):* the exceptions file holds 3,297 forms (`curated/lemma_exceptions.tsv`), including
+one rule for consistency: a plural whose singular is mostly an adjective keeps its form
+(*professionals*, *blacks*, *others*); the results and the author's decisions after them are in
+`docs/lemma_review.md`.
 
 **3.4 Spellings.** spaCy's `norm_` table, applied to the lemma and filtered to spelling variants
 (it also holds informal norms such as *cos* → *because*); undocumented, so it is read once,

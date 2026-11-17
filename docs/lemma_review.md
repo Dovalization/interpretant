@@ -144,6 +144,34 @@ decades and look like drift; keeping apart only splits some noun plurals from th
   the tag share alone took in ordinary nouns that spaCy often tags as adjectives in compounds
   (*astrocytes*, *mammals*, *neuropeptides*: 79 of 381), which the WordNet test removes. The
   thresholds (20 uses, half) are the review list's own.
+- **Amended before use: adjectives only** (the author, 2026-11-17). Applied to the whole kept text,
+  the rule as written kept 1,929 plurals: 1,531 whose singular is mostly an adjective, 299 mostly
+  a verb (*estimates*, *gains*, *moves*, *thanks*), 63 numbers or determiners (*ones*,
+  *thousands*) and 36 adverbs. A verb's plural noun is mostly the noun of the same word (*an
+  estimate*, *to estimate*), so keeping it apart would split one word, not separate two, and a
+  part-of-speech test cannot tell *thanks* from *estimates*. The rule therefore covers only
+  singulars with at least half of their uses tagged as adjectives and an adjective reading in
+  WordNet. Verb and number plurals keep their earlier answers (*thanks* and *ones* stay apart,
+  *beings*, *estimates* and *thousands* merge), which stay judgement calls.
+- **The review list's ties.** A rerun showed the list depended on the order the worker processes
+  finished in when a form's lemmas tie (*edifies*: *edifie* 1, *edify* 1). Fixed in 3bef2a8f; two
+  runs are now byte-identical. The judged list stays the first run's output (kept in
+  `data/processed/lemma_review/`); the fixed script differs from it on 7 rare forms with tied
+  lemmas and on 9 sampled forms near ties (7 of the tail sample, 1 hyphenated, 1 at the top-100
+  boundary), all of which were judged either way. The rule reads the fixed run's
+  `plural_merges.parquet`.
+
+### The consistency pass: results
+
+The adjective rule keeps 1,471 plurals apart. It overturns 1,331 earlier answers: 1,074 forms
+(166,459 tokens) that spaCy merged and no list caught, such as *characteristics* (29,989),
+*individuals* (29,604), *adolescents*, *females*, *males*, *standards* and *novels*; 235 agent
+verdicts (26,063 tokens); and 22 of the author's answers (39,658 tokens): *humans*,
+*professionals*, *metrics*, *officials*, *seconds*, *relatives*, *contemporaries*,
+*intellectuals*, *universals*, *abstracts*, *majors*, *bilinguals*, *constants*, *primitives*,
+*complexes*, *twins*, *fricatives*, *extremes*, *numerals*, *particulars*, *connectives* and
+*minors*. It disagrees with no override entry. As expected, it also splits some noun plurals from
+a singular mostly used attributively (*keys*, *tokens*, *firms*, *squares*).
 
 ### The tail and the exceptions file
 
@@ -154,8 +182,10 @@ decades and look like drift; keeping apart only splits some noun plurals from th
   form (1,576): spaCy's and the voted map's lemmas, the agents' final lemma and the author's blind,
   final and call answers.
 - **The exceptions file.** `curated/lemma_exceptions.tsv`, built by
-  `scripts/evidence/lemma_exceptions.py`, holds 1,966 forms: 1,091 by the hyphenated rule, 570 by
-  the agents (250 suspects and homographs, 320 in the tail), 181 from the override file (all but
-  *goes*), 105 by the author's final answers and 19 by the author's calls; 485 keep their form.
-  No target word is mapped to another word, and no exception merges a form into a target word.
-  The check on spaCy's own lemmas of the target words runs on the rebuilt view (3.6).
+  `scripts/evidence/lemma_exceptions.py`, holds 3,297 forms: 1,374 by the adjective rule, 1,091 by
+  the hyphenated rule, 538 by the agents, 181 from the override file (all but *goes*), 104 by the
+  author's final answers and 9 by the author's calls; 1,816 keep their form. Each entry names the
+  reading it applies to (`NNS` or `VBZ` as judged, empty for the override file's entries), so
+  *thanks* as a verb still merges. No target word is mapped to another word, and no exception
+  merges a form into a target word. The check on spaCy's own lemmas of the target words runs on
+  the rebuilt view (3.6).
