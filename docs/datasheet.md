@@ -8,7 +8,8 @@ counts come from `metrics/corpus.json` and the corpus report (`interpretant repo
 
 ## Summary for the sign-off
 
-**Status: awaiting the author's sign-off** (4b, layer 4; one sitting).
+**Status: approved by the author on 2026-11-16**, for agenda stages 5–13, under the stage 7
+junk gate (4b, layer 4).
 
 - **What it is.** 632,843 English research abstracts from OpenAlex, kept from 705,283 sampled in
   88 cells: 11 fields × 8 decades (1950s–2020s), each cell a seeded random sample (seed 42) of up
@@ -232,5 +233,7 @@ counts are regenerated with every build in the corpus report.
 
 ## Sign-off
 
-To be completed by the author: approved or not, the date, and any condition, recorded here and in
-agenda 4b.
+Approved by the author on 2026-11-16: the corpus of the build of record `75f36a82` is used for
+agenda stages 5–13, with the known limits above, under the stage 7 junk gate (agenda 4b). The
+review behind it is the calibrated judges' check in place of a fresh manual review, as decided
+the same day.

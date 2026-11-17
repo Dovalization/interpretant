@@ -1094,6 +1094,9 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   judges call junk, with its threshold pre-registered before the usages are drawn. The author's
   sign-off reads the datasheet with the calibrated judges' check in place of a fresh manual review
   (one sitting).
+- **Signed off (2026-11-16, the author).** The datasheet (`docs/datasheet.md`) and the review
+  summary are approved: the build of record `75f36a82` is the corpus for stages 5–13, with the
+  datasheet's known limits, under the stage 7 junk gate.
 - **After sign-off: abstracts against full texts** (assumption A6; decided 2026-11-14). Full
   texts do not become the corpus. Of run 4's kept works, 19–22% per decade before the 2010s have
   an open copy (42% in the 2010s, 67% in the 2020s), and 2–4% before 2000 carry a licence that
@@ -1883,7 +1886,8 @@ and nothing waits on work that comes later:
    then the review flags (repository-only, front matter, retracted, truncated: 4b); the abstracts
    table (2.3, 2.5, 4.6; `interpretant build-corpus`, minutes, so a threshold change never redoes
    stage 2).
-4. The corpus review and sign-off (4b), before any experiment uses the corpus. One diagnostic
+4. The corpus review and sign-off (4b), before any experiment uses the corpus (*signed off
+   2026-11-16*, build of record `75f36a82`, `docs/datasheet.md`). One diagnostic
    runs before it (the author, 2026-11-16): whether the identifiable junk moves static drift
    (`docs/predictions_cleaning.md`, round S1), which reads no target's result and decides
    whether cleaning continues toward 4b's 2% target.
