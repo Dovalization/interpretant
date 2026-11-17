@@ -14,7 +14,7 @@ word counts, the format `drift grid` reads.
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 
 import numpy as np
@@ -109,16 +109,26 @@ def train_cell(
     """Build PPMI-SVD vectors for one cell file, with each word's count stored."""
     from interpretant.embedding.base import training_sentences
 
-    def lines() -> Iterable[str]:
-        with path.open(encoding="utf-8") as text:
-            for line in text:
-                for sentence in training_sentences(line):
-                    yield " ".join(sentence)
+    with path.open(encoding="utf-8") as text:
+        lines = [" ".join(sentence) for line in text for sentence in training_sentences(line)]
+    return train_lines(lines, window, dimensions, min_count, seed)
 
-    counts = vocabulary(lines(), min_count)
+
+def train_lines(
+    lines: Sequence[str],
+    window: int = WINDOW,
+    dimensions: int = DIMENSIONS,
+    min_count: int = MIN_COUNT,
+    seed: int = 42,
+) -> KeyedVectors:
+    """Build PPMI-SVD vectors for one cell's lines of space-separated tokens, with counts stored.
+
+    No window crosses a line, so a text broken at a removed range is several lines.
+    """
+    counts = vocabulary(lines, min_count)
     words = sorted(counts, key=lambda word: -counts[word])
     index = {word: position for position, word in enumerate(words)}
-    vectors = svd_vectors(ppmi(cooccurrence(lines(), index, window)), dimensions, seed=seed)
+    vectors = svd_vectors(ppmi(cooccurrence(lines, index, window)), dimensions, seed=seed)
     keyed = KeyedVectors(vector_size=vectors.shape[1])
     keyed.add_vectors(words, vectors.astype(np.float32))
     for word in words:

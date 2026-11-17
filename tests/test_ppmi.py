@@ -8,7 +8,7 @@ import numpy as np
 from gensim.models import KeyedVectors
 
 from interpretant.embedding.grid import build_ppmi_grid, discover_cells
-from interpretant.embedding.ppmi import cooccurrence, ppmi, train_cell, vocabulary
+from interpretant.embedding.ppmi import cooccurrence, ppmi, train_cell, train_lines, vocabulary
 
 
 def test_cooccurrence_counts_pairs_within_the_window_symmetrically() -> None:
@@ -53,6 +53,26 @@ def test_train_cell_groups_words_used_alike(tmp_path: Path) -> None:
     assert vectors.get_vecattr("cat", "count") > 100
     nearest = [word for word, _ in vectors.most_similar("cat", topn=3)]
     assert set(nearest) <= set(animals)
+
+
+def test_train_lines_gives_the_vectors_train_cell_gives_for_the_same_text(tmp_path: Path) -> None:
+    rng = np.random.default_rng(1)
+    words = ["cat", "dog", "horse", "hammer", "saw", "drill", "grass", "wood", "barn", "shed"]
+    lines = [" ".join(rng.choice(words, size=12)) for _ in range(400)]
+    path = tmp_path / "toy_1990.txt"
+    path.write_text("\n".join(lines))
+
+    from_file = train_cell(path, window=2, dimensions=4, min_count=5)
+    from_lines = train_lines(lines, window=2, dimensions=4, min_count=5)
+
+    assert from_file.index_to_key == from_lines.index_to_key
+    assert np.array_equal(from_file.vectors, from_lines.vectors)
+
+
+def test_cooccurrence_never_counts_a_pair_across_lines() -> None:
+    index = {"a": 0, "b": 1}
+
+    assert cooccurrence(["x a", "b x"], index, window=3).toarray()[0, 1] == 0
 
 
 def test_ppmi_grid_builds_every_cell_and_resumes(tmp_path: Path) -> None:
