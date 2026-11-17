@@ -1082,6 +1082,18 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   examples (5). The author's review and sign-off stay open. Before more cleaning, round S1 of
   `docs/predictions_cleaning.md` tests whether the identifiable junk moves static drift (the
   author's choice, 2026-11-16; stage 4 of 9.1).
+- **The cleaning stops here, and the junk is checked where the main measure reads it (decided
+  2026-11-16, the author).** Rounds S1 and S1b (`docs/predictions_cleaning.md`): the junk the
+  rules can identify (0.8% of the text) moves static drift no more than random removal of as much
+  text, or than drawing the corpus again; and the static flags are not reproducible (a bootstrap
+  sample changes 79% of them, two averages of 9 models disagree on 51%). The residual 8% is a
+  long tail of kinds with no clean pattern, so further rule batches toward 2% are not justified.
+  The project's main measure is J on contextual usages (step 6), which junk reaches only through
+  target usages sampled from junk records, so the check moves there: a gate at stage 7 counts,
+  per target and decade, the share of its sampled usages that come from records the calibrated
+  judges call junk, with its threshold pre-registered before the usages are drawn. The author's
+  sign-off reads the datasheet with the calibrated judges' check in place of a fresh manual review
+  (one sitting).
 - **After sign-off: abstracts against full texts** (assumption A6; decided 2026-11-14). Full
   texts do not become the corpus. Of run 4's kept works, 19–22% per decade before the 2010s have
   an open copy (42% in the 2010s, 67% in the 2020s), and 2–4% before 2000 carry a licence that
@@ -1373,6 +1385,18 @@ systems in subtask 1 (8 of 10 in subtask 2) used static (type) embeddings, befor
 existed (Schlechtweg et al. 2020). Field-decade cells are small corpora. The
 README's best finding rests on skip-gram and PPMI agreeing. If the grid does not earn its place in
 experiment 4, the question lapses and gensim goes with it.
+
+*Evidence for experiment 4 from the cleaning check (2026-11-16, `docs/predictions_cleaning.md`,
+rounds S1 and S1b):* on the rebuilt corpus's thin static view, one PPMI-SVD model per cell and
+the top 5% of neighbour shift within frequency bins, a bootstrap sample of a cell's works
+changes 79% of the flags, removing 0.8% of the tokens at random changes 45%, and two averages of
+9 bootstrap models disagree on 51%. A flag from that measurement is not reproducible, so the
+grid needs a continuous score or far more models before it can carry decisions. Speed for that:
+co-occurrence counting is now one `np.bincount` per cell (exact); a full SVD on the GPU matched
+ARPACK (neighbour Jaccard 0.9997, flags 0.0185 apart, bit-identical repeats) but was slower
+(2.9 s against 2.1 s per cell); `torch.svd_lowrank` with 300 components and 32 iterations took
+0.19 s against ARPACK's 1.3 s on one cell, neighbour Jaccard 0.9998, and would need the same
+equivalence check before use.
 
 ## Step 7a: finding senses
 
@@ -1866,7 +1890,9 @@ and nothing waits on work that comes later:
 5. The lemma review (3.3); exceptions applied to the cached documents (3.6).
 6. The derived views: the static text and the contextual sentences (2.2).
 7. Matching and the usages table, with named entities recognised on target sentences; one
-   mention drawn per abstract (4.1–4.5).
+   mention drawn per abstract (4.1–4.5). Then the junk gate (4b, decided 2026-11-16): the share
+   of each target's sampled usages, per decade, that come from records the calibrated judges call
+   junk, against a threshold pre-registered before the usages are drawn.
 8. The gap report; a top-up download if a cell is under the floor, after which stages 2–7 run for
    the new abstracts and the corpus-level rules rerun in full (4.8).
 9. Control candidates generated and approved (step 5); encoding of targets, controls, sense-list
