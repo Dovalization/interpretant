@@ -61,8 +61,9 @@ uses) and *logos* → *logo* (370) are on no list, as their singulars are used a
    agents' verdicts are accepted for the suspects and homographs, except where the author's
    answer on the 50 calls replaces them. If not, the author reviews the agents' other changes to
    spaCy's lemma on those forms, most frequent first. The tail check (3.3) uses the author's final
-   answers; the blind count is reported beside it. *senses* was walked through with the author as
-   a worked example before judging, so it is left out of the calibration (141 forms).
+   answers; the blind count is reported beside it. *senses* (a worked example before judging) and
+   *formes* (French, asked about while judging) were talked through with the author, so they
+   are left out of the calibration (140 forms).
 2. **The hyphenated rule.** If the agents' final lemma equals the rejoined segment on at least 27
    of the 30 drawn forms, the rule applies to all 1,091; otherwise more are drawn.
 3. **Targets.** After the exceptions, no target word may be mapped to another word.
