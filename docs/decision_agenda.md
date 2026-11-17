@@ -668,7 +668,10 @@ names such as *hans*, *rogers*). It is rebuilt from the new static view, where t
 artefacts are gone. The author reviews the 100 most frequent types and every case touching a word
 in the word tables (about two sittings); for the rest, 30 drawn at random are checked, and if the
 voted map is right on at least 27 (set before reading), its lemma is accepted for the whole tail;
-otherwise more are reviewed. Approved corrections go into the exceptions file.
+otherwise more are reviewed. Approved corrections go into the exceptions file. *Run (2026-11-17):*
+the list, the judges and the rules are in `docs/lemma_review.md`, pre-registered before judging;
+since the static view writes spaCy's lemma, the list also takes spaCy's own merges (homographs,
+suspect merges and the override file's forms), judged by calibrated agents.
 
 **3.4 Spellings.** spaCy's `norm_` table, applied to the lemma and filtered to spelling variants
 (it also holds informal norms such as *cos* → *because*); undocumented, so it is read once,
