@@ -140,6 +140,12 @@ static_view:
   path: data/interim/static_view
   format: parquet
 
+# The forms whose static-view lemma differs from spaCy's in-context lemma, each under one reading
+# (NNS or VBZ), from the lemma review (docs/lemma_review.md), applied to the cached documents.
+lemma_exceptions:
+  path: curated/lemma_exceptions.tsv
+  format: tsv
+
 # lingua's language for every sentence of the annotation cache, one part per field and decade.
 sentence_languages:
   path: data/interim/sentence_languages

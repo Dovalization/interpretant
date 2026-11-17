@@ -17,7 +17,7 @@ class DatasetEntry(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     path: Path
-    format: Literal["parquet", "yaml", "json", "jsonl", "jsonl.gz", "docbin", "markdown"]
+    format: Literal["parquet", "yaml", "json", "jsonl", "jsonl.gz", "docbin", "markdown", "tsv"]
 
 
 class CatalogConfig(BaseModel):
@@ -51,6 +51,7 @@ class CatalogConfig(BaseModel):
     annotations: DatasetEntry
     sentences: DatasetEntry
     static_view: DatasetEntry
+    lemma_exceptions: DatasetEntry
     sentence_languages: DatasetEntry
 
 
