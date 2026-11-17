@@ -31,7 +31,11 @@ forms check the rejoined-segment rule (3.5, decided 2026-11-13) the same way. Dr
 
 Writes OUT/review_list.parquet (form, count, kind, spaCy's lemma and its share, the voted lemma,
 the signals, the group, up to three contexts) and prints the summary. Read-only; run from the
-repository root on the run machine: `python scripts/evidence/lemma_review_list.py OUT [PROCESSES]`.
+repository root on the run machine:
+`python scripts/evidence/lemma_review_list.py OUT [PROCESSES] [--tail]`. With `--tail` the
+untested `disagree` tail also gets contexts, for the agent judges chosen after the tail check
+failed (`docs/lemma_review.md`); they are drawn after the others with seed 20261117, so every
+other form's contexts stay as without it.
 """
 
 from __future__ import annotations
@@ -58,7 +62,9 @@ from interpretant.corpus.lemmas import read_overrides
 
 OUT = Path(sys.argv[1])
 PROCESSES = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+TAIL_CONTEXTS = "--tail" in sys.argv[3:]
 SEED = 20261116
+TAIL_SEED = 20261117
 TOP = 100
 TAIL_SAMPLE = 30
 CONTEXTS = 3
@@ -317,7 +323,10 @@ def main() -> None:
     rng = random.Random(SEED)
     table = grouped(pl.DataFrame(rows), targets, rng)
 
+    tail = frozenset(table.filter(pl.col("group") == "tail")["form"].to_list())
     listed = frozenset(table.filter(~pl.col("group").is_in(UNREVIEWED))["form"].to_list())
+    if TAIL_CONTEXTS:
+        listed |= tail
     gathered: list[dict[str, list[str]]] = over_parts(
         "gathering contexts",
         parts,
@@ -328,9 +337,19 @@ def main() -> None:
         for form, found in part_sentences.items():
             sentences[form].extend(found)
     contexts = [
-        rng.sample(sorted(sentences[form]), min(CONTEXTS, len(sentences[form])))
+        []
+        if form in tail
+        else rng.sample(sorted(sentences[form]), min(CONTEXTS, len(sentences[form])))
         for form in table["form"]
     ]
+    if TAIL_CONTEXTS:
+        tail_rng = random.Random(TAIL_SEED)
+        contexts = [
+            tail_rng.sample(sorted(sentences[form]), min(CONTEXTS, len(sentences[form])))
+            if form in tail
+            else drawn
+            for form, drawn in zip(table["form"], contexts, strict=True)
+        ]
     table = table.with_columns(contexts=pl.Series(contexts, dtype=pl.List(pl.String)))
     table.write_parquet(OUT / "review_list.parquet")
 
