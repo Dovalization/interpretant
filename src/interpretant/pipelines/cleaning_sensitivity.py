@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import os
 from collections import Counter
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from typing import Any
@@ -44,6 +44,8 @@ BASE_SEED = 20261116
 _BOOTSTRAP_OFFSET = 1000
 _THREAD_VARIABLES = ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS")
 Range = tuple[int, int]
+# A work's static tokens, their offsets and their finite-verb flags.
+WorkView = tuple[list[str], list[int], list[bool]]
 VersionKey = tuple[str, int]
 BASE: VersionKey = ("base", 0)
 TREATMENT: VersionKey = ("treatment", 0)
@@ -151,7 +153,7 @@ def measure_cleaning_sensitivity(
             from its part of the static view.
     """
     plans = plan_cells(base, later, settings.fields)
-    _locate_works(catalog, plans)
+    locate_works(catalog, plans)
     jobs = {
         name: _FieldJob(catalog=catalog, cells=cells, targets=targets, settings=settings)
         for name, cells in plans.items()
@@ -161,7 +163,7 @@ def measure_cleaning_sensitivity(
     }
     cell_count = sum(len(field_cells) for field_cells in plans.values())
     progress.stage("training the cell models", total=cell_count * versions_per_cell(settings))
-    with _one_blas_thread_per_worker(process_count):
+    with one_blas_thread_per_worker(process_count):
         results = map_parts_reporting(
             _measure_field, jobs, process_count=process_count, progress=progress, sizes=sizes
         )
@@ -245,7 +247,7 @@ def plan_cells(
     return {name: dict(sorted(cells.items())) for name, cells in sorted(plans.items())}
 
 
-def _locate_works(catalog: CatalogConfig, plans: dict[str, dict[int, CellPlan]]) -> None:
+def locate_works(catalog: CatalogConfig, plans: dict[str, dict[int, CellPlan]]) -> None:
     """Give each cell the static view's parts that hold its works.
 
     Raises:
@@ -306,7 +308,7 @@ def _measure_field(name: str, job: _FieldJob, report: Report) -> _FieldResult:
             models += 1
             report(1)
         if previous:
-            compare = _compare_averaged if job.settings.averaged else _compare
+            compare = compare_averaged if job.settings.averaged else _compare
             movements.extend(compare(name, previous_decade, decade, previous, current, job.targets))
         previous, previous_decade = current, decade
     return _FieldResult(movements, doses, target_tokens, target_removed, models)
@@ -316,12 +318,7 @@ def _treatment(
     job: _FieldJob, cell: str, plan: CellPlan
 ) -> tuple[dict[str, list[list[str]]], frozenset[str], dict[str, list[list[str]]], tuple[int, ...]]:
     """P's segments of the cell, C's dropped works, C's cut works' segments, and the cell's dose."""
-    wanted = set(plan.work_ids)
-    view: dict[str, tuple[list[str], list[int], list[bool]]] = {}
-    for part in plan.view_parts:
-        rows = load_static_view(job.catalog, part).filter(pl.col("work_id").is_in(wanted))
-        for work_id, tokens, starts, finite in rows.iter_rows():
-            view.setdefault(work_id, (tokens, starts, finite))
+    view = load_cell_view(job.catalog, plan)
     base_segments = {
         work_id: kept_segments(view[work_id][0], view[work_id][1], plan.base_removals[work_id])
         for work_id in plan.work_ids
@@ -350,6 +347,17 @@ def _treatment(
         passages,
         (len(plan.work_ids), total, len(dropped), len(verbless), removed),
     )
+
+
+def load_cell_view(catalog: CatalogConfig, plan: CellPlan) -> dict[str, WorkView]:
+    """The static view of the cell's works, read from the parts that hold them."""
+    wanted = set(plan.work_ids)
+    view: dict[str, WorkView] = {}
+    for part in plan.view_parts:
+        rows = load_static_view(catalog, part).filter(pl.col("work_id").is_in(wanted))
+        for work_id, tokens, starts, finite in rows.iter_rows():
+            view.setdefault(work_id, (tokens, starts, finite))
+    return view
 
 
 def _versions(
@@ -402,14 +410,25 @@ def _averaged_versions(
         "averaged_noise": base_segments,
         "averaged_treatment": treatment,
     }
-    for replicate in range(settings.bootstraps):
+    yield from averaged_versions(pools, cell, settings.bootstraps)
+
+
+def averaged_versions(
+    pools: Mapping[str, Mapping[str, list[list[str]]]], cell: str, bootstraps: int
+) -> Iterator[tuple[VersionKey, list[str]]]:
+    """Each bootstrap sample of each of round S1b's sets, one at a time.
+
+    ``pools`` holds each set's works (``AVERAGED_SETS``' names): the base, the base again for the
+    noise, and the treatment. A set's samples are seeded by its offset, the replicate and the cell.
+    """
+    for replicate in range(bootstraps):
         for name, offset in AVERAGED_SETS.items():
             works = pools[name]
             sample = bootstrap_sample(list(works), seeded(BASE_SEED, offset + replicate, cell))
             yield (name, replicate), cell_lines(works, sample=sample)
 
 
-def _compare_averaged(
+def compare_averaged(
     name: str,
     decade_a: int,
     decade_b: int,
@@ -539,7 +558,7 @@ def _count_targets(
 
 
 @contextmanager
-def _one_blas_thread_per_worker(process_count: int) -> Iterator[None]:
+def one_blas_thread_per_worker(process_count: int) -> Iterator[None]:
     """Start worker processes with BLAS limited to one thread; the main process is unchanged."""
     if process_count == 1:
         yield
