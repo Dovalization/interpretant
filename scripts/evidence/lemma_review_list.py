@@ -335,7 +335,9 @@ def main() -> None:
         families.update(part_families)
     by_form: dict[str, Counter[str]] = defaultdict(Counter)
     tags_by_form: dict[str, Counter[str]] = defaultdict(Counter)
-    for (form, tag, lemma), count in pairs.items():
+    # Sorted, so ties between lemmas and the row order (hence the ranks) do not depend on the
+    # order the parts finished in.
+    for (form, tag, lemma), count in sorted(pairs.items()):
         by_form[form][lemma] += count
         tags_by_form[form][tag] += count
     families_of: dict[str, TagCounts] = defaultdict(Counter)
