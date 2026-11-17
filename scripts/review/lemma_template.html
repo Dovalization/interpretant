@@ -74,11 +74,11 @@ mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3
 <div class="page">
   <header>
     <h1>Which lemma does this word take?</h1>
-    <p class="lede">Each word is a plural noun or a verb ending in -s, as the corpus uses it. <strong>Part 1 is blind:</strong> pick the word's dictionary form as these sentences use it. The suggestions come from two lemmatisers, in random order; where they agree there is one. Keys: 1 or 2 pick a suggestion, 3 keeps the word as it is, 4 types another lemma, arrows move. <strong>Part 2</strong> opens when part 1 is done: a second look at the forms where you and the agent judges differ, then the agents' most frequent calls on spaCy's own merges, with their answer suggested (Enter takes it).</p>
+    <p class="lede">Before counting words, the project shrinks every plural and every verb ending in -s to its base word, so <em>senses</em> and <em>sense</em> count as one word. For each word below, two programs guessed the base word; pick the right guess, or type it if both are wrong. The example sentences only show what the word means; they are not being checked. <strong>Part 1 is blind.</strong> On a phone, tap a card; on a keyboard, 1 or 2 pick a guess, 3 leaves the word as it is, 4 types another word, arrows move. <strong>Part 2</strong> opens when part 1 is done: a second look at the forms where you and the agent judges differ, then the agents' most frequent calls on spaCy's own merges, with their answer suggested (Enter takes it).</p>
   </header>
   <details class="howto" id="howto" open>
     <summary>How to answer, with examples</summary>
-    <p class="intro">Choose the form a dictionary would list, as these sentences use the word. The agent judges followed the same rules. None of the example words is on the page.</p>
+    <p class="intro">Choose the word it should be counted as, given what it means in the sentences. The agent judges followed the same rules. None of the example words is on the page.</p>
     <ol>
       <li><strong>An ordinary plural or verb takes its singular or base form.</strong> <em>theories</em> → <code>theory</code>, <em>applies</em> → <code>apply</code>; a plural acronym takes the acronym, <em>apis</em> → <code>api</code>. Press the key of that suggestion, <kbd>1</kbd> or <kbd>2</kbd>: their order is random.</li>
       <li><strong>Keep the word when its -s is not a plural or verb ending</strong> <kbd>3</kbd>: names (<em>hobbes</em>, <em>athens</em>), words that end in -s in the singular or have no singular (<em>basis</em>, <em>thesis</em>, <em>news</em>), and foreign or technical terms that are not English plurals. If <em>hobbes</em> is offered only <code>hobbe</code>, press <kbd>3</kbd>.</li>
@@ -144,7 +144,7 @@ function highlighted(sentence, form) {
 // The choices on keys 1-3; key 4 always types another lemma.
 function choices(step) {
   const { kind, item } = step;
-  const keep = `Keep <strong>${esc(item.form)}</strong> as it is`;
+  const keep = `Leave <strong>${esc(item.form)}</strong> as it is`;
   if (kind === "blind") {
     const listed = item.options.map((lemma, index) => ({ key: String(index + 1), lemma, source: item.sources[index], html: mono(lemma) }));
     return [...listed, { key: "3", lemma: item.form, source: "keep", html: keep, minor: true }];
@@ -213,9 +213,9 @@ function render() {
   const other = `<button class="opt minor${otherChosen ? " chosen" : ""}" data-key="4" type="button"><kbd>4</kbd><span class="label">${otherChosen ? `Another lemma: <strong>${esc(chosen.lemma)}</strong>` : "Another lemma…"}</span></button>`;
   main.innerHTML = `
     <div class="card"><div class="section">${esc(section)} · ${position(list, step)}</div>
-      <div class="form">${esc(item.form)}</div><div class="uses">${item.count.toLocaleString("en")} uses in the kept corpus</div>${hint(step, mine)}
+      <div class="form">${esc(item.form)}</div><div class="uses">${item.count.toLocaleString("en")} uses in the corpus. Example sentences, to show what it means:</div>${hint(step, mine)}
       <ul class="contexts">${item.contexts.map(s => `<li>${highlighted(s, item.form)}</li>`).join("") || "<li>No sentence kept for this form.</li>"}</ul></div>
-    <p class="question">Which dictionary form fits <em>${esc(item.form)}</em> here?</p>
+    <p class="question">Count <em>${esc(item.form)}</em> as which word?</p>
     <div class="options">${choices(step).map(button).join("")}${other}</div>
     <div class="other" id="other" hidden><input id="other-lemma" type="text" autocomplete="off" spellcheck="false" aria-label="Another lemma"><button id="other-save" type="button">Save</button></div>`;
 }
