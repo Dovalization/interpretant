@@ -103,8 +103,10 @@ def test_measure_cleaning_sensitivity_measures_each_version_of_each_comparison(
         for work_id, text in load_repaired_texts(catalog, f"{field}_{decade}").iter_rows():
             fields = works.get(work_id, ([], decade, text))[0]
             works[work_id] = ([*fields, field], decade, text)
+    # W3 also counts in HCI, which has no part of its own: its cell is found in AI's part.
     rows: list[BuildRow] = [
-        (work, fields, decade, text, [], None) for work, (fields, decade, text) in works.items()
+        (work, [*fields, "hci"] if work.endswith("W3") else fields, decade, text, [], None)
+        for work, (fields, decade, text) in works.items()
     ]
     dropped = next(work for work in works if work.endswith("W2"))
     later_rows: list[BuildRow] = [
@@ -130,8 +132,10 @@ def test_measure_cleaning_sensitivity_measures_each_version_of_each_comparison(
         ("bootstrap", 1),
     }
     assert set(movements["field"]) == {"ai"}
-    assert result.doses.height == 3
+    assert result.doses.height == 4
+    hci = result.doses.filter(pl.col("field") == "hci")
+    assert hci["works"].to_list() == [1]
     ai_2010 = result.doses.filter((pl.col("field") == "ai") & (pl.col("decade") == 2010))
     assert ai_2010["dropped_works"].item() >= 1
-    assert result.models == 6 * 3
+    assert result.models == 6 * 4
     assert result.target_doses["target"].to_list() == ["model"]

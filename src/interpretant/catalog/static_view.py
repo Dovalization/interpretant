@@ -43,8 +43,10 @@ def save_static_view(catalog: CatalogConfig, view: pl.DataFrame, part: str) -> P
     return target
 
 
-def load_static_view(catalog: CatalogConfig, part: str) -> pl.DataFrame:
-    """One part's static view, in the cache's order.
+def load_static_view(
+    catalog: CatalogConfig, part: str, columns: list[str] | None = None
+) -> pl.DataFrame:
+    """One part's static view, in the cache's order; only ``columns`` when given.
 
     Raises:
         ValueError: if the part name is not safe as a file name.
@@ -53,4 +55,15 @@ def load_static_view(catalog: CatalogConfig, part: str) -> pl.DataFrame:
     path = part_path(catalog.static_view.path, part, _SUFFIX)
     if not path.exists():
         raise FileNotFoundError(f"no static view for part {part!r} at {path}")
-    return pl.read_parquet(path)
+    return pl.read_parquet(path, columns=columns)
+
+
+def static_view_parts(catalog: CatalogConfig) -> list[str]:
+    """The parts the static view holds, sorted.
+
+    A work in several fields is annotated once, in one field's part, so a cell's works can sit in
+    other parts of the same decade.
+    """
+    return sorted(
+        path.name.removesuffix(_SUFFIX) for path in catalog.static_view.path.glob(f"*{_SUFFIX}")
+    )

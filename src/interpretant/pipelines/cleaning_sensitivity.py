@@ -23,7 +23,7 @@ import polars as pl
 from gensim.models import KeyedVectors
 
 from interpretant.catalog.config import CatalogConfig
-from interpretant.catalog.static_view import load_static_view
+from interpretant.catalog.static_view import load_static_view, static_view_parts
 from interpretant.corpus.cell_versions import (
     Cut,
     bootstrap_sample,
@@ -94,6 +94,9 @@ class CellPlan:
     base_removals: dict[str, list[Range]] = field(default_factory=dict)
     later_dropped: set[str] = field(default_factory=set)
     later_removals: dict[str, list[Range]] = field(default_factory=dict)
+    # The static view's parts that hold the cell's works: a work in several fields is annotated
+    # once, in one field's part of its decade.
+    view_parts: list[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -143,6 +146,7 @@ def measure_cleaning_sensitivity(
             from its part of the static view.
     """
     plans = plan_cells(base, later, settings.fields)
+    _locate_works(catalog, plans)
     jobs = {
         name: _FieldJob(catalog=catalog, cells=cells, targets=targets, settings=settings)
         for name, cells in plans.items()
@@ -225,6 +229,26 @@ def plan_cells(
     return {name: dict(sorted(cells.items())) for name, cells in sorted(plans.items())}
 
 
+def _locate_works(catalog: CatalogConfig, plans: dict[str, dict[int, CellPlan]]) -> None:
+    """Give each cell the static view's parts that hold its works.
+
+    Raises:
+        ValueError: if a cell's work is in no part of the static view.
+    """
+    part_of: dict[str, str] = {}
+    for part in static_view_parts(catalog):
+        for work_id in load_static_view(catalog, part, columns=["work_id"])["work_id"]:
+            part_of.setdefault(work_id, part)
+    for name, cells in plans.items():
+        for decade, plan in cells.items():
+            missing = [work_id for work_id in plan.work_ids if work_id not in part_of]
+            if missing:
+                raise ValueError(
+                    f"{len(missing)} works of cell {name}_{decade} have no static view"
+                )
+            plan.view_parts = sorted({part_of[work_id] for work_id in plan.work_ids})
+
+
 def has_finite_verb_outside(
     starts: list[int], finite_verbs: list[bool], removals: list[Range]
 ) -> bool:
@@ -272,13 +296,12 @@ def _treatment(
     job: _FieldJob, cell: str, plan: CellPlan
 ) -> tuple[dict[str, list[list[str]]], frozenset[str], dict[str, list[list[str]]], tuple[int, ...]]:
     """P's segments of the cell, C's dropped works, C's cut works' segments, and the cell's dose."""
-    view = {
-        work_id: (tokens, starts, finite)
-        for work_id, tokens, starts, finite in load_static_view(job.catalog, cell).iter_rows()
-    }
-    missing = [work_id for work_id in plan.work_ids if work_id not in view]
-    if missing:
-        raise ValueError(f"{len(missing)} works of cell {cell} are not in its static view")
+    wanted = set(plan.work_ids)
+    view: dict[str, tuple[list[str], list[int], list[bool]]] = {}
+    for part in plan.view_parts:
+        rows = load_static_view(job.catalog, part).filter(pl.col("work_id").is_in(wanted))
+        for work_id, tokens, starts, finite in rows.iter_rows():
+            view.setdefault(work_id, (tokens, starts, finite))
     base_segments = {
         work_id: kept_segments(view[work_id][0], view[work_id][1], plan.base_removals[work_id])
         for work_id in plan.work_ids
