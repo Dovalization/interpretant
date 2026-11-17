@@ -715,7 +715,9 @@ audit). The fix lemmatises the last segment and rejoins it, as exceptions applie
 **3.6 No second full pass.** The exceptions are applied to the cached documents, not by parsing
 again: spaCy pass → corpus-level rules → the lemma review → exceptions applied to the cache by an
 `AttributeRuler` → matching (measured on 2,000 abstracts: parsing 25.6 s, loading the cache and
-applying exceptions 0.2 s, about two minutes for the corpus on one process).
+applying exceptions 0.2 s, about two minutes for the corpus on one process). *Run (2026-11-17):*
+whether the exceptions move the static measurement is pre-registered as round L1 in
+`docs/predictions_lemmas.md`, before either view was built.
 
 Replaces: two lemma maps (one map plus the `AttributeRuler`), about six regex tokenisers,
 `TARGET_VARIANTS`.
