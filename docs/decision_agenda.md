@@ -1079,7 +1079,9 @@ misclassification stay tolerable (Hund, Bedrick and Pagano 2015).
   their own (2), citation lines in forms the new rules miss (an OUP line cut before its pages, a
   Frontiers line; 2), a thesis note written *Thesis: Ph. D., …* (1), a table of contents, a
   keyword jumble, a lone quotation, interviewee biographies and a list of Hungarian verb
-  examples (5). The author's review and sign-off stay open.
+  examples (5). The author's review and sign-off stay open. Before more cleaning, round S1 of
+  `docs/predictions_cleaning.md` tests whether the identifiable junk moves static drift (the
+  author's choice, 2026-11-16; stage 4 of 9.1).
 - **After sign-off: abstracts against full texts** (assumption A6; decided 2026-11-14). Full
   texts do not become the corpus. Of run 4's kept works, 19–22% per decade before the 2010s have
   an open copy (42% in the 2010s, 67% in the 2020s), and 2–4% before 2000 carry a licence that
@@ -1857,7 +1859,10 @@ and nothing waits on work that comes later:
    then the review flags (repository-only, front matter, retracted, truncated: 4b); the abstracts
    table (2.3, 2.5, 4.6; `interpretant build-corpus`, minutes, so a threshold change never redoes
    stage 2).
-4. The corpus review and sign-off (4b), before any experiment uses the corpus.
+4. The corpus review and sign-off (4b), before any experiment uses the corpus. One diagnostic
+   runs before it (the author, 2026-11-16): whether the identifiable junk moves static drift
+   (`docs/predictions_cleaning.md`, round S1), which reads no target's result and decides
+   whether cleaning continues toward 4b's 2% target.
 5. The lemma review (3.3); exceptions applied to the cached documents (3.6).
 6. The derived views: the static text and the contextual sentences (2.2).
 7. Matching and the usages table, with named entities recognised on target sentences; one
