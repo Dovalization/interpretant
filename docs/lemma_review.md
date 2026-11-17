@@ -189,6 +189,12 @@ a singular mostly used attributively (*keys*, *tokens*, *firms*, *squares*).
   *thanks* as a verb still merges. No target word is mapped to another word, and no exception
   merges a form into a target word. The check on spaCy's own lemmas of the target words runs on
   the rebuilt view (3.6).
+- **The target words on the cache (3.6, `scripts/evidence/target_lemmas.py`, 2 min 34 s).**
+  Over the kept text, no token of a target's own spelling is written as another word with the
+  exceptions (0), so the contingency of round L1 (`docs/predictions_lemmas.md`) does not apply.
+  One target changes: *medium* falls from 66,287 tokens to 8,684, as the 57,603 uses of *media*
+  stop counting as it; 87% of what the view counted as *medium* was *media*. The other 31
+  single-word targets keep the same tokens and the same forms.
 - **Amended 2026-11-17 (3.6).** The override file's entries now apply to plural nouns only
   (`NNS`): every override form is read mostly as one (*goes*, the only verb, is not carried), and
   with an empty tag *means* would have stayed unmerged as a verb too ("this means that").
