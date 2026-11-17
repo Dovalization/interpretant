@@ -93,3 +93,39 @@ Reported but not decisive:
 - **S1c.** The comparisons that involve the 1950s and 1960s move most under C, since much of the
   junk is there: 6,885 of the 23,355 verbless works and 1,378 of the 2,891 works the citation
   lines changed are from those two decades.
+
+### Amendment: a null verdict is checked on bootstrap-averaged drift (2026-11-16, before any code ran)
+
+A search of the literature after the round was committed found no study that measures how a
+share of non-abstract documents moves semantic-change results, but it found a reason a null
+verdict here could mislead. Antoniak and Mimno (2018, TACL 6) resample documents with
+replacement and find that nearest-neighbour lists change substantially with the documents
+present, more on small corpora. Of the four methods they test, PPMI's top-N lists were the least
+stable, and they advise averaging over bootstrap samples rather than trusting one model.
+Wendlandt et al. (2018) find words with 100–200 occurrences often unstable, and the measured
+words here start at 150 uses. The rule above compares junk with the noise of one model per cell.
+If the final static measurement averages bootstrap models, its noise falls and junk's relative
+effect grows, so "C does not move the measurement" would hold only for single models.
+
+So, if C does not move the measurement:
+
+- **Round S1b, bootstrap-averaged drift.** A version's score for a word is its neighbour shift
+  averaged over 9 bootstrap models per cell (each cell's works drawn with replacement, seeded).
+  - averaged P reuses the round's 9 bootstrap samples of P;
+  - averaged C draws 9 bootstrap samples of C's works;
+  - averaged P′ draws a second, independent 9 of P, to give the noise of an average.
+
+  The flags and the turnover are computed as above, on the averaged scores.
+- **Rule.** Let D(junk) be the turnover between averaged P and averaged C, and D(noise) the
+  turnover between averaged P and averaged P′. C moves the averaged measurement if
+  D(junk) ≥ 1.5 × D(noise): junk adds at least half the averaged noise on top of it.
+  (D(junk) ≈ D(noise) is what no effect looks like, since both are differences between
+  averages.)
+- **Outcomes.**
+  - C moves the averaged measurement: the junk matters for any measurement that averages models,
+    and cleaning continues.
+  - C moves neither measurement: the 2% target can be revisited for this kind of junk.
+- **Cost.** 18 × 88 more cell models, run only if the single-model verdict is null.
+
+If C moves the single-model measurement, nothing changes: junk that matters at one model's noise
+matters at lower noise too.
