@@ -54,7 +54,10 @@ in the corpus). Other verb forms, participles and *-ing* nominalisations are del
 alone: a general lemmatiser turns *learning* into *learn* and *meaning* into *mean*, which would
 destroy the concepts under study. Target words, hyphenated and phrase tokens are never mapped.
 Irregular plurals and words kept on purpose (*data*, *media*, *means*, *odds*) are in the tracked
-`data/lemma_overrides.tsv`.
+`data/lemma_overrides.tsv`. *For the rebuilt corpus (2026-11-17):* the static view takes spaCy's
+lemma in context with the reviewed exceptions of `curated/lemma_exceptions.tsv`, which carries
+the override file's decisions (agenda 3.2–3.6, `docs/lemma_review.md`); the type-level map stays
+only on the old grid's path.
 
 Two maps exist. The grid was lemmatised with the first, learned from simplemma's lemmas of bare
 word types (`data/processed/lemmas.tsv`, about 37,000 types, 8.3% of tokens). The grid is frozen,
@@ -126,7 +129,9 @@ for phrase detection.
 Preprocessing maps plurals and British spellings of the targets onto the lemma
 (`TARGET_VARIANTS`: *representations* → *representation*, *behaviour* → *behavior*), so a
 target gets one vector instead of several. Forms that are mostly verbs (*controls*) or
-carry another sense (*media*) are left alone.
+carry another sense (*media*) are left alone. *For the rebuilt corpus (2026-11-17):*
+`TARGET_VARIANTS` does not run; plurals merge through the lemma and its exceptions, and British
+spellings will through step 3.4 (agenda).
 
 The noise floor comes from the whole vocabulary: for each pair of cells, drift is fitted
 against log frequency over every word above the threshold in both cells, and a target

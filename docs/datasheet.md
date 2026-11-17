@@ -184,8 +184,17 @@ added or sent back rules are recorded there with their records.
   abstracts; flagged truncated abstracts (79,091) are kept.
 - **Repository-only works** (96,267) are flagged, not dropped: theses, reports and preprints mixed
   with articles, most in the early humanities cells.
-- **Lemmas** are spaCy's small model's; the lemma review (stage 5) has not happened yet (for
-  example, *senses* becomes *sens*).
+- **Lemmas** are spaCy's small model's in context, with the 3,297 exceptions of the lemma review
+  (2026-11-17, `curated/lemma_exceptions.tsv`, `docs/lemma_review.md`): *senses* becomes *sense*,
+  *data* and *media* keep their form, and a plural whose singular is mostly an adjective keeps
+  its form (*professionals*). British and American spellings stay apart until step 3.4
+  (*behaviour*, *behavior*).
+- **Sentences in other languages** remain: about 1% of the sentences sampled for the lemma review
+  (33 of 3,551) read as another language, mostly French. A likely cause, not confirmed: in text
+  whose accents were stripped, French *à* becomes *a*, which the language stage's list of English
+  function words counts, so a sentence of an abstract read as English is not checked on its own
+  (`corpus/language.py`). Not fixed, since cleaning stopped (rounds S1 and S1b); the stage-7 gate
+  on target usages covers what reaches the measures.
 
 ## Uses
 

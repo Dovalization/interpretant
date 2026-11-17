@@ -21,7 +21,10 @@ frequency). Other verb forms, participles and *-ing* nominalisations stay as the
 general lemmatiser maps *learning* to *learn* and *embedding* to *embed*. The grid's map came
 from simplemma (`data/processed/lemmas.tsv`); since 2026-11-11 the map comes from how spaCy's
 tagger reads each word in context (`data/processed/lemmas_voted.tsv`, `docs/corpus.md`). The
-hand-kept part is `data/lemma_overrides.tsv`.
+hand-kept part is `data/lemma_overrides.tsv`. *For the rebuilt corpus (2026-11-17):* neither
+`preprocess_text`, `TARGET_VARIANTS` nor the type-level map runs; the static view is written from
+spaCy's tokens and lemmas in context, with the reviewed exceptions of
+`curated/lemma_exceptions.tsv` (agenda 3.1–3.6, `docs/lemma_review.md`).
 Round 4 of the predictions tested which findings survive this change: all of the robust ones did; *information*'s convergence did not.
 
 `corpus phrases learn` fits one gensim `Phrases` model (normalised PMI ≥ 0.5, minimum count 20)
