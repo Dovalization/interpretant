@@ -10,11 +10,18 @@ kinds of form go on the list:
   only (the British and American pairs of `scripts/evidence/first_review/review_coverage.py`);
 - `hyphenated`: a hyphenated form whose spaCy lemma differs from the last segment's voted lemma
   rejoined (*self-reports* → *self-report*; 3.5's note);
-- `suspect_merge`: both merge it to the same lemma, but the lemma is rare beside the form
-  (*cosmos* → *cosmo*) or the form is mostly tagged as a name (*hans*); at least 20 uses;
-- `policy_keep`: both merge it, but the form has its own noun entry in spaCy's WordNet lemma index
-  and its singular is mostly read as an adjective (*goods*): the 2026-11-11 rule of
-  `data/lemma_overrides.tsv` keeps such plurals, so the author confirms each new one.
+- `suspect_merge`: spaCy merges it (whether or not the voted map does too), but the lemma is
+  rare beside the form (*cosmos* → *cosmo*) or the form is mostly tagged as a name (*hans*);
+- `policy_keep`: spaCy merges it, but the form has its own noun entry in spaCy's WordNet lemma
+  index and its singular is mostly read as an adjective (*goods*): the 2026-11-11 rule of
+  `data/lemma_overrides.tsv` keeps such plurals, so the author confirms each new one;
+- `homograph`: spaCy merges it into a singular that is rarely the same part of speech (*novels*
+  → *novel*, *thanks* → *thank*): a policy question, listed but not reviewed form by form;
+- `override`: spaCy merges a form the override file keeps or maps elsewhere; the override
+  carries into the exceptions file.
+
+The last four need at least 20 uses. Auxiliaries (`AUX`) are left out: the static view keeps
+them as they are (agenda 3.2).
 
 The author reviews the 100 most frequent `disagree` forms, every form touching a target word,
 every `suspect_merge` and every `policy_keep`; 30 other `disagree` forms are drawn at random for
@@ -61,6 +68,9 @@ SUSPECT_MIN_USES = 20
 RARE_LEMMA_RATIO = 0.05
 PROPER_SHARE = 0.5
 ADJECTIVE_SHARE = 0.5
+HOMOGRAPH_SHARE = 0.1
+HOMOGRAPH_CONTEXTS = 60
+UNREVIEWED = ("tail", "hyphen_rest", "homograph", "override")
 EXAMPLES = ("cosmos", "thanks", "mises", "forceps", "novels", "currents", "logos", "hans", "rogers")
 SPELLING = [
     ("our", "or"),
@@ -139,7 +149,7 @@ def count_part(part: str, removals: Ranges) -> tuple[Pairs, TagCounts]:
                 continue
             form = token.text.lower()
             families[(form, family(token.tag_))] += 1
-            if token.tag_ in TAGS:
+            if token.tag_ in TAGS and token.pos_ != "AUX":
                 pairs[(form, token.tag_, token.lemma_.lower())] += 1
     return pairs, families
 
@@ -150,7 +160,7 @@ def contexts_part(part: str, removals: Ranges, forms: frozenset[str]) -> dict[st
     for doc, ranges in kept_documents(part, removals):
         for token in doc:
             form = token.text.lower()
-            if token.tag_ not in TAGS or form not in forms:
+            if token.tag_ not in TAGS or token.pos_ == "AUX" or form not in forms:
                 continue
             if len(found[form]) >= CONTEXTS_PER_PART:
                 continue
@@ -180,6 +190,7 @@ def classify(
     lemmas: Counter[str],
     tags: Counter[str],
     voted: dict[str, str],
+    overrides: dict[str, str],
     families: TagCounts,
     nouns: frozenset[str],
 ) -> dict[str, object] | None:
@@ -202,24 +213,29 @@ def classify(
             return None
         return row | {"kind": "hyphenated", "voted_lemma": rejoined}
     other = voted.get(form, form)
-    if other == form:
-        return None
-    if other != lemma and not spelling_only(lemma, other):
+    if form in overrides and other != lemma:
+        return row | {"kind": "override", "voted_lemma": other}
+    if other not in (form, lemma) and not spelling_only(lemma, other):
         return row | {"kind": "disagree", "voted_lemma": other}
     if count < SUSPECT_MIN_USES:
         return None
+    own = "noun" if row["tag"] == "NNS" else "verb"
     lemma_uses = sum(n for (word, _), n in families.items() if word == lemma)
     form_uses = sum(n for (word, _), n in families.items() if word == form)
     signals = {
+        "voted_merges": other != form,
         "lemma_ratio": lemma_uses / count,
+        "own_family_share": families[(lemma, own)] / lemma_uses if lemma_uses else 0.0,
         "adjective_share": families[(lemma, "adjective")] / lemma_uses if lemma_uses else 0.0,
         "proper_share": families[(form, "proper")] / form_uses if form_uses else 0.0,
     }
     row = row | {"voted_lemma": other} | signals
-    if row["tag"] == "NNS" and form in nouns and signals["adjective_share"] > ADJECTIVE_SHARE:
+    if own == "noun" and form in nouns and signals["adjective_share"] > ADJECTIVE_SHARE:
         return row | {"kind": "policy_keep"}
     if signals["lemma_ratio"] < RARE_LEMMA_RATIO or signals["proper_share"] > PROPER_SHARE:
         return row | {"kind": "suspect_merge"}
+    if signals["own_family_share"] < HOMOGRAPH_SHARE:
+        return row | {"kind": "homograph"}
     return None
 
 
@@ -238,7 +254,7 @@ def grouped(table: pl.DataFrame, targets: set[str], rng: random.Random) -> pl.Da
     hyphen_sample = rng.sample(hyphenated, min(TAIL_SAMPLE, len(hyphenated)))
     kind = pl.col("kind")
     return table.with_columns(
-        group=pl.when(kind.is_in(["suspect_merge", "policy_keep"]))
+        group=pl.when(kind.is_in(["suspect_merge", "policy_keep", "homograph", "override"]))
         .then(kind)
         .when((kind == "disagree") & ((pl.col("kind_rank") <= TOP) | pl.col("touches_target")))
         .then(pl.lit("author"))
@@ -294,7 +310,7 @@ def main() -> None:
     for form, lemmas in by_form.items():
         lemma = lemmas.most_common(1)[0][0]
         local = families_of[form] + families_of[lemma]
-        row = classify(form, lemmas, tags_by_form[form], voted, local, nouns)
+        row = classify(form, lemmas, tags_by_form[form], voted, overrides, local, nouns)
         if row is not None:
             rows.append(row)
     words = load_target_words(Path("data/words_of_interest.txt"))
@@ -302,7 +318,11 @@ def main() -> None:
     rng = random.Random(SEED)
     table = grouped(pl.DataFrame(rows), targets, rng)
 
-    listed = frozenset(table["form"].to_list())
+    reviewed = table.filter(
+        ~pl.col("group").is_in(["tail", "hyphen_rest", "homograph", "override"])
+    )
+    homographs = table.filter(pl.col("group") == "homograph").head(HOMOGRAPH_CONTEXTS)
+    listed = frozenset(reviewed["form"].to_list() + homographs["form"].to_list())
     gathered: list[dict[str, list[str]]] = over_parts(
         "gathering contexts",
         parts,
@@ -330,15 +350,13 @@ def main() -> None:
         lines.append(str(summary.sort(column)))
     lines.append(f"touching a target: {table['touches_target'].sum()}")
     spacy_only = [
-        (form, lemmas.most_common(1)[0][0], sum(lemmas.values()))
+        sum(lemmas.values())
         for form, lemmas in by_form.items()
         if lemmas.most_common(1)[0][0] != form and voted.get(form, form) == form
     ]
-    overridden = [entry for entry in spacy_only if entry[0] in overrides]
     lines.append(
-        f"spaCy merges, voted map keeps: {len(spacy_only):,} forms, "
-        f"{sum(n for *_, n in spacy_only):,} tokens; of which in the override file: "
-        f"{len(overridden):,} forms, {sum(n for *_, n in overridden):,} tokens"
+        f"spaCy merges, voted map keeps (auxiliaries aside): {len(spacy_only):,} forms, "
+        f"{sum(spacy_only):,} tokens"
     )
     for example in EXAMPLES:
         lemmas = by_form.get(example, Counter())
