@@ -1,0 +1,207 @@
+<title>Lemma review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one word form per screen, its corpus sentences, the candidate lemmas as large choice cards and a slim progress bar; keys 1-4 choose, arrows move. Same family as the project's other judging pages. */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --ink: #1b2330; --muted: #5d6878; --rule: #dde2ea;
+  --accent: #2f5aa8; --accent-soft: #e6edf9; --mark: #fff1b8; --ok: #2c7a4b; --ok-soft: #e3f3e9;
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12; --ok: #7fd3a1; --ok-soft: #173426; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12; --ok: #7fd3a1; --ok-soft: #173426; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); margin: 0; }
+.page { max-width: 760px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 20px; }
+h1 { font: 650 1.6rem/1.2 var(--display); margin: 0; text-wrap: balance; }
+.lede { margin: 4px 0 0; color: var(--muted); max-width: 62ch; font-size: 0.95rem; }
+.status { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--muted); }
+.status strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.bar { flex: 1; height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.section { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.form { font: 650 2rem/1.1 var(--display); overflow-wrap: anywhere; }
+.uses { color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.hint { margin: 0; font-size: 0.92rem; color: var(--muted); max-width: 62ch; }
+.contexts { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.contexts li { font: 500 1rem/1.6 var(--display); overflow-wrap: anywhere; border-left: 3px solid var(--rule); padding-left: 12px; }
+mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3px; font-weight: 650; }
+.question { margin: 0; font-weight: 600; }
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt { display: flex; gap: 12px; align-items: center; text-align: left; width: 100%; font: inherit; color: inherit;
+  background: var(--surface); border: 2px solid var(--rule); border-radius: 10px; padding: 14px 16px; cursor: pointer; min-width: 0; }
+.opt:hover { border-color: var(--accent); }
+.opt:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.opt.chosen { border-color: var(--ok); background: var(--ok-soft); }
+.opt kbd { flex: none; font: 600 0.85rem/1 var(--body); border: 1px solid var(--rule); border-radius: 5px; padding: 5px 8px; background: var(--bg); }
+.opt .lemma { font: 500 1.15rem/1.3 var(--mono); overflow-wrap: anywhere; }
+.opt.minor { padding: 10px 14px; font-size: 0.95rem; }
+.other { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.other input { font: 500 1.05rem/1.3 var(--mono); padding: 8px 10px; border: 2px solid var(--accent); border-radius: 8px; background: var(--surface); color: var(--ink); flex: 1; min-width: 0; }
+.other button, .nav button, .copy { font: inherit; font-size: 0.9rem; color: var(--accent); background: none; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.nav button:disabled { color: var(--muted); cursor: default; opacity: .6; }
+.note { color: var(--muted); font-size: 0.85rem; min-height: 1.2em; }
+.done { text-align: center; padding: 32px 20px; }
+.done h2 { font: 650 1.4rem/1.3 var(--display); margin: 0 0 6px; }
+@media (max-width: 480px) { .options { grid-template-columns: 1fr; } .form { font-size: 1.6rem; } }
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+</style>
+<div class="page">
+  <header>
+    <h1>Which lemma does this word take?</h1>
+    <p class="lede">Each word is a plural noun or a verb ending in -s, as the corpus uses it. Pick its dictionary form as these sentences use it. The suggestions come from two lemmatisers, in random order; where they agree there is one. Keys: 1 or 2 pick a suggestion, 3 keeps the word as it is, 4 types another lemma, arrows move.</p>
+  </header>
+  <div class="status"><strong id="count">0 / 0</strong><div class="bar"><span id="bar"></span></div></div>
+  <main id="main"></main>
+  <div class="nav">
+    <button id="prev" type="button">← Previous</button>
+    <button id="skip" type="button">Next unjudged</button>
+    <button id="next" type="button">Next →</button>
+  </div>
+  <p class="note" id="note">Connecting…</p>
+</div>
+<script>
+const ITEMS = __ITEMS__;
+const STORE = "lemma-review-judgements";
+const SECTION = { author: "Frequent forms", tail_sample: "Tail check", policy_keep: "Kept-plural candidates" };
+const state = {};
+let db = null, at = 0, typing = false;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const judged = () => ITEMS.filter(i => state[i.id]).length;
+const firstOpen = from => { for (let k = 0; k < ITEMS.length; k++) { const n = (from + k) % ITEMS.length; if (!state[ITEMS[n].id]) return n; } return -1; };
+const sectionPosition = item => { const same = ITEMS.filter(i => i.group === item.group); return `${same.indexOf(item) + 1} of ${same.length}`; };
+
+function highlighted(sentence, form) {
+  const pattern = new RegExp(`\\b${form.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi");
+  let out = "", last = 0, match;
+  while ((match = pattern.exec(sentence)) !== null) {
+    out += esc(sentence.slice(last, match.index)) + `<mark>${esc(match[0])}</mark>`;
+    last = match.index + match[0].length;
+  }
+  return out + esc(sentence.slice(last));
+}
+
+function render() {
+  const main = document.getElementById("main");
+  const n = judged();
+  document.getElementById("count").textContent = `${n} / ${ITEMS.length}`;
+  document.getElementById("bar").style.width = ITEMS.length ? `${100 * n / ITEMS.length}%` : "0";
+  if (n === ITEMS.length && at === -1) {
+    main.innerHTML = `<div class="card done"><h2>All ${ITEMS.length} judged</h2><p>Thank you. ${db ? "Tell Claude you're done." : "Copy your answers and paste them to Claude."} You can still go back and change any answer.</p>${db ? "" : `<p><button class="copy" type="button">Copy answers</button></p><textarea id="answers" readonly rows="4" style="width:100%;font:12px/1.4 monospace">${esc(JSON.stringify(state))}</textarea>`}</div>`;
+    return;
+  }
+  const item = ITEMS[at], chosen = state[item.id] || {};
+  const opt = (value, key, label, minor) => `<button class="opt${minor ? " minor" : ""}${chosen.choice === value ? " chosen" : ""}" data-choice="${value}" type="button"><kbd>${key}</kbd><span${minor ? "" : ' class="lemma"'}>${label}</span></button>`;
+  main.innerHTML = `
+    <div class="card"><div class="section">${esc(SECTION[item.group])} · ${sectionPosition(item)}</div>
+      <div class="form">${esc(item.form)}</div><div class="uses">${item.count.toLocaleString("en")} uses in the kept corpus</div>${item.hint ? `<p class="hint">${esc(item.hint)}</p>` : ""}
+      <ul class="contexts">${item.contexts.map(s => `<li>${highlighted(s, item.form)}</li>`).join("") || "<li>No sentence kept for this form.</li>"}</ul></div>
+    <p class="question">Which dictionary form fits <em>${esc(item.form)}</em> here?</p>
+    <div class="options">${item.options.map((lemma, index) => opt(index === 0 ? "first" : "second", String(index + 1), esc(lemma))).join("")}${opt("keep", "3", `Keep <strong>${esc(item.form)}</strong> as it is`, true)}${opt("other", "4", chosen.choice === "other" ? `Another lemma: <strong>${esc(chosen.lemma)}</strong>` : "Another lemma…", true)}</div>
+    <div class="other" id="other" hidden><input id="other-lemma" type="text" autocomplete="off" spellcheck="false" aria-label="Another lemma"><button id="other-save" type="button">Save</button></div>`;
+  document.getElementById("prev").disabled = at <= 0;
+  document.getElementById("next").disabled = at >= ITEMS.length - 1;
+  typing = false;
+}
+
+function openOther() {
+  const box = document.getElementById("other"), input = document.getElementById("other-lemma");
+  box.hidden = false; typing = true;
+  input.value = (state[ITEMS[at].id] || {}).lemma || ""; input.focus();
+}
+
+async function record(choice, lemma) {
+  if (at < 0) return;
+  const item = ITEMS[at];
+  const source = choice === "first" || choice === "second" ? item.sources[choice === "first" ? 0 : 1] : choice;
+  const answer = { choice, lemma, source, updated: new Date().toISOString() };
+  state[item.id] = answer;
+  at = firstOpen(at + 1);
+  render();
+  if (!db) {
+    try { localStorage.setItem(STORE, JSON.stringify(state)); document.getElementById("note").textContent = "Kept in this browser."; }
+    catch (e) { document.getElementById("note").textContent = "Answers can't be kept in this browser; finish in one sitting and copy them at the end."; }
+    return;
+  }
+  try {
+    await db.collection("judgements").doc(item.id).set(answer);
+    document.getElementById("note").textContent = "Saved.";
+  } catch (e) {
+    document.getElementById("note").textContent = "Not saved: " + (e && e.message ? e.message : "try again");
+  }
+}
+
+function choose(value) {
+  if (at < 0) return;
+  const item = ITEMS[at];
+  if (value === "other") { openOther(); return; }
+  if (value === "second" && item.options.length < 2) return;
+  const lemma = value === "first" ? item.options[0] : value === "second" ? item.options[1] : item.form;
+  record(value, lemma);
+}
+
+function saveOther() {
+  const lemma = document.getElementById("other-lemma").value.trim().toLowerCase();
+  if (!lemma) { document.getElementById("note").textContent = "Type a lemma, or press Escape to go back."; return; }
+  record("other", lemma);
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.classList.contains("copy")) {
+    const text = JSON.stringify(state);
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(
+      () => { b.textContent = "Copied"; },
+      () => { b.textContent = "Select the text below and copy it"; const area = document.getElementById("answers"); if (area) area.select(); });
+    return;
+  }
+  if (b.id === "other-save") saveOther();
+  else if (b.dataset.choice) choose(b.dataset.choice);
+  else if (b.id === "prev" && at > 0) { at -= 1; render(); }
+  else if (b.id === "next") { at = at < 0 ? ITEMS.length - 1 : Math.min(ITEMS.length - 1, at + 1); render(); }
+  else if (b.id === "skip") { at = firstOpen(Math.max(at, 0)); render(); }
+});
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (typing) {
+    if (e.key === "Enter") { e.preventDefault(); saveOther(); }
+    else if (e.key === "Escape") { e.preventDefault(); render(); }
+    return;
+  }
+  const map = { "1": "first", "2": "second", "3": "keep", "4": "other" };
+  if (map[e.key]) { e.preventDefault(); choose(map[e.key]); }
+  else if (e.key === "ArrowLeft" && at > 0) { at -= 1; render(); }
+  else if (e.key === "ArrowRight") { at = at < 0 ? ITEMS.length - 1 : Math.min(ITEMS.length - 1, at + 1); render(); }
+});
+
+render();
+(async () => {
+  const note = document.getElementById("note");
+  db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+  if (!db) {
+    try { Object.assign(state, JSON.parse(localStorage.getItem(STORE) || "{}")); } catch (e) { /* nothing kept */ }
+    at = firstOpen(0); render();
+    note.textContent = "Answers are kept in this browser; copy them at the end.";
+    return;
+  }
+  const timer = setTimeout(() => { note.textContent = "Saved answers can't be reached yet; answers may not save."; }, 10000);
+  let first = true;
+  db.collection("judgements").onSnapshot(snap => {
+    snap.docs.forEach(d => { if (d.exists && d.data().choice) state[d.id] = d.data(); });
+    if (!snap.metadata.fromCache) { clearTimeout(timer); note.textContent = "Answers save as you go."; }
+    if (first) { first = false; at = firstOpen(0); }
+    if (!typing) render();
+  }, err => { clearTimeout(timer); note.textContent = "Saved answers are unavailable (" + err.code + ")."; });
+})();
+</script>
