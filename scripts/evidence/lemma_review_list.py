@@ -11,12 +11,16 @@ kinds of form go on the list:
 - `hyphenated`: a hyphenated form whose spaCy lemma differs from the last segment's voted lemma
   rejoined (*self-reports* → *self-report*; 3.5's note);
 - `suspect_merge`: both merge it to the same lemma, but the lemma is rare beside the form
-  (*cosmos* → *cosmo*), is mostly another part of speech (*novels* → *novel*, *thanks* →
-  *thank*), or the form is mostly a name (*hans*). Only forms with at least 20 uses.
+  (*cosmos* → *cosmo*) or the form is mostly tagged as a name (*hans*); at least 20 uses;
+- `policy_keep`: both merge it, but the form has its own noun entry in spaCy's WordNet lemma index
+  and its singular is mostly read as an adjective (*goods*): the 2026-11-11 rule of
+  `data/lemma_overrides.tsv` keeps such plurals, so the author confirms each new one.
 
-The author reviews the 100 most frequent forms and every form that touches a target word; 30
-forms of the rest are drawn at random (seed 20261116) for the tail check (at least 27 of 30 right
-accepts the voted map for the tail).
+The author reviews the 100 most frequent `disagree` forms, every form touching a target word,
+every `suspect_merge` and every `policy_keep`; 30 other `disagree` forms are drawn at random for
+the tail check (at least 27 of 30 right accepts the voted map for the tail), and 30 `hyphenated`
+forms check the rejoined-segment rule (3.5, decided 2026-11-13) the same way. Draws use seed
+20261116.
 
 Writes OUT/review_list.parquet (form, count, kind, spaCy's lemma and its share, the voted lemma,
 the signals, the group, up to three contexts) and prints the summary. Read-only; run from the
@@ -43,6 +47,7 @@ from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import read_catalog
 from interpretant.catalog.static_view import load_static_view, static_view_parts
 from interpretant.corpus.audit import load_target_words
+from interpretant.corpus.lemmas import read_overrides
 
 OUT = Path(sys.argv[1])
 PROCESSES = int(sys.argv[2]) if len(sys.argv) > 2 else 10
@@ -53,9 +58,10 @@ CONTEXTS = 3
 CONTEXTS_PER_PART = 5
 TAGS = frozenset({"NNS", "VBZ"})
 SUSPECT_MIN_USES = 20
-RARE_LEMMA_RATIO = 0.25
-OWN_FAMILY_SHARE = 0.25
-PROPER_SHARE = 0.3
+RARE_LEMMA_RATIO = 0.05
+PROPER_SHARE = 0.5
+ADJECTIVE_SHARE = 0.5
+EXAMPLES = ("cosmos", "thanks", "mises", "forceps", "novels", "currents", "logos", "hans", "rogers")
 SPELLING = [
     ("our", "or"),
     ("ise", "ize"),
@@ -93,16 +99,20 @@ def family(tag: str) -> str:
     return "other"
 
 
-def voted_map() -> dict[str, str]:
+def voted_map(overrides: dict[str, str]) -> dict[str, str]:
     """The voted map's lemma for each form, the curated overrides taking precedence."""
     table = pl.read_csv("data/processed/lemmas.tsv", separator="\t", quote_char=None)
     mapping = dict(zip(table["token"], table["lemma"], strict=True))
-    for line in Path("data/lemma_overrides.tsv").read_text(encoding="utf-8").splitlines():
-        line = line.split("#", 1)[0].rstrip()
-        if "\t" in line:
-            token, lemma = line.split("\t", 1)
-            mapping[token.strip()] = lemma.strip() or token.strip()
-    return mapping
+    return mapping | {token: lemma or token for token, lemma in overrides.items()}
+
+
+def noun_index() -> frozenset[str]:
+    """The nouns of spaCy's WordNet lemma index, as the small English model ships it."""
+    import spacy
+
+    pipeline = spacy.load("en_core_web_sm", exclude=["tok2vec", "tagger", "parser", "ner"])
+    lemmatizer = pipeline.get_pipe("lemmatizer")
+    return frozenset(lemmatizer.lookups.get_table("lemma_index")["noun"])  # type: ignore[attr-defined]
 
 
 def kept_documents(part: str, removals: Ranges) -> list[tuple[Doc, list[tuple[int, int]]]]:
@@ -166,7 +176,12 @@ def over_parts(
 
 
 def classify(
-    form: str, lemmas: Counter[str], tags: Counter[str], voted: dict[str, str], families: TagCounts
+    form: str,
+    lemmas: Counter[str],
+    tags: Counter[str],
+    voted: dict[str, str],
+    families: TagCounts,
+    nouns: frozenset[str],
 ) -> dict[str, object] | None:
     """The form's row on the list, or None when it needs no review."""
     lemma, lemma_count = lemmas.most_common(1)[0]
@@ -193,20 +208,48 @@ def classify(
         return row | {"kind": "disagree", "voted_lemma": other}
     if count < SUSPECT_MIN_USES:
         return None
-    own = "noun" if row["tag"] == "NNS" else "verb"
     lemma_uses = sum(n for (word, _), n in families.items() if word == lemma)
     form_uses = sum(n for (word, _), n in families.items() if word == form)
     signals = {
         "lemma_ratio": lemma_uses / count,
-        "own_family_share": families[(lemma, own)] / lemma_uses if lemma_uses else 0.0,
+        "adjective_share": families[(lemma, "adjective")] / lemma_uses if lemma_uses else 0.0,
         "proper_share": families[(form, "proper")] / form_uses if form_uses else 0.0,
     }
-    suspect = (
-        signals["lemma_ratio"] < RARE_LEMMA_RATIO
-        or signals["own_family_share"] < OWN_FAMILY_SHARE
-        or signals["proper_share"] > PROPER_SHARE
+    row = row | {"voted_lemma": other} | signals
+    if row["tag"] == "NNS" and form in nouns and signals["adjective_share"] > ADJECTIVE_SHARE:
+        return row | {"kind": "policy_keep"}
+    if signals["lemma_ratio"] < RARE_LEMMA_RATIO or signals["proper_share"] > PROPER_SHARE:
+        return row | {"kind": "suspect_merge"}
+    return None
+
+
+def grouped(table: pl.DataFrame, targets: set[str], rng: random.Random) -> pl.DataFrame:
+    """The table with each form's review group and its rank within its kind."""
+    table = table.with_columns(
+        kind_rank=pl.col("count").rank("ordinal", descending=True).over("kind"),
+        touches_target=pl.concat_list("form", "spacy_lemma", "voted_lemma")
+        .list.eval(pl.element().is_in(sorted(targets)))
+        .list.any(),
     )
-    return row | {"kind": "suspect_merge", "voted_lemma": other} | signals if suspect else None
+    disagree = table.filter(pl.col("kind") == "disagree")
+    tail = disagree.filter((pl.col("kind_rank") > TOP) & ~pl.col("touches_target"))
+    tail_sample = rng.sample(sorted(tail["form"]), min(TAIL_SAMPLE, tail.height))
+    hyphenated = sorted(table.filter(pl.col("kind") == "hyphenated")["form"])
+    hyphen_sample = rng.sample(hyphenated, min(TAIL_SAMPLE, len(hyphenated)))
+    kind = pl.col("kind")
+    return table.with_columns(
+        group=pl.when(kind.is_in(["suspect_merge", "policy_keep"]))
+        .then(kind)
+        .when((kind == "disagree") & ((pl.col("kind_rank") <= TOP) | pl.col("touches_target")))
+        .then(pl.lit("author"))
+        .when(pl.col("form").is_in(tail_sample))
+        .then(pl.lit("tail_sample"))
+        .when(pl.col("form").is_in(hyphen_sample))
+        .then(pl.lit("hyphen_sample"))
+        .when(kind == "hyphenated")
+        .then(pl.lit("hyphen_rest"))
+        .otherwise(pl.lit("tail"))
+    ).sort("count", "form", descending=[True, False])
 
 
 def main() -> None:
@@ -224,7 +267,9 @@ def main() -> None:
     for part in parts:
         work_ids = load_static_view(catalog, part, columns=["work_id"])["work_id"]
         own_removals[part] = {w: removals[w] for w in work_ids if w in removals}
-    voted = voted_map()
+    overrides = read_overrides(Path("data/lemma_overrides.tsv"))
+    voted = voted_map(overrides)
+    nouns = noun_index()
 
     counted: list[tuple[Pairs, TagCounts]] = over_parts(
         "counting the cached documents",
@@ -249,31 +294,13 @@ def main() -> None:
     for form, lemmas in by_form.items():
         lemma = lemmas.most_common(1)[0][0]
         local = families_of[form] + families_of[lemma]
-        row = classify(form, lemmas, tags_by_form[form], voted, local)
+        row = classify(form, lemmas, tags_by_form[form], voted, local, nouns)
         if row is not None:
             rows.append(row)
     words = load_target_words(Path("data/words_of_interest.txt"))
     targets = {word for word in words if "_" not in word}
     rng = random.Random(SEED)
-    table = (
-        pl.DataFrame(rows)
-        .with_columns(
-            touches_target=pl.concat_list("form", "spacy_lemma", "voted_lemma")
-            .list.eval(pl.element().is_in(sorted(targets)))
-            .list.any()
-        )
-        .sort("count", "form", descending=[True, False])
-        .with_row_index("rank", offset=1)
-    )
-    tail = table.filter((pl.col("rank") > TOP) & ~pl.col("touches_target"))
-    sample = set(rng.sample(tail["form"].to_list(), min(TAIL_SAMPLE, tail.height)))
-    table = table.with_columns(
-        group=pl.when((pl.col("rank") <= TOP) | pl.col("touches_target"))
-        .then(pl.lit("author"))
-        .when(pl.col("form").is_in(sorted(sample)))
-        .then(pl.lit("tail_sample"))
-        .otherwise(pl.lit("tail"))
-    )
+    table = grouped(pl.DataFrame(rows), targets, rng)
 
     listed = frozenset(table["form"].to_list())
     gathered: list[dict[str, list[str]]] = over_parts(
@@ -302,6 +329,20 @@ def main() -> None:
         summary = table.group_by(column).agg(forms=pl.len(), tokens=pl.col("count").sum())
         lines.append(str(summary.sort(column)))
     lines.append(f"touching a target: {table['touches_target'].sum()}")
+    spacy_only = [
+        (form, lemmas.most_common(1)[0][0], sum(lemmas.values()))
+        for form, lemmas in by_form.items()
+        if lemmas.most_common(1)[0][0] != form and voted.get(form, form) == form
+    ]
+    overridden = [entry for entry in spacy_only if entry[0] in overrides]
+    lines.append(
+        f"spaCy merges, voted map keeps: {len(spacy_only):,} forms, "
+        f"{sum(n for *_, n in spacy_only):,} tokens; of which in the override file: "
+        f"{len(overridden):,} forms, {sum(n for *_, n in overridden):,} tokens"
+    )
+    for example in EXAMPLES:
+        lemmas = by_form.get(example, Counter())
+        lines.append(f"  {example}: {dict(lemmas.most_common(3))}")
     sys.stdout.write("\n".join(lines) + "\n")
 
 
