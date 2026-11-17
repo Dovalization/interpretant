@@ -10,7 +10,9 @@ The list is the one `scripts/evidence/lemma_review_list.py` writes. Three parts,
 2. Second look: once every blind form is answered, the forms where the author and the agents
    differ, with both answers. The blind answers stay as they are; the second look's is final.
 3. The agents' calls: the most frequent suspect merges and homographs, with the agents' lemma
-   suggested.
+   suggested; then, since the calibration failed (2026-11-17), the follow-up review: every other
+   suspect or homograph with at least 50 uses where the agents changed spaCy's lemma or merged a
+   plural into a singular that is mostly an adjective, most frequent first.
 
 Usage: `python scripts/review/lemma_page.py REVIEW_LIST.parquet AGENTS.json OUT.html`, where
 AGENTS.json maps each judged form to `{"lemma": ..., "reason": ...}`, the agents' final lemma and,
@@ -32,6 +34,8 @@ TEMPLATE = Path(__file__).with_name("lemma_template.html")
 BLIND_GROUPS = ("author", "tail_sample", "policy_keep")
 CALL_GROUPS = ("suspect_merge", "homograph")
 CALLS = 50
+FOLLOW_UP_MIN_USES = 50
+ADJECTIVE_SHARE = 0.5
 DOCUMENT_ID = re.compile(r"[A-Za-z0-9_\-.~:@+]{1,200}")
 HINTS = {
     "policy_keep": "The project keeps plurals that are words of their own when the singular is "
@@ -78,13 +82,21 @@ def blind_items(review_list: pl.DataFrame, agents: Verdicts) -> list[dict[str, o
     return result
 
 
-def call_rows(review_list: pl.DataFrame) -> pl.DataFrame:
-    """The CALLS most frequent suspect merges and homographs, most frequent first."""
-    return (
-        review_list.filter(pl.col("group").is_in(CALL_GROUPS))
-        .sort("count", descending=True)
-        .head(CALLS)
+def call_rows(review_list: pl.DataFrame, agents: Verdicts) -> pl.DataFrame:
+    """The CALLS most frequent suspect merges and homographs, then the follow-up review's forms."""
+    pool = review_list.filter(pl.col("group").is_in(CALL_GROUPS)).sort("count", descending=True)
+    lemmas = {form: verdict["lemma"] for form, verdict in agents.items()}
+    rest = pool.slice(CALLS).with_columns(agents=pl.col("form").replace_strict(lemmas))
+    changed = pl.col("agents") != pl.col("spacy_lemma")
+    adjective_merge = (
+        (pl.col("agents") == pl.col("spacy_lemma"))
+        & (pl.col("tag") == "NNS")
+        & (pl.col("adjective_share") >= ADJECTIVE_SHARE)
     )
+    follow_up = rest.filter(
+        (pl.col("count") >= FOLLOW_UP_MIN_USES) & (changed | adjective_merge)
+    ).drop("agents")
+    return pl.concat([pool.head(CALLS), follow_up])
 
 
 def call_items(chosen: pl.DataFrame, agents: Verdicts) -> list[dict[str, object]]:
@@ -108,7 +120,7 @@ def main(review_list_path: Path, agents_path: Path, out_path: Path) -> None:
     """Fill the template with the three parts' items and write the page."""
     review_list = pl.read_parquet(review_list_path)
     agents: Verdicts = json.loads(agents_path.read_text(encoding="utf-8"))
-    chosen = call_rows(review_list)
+    chosen = call_rows(review_list, agents)
     blind, calls = blind_items(review_list, agents), call_items(chosen, agents)
     unusable = [item["id"] for item in blind + calls if not DOCUMENT_ID.fullmatch(str(item["id"]))]
     if unusable:
