@@ -93,3 +93,39 @@ any relabelling of as many tokens.
   *individuals*). Confidence about 70%.
 - **L1-c.** B's combined target rank change is larger than A′'s, because *medium* loses the uses
   of *media*. Confidence about 75%.
+
+### Round L1 results (2026-11-17, `scripts/score_lemma_sensitivity.py`)
+
+View A is R_A (72841dee), view B is R_B (daadb4ed), both from the same cache: 705,283 documents
+and 104,176,115 tokens each. The check of the target words found no target's own spelling
+written as another word, so view B was built as planned. The run (21 min 16 s of training,
+2,376 cell models, code `7bab3cd0`): 68 of 77 comparisons have at least 200 measured words in
+averaged A. The exceptions change 678,042 of the cells' 102,227,171 kept tokens (0.66%; the most
+in communication, 1.1–1.5% of its 2000s and 2010s cells).
+
+| | Rank disagreement from averaged A | Flag turnover | Words entering / leaving | Targets' combined rank change |
+|---|---:|---:|---:|---:|
+| Averaged B (D(B)) | 0.0506 | 0.5330 | 2,019 / 1,962 | 6,872 (958 comparisons) |
+| Averaged A′ (D(A′)) | 0.0472 | 0.5154 | 1,592 / 1,564 | 6,550 (979 comparisons) |
+
+- **L1-a: passed.** D(B) / D(A′) = 1.07, under 1.5.
+- **L1-b: passed.** The ratio is above 1.0.
+- **L1-c: passed.** B's combined target rank change is above A′'s (6,872 against 6,550).
+- **Verdict: the lemma exceptions do not move the averaged measurement.**
+- **Target counts.** One target's tokens differ: *medium*, 66,961 in A and 8,883 in B, counted
+  per cell. The other 31 are identical in both views.
+
+### Reading
+
+The exceptions change 0.66% of the kept text and move the averaged measurement by about 7% of the
+noise of two averages, the same ratio round S1b found for removing the identifiable junk (1.07).
+More words enter and leave the measured set than under noise (about 400 more each way), as
+expected: renamed and split words (*datum* and *data*, *professional* and *professionals*) are
+measured in one view only, and the rank statistic leaves them out by design.
+
+So, by the outcomes set above, for static drift under PPMI-SVD the lemma exceptions sit below the
+instrument's noise, and the remaining case-by-case lemma questions (the verb-type plurals,
+*logos*, the spellings of 3.4) are not worth more work for the static measurement. The exceptions
+stay, as corrections. The one change that does reach a target is *medium*, which loses 87% of
+what the view counted as it: that is a correction of what the word means in the view, not
+something a grid-wide statistic is built to show, and *medium*'s own result is not read here.

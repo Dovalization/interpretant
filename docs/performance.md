@@ -213,6 +213,18 @@ stage took 220 s instead of 115 (`abd16663`). The count's candidates (168,146 wo
 every place and the parts checked against spaCy's lemma index; symspellpy segments the words
 with no two-part cut.
 
+### The static view and round L1 (2026-11-17)
+
+- **The static view:** 83.4 s for 705,283 documents without the lemma exceptions (R_A), 93.3 s
+  with the 3,297 exceptions (R_B). The lookup attribute ruler adds about 10 s over the corpus,
+  built once per part on the part's vocab.
+- **The target-word check** (`scripts/evidence/target_lemmas.py`, every part's documents taken
+  twice, without and with the exceptions): 2 min 34 s on 10 processes.
+- **Round L1:** 2,376 cell models (88 cells, three sets of 9 bootstrap models) in 21 min 16 s on
+  11 processes, one per field; round S1b trained as many in 22 min 36 s before the co-occurrence
+  counting moved to `np.bincount`. The large late-decade cells set the end: the rate fell from
+  6.5 models a second in the first two minutes to 2.0 at the end.
+
 ## The vector store's encoding
 
 Every usage the rounds and scans need is encoded once with XL-LEXEME (`docs/methods.md`). The

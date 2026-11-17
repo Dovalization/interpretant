@@ -717,7 +717,12 @@ again: spaCy pass → corpus-level rules → the lemma review → exceptions app
 `AttributeRuler` → matching (measured on 2,000 abstracts: parsing 25.6 s, loading the cache and
 applying exceptions 0.2 s, about two minutes for the corpus on one process). *Run (2026-11-17):*
 whether the exceptions move the static measurement is pre-registered as round L1 in
-`docs/predictions_lemmas.md`, before either view was built.
+`docs/predictions_lemmas.md`, before either view was built. *Result (2026-11-17):* the static view
+of record (R_B, daadb4ed) applies the 3,297 exceptions to the cache through the attribute ruler
+(93 s for 705,283 documents, nothing parsed again), with auxiliaries left as they are; no target's
+own spelling is mapped away, and *medium* stops counting the 57,603 uses of *media*. Round L1:
+the exceptions do not move the averaged static measurement (rank disagreement 1.07 times the
+noise of two averages, under the 1.5 set before the run).
 
 Replaces: two lemma maps (one map plus the `AttributeRuler`), about six regex tokenisers,
 `TARGET_VARIANTS`.
