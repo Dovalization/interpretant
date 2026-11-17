@@ -37,7 +37,7 @@ from interpretant.drift.grid import add_shift_floor, compare_cells
 from interpretant.drift.stability import movement
 from interpretant.embedding.ppmi import SvdBackend, train_lines
 from interpretant.pipelines.progress import SILENT, Progress
-from interpretant.pipelines.workers import map_parts
+from interpretant.pipelines.workers import Report, map_parts_reporting
 
 BASE_SEED = 20261116
 # Bootstrap replicates are seeded apart from the placebos'.
@@ -159,9 +159,10 @@ def measure_cleaning_sensitivity(
     sizes = {
         name: sum(len(plan.work_ids) for plan in cells.values()) for name, cells in plans.items()
     }
-    progress.stage("measuring the versions", total=sum(sizes.values()))
+    cell_count = sum(len(field_cells) for field_cells in plans.values())
+    progress.stage("training the cell models", total=cell_count * versions_per_cell(settings))
     with _one_blas_thread_per_worker(process_count):
-        results = map_parts(
+        results = map_parts_reporting(
             _measure_field, jobs, process_count=process_count, progress=progress, sizes=sizes
         )
     target_tokens: Counter[str] = Counter()
@@ -190,6 +191,16 @@ def measure_cleaning_sensitivity(
         ),
         models=sum(result.models for result in results.values()),
     )
+
+
+def versions_per_cell(settings: SensitivitySettings) -> int:
+    """How many models each cell trains.
+
+    P, C, the placebos and the bootstrap samples; or round S1b's three sets of bootstrap samples.
+    """
+    if settings.averaged:
+        return len(AVERAGED_SETS) * settings.bootstraps
+    return 2 + settings.placebos + settings.bootstraps
 
 
 def plan_cells(
@@ -271,8 +282,11 @@ def _added_ranges(base_ranges: list[Range], later: list[dict[str, Any]]) -> list
     return [span for span in ranges if span not in known]
 
 
-def _measure_field(name: str, job: _FieldJob) -> _FieldResult:
-    """Train every version of the field's cells, decade by decade, and measure each comparison."""
+def _measure_field(name: str, job: _FieldJob, report: Report) -> _FieldResult:
+    """Train every version of the field's cells, decade by decade, and measure each comparison.
+
+    Reports each model as it is trained, so the progress moves within a field.
+    """
     movements: list[tuple[object, ...]] = []
     doses: list[tuple[object, ...]] = []
     target_tokens: Counter[str] = Counter()
@@ -290,6 +304,7 @@ def _measure_field(name: str, job: _FieldJob) -> _FieldResult:
         for key, lines in versions(base_segments, dropped, passages, cell, job.settings):
             current[key] = train_lines(lines, svd_backend=job.settings.svd_backend)
             models += 1
+            report(1)
         if previous:
             compare = _compare_averaged if job.settings.averaged else _compare
             movements.extend(compare(name, previous_decade, decade, previous, current, job.targets))

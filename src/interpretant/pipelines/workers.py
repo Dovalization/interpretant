@@ -15,15 +15,20 @@ from __future__ import annotations
 
 import multiprocessing
 import os
+import queue
+import threading
 from collections.abc import Callable, Iterator, Mapping
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from contextlib import contextmanager
+from dataclasses import dataclass
 from typing import TypeVar
 
 from interpretant.pipelines.progress import Progress
 
 _Input = TypeVar("_Input")
 _Result = TypeVar("_Result")
+# A worker's report of items done inside its part.
+Report = Callable[[int], None]
 # Polars reads its thread count from this variable when a process imports it.
 _POLARS_THREADS = "POLARS_MAX_THREADS"
 
@@ -105,3 +110,72 @@ def _run_in(
         finished[part] = future.result()
         advance(part)
     return finished
+
+
+def map_parts_reporting(
+    function: Callable[[str, _Input, Report], _Result],
+    inputs: Mapping[str, _Input],
+    *,
+    process_count: int,
+    progress: Progress,
+    sizes: Mapping[str, int] | None = None,
+) -> dict[str, _Result]:
+    """Run ``function(part, input, report)`` for every part, advancing as the parts report.
+
+    For parts that are few and long, where advancing per finished part would leave the progress
+    still for minutes: each part calls ``report(amount)`` as it finishes items, and the progress
+    advances by every report as it arrives, from the workers through a manager's queue (a proxy
+    that spawned workers can receive, as the ``multiprocessing`` documentation describes) and a
+    thread of this process. The parts start largest first when ``sizes`` gives each part's size.
+    Returns each part's result, in part order. A worker's exception is raised here.
+    """
+    order = sorted(inputs, key=lambda part: -sizes[part]) if sizes is not None else list(inputs)
+    if process_count == 1:
+        results = {part: function(part, inputs[part], progress.advance) for part in order}
+        return {part: results[part] for part in inputs}
+    context = multiprocessing.get_context("spawn")
+    with context.Manager() as manager:
+        reports: queue.Queue[int] = manager.Queue()
+        stop = threading.Event()
+        relay = threading.Thread(target=_relay_reports, args=(reports, progress, stop), daemon=True)
+        relay.start()
+        try:
+            with _spawned_pool(process_count) as pool:
+                futures = {
+                    pool.submit(function, part, inputs[part], _QueueReport(reports)): part
+                    for part in order
+                }
+                finished = {futures[future]: future.result() for future in as_completed(futures)}
+        finally:
+            stop.set()
+            relay.join()
+            _drain_reports(reports, progress)
+    return {part: finished[part] for part in inputs}
+
+
+@dataclass(frozen=True)
+class _QueueReport:
+    """A worker's ``report``: puts the amount on the manager's queue."""
+
+    reports: queue.Queue[int]
+
+    def __call__(self, amount: int = 1) -> None:
+        self.reports.put(amount)
+
+
+def _relay_reports(reports: queue.Queue[int], progress: Progress, stop: threading.Event) -> None:
+    """Advance the progress by each report until the parts are done."""
+    while not stop.is_set():
+        try:
+            progress.advance(reports.get(timeout=0.2))
+        except queue.Empty:
+            continue
+
+
+def _drain_reports(reports: queue.Queue[int], progress: Progress) -> None:
+    """Advance by the reports still queued when the parts finished."""
+    while True:
+        try:
+            progress.advance(reports.get_nowait())
+        except queue.Empty:
+            return

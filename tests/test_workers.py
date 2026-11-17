@@ -5,7 +5,7 @@ from __future__ import annotations
 import os
 
 from interpretant.pipelines.progress import SILENT
-from interpretant.pipelines.workers import map_parts, worker_pool
+from interpretant.pipelines.workers import Report, map_parts, map_parts_reporting, worker_pool
 from tests.test_progress import RecordingProgress
 
 
@@ -57,3 +57,30 @@ def test_worker_pool_keeps_its_workers_for_several_rounds_with_one_polars_thread
 def test_worker_pool_runs_in_this_process_with_one_process() -> None:
     with worker_pool(1) as pool:
         assert pool is None
+
+
+def report_each_item(part: str, items: int, report: Report) -> str:
+    """Reports every item of a part as it goes (importable, for spawned workers)."""
+    for _ in range(items):
+        report(1)
+    return part.upper()
+
+
+def test_map_parts_reporting_advances_by_every_report_in_this_process() -> None:
+    progress = RecordingProgress()
+    progress.stage("items", total=6)
+    results = map_parts_reporting(
+        report_each_item, {"a": 2, "b": 4}, process_count=1, progress=progress
+    )
+    assert results == {"a": "A", "b": "B"}
+    assert progress.stages == [("items", 6, 6)]
+
+
+def test_map_parts_reporting_relays_the_workers_reports() -> None:
+    progress = RecordingProgress()
+    progress.stage("items", total=9)
+    results = map_parts_reporting(
+        report_each_item, {"a": 2, "b": 3, "c": 4}, process_count=2, progress=progress
+    )
+    assert results == {"a": "A", "b": "B", "c": "C"}
+    assert progress.stages == [("items", 9, 9)]
