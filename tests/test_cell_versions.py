@@ -76,6 +76,17 @@ def test_placebo_and_bootstrap_draws_repeat_with_the_same_seed() -> None:
     assert bootstrap_sample(ids, seeded(1, 0, "x")) == bootstrap_sample(ids, seeded(1, 0, "x"))
 
 
+def test_cells_whose_names_share_sixteen_bytes_draw_apart() -> None:
+    ids = [f"w{n}" for n in range(50)]
+    for first, second in (
+        ("communication_1950", "communication_1960"),
+        ("communication_2000", "communication_2010"),
+    ):
+        assert bootstrap_sample(ids, seeded(1, 0, first)) != bootstrap_sample(
+            ids, seeded(1, 0, second)
+        )
+
+
 def test_bootstrap_sample_draws_as_many_works_with_replacement() -> None:
     ids = [f"w{n}" for n in range(50)]
     sample = bootstrap_sample(ids, np.random.default_rng(0))

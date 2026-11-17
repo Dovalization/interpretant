@@ -10,6 +10,7 @@ replicate and cell.
 
 from __future__ import annotations
 
+import hashlib
 from bisect import bisect_right
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
@@ -116,8 +117,12 @@ def bootstrap_sample(work_ids: Sequence[str], rng: np.random.Generator) -> list[
 
 
 def seeded(base_seed: int, replicate: int, cell: str) -> np.random.Generator:
-    """The generator of one replicate of one cell: the same draws for the same three values."""
-    cell_key = int.from_bytes(cell.encode("utf-8")[:16].ljust(16, b"\0"), "big")
+    """The generator of one replicate of one cell: the same draws for the same three values.
+
+    The cell enters as a hash of its whole name; until 2026-11-17 it entered as its first 16
+    bytes, so *communication_1950* to *_1990* shared one stream and *_2000* to *_2020* another.
+    """
+    cell_key = int.from_bytes(hashlib.sha256(cell.encode("utf-8")).digest(), "big")
     return np.random.default_rng([base_seed, replicate, cell_key])
 
 
