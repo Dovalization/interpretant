@@ -1,9 +1,10 @@
 """The thin static view (decision agenda 9.1, stage 6): every cached document's static tokens.
 
-Each worker process takes whole parts: it reads a part's cached spaCy documents and writes one row
-per document with its static tokens, their offsets and their finite-verb flags. The view depends
-only on the spaCy pass, so cleaning changes never rerun this stage; a build's removals apply to
-the offsets when a cell's text is made.
+Each worker process takes whole parts: it reads a part's cached spaCy documents, applies the lemma
+exceptions to them through spaCy's attribute ruler (agenda 3.6: the documents are not parsed
+again), and writes one row per document with its static tokens, their offsets and their
+finite-verb flags. The view depends only on the spaCy pass and the exceptions file, so cleaning
+changes never rerun this stage; a build's removals apply to the offsets when a cell's text is made.
 """
 
 from __future__ import annotations
@@ -15,7 +16,9 @@ import spacy
 
 from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import CatalogConfig
+from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exceptions
 from interpretant.catalog.static_view import STATIC_VIEW_SCHEMA, save_static_view
+from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.corpus.static_view import static_tokens
 from interpretant.pipelines.corpus import corpus_cells, corpus_parts
 from interpretant.pipelines.params import CorpusSelection
@@ -25,11 +28,20 @@ from interpretant.pipelines.workers import map_parts
 
 @dataclass(frozen=True)
 class StaticViewResult:
-    """What the stage wrote: the documents and static tokens, and the parts."""
+    """What the stage wrote: documents and static tokens, the parts, the exceptions applied."""
 
     document_count: int
     token_count: int
     parts: list[str]
+    exception_count: int
+
+
+@dataclass(frozen=True)
+class _PartJob:
+    """What a worker needs for its parts: the catalog and the lemma exceptions (picklable)."""
+
+    catalog: CatalogConfig
+    exceptions: tuple[LemmaException, ...]
 
 
 def build_static_view(
@@ -41,15 +53,20 @@ def build_static_view(
 ) -> StaticViewResult:
     """Write the static view of every cached document of the corpus, per part.
 
+    The lemma exceptions are read once here, so a malformed file fails before any worker starts.
+
     Raises:
-        ValueError: if no raw cell matches the selection.
-        FileNotFoundError: if a part has not been annotated.
+        ValueError: if no raw cell matches the selection, or the exceptions file's header or a
+            repeated form and tag is wrong.
+        FileNotFoundError: if a part has not been annotated, or the exceptions file is missing.
+        pydantic.ValidationError: if a row of the exceptions file is malformed.
     """
     parts = corpus_parts(corpus_cells(catalog, selection))
+    job = _PartJob(catalog, tuple(load_lemma_exceptions(catalog)))
     progress.stage("building the static view", total=len(parts))
     results = map_parts(
         _build_part,
-        dict.fromkeys(parts, catalog),
+        dict.fromkeys(parts, job),
         process_count=process_count,
         progress=progress,
     )
@@ -57,16 +74,22 @@ def build_static_view(
         document_count=sum(documents for documents, _ in results.values()),
         token_count=sum(tokens for _, tokens in results.values()),
         parts=parts,
+        exception_count=len(job.exceptions),
     )
 
 
-def _build_part(part: str, catalog: CatalogConfig) -> tuple[int, int]:
-    """Write one part's static view; its documents and static tokens."""
+def _build_part(part: str, job: _PartJob) -> tuple[int, int]:
+    """Write one part's static view; its documents and static tokens.
+
+    The ruler is built on the vocab the part's documents load into, since spaCy interns its
+    lemmas there.
+    """
     vocab = spacy.blank("en").vocab
+    ruler = lemma_exception_ruler(vocab, job.exceptions)
     rows = []
-    for doc in load_annotations(catalog, part, vocab):
-        view = static_tokens(doc)
+    for doc in load_annotations(job.catalog, part, vocab):
+        view = static_tokens(ruler(doc))
         rows.append((doc.user_data[WORK_ID], view.tokens, view.starts, view.finite_verbs))
     table = pl.DataFrame(rows, schema=STATIC_VIEW_SCHEMA, orient="row")
-    save_static_view(catalog, table, part=part)
+    save_static_view(job.catalog, table, part=part)
     return table.height, int(table["tokens"].list.len().sum())

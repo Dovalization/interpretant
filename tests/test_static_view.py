@@ -14,8 +14,10 @@ from spacy.tokens import Doc
 from interpretant.__main__ import cli
 from interpretant.catalog.annotations import load_annotations
 from interpretant.catalog.config import CatalogConfig, read_catalog
+from interpretant.catalog.lemma_exceptions import load_lemma_exceptions
 from interpretant.catalog.static_view import load_static_view, save_static_view
 from interpretant.corpus.annotation import annotate_texts
+from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.corpus.static_view import fold, static_tokens
 from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_static_view import build_static_view
@@ -64,10 +66,12 @@ def test_build_static_view_writes_a_row_per_cached_document(
     catalog = read_catalog(corpus_catalog_file)
     annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
     result = build_static_view(catalog, SELECTION)
-    docs = list(load_annotations(catalog, "ai_2010", nlp.vocab))
+    ruler = lemma_exception_ruler(nlp.vocab, load_lemma_exceptions(catalog))
+    docs = [ruler(doc) for doc in load_annotations(catalog, "ai_2010", nlp.vocab)]
     table = load_static_view(catalog, "ai_2010")
     assert table["tokens"].to_list() == [static_tokens(doc).tokens for doc in docs]
     assert table["starts"].to_list() == [static_tokens(doc).starts for doc in docs]
+    assert result.exception_count == len(load_lemma_exceptions(catalog))
     heights = sum(load_static_view(catalog, part).height for part in result.parts)
     assert result.document_count == heights
     assert result.token_count == sum(len(tokens) for tokens in table["tokens"]) + sum(
@@ -75,6 +79,30 @@ def test_build_static_view_writes_a_row_per_cached_document(
         for part in result.parts
         if part != "ai_2010"
     )
+
+
+def test_build_static_view_applies_the_catalogs_lemma_exceptions(
+    corpus_catalog_file: Path, tmp_path: Path
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    annotate_corpus(catalog, SELECTION, ANNOTATE_SETTINGS)
+    build_static_view(catalog, SELECTION)
+    repository_tokens = load_static_view(catalog, "ai_2010")["tokens"].explode().to_list()
+    assert "sense" in repository_tokens
+    assert "sens" not in repository_tokens
+    assert "model" in repository_tokens
+    exceptions_file = tmp_path / "lemma_exceptions.tsv"
+    exceptions_file.write_text(
+        "form\tlemma\ttag\tsource\nmodels\tmodels\tNNS\tauthor\n", encoding="utf-8"
+    )
+    entry = catalog.lemma_exceptions.model_copy(update={"path": exceptions_file})
+    other = catalog.model_copy(update={"lemma_exceptions": entry})
+    result = build_static_view(other, SELECTION)
+    tokens = load_static_view(other, "ai_2010")["tokens"].explode().to_list()
+    assert result.exception_count == 1
+    assert "models" in tokens
+    assert "model" not in tokens
+    assert "sens" in tokens
 
 
 def test_build_static_view_writes_the_same_rows_in_worker_processes(

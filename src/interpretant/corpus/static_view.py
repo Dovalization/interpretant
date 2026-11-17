@@ -2,7 +2,9 @@
 
 Each word token becomes one static token: lowercase, accents folded (Unicode NFKD, combining marks
 removed), the en dash written as a hyphen, and spaCy's in-context lemma for plural nouns (`NNS`)
-and third-person singular verbs (`VBZ`), auxiliaries left as they are (*is*, *has*).
+and third-person singular verbs (`VBZ`), auxiliaries left as they are (*is*, *has*). The stage
+applies the lemma exceptions (`corpus/lemma_exceptions.py`) to the document first, so the lemma
+read here is spaCy's or the exception's.
 Punctuation, whitespace and tokens with no letter are dropped. Each token keeps its character
 offset, so any build's removed ranges apply to it later without reading the documents again, and
 whether it is a finite verb, for the no-finite-verb check of agenda 2.3 (run 13). Phrases and the
