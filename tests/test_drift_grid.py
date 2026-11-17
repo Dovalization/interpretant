@@ -12,6 +12,7 @@ from gensim.models import KeyedVectors
 from interpretant.drift.grid import (
     CellModel,
     add_noise_floor,
+    add_shift_floor,
     cell_neighbours,
     compare_cells,
     cross_field_pairs,
@@ -144,3 +145,25 @@ def test_measure_grid_compares_trajectories_and_fields_and_flags_words(tmp_path:
 def test_measure_grid_needs_pairs(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="no within_field pairs"):
         measure_grid(tmp_path, targets=[], controls=[])
+
+
+def test_shift_floor_flags_the_top_of_each_bin_on_neighbour_shift_alone() -> None:
+    words = [f"w{n}" for n in range(400)]
+    shift = np.tile(np.linspace(0, 1, 100), 4)
+    shift[399] = 0.0
+    pair = pl.DataFrame(
+        {
+            "word": words,
+            "count_a": np.repeat([200, 2_000, 20_000, 200_000], 100),
+            "count_b": np.repeat([200, 2_000, 20_000, 200_000], 100),
+            "cosine_drift": np.zeros(400),
+            "neighbour_shift": shift,
+        }
+    )
+
+    ranked = add_shift_floor(pair)
+
+    flagged = set(ranked.filter(pl.col("candidate"))["word"])
+    tops = {f"w{bin_start + n}" for bin_start in (0, 100, 200, 300) for n in range(95, 100)}
+    assert flagged == tops - {"w399"} | {"w394"}
+    assert "cosine_rank" not in ranked.columns

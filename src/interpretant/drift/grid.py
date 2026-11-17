@@ -201,21 +201,12 @@ def add_noise_floor(
             pl.lit(None, pl.Float64).alias("shift_rank"),
             pl.lit(None, pl.Boolean).alias("candidate"),
         )
-    frequency = pl.Series(np.log(pair["count_a"].to_numpy() * pair["count_b"].to_numpy()) / 2)
-    bins = max(1, min(max_bins, len(pair) // min_bin_words))
-
-    def percentile(column: str) -> pl.Expr:
-        # NaN counts as missing, as in pandas: Polars ranks and counts only non-null values.
-        value = pl.col(column).fill_nan(None)
-        return (
-            value.rank("average").over("frequency_bin") / value.count().over("frequency_bin") * 100
-        )
-
     threshold = quantile * 100
     return (
-        pair.with_columns(frequency_bins(frequency, bins))
+        pair.with_columns(_pair_frequency_bins(pair, min_bin_words, max_bins))
         .with_columns(
-            cosine_rank=percentile("cosine_drift"), shift_rank=percentile("neighbour_shift")
+            cosine_rank=_bin_percentile("cosine_drift"),
+            shift_rank=_bin_percentile("neighbour_shift"),
         )
         .with_columns(
             candidate=(
@@ -223,6 +214,42 @@ def add_noise_floor(
             ).fill_null(False)
         )
     )
+
+
+def add_shift_floor(
+    pair: pl.DataFrame,
+    quantile: float = FLOOR_QUANTILE,
+    min_bin_words: int = MIN_BIN_WORDS,
+    max_bins: int = MAX_BINS,
+) -> pl.DataFrame:
+    """Rank each word's neighbourhood shift within its frequency bin and flag the top words.
+
+    The bins and percentiles of ``add_noise_floor``, on neighbourhood shift alone: cells that are
+    not aligned with each other, such as PPMI cells factorised one by one, have no meaningful
+    cosine drift.
+    """
+    if pair.is_empty():
+        return pair.with_columns(
+            pl.lit(None, pl.Float64).alias("frequency_bin"),
+            pl.lit(None, pl.Float64).alias("shift_rank"),
+            pl.lit(None, pl.Boolean).alias("candidate"),
+        )
+    return (
+        pair.with_columns(_pair_frequency_bins(pair, min_bin_words, max_bins))
+        .with_columns(shift_rank=_bin_percentile("neighbour_shift"))
+        .with_columns(candidate=(pl.col("shift_rank") > quantile * 100).fill_null(False))
+    )
+
+
+def _pair_frequency_bins(pair: pl.DataFrame, min_bin_words: int, max_bins: int) -> pl.Series:
+    frequency = pl.Series(np.log(pair["count_a"].to_numpy() * pair["count_b"].to_numpy()) / 2)
+    return frequency_bins(frequency, max(1, min(max_bins, len(pair) // min_bin_words)))
+
+
+def _bin_percentile(column: str) -> pl.Expr:
+    # NaN counts as missing, as in pandas: Polars ranks and counts only non-null values.
+    value = pl.col(column).fill_nan(None)
+    return value.rank("average").over("frequency_bin") / value.count().over("frequency_bin") * 100
 
 
 def measure_grid(
