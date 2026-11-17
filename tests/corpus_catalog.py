@@ -106,6 +106,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "repaired_texts:\n  path: repaired_texts\n  format: parquet\n"
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentences:\n  path: sentences\n  format: parquet\n"
+        "static_view:\n  path: static_view\n  format: parquet\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
         "corpus_comparison:\n  path: corpus_comparison.md\n  format: markdown\n"

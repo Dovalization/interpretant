@@ -133,6 +133,13 @@ sentences:
   path: data/interim/sentences
   format: parquet
 
+# The static view's tokens of every cached document (thin version: no phrases or word tables),
+# each with its character offset and finite-verb flag, one part per field and decade: a build's
+# removed ranges apply to the offsets, so cleaning changes never rebuild it.
+static_view:
+  path: data/interim/static_view
+  format: parquet
+
 # lingua's language for every sentence of the annotation cache, one part per field and decade.
 sentence_languages:
   path: data/interim/sentence_languages

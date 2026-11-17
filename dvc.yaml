@@ -159,6 +159,30 @@ stages:
     outs:
       - ${sentence_languages.path}
 
+  build_static_view:
+    cmd: interpretant build-static-view
+    deps:
+      - src/interpretant/catalog/annotations.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/static_view.py
+      - src/interpretant/cli/build_static_view.py
+      - src/interpretant/corpus/static_view.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/build_static_view.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - ${annotations.path}
+    params:
+      - corpus
+    outs:
+      - ${static_view.path}
+
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:
