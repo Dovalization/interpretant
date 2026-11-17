@@ -16,7 +16,7 @@ kinds of form go on the list:
   index and its singular is mostly read as an adjective (*goods*): the 2026-11-11 rule of
   `data/lemma_overrides.tsv` keeps such plurals, so the author confirms each new one;
 - `homograph`: spaCy merges it into a singular that is rarely the same part of speech (*novels*
-  → *novel*, *thanks* → *thank*): a policy question, listed but not reviewed form by form;
+  → *novel*, *thanks* → *thank*, but also *embeddings* → *embedding*);
 - `override`: spaCy merges a form the override file keeps or maps elsewhere; the override
   carries into the exceptions file.
 
@@ -69,8 +69,7 @@ RARE_LEMMA_RATIO = 0.05
 PROPER_SHARE = 0.5
 ADJECTIVE_SHARE = 0.5
 HOMOGRAPH_SHARE = 0.1
-HOMOGRAPH_CONTEXTS = 60
-UNREVIEWED = ("tail", "hyphen_rest", "homograph", "override")
+UNREVIEWED = ("tail", "hyphen_rest", "override")
 EXAMPLES = ("cosmos", "thanks", "mises", "forceps", "novels", "currents", "logos", "hans", "rogers")
 SPELLING = [
     ("our", "or"),
@@ -318,11 +317,7 @@ def main() -> None:
     rng = random.Random(SEED)
     table = grouped(pl.DataFrame(rows), targets, rng)
 
-    reviewed = table.filter(
-        ~pl.col("group").is_in(["tail", "hyphen_rest", "homograph", "override"])
-    )
-    homographs = table.filter(pl.col("group") == "homograph").head(HOMOGRAPH_CONTEXTS)
-    listed = frozenset(reviewed["form"].to_list() + homographs["form"].to_list())
+    listed = frozenset(table.filter(~pl.col("group").is_in(UNREVIEWED))["form"].to_list())
     gathered: list[dict[str, list[str]]] = over_parts(
         "gathering contexts",
         parts,
