@@ -2,11 +2,11 @@
 
 Each word token becomes one static token: lowercase, accents folded (Unicode NFKD, combining marks
 removed), the en dash written as a hyphen, and spaCy's in-context lemma for plural nouns (`NNS`)
-and third-person singular verbs (`VBZ`). Punctuation, whitespace and tokens with no letter are
-dropped. Each token keeps its character offset, so any build's removed ranges apply to it later
-without reading the documents again, and whether it is a finite verb, for the no-finite-verb
-check of agenda 2.3 (run 13). Phrases and the word tables come with the full view (agenda 9.1,
-stage 6).
+and third-person singular verbs (`VBZ`), auxiliaries left as they are (*is*, *has*).
+Punctuation, whitespace and tokens with no letter are dropped. Each token keeps its character
+offset, so any build's removed ranges apply to it later without reading the documents again, and
+whether it is a finite verb, for the no-finite-verb check of agenda 2.3 (run 13). Phrases and the
+word tables come with the full view (agenda 9.1, stage 6).
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from spacy.tokens import Doc, Token
 
 # Fine-grained tags whose in-context lemma the view writes (agenda 3.2): plural nouns and
-# third-person singular present verbs; other forms keep their own word.
+# third-person singular present verbs, auxiliaries aside; other forms keep their own word.
 _LEMMATISED_TAGS = frozenset({"NNS", "VBZ"})
 _EN_DASH = "–"
 
@@ -55,4 +55,5 @@ def fold(word: str) -> str:
 
 
 def _form(token: Token) -> str:
-    return token.lemma_ if token.tag_ in _LEMMATISED_TAGS and token.lemma_ else token.text
+    lemmatised = token.tag_ in _LEMMATISED_TAGS and token.pos_ != "AUX" and bool(token.lemma_)
+    return token.lemma_ if lemmatised else token.text

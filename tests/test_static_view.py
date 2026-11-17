@@ -37,6 +37,11 @@ def test_static_tokens_lemmatises_plural_nouns_and_third_person_verbs_only(nlp: 
     assert view.tokens == ["attention", "improve", "result", "earlier", "model", "improved"]
 
 
+def test_static_tokens_leave_auxiliaries_as_they_are(nlp: Language) -> None:
+    view = static_tokens(annotated("The model is large and has improved.", nlp))
+    assert view.tokens == ["the", "model", "is", "large", "and", "has", "improved"]
+
+
 def test_static_tokens_keep_offsets_and_finite_verbs(nlp: Language) -> None:
     doc = annotated("Attention improves results.", nlp)
     view = static_tokens(doc)
