@@ -129,3 +129,47 @@ So, if C does not move the measurement:
 
 If C moves the single-model measurement, nothing changes: junk that matters at one model's noise
 matters at lower noise too.
+
+### Round S1 results (2026-11-16, `scripts/score_cleaning_sensitivity.py`)
+
+The full run on the run machine (26 min 51 s, 2,640 cell models; static view of record `362befe0`,
+code `7d87b439`): 68 of the 77 comparisons have at least 200 measured words in P. C removes
+833,803 of P's 102,488,387 tokens (0.81%): 26,339 works dropped, 23,891 of them for having no
+finite verb, plus the batch's passages. Junk is short, so 4% of the works is under 1% of the
+text.
+
+| Version | M (flag turnover) | Rank disagreement | Words leaving the measured set | Targets' combined rank change |
+|---|---|---|---|---|
+| C | 0.4592 | 0.0642 | 572 | 7,153 |
+| 19 placebos | 0.4423–0.4606 | 0.0550–0.0570 | 605–681 | 6,506–7,067 |
+| 9 bootstrap samples | 0.7782–0.7953 (median 0.7913) | 0.2487–0.2537 | 2,404–2,603 | 15,556–16,442 |
+
+- **S1a: falsified.** M(C) = 0.4592 is below one placebo (0.4606); rank test p = 0.25.
+- **S1b: falsified.** M(C) is above half the median bootstrap M (0.3957). But every placebo is
+  too, so the size condition holds for random removal as well.
+- **S1c: passed.** C's mean flag turnover is 0.5065 in the comparisons that start in the 1950s
+  or 1960s, against 0.4469 in the others.
+- **Verdict: C does not move the measurement** (the rule's first part fails). The amendment
+  therefore applies: round S1b runs on bootstrap-averaged drift.
+
+The targets' tokens inside C's removal: 8,396 of 1,522,689 (0.55%); the largest share for one
+target is 2.22%.
+
+### Reading
+
+The flag statistic is dominated by the instrument's own instability. Removing 0.8% of the tokens
+at random changes about 45% of the top-5% flags, and a bootstrap sample changes about 79%. So a
+single PPMI-SVD model per cell cannot carry a flag decision: many words sit close to the 95th
+percentile, and small perturbations of the matrix reorder them. That is Antoniak and Mimno's
+(2018) warning, quantified on this corpus.
+
+Against that noise, junk removal is indistinguishable from random removal on the primary
+statistic. The secondary measures, which are continuous and not thresholded, do separate the two:
+C's rank disagreement (0.0642) and its targets' combined rank change (7,153) are both above every
+placebo. Junk has a small systematic effect, about a quarter of the bootstrap noise on the rank
+measure, and the threshold noise of the flags hides it.
+
+Round S1b, on bootstrap-averaged drift, decides whether that effect matters once the
+measurement's own noise is reduced. Separately, the single-model instability bears on agenda 6b:
+a static grid built on one model per cell would need bootstrap averaging (or another stabilised
+estimate) before any flag means anything.
