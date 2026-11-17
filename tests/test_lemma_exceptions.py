@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
 import pydantic
 import pytest
+import spacy
+from spacy.tokens import Doc, DocBin
 
 from interpretant.catalog.config import CatalogConfig, read_catalog
-from interpretant.catalog.lemma_exceptions import load_lemma_exceptions
+from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exceptions
 from interpretant.corpus.audit import load_target_words
+from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
+from interpretant.corpus.static_view import static_tokens
 
 HEADER = "# A comment line.\nform\tlemma\ttag\tsource\n"
 
@@ -69,3 +74,52 @@ def test_no_lemma_exception_maps_a_target_word_away() -> None:
     exceptions = load_lemma_exceptions(read_catalog())
     mapped_away = [e.form for e in exceptions if e.form in targets and e.lemma != e.form]
     assert mapped_away == []
+
+
+def exception(form: str, lemma: str, tag: Literal["NNS", "VBZ"]) -> LemmaException:
+    """One exception from the author, for a test."""
+    return LemmaException(form=form, lemma=lemma, tag=tag, source="author")
+
+
+def test_an_exception_sets_the_lemma_only_under_its_tag() -> None:
+    vocab = spacy.blank("en").vocab
+    doc = Doc(vocab, words=["means", "means"], tags=["NNS", "VBZ"], lemmas=["mean", "mean"])
+    lemma_exception_ruler(vocab, [exception("means", "means", "NNS")])(doc)
+    assert [token.lemma_ for token in doc] == ["means", "mean"]
+
+
+def test_an_exception_matches_the_form_in_any_case() -> None:
+    vocab = spacy.blank("en").vocab
+    doc = Doc(vocab, words=["Senses"], tags=["NNS"], lemmas=["sens"])
+    lemma_exception_ruler(vocab, [exception("senses", "sense", "NNS")])(doc)
+    assert doc[0].lemma_ == "sense"
+
+
+def test_auxiliaries_keep_their_form_whatever_the_exceptions() -> None:
+    vocab = spacy.blank("en").vocab
+    words = ["The", "model", "has", "senses"]
+    doc = Doc(
+        vocab,
+        words=words,
+        tags=["DT", "NN", "VBZ", "NNS"],
+        pos=["DET", "NOUN", "AUX", "NOUN"],
+        lemmas=["the", "model", "have", "sens"],
+    )
+    ruler = lemma_exception_ruler(
+        vocab, [exception("has", "hav", "VBZ"), exception("senses", "sense", "NNS")]
+    )
+    assert static_tokens(ruler(doc)).tokens == ["the", "model", "has", "sense"]
+
+
+def test_the_ruler_applies_to_documents_loaded_from_the_cache() -> None:
+    written = Doc(
+        spacy.blank("en").vocab,
+        words=["Others", "agree"],
+        tags=["NNS", "VBP"],
+        lemmas=["other", "agree"],
+    )
+    cache = DocBin(docs=[written], store_user_data=True).to_bytes()
+    vocab = spacy.blank("en").vocab
+    (doc,) = DocBin().from_bytes(cache).get_docs(vocab)
+    lemma_exception_ruler(vocab, [exception("others", "others", "NNS")])(doc)
+    assert [token.lemma_ for token in doc] == ["others", "agree"]
