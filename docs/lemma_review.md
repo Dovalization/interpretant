@@ -41,16 +41,27 @@ uses) and *logos* → *logo* (370) are on no list, as their singulars are used a
   for calibration, the author's 142 forms. Two Sonnet judges see each form independently, as the
   page shows it (the candidate lemmas in random order, their sources hidden, three corpus
   sentences); an Opus judge settles the forms where they differ.
+- **The author, after the agents** (amended 2026-11-17, after the agents judged and before any
+  author answer): the page opens a second part once the 142 blind answers are in. First a second
+  look at the forms where the author's blind answer differs from the agents', with both shown;
+  the blind answers stay as they were and score the calibration, and the second look's answer is
+  the author's final one. Then the 50 most frequent suspect merges and homographs (105,228 of
+  their 192,204 tokens), with spaCy's lemma and the agents' shown and the agents' suggested; the
+  author's answer there replaces the agents'. The calibration forms are mostly spelling-style
+  disagreements, so these 50 put the agents' policy calls (*others* kept, *professionals* merged)
+  in front of the author.
 - **No judging**: the override file carries into the exceptions file, except *goes*, which 3.2
   decides later (ordinary verbs merge: *goes* → *go*). *does* stays: outside auxiliary use spaCy
   reads it as a plural noun (*doe*).
 
 ## Rules, set before reading
 
-1. **Calibration.** The agents' final lemma is compared with the author's on the author's 142
-   forms (keeping the form counts as a lemma). If they agree on at least 90%, the agents'
-   verdicts are accepted for the suspects and homographs. If not, the author reviews the agents'
-   changes to spaCy's lemma on those forms, most frequent first.
+1. **Calibration.** The agents' final lemma is compared with the author's blind answer on the
+   author's 142 forms (keeping the form counts as a lemma). If they agree on at least 90%, the
+   agents' verdicts are accepted for the suspects and homographs, except where the author's
+   answer on the 50 calls replaces them. If not, the author reviews the agents' other changes to
+   spaCy's lemma on those forms, most frequent first. The tail check (3.3) uses the author's final
+   answers; the blind count is reported beside it.
 2. **The hyphenated rule.** If the agents' final lemma equals the rejoined segment on at least 27
    of the 30 drawn forms, the rule applies to all 1,091; otherwise more are drawn.
 3. **Targets.** After the exceptions, no target word may be mapped to another word.
