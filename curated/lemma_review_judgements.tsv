@@ -1,0 +1,1577 @@
+form	kind	group	uses	spacy_lemma	voted_lemma	agents	author_blind	author_final	author_call
+others	homograph	homograph	28701	other	other	others			others
+humans	policy_keep	policy_keep	9194	human	human	human	human	human	
+ones	homograph	homograph	9009	one	one	ones			ones
+professionals	homograph	homograph	6943	professional	professional	professional			professional
+beings	homograph	homograph	5194	being	being	being			being
+metrics	policy_keep	policy_keep	4059	metric	metric	metric	metric	metric	
+ends	homograph	homograph	3420	end	end	end			end
+senses	disagree	author	3193	sens	sense	sense	sense	sense	
+doses	disagree	author	3007	dos	dose	dose	dose	dose	
+bases	disagree	author	2999	basis	base	base	basis	base	
+synapses	disagree	author	2764	synapsis	synapse	synapse	synapse	synapse	
+motives	disagree	author	2265	motif	motive	motive	motive	motive	
+officials	homograph	homograph	2246	official	official	official			official
+bounds	homograph	homograph	2103	bound	bound	bound			bound
+goods	homograph	homograph	1990	good	good	goods			goods
+thanks	homograph	homograph	1947	thank	thanks	thanks			thanks
+thousands	homograph	homograph	1910	thousand	thousand	thousand			thousand
+astrocytes	homograph	homograph	1909	astrocyte	astrocyte	astrocyte			astrocyte
+seconds	homograph	homograph	1890	second	second	second			second
+currents	homograph	homograph	1845	current	current	currents			currents
+stresses	homograph	homograph	1750	stress	stress	stress			stress
+blacks	homograph	homograph	1674	black	black	black			blacks
+relatives	homograph	homograph	1590	relative	relative	relative			relative
+ss	suspect_merge	suspect_merge	1579	s	ss	s			ss
+hundreds	homograph	homograph	1543	hundred	hundred	hundred			hundred
+academics	homograph	homograph	1478	academic	academic	academics			academics
+millions	homograph	homograph	1446	million	million	million			million
+whites	homograph	homograph	1394	white	white	white			whites
+mammals	homograph	homograph	1317	mammal	mammal	mammal			mammal
+contemporaries	policy_keep	policy_keep	1270	contemporary	contemporary	contemporary	contemporary	contemporary	
+intellectuals	homograph	homograph	1221	intellectual	intellectual	intellectual			intellectual
+universals	homograph	homograph	1187	universal	universal	universal			universal
+masses	disagree	author	1130	mass	masse	mass	mass	mass	
+abstracts	homograph	homograph	1121	abstract	abstract	abstract			abstract
+policymakers	suspect_merge	suspect_merge	1075	policymaker	policymaker	policymaker			policymaker
+majors	policy_keep	policy_keep	1056	major	major	major	major	major	
+anomalies	homograph	homograph	1029	anomaly	anomaly	anomaly			anomaly
+bilinguals	homograph	homograph	954	bilingual	bilingual	bilingual			bilingual
+constants	homograph	homograph	938	constant	constant	constant			constant
+primitives	homograph	homograph	902	primitive	primitive	primitive			primitive
+surroundings	homograph	homograph	876	surrounding	surrounding	surroundings			surroundings
+complexes	homograph	homograph	836	complex	complex	complex			complex
+demographics	homograph	homograph	832	demographic	demographics	demographics			demographics
+twins	policy_keep	policy_keep	824	twin	twin	twin	twin	twin	
+cps	homograph	homograph	817	cp	cps	cps			cps
+diabetes	suspect_merge	suspect_merge	813	diabete	diabetes	diabetes			diabetes
+embeddings	homograph	homograph	808	embedding	embedding	embedding			embedding
+wives	disagree	author	790	wife	wive	wife	wife	wife	
+gods	homograph	homograph	772	god	god	god			god
+artefacts	disagree	author	757	artefact	artifact	artefact	artefact	artefact	
+inpatients	homograph	homograph	715	inpatient	inpatient	inpatient			inpatient
+fricatives	homograph	homograph	700	fricative	fricative	fricative			fricative
+extremes	homograph	homograph	669	extreme	extreme	extreme			extreme
+accumbens	suspect_merge	suspect_merge	654	accumben	accumbens	accumbens			accumbens
+rtms	homograph	homograph	653	rtm	rtms	rtms			rtms
+numerals	homograph	homograph	651	numeral	numeral	numeral			numeral
+institutes	homograph	homograph	607	institute	institute	institute			institute
+particulars	homograph	homograph	603	particular	particular	particular			particular
+hypnotics	homograph	homograph	600	hypnotic	hypnotic	hypnotic			hypnotics
+specifics	homograph	homograph	589	specific	specific	specifics			specifics
+normals	homograph	homograph	580	normal	normal	normal			normals
+connectives	homograph	homograph	576	connective	connective	connective			connective
+specimen	suspect_merge	suspect_merge	572	speciman	specimen	specimen			specimen
+preschoolers	suspect_merge	suspect_merge	570	preschooler	preschooler	preschooler			
+rises	homograph	homograph	535	rise	rise	rise			
+originates	homograph	homograph	528	originate	originate	originate			
+converges	homograph	homograph	521	converge	converge	converge			
+neuropeptides	homograph	homograph	517	neuropeptide	neuropeptide	neuropeptide			
+eds	suspect_merge	suspect_merge	505	ed	eds	ed			
+oligodendrocytes	homograph	homograph	503	oligodendrocyte	oligodendrocyte	oligodendrocyte			
+conditionals	homograph	homograph	501	conditional	conditional	conditional			
+ves	homograph	homograph	498	f	ves	ve			
+prefixes	disagree	author	487	prefix	prefixe	prefix	prefix	prefix	
+visuals	homograph	homograph	477	visual	visual	visual			
+capillaries	homograph	homograph	476	capillary	capillary	capillary			
+criminals	homograph	homograph	476	criminal	criminal	criminal			
+joints	homograph	homograph	476	joint	joint	joint			
+natives	homograph	homograph	476	native	native	native			
+closes	homograph	homograph	474	close	close	close			
+seniors	homograph	homograph	473	senior	senior	senior			
+confines	homograph	homograph	466	confine	confine	confine			
+schizophrenics	homograph	homograph	463	schizophrenic	schizophrenic	schizophrenic			
+likes	homograph	homograph	462	like	like	like			
+cosmos	suspect_merge	suspect_merge	461	cosmo	cosmos	cosmos			
+fantasies	disagree	author	456	fantasy	fantasie	fantasy	fantasy	fantasy	
+primes	homograph	homograph	443	prime	prime	prime			
+radicals	homograph	homograph	443	radical	radical	radical			
+progresses	homograph	homograph	434	progress	progress	progress			
+cnns	homograph	homograph	426	cnn	cnns	cnn			
+exemplifies	disagree	author	414	exemplify	exemplifie	exemplify	exemplify	exemplify	
+aquinas	suspect_merge	suspect_merge	412	aquina	aquinas	aquinas			
+nps	homograph	homograph	409	np	nps	np			
+comorbidities	disagree	author	408	comorbiditie	comorbidity	comorbidity	comorbidity	comorbidity	
+directs	homograph	homograph	406	direct	direct	direct			
+frontiers	suspect_merge	suspect_merge	402	frontier	frontier	frontier			
+erps	homograph	homograph	401	erp	erps	erp			
+depressives	homograph	homograph	392	depressive	depressive	depressive			
+equals	homograph	homograph	391	equal	equal	equal			
+offerings	homograph	homograph	384	offering	offering	offering			
+juveniles	homograph	homograph	383	juvenile	juvenile	juvenile			
+rts	homograph	homograph	383	rt	rts	rt			
+tens	homograph	homograph	383	ten	ten	ten			
+clothes	homograph	homograph	378	clothe	clothes	clothes			
+positives	homograph	homograph	366	positive	positive	positive			
+civilians	homograph	homograph	361	civilian	civilian	civilian			
+olds	homograph	homograph	358	old	old	old			
+informatics	policy_keep	policy_keep	357	informatic	informatics	informatics	informatics	informatics	
+subordinates	homograph	homograph	349	subordinate	subordinate	subordinate			
+invariants	homograph	homograph	348	invariant	invariant	invariant			
+epsps	homograph	homograph	346	epsp	epsps	epsp			
+auspices	disagree	author	342	auspex	auspice	auspices	auspice	auspices	
+transients	homograph	homograph	341	transient	transient	transient			
+essentials	homograph	homograph	332	essential	essential	essential			
+negatives	homograph	homograph	328	negative	negative	negative			
+dailies	homograph	homograph	326	daily	daily	dailies			
+opioids	homograph	homograph	320	opioid	opioid	opioid			
+zeros	homograph	homograph	317	zero	zero	zero			
+nationals	homograph	homograph	308	national	national	national			
+taxes	disagree	author	304	taxis	tax	tax	tax	tax	
+reproductions	suspect_merge	suspect_merge	302	reproduction	reproduction	reproduction			
+llms	suspect_merge	suspect_merge	301	llm	llms	llm			
+putamen	suspect_merge	suspect_merge	301	putaman	putamen	putamen			
+moderates	homograph	homograph	299	moderate	moderate	moderate			
+liberals	homograph	homograph	298	liberal	liberal	liberal			
+commercials	homograph	homograph	297	commercial	commercial	commercials			
+sixties	homograph	homograph	297	sixty	sixty	sixties			
+ancients	policy_keep	policy_keep	291	ancient	ancient	ancient	ancients	ancients	
+newborns	homograph	homograph	289	newborn	newborn	newborn			
+fibroblasts	homograph	homograph	286	fibroblast	fibroblast	fibroblast			
+monolinguals	homograph	homograph	286	monolingual	monolingual	monolingual			
+crosses	disagree	author	284	cross	crosse	cross	cross	cross	
+hmms	homograph	homograph	283	hmm	hmm	hmm			
+demonstratives	homograph	homograph	282	demonstrative	demonstrative	demonstrative			
+descartes	suspect_merge	suspect_merge	278	descarte	descartes	descartes			
+multipliers	homograph	homograph	277	multiplier	multiplier	multiplier			
+glucocorticoids	homograph	homograph	275	glucocorticoid	glucocorticoid	glucocorticoid			
+wearables	homograph	homograph	275	wearable	wearable	wearable			
+priors	homograph	homograph	273	prior	prior	prior			
+auxiliaries	homograph	homograph	270	auxiliary	auxiliary	auxiliary			
+conservatives	homograph	homograph	270	conservative	conservative	conservative			
+nominals	homograph	homograph	268	nominal	nominal	nominal			
+tics	homograph	homograph	268	tic	tic	tic			
+adverbials	homograph	homograph	266	adverbial	adverbial	adverbial			
+subcategories	disagree	author	257	subcategorie	subcategory	subcategory	subcategory	subcategory	
+reacts	homograph	homograph	253	react	react	react			
+elegans	suspect_merge	suspect_merge	250	elegan	elegans	elegans			
+focusses	suspect_merge	suspect_merge	249	focusse	focusses	focus			
+hydrops	suspect_merge	suspect_merge	247	hydrop	hydrops	hydrops			
+billions	homograph	homograph	244	billion	billion	billion			
+pancreas	suspect_merge	suspect_merge	244	pancrea	pancreas	pancreas			
+bcis	homograph	homograph	241	bci	bcis	bci			
+lumen	suspect_merge	suspect_merge	241	luman	lumen	lumen			
+lesbians	homograph	homograph	239	lesbian	lesbian	lesbian			
+passives	homograph	homograph	236	passive	passive	passive			
+maimonides	suspect_merge	suspect_merge	233	maimonide	maimonides	maimonides			
+adjuncts	homograph	homograph	228	adjunct	adjunct	adjunct			
+minors	policy_keep	policy_keep	228	minor	minor	minor	minor	minor	
+ours	homograph	homograph	228	our	ours	ours			
+seventies	homograph	homograph	224	seventy	seventy	seventies			
+lowers	homograph	homograph	223	lower	lower	lower			
+wills	homograph	homograph	223	will	will	will			
+socrates	suspect_merge	suspect_merge	222	socrate	socrates	socrates			
+intermediates	homograph	homograph	219	intermediate	intermediate	intermediate			
+parmenides	suspect_merge	suspect_merge	219	parmenide	parmenides	parmenides			
+nonlinearities	disagree	author	216	nonlinearitie	nonlinearity	nonlinearity	nonlinearity	nonlinearity	
+snps	homograph	homograph	216	snp	snps	snp			
+lens	homograph	homograph	214	len	lens	lens			
+phobics	homograph	homograph	211	phobic	phobic	phobic			
+counterfactuals	homograph	homograph	210	counterfactual	counterfactual	counterfactual			
+socialists	homograph	homograph	209	socialist	socialist	socialist			
+nmdars	homograph	homograph	208	nmdar	nmdars	nmdar			
+ants	homograph	homograph	207	ant	ant	ant			
+thirds	homograph	homograph	207	third	third	third			
+hmds	homograph	homograph	205	hmd	hmds	hmd			
+hybrids	homograph	homograph	204	hybrid	hybrid	hybrid			
+solids	homograph	homograph	202	solid	solid	solid			
+guis	homograph	homograph	200	gui	guis	gui			
+icts	homograph	homograph	200	ict	icts	ict			
+uavs	homograph	homograph	200	uav	uavs	uav			
+atlas	suspect_merge	suspect_merge	199	atla	atlas	atlas			
+happenings	homograph	homograph	199	happening	happening	happening			
+res	suspect_merge	suspect_merge	198	re	res	res			
+halves	disagree	author	197	half	halve	half	half	half	
+negroes	suspect_merge	suspect_merge	190	negro	negro	negro			
+nonprofits	homograph	homograph	190	nonprofit	nonprofit	nonprofit			
+superiors	homograph	homograph	190	superior	superior	superior			
+attaches	disagree	author	189	attach	attache	attach	attach	attach	
+twenties	homograph	homograph	189	twenty	twenty	twenties			
+integrals	homograph	homograph	188	integral	integral	integral			
+collectives	homograph	homograph	187	collective	collective	collective			
+initials	homograph	homograph	186	initial	initial	initials			
+ills	homograph	homograph	185	ill	ill	ills			
+lasts	homograph	homograph	185	last	last	last			
+dealings	homograph	homograph	184	dealing	dealing	dealings			
+confessions	suspect_merge	suspect_merge	183	confession	confession	confession			
+originals	homograph	homograph	183	original	original	original			
+tauopathies	disagree	author	183	tauopathie	tauopathy	tauopathy	tauopathy	tauopathy	
+dans	suspect_merge	suspect_merge	180	dan	dans	dans			
+bioethics	suspect_merge	suspect_merge	179	bioethic	bioethics	bioethics			
+smes	homograph	homograph	178	sme	smes	sme			
+ers	homograph	homograph	177	er	ers	er			
+nationalists	homograph	homograph	177	nationalist	nationalist	nationalist			
+mores	homograph	homograph	174	more	mores	mores			
+cares	homograph	homograph	173	care	care	care			
+stylistics	homograph	homograph	173	stylistic	stylistic	stylistics			
+unknowns	homograph	homograph	171	unknown	unknown	unknown			
+hypnosis	suspect_merge	suspect_merge	170	hypnosi	hypnosis	hypnosis			
+thirties	homograph	homograph	170	thirty	thirty	thirty			
+ipsps	homograph	homograph	169	ipsp	ipsps	ipsp			
+reflexives	homograph	homograph	169	reflexive	reflexive	reflexive			
+residuals	homograph	homograph	169	residual	residual	residual			
+serials	homograph	homograph	168	serial	serial	serial			
+davies	suspect_merge	suspect_merge	167	davy	davies	davies			
+pdas	homograph	homograph	167	pda	pdas	pda			
+psychophysics	policy_keep	policy_keep	167	psychophysic	psychophysics	psychophysics	psychophysics	psychophysics	
+artisans	homograph	homograph	166	artisan	artisan	artisan			
+cautions	homograph	homograph	166	caution	caution	caution			
+holdings	homograph	homograph	166	holding	holding	holding			
+opiates	homograph	homograph	165	opiate	opiate	opiate			
+wais	suspect_merge	suspect_merge	164	wai	wais	wais			
+geophysics	suspect_merge	suspect_merge	163	geophysic	geophysics	geophysics			
+fifties	homograph	homograph	162	fifty	fifty	fifty			
+fixes	disagree	author	162	fix	fixe	fix	fix	fix	
+rgcs	homograph	homograph	162	rgc	rgcs	rgc			
+mills	suspect_merge	suspect_merge	161	mill	mill	mill			
+uis	homograph	homograph	161	ui	uis	ui			
+ors	homograph	homograph	160	or	ors	or			
+ssris	homograph	homograph	160	ssri	ssris	ssri			
+triples	homograph	homograph	160	triple	triple	triple			
+capitalists	homograph	homograph	159	capitalist	capitalist	capitalist			
+mts	suspect_merge	suspect_merge	159	mt	mts	mt			
+anovas	homograph	homograph	157	anova	anovas	anova			
+communists	suspect_merge	suspect_merge	155	communist	communist	communist			
+phonotactics	homograph	homograph	155	phonotactic	phonotactics	phonotactics			
+interrogatives	homograph	homograph	154	interrogative	interrogative	interrogative			
+narcotics	homograph	homograph	154	narcotic	narcotic	narcotic			
+aphasics	homograph	homograph	153	aphasic	aphasic	aphasic			
+haptics	homograph	homograph	153	haptic	haptics	haptics			
+schemas	suspect_merge	suspect_merge	153	schema	schema	schema			
+revolutionaries	homograph	homograph	152	revolutionary	revolutionary	revolutionary			
+leds	homograph	homograph	150	led	leds	led			
+pets	homograph	homograph	150	pet	pet	pet			
+failings	homograph	homograph	149	failing	failing	failing			
+figuresreferencesrelateddetails	suspect_merge	suspect_merge	149	figuresreferencesrelateddetail	figuresreferencesrelateddetails	figuresreferencesrelateddetails			
+peripherals	homograph	homograph	149	peripheral	peripheral	peripheral			
+presumes	homograph	homograph	149	presume	presume	presume			
+heavens	homograph	homograph	148	heaven	heaven	heaven			
+locals	homograph	homograph	148	local	local	local			
+republics	homograph	homograph	148	republic	republic	republic			
+fpgas	homograph	homograph	147	fpga	fpgas	fpga			
+owns	homograph	homograph	147	own	own	own			
+sayings	homograph	homograph	147	saying	saying	saying			
+deferens	suspect_merge	suspect_merge	146	deferen	deferens	deferens			
+rs	suspect_merge	suspect_merge	146	r	rs	r			
+cmos	homograph	homograph	144	cmo	cmos	cmos			
+functionals	homograph	homograph	144	functional	functional	functional			
+neuroleptics	homograph	homograph	144	neuroleptic	neuroleptic	neuroleptic			
+comics	disagree	author	143	comic_strip	comic	comic	comic	comic	
+ellipses	disagree	author	141	ellipsis	ellipse	ellipse	ellipse	ellipse	
+orns	homograph	homograph	141	orn	orn	orn			
+als	suspect_merge	suspect_merge	139	al	als	als			
+marxists	suspect_merge	suspect_merge	136	marxist	marxist	marxist			
+adrenals	homograph	homograph	134	adrenal	adrenal	adrenal			
+congresses	homograph	homograph	134	congress	congress	congress			
+gnns	homograph	homograph	134	gnn	gnns	gnn			
+scs	homograph	homograph	134	sc	scs	sc			
+eighties	homograph	homograph	133	eighty	eighty	eighties			
+mixes	disagree	author	133	mix	mixe	mix	mix	mix	
+neurotics	homograph	homograph	132	neurotic	neurotic	neurotic			
+css	homograph	homograph	131	cs	css	cs			
+anns	homograph	homograph	130	ann	anns	ann			
+dependents	homograph	homograph	130	dependent	dependent	dependent			
+enkephalins	homograph	homograph	130	enkephalin	enkephalins	enkephalin			
+euripides	suspect_merge	suspect_merge	130	euripide	euripides	euripides			
+evangelicals	homograph	homograph	130	evangelical	evangelicals	evangelical			
+biophysics	suspect_merge	suspect_merge	129	biophysic	biophysics	biophysics			
+leukocytes	homograph	homograph	129	leukocyte	leukocyte	leukocyte			
+midwives	disagree	author	129	midwife	midwive	midwife	midwife	midwife	
+gpus	homograph	homograph	128	gpu	gpus	gpu			
+moderns	homograph	homograph	128	modern	modern	moderns			
+biopolitics	suspect_merge	suspect_merge	127	biopolitic	biopolitics	biopolitics			
+sceptics	disagree	author	127	sceptic	skeptic	sceptic	skeptic	sceptic	
+shelves	disagree	author	126	shelf	shelve	shelf	shelf	shelf	
+antipsychotics	homograph	homograph	125	antipsychotic	antipsychotic	antipsychotic			
+deviants	homograph	homograph	125	deviant	deviant	deviant			
+mncs	homograph	homograph	125	mnc	mncs	mnc			
+parsons	suspect_merge	suspect_merge	125	parson	parson	parsons			
+speculates	homograph	homograph	125	speculate	speculate	speculate			
+backs	homograph	homograph	124	back	back	back			
+juniors	homograph	homograph	124	junior	junior	junior			
+preliminaries	homograph	homograph	124	preliminary	preliminary	preliminary			
+housewives	disagree	author	123	housewife	housewive	housewife	housewife	housewife	
+ids	suspect_merge	suspect_merge	123	id	ids	id			
+aps	suspect_merge	suspect_merge	122	ap	aps	ap			
+trustees	suspect_merge	suspect_merge	122	trustee	trustee	trustee			
+wells	suspect_merge	suspect_merge	120	well	well	wells			
+airways	suspect_merge	suspect_merge	119	airway	airway	airway			
+slows	homograph	homograph	118	slow	slow	slow			
+causatives	homograph	homograph	117	causative	causatives	causative			
+nns	suspect_merge	suspect_merge	117	nn	nns	nn			
+aces	suspect_merge	suspect_merge	116	ace	ace	ace			
+hcws	homograph	homograph	116	hcw	hcws	hcw			
+internals	homograph	homograph	116	internal	internal	internals			
+jaspers	suspect_merge	suspect_merge	116	jasper	jasper	jaspers			
+npcs	homograph	homograph	116	npc	npcs	npc			
+observables	homograph	homograph	116	observable	observable	observable			
+smartwatches	disagree	author	116	smartwatche	smartwatch	smartwatch	smartwatch	smartwatch	
+detractors	suspect_merge	suspect_merge	115	detractor	detractor	detractor			
+les	suspect_merge	suspect_merge	115	le	les	les			
+metaethics	homograph	homograph	115	metaethic	metaethics	metaethics			
+partisans	homograph	homograph	115	partisan	partisan	partisan			
+aeronautics	suspect_merge	suspect_merge	114	aeronautic	aeronautics	aeronautics			
+binaries	homograph	homograph	114	binary	binary	binary			
+blanks	homograph	homograph	114	blank	blank	blank			
+dyslexics	homograph	homograph	114	dyslexic	dyslexic	dyslexic			
+externals	homograph	homograph	114	external	external	external			
+acumen	suspect_merge	suspect_merge	113	acuman	acumen	acumen			
+alternates	homograph	homograph	113	alternate	alternate	alternate			
+interrupts	homograph	homograph	112	interrupt	interrupt	interrupt			
+primaries	homograph	homograph	112	primary	primary	primary			
+trans	suspect_merge	suspect_merge	112	tran	trans	trans			
+scholastics	homograph	homograph	111	scholastic	scholastic	scholastic			
+ups	homograph	homograph	111	up	ups	up			
+wrongs	homograph	homograph	111	wrong	wrong	wrong			
+pretests	homograph	homograph	110	pretest	pretest	pretest			
+intervenes	homograph	homograph	109	intervene	intervene	intervene			
+dogmatics	homograph	homograph	108	dogmatic	dogmatics	dogmatics			
+exergames	homograph	homograph	108	exergame	exergames	exergame			
+electrodynamics	homograph	homograph	107	electrodynamic	electrodynamics	electrodynamics			
+bydetails	suspect_merge	suspect_merge	106	bydetail	bydetails	bydetails			
+gays	homograph	homograph	106	gay	gay	gay			
+rcts	suspect_merge	suspect_merge	106	rct	rcts	rct			
+annals	suspect_merge	suspect_merge	105	annal	annal	annals			
+doubles	homograph	homograph	105	double	double	double			
+epscs	homograph	homograph	105	epsc	epscs	epsc			
+narrows	homograph	homograph	105	narrow	narrow	narrow			
+utilitarians	homograph	homograph	105	utilitarian	utilitarian	utilitarian			
+singles	homograph	homograph	104	single	single	single			
+syphilis	suspect_merge	suspect_merge	104	syphili	syphilis	syphilis			
+ics	suspect_merge	suspect_merge	103	ic	ics	ic			
+indexicals	homograph	homograph	103	indexical	indexicals	indexical			
+multiples	homograph	homograph	103	multiple	multiple	multiple			
+concomitants	homograph	homograph	102	concomitant	concomitant	concomitant			
+fairs	homograph	homograph	102	fair	fair	fairs			
+nineties	homograph	homograph	102	ninety	ninety	nineties			
+abducens	suspect_merge	suspect_merge	101	abducen	abducens	abducens			
+geopolitics	suspect_merge	suspect_merge	101	geopolitic	geopolitics	geopolitics			
+plains	suspect_merge	suspect_merge	101	plain	plain	plain			
+soas	homograph	homograph	101	soa	soas	soa			
+subthemes	suspect_merge	suspect_merge	101	subtheme	subthemes	subtheme			
+svms	suspect_merge	suspect_merge	101	svm	svms	svm			
+indefinites	homograph	homograph	100	indefinite	indefinites	indefinite			
+vagaries	suspect_merge	suspect_merge	100	vagary	vagary	vagary			
+frees	homograph	homograph	99	free	free	free			
+millennials	homograph	homograph	99	millennial	millennial	millennial			
+problematics	homograph	homograph	99	problematic	problematic	problematic			
+meditations	suspect_merge	suspect_merge	97	meditation	meditation	meditation			
+minutiae	suspect_merge	suspect_merge	97	minutia	minutiae	minutia			
+optogenetics	homograph	homograph	97	optogenetic	optogenetics	optogenetics			
+anxiolytics	homograph	homograph	96	anxiolytic	anxiolytics	anxiolytic			
+biceps	suspect_merge	suspect_merge	96	bicep	biceps	biceps			
+epigenetics	homograph	homograph	96	epigenetic	epigenetics	epigenetics			
+lenis	homograph	homograph	96	leni	lenis	lenis			
+manets	homograph	homograph	96	manet	manets	manet			
+rabies	suspect_merge	suspect_merge	96	rabie	rabies	rabies			
+sacks	suspect_merge	suspect_merge	96	sack	sack	sack			
+woods	suspect_merge	suspect_merge	96	wood	wood	woods			
+limen	suspect_merge	suspect_merge	95	liman	limen	limen			
+pharmaceuticals	suspect_merge	suspect_merge	95	pharmaceutical	pharmaceutical	pharmaceutical			
+testes	disagree	author	95	testis	teste	testis	testis	testis	
+ampars	homograph	homograph	94	ampar	ampars	ampar			
+explosives	homograph	homograph	94	explosive	explosive	explosive			
+cosmetics	homograph	homograph	93	cosmetic	cosmetic	cosmetics			
+ewes	homograph	homograph	93	ewe	ewe	ewe			
+crs	suspect_merge	suspect_merge	92	cr	crs	cr			
+finals	homograph	homograph	92	final	final	finals			
+moocs	homograph	homograph	92	mooc	moocs	mooc			
+opcs	homograph	homograph	92	opc	opcs	opc			
+excels	homograph	homograph	91	excel	excel	excel			
+furthers	homograph	homograph	91	further	further	further			
+hymes	suspect_merge	suspect_merge	91	hyme	hymes	hymes			
+literals	homograph	homograph	91	literal	literal	literal			
+matures	homograph	homograph	91	mature	mature	mature			
+dos	suspect_merge	suspect_merge	90	do	dos	do			
+sedatives	homograph	homograph	90	sedative	sedative	sedative			
+immunoreactivities	disagree	author	89	immunoreactivitie	immunoreactivity	immunoreactivity	immunoreactivity	immunoreactivity	
+mdps	homograph	homograph	89	mdp	mdps	mdp			
+oftentimes	suspect_merge	suspect_merge	89	oftentime	oftentimes	oftentimes			
+herpes	suspect_merge	suspect_merge	88	herpe	herpes	herpes			
+regimen	suspect_merge	suspect_merge	88	regiman	regimen	regimen			
+acidosis	suspect_merge	suspect_merge	87	acidosi	acidosis	acidosis			
+downs	homograph	homograph	87	down	down	downs			
+overviews	homograph	homograph	87	overview	overview	overview			
+refs	homograph	homograph	87	ref	ref	ref			
+forties	homograph	homograph	86	forty	forty	forty			
+lmics	homograph	homograph	86	lmic	lmics	lmic			
+csps	homograph	homograph	85	csp	csps	csp			
+burns	suspect_merge	suspect_merge	84	burn	burn	burn			
+cfs	suspect_merge	suspect_merge	84	cf	cfs	cf			
+comparatives	homograph	homograph	84	comparative	comparative	comparative			
+declaratives	homograph	homograph	84	declarative	declarative	declarative			
+emanates	homograph	homograph	84	emanate	emanate	emanate			
+eros	suspect_merge	suspect_merge	84	ero	eros	eros			
+stapes	suspect_merge	suspect_merge	84	stape	stapes	stapes			
+dawkins	suspect_merge	suspect_merge	83	dawkin	dawkins	dawkins			
+dissidents	homograph	homograph	83	dissident	dissident	dissident			
+ipscs	homograph	homograph	83	ipsc	ipscs	ipsc			
+psychedelics	homograph	homograph	83	psychedelic	psychedelic	psychedelic			
+scots	suspect_merge	suspect_merge	83	scot	scots	scot			
+tropics	policy_keep	policy_keep	83	tropic	tropic	tropics	tropics	tropics	
+heterosexuals	homograph	homograph	82	heterosexual	heterosexual	heterosexual			
+cas	suspect_merge	suspect_merge	81	ca	cas	ca			
+generals	homograph	homograph	81	general	general	general			
+militants	homograph	homograph	81	militant	militant	militant			
+mobiles	homograph	homograph	81	mobile	mobile	mobile			
+mounts	homograph	homograph	81	mount	mount	mount			
+rnns	suspect_merge	suspect_merge	80	rnn	rnns	rnn			
+favorites	homograph	homograph	79	favorite	favorite	favorite			
+gypsies	homograph	homograph	79	gypsy	gypsy	gypsy			
+kindergartners	suspect_merge	suspect_merge	79	kindergartner	kindergartner	kindergartner			
+ponens	suspect_merge	suspect_merge	79	ponen	ponens	ponens			
+arthropods	homograph	homograph	78	arthropod	arthropod	arthropod			
+sapiens	suspect_merge	suspect_merge	78	sapien	sapiens	sapiens			
+shines	disagree	author	78	shin	shine	shine	shine	shine	
+shortens	homograph	homograph	78	shorten	shorten	shorten			
+tms	suspect_merge	suspect_merge	78	tm	tms	tm			
+absolutes	homograph	homograph	77	absolute	absolute	absolute			
+asds	homograph	homograph	76	asd	asds	asd			
+cds	suspect_merge	suspect_merge	76	cd	cds	cd			
+kairos	suspect_merge	suspect_merge	76	kairo	kairos	kairos			
+nonathletes	homograph	homograph	76	nonathlete	nonathletes	nonathlete			
+strivings	homograph	homograph	76	striving	striving	striving			
+cooperatives	homograph	homograph	75	cooperative	cooperative	cooperative			
+creatives	homograph	homograph	75	creative	creative	creative			
+discriminants	homograph	homograph	75	discriminant	discriminant	discriminant			
+weeklies	homograph	homograph	75	weekly	weekly	weekly			
+ces	homograph	homograph	74	ce	ces	ce			
+fines	homograph	homograph	74	fine	fine	fine			
+outskirts	suspect_merge	suspect_merge	74	outskirt	outskirts	outskirts			
+progressives	homograph	homograph	74	progressive	progressive	progressive			
+fundamentalists	homograph	homograph	73	fundamentalist	fundamentalist	fundamentalist			
+gans	homograph	homograph	73	gan	gan	gan			
+telos	suspect_merge	suspect_merge	73	telo	telos	telos			
+indoors	homograph	homograph	72	indoor	indoors	indoors			
+laterals	homograph	homograph	72	lateral	lateral	lateral			
+measles	suspect_merge	suspect_merge	72	measle	measle	measles			
+possessives	homograph	homograph	72	possessive	possessive	possessive			
+protestants	suspect_merge	suspect_merge	72	protestant	protestant	protestant			
+psychotics	homograph	homograph	72	psychotic	psychotic	psychotic			
+tas	homograph	homograph	72	ta	tas	ta			
+dpoaes	homograph	homograph	71	dpoae	dpoaes	dpoae			
+extroverts	homograph	homograph	71	extrovert	extrovert	extrovert			
+perfects	homograph	homograph	71	perfect	perfect	perfect			
+sps	suspect_merge	suspect_merge	71	sp	sps	sp			
+defectives	homograph	homograph	70	defective	defective	defective			
+astrophysics	suspect_merge	suspect_merge	69	astrophysic	astrophysics	astrophysics			
+itss	homograph	homograph	69	its	itss	its			
+ordinals	homograph	homograph	69	ordinal	ordinal	ordinal			
+pips	homograph	homograph	69	pip	pip	pip			
+scas	homograph	homograph	69	sca	scas	sca			
+sds	suspect_merge	suspect_merge	69	sd	sds	sd			
+lawmakers	suspect_merge	suspect_merge	68	lawmaker	lawmaker	lawmaker			
+marches	homograph	homograph	68	march	march	march			
+performatives	homograph	homograph	68	performative	performative	performative			
+summons	homograph	homograph	68	summon	summon	summon			
+velars	homograph	homograph	68	velar	velar	velar			
+wikis	suspect_merge	suspect_merge	68	wiki	wiki	wiki			
+ethnomathematics	suspect_merge	suspect_merge	67	ethnomathematic	ethnomathematics	ethnomathematics			
+heightens	homograph	homograph	67	heighten	heighten	heighten			
+mortals	homograph	homograph	67	mortal	mortal	mortal			
+yours	homograph	homograph	67	your	yours	yours			
+appropriates	homograph	homograph	66	appropriate	appropriate	appropriate			
+followings	homograph	homograph	66	following	following	following			
+lateralis	suspect_merge	suspect_merge	66	laterali	lateralis	lateralis			
+lures	disagree	author	66	lur	lure	lure	lure	lure	
+subscores	homograph	homograph	66	subscore	subscores	subscore			
+thieves	disagree	author	66	thief	thieve	thief	thief	thief	
+dues	homograph	homograph	65	due	due	dues			
+ethnics	homograph	homograph	65	ethnic	ethnic	ethnic			
+formatives	homograph	homograph	65	formative	formative	formative			
+lans	homograph	homograph	65	lan	lans	lan			
+sans	suspect_merge	suspect_merge	65	san	san	sans			
+wsis	homograph	homograph	65	wsi	wsis	wsi			
+attenders	suspect_merge	suspect_merge	64	attender	attender	attender			
+cookies	disagree	author	64	cooky	cookie	cookie	cookie	cookie	
+emojis	homograph	homograph	64	emoji	emoji	emoji			
+itas	homograph	homograph	64	ita	itas	ita			
+neuroethics	policy_keep	policy_keep	64	neuroethic	neuroethics	neuroethics	neuroethics	neuroethics	
+outwards	homograph	homograph	64	outward	outwards	outwards			
+parables	homograph	homograph	64	parable	parable	parable			
+pipiens	suspect_merge	suspect_merge	64	pipien	pipiens	pipiens			
+pomdps	homograph	homograph	64	pomdp	pomdps	pomdp			
+reals	homograph	homograph	64	real	real	real			
+sleeps	homograph	homograph	64	sleep	sleep	sleep			
+subprocesses	disagree	author	64	subprocesse	subprocess	subprocess	subprocess	subprocess	
+transcriptomics	homograph	homograph	64	transcriptomic	transcriptomics	transcriptomics			
+wakings	homograph	homograph	64	waking	waking	waking			
+asses	suspect_merge	suspect_merge	63	asse	asse	assess			
+diabetics	homograph	homograph	63	diabetic	diabetic	diabetic			
+informationnotes	suspect_merge	suspect_merge	63	informationnote	informationnotes	informationnotes			
+micropipettes	homograph	homograph	63	micropipette	micropipettes	micropipette			
+oaes	homograph	homograph	63	oae	oaes	oae			
+otoliths	homograph	homograph	63	otolith	otolith	otolith			
+skies	disagree	author	63	sky	ski	sky	sky	sky	
+multinationals	homograph	homograph	62	multinational	multinational	multinational			
+thomists	suspect_merge	suspect_merge	62	thomist	thomist	thomist			
+givens	suspect_merge	suspect_merge	61	given	given	givens			
+nonwhites	homograph	homograph	61	nonwhite	nonwhites	nonwhite			
+supervisees	homograph	homograph	61	supervisee	supervisee	supervisee			
+tcs	suspect_merge	suspect_merge	61	tc	tcs	tc			
+basalis	suspect_merge	suspect_merge	60	basali	basalis	basalis			
+diogenes	suspect_merge	suspect_merge	60	diogene	diogenes	diogenes			
+idps	homograph	homograph	60	idp	idps	idp			
+kindergarteners	suspect_merge	suspect_merge	60	kindergartener	kindergarteners	kindergartener			
+maladies	disagree	author	60	malady	maladie	malady	malady	malady	
+queens	suspect_merge	suspect_merge	60	queen	queen	queen			
+sies	homograph	homograph	60	sie	sie	sie			
+veps	homograph	homograph	60	vep	veps	vep			
+anaxagoras	suspect_merge	suspect_merge	59	anaxagora	anaxagoras	anaxagoras			
+billings	suspect_merge	suspect_merge	59	billing	billing	billing			
+cryptocurrencies	disagree	author	59	cryptocurrencie	cryptocurrency	cryptocurrency	cryptocurrency	cryptocurrency	
+isis	homograph	homograph	59	isi	isis	isi			
+lows	homograph	homograph	59	low	low	low			
+mps	homograph	homograph	59	mp	mps	mp			
+rms	suspect_merge	suspect_merge	59	rm	rms	firm			
+stoics	suspect_merge	suspect_merge	59	stoic	stoic	stoic			
+ins	suspect_merge	suspect_merge	58	in	ins	ins			
+intimates	homograph	homograph	58	intimate	intimate	intimate			
+metabolomics	homograph	homograph	58	metabolomic	metabolomics	metabolomics			
+pus	homograph	homograph	58	pu	pus	pu			
+roses	homograph	homograph	58	rose	rose	rose			
+suprasegmentals	homograph	homograph	58	suprasegmental	suprasegmental	suprasegmental			
+tangibles	homograph	homograph	58	tangible	tangibles	tangible			
+wffs	homograph	homograph	58	wff	wffs	wff			
+explanans	suspect_merge	suspect_merge	57	explanan	explanans	explanans			
+freedmen	suspect_merge	suspect_merge	57	freedman	freedmen	freedman			
+knights	suspect_merge	suspect_merge	57	knight	knight	knight			
+ndds	homograph	homograph	57	ndd	ndds	ndd			
+pps	suspect_merge	suspect_merge	57	pp	pps	pp			
+psas	suspect_merge	suspect_merge	57	psa	psas	psa			
+ars	suspect_merge	suspect_merge	56	ar	ars	ars			
+embarks	homograph	homograph	56	embark	embark	embark			
+generics	homograph	homograph	56	generic	generic	generic			
+highlands	suspect_merge	suspect_merge	56	highland	highland	highland			
+highs	homograph	homograph	56	high	high	high			
+oscillates	homograph	homograph	56	oscillate	oscillate	oscillate			
+substantives	homograph	homograph	56	substantive	substantive	substantive			
+ventralis	suspect_merge	suspect_merge	56	ventrali	ventralis	ventralis			
+lms	suspect_merge	suspect_merge	55	lm	lms	lm			
+srs	suspect_merge	suspect_merge	55	sr	srs	sr			
+clears	homograph	homograph	54	clear	clear	clear			
+crustaceans	homograph	homograph	54	crustacean	crustacean	crustacean			
+electrolytes	homograph	homograph	54	electrolyte	electrolyte	electrolyte			
+kindreds	homograph	homograph	54	kindred	kindred	kindred			
+pes	suspect_merge	suspect_merge	54	pe	pes	pe			
+photonics	homograph	homograph	54	photonic	photonics	photonics			
+simples	homograph	homograph	54	simple	simple	simples			
+cooks	homograph	homograph	53	cook	cook	cook			
+lords	suspect_merge	suspect_merge	53	lord	lord	lord			
+trellis	suspect_merge	suspect_merge	53	trelli	trellis	trellis			
+collectivities	disagree	author	52	collectivitie	collectivity	collectivity	collectivity	collectivity	
+discours	suspect_merge	suspect_merge	52	discour	discours	discours			
+diuretics	homograph	homograph	52	diuretic	diuretic	diuretic			
+itds	homograph	homograph	52	itd	itds	itd			
+lexis	homograph	homograph	52	lexi	lexis	lexis			
+nonmusicians	homograph	homograph	52	nonmusician	nonmusicians	nonmusician			
+additives	homograph	homograph	51	additive	additive	additive			
+bns	homograph	homograph	51	bn	bns	bn			
+downwards	homograph	homograph	51	downward	downwards	downwards			
+psps	homograph	homograph	51	psp	psp	psp			
+nonstutterers	suspect_merge	suspect_merge	50	nonstutterer	nonstutterers	nonstutterer			
+nts	suspect_merge	suspect_merge	50	nt	nts	nt			
+osns	suspect_merge	suspect_merge	50	osn	osns	osn			
+pharmacotherapies	disagree	author	50	pharmacotherapie	pharmacotherapy	pharmacotherapy	pharmacotherapy	pharmacotherapy	
+schematics	homograph	homograph	50	schematic	schematic	schematic			
+seminaries	homograph	homograph	50	seminary	seminary	seminary			
+westerners	suspect_merge	suspect_merge	50	westerner	westerner	westerner			
+behooves	suspect_merge	suspect_merge	49	behoove	behoove	behoove			
+democrats	suspect_merge	suspect_merge	49	democrat	democrat	democrat			
+els	suspect_merge	suspect_merge	49	el	els	els			
+independents	homograph	homograph	49	independent	independent	independent			
+nsaids	homograph	homograph	49	nsaid	nsaids	nsaid			
+psds	homograph	homograph	49	psd	psds	psd			
+copes	disagree	author	48	cop	cope	cope	cope	cope	
+firsts	homograph	homograph	48	first	first	first			
+interspecies	disagree	author	48	interspecie	interspecy	interspecies	interspecie	interspecies	
+labials	homograph	homograph	48	labial	labial	labial			
+mes	suspect_merge	suspect_merge	48	me	mes	mes			
+metamorphoses	disagree	author	48	metamorphosis	metamorphose	metamorphosis	metamorphosis	metamorphosis	
+unobservables	homograph	homograph	48	unobservable	unobservables	unobservable			
+belongings	homograph	homograph	47	belonging	belonging	belongings			
+charmides	suspect_merge	suspect_merge	47	charmide	charmides	charmides			
+christians	suspect_merge	suspect_merge	47	christian	christians	christian			
+endnotes	homograph	homograph	47	endnote	endnotes	endnote			
+inwards	homograph	homograph	47	inward	inwards	inward			
+lds	suspect_merge	suspect_merge	47	ld	lds	ld			
+lettres	suspect_merge	suspect_merge	47	lettre	lettres	lettres			
+locatives	homograph	homograph	47	locative	locative	locative			
+pres	homograph	homograph	47	pre	pre	pres			
+resultatives	homograph	homograph	47	resultative	resultatives	resultative			
+ses	suspect_merge	suspect_merge	47	s	ses	ses			
+statins	homograph	homograph	47	statin	statin	statin			
+teoaes	homograph	homograph	47	teoae	teoaes	teoae			
+cans	homograph	homograph	46	can	can	cans			
+distalis	suspect_merge	suspect_merge	46	distali	distalis	distalis			
+imperialists	homograph	homograph	46	imperialist	imperialist	imperialist			
+lstms	homograph	homograph	46	lstm	lstms	lstm			
+nondepressives	homograph	homograph	46	nondepressive	nondepressives	nondepressive			
+ponders	homograph	homograph	46	ponder	ponder	ponder			
+sles	homograph	homograph	46	sle	sles	sle			
+aas	suspect_merge	suspect_merge	45	aa	aas	aa			
+csos	homograph	homograph	45	cso	csos	cso			
+dieters	homograph	homograph	45	dieter	dieter	dieter			
+doings	homograph	homograph	45	doing	doing	doing			
+meps	suspect_merge	suspect_merge	45	mep	meps	mep			
+notables	homograph	homograph	45	notable	notable	notable			
+presenilins	homograph	homograph	45	presenilin	presenilin	presenilin			
+ravens	homograph	homograph	45	raven	raven	raven			
+spns	homograph	homograph	45	spn	spns	spn			
+tuis	suspect_merge	suspect_merge	45	tui	tui	tui			
+ais	suspect_merge	suspect_merge	44	ai	ais	ai			
+axiomatics	homograph	homograph	44	axiomatic	axiomatics	axiomatics			
+corpses	disagree	author	44	corps	corpse	corpse	corpse	corpse	
+enrollees	homograph	homograph	44	enrollee	enrollee	enrollee			
+mimetics	homograph	homograph	44	mimetic	mimetic	mimetics			
+mitoses	suspect_merge	suspect_merge	44	mitose	mitose	mitosis			
+multilinguals	homograph	homograph	44	multilingual	multilinguals	multilingual			
+outs	homograph	homograph	44	out	out	outs			
+posses	homograph	homograph	44	posse	posse	possess			
+scalars	homograph	homograph	44	scalar	scalar	scalar			
+stewards	homograph	homograph	44	steward	steward	steward			
+subspecialties	disagree	author	44	subspecialtie	subspecialty	subspecialty	subspecialty	subspecialty	
+erodes	homograph	homograph	43	erode	erode	erode			
+gospels	suspect_merge	suspect_merge	43	gospel	gospel	gospel			
+headquarters	homograph	homograph	43	headquarter	headquarters	headquarters			
+hers	homograph	homograph	43	her	hers	hers			
+neurotechnologies	disagree	author	43	neurotechnologie	neurotechnology	neurotechnology	neurotechnology	neurotechnology	
+ohcs	suspect_merge	suspect_merge	43	ohc	ohcs	ohc			
+overflows	homograph	homograph	43	overflow	overflow	overflow			
+pas	suspect_merge	suspect_merge	43	pa	pas	pa			
+reciprocals	homograph	homograph	43	reciprocal	reciprocal	reciprocal			
+ssds	homograph	homograph	43	ssd	ssds	ssd			
+islanders	suspect_merge	suspect_merge	42	islander	islander	islander			
+mas	suspect_merge	suspect_merge	42	ma	mas	ma			
+mdgs	homograph	homograph	42	mdg	mdgs	mdg			
+specifiers	homograph	homograph	42	specifier	specifier	specifier			
+submatrices	suspect_merge	suspect_merge	42	submatrice	submatrices	submatrix			
+suds	homograph	homograph	42	sud	sud	sud			
+colds	homograph	homograph	41	cold	cold	cold			
+cos	suspect_merge	suspect_merge	41	co	cos	co			
+dispenses	homograph	homograph	41	dispense	dispense	dispense			
+dominants	homograph	homograph	41	dominant	dominant	dominant			
+englishmen	suspect_merge	suspect_merge	41	englishman	englishmen	englishman			
+ihcs	homograph	homograph	41	ihc	ihcs	ihc			
+kbs	suspect_merge	suspect_merge	41	kb	kbs	kb			
+marginals	homograph	homograph	41	marginal	marginal	marginal			
+meninges	suspect_merge	suspect_merge	41	meninge	meninges	meninx			
+pagans	homograph	homograph	41	pagan	pagan	pagan			
+preschools	homograph	homograph	41	preschool	preschool	preschool			
+stereotypies	disagree	author	41	stereotypie	stereotypy	stereotypy	stereotypy	stereotypy	
+cogitans	suspect_merge	suspect_merge	40	cogitan	cogitans	cogitans			
+eidos	suspect_merge	suspect_merge	40	eido	eidos	eidos			
+epistles	suspect_merge	suspect_merge	40	epistle	epistle	epistle			
+greats	homograph	homograph	40	great	great	great			
+multiplies	disagree	author	40	multiplie	multiply	multiply	multiply	multiply	
+narcoleptics	homograph	homograph	40	narcoleptic	narcoleptic	narcoleptic			
+obes	homograph	homograph	40	obe	obes	obe			
+sorites	suspect_merge	suspect_merge	40	sorite	sorites	sorites			
+sunglasses	suspect_merge	suspect_merge	40	sunglass	sunglass	sunglasses			
+ans	suspect_merge	suspect_merge	39	an	ans	an			
+asides	homograph	homograph	39	aside	aside	aside			
+daltons	homograph	homograph	39	dalton	dalton	dalton			
+feces	homograph	homograph	39	fece	feces	feces			
+germans	suspect_merge	suspect_merge	39	german	germans	german			
+legitimates	homograph	homograph	39	legitimate	legitimate	legitimate			
+tjs	homograph	homograph	39	tj	tjs	tj			
+alveolars	homograph	homograph	38	alveolar	alveolar	alveolar			
+bushes	homograph	homograph	38	bush	bush	bush			
+corps	suspect_merge	suspect_merge	38	corp	corps	corps			
+crfs	homograph	homograph	38	crf	crfs	crf			
+ecs	suspect_merge	suspect_merge	38	ec	ecs	ec			
+expressives	homograph	homograph	38	expressive	expressives	expressive			
+folkways	suspect_merge	suspect_merge	38	folkway	folkways	folkway			
+leftists	homograph	homograph	38	leftist	leftist	leftist			
+nobles	homograph	homograph	38	noble	noble	noble			
+noncombatants	homograph	homograph	38	noncombatant	noncombatant	noncombatant			
+panickers	suspect_merge	suspect_merge	38	panicker	panickers	panicker			
+sociodemographics	homograph	homograph	38	sociodemographic	sociodemographics	sociodemographic			
+stills	homograph	homograph	38	still	still	stills			
+energetics	homograph	homograph	37	energetic	energetics	energetics			
+fs	suspect_merge	suspect_merge	37	f	fs	fs			
+gsrs	homograph	homograph	37	gsr	gsrs	gsr			
+isoglosses	suspect_merge	suspect_merge	37	isoglosse	isoglosses	isogloss			
+lsbs	homograph	homograph	37	lsb	lsbs	lsb			
+newsworkers	suspect_merge	suspect_merge	37	newsworker	newsworkers	newsworker			
+possibles	homograph	homograph	37	possible	possible	possible			
+sands	suspect_merge	suspect_merge	37	sand	sand	sand			
+sens	homograph	homograph	37	sen	sens	sens			
+subspecies	suspect_merge	suspect_merge	37	subspecie	subspecies	subspecies			
+whigs	homograph	homograph	37	whig	whig	whig			
+chaps	homograph	homograph	36	chap	chap	chap			
+corrupts	homograph	homograph	36	corrupt	corrupt	corrupt			
+decimals	homograph	homograph	36	decimal	decimal	decimal			
+foibles	homograph	homograph	36	foible	foible	foible			
+furnishings	homograph	homograph	36	furnishing	furnishing	furnishing			
+ils	suspect_merge	suspect_merge	36	il	ils	il			
+johannes	suspect_merge	suspect_merge	36	johanne	johannes	johannes			
+neuroprostheses	suspect_merge	suspect_merge	36	neuroprosthese	neuroprostheses	neuroprosthesis			
+posteriors	homograph	homograph	36	posterior	posterior	posterior			
+sfs	suspect_merge	suspect_merge	36	sf	sfs	sf			
+borns	homograph	homograph	35	born	born	born			
+captives	homograph	homograph	35	captive	captive	captive			
+catholics	suspect_merge	suspect_merge	35	catholic	catholics	catholic			
+epileptics	homograph	homograph	35	epileptic	epileptic	epileptic			
+exponentials	homograph	homograph	35	exponential	exponential	exponential			
+granulocytes	homograph	homograph	35	granulocyte	granulocyte	granulocyte			
+muses	disagree	author	35	mus	muse	muse	muse	muse	
+nonhumans	homograph	homograph	35	nonhuman	nonhuman	nonhuman			
+nss	suspect_merge	suspect_merge	35	ns	nss	ns			
+operatives	homograph	homograph	35	operative	operative	operative			
+tollens	suspect_merge	suspect_merge	35	tollen	tollens	tollens			
+yourselves	homograph	homograph	35	yourself	yourselves	yourself			
+anorexics	homograph	homograph	34	anorexic	anorexic	anorexic			
+caustics	homograph	homograph	34	caustic	caustic	caustic			
+coronals	homograph	homograph	34	coronal	coronal	coronal			
+existentials	homograph	homograph	34	existential	existentials	existential			
+gpas	homograph	homograph	34	gpa	gpas	gpa			
+monies	suspect_merge	suspect_merge	34	monie	monies	money			
+nonmigrants	homograph	homograph	34	nonmigrant	nonmigrants	nonmigrant			
+opns	homograph	homograph	34	opn	opns	opn			
+pituicytes	suspect_merge	suspect_merge	34	pituicyte	pituicytes	pituicyte			
+rickets	suspect_merge	suspect_merge	34	ricket	rickets	rickets			
+spares	disagree	author	34	spar	spare	spare	spare	spare	
+succumbs	homograph	homograph	34	succumb	succumb	succumb			
+temps	suspect_merge	suspect_merge	34	temp	temp	temps			
+anorectics	homograph	homograph	33	anorectic	anorectic	anorectic			
+deictics	homograph	homograph	33	deictic	deictic	deictic			
+dels	homograph	homograph	33	del	del	dels			
+errs	homograph	homograph	33	err	err	err			
+fries	suspect_merge	suspect_merge	33	fry	fry	fry			
+hippocrates	suspect_merge	suspect_merge	33	hippocrate	hippocrates	hippocrates			
+hypotheticals	homograph	homograph	33	hypothetical	hypothetical	hypothetical			
+microphysics	suspect_merge	suspect_merge	33	microphysic	microphysics	microphysics			
+pers	homograph	homograph	33	per	per	pers			
+sacra	suspect_merge	suspect_merge	33	sacrum	sacra	sacra			
+sellars	suspect_merge	suspect_merge	33	sellar	sellars	sellars			
+spotlights	homograph	homograph	33	spotlight	spotlight	spotlight			
+tcks	homograph	homograph	33	tck	tcks	tck			
+wsns	suspect_merge	suspect_merge	33	wsn	wsns	wsn			
+autistics	homograph	homograph	32	autistic	autistics	autistic			
+blinds	homograph	homograph	32	blind	blind	blind			
+coverings	homograph	homograph	32	covering	covering	covering			
+cts	suspect_merge	suspect_merge	32	ct	cts	ct			
+efs	suspect_merge	suspect_merge	32	ef	efs	ef			
+firstborns	homograph	homograph	32	firstborn	firstborn	firstborn			
+magnifies	disagree	author	32	magnifie	magnify	magnify	magnify	magnify	
+mcs	suspect_merge	suspect_merge	32	mc	mcs	mc			
+medievals	homograph	homograph	32	medieval	medieval	medieval			
+nmjs	homograph	homograph	32	nmj	nmjs	nmj			
+omics	homograph	homograph	32	omic	omics	omics			
+partials	homograph	homograph	32	partial	partial	partial			
+psychotropics	homograph	homograph	32	psychotropic	psychotropics	psychotropic			
+sensibles	homograph	homograph	32	sensible	sensibles	sensible			
+adherens	suspect_merge	suspect_merge	31	adheren	adherens	adherens			
+arcades	suspect_merge	suspect_merge	31	arcade	arcade	arcade			
+bisexuals	homograph	homograph	31	bisexual	bisexual	bisexual			
+bzds	homograph	homograph	31	bzd	bzds	bzd			
+clings	homograph	homograph	31	cling	cling	cling			
+correlatives	homograph	homograph	31	correlative	correlative	correlative			
+csts	homograph	homograph	31	cst	csts	cst			
+dags	homograph	homograph	31	dag	dag	dag			
+faeces	suspect_merge	suspect_merge	31	faece	faeces	faeces			
+foramen	suspect_merge	suspect_merge	31	foraman	foramen	foramen			
+frontalis	suspect_merge	suspect_merge	31	frontali	frontalis	frontalis			
+hcps	homograph	homograph	31	hcp	hcps	hcp			
+hovers	homograph	homograph	31	hover	hover	hover			
+isocrates	suspect_merge	suspect_merge	31	isocrate	isocrates	isocrates			
+metamathematics	suspect_merge	suspect_merge	31	metamathematic	metamathematics	metamathematics			
+microsystems	suspect_merge	suspect_merge	31	microsystem	microsystem	microsystem			
+mumps	suspect_merge	suspect_merge	31	mump	mumps	mumps			
+nfs	homograph	homograph	31	nf	nfs	nf			
+notifies	disagree	author	31	notifie	notify	notify	notify	notify	
+ods	homograph	homograph	31	od	ods	od			
+orbitals	homograph	homograph	31	orbital	orbital	orbital			
+platonists	suspect_merge	suspect_merge	31	platonist	platonist	platonist			
+pns	suspect_merge	suspect_merge	31	pn	pns	pn			
+reds	homograph	homograph	31	red	red	red			
+stirrings	homograph	homograph	31	stirring	stirring	stirring			
+whereabouts	suspect_merge	suspect_merge	31	whereabout	whereabouts	whereabouts			
+aborigines	suspect_merge	suspect_merge	30	aborigine	aborigine	aborigine			
+aestheticians	suspect_merge	suspect_merge	30	aesthetician	aestheticians	aesthetician			
+aminoglycosides	homograph	homograph	30	aminoglycoside	aminoglycoside	aminoglycoside			
+averroes	suspect_merge	suspect_merge	30	averroe	averroes	averroes			
+barons	homograph	homograph	30	baron	baron	baron			
+binomials	homograph	homograph	30	binomial	binomial	binomial			
+castells	suspect_merge	suspect_merge	30	castell	castells	castells			
+definites	homograph	homograph	30	definite	definites	definite			
+demosthenes	suspect_merge	suspect_merge	30	demosthene	demosthenes	demosthenes			
+dissipates	homograph	homograph	30	dissipate	dissipate	dissipate			
+divines	homograph	homograph	30	divine	divine	divines			
+dons	homograph	homograph	30	don	don	don			
+ecas	homograph	homograph	30	eca	ecas	eca			
+fascists	homograph	homograph	30	fascist	fascist	fascist			
+fourths	homograph	homograph	30	fourth	fourth	fourth			
+implosives	homograph	homograph	30	implosive	implosives	implosive			
+mscs	suspect_merge	suspect_merge	30	msc	mscs	msc			
+oriens	homograph	homograph	30	orien	oriens	oriens			
+pdes	homograph	homograph	30	pde	pdes	pde			
+princeps	suspect_merge	suspect_merge	30	princep	princeps	princeps			
+pts	suspect_merge	suspect_merge	30	pt	pts	pt			
+seps	homograph	homograph	30	sep	seps	sep			
+tigers	suspect_merge	suspect_merge	30	tiger	tiger	tiger			
+vas	homograph	homograph	30	va	vas	va			
+vnrs	homograph	homograph	30	vnr	vnrs	vnr			
+africans	suspect_merge	suspect_merge	29	african	africans	african			
+ascs	homograph	homograph	29	asc	ascs	asc			
+authoritarians	homograph	homograph	29	authoritarian	authoritarian	authoritarian			
+berries	homograph	homograph	29	berry	berry	berry			
+bps	suspect_merge	suspect_merge	29	bp	bps	bp			
+calculi	suspect_merge	suspect_merge	29	calculus	calculi	calculus			
+exhibitors	suspect_merge	suspect_merge	29	exhibitor	exhibitor	exhibitor			
+formers	homograph	homograph	29	former	former	former			
+franciscans	suspect_merge	suspect_merge	29	franciscan	franciscans	franciscan			
+gmms	homograph	homograph	29	gmm	gmms	gmm			
+iprgcs	homograph	homograph	29	iprgc	iprgcs	iprgc			
+kars	homograph	homograph	29	kar	kars	kar			
+mutandis	suspect_merge	suspect_merge	29	mutandi	mutandis	mutandis			
+overwhelms	homograph	homograph	29	overwhelm	overwhelm	overwhelm			
+pfs	suspect_merge	suspect_merge	29	pf	pfs	pf			
+quadriceps	suspect_merge	suspect_merge	29	quadricep	quadriceps	quadriceps			
+recombinants	homograph	homograph	29	recombinant	recombinant	recombinant			
+srts	homograph	homograph	29	srt	srts	srt			
+subfamilies	homograph	homograph	29	subfamily	subfamily	subfamily			
+verbals	homograph	homograph	29	verbal	verbal	verbal			
+alms	homograph	homograph	28	alm	alms	alms			
+cliffs	suspect_merge	suspect_merge	28	cliff	cliff	cliff			
+contradictories	homograph	homograph	28	contradictory	contradictory	contradictory			
+fairbanks	suspect_merge	suspect_merge	28	fairbank	fairbanks	fairbanks			
+fakes	homograph	homograph	28	fake	fake	fake			
+fishers	homograph	homograph	28	fisher	fisher	fisher			
+hates	disagree	author	28	hat	hate	hate	hate	hate	
+hbcus	homograph	homograph	28	hbcu	hbcus	hbcu			
+hesitates	homograph	homograph	28	hesitate	hesitate	hesitate			
+impersonals	homograph	homograph	28	impersonal	impersonals	impersonal			
+impulsives	homograph	homograph	28	impulsive	impulsives	impulsive			
+oughts	homograph	homograph	28	ought	oughts	ought			
+sgns	homograph	homograph	28	sgn	sgns	sgn			
+simons	suspect_merge	suspect_merge	28	simon	simons	simons			
+wlans	homograph	homograph	28	wlan	wlans	wlan			
+abrs	suspect_merge	suspect_merge	27	abr	abrs	abr			
+aerials	homograph	homograph	27	aerial	aerial	aerial			
+aes	suspect_merge	suspect_merge	27	ae	aes	ae			
+americans	suspect_merge	suspect_merge	27	american	americans	american			
+aus	homograph	homograph	27	au	aus	au			
+bibles	homograph	homograph	27	bible	bible	bible			
+bowers	suspect_merge	suspect_merge	27	bower	bower	bowers			
+colonialists	homograph	homograph	27	colonialist	colonialist	colonialist			
+combs	suspect_merge	suspect_merge	27	comb	comb	comb			
+debs	homograph	homograph	27	deb	deb	deb			
+dentals	homograph	homograph	27	dental	dental	dental			
+diagonals	homograph	homograph	27	diagonal	diagonal	diagonal			
+dsps	homograph	homograph	27	dsp	dsps	dsp			
+fepsps	homograph	homograph	27	fepsp	fepsps	fepsp			
+fieldnotes	homograph	homograph	27	fieldnote	fieldnotes	fieldnote			
+folksonomies	suspect_merge	suspect_merge	27	folksonomie	folksonomies	folksonomy			
+idiosyncracies	disagree	author	27	idiosyncracie	idiosyncracy	idiosyncrasy	idiosyncracy	idiosyncrasy	
+innocents	homograph	homograph	27	innocent	innocent	innocent			
+ivs	homograph	homograph	27	iv	ivs	iv			
+miniatures	homograph	homograph	27	miniature	miniature	miniature			
+neurodynamics	homograph	homograph	27	neurodynamic	neurodynamics	neurodynamics			
+ngcs	homograph	homograph	27	ngc	ngcs	ngc			
+occludentes	suspect_merge	suspect_merge	27	occludente	occludentes	occludentes			
+ops	suspect_merge	suspect_merge	27	op	ops	op			
+prediabetes	suspect_merge	suspect_merge	27	prediabete	prediabetes	prediabetes			
+psychosomatics	homograph	homograph	27	psychosomatic	psychosomatics	psychosomatics			
+ribosomes	homograph	homograph	27	ribosome	ribosome	ribosome			
+vans	homograph	homograph	27	van	van	van			
+vouchers	homograph	homograph	27	voucher	voucher	voucher			
+autoradiographs	suspect_merge	suspect_merge	26	autoradiograph	autoradiograph	autoradiograph			
+bios	homograph	homograph	26	bio	bio	bio			
+cpns	homograph	homograph	26	cpn	cpns	cpn			
+dibels	suspect_merge	suspect_merge	26	dibel	dibels	dibels			
+docs	homograph	homograph	26	doc	doc	doc			
+ees	suspect_merge	suspect_merge	26	ee	ees	ee			
+emss	homograph	homograph	26	ems	emss	ems			
+haves	homograph	homograph	26	have	have	haves			
+indivisibles	homograph	homograph	26	indivisible	indivisibles	indivisible			
+nonprofessionals	homograph	homograph	26	nonprofessional	nonprofessionals	nonprofessional			
+phfs	homograph	homograph	26	phf	phfs	phf			
+phosphorus	suspect_merge	suspect_merge	26	phosphoru	phosphorus	phosphorus			
+racists	homograph	homograph	26	racist	racist	racist			
+ras	suspect_merge	suspect_merge	26	ra	ras	ra			
+recherches	suspect_merge	suspect_merge	26	recherche	recherches	recherches			
+reifies	disagree	author	26	reifie	reify	reify	reify	reify	
+reuniens	suspect_merge	suspect_merge	26	reunien	reuniens	reuniens			
+richards	suspect_merge	suspect_merge	26	richard	richards	richards			
+tanycytes	homograph	homograph	26	tanycyte	tanycytes	tanycyte			
+tcas	homograph	homograph	26	tca	tcas	tca			
+transcendentals	homograph	homograph	26	transcendental	transcendentals	transcendental			
+trumps	homograph	homograph	26	trump	trump	trump			
+verticals	homograph	homograph	26	vertical	vertical	vertical			
+voluntas	suspect_merge	suspect_merge	26	volunta	voluntas	voluntas			
+bams	homograph	homograph	25	bam	bam	bam			
+bayes	suspect_merge	suspect_merge	25	baye	bayes	bayes			
+cvcs	homograph	homograph	25	cvc	cvcs	cvc			
+cynics	suspect_merge	suspect_merge	25	cynic	cynic	cynic			
+electives	homograph	homograph	25	elective	elective	elective			
+evidentials	homograph	homograph	25	evidential	evidentials	evidential			
+fnns	homograph	homograph	25	fnn	fnns	fnn			
+formes	disagree	author	25	form	forme	formes	formes	formes	
+forwards	homograph	homograph	25	forward	forwards	forward			
+hcis	homograph	homograph	25	hci	hcis	hci			
+heis	suspect_merge	suspect_merge	25	hei	heis	hei			
+icus	homograph	homograph	25	icu	icus	icu			
+ips	suspect_merge	suspect_merge	25	ip	ips	ip			
+limitans	suspect_merge	suspect_merge	25	limitan	limitans	limitans			
+manipulatives	homograph	homograph	25	manipulative	manipulative	manipulative			
+mds	suspect_merge	suspect_merge	25	md	mds	md			
+mmogs	homograph	homograph	25	mmog	mmogs	mmog			
+neoplatonists	suspect_merge	suspect_merge	25	neoplatonist	neoplatonist	neoplatonist			
+northerners	suspect_merge	suspect_merge	25	northerner	northerner	northerner			
+omnes	homograph	homograph	25	omne	omnes	omnes			
+omnis	homograph	homograph	25	omni	omnis	omnis			
+opticks	suspect_merge	suspect_merge	25	optick	opticks	opticks			
+pharmacodynamics	homograph	homograph	25	pharmacodynamic	pharmacodynamics	pharmacodynamics			
+ptms	homograph	homograph	25	ptm	ptms	ptm			
+reactionaries	homograph	homograph	25	reactionary	reactionary	reactionary			
+saunders	suspect_merge	suspect_merge	25	saunder	saunders	saunders			
+smcs	homograph	homograph	25	smc	smcs	smc			
+soaes	homograph	homograph	25	soae	soaes	soae			
+synectics	homograph	homograph	25	synectic	synectics	synectics			
+uimss	homograph	homograph	25	uims	uimss	uims			
+zeroes	homograph	homograph	25	zero	zero	zero			
+ams	suspect_merge	suspect_merge	24	am	ams	am			
+barthes	suspect_merge	suspect_merge	24	barthe	barthes	barthes			
+bdds	homograph	homograph	24	bdd	bdds	bdd			
+brutes	homograph	homograph	24	brute	brute	brute			
+carruthers	suspect_merge	suspect_merge	24	carruther	carruthers	carruthers			
+compatibles	homograph	homograph	24	compatible	compatible	compatible			
+conics	homograph	homograph	24	conic	conic	conic			
+elenchus	suspect_merge	suspect_merge	24	elenchu	elenchus	elenchus			
+engels	suspect_merge	suspect_merge	24	engel	engels	engels			
+englishes	suspect_merge	suspect_merge	24	english	englishes	english			
+fluents	homograph	homograph	24	fluent	fluents	fluent			
+ielts	homograph	homograph	24	ielt	ielts	ielts			
+indicatives	homograph	homograph	24	indicative	indicative	indicative			
+leptomeninges	suspect_merge	suspect_merge	24	leptomeninge	leptomeninges	leptomeninx			
+lvcs	suspect_merge	suspect_merge	24	lvc	lvcs	lvc			
+mains	homograph	homograph	24	main	main	mains			
+microfilaments	homograph	homograph	24	microfilament	microfilament	microfilament			
+mitochondria	suspect_merge	suspect_merge	24	mitochondrion	mitochondria	mitochondrion			
+offs	homograph	homograph	24	off	off	off			
+ohscs	homograph	homograph	24	ohsc	ohscs	ohsc			
+ons	homograph	homograph	24	on	ons	on			
+peacekeepers	suspect_merge	suspect_merge	24	peacekeeper	peacekeeper	peacekeeper			
+perennis	suspect_merge	suspect_merge	24	perenni	perennis	perennis			
+psrs	homograph	homograph	24	psr	psrs	psr			
+regulars	homograph	homograph	24	regular	regular	regular			
+saccharomyces	suspect_merge	suspect_merge	24	saccharomyce	saccharomyces	saccharomyces			
+sids	suspect_merge	suspect_merge	24	sid	sids	sid			
+swds	homograph	homograph	24	swd	swds	swd			
+symons	homograph	homograph	24	symon	symons	symons			
+amnesics	homograph	homograph	23	amnesic	amnesics	amnesic			
+autoradiograms	suspect_merge	suspect_merge	23	autoradiogram	autoradiograms	autoradiogram			
+biosemiotics	homograph	homograph	23	biosemiotic	biosemiotics	biosemiotics			
+busses	disagree	author	23	bus	buss	bus	bus	bus	
+calves	disagree	author	23	calf	calve	calf	calf	calf	
+ccvcs	homograph	homograph	23	ccvc	ccvcs	ccvc			
+cleaners	policy_keep	policy_keep	23	cleaner	cleaner	cleaner	cleaner	cleaner	
+comings	homograph	homograph	23	coming	coming	coming			
+cosmopolitans	homograph	homograph	23	cosmopolitan	cosmopolitan	cosmopolitan			
+czechs	suspect_merge	suspect_merge	23	czech	czechs	czech			
+dtms	homograph	homograph	23	dtm	dtms	dtm			
+eines	homograph	homograph	23	eine	eines	eines			
+francophones	homograph	homograph	23	francophone	francophone	francophone			
+internationals	homograph	homograph	23	international	international	international			
+jenkins	suspect_merge	suspect_merge	23	jenkin	jenkins	jenkins			
+laryngeals	homograph	homograph	23	laryngeal	laryngeals	laryngeal			
+levellers	suspect_merge	suspect_merge	23	leveller	levellers	leveller			
+ndes	homograph	homograph	23	nde	ndes	nde			
+polysomes	homograph	homograph	23	polysome	polysomes	polysome			
+sars	suspect_merge	suspect_merge	23	sar	sars	sars			
+schooldays	suspect_merge	suspect_merge	23	schoolday	schoolday	schoolday			
+serres	suspect_merge	suspect_merge	23	serre	serres	serres			
+sweets	homograph	homograph	23	sweet	sweet	sweets			
+telematics	homograph	homograph	23	telematic	telematics	telematics			
+thematics	homograph	homograph	23	thematic	thematics	thematics			
+ths	homograph	homograph	23	th	ths	ths			
+uems	homograph	homograph	23	uem	uems	uem			
+universalis	homograph	homograph	23	universali	universalis	universalis			
+actives	homograph	homograph	22	active	active	actives			
+belles	suspect_merge	suspect_merge	22	belle	belle	belles			
+celts	homograph	homograph	22	celt	celts	celt			
+choses	homograph	homograph	22	chose	choses	choses			
+communitas	suspect_merge	suspect_merge	22	communita	communitas	communitas			
+congeries	suspect_merge	suspect_merge	22	congerie	congeries	congeries			
+constructionists	homograph	homograph	22	constructionist	constructionist	constructionist			
+cvds	homograph	homograph	22	cvd	cvds	cvd			
+daters	suspect_merge	suspect_merge	22	dater	daters	dater			
+dbns	homograph	homograph	22	dbn	dbns	dbn			
+exclamatives	homograph	homograph	22	exclamative	exclamatives	exclamative			
+fcms	suspect_merge	suspect_merge	22	fcm	fcms	fcm			
+fours	homograph	homograph	22	four	four	four			
+gabaars	homograph	homograph	22	gabaar	gabaars	gabaar			
+gos	homograph	homograph	22	go	gos	go			
+herbals	homograph	homograph	22	herbal	herbal	herbal			
+intransitives	homograph	homograph	22	intransitive	intransitive	intransitive			
+jesuits	suspect_merge	suspect_merge	22	jesuit	jesuits	jesuit			
+ldcs	homograph	homograph	22	ldc	ldcs	ldc			
+macs	suspect_merge	suspect_merge	22	mac	mac	mac			
+mdes	homograph	homograph	22	mde	mdes	mde			
+memetics	homograph	homograph	22	memetic	memetics	memetics			
+microfilms	suspect_merge	suspect_merge	22	microfilm	microfilm	microfilm			
+mris	suspect_merge	suspect_merge	22	mri	mris	mri			
+ncds	homograph	homograph	22	ncd	ncds	ncd			
+nomen	suspect_merge	suspect_merge	22	noman	nomen	nomen			
+operants	homograph	homograph	22	operant	operants	operant			
+psgs	homograph	homograph	22	psg	psgs	psg			
+pvs	suspect_merge	suspect_merge	22	pv	pvs	pv			
+quotatives	homograph	homograph	22	quotative	quotatives	quotative			
+reanalyses	homograph	homograph	22	reanalyse	reanalyze	reanalysis			
+regents	suspect_merge	suspect_merge	22	regent	regent	regent			
+reveries	disagree	author	22	revery	reverie	reverie	revery	reverie	
+sociocybernetics	homograph	homograph	22	sociocybernetic	sociocybernetics	sociocybernetics			
+ssveps	homograph	homograph	22	ssvep	ssveps	ssvep			
+trivers	suspect_merge	suspect_merge	22	triver	trivers	trivers			
+unaccusatives	homograph	homograph	22	unaccusative	unaccusatives	unaccusative			
+abides	homograph	homograph	21	abide	abide	abide			
+aches	homograph	homograph	21	ache	ache	ache			
+annexes	disagree	author	21	annex	annexe	annex	annex	annex	
+antics	homograph	homograph	21	antic	antic	antics			
+ascetics	homograph	homograph	21	ascetic	ascetic	ascetic			
+biosciences	suspect_merge	suspect_merge	21	bioscience	bioscience	bioscience			
+caries	suspect_merge	suspect_merge	21	carie	caries	caries			
+commissives	homograph	homograph	21	commissive	commissives	commissive			
+cummins	suspect_merge	suspect_merge	21	cummin	cummin	cummins			
+curbs	homograph	homograph	21	curb	curb	curb			
+domestics	homograph	homograph	21	domestic	domestic	domestics			
+dtns	homograph	homograph	21	dtn	dtns	dtn			
+ens	suspect_merge	suspect_merge	21	en	ens	ens			
+estes	suspect_merge	suspect_merge	21	este	estes	estes			
+fbos	homograph	homograph	21	fbo	fbos	fbo			
+framers	homograph	homograph	21	framer	framer	framer			
+gentiles	suspect_merge	suspect_merge	21	gentile	gentile	gentile			
+gms	suspect_merge	suspect_merge	21	gm	gms	gm			
+gtpases	homograph	homograph	21	gtpase	gtpases	gtpase			
+guilders	disagree	author	21	guilde	guilder	guilder	guilder	guilder	
+heritabilities	disagree	author	21	heritabilitie	heritability	heritability	heritability	heritability	
+humanitarians	homograph	homograph	21	humanitarian	humanitarian	humanitarian			
+ias	suspect_merge	suspect_merge	21	ia	ias	ia			
+illiterates	homograph	homograph	21	illiterate	illiterate	illiterate			
+immortals	homograph	homograph	21	immortal	immortal	immortal			
+indiscernibles	homograph	homograph	21	indiscernible	indiscernibles	indiscernible			
+inferiors	homograph	homograph	21	inferior	inferior	inferior			
+kpis	homograph	homograph	21	kpi	kpis	kpi			
+mmos	homograph	homograph	21	mmo	mmos	mmo			
+oeuvres	suspect_merge	suspect_merge	21	oeuvre	oeuvre	oeuvre			
+palatals	homograph	homograph	21	palatal	palatal	palatal			
+pbmcs	homograph	homograph	21	pbmc	pbmcs	pbmc			
+persisters	suspect_merge	suspect_merge	21	persister	persisters	persister			
+pgs	suspect_merge	suspect_merge	21	pg	pgs	pg			
+pharyngeals	homograph	homograph	21	pharyngeal	pharyngeal	pharyngeal			
+repressers	suspect_merge	suspect_merge	21	represser	repressers	represser			
+republicans	suspect_merge	suspect_merge	21	republican	republican	republican			
+slights	homograph	homograph	21	slight	slight	slights			
+sommers	homograph	homograph	21	sommer	sommers	sommers			
+spokes	homograph	homograph	21	spoke	spoke	spoke			
+spons	homograph	homograph	21	spon	spons	spons			
+wanders	homograph	homograph	21	wander	wander	wander			
+yas	homograph	homograph	21	ya	yas	ya			
+acs	suspect_merge	suspect_merge	20	ac	acs	ac			
+amps	suspect_merge	suspect_merge	20	amp	amp	amp			
+artes	homograph	homograph	20	arte	artes	artes			
+bmscs	homograph	homograph	20	bmsc	bmscs	bmsc			
+cannabinoids	homograph	homograph	20	cannabinoid	cannabinoid	cannabinoid			
+cbs	suspect_merge	suspect_merge	20	cb	cbs	cb			
+citationspermissionsreprints	suspect_merge	suspect_merge	20	citationspermissionsreprint	citationspermissionsreprints	citationspermissionsreprints			
+compacts	homograph	homograph	20	compact	compact	compacts			
+covaries	disagree	author	20	covarie	covary	covary	covary	covary	
+dts	suspect_merge	suspect_merge	20	dt	dts	dt			
+duns	suspect_merge	suspect_merge	20	dun	dun	duns			
+elisas	homograph	homograph	20	elisa	elisas	elisa			
+eoaes	homograph	homograph	20	eoae	eoaes	eoae			
+epistemics	homograph	homograph	20	epistemic	epistemics	epistemics			
+erotics	homograph	homograph	20	erotic	erotic	erotics			
+etchings	homograph	homograph	20	etching	etching	etching			
+favourites	homograph	homograph	20	favourite	favorite	favourite			
+ffts	homograph	homograph	20	fft	ffts	fft			
+firs	homograph	homograph	20	fir	fir	fir			
+freemen	homograph	homograph	20	freeman	freemen	freeman			
+gabors	homograph	homograph	20	gabor	gabors	gabor			
+gallows	homograph	homograph	20	gallow	gallows	gallows			
+herders	homograph	homograph	20	herder	herder	herder			
+iccs	suspect_merge	suspect_merge	20	icc	iccs	icc			
+ifs	suspect_merge	suspect_merge	20	if	ifs	if			
+manovas	homograph	homograph	20	manova	manovas	manova			
+mias	suspect_merge	suspect_merge	20	mia	mias	mia			
+militates	homograph	homograph	20	militate	militate	militate			
+neuropathologies	disagree	author	20	neuropathologie	neuropathology	neuropathology	neuropathology	neuropathology	
+neutrals	homograph	homograph	20	neutral	neutral	neutral			
+nonpatients	homograph	homograph	20	nonpatient	nonpatients	nonpatient			
+nscs	suspect_merge	suspect_merge	20	nsc	nscs	nsc			
+pdps	homograph	homograph	20	pdp	pdps	pdp			
+periphrases	disagree	author	20	periphrasis	periphrase	periphrasis	periphrasis	periphrasis	
+personals	homograph	homograph	20	personal	personal	personals			
+phylogenetics	homograph	homograph	20	phylogenetic	phylogenetics	phylogenetics			
+plms	suspect_merge	suspect_merge	20	plm	plms	plm			
+polytechnics	homograph	homograph	20	polytechnic	polytechnic	polytechnic			
+pses	homograph	homograph	20	ps	pses	pse			
+reflectives	homograph	homograph	20	reflective	reflectives	reflective			
+rps	suspect_merge	suspect_merge	20	rp	rps	rp			
+rses	suspect_merge	suspect_merge	20	rse	rses	rses			
+sas	suspect_merge	suspect_merge	20	sa	sas	sa			
+secs	homograph	homograph	20	sec	sec	sec			
+sitbs	homograph	homograph	20	sitb	sitbs	sitb			
+slts	homograph	homograph	20	slt	slts	slt			
+snaps	homograph	homograph	20	snap	snap	snap			
+stengers	suspect_merge	suspect_merge	20	stenger	stengers	stengers			
+subtheories	suspect_merge	suspect_merge	20	subtheorie	subtheories	subtheory			
+synaptoneurosomes	suspect_merge	suspect_merge	20	synaptoneurosome	synaptoneurosomes	synaptoneurosome			
+tds	suspect_merge	suspect_merge	20	td	tds	td			
+tps	suspect_merge	suspect_merge	20	tp	tps	tp			
+victors	homograph	homograph	20	victor	victor	victor			
+collaboratories	disagree	author	19	collaboratorie	collaboratory	collaboratory	collaboratory	collaboratory	
+soles	disagree	author	19	sol	sole	sole	sole	sole	
+sheaves	disagree	author	18	sheaf	sheave	sheaf	sheaf	sheaf	
+phenocopies	disagree	author	17	phenocopie	phenocopy	phenocopy	phenocopy	phenocopy	
+solidifies	disagree	author	17	solidifie	solidify	solidify	solidify	solidify	
+anastomoses	disagree	author	15	anastomosis	anastomose	anastomosis	anastomosis	anastomosis	
+developes	disagree	author	15	develop	develope	develop	develop	develop	
+discuses	disagree	author	15	discuse	discus	discuss	discus	discuss	
+hippies	disagree	author	15	hippy	hippie	hippie	hippie	hippie	
+hypothesises	disagree	author	15	hypothesis	hypothesize	hypothesize	hypothesize	hypothesize	
+preprocesses	disagree	author	15	preprocesse	preprocess	preprocesse	preprocess	preprocess	
+regexes	disagree	author	15	regexe	regex	regex	regex	regex	
+vases	disagree	author	15	vas	vase	vase	vase	vase	
+fortes	disagree	author	14	fortis	forte	forte	fortes	fortes	
+goodies	disagree	author	14	goody	goodie	goody	goody	goody	
+keypresses	disagree	author	14	keypresse	keypress	keypress	keypress	keypress	
+stepfamilies	disagree	author	14	stepfamilie	stepfamily	stepfamily	stepfamily	stepfamily	
+phalanges	disagree	author	13	phalanx	phalange	phalanx	phalanx	phalanx	
+amyloidoses	disagree	author	12	amyloidose	amyloidosis	amyloidosis	amyloidosis	amyloidosis	
+equivalencies	disagree	author	12	equivalencie	equivalency	equivalency	equivalency	equivalency	
+paralyses	disagree	author	12	paralysis	paralyze	paralysis	paralysis	paralysis	
+syringes	disagree	author	12	syrinx	syringe	syringe	syringe	syringe	
+coolies	disagree	author	11	cooly	coolie	coolie	coolie	coolie	
+extinguishes	disagree	author	11	extinguishe	extinguish	extinguish	extinguish	extinguish	
+incongruencies	disagree	author	11	incongruencie	incongruency	incongruency	incongruency	incongruency	
+leukodystrophies	disagree	author	11	leukodystrophie	leukodystrophy	leukodystrophy	leukodystrophy	leukodystrophy	
+monotherapies	disagree	author	11	monotherapie	monotherapy	monotherapy	monotherapy	monotherapy	
+caddies	disagree	tail	10	caddy	caddie	caddie			
+differencies	disagree	author	10	differencie	differency	difference	difference	difference	
+multispecies	disagree	author	10	multispecie	multispecy	multispecies	multispecies	multispecies	
+perishes	disagree	author	10	perishe	perish	perish	perish	perish	
+prefetches	disagree	author	10	prefetche	prefetch	prefetch	prefetch	prefetch	
+preoccupies	disagree	author	10	preoccupie	preoccupy	preoccupy	preoccupy	preoccupy	
+vires	disagree	author	10	vis	vire	vires	vires	vires	
+virtualities	disagree	author	10	virtualitie	virtuality	virtuality	virtuality	virtuality	
+dysfluencies	disagree	tail_sample	9	dysfluencie	dysfluency	dysfluency	dysfluency	dysfluency	
+interactivities	disagree	tail	9	interactivitie	interactivity	interactivity			
+megacities	disagree	tail	9	megacitie	megacity	megacity			
+polyneuropathies	disagree	tail	9	polyneuropathie	polyneuropathy	polyneuropathy			
+sequencies	disagree	tail	9	sequencie	sequency	sequence			
+smoothes	disagree	tail	9	smooth	smoothe	smooth			
+congruencies	disagree	tail	8	congruencie	congruency	congruency			
+cyberbullies	disagree	tail	8	cyberbullie	cyberbully	cyberbully			
+intraspecies	disagree	tail	8	intraspecie	intraspecy	intraspecies			
+junkies	disagree	tail	8	junky	junkie	junkie			
+mystifies	disagree	tail	8	mystifie	mystify	mystify			
+nonfluencies	disagree	tail	8	nonfluencie	nonfluency	nonfluency			
+optimisers	disagree	tail	8	optimiser	optimizers	optimiser			
+circumfixes	disagree	tail	7	circumfixe	circumfix	circumfix			
+infoboxes	disagree	tail_sample	7	infoboxe	infobox	infobox	infobox	infobox	
+interfixes	disagree	tail	7	interfixe	interfix	interfix			
+leges	disagree	tail	7	lex	lege	leges			
+loaves	disagree	tail	7	loaf	loave	loaf			
+prophesies	disagree	tail	7	prophesie	prophesy	prophecy			
+remixes	disagree	tail	7	remixe	remix	remix			
+waterbodies	disagree	tail	7	waterbodie	waterbody	waterbody			
+ancillaries	disagree	tail	6	ancillarie	ancillary	ancillary			
+checkboxes	disagree	tail	6	checkboxe	checkbox	checkbox			
+confixes	disagree	tail	6	confixe	confix	confix			
+determinacies	disagree	tail	6	determinacie	determinacy	determinacy			
+metaclasses	disagree	tail	6	metaclasse	metaclass	metaclass			
+multiliteracies	disagree	tail	6	multiliteracie	multiliteracy	multiliteracy			
+mycoses	disagree	tail	6	mycose	mycosis	mycosis			
+nannies	disagree	tail	6	nanny	nannie	nanny			
+pathophysiologies	disagree	tail	6	pathophysiologie	pathophysiology	pathophysiology			
+ramifies	disagree	tail	6	ramifie	ramify	ramify			
+ruses	disagree	tail	6	rus	ruse	ruse			
+simplexes	disagree	tail	6	simplexe	simplex	simplex			
+baddies	disagree	tail	5	baddie	baddy	baddie			
+cesses	disagree	tail	5	cesse	cess	cesses			
+colourings	disagree	tail	5	colouring	colorings	colouring			
+consequencies	disagree	tail	5	consequencie	consequency	consequence			
+furries	disagree	tail	5	furrie	furry	furry			
+gratifies	disagree	tail	5	gratifie	gratify	gratify			
+incommensurabilities	disagree	tail	5	incommensurabilitie	incommensurability	incommensurability			
+indicies	disagree	tail	5	indicie	indicy	index			
+midfrequencies	disagree	tail	5	midfrequencie	midfrequency	midfrequency			
+orthoses	disagree	tail	5	orthose	orthosis	orthosis			
+osmolalities	disagree	tail	5	osmolalitie	osmolality	osmolality			
+overexpresses	disagree	tail	5	overexpresse	overexpress	overexpress			
+plenaries	disagree	tail	5	plenarie	plenary	plenary			
+retries	disagree	tail	5	retrie	retry	retry			
+subassemblies	disagree	tail	5	subassemblie	subassembly	subassembly			
+symbioses	disagree	tail	5	symbiose	symbiosis	symbiosis			
+transliteracies	disagree	tail	5	transliteracie	transliteracy	transliteracy			
+axonopathies	disagree	tail_sample	4	axonopathie	axonopathy	axonopathy	axonopathy	axonopathy	
+commodifies	disagree	tail	4	commodifie	commodify	commodify			
+detectabilities	disagree	tail_sample	4	detectabilitie	detectability	detectability	detectability	detectability	
+deviancies	disagree	tail	4	deviancie	deviancy	deviancy			
+dialyses	disagree	tail	4	dialysis	dialyze	dialysis			
+exercies	disagree	tail	4	exercie	exercy	exercise			
+fasces	disagree	tail	4	fasce	fascis	fasces			
+fruitflies	disagree	tail	4	fruitflie	fruitfly	fruitfly			
+greenfinches	disagree	tail	4	greenfinche	greenfinch	greenfinch			
+gummies	disagree	tail	4	gummie	gummy	gummy			
+harries	disagree	tail	4	harrie	harry	harries			
+historicises	disagree	tail	4	historicise	historicizes	historicise			
+hybridities	disagree	tail	4	hybriditie	hybridity	hybridity			
+lyses	disagree	tail	4	lysis	lyse	lyses			
+morphospecies	disagree	tail	4	morphospecie	morphospecy	morphospecies			
+nondemocracies	disagree	tail	4	nondemocracie	nondemocracy	nondemocracy			
+orgies	disagree	tail	4	orgy	orgie	orgy			
+pareses	disagree	tail	4	parese	paresis	paresis			
+pathogeneses	disagree	tail	4	pathogenese	pathogenesis	pathogenesis			
+polyominoes	disagree	tail	4	polyominoe	polyomino	polyomino			
+quickies	disagree	tail	4	quicky	quickie	quickie			
+scepticisms	disagree	tail	4	scepticism	skepticism	scepticism			
+shies	disagree	tail	4	shy	shie	shy			
+totes	disagree	tail	4	tot	tote	totes			
+visualisers	disagree	tail	4	visualiser	visualizers	visualiser			
+backstories	disagree	tail	3	backstorie	backstory	backstory			
+bathes	disagree	tail	3	bath	bathe	bathe			
+bioprocesses	disagree	tail	3	bioprocesse	bioprocess	bioprocess			
+biospecies	disagree	tail	3	biospecie	biospecy	biospecies			
+chilies	disagree	tail	3	chilie	chili	chili			
+ciencies	disagree	tail	3	ciencie	ciency	ciencies			
+codeswitches	disagree	tail	3	codeswitche	codeswitch	codeswitch			
+connexes	disagree	tail	3	connexe	connex	connexes			
+controllabilities	disagree	tail	3	controllabilitie	controllability	controllability			
+cryptanalyses	disagree	tail	3	cryptanalyse	cryptanalysis	cryptanalysis			
+detoxifies	disagree	tail	3	detoxifie	detoxify	detoxify			
+discrepencies	disagree	tail	3	discrepencie	discrepency	discrepancy			
+ecchymoses	disagree	tail	3	ecchymosis	ecchymose	ecchymosis			
+envies	disagree	tail	3	envy	envie	envy			
+examplifies	disagree	tail	3	examplifie	examplify	exemplify			
+hardcopies	disagree	tail	3	hardcopie	hardcopy	hardcopy			
+learning-disabilities	hyphenated	hyphen_sample	3	learning-disabilitie	learning-disability	learning-disability			
+muxes	disagree	tail	3	muxe	mux	muxe			
+secondes	disagree	tail	3	second	seconde	secondes			
+situses	disagree	tail	3	situse	situs	situs			
+stases	disagree	tail	3	stase	stasis	stasis			
+subcompetencies	disagree	tail	3	subcompetencie	subcompetency	subcompetency			
+subpolicies	disagree	tail_sample	3	subpolicie	subpolicy	subpolicy	subpolicy	subpolicy	
+superficies	disagree	tail	3	superficie	superficy	superficies			
+tendancies	disagree	tail	3	tendancie	tendancy	tendency			
+unconformities	disagree	tail	3	unconformitie	unconformity	unconformity			
+wades	disagree	tail	3	wad	wade	wade			
+zoonoses	disagree	tail	3	zoonosis	zoonose	zoonosis			
+acidifies	disagree	tail	2	acidifie	acidify	acidify			
+alterities	disagree	tail	2	alteritie	alterity	alterity			
+anchoresses	disagree	tail	2	anchoresse	anchoress	anchoress			
+axotomies	disagree	tail	2	axotomie	axotomy	axotomy			
+bogies	disagree	tail	2	bogy	bogie	bogie			
+calibres	disagree	tail	2	calibre	caliber	calibre			
+claimes	disagree	tail	2	claim	claime	claim			
+complexifies	disagree	tail	2	complexifie	complexify	complexify			
+confraternities	disagree	tail	2	confraternitie	confraternity	confraternity			
+contigencies	disagree	tail	2	contigencie	contigency	contingency			
+coronaviruses	disagree	tail	2	coronaviruse	coronavirus	coronavirus			
+correspondencies	disagree	tail	2	correspondencie	correspondency	correspondence			
+countertendencies	disagree	tail	2	countertendencie	countertendency	countertendency			
+criticies	disagree	tail	2	criticie	criticy	criticise			
+curries	disagree	tail	2	curry	currie	curry			
+demultiplexes	disagree	tail	2	demultiplexe	demultiplex	demultiplex			
+dependancies	disagree	tail	2	dependancie	dependancy	dependency			
+deterritorialises	disagree	tail	2	deterritorialise	deterritorializes	deterritorialise			
+disturbancies	disagree	tail	2	disturbancie	disturbancy	disturbance			
+diureses	disagree	tail_sample	2	diurese	diuresis	diuresis	diuresis	diuresis	
+dolores	disagree	tail_sample	2	dolore	dolor	dolores	dolores	dolores	
+dominancies	disagree	tail	2	dominancie	dominancy	dominancy			
+e-territories	hyphenated	hyphen_sample	2	e-territorie	e-territory	e-territory			
+ecstacies	disagree	tail	2	ecstacie	ecstacy	ecstasy			
+edifies	disagree	tail	2	edifie	edify	edify			
+eigenfrequencies	disagree	tail	2	eigenfrequencie	eigenfrequency	eigenfrequency			
+exclusivities	disagree	tail	2	exclusivitie	exclusivity	exclusivity			
+footswitches	disagree	tail	2	footswitche	footswitch	footswitch			
+formantfrequencies	disagree	tail	2	formantfrequencie	formantfrequency	formantfrequencies			
+freqencies	disagree	tail	2	freqencie	freqency	frequency			
+guaranties	disagree	tail	2	guarantie	guaranty	guarantee			
+harasses	disagree	tail	2	harasse	harass	harass			
+herpesviruses	disagree	tail_sample	2	herpesviruse	herpesvirus	herpesvirus	herpesvirus	herpesvirus	
+herstories	disagree	tail	2	herstorie	herstory	herstory			
+histopathologies	disagree	tail	2	histopathologie	histopathology	histopathology			
+hyperrealities	disagree	tail	2	hyperrealitie	hyperreality	hyperreality			
+inboxes	disagree	tail	2	inboxe	inbox	inbox			
+incompasses	disagree	tail	2	incompasse	incompass	encompass			
+indivisibilities	disagree	tail_sample	2	indivisibilitie	indivisibility	indivisibility	indivisibility	indivisibility	
+interconnectivities	disagree	tail	2	interconnectivitie	interconnectivity	interconnectivity			
+intercrosses	disagree	tail	2	intercrosse	intercross	intercross			
+lavishes	disagree	tail	2	lavishe	lavish	lavish			
+lefties	disagree	tail	2	lefty	leftie	lefty			
+lentiviruses	disagree	tail	2	lentiviruse	lentivirus	lentivirus			
+metapsychologies	disagree	tail	2	metapsychologie	metapsychology	metapsychology			
+micro-properties	hyphenated	hyphen_sample	2	micro-propertie	micro-property	micro-property			
+microswitches	disagree	tail	2	microswitche	microswitch	microswitch			
+misclassifies	disagree	tail	2	misclassifie	misclassify	misclassify			
+mucopolysaccharidoses	disagree	tail	2	mucopolysaccharidose	mucopolysaccharidosis	mucopolysaccharidosis			
+multimodalities	disagree	tail	2	multimodalitie	multimodality	multimodality			
+ossifies	disagree	tail	2	ossifie	ossify	ossify			
+ostriches	disagree	tail	2	ostriche	ostrich	ostrich			
+pixies	disagree	tail	2	pixy	pixie	pixie			
+prosopographies	disagree	tail	2	prosopographie	prosopography	prosopography			
+raves	disagree	tail	2	raf	rave	rave			
+s5-theses	hyphenated	hyphen_sample	2	s5-these	s5-thesis	s5-thesis			
+schistosomiases	disagree	tail	2	schistosomiase	schistosomiasis	schistosomiasis			
+scries	disagree	tail	2	scrie	scry	scries			
+sub-dictionaries	hyphenated	hyphen_sample	2	sub-dictionarie	sub-dictionary	sub-dictionary			
+syllabifies	disagree	tail	2	syllabifie	syllabify	syllabify			
+tarries	disagree	tail	2	tarrie	tarry	tarry			
+tinges	disagree	tail	2	ting	tinge	tinge			
+tyros	disagree	tail	2	tiro	tyro	tyro			
+vouches	disagree	tail	2	vouche	vouch	vouch			
+-dependencies	hyphenated	hyphen_sample	1	-dependencie	-dependency	-dependency			
+-fluxes	hyphenated	hyphen_sample	1	-fluxe	-flux	flux			
+-furnishes	hyphenated	hyphen_sample	1	-furnishe	-furnish	furnish			
+absorbancies	disagree	tail	1	absorbancie	absorbancy	absorbancy			
+adzes	disagree	tail	1	adz	adze	adze			
+aeries	disagree	tail_sample	1	aery	aerie	series	aeries	aeries	
+agcncies	disagree	tail	1	agcncie	agcncy	agcncies			
+akses	disagree	tail	1	akse	aks	akses			
+allegiencies	disagree	tail_sample	1	allegiencie	allegiency	allegiance	allegiance	allegiance	
+animacies	disagree	tail	1	animacie	animacy	animacy			
+anomies	disagree	tail	1	anomy	anomie	anomie			
+antitheodicies	disagree	tail	1	antitheodicie	antitheodicy	antitheodicy			
+appendicies	disagree	tail	1	appendicie	appendicy	appendix			
+asgenusandspecies	disagree	tail	1	asgenusandspecie	asgenusandspecy	asgenusandspecies			
+askes	disagree	tail	1	ask	aske	ask			
+associativities	disagree	tail	1	associativitie	associativity	associativity			
+auspicies	disagree	tail	1	auspicie	auspicy	auspicies			
+baculoviruses	disagree	tail	1	baculoviruse	baculovirus	baculovirus			
+bandpasses	disagree	tail	1	bandpasse	bandpass	bandpass			
+beatboxes	disagree	tail	1	beatboxe	beatbox	beatbox			
+biggies	disagree	tail	1	biggie	biggy	biggie			
+biocompatibilities	disagree	tail	1	biocompatibilitie	biocompatibility	biocompatibility			
+biofacies	disagree	tail	1	biofacie	biofacy	biofacies			
+bronchoscopies	disagree	tail	1	bronchoscopie	bronchoscopy	bronchoscopy			
+burocracies	disagree	tail	1	burocracie	burocracy	bureaucracy			
+casses	disagree	tail	1	casse	cass	casses			
+catharses	disagree	tail	1	cathars	catharsis	catharsis			
+chemosensitivities	disagree	tail	1	chemosensitivitie	chemosensitivity	chemosensitivity			
+coefficiencies	disagree	tail	1	coefficiencie	coefficiency	coefficient			
+coexpresses	disagree	tail	1	coexpresse	coexpress	coexpress			
+collegialities	disagree	tail	1	collegialitie	collegiality	collegiality			
+compentencies	disagree	tail	1	compentencie	compentency	competency			
+complicacies	disagree	tail	1	complicacie	complicacy	complicacy			
+confirmes	disagree	tail	1	confirm	confirme	confirm			
+conflict-intensifies	hyphenated	hyphen_sample	1	conflict-intensifie	conflict-intensify	conflict-intensify			
+conscies	disagree	tail	1	conscie	conscy	conscies			
+consequecies	disagree	tail	1	consequecie	consequecy	consequence			
+consignifies	disagree	tail	1	consignifie	consignify	consignify			
+contengencies	disagree	tail	1	contengencie	contengency	contingency			
+contributories	disagree	tail	1	contributorie	contributory	contributory			
+conveniencies	disagree	tail	1	conveniencie	conveniency	conveniency			
+copurifies	disagree	tail	1	copurifie	copurify	copurify			
+corticies	disagree	tail	1	corticie	corticy	cortex			
+counterexemplifies	disagree	tail	1	counterexemplifie	counterexemplify	counterexemplify			
+cowries	disagree	tail	1	cowry	cowrie	cowrie			
+crossmatches	disagree	tail	1	crossmatche	crossmatch	crossmatch			
+cystectomies	disagree	tail	1	cystectomie	cystectomy	cystectomy			
+cystoscopies	disagree	tail	1	cystoscopie	cystoscopy	cystoscopy			
+dallies	disagree	tail	1	dallie	dally	daily			
+debouches	disagree	tail	1	debouch	debouche	debouch			
+deceivethemselveswithfallacies	disagree	tail	1	deceivethemselveswithfallacie	deceivethemselveswithfallacy	deceivethemselveswithfallacies			
+deciencies	disagree	tail	1	deciencie	deciency	deficiency			
+defficiencies	disagree	tail	1	defficiencie	defficiency	deficiency			
+deficencies	disagree	tail	1	deficencie	deficency	deficiency			
+dehistoricises	disagree	tail	1	dehistoricise	dehistoricizes	dehistoricise			
+deifies	disagree	tail	1	deifie	deify	deify			
+densifies	disagree	tail	1	densifie	densify	densify			
+depeadencies	disagree	tail	1	depeadencie	depeadency	dependency			
+dependecies	disagree	tail	1	dependecie	dependecy	dependency			
+desertifies	disagree	tail	1	desertifie	desertify	desertify			
+digitalpolicies	disagree	tail	1	digitalpolicie	digitalpolicy	digitalpolicies			
+disceprancies	disagree	tail	1	disceprancie	disceprancy	discrepancy			
+disfiuencies	disagree	tail	1	disfiuencie	disfiuency	disfluency			
+diyergencies	disagree	tail	1	diyergencie	diyergency	divergence			
+doxes	disagree	tail	1	doxe	dox	doxes			
+duopolies	disagree	tail	1	duopolie	duopoly	duopoly			
+dwrepancies	disagree	tail	1	dwrepancie	dwrepancy	dwrepancies			
+dysfunctionalities	disagree	tail	1	dysfunctionalitie	dysfunctionality	dysfunctionality			
+dysmorphicfacies	disagree	tail	1	dysmorphicfacie	dysmorphicfacy	dysmorphicfacies			
+e-accessories	hyphenated	hyphen_sample	1	e-accessorie	e-accessory	e-accessory			
+ecurrencies	disagree	tail	1	ecurrencie	ecurrency	ecurrency			
+eeg-analyses	hyphenated	hyphen_sample	1	eeg-analyse	eeg-analysis	eeg-analysis			
+efflciencies	disagree	tail	1	efflciencie	efflciency	efficiency			
+elegancies	disagree	tail	1	elegancie	elegancy	elegancy			
+embryoes	disagree	tail	1	embryoe	embryo	embryo			
+emissivities	disagree	tail_sample	1	emissivitie	emissivity	emissivity	emissivity	emissivity	
+esophagogastroduodenoscopies	disagree	tail	1	esophagogastroduodenoscopie	esophagogastroduodenoscopy	esophagogastroduodenoscopy			
+especies	disagree	tail	1	especie	especy	especies			
+espies	disagree	tail	1	espie	espy	espy			
+euspecies	disagree	tail	1	euspecie	euspecy	euspecies			
+ex-spies	hyphenated	hyphen_sample	1	ex-spie	ex-spy	ex-spy			
+examineinconsistencies	disagree	tail_sample	1	examineinconsistencie	examineinconsistency	examineinconsistency	examineinconsistencies	examineinconsistencies	
+eyries	disagree	tail	1	eyry	eyrie	eyrie			
+falacies	disagree	tail	1	falacie	falacy	fallacy			
+farmacies	disagree	tail	1	farmacie	farmacy	pharmacy			
+ficuses	disagree	tail	1	ficuse	ficus	focus			
+frecuencies	disagree	tail	1	frecuencie	frecuency	frequency			
+frequecies	disagree	tail	1	frequecie	frequecy	frequency			
+frequeucies	disagree	tail	1	frequeucie	frequeucy	frequency			
+freuqencies	disagree	tail	1	freuqencie	freuqency	frequency			
+fucuses	disagree	tail	1	fucuse	fucus	focus			
+future-selves	hyphenated	hyphen_sample	1	future-selve	future-self	future-self			
+gentrifies	disagree	tail	1	gentrifie	gentrify	gentrify			
+gnomologies	disagree	tail	1	gnomologie	gnomology	gnomology			
+goal-properties	hyphenated	hyphen_sample	1	goal-propertie	goal-property	goal-property			
+granicies	disagree	tail	1	granicie	granicy	granicies			
+grannies	disagree	tail	1	granny	grannie	granny			
+hauntologies	disagree	tail	1	hauntologie	hauntology	hauntology			
+havepolicies	disagree	tail	1	havepolicie	havepolicy	havepolicies			
+herniorrhaphies	disagree	tail	1	herniorrhaphie	herniorrhaphy	herniorrhaphy			
+hoverflies	disagree	tail	1	hoverflie	hoverfly	hoverfly			
+iconicities	disagree	tail	1	iconicitie	iconicity	iconicity			
+identifiabilities	disagree	tail_sample	1	identifiabilitie	identifiability	identifiability	identifiability	identifiability	
+ideocyncracies	disagree	tail	1	ideocyncracie	ideocyncracy	idiosyncrasy			
+image-complexes	hyphenated	hyphen_sample	1	image-complexe	image-complex	image-complex			
+inconsisencies	disagree	tail	1	inconsisencie	inconsisency	inconsistency			
+inconveniencies	disagree	tail	1	inconveniencie	inconveniency	inconvenience			
+incrosses	disagree	tail	1	incrosse	incross	incross			
+indeterminancies	disagree	tail	1	indeterminancie	indeterminancy	indeterminacy			
+india-countries	hyphenated	hyphen_sample	1	india-countrie	india-country	india-country			
+indulgencies	disagree	tail	1	indulgencie	indulgency	indulgency			
+ineciencies	disagree	tail	1	ineciencie	ineciency	ineciencies			
+influencies	disagree	tail	1	influencie	influency	influence			
+innacuracies	disagree	tail	1	innacuracie	innacuracy	inaccuracy			
+innaruracies	disagree	tail	1	innaruracie	innaruracy	inaccuracy			
+interdependecies	disagree	tail	1	interdependecie	interdependecy	interdependency			
+interesses	disagree	tail	1	interesse	interess	interesses			
+intergrated-activities	hyphenated	hyphen_sample	1	intergrated-activitie	intergrated-activity	intergrated-activity			
+intermeshes	disagree	tail	1	intermeshe	intermesh	intermesh			
+interminancies	disagree	tail	1	interminancie	interminancy	indeterminacy			
+intracacies	disagree	tail	1	intracacie	intracacy	intricacy			
+intricascies	disagree	tail	1	intricascie	intricascy	intricacy			
+invariancies	disagree	tail	1	invariancie	invariancy	invariancy			
+irrelevaricies	disagree	tail	1	irrelevaricie	irrelevaricy	irrelevaricies			
+islamises	disagree	tail	1	islamise	islamizes	islamise			
+kiddies	disagree	tail	1	kiddy	kiddie	kiddie			
+knowing-processes	hyphenated	hyphen_sample	1	knowing-processe	knowing-process	knowing-process			
+kurtoses	disagree	tail	1	kurtose	kurtosis	kurtosis			
+l-complexes	hyphenated	hyphen_sample	1	l-complexe	l-complex	l-complex			
+lalatencies	disagree	tail	1	lalatencie	lalatency	lalatencies			
+lalencies	disagree	tail_sample	1	lalencie	lalency	latency	lalencies	lalencies	
+lambastes	disagree	tail	1	lambast	lambaste	lambaste			
+latncies	disagree	tail	1	latncie	latncy	latncies			
+life-expectancies	hyphenated	hyphen_sample	1	life-expectancie	life-expectancy	life-expectancy			
+linguodidacticalcompetencies	disagree	tail	1	linguodidacticalcompetencie	linguodidacticalcompetency	linguodidacticalcompetencies			
+liquefies	disagree	tail	1	liquefie	liquefy	liquefy			
+lithofacies	disagree	tail	1	lithofacie	lithofacy	lithofacies			
+logfrequencies	disagree	tail	1	logfrequencie	logfrequency	logfrequencies			
+luxes	disagree	tail	1	lux	luxe	lux			
+martyrologies	disagree	tail	1	martyrologie	martyrology	martyrology			
+match-boxes	hyphenated	hyphen_sample	1	match-boxe	match-box	match-box			
+matricies	disagree	tail_sample	1	matricie	matricy	matrix	matrix	matrix	
+medlies	disagree	tail_sample	1	medlie	medly	medley	medley	medley	
+megatendencies	disagree	tail	1	megatendencie	megatendency	megatendency			
+message-facilities	hyphenated	hyphen_sample	1	message-facilitie	message-facility	message-facility			
+metacompetencies	disagree	tail	1	metacompetencie	metacompetency	metacompetency			
+metatheologies	disagree	tail	1	metatheologie	metatheology	metatheology			
+microcavities	disagree	tail	1	microcavitie	microcavity	microcavity			
+microlenses	disagree	tail	1	microlense	microlens	microlens			
+miscarries	disagree	tail	1	miscarrie	miscarry	miscarry			
+mistifies	disagree	tail	1	mistifie	mistify	mystify			
+monoiodospecies	disagree	tail	1	monoiodospecie	monoiodospecy	monoiodospecies			
+morphophonologies	disagree	tail	1	morphophonologie	morphophonology	morphophonology			
+mutexes	disagree	tail	1	mutexe	mutex	mutex			
+neocortecies	disagree	tail	1	neocortecie	neocortecy	neocortex			
+neurotoxicities	disagree	tail	1	neurotoxicitie	neurotoxicity	neurotoxicity			
+newdependencies	disagree	tail	1	newdependencie	newdependency	newdependencies			
+noeses	disagree	tail	1	noese	noesis	noesis			
+nondeterminacies	disagree	tail	1	nondeterminacie	nondeterminacy	nondeterminacy			
+nonspecies	disagree	tail	1	nonspecie	nonspecy	nonspecies			
+nystagmuses	disagree	tail	1	nystagmuse	nystagmus	nystagmus			
+onknownfrequencies	disagree	tail_sample	1	onknownfrequencie	onknownfrequency	onknownfrequency	onknownfrequencies	onknownfrequencies	
+ontotheologies	disagree	tail_sample	1	ontotheologie	ontotheology	ontotheology	ontotheology	ontotheology	
+opacifies	disagree	tail_sample	1	opacifie	opacify	opacify	opacify	opacify	
+out-patches	hyphenated	hyphen_sample	1	out-patche	out-patch	out-patch			
+outcrosses	disagree	tail_sample	1	outcrosse	outcross	outcross	outcross	outcross	
+overemphases	disagree	tail	1	overemphase	overemphasis	overemphasis			
+overgoes	disagree	tail	1	overgoe	overgo	overgo			
+partocracies	disagree	tail	1	partocracie	partocracy	partocracy			
+physiopathologies	disagree	tail	1	physiopathologie	physiopathology	physiopathology			
+platonises	disagree	tail	1	platonise	platonizes	platonise			
+playes	disagree	tail	1	play	playe	play			
+pneumatologies	disagree	tail	1	pneumatologie	pneumatology	pneumatology			
+polarizabilities	disagree	tail	1	polarizabilitie	polarizability	polarizability			
+practicies	disagree	tail	1	practicie	practicy	practice			
+praxeologies	disagree	tail	1	praxeologie	praxeology	praxeology			
+precises	disagree	tail_sample	1	precis	precise	precise	precise	precise	
+predictedlecturesaccompaniedbythecorrespondingfrequencies	disagree	tail	1	predictedlecturesaccompaniedbythecorrespondingfrequencie	predictedlecturesaccompaniedbythecorrespondingfrequency	predictedlecturesaccompaniedbythecorrespondingfrequencies			
+prejudicies	disagree	tail_sample	1	prejudicie	prejudicy	prejudice	prejudice	prejudice	
+premalignancies	disagree	tail_sample	1	premalignancie	premalignancy	premalignancy	premalignancy	premalignancy	
+prespecifies	disagree	tail	1	prespecifie	prespecify	prespecify			
+proclaimes	disagree	tail	1	proclaim	proclaime	proclaim			
+prophetesses	disagree	tail	1	prophetesse	prophetess	prophetess			
+prophylaxes	disagree	tail_sample	1	prophylaxe	prophylaxis	prophylaxis	prophylaxis	prophylaxis	
+propositionalindependencies	disagree	tail_sample	1	propositionalindependencie	propositionalindependency	propositionalindependency	propositionalindependencies	propositionalindependencies	
+proselytisers	disagree	tail	1	proselytiser	proselytizers	proselytiser			
+pseudospecies	disagree	tail	1	pseudospecie	pseudospecy	pseudospecies			
+psychobiographies	disagree	tail	1	psychobiographie	psychobiography	psychobiography			
+psychotechnologies	disagree	tail	1	psychotechnologie	psychotechnology	psychotechnology			
+pulicies	disagree	tail	1	pulicie	pulicy	policy			
+radiosyntheses	disagree	tail	1	radiosynthese	radiosynthesis	radiosynthesis			
+rases	disagree	tail	1	ras	rase	rases			
+readdresses	disagree	tail	1	readdresse	readdress	readdress			
+reclassifies	disagree	tail	1	reclassifie	reclassify	reclassify			
+recrosses	disagree	tail	1	recrosse	recross	recross			
+regardes	disagree	tail	1	regard	regarde	regard			
+regnancies	disagree	tail	1	regnancie	regnancy	regnancies			
+rehumanises	disagree	tail	1	rehumanise	rehumanizes	rehumanise			
+reidentifies	disagree	tail	1	reidentifie	reidentify	reidentify			
+relaunches	disagree	tail	1	relaunche	relaunch	relaunch			
+republishes	disagree	tail	1	republishe	republish	republish			
+resignifies	disagree	tail	1	resignifie	resignify	resignify			
+respecifies	disagree	tail	1	respecifie	respecify	respecify			
+reterritorialises	disagree	tail	1	reterritorialise	reterritorializes	reterritorialise			
+revolutionaryconspiracies	disagree	tail	1	revolutionaryconspiracie	revolutionaryconspiracy	revolutionaryconspiracies			
+robustifies	disagree	tail_sample	1	robustifie	robustify	robustify	robustify	robustify	
+roughnesses	disagree	tail	1	roughnesse	roughness	roughness			
+sacralises	disagree	tail	1	sacralise	sacralizes	sacralise			
+saltmarshes	disagree	tail_sample	1	saltmarshe	saltmarsh	saltmarsh	saltmarsh	saltmarsh	
+scenographies	disagree	tail	1	scenographie	scenography	scenography			
+scleroses	disagree	tail	1	sclerosis	sclerose	sclerosis			
+score-classes	hyphenated	hyphen_sample	1	score-classe	score-class	score-class			
+scrupulosities	disagree	tail_sample	1	scrupulositie	scrupulosity	scrupulosity	scrupulosity	scrupulosity	
+seasonalities	disagree	tail	1	seasonalitie	seasonality	seasonality			
+self-copies	hyphenated	hyphen_sample	1	self-copie	self-copy	self-copy			
+servo-processes	hyphenated	hyphen_sample	1	servo-processe	servo-process	servo-process			
+significantinefficiencies	disagree	tail	1	significantinefficiencie	significantinefficiency	significantinefficiencies			
+smarties	disagree	tail	1	smartie	smarty	smarty			
+sociomatricies	disagree	tail	1	sociomatricie	sociomatricy	sociomatrix			
+sparsifies	disagree	tail	1	sparsifie	sparsify	sparsify			
+stentencies	disagree	tail	1	stentencie	stentency	sentence			
+stereochemistries	disagree	tail	1	stereochemistrie	stereochemistry	stereochemistry			
+stratecies	disagree	tail	1	stratecie	stratecy	strategy			
+sub-selves	hyphenated	hyphen_sample	1	sub-selve	sub-self	sub-self			
+subclassifies	disagree	tail	1	subclassifie	subclassify	subclassify			
+subfixes	disagree	tail	1	subfixe	subfix	suffix			
+subfrequencies	disagree	tail	1	subfrequencie	subfrequency	subfrequency			
+super-classes	hyphenated	hyphen_sample	1	super-classe	super-class	super-class			
+superfamilies	disagree	tail	1	superfamilie	superfamily	superfamily			
+surrogacies	disagree	tail	1	surrogacie	surrogacy	surrogacy			
+susses	disagree	tail	1	susse	suss	susses			
+symptomologies	disagree	tail	1	symptomologie	symptomology	symptomology			
+technopolicies	disagree	tail_sample	1	technopolicie	technopolicy	technopolicy	technopolicy	technopolicy	
+tendercies	disagree	tail	1	tendercie	tendercy	tendency			
+textureinconsistencies	disagree	tail	1	textureinconsistencie	textureinconsistency	textureinconsistencies			
+thermostabilities	disagree	tail	1	thermostabilitie	thermostability	thermostability			
+theterrorpolicies	disagree	tail	1	theterrorpolicie	theterrorpolicy	theterrorpolicies			
+they-identities	hyphenated	hyphen_sample	1	they-identitie	they-identity	they-identity			
+timeboxes	disagree	tail	1	timeboxe	timebox	timebox			
+trainingpolicies	disagree	tail	1	trainingpolicie	trainingpolicy	trainingpolicies			
+translations-with-commentaries	hyphenated	hyphen_sample	1	translations-with-commentarie	translations-with-commentary	translation-with-commentary			
+transmissibilities	disagree	tail	1	transmissibilitie	transmissibility	transmissibility			
+trollies	disagree	tail	1	trollie	trolly	trolley			
+underapplies	disagree	tail	1	underapplie	underapply	underapply			
+underemphasises	disagree	tail	1	underemphasise	underemphasizes	underemphasise			
+undersupplies	disagree	tail	1	undersupplie	undersupply	undersupply			
+unlatches	disagree	tail	1	unlatche	unlatch	unlatch			
+unmixes	disagree	tail	1	unmixe	unmix	unmix			
+viscoelasticities	disagree	tail	1	viscoelasticitie	viscoelasticity	viscoelasticity			
+waterlilies	disagree	tail	1	waterlilie	waterlily	waterlily			
+zndancies	disagree	tail	1	zndancie	zndancy	zndancies			

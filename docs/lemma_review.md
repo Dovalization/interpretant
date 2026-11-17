@@ -21,7 +21,8 @@ with the voted lemma map as the tool that finds them. Forms with at least 20 use
 Two findings came with the list:
 
 - **The overrides were not applied.** The thin static view takes spaCy's lemma alone, so it writes
-  *datum* for *data* (139,839 uses) and *medium* for the target *media* (57,608). The override file
+  *datum* for *data* (139,839 uses) and *medium* for *media* (57,608), merging the mass media into
+  the target word *medium*. The override file
   carries into the exceptions file, so these are fixed when the view is rebuilt with the
   exceptions (3.6).
 - **Auxiliaries were lemmatised** (*is* → *be*, *has* → *have*; 1.47 million tokens), against 3.2.
@@ -109,9 +110,24 @@ the second look showed a difference, and answered the 50 calls.
   the author's five overrides on the calls kept a plural apart from a mostly adjectival singular
   (*blacks*, *whites*, *normals*, *hypnotics*); the agents' other merges of that shape stand as
   they decided.
-- **The untested tail.** No consequence was registered for a failed tail check. The 359 untested
-  `disagree` forms (804 tokens, at most 10 uses each) are judged by the agents as above (two
-  Sonnet judges, the Opus judge on their differences), now all with the sentence on keeping junk,
-  since the agents were right on 25 of the 30 drawn and spaCy on none.
+- **The untested tail.** The agenda's consequence of a failed tail check is that more forms are
+  reviewed (3.3). All 359 untested `disagree` forms (804 tokens, at most 10 uses each) are
+  reviewed by the agents as above (two Sonnet judges, the Opus judge on their differences), now
+  all with the sentence on keeping junk, since the agents were right on 25 of the 30 drawn and
+  spaCy on none. Their contexts come from `lemma_review_list.py --tail`, drawn with their own
+  seed so every other form's contexts are unchanged (checked: 2,436 of 2,436 identical).
 
-To be completed: the follow-up review's figures, the tail's verdicts and the exceptions file.
+### The tail and the exceptions file
+
+- **The tail.** The two Sonnet judges agree on 349 of the 359 forms (97.2%); the Opus judge
+  settled the other 10. The agents give spaCy's lemma for 39, the voted map's for 204, keep the
+  form for 53 and give another lemma for 63.
+- **The record.** Every judgement is in `curated/lemma_review_judgements.tsv`, one row per judged
+  form (1,576): spaCy's and the voted map's lemmas, the agents' final lemma and the author's blind,
+  final and call answers.
+- **The exceptions file.** `curated/lemma_exceptions.tsv`, built by
+  `scripts/evidence/lemma_exceptions.py`, holds 1,966 forms: 1,091 by the hyphenated rule, 570 by
+  the agents (250 suspects and homographs, 320 in the tail), 181 from the override file (all but
+  *goes*), 105 by the author's final answers and 19 by the author's calls; 485 keep their form.
+  No target word is mapped to another word, and no exception merges a form into a target word.
+  The check on spaCy's own lemmas of the target words runs on the rebuilt view (3.6).
