@@ -15,8 +15,9 @@ From the lemma review (`docs/lemma_review.md`), each form takes, in this order o
 
 A form is written only when its lemma differs from spaCy's, except the override file's forms,
 which are all written as the project's policy list. The lemma is spelled out even when it is the
-form itself. Each entry names the reading it applies to (`NNS`, `VBZ`, or empty for any): the
-rule's plural nouns, and each judged form as the judges saw it. The build fails if a target word
+form itself. Each entry names the reading it applies to (`NNS` or `VBZ`): the override file's
+forms and the rule's as plural nouns (every override form is read mostly as one; *goes*, the only
+verb, is not carried), and each judged form as the judges saw it. The build fails if a target word
 would be mapped to another word, and it reports every earlier answer the rule changes.
 
 Usage, from the repository root: `python scripts/evidence/lemma_exceptions.py REVIEW_LIST.parquet
@@ -50,7 +51,7 @@ ADJECTIVE_SHARE = 0.5
 HEADER = """\
 # The static view's lemma exceptions (docs/decision_agenda.md 3.2, 3.3; docs/lemma_review.md).
 # form<TAB>lemma<TAB>tag<TAB>source; the lemma is spelled out even when it is the form itself;
-# the tag is the reading the entry applies to (NNS, VBZ, or empty for any).
+# the tag is the reading the entry applies to (NNS or VBZ).
 # Sources: override (data/lemma_overrides.tsv), adjective_rule (a plural whose singular is mostly
 # an adjective), author (the author's final answer), author_call (the author's answer on a call),
 # agents (the agent judges), hyphen_rule (the rejoined last segment).
@@ -109,7 +110,7 @@ def exceptions(
 ) -> dict[str, Entry]:
     """Each form's exception, by the precedence in the module docstring."""
     result = {
-        form: Entry(lemma or form, "", "override")
+        form: Entry(lemma or form, "NNS", "override")
         for form, lemma in read_overrides(OVERRIDES).items()
         if form not in NOT_CARRIED
     }

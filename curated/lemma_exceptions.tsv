@@ -1,6 +1,6 @@
 # The static view's lemma exceptions (docs/decision_agenda.md 3.2, 3.3; docs/lemma_review.md).
 # form<TAB>lemma<TAB>tag<TAB>source; the lemma is spelled out even when it is the form itself;
-# the tag is the reading the entry applies to (NNS, VBZ, or empty for any).
+# the tag is the reading the entry applies to (NNS or VBZ).
 # Sources: override (data/lemma_overrides.tsv), adjective_rule (a plural whose singular is mostly
 # an adjective), author (the author's final answer), author_call (the author's answer on a call),
 # agents (the agent judges), hyphen_rule (the rejoined last segment).
@@ -65,11 +65,11 @@ accidentals	accidentals	NNS	adjective_rule
 accumbens	accumbens	NNS	author_call
 accurates	accurates	NNS	adjective_rule
 accusatives	accusatives	NNS	adjective_rule
-achilles	achilles		override
+achilles	achilles	NNS	override
 acidifies	acidify	NNS	agents
 acidosis	acidosis	NNS	agents
-acoustics	acoustics		override
-acrobatics	acrobatics		override
+acoustics	acoustics	NNS	override
+acrobatics	acrobatics	NNS	override
 across-countries	across-country	NNS	hyphen_rule
 action-classes	action-class	NNS	hyphen_rule
 action-possibilities	action-possibility	NNS	hyphen_rule
@@ -98,9 +98,9 @@ adversatives	adversatives	NNS	adjective_rule
 adzes	adze	NNS	agents
 aerials	aerials	NNS	adjective_rule
 aeries	aeries	NNS	author
-aerodynamics	aerodynamics		override
+aerodynamics	aerodynamics	NNS	override
 aeronautics	aeronautics	NNS	agents
-aesthetics	aesthetics		override
+aesthetics	aesthetics	NNS	override
 affirmatives	affirmatives	NNS	adjective_rule
 afghans	afghans	NNS	adjective_rule
 afraids	afraids	NNS	adjective_rule
@@ -150,7 +150,7 @@ amyloidoses	amyloidosis	NNS	author
 anaesthetics	anaesthetics	NNS	adjective_rule
 analgesics	analgesics	NNS	adjective_rule
 anals	anals	NNS	adjective_rule
-analytics	analytics		override
+analytics	analytics	NNS	override
 anaphorics	anaphorics	NNS	adjective_rule
 anaxagoras	anaxagoras	NNS	agents
 ancestrals	ancestrals	NNS	adjective_rule
@@ -160,7 +160,7 @@ ancillaries	ancillary	NNS	agents
 anesthetics	anesthetics	NNS	adjective_rule
 anglicans	anglicans	NNS	adjective_rule
 animacies	animacy	NNS	agents
-animatronics	animatronics		override
+animatronics	animatronics	NNS	override
 annals	annals	NNS	agents
 annuals	annuals	NNS	adjective_rule
 anomics	anomics	NNS	adjective_rule
@@ -197,7 +197,7 @@ aphasics	aphasics	NNS	adjective_rule
 apicals	apicals	NNS	adjective_rule
 apneics	apneics	NNS	adjective_rule
 apocalyptics	apocalyptics	NNS	adjective_rule
-apologetics	apologetics		override
+apologetics	apologetics	NNS	override
 appellatives	appellatives	NNS	adjective_rule
 appendicies	appendix	NNS	agents
 applicatives	applicatives	NNS	adjective_rule
@@ -209,14 +209,14 @@ apts	apts	NNS	adjective_rule
 aquatics	aquatics	NNS	adjective_rule
 aquinas	aquinas	NNS	agents
 arcanes	arcanes	NNS	adjective_rule
-architectonics	architectonics		override
+architectonics	architectonics	NNS	override
 archives-libraries	archives-library	NNS	hyphen_rule
 area-studies	area-study	NNS	hyphen_rule
-aries	aries		override
+aries	aries	NNS	override
 aristotelians	aristotelians	NNS	adjective_rule
 arithmetics	arithmetics	NNS	adjective_rule
 aromatics	aromatics	NNS	adjective_rule
-arrears	arrears		override
+arrears	arrears	NNS	override
 ars	ars	NNS	agents
 arterials	arterials	NNS	adjective_rule
 artes	artes	VBZ	agents
@@ -230,16 +230,16 @@ asians	asians	NNS	adjective_rule
 aspectuals	aspectuals	NNS	adjective_rule
 assertives	assertives	NNS	adjective_rule
 asses	assess	VBZ	agents
-assizes	assizes		override
+assizes	assizes	NNS	override
 associativities	associativity	NNS	agents
 asthmatics	asthmatics	NNS	adjective_rule
 astrophysics	astrophysics	NNS	agents
 asymptotics	asymptotics	NNS	adjective_rule
 at-home-technologies	at-home-technology	NNS	hyphen_rule
 athenians	athenians	NNS	adjective_rule
-athletics	athletics		override
+athletics	athletics	NNS	override
 atlas	atlas	NNS	agents
-atmospherics	atmospherics		override
+atmospherics	atmospherics	NNS	override
 atomics	atomics	NNS	adjective_rule
 atomistics	atomistics	NNS	adjective_rule
 attendants	attendants	NNS	adjective_rule
@@ -263,7 +263,7 @@ auto-antibodies	auto-antibody	NNS	hyphen_rule
 auto-biographies	auto-biography	NNS	hyphen_rule
 auto-identifies	auto-identify	VBZ	hyphen_rule
 autoanti-bodies	autoanti-body	NNS	hyphen_rule
-automata	automaton		override
+automata	automaton	NNS	override
 automatics	automatics	NNS	adjective_rule
 auxiliaries	auxiliaries	NNS	adjective_rule
 av-implies	av-imply	NNS	hyphen_rule
@@ -271,8 +271,8 @@ availables	availables	NNS	adjective_rule
 averages	averages	NNS	adjective_rule
 averroes	averroes	NNS	agents
 avians	avians	NNS	adjective_rule
-avionics	avionics		override
-axes	axis		override
+avionics	avionics	NNS	override
+axes	axis	NNS	override
 axiomatics	axiomatics	NNS	adjective_rule
 axonopathies	axonopathy	NNS	author
 axotomies	axotomy	NNS	agents
@@ -287,7 +287,7 @@ bads	bads	NNS	adjective_rule
 bahrainis	bahrainis	NNS	adjective_rule
 balance-studies	balance-study	NNS	hyphen_rule
 balds	balds	NNS	adjective_rule
-ballistics	ballistics		override
+ballistics	ballistics	NNS	override
 band-matrices	band-matrix	NNS	hyphen_rule
 bandpasses	bandpass	NNS	agents
 bankrupts	bankrupts	NNS	adjective_rule
@@ -299,7 +299,7 @@ barthes	barthes	NNS	agents
 basalis	basalis	NNS	agents
 based-approaches	based-approach	NNS	hyphen_rule
 bases	base	NNS	author
-basics	basics		override
+basics	basics	NNS	override
 bathes	bathe	VBZ	agents
 bayes	bayes	NNS	agents
 bayesians	bayesians	NNS	adjective_rule
@@ -322,12 +322,12 @@ between-studies	between-study	NNS	hyphen_rule
 bias-strategies	bias-strategy	NNS	hyphen_rule
 biceps	biceps	NNS	agents
 biennials	biennials	NNS	adjective_rule
-bifocals	bifocals		override
+bifocals	bifocals	NNS	override
 big-classes	big-class	NNS	hyphen_rule
 bilabials	bilabials	NNS	adjective_rule
 bilinguals	bilinguals	NNS	adjective_rule
 binaries	binaries	NNS	adjective_rule
-binoculars	binoculars		override
+binoculars	binoculars	NNS	override
 binomials	binomials	NNS	adjective_rule
 binominals	binominals	NNS	adjective_rule
 bio-batteries	bio-battery	NNS	hyphen_rule
@@ -342,14 +342,14 @@ bioethics	bioethics	NNS	agents
 biofacies	biofacies	NNS	agents
 biologicals	biologicals	NNS	adjective_rule
 biologics	biologics	NNS	adjective_rule
-biometrics	biometrics		override
-bionics	bionics		override
+biometrics	biometrics	NNS	override
+bionics	bionics	NNS	override
 biophysics	biophysics	NNS	agents
 biopolitics	biopolitics	NNS	agents
 bioprocesses	bioprocess	NNS	agents
 biosemiotics	biosemiotics	NNS	agents
 biospecies	biospecies	NNS	agents
-biosystematics	biosystematics		override
+biosystematics	biosystematics	NNS	override
 biotics	biotics	NNS	adjective_rule
 bipolars	bipolars	NNS	adjective_rule
 bisexuals	bisexuals	NNS	adjective_rule
@@ -363,7 +363,7 @@ blindfolds	blindfolds	NNS	adjective_rule
 blinds	blinds	NNS	adjective_rule
 blonds	blonds	NNS	adjective_rule
 blue-skies	blue-ski	NNS	hyphen_rule
-blues	blues		override
+blues	blues	NNS	override
 body-technologies	body-technology	NNS	hyphen_rule
 bogies	bogie	NNS	agents
 booleans	booleans	NNS	adjective_rule
@@ -375,7 +375,7 @@ brain-bodies	brain-body	NNS	hyphen_rule
 brain-processes	brain-process	NNS	hyphen_rule
 braves	braves	NNS	adjective_rule
 brazilians	brazilians	NNS	adjective_rule
-briefs	briefs		override
+briefs	briefs	NNS	override
 brights	brights	NNS	adjective_rule
 bronchoscopies	bronchoscopy	NNS	agents
 brutes	brutes	NNS	adjective_rule
@@ -395,7 +395,7 @@ ca-approaches	ca-approach	NNS	hyphen_rule
 caddies	caddie	NNS	agents
 calbindin-positive-patches	calbindin-positive-patch	NNS	hyphen_rule
 californians	californians	NNS	adjective_rule
-calisthenics	calisthenics		override
+calisthenics	calisthenics	NNS	override
 calorics	calorics	NNS	adjective_rule
 cals-technologies	cals-technology	NNS	hyphen_rule
 camp-facilities	camp-facility	NNS	hyphen_rule
@@ -433,7 +433,7 @@ cell-bodies	cell-body	NNS	hyphen_rule
 center-frequencies	center-frequency	NNS	hyphen_rule
 central-tendencies	central-tendency	NNS	hyphen_rule
 centrists	centrists	NNS	adjective_rule
-ceramics	ceramics		override
+ceramics	ceramics	NNS	override
 cerebrals	cerebrals	NNS	adjective_rule
 ceremonials	ceremonials	NNS	adjective_rule
 certains	certains	NNS	adjective_rule
@@ -451,7 +451,7 @@ chemotherapeutics	chemotherapeutics	NNS	adjective_rule
 chiefs	chiefs	NNS	adjective_rule
 chieves	chieves	NNS	adjective_rule
 child-witches	child-witch	NNS	hyphen_rule
-children	child		override
+children	child	NNS	override
 chileans	chileans	NNS	adjective_rule
 chilies	chili	NNS	agents
 choices-minorities	choices-minority	NNS	hyphen_rule
@@ -466,13 +466,13 @@ circulars	circulars	NNS	adjective_rule
 circumfixes	circumfix	NNS	agents
 circumstantials	circumstantials	NNS	adjective_rule
 citationspermissionsreprints	citationspermissionsreprints	NNS	agents
-civics	civics		override
+civics	civics	NNS	override
 civilians	civilians	NNS	adjective_rule
-cladistics	cladistics		override
+cladistics	cladistics	NNS	override
 class-trajectories	class-trajectory	NNS	hyphen_rule
 classes-secretaries	classes-secretary	NNS	hyphen_rule
 classicals	classicals	NNS	adjective_rule
-classics	classics		override
+classics	classics	NNS	override
 claustrophobics	claustrophobics	NNS	adjective_rule
 clericals	clericals	NNS	adjective_rule
 "clitics""--entities"	"clitics""--entity"	NNS	hyphen_rule
@@ -521,7 +521,7 @@ comics	comic	NNS	author
 commercials	commercials	NNS	adjective_rule
 commodifies	commodify	VBZ	agents
 commonplaces	commonplaces	NNS	adjective_rule
-commons	commons		override
+commons	commons	NNS	override
 communication-processes	communication-process	NNS	hyphen_rule
 communicatives	communicatives	NNS	adjective_rule
 communists	communists	NNS	adjective_rule
@@ -584,7 +584,7 @@ contemplatives	contemplatives	NNS	adjective_rule
 contemporaries	contemporaries	NNS	adjective_rule
 contengencies	contingency	NNS	agents
 content-analyses	content-analysis	NNS	hyphen_rule
-contexts	context		override
+contexts	context	NNS	override
 contigencies	contingency	NNS	agents
 continentals	continentals	NNS	adjective_rule
 contingents	contingents	NNS	adjective_rule
@@ -592,7 +592,7 @@ continuation-classes	continuation-class	NNS	hyphen_rule
 contraceptives	contraceptives	NNS	adjective_rule
 contradictories	contradictories	NNS	adjective_rule
 contraries	contraries	NNS	adjective_rule
-contras	contras		override
+contras	contras	NNS	override
 contributories	contributory	NNS	agents
 controllabilities	controllability	NNS	agents
 conveniencies	conveniency	NNS	agents
@@ -606,7 +606,7 @@ copulatives	copulatives	NNS	adjective_rule
 copurifies	copurify	VBZ	agents
 cordials	cordials	NNS	adjective_rule
 coronaviruses	coronavirus	NNS	agents
-corpora	corpus		override
+corpora	corpus	NNS	override
 corporals	corporals	NNS	adjective_rule
 corporates	corporates	NNS	adjective_rule
 corporeals	corporeals	NNS	adjective_rule
@@ -651,7 +651,7 @@ creative-abilities	creative-ability	NNS	hyphen_rule
 creatives	creatives	NNS	adjective_rule
 criminals	criminals	NNS	adjective_rule
 crisps	crisps	NNS	adjective_rule
-criteria	criterion		override
+criteria	criterion	NNS	override
 criticals	criticals	NNS	adjective_rule
 criticies	criticise	NNS	agents
 crm-strategies	crm-strategy	NNS	hyphen_rule
@@ -662,8 +662,8 @@ cross-reactivities	cross-reactivity	NNS	hyphen_rule
 cross-validities	cross-validity	NNS	hyphen_rule
 crossmatches	crossmatch	NNS	agents
 crustaceans	crustaceans	NNS	adjective_rule
-cryogenics	cryogenics		override
-cryonics	cryonics		override
+cryogenics	cryogenics	NNS	override
+cryonics	cryonics	NNS	override
 cryptanalyses	cryptanalysis	NNS	agents
 crypto-sceptics	crypto-skeptic	NNS	hyphen_rule
 cryptocurrencies	cryptocurrency	NNS	author
@@ -677,12 +677,12 @@ currents	currents	NNS	adjective_rule
 curriculars	curriculars	NNS	adjective_rule
 cyber-realities	cyber-reality	NNS	hyphen_rule
 cyberbullies	cyberbully	NNS	agents
-cybernetics	cybernetics		override
+cybernetics	cybernetics	NNS	override
 cypriots	cypriots	NNS	adjective_rule
 cystectomies	cystectomy	NNS	agents
 cystoscopies	cystoscopy	NNS	agents
-cytoarchitectonics	cytoarchitectonics		override
-cytogenetics	cytogenetics		override
+cytoarchitectonics	cytoarchitectonics	NNS	override
+cytogenetics	cytogenetics	NNS	override
 c∞-densities	c∞-density	NNS	hyphen_rule
 d-classes	d-class	NNS	hyphen_rule
 dai-approaches	dai-approach	NNS	hyphen_rule
@@ -692,7 +692,7 @@ dallies	daily	NNS	agents
 dans	dans	NNS	agents
 darks	darks	NNS	adjective_rule
 darwinians	darwinians	NNS	adjective_rule
-data	data		override
+data	data	NNS	override
 data-analyses	data-analysis	NNS	hyphen_rule
 data-dependencies	data-dependency	NNS	hyphen_rule
 data-queries	data-query	NNS	hyphen_rule
@@ -748,7 +748,7 @@ depressants	depressants	NNS	adjective_rule
 depth-studies	depth-study	NNS	hyphen_rule
 derivables	derivables	NNS	adjective_rule
 derivatives	derivatives	NNS	adjective_rule
-dermatoglyphics	dermatoglyphics		override
+dermatoglyphics	dermatoglyphics	NNS	override
 descartes	descartes	NNS	agents
 descriptives	descriptives	NNS	adjective_rule
 desert-possibilities	desert-possibility	NNS	hyphen_rule
@@ -770,19 +770,19 @@ diabetes	diabetes	NNS	author_call
 diabetics	diabetics	NNS	adjective_rule
 diacriticals	diacriticals	NNS	adjective_rule
 diacritics	diacritics	NNS	adjective_rule
-diagnoses	diagnosis		override
-diagnostics	diagnostics		override
+diagnoses	diagnosis	NNS	override
+diagnostics	diagnostics	NNS	override
 diagonals	diagonals	NNS	adjective_rule
 diagrammatics	diagrammatics	NNS	adjective_rule
 dibels	dibels	NNS	agents
-didactics	didactics		override
+didactics	didactics	NNS	override
 dietaries	dietaries	NNS	adjective_rule
-dietetics	dietetics		override
+dietetics	dietetics	NNS	override
 differencies	difference	NNS	author
 differentials	differentials	NNS	adjective_rule
 differents	differents	NNS	adjective_rule
 difficults	difficults	NNS	adjective_rule
-digitalis	digitalis		override
+digitalis	digitalis	NNS	override
 digitalpolicies	digitalpolicies	NNS	agents
 diminutives	diminutives	NNS	adjective_rule
 diogenes	diogenes	NNS	agents
@@ -819,7 +819,7 @@ divines	divines	NNS	adjective_rule
 diyergencies	divergence	NNS	agents
 doctrinaires	doctrinaires	NNS	adjective_rule
 docu-realities	docu-reality	NNS	hyphen_rule
-does	does		override
+does	does	NNS	override
 dogmatics	dogmatics	NNS	adjective_rule
 dolores	dolores	NNS	author
 domestics	domestics	NNS	adjective_rule
@@ -830,7 +830,7 @@ downs	downs	NNS	agents
 downwards	downwards	NNS	adjective_rule
 doxes	doxes	NNS	agents
 dr-analyses	dr-analysis	NNS	hyphen_rule
-dramatics	dramatics		override
+dramatics	dramatics	NNS	override
 dreadfuls	dreadfuls	NNS	adjective_rule
 dream-bodies	dream-body	NNS	hyphen_rule
 drive-cathexes	drive-cathexis	NNS	hyphen_rule
@@ -843,9 +843,9 @@ dumbs	dumbs	NNS	adjective_rule
 dummies	dummies	NNS	adjective_rule
 duns	duns	NNS	agents
 duopolies	duopoly	NNS	agents
-durables	durables		override
+durables	durables	NNS	override
 dwrepancies	dwrepancies	NNS	agents
-dynamics	dynamics		override
+dynamics	dynamics	NNS	override
 dysfluencies	dysfluency	NNS	author
 dysfunctionalities	dysfunctionality	NNS	agents
 dyslexics	dyslexics	NNS	adjective_rule
@@ -872,8 +872,8 @@ eccentrics	eccentrics	NNS	adjective_rule
 ecclesiastics	ecclesiastics	NNS	adjective_rule
 echoics	echoics	NNS	adjective_rule
 eclectics	eclectics	NNS	adjective_rule
-econometrics	econometrics		override
-economics	economics		override
+econometrics	econometrics	NNS	override
+economics	economics	NNS	override
 ecstacies	ecstasy	NNS	agents
 ecstatics	ecstatics	NNS	adjective_rule
 ecurrencies	ecurrency	NNS	agents
@@ -912,9 +912,9 @@ electives	electives	NNS	adjective_rule
 electorals	electorals	NNS	adjective_rule
 electrics	electrics	NNS	adjective_rule
 electrodynamics	electrodynamics	NNS	agents
-electromagnetics	electromagnetics		override
-electronics	electronics		override
-electrostatics	electrostatics		override
+electromagnetics	electromagnetics	NNS	override
+electronics	electronics	NNS	override
+electrostatics	electrostatics	NNS	override
 elegancies	elegancy	NNS	agents
 elegans	elegans	NNS	agents
 elementals	elementals	NNS	adjective_rule
@@ -948,7 +948,7 @@ entrepreneurials	entrepreneurials	NNS	adjective_rule
 environments-classes	environments-class	NNS	hyphen_rule
 ep-trajectories	ep-trajectory	NNS	hyphen_rule
 ephemerals	ephemerals	NNS	adjective_rule
-ephesians	ephesians		override
+ephesians	ephesians	NNS	override
 epics	epics	NNS	adjective_rule
 epicureans	epicureans	NNS	adjective_rule
 epidurals	epidurals	NNS	adjective_rule
@@ -959,7 +959,7 @@ equestrians	equestrians	NNS	adjective_rule
 equivalencies	equivalency	NNS	author
 equivalents	equivalents	NNS	adjective_rule
 equivocals	equivocals	NNS	adjective_rule
-ergonomics	ergonomics		override
+ergonomics	ergonomics	NNS	override
 eros	eros	NNS	agents
 erotics	erotics	NNS	adjective_rule
 erratics	erratics	NNS	adjective_rule
@@ -973,14 +973,14 @@ especies	especies	NNS	agents
 espies	espy	NNS	agents
 essentials	essentials	NNS	adjective_rule
 estes	estes	NNS	agents
-esthetics	esthetics		override
-ethics	ethics		override
+esthetics	esthetics	NNS	override
+ethics	ethics	NNS	override
 ethnic-minorities	ethnic-minority	NNS	hyphen_rule
 ethnics	ethnics	NNS	adjective_rule
 ethnocentrics	ethnocentrics	NNS	adjective_rule
 ethnographics	ethnographics	NNS	adjective_rule
 ethnomathematics	ethnomathematics	NNS	agents
-eugenics	eugenics		override
+eugenics	eugenics	NNS	override
 euripides	euripides	NNS	agents
 europeans	europeans	NNS	adjective_rule
 euspecies	euspecies	NNS	agents
@@ -1093,7 +1093,7 @@ firstborns	firstborns	NNS	adjective_rule
 firsts	firsts	NNS	adjective_rule
 fittings	fittings	NNS	adjective_rule
 five-classes	five-class	VBZ	hyphen_rule
-flats	flats		override
+flats	flats	NNS	override
 flexibles	flexibles	NNS	adjective_rule
 fluents	fluents	NNS	adjective_rule
 focals	focals	NNS	adjective_rule
@@ -1106,7 +1106,7 @@ footswitches	footswitch	NNS	agents
 foramen	foramen	NNS	agents
 force-intensities	force-intensity	NNS	hyphen_rule
 foreigns	foreigns	NNS	adjective_rule
-forensics	forensics		override
+forensics	forensics	NNS	override
 form-classes	form-class	NNS	hyphen_rule
 formantfrequencies	formantfrequencies	NNS	agents
 formatives	formatives	NNS	adjective_rule
@@ -1138,7 +1138,7 @@ fugitives	fugitives	NNS	adjective_rule
 fulls	fulls	NNS	adjective_rule
 functionals	functionals	NNS	adjective_rule
 fundamentalists	fundamentalists	NNS	adjective_rule
-fundamentals	fundamentals		override
+fundamentals	fundamentals	NNS	override
 furries	furry	NNS	agents
 future-selves	future-self	NNS	hyphen_rule
 futures	futures	NNS	adjective_rule
@@ -1156,10 +1156,10 @@ gendered-identities	gendered-identity	NNS	hyphen_rule
 gene-frequencies	gene-frequency	NNS	hyphen_rule
 generals	generals	NNS	adjective_rule
 generics	generics	NNS	adjective_rule
-genetics	genetics		override
-genitals	genitals		override
+genetics	genetics	NNS	override
+genitals	genitals	NNS	override
 genitives	genitives	NNS	adjective_rule
-genomics	genomics		override
+genomics	genomics	NNS	override
 gentles	gentles	NNS	adjective_rule
 gentrifies	gentrify	NNS	agents
 geo-demonologies	geo-demonology	NNS	hyphen_rule
@@ -1171,7 +1171,7 @@ geometrics	geometrics	NNS	adjective_rule
 geophysics	geophysics	NNS	agents
 geopolitics	geopolitics	NNS	agents
 georgians	georgians	NNS	adjective_rule
-geriatrics	geriatrics		override
+geriatrics	geriatrics	NNS	override
 germans	germans	NNS	adjective_rule
 germinals	germinals	NNS	adjective_rule
 ghanaians	ghanaians	NNS	adjective_rule
@@ -1179,7 +1179,7 @@ ghost-stories	ghost-story	NNS	hyphen_rule
 giants	giants	NNS	adjective_rule
 gill-arches	gill-arch	NNS	hyphen_rule
 givens	givens	NNS	agents
-glasses	glasses		override
+glasses	glasses	NNS	override
 globals	globals	NNS	adjective_rule
 glossies	glossies	NNS	adjective_rule
 glottals	glottals	NNS	adjective_rule
@@ -1192,15 +1192,15 @@ goal-properties	goal-property	NNS	hyphen_rule
 goods	goods	NNS	adjective_rule
 graduals	graduals	NNS	adjective_rule
 granicies	granicies	VBZ	agents
-graphics	graphics		override
+graphics	graphics	NNS	override
 gratifies	gratify	NNS	agents
-graves	graves		override
+graves	graves	NNS	override
 grays	grays	NNS	adjective_rule
 greater-elasticities	greater-elasticity	NNS	hyphen_rule
 greats	greats	NNS	adjective_rule
 greeks	greeks	NNS	adjective_rule
 greenfinches	greenfinch	NNS	agents
-greens	greens		override
+greens	greens	NNS	override
 grosses	grosses	NNS	adjective_rule
 grotesques	grotesques	NNS	adjective_rule
 group-properties	group-property	NNS	hyphen_rule
@@ -1208,7 +1208,7 @@ guaranties	guarantee	VBZ	agents
 guilders	guilder	NNS	author
 gummies	gummy	NNS	agents
 gutturals	gutturals	NNS	adjective_rule
-gymnastics	gymnastics		override
+gymnastics	gymnastics	NNS	override
 gyroscopics	gyroscopics	NNS	adjective_rule
 h-meshes	h-mesh	NNS	hyphen_rule
 habilitation-theses	habilitation-thesis	NNS	hyphen_rule
@@ -1222,7 +1222,7 @@ happiness-activities	happiness-activity	NNS	hyphen_rule
 haptics	haptics	NNS	adjective_rule
 harasses	harass	NNS	agents
 hardcopies	hardcopy	NNS	agents
-harmonics	harmonics		override
+harmonics	harmonics	NNS	override
 harries	harries	NNS	agents
 hash-indexes	hash-index	NNS	hyphen_rule
 hates	hate	VBZ	author
@@ -1238,14 +1238,14 @@ hegelians	hegelians	NNS	adjective_rule
 held-congresses	held-congress	NNS	hyphen_rule
 help-classes	help-class	NNS	hyphen_rule
 help-facilities	help-facility	NNS	hyphen_rule
-hemodynamics	hemodynamics		override
+hemodynamics	hemodynamics	NNS	override
 her-stories	her-story	NNS	hyphen_rule
 herbals	herbals	NNS	adjective_rule
 heritabilities	heritability	NNS	author
-hermeneutics	hermeneutics		override
+hermeneutics	hermeneutics	NNS	override
 hermetics	hermetics	NNS	adjective_rule
 herniorrhaphies	herniorrhaphy	NNS	agents
-heroics	heroics		override
+heroics	heroics	NNS	override
 herpes	herpes	NNS	agents
 herpesviruses	herpesvirus	NNS	author
 hers	hers	NNS	agents
@@ -1266,13 +1266,13 @@ hispanics	hispanics	NNS	adjective_rule
 histopathologies	histopathology	NNS	agents
 historicals	historicals	NNS	adjective_rule
 historics	historics	NNS	adjective_rule
-histrionics	histrionics		override
+histrionics	histrionics	NNS	override
 holistics	holistics	NNS	adjective_rule
 hollows	hollows	NNS	adjective_rule
 home-classes	home-class	NNS	hyphen_rule
 homelesses	homelesses	NNS	adjective_rule
 homewards	homewards	NNS	adjective_rule
-homiletics	homiletics		override
+homiletics	homiletics	NNS	override
 homosexuals	homosexuals	NNS	adjective_rule
 honorifics	honorifics	NNS	adjective_rule
 hopefuls	hopefuls	NNS	adjective_rule
@@ -1286,16 +1286,16 @@ hrp-studies	hrp-study	NNS	hyphen_rule
 humanistics	humanistics	NNS	adjective_rule
 humanists	humanists	NNS	adjective_rule
 humanitarians	humanitarians	NNS	adjective_rule
-humanities	humanities		override
+humanities	humanities	NNS	override
 humans	humans	NNS	adjective_rule
 humbles	humbles	NNS	adjective_rule
 hundredths	hundredths	NNS	adjective_rule
 hungarians	hungarians	NNS	adjective_rule
 hybridities	hybridity	NNS	agents
 hybrids	hybrids	NNS	adjective_rule
-hydraulics	hydraulics		override
-hydrodynamics	hydrodynamics		override
-hydroponics	hydroponics		override
+hydraulics	hydraulics	NNS	override
+hydrodynamics	hydrodynamics	NNS	override
+hydroponics	hydroponics	NNS	override
 hydrops	hydrops	NNS	agents
 hydrostatics	hydrostatics	NNS	adjective_rule
 hymes	hymes	NNS	agents
@@ -1308,7 +1308,7 @@ hypnosis	hypnosis	NNS	agents
 hypnotics	hypnotics	NNS	adjective_rule
 hypo-intensities	hypo-intensity	NNS	hyphen_rule
 hypo-sensitivities	hypo-sensitivity	NNS	hyphen_rule
-hypotheses	hypothesis		override
+hypotheses	hypothesis	NNS	override
 hypothesises	hypothesize	NNS	author
 hypotheticals	hypotheticals	NNS	adjective_rule
 iambics	iambics	NNS	adjective_rule
@@ -1393,7 +1393,7 @@ indeterminates	indeterminates	NNS	adjective_rule
 indexicals	indexicals	NNS	adjective_rule
 india-countries	india-country	NNS	hyphen_rule
 indicatives	indicatives	NNS	adjective_rule
-indices	index		override
+indices	index	NNS	override
 indicies	index	NNS	agents
 indifferents	indifferents	NNS	adjective_rule
 indignants	indignants	NNS	adjective_rule
@@ -1507,13 +1507,13 @@ ishārāt-commentaries	ishārāt-commentary	NNS	hyphen_rule
 isocrates	isocrates	NNS	agents
 isoglosses	isogloss	NNS	agents
 isolationists	isolationists	NNS	adjective_rule
-isometrics	isometrics		override
+isometrics	isometrics	NNS	override
 italians	italians	NNS	adjective_rule
 item-analyses	item-analysis	NNS	hyphen_rule
 iteratives	iteratives	NNS	adjective_rule
 itinerants	itinerants	NNS	adjective_rule
-its	its		override
-ives	ives		override
+its	its	NNS	override
+ives	ives	NNS	override
 jamesians	jamesians	NNS	adjective_rule
 jaspers	jaspers	NNS	agents
 jenkins	jenkins	NNS	agents
@@ -1538,9 +1538,9 @@ keys	keys	NNS	adjective_rule
 kiddies	kiddie	NNS	agents
 kind-hierarchies	kind-hierarchy	NNS	hyphen_rule
 kinds-properties	kinds-property	NNS	hyphen_rule
-kinematics	kinematics		override
-kinesthetics	kinesthetics		override
-kinetics	kinetics		override
+kinematics	kinematics	NNS	override
+kinesthetics	kinesthetics	NNS	override
+kinetics	kinetics	NNS	override
 knot-families	knot-family	NNS	hyphen_rule
 knowables	knowables	NNS	adjective_rule
 knowing-processes	knowing-process	NNS	hyphen_rule
@@ -1585,7 +1585,7 @@ legislatives	legislatives	NNS	adjective_rule
 length-biases	length-bias	NNS	hyphen_rule
 lenis	lenis	NNS	agents
 lens	lens	NNS	agents
-lenses	lens		override
+lenses	lens	NNS	override
 lentiviruses	lentivirus	NNS	agents
 leptomeninges	leptomeninx	NNS	agents
 les	les	NNS	agents
@@ -1595,7 +1595,7 @@ lethargics	lethargics	NNS	adjective_rule
 lettres	lettres	NNS	agents
 leukodystrophies	leukodystrophy	NNS	author
 lever-presses	lever-press	NNS	hyphen_rule
-lexicostatistics	lexicostatistics		override
+lexicostatistics	lexicostatistics	NNS	override
 lexis	lexis	NNS	agents
 lf-affixes	lf-affix	NNS	hyphen_rule
 liberals	liberals	NNS	adjective_rule
@@ -1611,7 +1611,7 @@ lightweights	lightweights	NNS	adjective_rule
 limen	limen	NNS	agents
 limitans	limitans	NNS	agents
 linear-processes	linear-process	NNS	hyphen_rule
-linguistics	linguistics		override
+linguistics	linguistics	NNS	override
 linguodidacticalcompetencies	linguodidacticalcompetencies	NNS	agents
 liquefies	liquefy	NNS	agents
 liquids	liquids	NNS	adjective_rule
@@ -1621,7 +1621,7 @@ literates	literates	NNS	adjective_rule
 lithofacies	lithofacies	NNS	agents
 littles	littles	NNS	adjective_rule
 littorals	littorals	NNS	adjective_rule
-lives	life		override
+lives	life	NNS	override
 living-educational-theories	living-educational-theory	NNS	hyphen_rule
 living-with-viruses	living-with-virus	NNS	hyphen_rule
 locals	locals	NNS	adjective_rule
@@ -1629,7 +1629,7 @@ locomotives	locomotives	NNS	adjective_rule
 log-energies	log-energy	NNS	hyphen_rule
 log-probabilities	log-probability	NNS	hyphen_rule
 logfrequencies	logfrequencies	NNS	agents
-logistics	logistics		override
+logistics	logistics	NNS	override
 longs	longs	NNS	adjective_rule
 love-matches	love-match	NNS	hyphen_rule
 love-speeches	love-speech	NNS	hyphen_rule
@@ -1654,17 +1654,17 @@ macro-processes	macro-process	NNS	hyphen_rule
 macro-properties	macro-property	NNS	hyphen_rule
 macro-theories	macro-theory	NNS	hyphen_rule
 macro-varieties	macro-variety	NNS	hyphen_rule
-macroeconomics	macroeconomics		override
+macroeconomics	macroeconomics	NNS	override
 macros	macros	NNS	adjective_rule
 mads	mads	NNS	adjective_rule
-magnetics	magnetics		override
+magnetics	magnetics	NNS	override
 magnifies	magnify	NNS	author
 maimonides	maimonides	VBZ	agents
 mains	mains	NNS	adjective_rule
 majors	majors	NNS	adjective_rule
 makeshifts	makeshifts	NNS	adjective_rule
 males	males	NNS	adjective_rule
-mals	mals		override
+mals	mals	NNS	override
 mammalians	mammalians	NNS	adjective_rule
 mammoths	mammoths	NNS	adjective_rule
 mandatories	mandatories	NNS	adjective_rule
@@ -1694,8 +1694,8 @@ material-stories	material-story	NNS	hyphen_rule
 materialistics	materialistics	NNS	adjective_rule
 materials-stories	materials-story	NNS	hyphen_rule
 mathematicals	mathematicals	NNS	adjective_rule
-mathematics	mathematics		override
-matrices	matrix		override
+mathematics	mathematics	NNS	override
+matrices	matrix	NNS	override
 matricesm-matrices	matricesm-matrix	NNS	hyphen_rule
 matricies	matrix	NNS	author
 matures	matures	NNS	adjective_rule
@@ -1704,13 +1704,13 @@ maximums	maximums	NNS	adjective_rule
 meaning-as-use-theories	meaning-as-use-theory	NNS	hyphen_rule
 meaning-complexes	meaning-complex	NNS	hyphen_rule
 meaning-entities	meaning-entity	NNS	hyphen_rule
-means	means		override
+means	means	NNS	override
 measles	measles	NNS	agents
 measurables	measurables	NNS	adjective_rule
 mechanicals	mechanicals	NNS	adjective_rule
-mechanics	mechanics		override
+mechanics	mechanics	NNS	override
 mechanistics	mechanistics	NNS	adjective_rule
-media	media		override
+media	media	NNS	override
 media-personalities	media-personality	NNS	hyphen_rule
 media-technologies	media-technology	NNS	hyphen_rule
 mediaevals	mediaevals	NNS	adjective_rule
@@ -1729,7 +1729,7 @@ member-beneficiaries	member-beneficiary	NNS	hyphen_rule
 meme-complexes	meme-complex	NNS	hyphen_rule
 memetics	memetics	NNS	agents
 memory-fetches	memory-fetch	NNS	hyphen_rule
-men	man		override
+men	man	NNS	override
 meninges	meninx	NNS	agents
 mep-latencies	mep-latency	NNS	hyphen_rule
 mercenaries	mercenaries	NNS	adjective_rule
@@ -1780,8 +1780,8 @@ micro-strategies	micro-strategy	NNS	hyphen_rule
 micro-studies	micro-study	NNS	hyphen_rule
 micro-theories	micro-theory	NNS	hyphen_rule
 microcavities	microcavity	NNS	agents
-microeconomics	microeconomics		override
-microelectronics	microelectronics		override
+microeconomics	microeconomics	NNS	override
+microelectronics	microelectronics	NNS	override
 microlenses	microlens	NNS	agents
 microphysics	microphysics	NNS	agents
 micros	micros	NNS	adjective_rule
@@ -1828,7 +1828,7 @@ missionaries	missionaries	NNS	adjective_rule
 mistifies	mystify	NNS	agents
 mitoses	mitosis	NNS	agents
 mixed-abilities	mixed-ability	NNS	hyphen_rule
-mnemonics	mnemonics		override
+mnemonics	mnemonics	NNS	override
 mobiles	mobiles	NNS	adjective_rule
 modeling)-zeroes	modeling)-zero	NNS	hyphen_rule
 moderns	moderns	NNS	adjective_rule
@@ -1841,10 +1841,10 @@ monolinguals	monolinguals	NNS	adjective_rule
 monosyllabics	monosyllabics	NNS	adjective_rule
 monotherapies	monotherapy	NNS	author
 monthlies	monthlies	NNS	adjective_rule
-morals	morals		override
+morals	morals	NNS	override
 mores	mores	NNS	agents
 morphemics	morphemics	NNS	adjective_rule
-morphophonemics	morphophonemics		override
+morphophonemics	morphophonemics	NNS	override
 morphophonologies	morphophonology	NNS	agents
 morphospecies	morphospecies	NNS	agents
 mortals	mortals	NNS	adjective_rule
@@ -1936,7 +1936,7 @@ neuro-prostheses	neuro-prosthesis	NNS	hyphen_rule
 neuro-technologies	neuro-technology	NNS	hyphen_rule
 neurodynamics	neurodynamics	NNS	agents
 neuroethics	neuroethics	NNS	author
-neurolinguistics	neurolinguistics		override
+neurolinguistics	neurolinguistics	NNS	override
 neuronals	neuronals	NNS	adjective_rule
 neurons-relies	neurons-rely	NNS	hyphen_rule
 neuropathologies	neuropathology	NNS	author
@@ -1947,7 +1947,7 @@ neurotoxicities	neurotoxicity	NNS	agents
 neutrals	neutrals	NNS	adjective_rule
 newborns	newborns	NNS	adjective_rule
 newdependencies	newdependencies	NNS	agents
-news	news		override
+news	news	NNS	override
 news-agencies	news-agency	NNS	hyphen_rule
 news-stories	news-story	NNS	hyphen_rule
 newton-commentaries	newton-commentary	NNS	hyphen_rule
@@ -2027,8 +2027,8 @@ nulls	nulls	NNS	adjective_rule
 numerals	numerals	NNS	adjective_rule
 numericals	numericals	NNS	adjective_rule
 numerics	numerics	NNS	adjective_rule
-numismatics	numismatics		override
-nuptials	nuptials		override
+numismatics	numismatics	NNS	override
+nuptials	nuptials	NNS	override
 nutrients	nutrients	NNS	adjective_rule
 nystagmuses	nystagmus	VBZ	agents
 object-entities	object-entity	NNS	hyphen_rule
@@ -2041,11 +2041,11 @@ observables	observables	NNS	adjective_rule
 observants	observants	NNS	adjective_rule
 obsessionals	obsessionals	NNS	adjective_rule
 obsessives	obsessives	NNS	adjective_rule
-obstetrics	obstetrics		override
+obstetrics	obstetrics	NNS	override
 occludentes	occludentes	NNS	agents
 occlusives	occlusives	NNS	adjective_rule
 oculars	oculars	NNS	adjective_rule
-odds	odds		override
+odds	odds	NNS	override
 oecd-countries	oecd-country	NNS	hyphen_rule
 oedipus-wishes	oedipus-wish	NNS	hyphen_rule
 ofesse-reflexes	ofesse-reflex	NNS	hyphen_rule
@@ -2067,7 +2067,7 @@ ones	ones	NNS	author_call
 ongoings	ongoings	NNS	adjective_rule
 onknownfrequencies	onknownfrequencies	NNS	author
 only-bullies	only-bully	NNS	hyphen_rule
-onomastics	onomastics		override
+onomastics	onomastics	NNS	override
 onomatopoetics	onomatopoetics	NNS	adjective_rule
 onto-epistemologies	onto-epistemology	NNS	hyphen_rule
 onto-theologies	onto-theology	NNS	hyphen_rule
@@ -2082,7 +2082,7 @@ opponent-strategies	opponent-strategy	NNS	hyphen_rule
 opposites	opposites	NNS	adjective_rule
 optatives	optatives	NNS	adjective_rule
 opticks	opticks	NNS	agents
-optics	optics		override
+optics	optics	NNS	override
 optimums	optimums	NNS	adjective_rule
 optogenetics	optogenetics	NNS	agents
 orals	orals	NNS	adjective_rule
@@ -2099,11 +2099,11 @@ orientation-activities	orientation-activity	NNS	hyphen_rule
 originals	originals	NNS	adjective_rule
 ornamentals	ornamentals	NNS	adjective_rule
 orphics	orphics	NNS	adjective_rule
-orthodontics	orthodontics		override
+orthodontics	orthodontics	NNS	override
 orthogonals	orthogonals	NNS	adjective_rule
-orthopaedics	orthopaedics		override
-orthopedics	orthopedics		override
-orthoptics	orthoptics		override
+orthopaedics	orthopaedics	NNS	override
+orthopedics	orthopedics	NNS	override
+orthoptics	orthoptics	NNS	override
 orthoses	orthosis	NNS	agents
 osmolalities	osmolality	NNS	agents
 ossifies	ossify	NNS	agents
@@ -2137,7 +2137,7 @@ p-boxes	p-box	NNS	hyphen_rule
 p-practice-modifies	p-practice-modify	NNS	hyphen_rule
 p-properties	p-property	NNS	hyphen_rule
 p2-latencies	p2-latency	NNS	hyphen_rule
-paediatrics	paediatrics		override
+paediatrics	paediatrics	NNS	override
 palatals	palatals	NNS	adjective_rule
 pales	pales	NNS	adjective_rule
 palliatives	palliatives	NNS	adjective_rule
@@ -2180,15 +2180,15 @@ pathophysiologies	pathophysiology	NNS	agents
 pathos-categories	pathos-category	NNS	hyphen_rule
 patient-families	patient-family	NNS	hyphen_rule
 patricians	patricians	NNS	adjective_rule
-patristics	patristics		override
+patristics	patristics	NNS	override
 pattern-classes	pattern-class	NNS	hyphen_rule
 pattern-matches	pattern-match	VBZ	hyphen_rule
 peace-anxieties	peace-anxiety	NNS	hyphen_rule
 peak-frequencies	peak-frequency	NNS	hyphen_rule
 peak-latencies	peak-latency	NNS	hyphen_rule
 pedagogical-controversies	pedagogical-controversy	NNS	hyphen_rule
-pedagogics	pedagogics		override
-pediatrics	pediatrics		override
+pedagogics	pedagogics	NNS	override
+pediatrics	pediatrics	NNS	override
 pejoratives	pejoratives	NNS	adjective_rule
 pellet-dishes	pellet-dish	NNS	hyphen_rule
 pendants	pendants	NNS	adjective_rule
@@ -2214,24 +2214,24 @@ personals	personals	NNS	adjective_rule
 peruvians	peruvians	NNS	adjective_rule
 petites	petites	NNS	adjective_rule
 phantoms	phantoms	NNS	adjective_rule
-pharmaceutics	pharmaceutics		override
+pharmaceutics	pharmaceutics	NNS	override
 pharmaco-therapies	pharmaco-therapy	NNS	hyphen_rule
 pharmacodynamics	pharmacodynamics	NNS	agents
-pharmacogenetics	pharmacogenetics		override
-pharmacokinetics	pharmacokinetics		override
+pharmacogenetics	pharmacogenetics	NNS	override
+pharmacokinetics	pharmacokinetics	NNS	override
 pharmacologics	pharmacologics	NNS	adjective_rule
 pharmacotherapies	pharmacotherapy	NNS	author
 pharyngeals	pharyngeals	NNS	adjective_rule
 phase-properties	phase-property	NNS	hyphen_rule
 phase-velocities	phase-velocity	NNS	hyphen_rule
 phenocopies	phenocopy	NNS	author
-phenomena	phenomenon		override
+phenomena	phenomenon	NNS	override
 philippines	philippines	NNS	adjective_rule
 philosophy-studies	philosophy-study	NNS	hyphen_rule
 phobics	phobics	NNS	adjective_rule
 phoneme-dependencies	phoneme-dependency	NNS	hyphen_rule
-phonemics	phonemics		override
-phonetics	phonetics		override
+phonemics	phonemics	NNS	override
+phonetics	phonetics	NNS	override
 phonotactics	phonotactics	NNS	agents
 phospho-antibodies	phospho-antibody	NNS	hyphen_rule
 phosphorus	phosphorus	NNS	agents
@@ -2245,7 +2245,7 @@ phrase-complexes	phrase-complex	NNS	hyphen_rule
 phylogenetics	phylogenetics	NNS	adjective_rule
 physicals	physicals	NNS	adjective_rule
 physician-coaches	physician-coach	NNS	hyphen_rule
-physics	physics		override
+physics	physics	NNS	override
 physiopathologies	physiopathology	NNS	agents
 pictorials	pictorials	NNS	adjective_rule
 picture-theories	picture-theory	NNS	hyphen_rule
@@ -2268,14 +2268,14 @@ plenaries	plenary	NNS	agents
 pleonastics	pleonastics	NNS	adjective_rule
 pluralistics	pluralistics	NNS	adjective_rule
 plurals	plurals	NNS	adjective_rule
-plus	plus		override
-pneumatics	pneumatics		override
+plus	plus	NNS	override
+pneumatics	pneumatics	NNS	override
 pneumatologies	pneumatology	NNS	agents
-poetics	poetics		override
+poetics	poetics	NNS	override
 polarizabilities	polarizability	NNS	agents
 polars	polars	NNS	adjective_rule
 politicals	politicals	NNS	adjective_rule
-politics	politics		override
+politics	politics	NNS	override
 polyglots	polyglots	NNS	adjective_rule
 polygon-meshes	polygon-mesh	NNS	hyphen_rule
 polynesians	polynesians	NNS	adjective_rule
@@ -2315,7 +2315,7 @@ power-stories	power-story	NNS	hyphen_rule
 pr-technologies	pr-technology	NNS	hyphen_rule
 practicals	practicals	NNS	adjective_rule
 practicies	practice	NNS	agents
-pragmatics	pragmatics		override
+pragmatics	pragmatics	NNS	override
 praxeologies	praxeology	NNS	agents
 pre-activities	pre-activity	NNS	hyphen_rule
 pre-analyses	pre-analysis	NNS	hyphen_rule
@@ -2353,7 +2353,7 @@ principal-axes	principal-axis	NNS	hyphen_rule
 principals	principals	NNS	adjective_rule
 principle-implies	principle-imply	NNS	hyphen_rule
 priors	priors	NNS	adjective_rule
-privates	privates		override
+privates	privates	NNS	override
 pro-indexes	pro-index	NNS	hyphen_rule
 pro-parties	pro-party	NNS	hyphen_rule
 prob-abilities	prob-ability	NNS	hyphen_rule
@@ -2375,7 +2375,7 @@ proletarians	proletarians	NNS	adjective_rule
 prominents	prominents	NNS	adjective_rule
 prones	prones	NNS	adjective_rule
 pronominals	pronominals	NNS	adjective_rule
-propaedeutics	propaedeutics		override
+propaedeutics	propaedeutics	NNS	override
 propers	propers	NNS	adjective_rule
 prophesies	prophecy	NNS	agents
 prophetesses	prophetess	VBZ	agents
@@ -2389,9 +2389,9 @@ prosaics	prosaics	NNS	adjective_rule
 prosodics	prosodics	NNS	adjective_rule
 prosopographies	prosopography	NNS	agents
 prospectives	prospectives	NNS	adjective_rule
-prosthetics	prosthetics		override
-prosthodontics	prosthodontics		override
-proteomics	proteomics		override
+prosthetics	prosthetics	NNS	override
+prosthodontics	prosthodontics	NNS	override
+proteomics	proteomics	NNS	override
 protestants	protestants	NNS	adjective_rule
 proto-factories	proto-factory	NNS	hyphen_rule
 proto-ideologies	proto-ideology	NNS	hyphen_rule
@@ -2399,7 +2399,7 @@ proto-loyalties	proto-loyalty	NNS	hyphen_rule
 proto-societies	proto-society	NNS	hyphen_rule
 proto-terminologies	proto-terminology	NNS	hyphen_rule
 provincials	provincials	NNS	adjective_rule
-proxemics	proxemics		override
+proxemics	proxemics	NNS	override
 proximals	proximals	NNS	adjective_rule
 pses	pse	NNS	agents
 pseudo-affixes	pseudo-affix	NNS	hyphen_rule
@@ -2421,9 +2421,9 @@ psycho-neuroses	psycho-neurosis	NNS	hyphen_rule
 psycho-technologies	psycho-technology	NNS	hyphen_rule
 psycho-therapies	psycho-therapy	NNS	hyphen_rule
 psychobiographies	psychobiography	NNS	agents
-psychodynamics	psychodynamics		override
-psycholinguistics	psycholinguistics		override
-psychometrics	psychometrics		override
+psychodynamics	psychodynamics	NNS	override
+psycholinguistics	psycholinguistics	NNS	override
+psychometrics	psychometrics	NNS	override
 psychoneurotics	psychoneurotics	NNS	adjective_rule
 psychophysics	psychophysics	NNS	author
 psychosomatics	psychosomatics	NNS	adjective_rule
@@ -2439,7 +2439,7 @@ pures	pures	NNS	adjective_rule
 purples	purples	NNS	adjective_rule
 purposives	purposives	NNS	adjective_rule
 putamen	putamen	NNS	agents
-pyrotechnics	pyrotechnics		override
+pyrotechnics	pyrotechnics	NNS	override
 pythagoreans	pythagoreans	NNS	adjective_rule
 quadratics	quadratics	NNS	adjective_rule
 quadriceps	quadriceps	NNS	agents
@@ -2564,7 +2564,7 @@ rhetoricals	rhetoricals	NNS	adjective_rule
 rheumatics	rheumatics	NNS	adjective_rule
 rhythmics	rhythmics	NNS	adjective_rule
 richards	richards	NNS	agents
-riches	riches		override
+riches	riches	NNS	override
 rickets	rickets	NNS	agents
 rightists	rightists	NNS	adjective_rule
 rights	rights	NNS	adjective_rule
@@ -2574,7 +2574,7 @@ riparians	riparians	NNS	adjective_rule
 risk-categories	risk-category	NNS	hyphen_rule
 rituals	rituals	NNS	adjective_rule
 rms	firm	NNS	agents
-robotics	robotics		override
+robotics	robotics	NNS	override
 robustifies	robustify	VBZ	author
 roc-analyses	roc-analysis	VBZ	hyphen_rule
 rod-processes	rod-process	NNS	hyphen_rule
@@ -2589,7 +2589,7 @@ routines	routines	NNS	adjective_rule
 rs-categories	rs-category	NNS	hyphen_rule
 rses	rses	NNS	agents
 rtms	rtms	NNS	author_call
-rubens	rubens		override
+rubens	rubens	NNS	override
 rudes	rudes	NNS	adjective_rule
 rule-hypotheses	rule-hypothesis	NNS	hyphen_rule
 rulers-opportunities	rulers-opportunity	NNS	hyphen_rule
@@ -2618,7 +2618,7 @@ scants	scants	NNS	adjective_rule
 scenics	scenics	NNS	adjective_rule
 scenographies	scenography	NNS	agents
 schema-ontologies	schema-ontology	NNS	hyphen_rule
-schemata	schema		override
+schemata	schema	NNS	override
 schematics	schematics	NNS	adjective_rule
 schistosomiases	schistosomiasis	NNS	agents
 schizoids	schizoids	NNS	adjective_rule
@@ -2679,14 +2679,14 @@ self-touches	self-touch	NNS	hyphen_rule
 self-x-capacities	self-x-capacity	NNS	hyphen_rule
 selfish-biases	selfish-bias	NNS	hyphen_rule
 sellars	sellars	NNS	agents
-selves	self		override
-semantics	semantics		override
+selves	self	NNS	override
+semantics	semantics	NNS	override
 semi-auxiliaries	semi-auxiliary	NNS	hyphen_rule
 semi-axes	semi-axis	NNS	hyphen_rule
 semi-colonies	semi-colony	NNS	hyphen_rule
 semi-democracies	semi-democracy	NNS	hyphen_rule
 semi-superheroes	semi-superhero	NNS	hyphen_rule
-semiotics	semiotics		override
+semiotics	semiotics	NNS	override
 seniors	seniors	NNS	adjective_rule
 sens	sens	NNS	agents
 sense-modalities	sense-modality	NNS	hyphen_rule
@@ -2703,7 +2703,7 @@ separatists	separatists	NNS	adjective_rule
 sequencies	sequence	NNS	agents
 sequents	sequents	NNS	adjective_rule
 serials	serials	NNS	adjective_rule
-series	series		override
+series	series	NNS	override
 serotonin-immunoreactivities	serotonin-immunoreactivity	NNS	hyphen_rule
 serres	serres	NNS	agents
 servo-processes	servo-process	VBZ	hyphen_rule
@@ -2714,13 +2714,13 @@ seventies	seventies	NNS	agents
 severes	severes	NNS	adjective_rule
 sexuals	sexuals	NNS	adjective_rule
 shallows	shallows	NNS	adjective_rule
-shambles	shambles		override
+shambles	shambles	NNS	override
 sheaf-categories	sheaf-category	NNS	hyphen_rule
 sheers	sheers	NNS	adjective_rule
 shines	shine	VBZ	author
 shock-intensities	shock-intensity	NNS	hyphen_rule
 short-stories	short-story	NNS	hyphen_rule
-shorts	shorts		override
+shorts	shorts	NNS	override
 shys	shys	NNS	adjective_rule
 sibilants	sibilants	NNS	adjective_rule
 sicilians	sicilians	NNS	adjective_rule
@@ -2768,7 +2768,7 @@ socio-ecologies	socio-ecology	NNS	hyphen_rule
 socio-identities	socio-identity	NNS	hyphen_rule
 sociocybernetics	sociocybernetics	NNS	agents
 socioeconomics	socioeconomics	NNS	adjective_rule
-sociolinguistics	sociolinguistics		override
+sociolinguistics	sociolinguistics	NNS	override
 sociomatricies	sociomatrix	NNS	agents
 socrates	socrates	NNS	agents
 socratics	socratics	NNS	adjective_rule
@@ -2803,7 +2803,7 @@ spatio-temporalities	spatio-temporality	NNS	hyphen_rule
 speaker-switches	speaker-switch	NNS	hyphen_rule
 special-classes	special-class	NNS	hyphen_rule
 specials	specials	NNS	adjective_rule
-species	species		override
+species	species	NNS	override
 specific-antibodies	specific-antibody	NNS	hyphen_rule
 specific-approaches	specific-approach	NNS	hyphen_rule
 specifics	specifics	NNS	adjective_rule
@@ -2829,8 +2829,8 @@ star-parties	star-party	NNS	hyphen_rule
 starks	starks	NNS	adjective_rule
 stases	stasis	NNS	agents
 state-classes	state-class	NNS	hyphen_rule
-statics	statics		override
-statistics	statistics		override
+statics	statics	NNS	override
+statistics	statistics	NNS	override
 statives	statives	NNS	adjective_rule
 stem-classes	stem-class	NNS	hyphen_rule
 stengers	stengers	NNS	agents
@@ -2842,7 +2842,7 @@ stiffs	stiffs	NNS	adjective_rule
 stills	stills	NNS	agents
 stimulants	stimulants	NNS	adjective_rule
 stimulatives	stimulatives	NNS	adjective_rule
-stimuli	stimulus		override
+stimuli	stimulus	NNS	override
 stimulus-onset-asynchronies	stimulus-onset-asynchrony	NNS	hyphen_rule
 stimulus-properties	stimulus-property	NNS	hyphen_rule
 stochastics	stochastics	NNS	adjective_rule
@@ -2851,10 +2851,10 @@ stop-watches	stop-watch	NNS	hyphen_rule
 stories-stories	stories-story	NNS	hyphen_rule
 story-guesses	story-guess	NNS	hyphen_rule
 straights	straights	NNS	adjective_rule
-straits	straits		override
+straits	straits	NNS	override
 stranges	stranges	NNS	adjective_rule
 stratecies	strategy	NNS	agents
-strategics	strategics		override
+strategics	strategics	NNS	override
 strategies-strategies	strategies-strategy	NNS	hyphen_rule
 street-communities	street-community	NNS	hyphen_rule
 striates	striates	NNS	adjective_rule
@@ -2981,14 +2981,14 @@ syntagmatics	syntagmatics	NNS	adjective_rule
 synthetics	synthetics	NNS	adjective_rule
 syphilis	syphilis	NNS	agents
 syringes	syringe	NNS	author
-systematics	systematics		override
+systematics	systematics	NNS	override
 systemics	systemics	NNS	adjective_rule
 systems-approaches	systems-approach	NNS	hyphen_rule
 t-communities	t-community	NNS	hyphen_rule
 t-matrices	t-matrix	NNS	hyphen_rule
 t-properties	t-property	NNS	hyphen_rule
 t_1}$-topologies	t_1}$-topology	NNS	hyphen_rule
-tabes	tabes		override
+tabes	tabes	NNS	override
 tail-pinches	tail-pinch	NNS	hyphen_rule
 taking-tendencies	taking-tendency	NNS	hyphen_rule
 tales-stories	tales-story	NNS	hyphen_rule
@@ -3003,13 +3003,13 @@ teacher-studies	teacher-study	NNS	hyphen_rule
 techno-identities	techno-identity	NNS	hyphen_rule
 techno-realities	techno-reality	NNS	hyphen_rule
 technopolicies	technopolicy	NNS	author
-tectonics	tectonics		override
+tectonics	tectonics	NNS	override
 teenages	teenages	NNS	adjective_rule
 tele-laboratories	tele-laboratory	NNS	hyphen_rule
 tele-technologies	tele-technology	NNS	hyphen_rule
 telematics	telematics	NNS	agents
 telephone-directories	telephone-directory	NNS	hyphen_rule
-telerobotics	telerobotics		override
+telerobotics	telerobotics	NNS	override
 telos	telos	NNS	agents
 temporal-dependencies	temporal-dependency	NNS	hyphen_rule
 temporals	temporals	NNS	adjective_rule
@@ -3040,14 +3040,14 @@ themselves-analyses	themselves-analysis	NNS	hyphen_rule
 then-businesses	then-business	NNS	hyphen_rule
 theoretics	theoretics	NNS	adjective_rule
 theories”-theories	theories”-theory	NNS	hyphen_rule
-therapeutics	therapeutics		override
+therapeutics	therapeutics	NNS	override
 therapist-wishes	therapist-wish	NNS	hyphen_rule
 thermals	thermals	NNS	adjective_rule
 thermionics	thermionics	NNS	adjective_rule
-thermodynamics	thermodynamics		override
+thermodynamics	thermodynamics	NNS	override
 thermostabilities	thermostability	NNS	agents
 these-inconsistencies	these-inconsistency	NNS	hyphen_rule
-theses	thesis		override
+theses	thesis	NNS	override
 theterrorpolicies	theterrorpolicies	NNS	agents
 they-identities	they-identity	NNS	hyphen_rule
 thing-processes	thing-process	NNS	hyphen_rule
@@ -3062,7 +3062,7 @@ thought-technologies	thought-technology	NNS	hyphen_rule
 three-bodies	three-body	NNS	hyphen_rule
 threefolds	threefolds	NNS	adjective_rule
 ths	ths	NNS	agents
-thus	thus		override
+thus	thus	NNS	override
 tidies	tidies	NNS	adjective_rule
 tights	tights	NNS	adjective_rule
 time-boundaries	time-boundary	NNS	hyphen_rule
@@ -3078,7 +3078,7 @@ tokens	tokens	NNS	adjective_rule
 tollens	tollens	NNS	agents
 tonals	tonals	NNS	adjective_rule
 tone-classes	tone-class	NNS	hyphen_rule
-tongs	tongs		override
+tongs	tongs	NNS	override
 tools-to-theories	tools-to-theory	NNS	hyphen_rule
 topic-ontologies	topic-ontology	VBZ	hyphen_rule
 tops	tops	NNS	adjective_rule
@@ -3125,7 +3125,7 @@ truants	truants	NNS	adjective_rule
 trues	trues	NNS	adjective_rule
 truth-theories	truth-theory	NNS	hyphen_rule
 tubulars	tubulars	NNS	adjective_rule
-tues	tues		override
+tues	tues	NNS	override
 twelfths	twelfths	NNS	adjective_rule
 twenties	twenties	NNS	agents
 twin-studies	twin-study	NNS	hyphen_rule
@@ -3203,7 +3203,7 @@ verbatims	verbatims	NNS	adjective_rule
 vergence-anomalies	vergence-anomaly	NNS	hyphen_rule
 veritables	veritables	NNS	adjective_rule
 versatiles	versatiles	NNS	adjective_rule
-versus	versus		override
+versus	versus	NNS	override
 vertebrates	vertebrates	NNS	adjective_rule
 verticals	verticals	NNS	adjective_rule
 ves	ve	NNS	agents
@@ -3219,7 +3219,7 @@ visibles	visibles	NNS	adjective_rule
 visionaries	visionaries	NNS	adjective_rule
 visual-acuities	visual-acuity	NNS	hyphen_rule
 visuals	visuals	NNS	adjective_rule
-vitals	vitals		override
+vitals	vitals	NNS	override
 vocalics	vocalics	NNS	adjective_rule
 vocals	vocals	NNS	adjective_rule
 vocatives	vocatives	NNS	adjective_rule
@@ -3264,7 +3264,7 @@ winter-bodies	winter-body	NNS	hyphen_rule
 wirelesses	wirelesses	NNS	adjective_rule
 within-countries	within-country	NNS	hyphen_rule
 within-families	within-family	NNS	hyphen_rule
-women	woman		override
+women	woman	NNS	override
 woods	woods	NNS	agents
 word-affinities	word-affinity	NNS	hyphen_rule
 word-categories	word-category	NNS	hyphen_rule
@@ -3285,7 +3285,7 @@ wrist-watches	wrist-watch	NNS	hyphen_rule
 wrongs	wrongs	NNS	adjective_rule
 x'-theories	x'-theory	NNS	hyphen_rule
 yellows	yellows	NNS	adjective_rule
-yes	yes		override
+yes	yes	NNS	override
 yield-inventories	yield-inventory	NNS	hyphen_rule
 youngers	youngers	NNS	adjective_rule
 youngs	youngs	NNS	adjective_rule

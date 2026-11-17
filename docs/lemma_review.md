@@ -189,3 +189,6 @@ a singular mostly used attributively (*keys*, *tokens*, *firms*, *squares*).
   *thanks* as a verb still merges. No target word is mapped to another word, and no exception
   merges a form into a target word. The check on spaCy's own lemmas of the target words runs on
   the rebuilt view (3.6).
+- **Amended 2026-11-17 (3.6).** The override file's entries now apply to plural nouns only
+  (`NNS`): every override form is read mostly as one (*goes*, the only verb, is not carried), and
+  with an empty tag *means* would have stayed unmerged as a verb too ("this means that").
