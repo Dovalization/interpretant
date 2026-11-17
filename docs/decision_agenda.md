@@ -1921,6 +1921,26 @@ and nothing waits on work that comes later:
 12. Sense lists frozen (7a.4); the author's labels (7.2); counting (7.4).
 13. The confirmation plan committed (6.2); held-out labels; the confirming run.
 
+**9.2 Preprocessing to a standard before inference** (decided 2026-11-17, the author). The rest
+of steps 3 and 4 and stages 6–8 are finished, each to a quality bar fixed in its plan before it
+runs, before any encoding or model (stage 9 on). After stage 8 the corpus and the usages table are
+frozen for inference. Not reopened: corpus cleaning (rounds S1 and S1b found the identifiable junk
+below the measurement's noise) and lemma polishing (round L1 found the same of the exceptions).
+Target extraction (stage 7) belongs to this phase: its quality shows only once usages are drawn,
+and the gap report (stage 8) can send new abstracts through stages 2–7.
+
+| Step | Work | Quality bar |
+|---|---|---|
+| 0 | Leftovers: the datasheet's known limits, dated notes in the living docs, the housekeeping list | A reviewed diff |
+| 1 | The word table (4.7, `curated/words.tsv`): lemma, part of speech, match by lemma or form, held out, drafted from each target's part-of-speech shares in the corpus | The author's approval; held-out words fixed before any target result is read |
+| 2 | Spellings (3.4): `norm_` filtered and versioned, the project's rules as backstop, compound forms mapped to the most frequent; retiring `TARGET_VARIANTS`, the protected list and the voted map on the text; the hyphenated rule's spelling-only entries | A random sample of mapped pairs judged at a rate set in its plan; no target mapped away |
+| 3 | Phrases (3.5), planned in a pass of its own: `Matcher` candidates, C-value with a frequency floor | The top of the list reviewed by the author; no phrase containing a single-word target joined |
+| 4 | The full static view: exceptions, spellings and phrases | Token alignment, spot checks and the target check, as at 3.6 |
+| 5 | The contextual sentence view (2.2) | An audit of sentence boundaries |
+| 6 | Matching and the usages table (4.1–4.6), in one `usages` package as the code review of 2026-11-12 advised; the small or transformer model for entities by the one-field comparison (4.9) | An audit of matched usages (the right word, part of speech and scope) and a recall check |
+| 7 | The junk gate (4b) | Its threshold pre-registered before the usages are drawn |
+| 8 | The gap report (4.8) | A top-up download plan only for cells under the floor, approved by the author |
+
 ## Step 10: terminology pass (later)
 
 Names should follow common NLP and data-project usage, as *static* and *contextual* replaced
@@ -2027,6 +2047,9 @@ The sized tasks come to about 4 hours; three are not yet sized.
 - [x] `docs/experiments.md`: the record of past experiments, written before any step 1 deletion
   (37 entries; the README points to it).
 - [ ] Push: the local commits wait for the author's go.
+- [ ] The homelab's old checkout (`~/interpretant-old`, 20 GB, 24 uncommitted changes, set aside
+  2026-11-17 when the run checkout moved to `~/Developer/interpretant`): kept or deleted, the
+  author decides.
 - [ ] Devlog 07: waiting for the author's review.
 - [ ] bazzite's copy of the repository: behind the Mac; sync before any GPU run.
 - [ ] Progress lines show "0/s" for stages that finish fewer than one item a second (the
