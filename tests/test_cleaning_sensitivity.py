@@ -14,6 +14,7 @@ from interpretant.pipelines.annotate_corpus import annotate_corpus
 from interpretant.pipelines.build_static_view import build_static_view
 from interpretant.pipelines.cleaning_sensitivity import (
     SensitivitySettings,
+    average_pairs,
     has_finite_verb_outside,
     measure_cleaning_sensitivity,
     plan_cells,
@@ -91,9 +92,8 @@ def test_plan_cells_refuses_builds_whose_texts_differ() -> None:
         plan_cells(base, later, ())
 
 
-def test_measure_cleaning_sensitivity_measures_each_version_of_each_comparison(
-    corpus_catalog_file: Path,
-) -> None:
+def small_builds(corpus_catalog_file: Path) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """P and the later build over the small corpus's static view; W2 dropped later."""
     catalog = read_catalog(corpus_catalog_file)
     selection = CorpusSelection(fields=("ai", "compsci"), decades=(2010, 2020))
     annotate_corpus(catalog, selection, ANNOTATE_SETTINGS)
@@ -114,10 +114,19 @@ def test_measure_cleaning_sensitivity_measures_each_version_of_each_comparison(
         for work, fields, decade, text, ranges, reason in rows
     ]
 
+    return build(rows), build(later_rows)
+
+
+def test_measure_cleaning_sensitivity_measures_each_version_of_each_comparison(
+    corpus_catalog_file: Path,
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    base, later = small_builds(corpus_catalog_file)
+
     result = measure_cleaning_sensitivity(
         catalog,
-        build(rows),
-        build(later_rows),
+        base,
+        later,
         targets=frozenset({"model"}),
         settings=SensitivitySettings(placebos=2, bootstraps=2),
     )
@@ -139,3 +148,54 @@ def test_measure_cleaning_sensitivity_measures_each_version_of_each_comparison(
     assert ai_2010["dropped_works"].item() >= 1
     assert result.models == 6 * 4
     assert result.target_doses["target"].to_list() == ["model"]
+
+
+def test_the_averaged_round_measures_averaged_c_and_averaged_p_again(
+    corpus_catalog_file: Path,
+) -> None:
+    catalog = read_catalog(corpus_catalog_file)
+    base, later = small_builds(corpus_catalog_file)
+    result = measure_cleaning_sensitivity(
+        catalog,
+        base,
+        later,
+        targets=frozenset({"model"}),
+        settings=SensitivitySettings(bootstraps=2, averaged=True),
+    )
+    assert set(result.movements["version"]) == {"averaged_treatment", "averaged_noise"}
+    assert result.movements.height == 2
+    assert result.models == 2 * 3 * 4
+
+
+def test_average_pairs_keeps_words_measured_in_every_replicate() -> None:
+    schema = {
+        "word": pl.String,
+        "count_a": pl.Int64,
+        "count_b": pl.Int64,
+        "cosine_drift": pl.Float32,
+        "neighbour_shift": pl.Float64,
+    }
+    first = pl.DataFrame(
+        {
+            "word": ["a", "b"],
+            "count_a": [200, 300],
+            "count_b": [200, 300],
+            "cosine_drift": [0.1, 0.2],
+            "neighbour_shift": [0.2, 0.4],
+        },
+        schema=schema,
+    )
+    second = pl.DataFrame(
+        {
+            "word": ["a"],
+            "count_a": [400],
+            "count_b": [200],
+            "cosine_drift": [0.3],
+            "neighbour_shift": [0.6],
+        },
+        schema=schema,
+    )
+    averaged = average_pairs([first, second])
+    assert averaged["word"].to_list() == ["a"]
+    assert averaged["neighbour_shift"].item() == pytest.approx(0.4)
+    assert averaged["count_a"].item() == pytest.approx(300)

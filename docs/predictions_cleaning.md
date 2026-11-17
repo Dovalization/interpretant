@@ -173,3 +173,21 @@ Round S1b, on bootstrap-averaged drift, decides whether that effect matters once
 measurement's own noise is reduced. Separately, the single-model instability bears on agenda 6b:
 a static grid built on one model per cell would need bootstrap averaging (or another stabilised
 estimate) before any flag means anything.
+
+### Round S1b: bets and one limit (2026-11-16, after round S1's results, before S1b ran)
+
+Round S1b runs as the amendment fixed it: 9 bootstrap models per cell for averaged P (round S1's
+own bootstrap samples, the same seeds), averaged P′ (seeds offset by 2000) and averaged C
+(C's works resampled, seeds offset by 3000), scored by `scripts/score_cleaning_sensitivity_averaged.py`.
+A word enters an averaged table only if it is measured in all 9 replicates of the comparison.
+
+**One limit, stated before the run.** S1b has no placebo, so a "moves" verdict would mean only
+that removing this 0.8% of the text moves the averaged measurement beyond the noise of two
+averages. Round S1 found single-model junk removal indistinguishable from random removal on the
+flags. So "moves" here cannot alone say that the *junk* matters rather than removing any
+similar amount of text; that question would need averaged placebos (9 × 19 more models per cell).
+
+**Bet S1b-a (Claude's).** D(junk) < 1.5 × D(noise), so C does not move the averaged measurement
+either. Averaging smooths the removal's effect on the matrix as well as the bootstrap noise, and
+in round S1 the junk-specific part of the rank disagreement was small (0.064 for C against at
+most 0.057 for the placebos). Confidence about 60%.

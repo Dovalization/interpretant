@@ -84,6 +84,9 @@ class SensitivitySettings:
     placebos: int = 19
     bootstraps: int = 9
     fields: tuple[str, ...] = ()
+    # Round S1b: neighbour shift averaged over the bootstrap models of P, of C and of P again,
+    # instead of single models and placebos.
+    averaged: bool = False
 
 
 @dataclass
@@ -281,13 +284,13 @@ def _measure_field(name: str, job: _FieldJob) -> _FieldResult:
         doses.append((name, decade, *dose))
         _count_targets(base_segments, dropped, passages, job.targets, target_tokens, target_removed)
         current: dict[VersionKey, KeyedVectors] = {}
-        for key, lines in _versions(base_segments, dropped, passages, cell, job.settings):
+        versions = _averaged_versions if job.settings.averaged else _versions
+        for key, lines in versions(base_segments, dropped, passages, cell, job.settings):
             current[key] = train_lines(lines)
             models += 1
         if previous:
-            movements.extend(
-                _compare(name, previous_decade, decade, previous, current, job.targets)
-            )
+            compare = _compare_averaged if job.settings.averaged else _compare
+            movements.extend(compare(name, previous_decade, decade, previous, current, job.targets))
         previous, previous_decade = current, decade
     return _FieldResult(movements, doses, target_tokens, target_removed, models)
 
@@ -357,6 +360,100 @@ def _versions(
             ("bootstrap", replicate),
             cell_lines(base_segments, sample=bootstrap_sample(work_ids, rng)),
         )
+
+
+# Round S1b's three sets of bootstrap models, and the seed offset of each: averaged P reuses round
+# S1's bootstrap samples of P.
+AVERAGED_SETS = {"averaged_base": 1000, "averaged_noise": 2000, "averaged_treatment": 3000}
+
+
+def _averaged_versions(
+    base_segments: dict[str, list[list[str]]],
+    dropped: frozenset[str],
+    passages: dict[str, list[list[str]]],
+    cell: str,
+    settings: SensitivitySettings,
+) -> Iterator[tuple[VersionKey, list[str]]]:
+    """Each bootstrap sample of P, of P again and of C, one at a time."""
+    treatment = {
+        work_id: segments
+        for work_id, segments in {**base_segments, **passages}.items()
+        if work_id not in dropped
+    }
+    pools = {
+        "averaged_base": base_segments,
+        "averaged_noise": base_segments,
+        "averaged_treatment": treatment,
+    }
+    for replicate in range(settings.bootstraps):
+        for name, offset in AVERAGED_SETS.items():
+            works = pools[name]
+            sample = bootstrap_sample(list(works), seeded(BASE_SEED, offset + replicate, cell))
+            yield (name, replicate), cell_lines(works, sample=sample)
+
+
+def _compare_averaged(
+    name: str,
+    decade_a: int,
+    decade_b: int,
+    previous: dict[VersionKey, KeyedVectors],
+    current: dict[VersionKey, KeyedVectors],
+    targets: frozenset[str],
+) -> Iterator[tuple[object, ...]]:
+    """Averaged C's and averaged P′'s movement from averaged P, for one comparison."""
+    replicates = sorted(
+        {replicate for set_name, replicate in current if set_name == "averaged_base"}
+    )
+    averaged = {
+        set_name: add_shift_floor(
+            average_pairs(
+                [
+                    compare_cells(previous[(set_name, replicate)], current[(set_name, replicate)])
+                    for replicate in replicates
+                ]
+            )
+        )
+        for set_name in AVERAGED_SETS
+    }
+    base = averaged["averaged_base"]
+    for set_name in ("averaged_treatment", "averaged_noise"):
+        version = averaged[set_name]
+        moved = movement(base, version)
+        change, compared = _target_rank_change(base, version, targets)
+        yield (
+            set_name,
+            0,
+            name,
+            decade_a,
+            decade_b,
+            base.height,
+            moved.flag_turnover,
+            moved.rank_disagreement,
+            moved.entering,
+            moved.leaving,
+            change,
+            compared,
+        )
+
+
+def average_pairs(pairs: list[pl.DataFrame]) -> pl.DataFrame:
+    """The words measured in every replicate's pair table, with counts and drift averaged."""
+    if not pairs or any(pair.is_empty() for pair in pairs):
+        return pl.DataFrame(schema={**pairs[0].schema} if pairs else None)
+    stacked = pl.concat(pairs)
+    return (
+        stacked.group_by("word")
+        .agg(
+            pl.len().alias("replicates"),
+            pl.col("count_a").mean(),
+            pl.col("count_b").mean(),
+            pl.col("cosine_drift").mean(),
+            pl.col("neighbour_shift").mean(),
+        )
+        .filter(pl.col("replicates") == len(pairs))
+        .drop("replicates")
+        .sort("word")
+    )
 
 
 def _compare(

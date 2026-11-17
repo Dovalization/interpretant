@@ -61,6 +61,11 @@ TREATMENT_REVISION = "75f36a82"
 @click.option("--field", "fields", multiple=True, help="Only these fields (a timing run).")
 @click.option("--placebos", default=19, show_default=True, help="Placebo versions per cell.")
 @click.option("--bootstraps", default=9, show_default=True, help="Bootstrap samples per cell.")
+@click.option(
+    "--averaged",
+    is_flag=True,
+    help="Round S1b: drift averaged over bootstrap models of P, of C and of P again.",
+)
 @process_count_option
 def measure_cleaning_sensitivity_command(
     catalog_file: Path,
@@ -72,6 +77,8 @@ def measure_cleaning_sensitivity_command(
     placebos: int,
     bootstraps: int,
     process_count: int | None,
+    *,
+    averaged: bool,
 ) -> None:
     """Measure whether removing the identifiable junk moves static drift (round S1).
 
@@ -92,7 +99,9 @@ def measure_cleaning_sensitivity_command(
             base,
             later,
             targets=targets,
-            settings=SensitivitySettings(placebos=placebos, bootstraps=bootstraps, fields=fields),
+            settings=SensitivitySettings(
+                placebos=placebos, bootstraps=bootstraps, fields=fields, averaged=averaged
+            ),
             process_count=process_count or default_process_count(),
             progress=timer,
         )
