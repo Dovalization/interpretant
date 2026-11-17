@@ -30,7 +30,8 @@ forms check the rejoined-segment rule (3.5, decided 2026-11-13) the same way. Dr
 20261116.
 
 Writes OUT/review_list.parquet (form, count, kind, spaCy's lemma and its share, the voted lemma,
-the signals, the group, up to three contexts) and prints the summary. Read-only; run from the
+the signals, the group, up to three contexts) and OUT/plural_merges.parquet (every plural spaCy
+merges, with its singular's part-of-speech shares), and prints the summary. Read-only; run from the
 repository root on the run machine:
 `python scripts/evidence/lemma_review_list.py OUT [PROCESSES] [--tail]`. With `--tail` the
 untested `disagree` tail also gets contexts, for the agent judges chosen after the tail check
@@ -244,6 +245,36 @@ def classify(
     return None
 
 
+def plural_merges(
+    by_form: dict[str, Counter[str]],
+    tags_by_form: dict[str, Counter[str]],
+    families_of: dict[str, TagCounts],
+) -> pl.DataFrame:
+    """Every form read mostly as a plural noun that spaCy merges, with its singular's family shares.
+
+    For the rule on plurals whose singular is mostly another part of speech
+    (`docs/lemma_review.md`, the consistency pass); the shares are over every use of the
+    singular's spelling in the kept text.
+    """
+    rows = []
+    for form, lemmas in by_form.items():
+        lemma = lemmas.most_common(1)[0][0]
+        if lemma == form or tags_by_form[form].most_common(1)[0][0] != "NNS":
+            continue
+        uses = families_of[lemma]
+        total = sum(uses.values())
+        row: dict[str, object] = {
+            "form": form,
+            "count": sum(lemmas.values()),
+            "spacy_lemma": lemma,
+            "singular_uses": total,
+        }
+        for name in ("noun", "proper", "adjective", "verb", "adverb", "other"):
+            row[f"{name}_share"] = uses[(lemma, name)] / total if total else 0.0
+        rows.append(row)
+    return pl.DataFrame(rows)
+
+
 def grouped(table: pl.DataFrame, targets: set[str], rng: random.Random) -> pl.DataFrame:
     """The table with each form's review group and its rank within its kind."""
     table = table.with_columns(
@@ -311,6 +342,7 @@ def main() -> None:
     for (word, name), count in families.items():
         families_of[word][(word, name)] = count
 
+    plural_merges(by_form, tags_by_form, families_of).write_parquet(OUT / "plural_merges.parquet")
     rows = []
     for form, lemmas in by_form.items():
         lemma = lemmas.most_common(1)[0][0]

@@ -117,6 +117,34 @@ the second look showed a difference, and answered the 50 calls.
   spaCy on none. Their contexts come from `lemma_review_list.py --tail`, drawn with their own
   seed so every other form's contexts are unchanged (checked: 2,436 of 2,436 identical).
 
+## The consistency pass (set 2026-11-17, before it was applied)
+
+The case-by-case answers on plurals whose singular is another part of speech disagree with each
+other: of the 302 listed plural nouns whose singular is mostly an adjective, 45 were kept apart
+(*others*, *goods*, *blacks*, *academics*, *normals*) and 257 merged (*humans*, *professionals*,
+*metrics*, *officials*, *seconds*). The author chose one policy for all of them: **keep apart**.
+Merging two words makes a word's neighbourhood depend on their mix, which can change across
+decades and look like drift; keeping apart only splits some noun plurals from their singular
+(*metrics*, *bounds*), which thins counts.
+
+- **The rule.** A form read mostly as a plural noun that spaCy merges into a singular keeps its
+  form when the singular's spelling has at least 20 uses in the kept text, fewer than half of
+  them tagged as nouns (common or proper), and WordNet (spaCy's lemma index) gives it an
+  adjective, verb or adverb reading. Hyphenated forms stay with the hyphenated rule.
+- **Scope.** Every such plural in the kept text (`plural_merges.parquet`, written by
+  `lemma_review_list.py`), not only the listed ones, so it also reaches forms no list caught
+  (*novels*).
+- **Precedence.** The override file, then this rule, then the author's and the agents' answers,
+  then the hyphenated rule. The rule overrides earlier answers in its scope, the author's
+  included; the results list every one it changes, and any override entry it disagrees with.
+- **Left out.** Plurals whose singular is mostly a noun with another meaning (*logos*, *arms*):
+  a part-of-speech rule cannot see them, so they stay as decided or are listed by hand. The other
+  answers (spellings, names, junk, irregular plurals) stand.
+- **How the rule was chosen.** Its tests were tried on the listed forms before this was written:
+  the tag share alone took in ordinary nouns that spaCy often tags as adjectives in compounds
+  (*astrocytes*, *mammals*, *neuropeptides*: 79 of 381), which the WordNet test removes. The
+  thresholds (20 uses, half) are the review list's own.
+
 ### The tail and the exceptions file
 
 - **The tail.** The two Sonnet judges agree on 349 of the 359 forms (97.2%); the Opus judge
