@@ -78,8 +78,8 @@ stages:
       size: 2694
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 7b0bdccfc4950fdb7651e3251899d43c
-      size: 4131
+      md5: 4229c9975a7f21c8694b34d4e6ad9365
+      size: 7085
     params:
       params.yaml:
         annotate_corpus:
@@ -240,8 +240,8 @@ stages:
       size: 2694
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 7b0bdccfc4950fdb7651e3251899d43c
-      size: 4131
+      md5: 4229c9975a7f21c8694b34d4e6ad9365
+      size: 7085
     params:
       params.yaml:
         build_corpus:
@@ -442,8 +442,8 @@ stages:
       size: 2694
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 7b0bdccfc4950fdb7651e3251899d43c
-      size: 4131
+      md5: 4229c9975a7f21c8694b34d4e6ad9365
+      size: 7085
     params:
       params.yaml:
         corpus:
@@ -606,8 +606,8 @@ stages:
       size: 2694
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 7b0bdccfc4950fdb7651e3251899d43c
-      size: 4131
+      md5: 4229c9975a7f21c8694b34d4e6ad9365
+      size: 7085
     params:
       params.yaml:
         clean_corpus:
@@ -850,8 +850,8 @@ stages:
       size: 2694
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 7b0bdccfc4950fdb7651e3251899d43c
-      size: 4131
+      md5: 4229c9975a7f21c8694b34d4e6ad9365
+      size: 7085
     params:
       params.yaml:
         corpus:
@@ -943,16 +943,16 @@ stages:
       size: 1913
     - path: src/interpretant/catalog/static_view.py
       hash: md5
-      md5: cb407e8336b105112cc96e231c0fa4a0
-      size: 2053
+      md5: 995b96313132fa5d155200444d32485e
+      size: 2514
     - path: src/interpretant/cli/build_static_view.py
       hash: md5
       md5: 57bcaf9e4f7059f2c53f65d9704bf325
       size: 2251
     - path: src/interpretant/corpus/static_view.py
       hash: md5
-      md5: 5cdcac4da4eb852f0a7b39a7073d57be
-      size: 2283
+      md5: 7a26cdf6ab00fae5a7eab27e36cb9c6e
+      size: 2404
     - path: src/interpretant/corpus/works.py
       hash: md5
       md5: c4a97f7d0484dcd331505542be27fecc
@@ -975,8 +975,8 @@ stages:
       size: 2694
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 7b0bdccfc4950fdb7651e3251899d43c
-      size: 4131
+      md5: 4229c9975a7f21c8694b34d4e6ad9365
+      size: 7085
     params:
       params.yaml:
         corpus:
@@ -1004,6 +1004,6 @@ stages:
     outs:
     - path: data/interim/static_view
       hash: md5
-      md5: 5397e5af39ae88b62248299d4b61e455.dir
-      size: 422661284
+      md5: decaf48e3a6ad37b3c080cf7fadf8bea.dir
+      size: 422789425
       nfiles: 88
