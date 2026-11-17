@@ -191,3 +191,34 @@ similar amount of text; that question would need averaged placebos (9 × 19 more
 either. Averaging smooths the removal's effect on the matrix as well as the bootstrap noise, and
 in round S1 the junk-specific part of the rank disagreement was small (0.064 for C against at
 most 0.057 for the placebos). Confidence about 60%.
+
+### Round S1b results (2026-11-16, `scripts/score_cleaning_sensitivity_averaged.py`)
+
+The run (22 min 36 s, 2,376 cell models, code `fabd6eb3`): 68 of 77 comparisons have at least 200
+measured words in averaged P.
+
+| | Flag turnover from averaged P | Rank disagreement | Targets' combined rank change |
+|---|---|---|---|
+| Averaged C (D(junk)) | 0.5197 | 0.0503 | 6,775 |
+| Averaged P′ (D(noise)) | 0.5144 | 0.0471 | 6,662 |
+
+- **S1b-a: passed.** D(junk) / D(noise) = 1.01, far under 1.5.
+- **Verdict: C does not move the averaged measurement either.** By the amendment, C moves neither
+  measurement, so the 2% target can be revisited for this kind of junk (the author decides).
+  Junk with verbs stays untested.
+
+### Reading of S1 and S1b together
+
+The junk the rules can identify (0.8% of the text) changes the static measurement no more than
+removing as much text at random (S1), or than drawing the corpus again (S1b). The larger finding
+is the instrument's own noise. Two averages of 9 bootstrap models of the same corpus disagree
+on half of the top-5% flags (0.51), against 0.79 for single models. So averaging nine models
+removes only about a third of the disagreement, and a flag from this measurement (PPMI-SVD per
+cell, neighbour shift, the top 5% within frequency bins) is not reproducible. The words near the
+95th percentile move across it with any perturbation.
+
+For the corpus, this means further cleaning toward 2% cannot be justified by this measurement:
+its noise is far larger than anything the identifiable junk does. For the measurement, it means
+the static grid needs a more stable statistic before it can carry decisions (agenda 6b and
+detection experiment 4): many more bootstrap models, a continuous score rather than a top-5%
+flag, or the contextual measure with its matched controls and rank test.
