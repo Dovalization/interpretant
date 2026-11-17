@@ -19,6 +19,7 @@ from interpretant.cli.count_word_repairs import count_word_repairs_command
 from interpretant.cli.detect_languages import detect_languages_command
 from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
+from interpretant.cli.measure_cleaning_sensitivity import measure_cleaning_sensitivity_command
 from interpretant.cli.report_corpus import report_corpus_command
 
 console = Console()
@@ -41,6 +42,7 @@ cli.add_command(clean_corpus_command)
 cli.add_command(build_corpus_command)
 cli.add_command(report_corpus_command)
 cli.add_command(compare_corpus_command)
+cli.add_command(measure_cleaning_sensitivity_command)
 
 
 # ---------------------------------------------------------------------------

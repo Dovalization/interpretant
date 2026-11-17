@@ -123,10 +123,13 @@ def train_lines(
 ) -> KeyedVectors:
     """Build PPMI-SVD vectors for one cell's lines of space-separated tokens, with counts stored.
 
-    No window crosses a line, so a text broken at a removed range is several lines.
+    No window crosses a line, so a text broken at a removed range is several lines. A cell
+    with fewer than two words at the minimum count gets no vectors.
     """
     counts = vocabulary(lines, min_count)
     words = sorted(counts, key=lambda word: -counts[word])
+    if len(words) <= 1:
+        return KeyedVectors(vector_size=dimensions)
     index = {word: position for position, word in enumerate(words)}
     vectors = svd_vectors(ppmi(cooccurrence(lines, index, window)), dimensions, seed=seed)
     keyed = KeyedVectors(vector_size=vectors.shape[1])

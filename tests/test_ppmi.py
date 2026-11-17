@@ -94,3 +94,7 @@ def test_ppmi_grid_builds_every_cell_and_resumes(tmp_path: Path) -> None:
 
 def test_vocabulary_applies_the_count_threshold() -> None:
     assert vocabulary(["a a b", "a c"], min_count=2) == {"a": 3}
+
+
+def test_train_lines_gives_no_vectors_to_a_cell_without_two_counted_words() -> None:
+    assert len(train_lines(["a b c"], min_count=20)) == 0
