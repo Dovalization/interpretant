@@ -5,7 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+import pytest
+import torch
 from gensim.models import KeyedVectors
+from scipy import sparse
 
 from interpretant.embedding.grid import build_ppmi_grid, discover_cells
 from interpretant.embedding.ppmi import cooccurrence, ppmi, train_cell, train_lines, vocabulary
@@ -98,3 +101,56 @@ def test_vocabulary_applies_the_count_threshold() -> None:
 
 def test_train_lines_gives_no_vectors_to_a_cell_without_two_counted_words() -> None:
     assert len(train_lines(["a b c"], min_count=20)) == 0
+
+
+def batch_cooccurrence(lines: list[str], index: dict[str, int], window: int) -> sparse.csr_matrix:
+    """The counting the module did before, by adding a matrix per line: the reference."""
+    size = len(index)
+    total = sparse.csr_matrix((size, size), dtype=np.float64)
+    for line in lines:
+        ids = np.array([index[word] for word in line.split() if word in index], dtype=np.int64)
+        rows: list[np.ndarray] = []
+        columns: list[np.ndarray] = []
+        for offset in range(1, window + 1):
+            if len(ids) > offset:
+                rows += [ids[:-offset], ids[offset:]]
+                columns += [ids[offset:], ids[:-offset]]
+        if rows:
+            row, column = np.concatenate(rows), np.concatenate(columns)
+            ones = np.ones(len(row), dtype=np.float64)
+            total = total + sparse.coo_matrix((ones, (row, column)), shape=(size, size)).tocsr()
+    return total
+
+
+def test_cooccurrence_counts_exactly_as_adding_matrices_per_line_did() -> None:
+    rng = np.random.default_rng(3)
+    words = [f"w{n}" for n in range(40)]
+    lines = [" ".join(rng.choice([*words, "oov"], size=rng.integers(0, 30))) for _ in range(300)]
+    index = {word: position for position, word in enumerate(words)}
+
+    counted = cooccurrence(lines, index, window=5)
+    reference = batch_cooccurrence(lines, index, window=5)
+
+    assert counted.has_canonical_format
+    assert np.array_equal(counted.indptr, reference.indptr)
+    assert np.array_equal(counted.indices, reference.indices)
+    assert np.array_equal(counted.data, reference.data)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="needs a CUDA device")
+def test_the_cuda_svd_finds_the_neighbours_arpack_finds() -> None:
+    rng = np.random.default_rng(4)
+    animals, tools = ["cat", "dog", "horse", "cow"], ["hammer", "saw", "drill", "wrench"]
+    lines = []
+    for _ in range(600):
+        lines.append(f"the {rng.choice(animals)} eats grass and sleeps in the barn")
+        lines.append(f"the {rng.choice(tools)} cuts wood and sits in the shed")
+
+    on_cpu = train_lines(lines, window=2, dimensions=4, min_count=5)
+    on_gpu = train_lines(lines, window=2, dimensions=4, min_count=5, svd_backend="cuda")
+
+    assert on_cpu.index_to_key == on_gpu.index_to_key
+    for word in ("cat", "hammer"):
+        cpu_neighbours = {neighbour for neighbour, _ in on_cpu.most_similar(word, topn=3)}
+        gpu_neighbours = {neighbour for neighbour, _ in on_gpu.most_similar(word, topn=3)}
+        assert cpu_neighbours == gpu_neighbours

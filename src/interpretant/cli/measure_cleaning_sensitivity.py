@@ -13,6 +13,7 @@ from interpretant.catalog.revisions import load_abstracts_at
 from interpretant.cli.options import default_process_count, process_count_option
 from interpretant.cli.progress import LiveProgress
 from interpretant.corpus.audit import load_target_words
+from interpretant.embedding.ppmi import SvdBackend
 from interpretant.pipelines.cleaning_sensitivity import (
     SensitivityResult,
     SensitivitySettings,
@@ -62,6 +63,13 @@ TREATMENT_REVISION = "75f36a82"
 @click.option("--placebos", default=19, show_default=True, help="Placebo versions per cell.")
 @click.option("--bootstraps", default=9, show_default=True, help="Bootstrap samples per cell.")
 @click.option(
+    "--svd-backend",
+    type=click.Choice(["arpack", "cuda"]),
+    default="arpack",
+    show_default=True,
+    help="ARPACK on the CPU, or cuSOLVER on the GPU (only once checked against ARPACK).",
+)
+@click.option(
     "--averaged",
     is_flag=True,
     help="Round S1b: drift averaged over bootstrap models of P, of C and of P again.",
@@ -76,6 +84,7 @@ def measure_cleaning_sensitivity_command(
     fields: tuple[str, ...],
     placebos: int,
     bootstraps: int,
+    svd_backend: SvdBackend,
     process_count: int | None,
     *,
     averaged: bool,
@@ -100,7 +109,11 @@ def measure_cleaning_sensitivity_command(
             later,
             targets=targets,
             settings=SensitivitySettings(
-                placebos=placebos, bootstraps=bootstraps, fields=fields, averaged=averaged
+                placebos=placebos,
+                bootstraps=bootstraps,
+                fields=fields,
+                averaged=averaged,
+                svd_backend=svd_backend,
             ),
             process_count=process_count or default_process_count(),
             progress=timer,

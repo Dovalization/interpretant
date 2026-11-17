@@ -16,6 +16,7 @@ from __future__ import annotations
 from collections import Counter
 from collections.abc import Iterable, Sequence
 from pathlib import Path
+from typing import Literal
 
 import numpy as np
 from gensim.models import KeyedVectors
@@ -27,7 +28,7 @@ DIMENSIONS = 100
 MIN_COUNT = 20
 CONTEXT_SMOOTHING = 0.75
 EIGENVALUE_WEIGHT = 0.5
-LINES_PER_BATCH = 20_000
+SvdBackend = Literal["arpack", "cuda"]
 
 
 def vocabulary(lines: Iterable[str], min_count: int = MIN_COUNT) -> Counter[str]:
@@ -45,30 +46,33 @@ def cooccurrence(
 
     Out-of-vocabulary tokens are dropped before windowing, as word2vec drops words below its
     minimum count, so the two methods see the same contexts.
+
+    The pairs of every line are counted at once, each pair a key into a size-by-size table
+    (``np.bincount``); the matrix is then put in SciPy's canonical form (sorted indices, no
+    duplicates), the form adding batch matrices gave before, so the SVD sums in the same order.
     """
     size = len(index)
-    total = sparse.csr_matrix((size, size), dtype=np.float64)
-    rows: list[np.ndarray] = []
-    columns: list[np.ndarray] = []
-
-    def flush() -> sparse.csr_matrix:
-        if not rows:
-            return sparse.csr_matrix((size, size), dtype=np.float64)
-        row, column = np.concatenate(rows), np.concatenate(columns)
-        rows.clear()
-        columns.clear()
-        values = np.ones(len(row), dtype=np.float64)
-        return sparse.coo_matrix((values, (row, column)), shape=(size, size)).tocsr()
-
-    for number, line in enumerate(lines, start=1):
-        ids = np.fromiter((index[w] for w in line.split() if w in index), dtype=np.int64)
-        for offset in range(1, window + 1):
-            if len(ids) > offset:
-                rows += [ids[:-offset], ids[offset:]]
-                columns += [ids[offset:], ids[:-offset]]
-        if number % LINES_PER_BATCH == 0:
-            total = total + flush()
-    return total + flush()
+    per_line = [
+        np.fromiter((index[word] for word in line.split() if word in index), dtype=np.int64)
+        for line in lines
+    ]
+    if not per_line or size == 0:
+        return sparse.csr_matrix((size, size), dtype=np.float64)
+    ids = np.concatenate(per_line)
+    line_of = np.repeat(np.arange(len(per_line)), [len(line_ids) for line_ids in per_line])
+    keys: list[np.ndarray] = []
+    for offset in range(1, window + 1):
+        same_line = line_of[:-offset] == line_of[offset:]
+        left, right = ids[:-offset][same_line], ids[offset:][same_line]
+        keys += [left * size + right, right * size + left]
+    counts = np.bincount(np.concatenate(keys), minlength=size * size)
+    nonzero = np.flatnonzero(counts)
+    matrix = sparse.csr_matrix(
+        (counts[nonzero].astype(np.float64), (nonzero // size, nonzero % size)),
+        shape=(size, size),
+    )
+    matrix.sum_duplicates()
+    return matrix
 
 
 def ppmi(
@@ -91,12 +95,32 @@ def svd_vectors(
     dimensions: int = DIMENSIONS,
     eigenvalue_weight: float = EIGENVALUE_WEIGHT,
     seed: int = 42,
+    backend: SvdBackend = "arpack",
 ) -> np.ndarray:
-    """Truncated SVD of the PPMI matrix, word vectors weighted by singular values ** p."""
+    """Truncated SVD of the PPMI matrix, word vectors weighted by singular values ** p.
+
+    ``arpack`` is SciPy's iterative ``svds`` in float64 on the CPU. ``cuda`` is a full SVD of the
+    dense matrix in float32 on the GPU (``torch.linalg.svd`` with cuSOLVER's QR-based ``gesvd``,
+    which PyTorch's documentation advises when precision matters), keeping the top components:
+    much faster on the run machine, but a different numerical route, so it is used only where an
+    equivalence check against ``arpack`` has been recorded (docs/predictions_cleaning.md).
+    """
     rank = min(dimensions, min(matrix.shape) - 1)
+    if backend == "cuda":
+        return _cuda_svd_vectors(matrix, rank, eigenvalue_weight)
     left, values, _ = svds(matrix, k=rank, random_state=seed)
     vectors: np.ndarray = left * values**eigenvalue_weight
     return vectors
+
+
+def _cuda_svd_vectors(matrix: sparse.csr_matrix, rank: int, eigenvalue_weight: float) -> np.ndarray:
+    import torch
+
+    dense = torch.from_numpy(matrix.toarray().astype(np.float32)).to("cuda")
+    left, values, _ = torch.linalg.svd(dense, full_matrices=False, driver="gesvd")
+    vectors = left[:, :rank] * values[:rank] ** eigenvalue_weight
+    result: np.ndarray = vectors.cpu().numpy().astype(np.float64)
+    return result
 
 
 def train_cell(
@@ -120,6 +144,7 @@ def train_lines(
     dimensions: int = DIMENSIONS,
     min_count: int = MIN_COUNT,
     seed: int = 42,
+    svd_backend: SvdBackend = "arpack",
 ) -> KeyedVectors:
     """Build PPMI-SVD vectors for one cell's lines of space-separated tokens, with counts stored.
 
@@ -131,7 +156,8 @@ def train_lines(
     if len(words) <= 1:
         return KeyedVectors(vector_size=dimensions)
     index = {word: position for position, word in enumerate(words)}
-    vectors = svd_vectors(ppmi(cooccurrence(lines, index, window)), dimensions, seed=seed)
+    pairs = cooccurrence(lines, index, window)
+    vectors = svd_vectors(ppmi(pairs), dimensions, seed=seed, backend=svd_backend)
     keyed = KeyedVectors(vector_size=vectors.shape[1])
     keyed.add_vectors(words, vectors.astype(np.float32))
     for word in words:

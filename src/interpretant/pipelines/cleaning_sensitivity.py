@@ -35,7 +35,7 @@ from interpretant.corpus.cell_versions import (
 )
 from interpretant.drift.grid import add_shift_floor, compare_cells
 from interpretant.drift.stability import movement
-from interpretant.embedding.ppmi import train_lines
+from interpretant.embedding.ppmi import SvdBackend, train_lines
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts
 
@@ -87,6 +87,8 @@ class SensitivitySettings:
     # Round S1b: neighbour shift averaged over the bootstrap models of P, of C and of P again,
     # instead of single models and placebos.
     averaged: bool = False
+    # The SVD's route (embedding/ppmi.py): ARPACK on the CPU, or cuSOLVER on the GPU once checked.
+    svd_backend: SvdBackend = "arpack"
 
 
 @dataclass
@@ -286,7 +288,7 @@ def _measure_field(name: str, job: _FieldJob) -> _FieldResult:
         current: dict[VersionKey, KeyedVectors] = {}
         versions = _averaged_versions if job.settings.averaged else _versions
         for key, lines in versions(base_segments, dropped, passages, cell, job.settings):
-            current[key] = train_lines(lines)
+            current[key] = train_lines(lines, svd_backend=job.settings.svd_backend)
             models += 1
         if previous:
             compare = _compare_averaged if job.settings.averaged else _compare
