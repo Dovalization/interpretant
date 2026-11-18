@@ -146,6 +146,12 @@ lemma_exceptions:
   path: curated/lemma_exceptions.tsv
   format: tsv
 
+# The words the project studies (decision agenda 4.7): lemma, the parts of speech in scope, match
+# by lemma or form, held out for the confirming run.
+words:
+  path: curated/words.tsv
+  format: tsv
+
 # lingua's language for every sentence of the annotation cache, one part per field and decade.
 sentence_languages:
   path: data/interim/sentence_languages

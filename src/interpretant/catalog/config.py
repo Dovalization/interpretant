@@ -52,6 +52,7 @@ class CatalogConfig(BaseModel):
     sentences: DatasetEntry
     static_view: DatasetEntry
     lemma_exceptions: DatasetEntry
+    words: DatasetEntry
     sentence_languages: DatasetEntry
 
 
