@@ -6,13 +6,19 @@ spellings of the same word (British and American variants: -ise/-ize, -our/-or, 
 l, ae/oe, -ogue/-og, and the like). Which of the two is the standard was set by a rule (the form
 the corpus uses more often); do not judge the direction.
 
-Judge whether each pair is right:
+Judge each pair at the level of the word, not of the two sentences:
 
-- right: FORM and STANDARD are spellings of the same English word, with the same meaning, as the
-  sentences use them.
-- wrong: they are different words or meanings in this corpus (for example the plural noun
-  "analyses" and the verb "analyzes"; "cheques" and "checks"); one of them is not English or is a
-  misspelling of a third word; or the standard is not a real spelling.
+- right: FORM and STANDARD are spellings of the same English word. Different senses of that word in
+  the sentences do not make a pair wrong, because both spellings carry all of its senses (economic
+  and optical "polarisation" are one word in either spelling).
+- wrong: the choice of spelling itself marks a different word or sense in this corpus (the plural
+  noun "analyses" against the verb "analyzes"; "cheques" against "checks"); one of them is not an
+  English word, or is a misspelling of a third word; or the standard is not a real spelling.
 
-Each item gives the pair and up to two sentences from the corpus for FORM and for STANDARD. Decide
-from the item and your knowledge of English; do not look anything up and do not run code.
+Names and other languages are handled separately, by a rule. If a sentence shows a form only as a
+name (Professor Armour) or inside another language (French "centralisé"), judge the English word
+the pair stands for.
+
+Each item gives the pair and up to two sentences from the corpus for FORM and for STANDARD. Use
+them to see how the corpus uses each spelling, together with your knowledge of English; do not look
+anything up and do not run code.

@@ -63,6 +63,51 @@ matching. It applies to each hyphen segment of a folded token, one token for one
 - **Then.** `curated/spellings.tsv` is written from the proposal, minus the pairs judged wrong,
   and the check that no word-table lemma is mapped away runs on it.
 
+## The first calibration, and the criterion settled (2026-11-17)
+
+Set after the first calibration and before any pair was judged again.
+
+- **The first calibration failed.** The agents agreed with the author on 22 of the 30 pairs
+  (`verdicts/author_calibration.json`). All 8 differences are pairs the author called not the
+  same and the agents called one word. Their sentences show four kinds:
+  - names: *armour* (Professor Armour, the Army's Armor branch) and *technicolour* (the
+    Technicolor Corporation);
+  - a folded French word: *centralise* (French *centralisé*);
+  - a spelling that marks a different sense: British *programme* (a plan, a course) against
+    *program* (software);
+  - two sides showing different senses of one word: *polarisation* (economics against signals),
+    *renormalisation* (linguistics against physics), *spiralled*, *generaliser*.
+
+  The agents judged from their knowledge of English and did not use the sentences: both called
+  *armour* right although every sentence was a name. The page asked whether the pair had "one
+  meaning here", which invited comparing the two sentences' senses.
+- **The criterion, settled by the author.** A pair is judged at the level of the word:
+  - **right** if the two are spellings of one word, even when the sentences show different senses
+    of it, since both spellings carry every sense;
+  - **wrong** if the choice of spelling itself marks a different word or sense in this corpus
+    (*analyses* the plural noun against *analyzes* the verb; *programme* against *program*), if
+    one is not English or is a misspelling of a third word, or if the standard is not a real
+    spelling.
+- **Names and other languages are not judged.** A rule in how the map is applied handles them.
+  Measured over kept works (`scripts/evidence/spelling_skips.py`, code `cfba60e2`), of the
+  160,017 tokens the map rewrites:
+  - 168 are written with an accent, almost all French (*utilisé*, *réalisation*). The map leaves
+    accented tokens alone.
+  - 9,502 (5.9%) are tagged as proper nouns. The tag marks names (the Labour party, James Armour)
+    and title-cased common words ("Child Behaviour Checklist") alike. The author's decision on
+    them is recorded here once made.
+- **The census call:** *programme* and *programmes* leave the map (the author).
+- **Judged again.** The two judges judge all 273 items again with the clarified prompt
+  (`curated/judging/spellings/prompt.md`; the first version is at commit `2e96b7e1`). The items
+  now show each sentence as a 300-character window centred on the word, since the first items cut
+  two calibration pairs short. Their verdicts go to `data/review/spellings/verdicts_v2/`, with the
+  Opus adjudicator for their differences.
+- **A second calibration.** The author judges, blind and on the clarified page, 30 pairs drawn
+  from the 120 sample pairs the first calibration did not use (seed 20261122). The bar stays: the
+  agents' verdicts stand if they agree with the author on at least 27 of the 30, a "not sure"
+  counting as a disagreement. Otherwise the author judges the sample's 150 pairs on the clarified
+  page. The sample's bar (at most 3 wrong of 150) does not change.
+
 ## Results
 
 To be written after judging.
