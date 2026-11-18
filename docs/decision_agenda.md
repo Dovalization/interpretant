@@ -1708,8 +1708,8 @@ regression written four times.
 
 ## Step 8: code layout
 
-Inputs: `docs/review_codebase_2026-11-12.md` (its critical items: a `usages/` package, which
-became `corpus/target_matching.py`, `corpus/usage_selection.py` and the catalog's usages dataset;
+Inputs: `docs/review_codebase_2026-11-12.md` (its critical items: a `usages/` package, which is
+now `usages/` above `corpus/` with the catalog's usages dataset, phase step 6, 2026-11-18;
 `corpus/cleaning.py` and an annotation module holding the spaCy pass; `lemmas.py` split; a `cli/`
 package; the repeated helpers extracted: unit rows, divergence, torch device, cell reading, label
 tables); steps 1–7.
