@@ -1,0 +1,6 @@
+# The compound map (decision agenda 3.4; phase step 3; docs/compounds.md): form<TAB>standard<TAB>source.
+# Each spelling of a two-part compound is written as its family's most frequent form over kept
+# works (source frequency), or as a word-table lemma (source word_table). A form with a space is
+# a spaced pair, merged only as a noun-noun compound; any other form is one token, rewritten whole.
+# Empty until the audit passes. Built by scripts/review/score_compounds.py; do not edit by hand.
+form	standard	source
