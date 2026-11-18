@@ -309,8 +309,8 @@ round 3's precision abstracts and joins and round 5's splits and target sentence
 | Split cuts | 1 of 80 wrong | at most 2 |
 | Boundaries of target sentences | 0 of 150 wrong | at most 5 |
 
-**Against the spaCy pass alone:** the first audit's agents found 9 wrong cuts in 314 (97.1%) and 6
-of 150 target sentences holding two sentences; the author found 7 wrong cuts in the 4 abstracts
+**Against the spaCy pass alone:** the first audit's agents found 9 wrong cuts in 314 (97.1%) and 5
+of 150 target sentences holding two sentences (6 of 150 in the fresh audit, none made by a join); the author found 7 wrong cuts in the 4 abstracts
 the curtailed inspection showed, 6 of which the rules now join (the seventh is a stray OCR period
 before a capital). Wrong cuts gathered in OCR-damaged early decades: every pattern the scans
 tested was 5 to 12 times more common per cut in the 1950s than in the 2020s, and so are the joins
