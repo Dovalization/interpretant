@@ -56,8 +56,8 @@ def count_part(
         ranges = removals.get(doc.user_data[WORK_ID])
         if ranges is None:
             continue
-        without = static_tokens(doc)
-        with_exceptions = static_tokens(ruler(doc))
+        without = static_tokens(doc, {})
+        with_exceptions = static_tokens(ruler(doc), {})
         by_start = {token.idx: token for token in doc}
         for start, a, b in zip(without.starts, without.tokens, with_exceptions.tokens, strict=True):
             if any(low <= start < high for low, high in ranges):

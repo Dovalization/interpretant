@@ -17,6 +17,7 @@ import spacy
 from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exceptions
+from interpretant.catalog.spellings import Spelling, load_spellings
 from interpretant.catalog.static_view import STATIC_VIEW_SCHEMA, save_static_view
 from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.corpus.static_view import static_tokens
@@ -28,20 +29,22 @@ from interpretant.pipelines.workers import map_parts
 
 @dataclass(frozen=True)
 class StaticViewResult:
-    """What the stage wrote: documents and static tokens, the parts, the exceptions applied."""
+    """What the stage wrote: documents, static tokens, parts, exceptions and spellings."""
 
     document_count: int
     token_count: int
     parts: list[str]
     exception_count: int
+    spelling_count: int
 
 
 @dataclass(frozen=True)
 class _PartJob:
-    """What a worker needs for its parts: the catalog and the lemma exceptions (picklable)."""
+    """What a worker needs for its parts: the catalog, the lemma exceptions, the spelling map."""
 
     catalog: CatalogConfig
     exceptions: tuple[LemmaException, ...]
+    spellings: tuple[Spelling, ...]
 
 
 def build_static_view(
@@ -53,16 +56,18 @@ def build_static_view(
 ) -> StaticViewResult:
     """Write the static view of every cached document of the corpus, per part.
 
-    The lemma exceptions are read once here, so a malformed file fails before any worker starts.
+    The lemma exceptions and the spelling map are read once here, so a malformed file fails before
+    any worker starts.
 
     Raises:
-        ValueError: if no raw cell matches the selection, or the exceptions file's header or a
-            repeated form and tag is wrong.
-        FileNotFoundError: if a part has not been annotated, or the exceptions file is missing.
-        pydantic.ValidationError: if a row of the exceptions file is malformed.
+        ValueError: if no raw cell matches the selection, the exceptions file's header or a
+            repeated form and tag is wrong, or the spelling map's header, a repeated form or a
+            chained standard is.
+        FileNotFoundError: if a part has not been annotated, or either file is missing.
+        pydantic.ValidationError: if a row of either file is malformed.
     """
     parts = corpus_parts(corpus_cells(catalog, selection))
-    job = _PartJob(catalog, tuple(load_lemma_exceptions(catalog)))
+    job = _PartJob(catalog, tuple(load_lemma_exceptions(catalog)), tuple(load_spellings(catalog)))
     progress.stage("building the static view", total=len(parts))
     results = map_parts(
         _build_part,
@@ -75,6 +80,7 @@ def build_static_view(
         token_count=sum(tokens for _, tokens in results.values()),
         parts=parts,
         exception_count=len(job.exceptions),
+        spelling_count=len(job.spellings),
     )
 
 
@@ -86,9 +92,10 @@ def _build_part(part: str, job: _PartJob) -> tuple[int, int]:
     """
     vocab = spacy.blank("en").vocab
     ruler = lemma_exception_ruler(vocab, job.exceptions)
+    spellings = {spelling.form: spelling.standard for spelling in job.spellings}
     rows = []
     for doc in load_annotations(job.catalog, part, vocab):
-        view = static_tokens(ruler(doc))
+        view = static_tokens(ruler(doc), spellings)
         rows.append((doc.user_data[WORK_ID], view.tokens, view.starts, view.finite_verbs))
     table = pl.DataFrame(rows, schema=STATIC_VIEW_SCHEMA, orient="row")
     save_static_view(job.catalog, table, part=part)

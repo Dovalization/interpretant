@@ -169,10 +169,12 @@ stages:
       - src/interpretant/catalog/metadata.py
       - src/interpretant/catalog/parts.py
       - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/spellings.py
       - src/interpretant/catalog/static_view.py
       - src/interpretant/cli/build_static_view.py
       - src/interpretant/corpus/attribute_rules.py
       - src/interpretant/corpus/lemma_exceptions.py
+      - src/interpretant/corpus/spelling.py
       - src/interpretant/corpus/static_view.py
       - src/interpretant/corpus/works.py
       - src/interpretant/pipelines/build_static_view.py
@@ -182,6 +184,7 @@ stages:
       - src/interpretant/pipelines/workers.py
       - ${annotations.path}
       - ${lemma_exceptions.path}
+      - ${spellings.path}
     params:
       - corpus
     outs:

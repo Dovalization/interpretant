@@ -62,7 +62,7 @@ def measure_part(
         if work_id not in kept_ids:
             continue
         doc = ruler(doc)
-        view = static_tokens(doc)
+        view = static_tokens(doc, {})
         by_start = {token.idx: token for token in doc}
         for word, start in zip(view.tokens, view.starts, strict=True):
             mapped = [segment for segment in word.split("-") if segment in spellings]

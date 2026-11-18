@@ -30,7 +30,8 @@ from interpretant.pipelines.runs import record_run
 def build_static_view_command(catalog_file: Path, process_count: int | None) -> None:
     """Write the static tokens of every cached document, with offsets and finite-verb flags.
 
-    The lemma exceptions of the catalog's exceptions file are applied first (agenda 3.6).
+    The lemma exceptions of the catalog's exceptions file are applied first (agenda 3.6), then the
+    spelling map (3.4).
 
     Each worker process takes whole parts. Progress is shown live: a bar in a terminal, a line
     every half minute in a log file.
@@ -49,6 +50,7 @@ def build_static_view_command(catalog_file: Path, process_count: int | None) -> 
         "documents": result.document_count,
         "tokens": result.token_count,
         "lemma_exceptions": result.exception_count,
+        "spellings": result.spelling_count,
     }
     record_run(catalog, command="build-static-view", stages=timer.finish(), counts=counts)
     console.print(render_static_view_result(result))

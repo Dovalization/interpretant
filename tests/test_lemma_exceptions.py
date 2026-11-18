@@ -108,7 +108,7 @@ def test_auxiliaries_keep_their_form_whatever_the_exceptions() -> None:
     ruler = lemma_exception_ruler(
         vocab, [exception("has", "hav", "VBZ"), exception("senses", "sense", "NNS")]
     )
-    assert static_tokens(ruler(doc)).tokens == ["the", "model", "has", "sense"]
+    assert static_tokens(ruler(doc), {}).tokens == ["the", "model", "has", "sense"]
 
 
 def test_the_ruler_applies_to_documents_loaded_from_the_cache() -> None:
