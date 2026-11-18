@@ -1,11 +1,12 @@
 """Score the spelling audit by `docs/spellings.md`'s rules and write `curated/spellings.tsv`.
 
-Reads the key and the agent verdicts in `data/review/spellings/` (the two judges' agreed verdict,
-else the adjudicator's) and the author's calibration answers as the page's store exports them
-(one JSON file per blind id). The calibration passes if the agents agree with the author on at
-least 27 of the 30 ("not sure" counts as a disagreement); then the sample passes if at most 3 of
-its 150 pairs are wrong. The map is the proposal minus every pair judged wrong in the sample or
-the census. Usage: `python scripts/review/score_spellings.py PROPOSAL.parquet AUTHOR_DIR`.
+Reads the key and the second round's agent verdicts in `data/review/spellings/verdicts_v2/` (the
+two judges' agreed verdict, else the adjudicator's) and the author's answers to the second
+calibration (a JSON object of blind id to verdict). The calibration passes if the agents agree with
+the author on at least 27 of the 30 ("not sure" counts as a disagreement); then the sample passes
+if at most 3 of its 150 pairs are wrong, the author's own calls counting as wrong. The map is the
+proposal minus every pair judged wrong in the sample or the census and minus the author's calls.
+Usage: `python scripts/review/score_spellings.py PROPOSAL.parquet AUTHOR.json`.
 """
 
 from __future__ import annotations
@@ -22,6 +23,9 @@ from interpretant.catalog.words import load_words
 from interpretant.corpus.spelling import mapped_away
 
 REVIEW = Path("data/review/spellings")
+VERDICTS = REVIEW / "verdicts_v2"
+# The author's census call (2026-11-17): programme marks a sense program does not.
+AUTHOR_CALLS = frozenset({"programme", "programmes"})
 OUT = Path("curated/spellings.tsv")
 CALIBRATION_AGREEMENT = 27
 SAMPLE_MAX_WRONG = 3
@@ -38,25 +42,16 @@ def agent_verdicts() -> dict[str, str]:
 
     def load(judge: str) -> dict[str, str]:
         found: dict[str, str] = {}
-        for path in sorted((REVIEW / "verdicts").glob(f"judge_{judge}_batch_*.json")):
+        for path in sorted((VERDICTS).glob(f"judge_{judge}_batch_*.json")):
             found |= {i: v["verdict"] for i, v in json.loads(path.read_text()).items()}
         return found
 
     first, second = load("A"), load("B")
     settled = {
         i: v["verdict"]
-        for i, v in json.loads((REVIEW / "verdicts" / "opus_adjudication.json").read_text()).items()
+        for i, v in json.loads((VERDICTS / "opus_adjudication.json").read_text()).items()
     }
     return {i: first[i] if first[i] == second[i] else settled[i] for i in first}
-
-
-def author_answers(folder: Path) -> dict[str, str]:
-    """The author's calibration answers, by blind id."""
-    answers: dict[str, str] = {}
-    for path in sorted(folder.rglob("*.json")):
-        document = json.loads(path.read_text())
-        answers[path.stem] = document.get("data", document)["verdict"]
-    return answers
 
 
 def main() -> None:
@@ -64,7 +59,7 @@ def main() -> None:
     proposal = pl.read_parquet(sys.argv[1])
     key = json.loads((REVIEW / "key.json").read_text())
     agents = agent_verdicts()
-    author = author_answers(Path(sys.argv[2]))
+    author: dict[str, str] = json.loads(Path(sys.argv[2]).read_text())
     agreed = sum(author.get(i) == agents[i] for i in author)
     sys.stdout.write(
         f"calibration: the agents agree with the author on {agreed} of {len(author)} "
@@ -79,13 +74,13 @@ def main() -> None:
     if len(author) < 30 or agreed < CALIBRATION_AGREEMENT:
         raise SystemExit("the calibration does not pass: the author judges the sample")
     sample = [i for i, entry in key.items() if "sample" in entry["sets"]]
-    wrong_sample = [i for i in sample if agents[i] == "wrong"]
+    wrong_sample = [i for i in sample if agents[i] == "wrong" or key[i]["form"] in AUTHOR_CALLS]
     sys.stdout.write(
         f"sample: {len(wrong_sample)} of {len(sample)} wrong (rule: at most {SAMPLE_MAX_WRONG}): "
         + ", ".join(f"{key[i]['form']}->{key[i]['standard']}" for i in wrong_sample)
         + "\n"
     )
-    wrong = {key[i]["form"] for i in key if agents[i] == "wrong"}
+    wrong = {key[i]["form"] for i in key if agents[i] == "wrong"} | AUTHOR_CALLS
     census_wrong = sorted(wrong - {key[i]["form"] for i in wrong_sample})
     sys.stdout.write(f"census, fixed one by one: {census_wrong}\n")
     if len(wrong_sample) > SAMPLE_MAX_WRONG:
