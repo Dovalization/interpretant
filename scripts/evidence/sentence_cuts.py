@@ -3,10 +3,11 @@
 The sentence view's cut precision failed its bar (2026-11-18: 7 wrong of 314). The wrong cuts fell
 after *p. 8* inside brackets, inside spaced OCR ellipses, at a stray OCR period and after bare list
 numbers. This script scans every cut between two consecutive sentences of a kept work and counts
-the cuts each candidate pattern matches, overall and per decade, with seeded examples of each
-(the last characters before the cut and the first after), so each pattern's precision can be
-judged before it becomes a rule. The examples quote corpus text: they stay out of git. Run from the
-repository root on the run machine:
+the cuts each candidate rule matches (the first pass, `c8b27460`, tried broad patterns; this one
+narrows them to rules, with abbreviations counted one by one), overall and per decade, with
+seeded examples of each (the last characters before the cut and the first after), so each rule's
+precision can be judged before it is used. The examples quote corpus text: they stay out of
+git. Run from the repository root on the run machine:
 `python scripts/evidence/sentence_cuts.py OUT [PROCESSES]`.
 """
 
@@ -30,91 +31,68 @@ from interpretant.pipelines.workers import map_parts
 SEED = 20261130
 EXAMPLES = 40
 CONTEXT = 70
+# Abbreviations counted one by one, to keep only those that never end a sentence.
 ABBREVIATIONS = frozenset(
-    [
-        "p",
-        "pp",
-        "vol",
-        "vols",
-        "no",
-        "nos",
-        "fig",
-        "figs",
-        "eq",
-        "eqs",
-        "ed",
-        "eds",
-        "al",
-        "eg",
-        "ie",
-        "cf",
-        "vs",
-        "ca",
-        "approx",
-        "dr",
-        "mr",
-        "mrs",
-        "ms",
-        "prof",
-        "st",
-        "jr",
-        "sr",
-        "inc",
-        "ltd",
-        "co",
-        "dept",
-        "univ",
-        "ch",
-        "chap",
-        "sec",
-        "secs",
-        "ref",
-        "refs",
-        "viz",
-        "op",
-        "cit",
-        "ibid",
-        "resp",
-        "esp",
-        "etc",
-    ]
-)
-_LIST_NUMBER = re.compile(r"(?:^|[\s(:])(?:\d{1,2}|[ivxlc]{1,5}|[a-zA-Z])\s?\.$")
-_INITIAL = re.compile(r"(?:^|\s)[A-Z]\.$")
-_ELLIPSIS = re.compile(r"\.\s\.$|^\.\s\.|^\.\s*$")
+    {
+        "al", "approx", "ca", "cf", "ch", "chap", "cit", "co", "dept", "dr", "ed", "eds", "eg",
+        "eq", "esp", "et", "etc", "fig", "figs", "ibid", "ie", "inc", "jr", "ltd", "mr", "mrs",
+        "no", "nos", "op", "p", "pp", "prof", "ref", "refs", "resp", "sec", "st", "tr", "trans",
+        "univ", "viz", "vol", "vols", "vs",
+    }
+)  # fmt: skip
+FUNCTION_WORDS = frozenset(
+    {
+        "the", "a", "an", "of", "and", "or", "to", "in", "for", "with", "by", "on", "at", "from",
+        "as", "that", "which", "its", "their", "his", "her", "our",
+    }
+)  # fmt: skip
+_LIST_NUMBER_AFTER_COLON = re.compile(r"[:;]\s*\(?\d{1,2}[.)]\s*$")
+_SPACED_DOTS = re.compile(r"\.\s+\.$")
 _LAST_WORD = re.compile(r"([A-Za-z][A-Za-z.]*)\.$")
-_TERMINAL = ".!?:;\"'”’)]»"
+_FINAL_WORD = re.compile(r"([A-Za-z]+)$")
+_OPENERS, _CLOSERS = "([", ")]"
+
+
+def unclosed(text: str) -> int:
+    """How many brackets the text opens and leaves open."""
+    return sum(text.count(o) - text.count(c) for o, c in zip(_OPENERS, _CLOSERS, strict=True))
+
+
+def closes_first(text: str) -> bool:
+    """Whether the text closes a bracket it never opened."""
+    depth = 0
+    for character in text:
+        depth += (character in _OPENERS) - (character in _CLOSERS)
+        if depth < 0:
+            return True
+    return False
 
 
 def patterns(before: str, after: str) -> list[str]:
-    """The candidate patterns a cut between ``before`` and ``after`` matches."""
+    """The candidate rules a cut between ``before`` and ``after`` matches."""
     found = []
-    head = after.lstrip("\"'“‘([")
-    if not any(character.isalpha() for character in after):
+    if not any(character.isalpha() for character in before + after):
+        found.append("both_rows_have_no_letter")
+    elif not any(character.isalpha() for character in after):
         found.append("after_has_no_letter")
-    if not any(character.isalpha() for character in before):
+    elif not any(character.isalpha() for character in before):
         found.append("before_has_no_letter")
-    if head[:1].islower():
-        found.append("after_starts_lowercase")
-    if after[:1] in ":;,)]}":
-        found.append("after_starts_with_punctuation")
-    if after[:1].isdigit():
-        found.append("after_starts_with_digit")
-    if _LIST_NUMBER.search(before):
-        found.append("before_ends_with_list_number")
-    if _INITIAL.search(before):
-        found.append("before_ends_with_initial")
+    if after[:1] in ",;:)]}":
+        found.append("after_starts_with_closing_punctuation")
+    if after[:1] == ".":
+        found.append("after_starts_with_period")
+    if _SPACED_DOTS.search(before):
+        found.append("before_ends_with_spaced_dots")
+    if _LIST_NUMBER_AFTER_COLON.search(before):
+        found.append("before_ends_with_list_number_after_colon")
+    final = _FINAL_WORD.search(before)
+    if final and final.group(1).lower() in FUNCTION_WORDS:
+        found.append("before_ends_with_function_word")
+    if unclosed(before) > 0 and closes_first(after):
+        found.append("cut_inside_brackets")
     word = _LAST_WORD.search(before)
-    if word and word.group(1).replace(".", "").lower() in ABBREVIATIONS:
-        found.append("before_ends_with_abbreviation")
-    if _ELLIPSIS.search(before) or _ELLIPSIS.search(after):
-        found.append("spaced_ellipsis")
-    if before.count("(") > before.count(")") or before.count("[") > before.count("]"):
-        found.append("before_has_open_bracket")
-    if before.rstrip()[-1:] not in _TERMINAL:
-        found.append("before_has_no_end_punctuation")
-    if sum(1 for piece in before.split() if any(c.isalpha() for c in piece)) <= 2:
-        found.append("before_is_short")
+    if word and (abbreviation := word.group(1).replace(".", "").lower()) in ABBREVIATIONS:
+        found.append(f"abbreviation_{abbreviation}")
     return found
 
 
