@@ -1,0 +1,322 @@
+{
+ "S000": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S001": {
+  "verdict": "wrong",
+  "reason": "cut after option label B"
+ },
+ "S002": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S003": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S004": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S005": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S006": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S007": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S008": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S009": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S010": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S011": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S012": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S013": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S014": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S015": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S016": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S017": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S018": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S019": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S020": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S021": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S022": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S023": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S024": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S025": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S026": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S027": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S028": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S029": {
+  "verdict": "wrong",
+  "reason": "cut after outline label B"
+ },
+ "S030": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S031": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S032": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S033": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S034": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S035": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S036": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S037": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S038": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S039": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S040": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S041": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S042": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S043": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S044": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S045": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S046": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S047": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S048": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S049": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S050": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S051": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S052": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S053": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S054": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S055": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S056": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S057": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S058": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S059": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S060": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S061": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S062": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S063": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S064": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S065": {
+  "verdict": "wrong",
+  "reason": "cut after option label D"
+ },
+ "S066": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S067": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S068": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S069": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S070": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S071": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S072": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S073": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S074": {
+  "verdict": "wrong",
+  "reason": "cut after option label C"
+ },
+ "S075": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S076": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S077": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S078": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ },
+ "S079": {
+  "verdict": "right",
+  "reason": "sentence ends before next begins"
+ }
+}

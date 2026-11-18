@@ -1,0 +1,4 @@
+{
+  "T055": {"verdict": "right", "where": null, "note": "Comma-joined clauses; capital after comma is translation artifact, as in after row"},
+  "T082": {"verdict": "wrong", "where": "two sentences", "note": "Two contents entries; second title starts after et al."}
+}

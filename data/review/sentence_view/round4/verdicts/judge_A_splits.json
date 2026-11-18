@@ -1,0 +1,322 @@
+{
+ "S000": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S001": {
+  "verdict": "wrong",
+  "reason": "option label B split off"
+ },
+ "S002": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S003": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S004": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S005": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S006": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S007": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S008": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S009": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S010": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S011": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S012": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S013": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S014": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S015": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S016": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S017": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S018": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S019": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S020": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S021": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S022": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S023": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S024": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S025": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S026": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S027": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S028": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S029": {
+  "verdict": "wrong",
+  "reason": "contents label D split from entry"
+ },
+ "S030": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S031": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S032": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S033": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S034": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S035": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S036": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S037": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S038": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S039": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S040": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S041": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S042": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S043": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S044": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S045": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S046": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S047": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S048": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S049": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S050": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S051": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S052": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S053": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S054": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S055": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S056": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S057": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S058": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S059": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S060": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S061": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S062": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S063": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S064": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S065": {
+  "verdict": "wrong",
+  "reason": "option label D split off"
+ },
+ "S066": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S067": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S068": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S069": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S070": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S071": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S072": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S073": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S074": {
+  "verdict": "wrong",
+  "reason": "option label C split off"
+ },
+ "S075": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S076": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S077": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S078": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ },
+ "S079": {
+  "verdict": "right",
+  "reason": "sentence ends at cut"
+ }
+}
