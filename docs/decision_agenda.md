@@ -1929,7 +1929,7 @@ for them (an audit, the junk gate, a measurement): each is recorded as a new ver
 steps after it. Corpus cleaning and lemma work are not priorities in this phase, since rounds S1,
 S1b and L1 found them below the static measurement's noise; they come back if later evidence, such
 as the junk gate or the contextual measures, shows they matter. The phase's plan, with each step's
-quality bar and the sources behind it, is kept with the steps' own documents as they are written.
+quality bar and the sources behind it, is `docs/preprocessing_phase.md`.
 Target extraction (stage 7) belongs to this phase: its quality shows only once usages are drawn,
 and the gap report (stage 8) can send new abstracts through stages 2–7.
 
