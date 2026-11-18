@@ -376,6 +376,13 @@ languages identical to the sentences table (4,584,443 rows).
   (`data/review/run3/verdicts.jsonl`), at ≥45/50 agreement. This also closes 4b's postponed
   sentence re-check.
 
+**Results (2026-11-18)** are in `docs/sentence_view.md`. The audit failed at first (cut precision
+97.8% on the author's curtailed inspection); merge rules found by scanning every cut, and a split
+rule for breaks the pass missed after capitals, brought it to 98.3% precision, 0 of 80 wrong joins,
+1 of 80 wrong splits and 0 of 150 wrongly bounded target sentences over five rounds of fresh agent
+audits. The agents' verdicts stand by the author's decision after two recalibrations fell one short.
+OCR correction was left to step 7.
+
 ## Step 6: matching and the usages table (4.1–4.6), in `src/interpretant/usages/`
 
 **Layers:** `pipelines > review > usages > corpus > catalog`. `usages` goes in the catalog's

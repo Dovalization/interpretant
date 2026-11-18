@@ -119,6 +119,14 @@ whose standard is open holds that standard with its space (*user interface*). Re
 entries as words (`corpus/cell_versions.segment_words`), so the empty entries drop out. Single
 words are not joined into phrases (agenda 3.5).
 
+**The contextual sentence view** (`corpus/sentence_view.py`, `docs/sentence_view.md`; lock
+`9eeb2274`) holds one row per sentence of every kept work, 4,297,519 in all, with its span, language,
+word count and exclusion. The spaCy pass's sentences are corrected by audited rules: 45,593 cuts
+where no sentence ends are joined (after an abbreviation, a list number, inside brackets, around a
+stray mark) and 1,337 breaks the pass missed after a capital are cut. 92,204 sentences lie wholly in
+removed ranges and 64,813 are the unfinished last sentence of a truncated work; neither is drawn
+from. The audit found 98.3% of cuts right and no target sentence wrongly bounded in 150.
+
 Dropped abstracts, by reason:
 
 | Reason | Abstracts |
@@ -212,6 +220,10 @@ added or sent back rules are recorded there with their records.
   (in the families that vary, closed forms gain about 20 points from the 1950s to the 2020s), so
   that drift is reported separately in `docs/compounds.md`. Accented tokens (mostly French words)
   are left unmapped, and three-part compounds (*state-of-the-art*) are left as written.
+- **Sentence boundaries** are the spaCy pass's with audited corrections: about 2% of cuts may
+  still fall where no sentence ends, mostly in OCR-damaged and non-prose text of early decades,
+  and breaks lost to OCR are not found. The audit's agent verdicts stand by the author's decision
+  after two recalibrations fell one short (`docs/sentence_view.md`).
 - **Sentences in other languages** remain: about 1% of the sentences sampled for the lemma review
   (33 of 3,551) read as another language, mostly French. A likely cause, not confirmed: in text
   whose accents were stripped, French *à* becomes *a*, which the language stage's list of English
