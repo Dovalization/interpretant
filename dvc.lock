@@ -14,8 +14,8 @@ stages:
       size: 3310
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -152,8 +152,8 @@ stages:
       size: 4649
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -296,8 +296,8 @@ stages:
       size: 4649
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -382,8 +382,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -538,8 +538,8 @@ stages:
       size: 3310
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -664,8 +664,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -762,8 +762,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -939,8 +939,8 @@ stages:
       size: 4157
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -1061,8 +1061,8 @@ stages:
       size: 4649
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: fc86dad61777b39465748faa9325d490
-      size: 2401
+      md5: a7c9203dd7bada1413fef1a9fe090b12
+      size: 2426
     - path: src/interpretant/catalog/parts.py
       hash: md5
       md5: bd9edd2c1e8cbe90de37d96b91bf92be
@@ -1073,8 +1073,8 @@ stages:
       size: 7809
     - path: src/interpretant/catalog/sentence_view.py
       hash: md5
-      md5: 4c57303d6513aee2d378c2ec2a601b86
-      size: 4881
+      md5: 01042cf89dd32b2ebda9c33633ba416d
+      size: 5389
     - path: src/interpretant/cli/build_sentence_view.py
       hash: md5
       md5: 8c55e9cd9de8d70332e26a702da76606
