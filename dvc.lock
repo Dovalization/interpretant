@@ -1073,24 +1073,24 @@ stages:
       size: 7809
     - path: src/interpretant/catalog/sentence_view.py
       hash: md5
-      md5: 48399a6ed3d1a89e0e8bc11361f70664
-      size: 4742
+      md5: 4c57303d6513aee2d378c2ec2a601b86
+      size: 4881
     - path: src/interpretant/cli/build_sentence_view.py
       hash: md5
-      md5: 59a5c891da93427a60f7275a09566110
-      size: 2716
+      md5: 8c55e9cd9de8d70332e26a702da76606
+      size: 2838
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 1608ee959caae88b72fb7692165a8bc6
       size: 8800
     - path: src/interpretant/corpus/sentence_view.py
       hash: md5
-      md5: 0207a7d67eed8a6d1eff350a89a97c75
-      size: 8898
+      md5: 8c57e05a8d26a260eb3359f1c4e4e8a3
+      size: 11225
     - path: src/interpretant/pipelines/build_sentence_view.py
       hash: md5
-      md5: 11aa7fc69fe0a19adb165502136d751c
-      size: 3002
+      md5: ecf027270928b9e458e219fddd9b1a5b
+      size: 3106
     - path: src/interpretant/pipelines/progress.py
       hash: md5
       md5: 22394da32ea7c6b1bae98d4ea88baa5c
@@ -1102,6 +1102,6 @@ stages:
     outs:
     - path: data/processed/sentence_view
       hash: md5
-      md5: 077a88d3acffc77a36d577e409e21df8.dir
-      size: 25676298
+      md5: 908312b8af9693b1099e0ea007db4065.dir
+      size: 25720710
       nfiles: 88
