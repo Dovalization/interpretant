@@ -114,3 +114,6 @@ data/review/compounds/calibration.json
 data/review/compounds/adjudicate.jsonl
 data/review/static_view/spot_check.jsonl
 data/review/static_view/adjudicate.jsonl
+data/review/sentence_view/abstracts.jsonl
+data/review/sentence_view/sentences.jsonl
+data/review/sentence_view/adjudicate*.jsonl
