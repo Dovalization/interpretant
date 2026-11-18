@@ -131,7 +131,12 @@ def record_build(repository: Path) -> None:
     """Commit the repository's current files, the abstracts table tracked by DVC."""
     git = ["git", "-c", "user.name=Test", "-c", "user.email=test@example.org"]
     git += ["-c", "commit.gpgsign=false", "-c", "core.hooksPath=/dev/null"]
-    environment = {**os.environ, "DVC_NO_ANALYTICS": "1"}
+    # Git's own variables are dropped: run from a commit hook, GIT_INDEX_FILE and GIT_DIR would
+    # point these commands at the outer repository's index instead of the temporary one.
+    environment = {
+        **{name: value for name, value in os.environ.items() if not name.startswith("GIT_")},
+        "DVC_NO_ANALYTICS": "1",
+    }
     for command in (
         ["git", "init", "--quiet"],
         [sys.executable, "-m", "dvc", "init", "--quiet"],
