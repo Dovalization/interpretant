@@ -1,0 +1,402 @@
+{
+ "S00": {
+  "work_id": "https://openalex.org/W2065118364",
+  "start": 116,
+  "kind": "rewrite"
+ },
+ "S01": {
+  "work_id": "https://openalex.org/W273993821",
+  "start": 114,
+  "kind": "merge"
+ },
+ "S02": {
+  "work_id": "https://openalex.org/W2913969298",
+  "start": 718,
+  "kind": "rewrite"
+ },
+ "S03": {
+  "work_id": "https://openalex.org/W2102285346",
+  "start": 15,
+  "kind": "rewrite"
+ },
+ "S04": {
+  "work_id": "https://openalex.org/W2086444013",
+  "start": 550,
+  "kind": "merge"
+ },
+ "S05": {
+  "work_id": "https://openalex.org/W1544203798",
+  "start": 766,
+  "kind": "rewrite"
+ },
+ "S06": {
+  "work_id": "https://openalex.org/W2156090885",
+  "start": 78,
+  "kind": "rewrite"
+ },
+ "S07": {
+  "work_id": "https://openalex.org/W2055528933",
+  "start": 135,
+  "kind": "split"
+ },
+ "S08": {
+  "work_id": "https://openalex.org/W1968504356",
+  "start": 1772,
+  "kind": "rewrite"
+ },
+ "S09": {
+  "work_id": "https://openalex.org/W7161172431",
+  "start": 48,
+  "kind": "rewrite"
+ },
+ "S10": {
+  "work_id": "https://openalex.org/W2328456292",
+  "start": 543,
+  "kind": "rewrite"
+ },
+ "S11": {
+  "work_id": "https://openalex.org/W2008125647",
+  "start": 728,
+  "kind": "rewrite"
+ },
+ "S12": {
+  "work_id": "https://openalex.org/W2383803609",
+  "start": 905,
+  "kind": "rewrite"
+ },
+ "S13": {
+  "work_id": "https://openalex.org/W4316661805",
+  "start": 557,
+  "kind": "rewrite"
+ },
+ "S14": {
+  "work_id": "https://openalex.org/W2102491508",
+  "start": 106,
+  "kind": "rewrite"
+ },
+ "S15": {
+  "work_id": "https://openalex.org/W2075294795",
+  "start": 211,
+  "kind": "split"
+ },
+ "S16": {
+  "work_id": "https://openalex.org/W2064109338",
+  "start": 77,
+  "kind": "rewrite"
+ },
+ "S17": {
+  "work_id": "https://openalex.org/W2055893945",
+  "start": 114,
+  "kind": "rewrite"
+ },
+ "S18": {
+  "work_id": "https://openalex.org/W7204190029",
+  "start": 970,
+  "kind": "rewrite"
+ },
+ "S19": {
+  "work_id": "https://openalex.org/W3134619890",
+  "start": 145,
+  "kind": "merge"
+ },
+ "S20": {
+  "work_id": "https://openalex.org/W7113402652",
+  "start": 751,
+  "kind": "merge"
+ },
+ "S21": {
+  "work_id": "https://openalex.org/W4414208729",
+  "start": 1242,
+  "kind": "rewrite"
+ },
+ "S22": {
+  "work_id": "https://openalex.org/W3036761968",
+  "start": 177,
+  "kind": "split"
+ },
+ "S23": {
+  "work_id": "https://openalex.org/W4243346045",
+  "start": 1149,
+  "kind": "merge"
+ },
+ "S24": {
+  "work_id": "https://openalex.org/W4401748658",
+  "start": 198,
+  "kind": "rewrite"
+ },
+ "S25": {
+  "work_id": "https://openalex.org/W2018988401",
+  "start": 862,
+  "kind": "rewrite"
+ },
+ "S26": {
+  "work_id": "https://openalex.org/W134286935",
+  "start": 869,
+  "kind": "rewrite"
+ },
+ "S27": {
+  "work_id": "https://openalex.org/W4306175127",
+  "start": 109,
+  "kind": "rewrite"
+ },
+ "S28": {
+  "work_id": "https://openalex.org/W11385285",
+  "start": 949,
+  "kind": "rewrite"
+ },
+ "S29": {
+  "work_id": "https://openalex.org/W1832411865",
+  "start": 20,
+  "kind": "rewrite"
+ },
+ "S30": {
+  "work_id": "https://openalex.org/W4405484843",
+  "start": 1034,
+  "kind": "split"
+ },
+ "S31": {
+  "work_id": "https://openalex.org/W185215690",
+  "start": 473,
+  "kind": "rewrite"
+ },
+ "S32": {
+  "work_id": "https://openalex.org/W2125053020",
+  "start": 1328,
+  "kind": "rewrite"
+ },
+ "S33": {
+  "work_id": "https://openalex.org/W309058229",
+  "start": 268,
+  "kind": "rewrite"
+ },
+ "S34": {
+  "work_id": "https://openalex.org/W2992506232",
+  "start": 631,
+  "kind": "rewrite"
+ },
+ "S35": {
+  "work_id": "https://openalex.org/W3094146600",
+  "start": 607,
+  "kind": "rewrite"
+ },
+ "S36": {
+  "work_id": "https://openalex.org/W2010401500",
+  "start": 353,
+  "kind": "merge"
+ },
+ "S37": {
+  "work_id": "https://openalex.org/W2028179354",
+  "start": 584,
+  "kind": "rewrite"
+ },
+ "S38": {
+  "work_id": "https://openalex.org/W2046896280",
+  "start": 13,
+  "kind": "rewrite"
+ },
+ "S39": {
+  "work_id": "https://openalex.org/W1926040834",
+  "start": 723,
+  "kind": "rewrite"
+ },
+ "S40": {
+  "work_id": "https://openalex.org/W1998346181",
+  "start": 474,
+  "kind": "rewrite"
+ },
+ "S41": {
+  "work_id": "https://openalex.org/W1686511383",
+  "start": 535,
+  "kind": "rewrite"
+ },
+ "S42": {
+  "work_id": "https://openalex.org/W855936106",
+  "start": 363,
+  "kind": "rewrite"
+ },
+ "S43": {
+  "work_id": "https://openalex.org/W265131396",
+  "start": 38,
+  "kind": "rewrite"
+ },
+ "S44": {
+  "work_id": "https://openalex.org/W2788542639",
+  "start": 1498,
+  "kind": "rewrite"
+ },
+ "S45": {
+  "work_id": "https://openalex.org/W3005090612",
+  "start": 1339,
+  "kind": "rewrite"
+ },
+ "S46": {
+  "work_id": "https://openalex.org/W2064565863",
+  "start": 291,
+  "kind": "rewrite"
+ },
+ "S47": {
+  "work_id": "https://openalex.org/W3158229603",
+  "start": 258,
+  "kind": "rewrite"
+ },
+ "S48": {
+  "work_id": "https://openalex.org/W1605489684",
+  "start": 1586,
+  "kind": "split"
+ },
+ "S49": {
+  "work_id": "https://openalex.org/W1989488924",
+  "start": 503,
+  "kind": "rewrite"
+ },
+ "S50": {
+  "work_id": "https://openalex.org/W7148190850",
+  "start": 3197,
+  "kind": "rewrite"
+ },
+ "S51": {
+  "work_id": "https://openalex.org/W4226539475",
+  "start": 146,
+  "kind": "rewrite"
+ },
+ "S52": {
+  "work_id": "https://openalex.org/W102800024",
+  "start": 0,
+  "kind": "rewrite"
+ },
+ "S53": {
+  "work_id": "https://openalex.org/W3028014033",
+  "start": 660,
+  "kind": "rewrite"
+ },
+ "S54": {
+  "work_id": "https://openalex.org/W2271844352",
+  "start": 99,
+  "kind": "rewrite"
+ },
+ "S55": {
+  "work_id": "https://openalex.org/W3196707273",
+  "start": 3365,
+  "kind": "rewrite"
+ },
+ "S56": {
+  "work_id": "https://openalex.org/W2805405415",
+  "start": 488,
+  "kind": "rewrite"
+ },
+ "S57": {
+  "work_id": "https://openalex.org/W2001474364",
+  "start": 565,
+  "kind": "split"
+ },
+ "S58": {
+  "work_id": "https://openalex.org/W3136022487",
+  "start": 1670,
+  "kind": "merge"
+ },
+ "S59": {
+  "work_id": "https://openalex.org/W2396232677",
+  "start": 957,
+  "kind": "rewrite"
+ },
+ "S60": {
+  "work_id": "https://openalex.org/W1949169594",
+  "start": 308,
+  "kind": "rewrite"
+ },
+ "S61": {
+  "work_id": "https://openalex.org/W2086573153",
+  "start": 1763,
+  "kind": "rewrite"
+ },
+ "S62": {
+  "work_id": "https://openalex.org/W1700906360",
+  "start": 716,
+  "kind": "split"
+ },
+ "S63": {
+  "work_id": "https://openalex.org/W2584544586",
+  "start": 726,
+  "kind": "rewrite"
+ },
+ "S64": {
+  "work_id": "https://openalex.org/W7140308410",
+  "start": 502,
+  "kind": "rewrite"
+ },
+ "S65": {
+  "work_id": "https://openalex.org/W249688109",
+  "start": 624,
+  "kind": "rewrite"
+ },
+ "S66": {
+  "work_id": "https://openalex.org/W2025218499",
+  "start": 578,
+  "kind": "rewrite"
+ },
+ "S67": {
+  "work_id": "https://openalex.org/W2033091866",
+  "start": 173,
+  "kind": "rewrite"
+ },
+ "S68": {
+  "work_id": "https://openalex.org/W216264744",
+  "start": 590,
+  "kind": "rewrite"
+ },
+ "S69": {
+  "work_id": "https://openalex.org/W2150554778",
+  "start": 497,
+  "kind": "rewrite"
+ },
+ "S70": {
+  "work_id": "https://openalex.org/W2198092333",
+  "start": 720,
+  "kind": "rewrite"
+ },
+ "S71": {
+  "work_id": "https://openalex.org/W2076256260",
+  "start": 1325,
+  "kind": "rewrite"
+ },
+ "S72": {
+  "work_id": "https://openalex.org/W2768535546",
+  "start": 730,
+  "kind": "rewrite"
+ },
+ "S73": {
+  "work_id": "https://openalex.org/W7161755993",
+  "start": 54,
+  "kind": "rewrite"
+ },
+ "S74": {
+  "work_id": "https://openalex.org/W52878645",
+  "start": 307,
+  "kind": "split"
+ },
+ "S75": {
+  "work_id": "https://openalex.org/W587164876",
+  "start": 751,
+  "kind": "merge"
+ },
+ "S76": {
+  "work_id": "https://openalex.org/W2056638645",
+  "start": 2391,
+  "kind": "rewrite"
+ },
+ "S77": {
+  "work_id": "https://openalex.org/W2314549992",
+  "start": 1050,
+  "kind": "rewrite"
+ },
+ "S78": {
+  "work_id": "https://openalex.org/W4372267124",
+  "start": 386,
+  "kind": "rewrite"
+ },
+ "S79": {
+  "work_id": "https://openalex.org/W1989548146",
+  "start": 3507,
+  "kind": "rewrite"
+ }
+}

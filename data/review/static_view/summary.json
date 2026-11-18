@@ -1,0 +1,463 @@
+{
+ "parts": {
+  "r_b": 88,
+  "new": 88,
+  "checked": 88
+ },
+ "counts": {
+  "entries": 104176115,
+  "entries_merge": 34276,
+  "entries_not_applied": 437,
+  "entries_rewrite": 263582,
+  "entries_split": 29415,
+  "entries_unchanged": 103814115,
+  "entries_unexplained": 14,
+  "merges_holding_a_held_out_word": 0,
+  "merges_holding_a_word": 0,
+  "spaced_pairs_not_merged": 6326,
+  "works": 705283,
+  "works_only_in_new": 0,
+  "works_only_in_r_b": 0
+ },
+ "rewrites_not_applied": {
+  "accented": 437
+ },
+ "targets": {
+  "affordance": {
+   "r_b": 1354,
+   "gained": 0,
+   "new": 1354,
+   "changed": 0
+  },
+  "agency": {
+   "r_b": 10080,
+   "gained": 0,
+   "new": 10080,
+   "changed": 0
+  },
+  "agent": {
+   "r_b": 18798,
+   "gained": 0,
+   "new": 18798,
+   "changed": 0
+  },
+  "alignment": {
+   "r_b": 3316,
+   "gained": 0,
+   "new": 3316,
+   "changed": 0
+  },
+  "attention": {
+   "r_b": 40495,
+   "gained": 167,
+   "new": 40662,
+   "changed": 0
+  },
+  "behavior": {
+   "r_b": 55359,
+   "gained": 16876,
+   "new": 72235,
+   "changed": 0
+  },
+  "cloud": {
+   "r_b": 3888,
+   "gained": 25,
+   "new": 3913,
+   "changed": 0
+  },
+  "cognition": {
+   "r_b": 9208,
+   "gained": 0,
+   "new": 9208,
+   "changed": 0
+  },
+  "complexity": {
+   "r_b": 16799,
+   "gained": 0,
+   "new": 16799,
+   "changed": 0
+  },
+  "component": {
+   "r_b": 32462,
+   "gained": 0,
+   "new": 32462,
+   "changed": 0
+  },
+  "computation": {
+   "r_b": 7738,
+   "gained": 0,
+   "new": 7738,
+   "changed": 0
+  },
+  "consciousness": {
+   "r_b": 10236,
+   "gained": 0,
+   "new": 10236,
+   "changed": 0
+  },
+  "control": {
+   "r_b": 78843,
+   "gained": 47,
+   "new": 78890,
+   "changed": 0
+  },
+  "embedding": {
+   "r_b": 2832,
+   "gained": 0,
+   "new": 2832,
+   "changed": 0
+  },
+  "embodiment": {
+   "r_b": 1676,
+   "gained": 0,
+   "new": 1676,
+   "changed": 0
+  },
+  "emergence": {
+   "r_b": 6553,
+   "gained": 0,
+   "new": 6553,
+   "changed": 0
+  },
+  "experience": {
+   "r_b": 75905,
+   "gained": 67,
+   "new": 75972,
+   "changed": 0
+  },
+  "feedback": {
+   "r_b": 16312,
+   "gained": 146,
+   "new": 16458,
+   "changed": 0
+  },
+  "fusion": {
+   "r_b": 4477,
+   "gained": 0,
+   "new": 4477,
+   "changed": 0
+  },
+  "hallucination": {
+   "r_b": 1007,
+   "gained": 0,
+   "new": 1007,
+   "changed": 0
+  },
+  "having": {
+   "r_b": 18483,
+   "gained": 0,
+   "new": 18483,
+   "changed": 0
+  },
+  "image": {
+   "r_b": 50944,
+   "gained": 213,
+   "new": 51157,
+   "changed": 0
+  },
+  "information": {
+   "r_b": 109784,
+   "gained": 710,
+   "new": 110494,
+   "changed": 0
+  },
+  "intelligence": {
+   "r_b": 21608,
+   "gained": 0,
+   "new": 21608,
+   "changed": 0
+  },
+  "intentionality": {
+   "r_b": 1077,
+   "gained": 0,
+   "new": 1077,
+   "changed": 0
+  },
+  "interface": {
+   "r_b": 32781,
+   "gained": 316,
+   "new": 33097,
+   "changed": 0
+  },
+  "interpretation": {
+   "r_b": 24555,
+   "gained": 21,
+   "new": 24576,
+   "changed": 0
+  },
+  "learning": {
+   "r_b": 102593,
+   "gained": 460,
+   "new": 103053,
+   "changed": 0
+  },
+  "meaning": {
+   "r_b": 34252,
+   "gained": 31,
+   "new": 34283,
+   "changed": 0
+  },
+  "medium": {
+   "r_b": 8686,
+   "gained": 0,
+   "new": 8686,
+   "changed": 0
+  },
+  "memory": {
+   "r_b": 39292,
+   "gained": 0,
+   "new": 39292,
+   "changed": 0
+  },
+  "mind": {
+   "r_b": 19419,
+   "gained": 0,
+   "new": 19419,
+   "changed": 0
+  },
+  "model": {
+   "r_b": 154114,
+   "gained": 96,
+   "new": 154210,
+   "changed": 0
+  },
+  "network": {
+   "r_b": 66500,
+   "gained": 79,
+   "new": 66579,
+   "changed": 0
+  },
+  "perception": {
+   "r_b": 34176,
+   "gained": 73,
+   "new": 34249,
+   "changed": 0
+  },
+  "platform": {
+   "r_b": 13304,
+   "gained": 0,
+   "new": 13304,
+   "changed": 0
+  },
+  "presence": {
+   "r_b": 19448,
+   "gained": 0,
+   "new": 19448,
+   "changed": 0
+  },
+  "prompt": {
+   "r_b": 2278,
+   "gained": 0,
+   "new": 2278,
+   "changed": 0
+  },
+  "representation": {
+   "r_b": 29954,
+   "gained": 0,
+   "new": 29954,
+   "changed": 0
+  },
+  "sign": {
+   "r_b": 14051,
+   "gained": 39,
+   "new": 14090,
+   "changed": 0
+  },
+  "simulation": {
+   "r_b": 16450,
+   "gained": 0,
+   "new": 16450,
+   "changed": 0
+  },
+  "strength": {
+   "r_b": 9540,
+   "gained": 0,
+   "new": 9540,
+   "changed": 0
+  },
+  "symbol": {
+   "r_b": 6800,
+   "gained": 20,
+   "new": 6820,
+   "changed": 0
+  },
+  "system": {
+   "r_b": 218741,
+   "gained": 152,
+   "new": 218893,
+   "changed": 0
+  },
+  "transformer": {
+   "r_b": 1220,
+   "gained": 0,
+   "new": 1220,
+   "changed": 0
+  },
+  "user": {
+   "r_b": 83502,
+   "gained": 367,
+   "new": 83869,
+   "changed": 0
+  }
+ },
+ "held_out_words_changed_or_gaining": 0,
+ "reconciliation": {
+  "merges_seen": 33432,
+  "merges_counted_by_the_builder": 33461,
+  "one_token_rewrites_seen": 126767,
+  "one_token_counted_by_the_builder": 126765,
+  "spelled_entries_seen": 158498,
+  "largest_merge_differences": [
+   [
+    "beta protein",
+    3,
+    26
+   ],
+   [
+    "expectation maximization",
+    65,
+    72
+   ],
+   [
+    "self organizing",
+    26,
+    30
+   ],
+   [
+    "beta receptor",
+    20,
+    22
+   ],
+   [
+    "work life",
+    123,
+    124
+   ],
+   [
+    "day time",
+    50,
+    51
+   ],
+   [
+    "care giver",
+    40,
+    41
+   ],
+   [
+    "work site",
+    23,
+    24
+   ],
+   [
+    "millimeter wave",
+    22,
+    23
+   ]
+  ]
+ },
+ "unexplained_examples": [
+  [
+   "https://openalex.org/W2315027061",
+   464,
+   "n-colorings",
+   "n-coloring",
+   "n-colorings"
+  ],
+  [
+   "https://openalex.org/W2532150427",
+   311,
+   "four-colorings",
+   "four-coloring",
+   "four-colorings"
+  ],
+  [
+   "https://openalex.org/W2532150427",
+   580,
+   "four-colorings",
+   "four-coloring",
+   "four-colorings"
+  ],
+  [
+   "https://openalex.org/W2532150427",
+   655,
+   "four-colorings",
+   "four-coloring",
+   "four-colorings"
+  ],
+  [
+   "https://openalex.org/W2532150427",
+   761,
+   "four-colorings",
+   "four-coloring",
+   "four-colorings"
+  ],
+  [
+   "https://openalex.org/W2532150427",
+   1006,
+   "four-colorings",
+   "four-coloring",
+   "four-colorings"
+  ],
+  [
+   "https://openalex.org/W2532150427",
+   1120,
+   "four-colorings",
+   "four-coloring",
+   "four-colorings"
+  ],
+  [
+   "https://openalex.org/W3101188271",
+   122,
+   "edge-colorings",
+   "edge-coloring",
+   "edge-colorings"
+  ],
+  [
+   "https://openalex.org/W2315022713",
+   369,
+   "λ-colorings",
+   "λ-coloring",
+   "λ-colorings"
+  ],
+  [
+   "https://openalex.org/W1998549616",
+   265,
+   "3-colorings",
+   "3-coloring",
+   "3-colorings"
+  ],
+  [
+   "https://openalex.org/W1998549616",
+   400,
+   "3-colorings",
+   "3-coloring",
+   "3-colorings"
+  ],
+  [
+   "https://openalex.org/W1753229983",
+   107,
+   "k-colorings",
+   "k-coloring",
+   "k-colorings"
+  ],
+  [
+   "https://openalex.org/W1753229983",
+   305,
+   "k-colorings",
+   "k-coloring",
+   "k-colorings"
+  ],
+  [
+   "https://openalex.org/W4246388070",
+   4110,
+   "re-singularizes",
+   "re-singularize",
+   "re-singularizes"
+  ]
+ ],
+ "bar": {
+  "alignment": true,
+  "changes_explained": false,
+  "targets": true
+ }
+}
