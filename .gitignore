@@ -103,3 +103,7 @@ npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# The spelling audit's items quote corpus sentences; only the key and the verdicts are committed.
+data/review/spellings/batch_*.jsonl
+data/review/spellings/calibration.json

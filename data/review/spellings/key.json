@@ -1,0 +1,2226 @@
+{
+ "S000": {
+  "form": "computerised",
+  "standard": "computerized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S001": {
+  "form": "neighbourhood",
+  "standard": "neighborhood",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S002": {
+  "form": "behaviour",
+  "standard": "behavior",
+  "sets": [
+   "sample",
+   "census:word_table"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S003": {
+  "form": "humour",
+  "standard": "humor",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S004": {
+  "form": "coloreds",
+  "standard": "coloureds",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S005": {
+  "form": "eroticizing",
+  "standard": "eroticising",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S006": {
+  "form": "scepter",
+  "standard": "sceptre",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S007": {
+  "form": "generalisation",
+  "standard": "generalization",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S008": {
+  "form": "skeptic",
+  "standard": "sceptic",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S009": {
+  "form": "democratised",
+  "standard": "democratized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S010": {
+  "form": "latinised",
+  "standard": "latinized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S011": {
+  "form": "omelet",
+  "standard": "omelette",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S012": {
+  "form": "louver",
+  "standard": "louvre",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S013": {
+  "form": "armories",
+  "standard": "armouries",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S014": {
+  "form": "saltpeter",
+  "standard": "saltpetre",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S015": {
+  "form": "confessionalisation",
+  "standard": "confessionalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S016": {
+  "form": "dichotomisation",
+  "standard": "dichotomization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S017": {
+  "form": "jeweler",
+  "standard": "jeweller",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S018": {
+  "form": "recontextualisation",
+  "standard": "recontextualization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S019": {
+  "form": "catalog",
+  "standard": "catalogue",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S020": {
+  "form": "maximising",
+  "standard": "maximizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S021": {
+  "form": "renormalisation",
+  "standard": "renormalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S022": {
+  "form": "topicalize",
+  "standard": "topicalise",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "uniform"
+ },
+ "S023": {
+  "form": "federalization",
+  "standard": "federalisation",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "uniform"
+ },
+ "S024": {
+  "form": "succor",
+  "standard": "succour",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S025": {
+  "form": "categorise",
+  "standard": "categorize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S026": {
+  "form": "optimisation",
+  "standard": "optimization",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S027": {
+  "form": "shrivelled",
+  "standard": "shriveled",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S028": {
+  "form": "vascularised",
+  "standard": "vascularized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S029": {
+  "form": "favouring",
+  "standard": "favoring",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S030": {
+  "form": "canceler",
+  "standard": "canceller",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S031": {
+  "form": "aestheticised",
+  "standard": "aestheticized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S032": {
+  "form": "civilisation",
+  "standard": "civilization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S033": {
+  "form": "esthetics",
+  "standard": "aesthetics",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S034": {
+  "form": "internalisation",
+  "standard": "internalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S035": {
+  "form": "securitized",
+  "standard": "securitised",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S036": {
+  "form": "honour",
+  "standard": "honor",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S037": {
+  "form": "armour",
+  "standard": "armor",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S038": {
+  "form": "rivalled",
+  "standard": "rivaled",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S039": {
+  "form": "offence",
+  "standard": "offense",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S040": {
+  "form": "transnationalisation",
+  "standard": "transnationalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S041": {
+  "form": "plowed",
+  "standard": "ploughed",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S042": {
+  "form": "homoeopath",
+  "standard": "homeopath",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S043": {
+  "form": "grey",
+  "standard": "gray",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S044": {
+  "form": "parameterising",
+  "standard": "parameterizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S045": {
+  "form": "realizes",
+  "standard": "realises",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S046": {
+  "form": "desensitise",
+  "standard": "desensitize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S047": {
+  "form": "ghettoizing",
+  "standard": "ghettoising",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S048": {
+  "form": "unequaled",
+  "standard": "unequalled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S049": {
+  "form": "watercolor",
+  "standard": "watercolour",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S050": {
+  "form": "topicalising",
+  "standard": "topicalizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S051": {
+  "form": "signaler",
+  "standard": "signaller",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S052": {
+  "form": "marshaling",
+  "standard": "marshalling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S053": {
+  "form": "recognised",
+  "standard": "recognized",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S054": {
+  "form": "maximised",
+  "standard": "maximized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S055": {
+  "form": "smoldering",
+  "standard": "smouldering",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S056": {
+  "form": "universalised",
+  "standard": "universalized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S057": {
+  "form": "gaging",
+  "standard": "gauging",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S058": {
+  "form": "rumoured",
+  "standard": "rumored",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S059": {
+  "form": "depoliticise",
+  "standard": "depoliticize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S060": {
+  "form": "paediatric",
+  "standard": "pediatric",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S061": {
+  "form": "modularisation",
+  "standard": "modularization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S062": {
+  "form": "pathologise",
+  "standard": "pathologize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S063": {
+  "form": "defence",
+  "standard": "defense",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S064": {
+  "form": "cancelation",
+  "standard": "cancellation",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S065": {
+  "form": "archeology",
+  "standard": "archaeology",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S066": {
+  "form": "deemphasise",
+  "standard": "deemphasize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S067": {
+  "form": "untrammeled",
+  "standard": "untrammelled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S068": {
+  "form": "coloured",
+  "standard": "colored",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S069": {
+  "form": "checkered",
+  "standard": "chequered",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S070": {
+  "form": "favour",
+  "standard": "favor",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S071": {
+  "form": "amphitheatre",
+  "standard": "amphitheater",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S072": {
+  "form": "centralise",
+  "standard": "centralize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S073": {
+  "form": "libeled",
+  "standard": "libelled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S074": {
+  "form": "exorcize",
+  "standard": "exorcise",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S075": {
+  "form": "focalize",
+  "standard": "focalise",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S076": {
+  "form": "marginalisation",
+  "standard": "marginalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S077": {
+  "form": "aggrandisement",
+  "standard": "aggrandizement",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S078": {
+  "form": "centre",
+  "standard": "center",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S079": {
+  "form": "laborers",
+  "standard": "labourers",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S080": {
+  "form": "neighbored",
+  "standard": "neighboured",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S081": {
+  "form": "sombre",
+  "standard": "somber",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S082": {
+  "form": "utilizes",
+  "standard": "utilises",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S083": {
+  "form": "modelling",
+  "standard": "modeling",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S084": {
+  "form": "councilors",
+  "standard": "councillors",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S085": {
+  "form": "favourable",
+  "standard": "favorable",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S086": {
+  "form": "meters",
+  "standard": "metres",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S087": {
+  "form": "binging",
+  "standard": "bingeing",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S088": {
+  "form": "nativisation",
+  "standard": "nativization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S089": {
+  "form": "reveling",
+  "standard": "revelling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S090": {
+  "form": "emphasise",
+  "standard": "emphasize",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S091": {
+  "form": "toxemia",
+  "standard": "toxaemia",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S092": {
+  "form": "sepulcher",
+  "standard": "sepulchre",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S093": {
+  "form": "fibre",
+  "standard": "fiber",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S094": {
+  "form": "esthetically",
+  "standard": "aesthetically",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S095": {
+  "form": "universalise",
+  "standard": "universalize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S096": {
+  "form": "neighbouring",
+  "standard": "neighboring",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S097": {
+  "form": "realisation",
+  "standard": "realization",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S098": {
+  "form": "honoured",
+  "standard": "honored",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S099": {
+  "form": "criminalising",
+  "standard": "criminalizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S100": {
+  "form": "modelization",
+  "standard": "modelisation",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S101": {
+  "form": "unrecognised",
+  "standard": "unrecognized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S102": {
+  "form": "epilog",
+  "standard": "epilogue",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S103": {
+  "form": "utilised",
+  "standard": "utilized",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S104": {
+  "form": "leveler",
+  "standard": "leveller",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S105": {
+  "form": "exorcized",
+  "standard": "exorcised",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S106": {
+  "form": "anesthetist",
+  "standard": "anaesthetist",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S107": {
+  "form": "spirantisation",
+  "standard": "spirantization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S108": {
+  "form": "recontextualise",
+  "standard": "recontextualize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S109": {
+  "form": "skeptics",
+  "standard": "sceptics",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S110": {
+  "form": "prologue",
+  "standard": "prolog",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S111": {
+  "form": "pluralising",
+  "standard": "pluralizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S112": {
+  "form": "behavioural",
+  "standard": "behavioral",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S113": {
+  "form": "liberalisation",
+  "standard": "liberalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S114": {
+  "form": "characterise",
+  "standard": "characterize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S115": {
+  "form": "disks",
+  "standard": "discs",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S116": {
+  "form": "demonisation",
+  "standard": "demonization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S117": {
+  "form": "commercialising",
+  "standard": "commercializing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S118": {
+  "form": "colour",
+  "standard": "color",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S119": {
+  "form": "specter",
+  "standard": "spectre",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S120": {
+  "form": "esthete",
+  "standard": "aesthete",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S121": {
+  "form": "diagonalized",
+  "standard": "diagonalised",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "uniform"
+ },
+ "S122": {
+  "form": "rancor",
+  "standard": "rancour",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S123": {
+  "form": "utilise",
+  "standard": "utilize",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S124": {
+  "form": "analyse",
+  "standard": "analyze",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S125": {
+  "form": "moldering",
+  "standard": "mouldering",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S126": {
+  "form": "analysed",
+  "standard": "analyzed",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S127": {
+  "form": "utilising",
+  "standard": "utilizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S128": {
+  "form": "cozy",
+  "standard": "cosy",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S129": {
+  "form": "totalling",
+  "standard": "totaling",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S130": {
+  "form": "parallelising",
+  "standard": "parallelizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S131": {
+  "form": "vapour",
+  "standard": "vapor",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S132": {
+  "form": "hypothesised",
+  "standard": "hypothesized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S133": {
+  "form": "labelled",
+  "standard": "labeled",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S134": {
+  "form": "theater",
+  "standard": "theatre",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S135": {
+  "form": "analogue",
+  "standard": "analog",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S136": {
+  "form": "videodisk",
+  "standard": "videodisc",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S137": {
+  "form": "federalised",
+  "standard": "federalized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S138": {
+  "form": "banister",
+  "standard": "bannister",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S139": {
+  "form": "platformisation",
+  "standard": "platformization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S140": {
+  "form": "paneling",
+  "standard": "panelling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S141": {
+  "form": "quarreled",
+  "standard": "quarrelled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S142": {
+  "form": "trialed",
+  "standard": "trialled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S143": {
+  "form": "shriveling",
+  "standard": "shrivelling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S144": {
+  "form": "dialogs",
+  "standard": "dialogues",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "uniform"
+ },
+ "S145": {
+  "form": "dialog",
+  "standard": "dialogue",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S146": {
+  "form": "monolog",
+  "standard": "monologue",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S147": {
+  "form": "plough",
+  "standard": "plow",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S148": {
+  "form": "visualisation",
+  "standard": "visualization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S149": {
+  "form": "organisation",
+  "standard": "organization",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S150": {
+  "form": "synchronise",
+  "standard": "synchronize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S151": {
+  "form": "technicolour",
+  "standard": "technicolor",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S152": {
+  "form": "standardised",
+  "standard": "standardized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S153": {
+  "form": "equaled",
+  "standard": "equalled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S154": {
+  "form": "filet",
+  "standard": "fillet",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S155": {
+  "form": "secularisation",
+  "standard": "secularization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S156": {
+  "form": "counsellor",
+  "standard": "counselor",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S157": {
+  "form": "jewelry",
+  "standard": "jewellery",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S158": {
+  "form": "polarisation",
+  "standard": "polarization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S159": {
+  "form": "enthrall",
+  "standard": "enthral",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S160": {
+  "form": "epaulet",
+  "standard": "epaulette",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S161": {
+  "form": "misdemeanors",
+  "standard": "misdemeanours",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S162": {
+  "form": "recognising",
+  "standard": "recognizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S163": {
+  "form": "encephalisation",
+  "standard": "encephalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S164": {
+  "form": "pedaling",
+  "standard": "pedalling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S165": {
+  "form": "trialing",
+  "standard": "trialling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S166": {
+  "form": "grueling",
+  "standard": "gruelling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S167": {
+  "form": "spiralled",
+  "standard": "spiraled",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S168": {
+  "form": "revolutionised",
+  "standard": "revolutionized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S169": {
+  "form": "interiorization",
+  "standard": "interiorisation",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S170": {
+  "form": "internationalise",
+  "standard": "internationalize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S171": {
+  "form": "neutralising",
+  "standard": "neutralizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S172": {
+  "form": "generalised",
+  "standard": "generalized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S173": {
+  "form": "quarreling",
+  "standard": "quarrelling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S174": {
+  "form": "judgement",
+  "standard": "judgment",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S175": {
+  "form": "theaters",
+  "standard": "theatres",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S176": {
+  "form": "modelled",
+  "standard": "modeled",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S177": {
+  "form": "disc",
+  "standard": "disk",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S178": {
+  "form": "centred",
+  "standard": "centered",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S179": {
+  "form": "harmonised",
+  "standard": "harmonized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S180": {
+  "form": "labour",
+  "standard": "labor",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S181": {
+  "form": "organisational",
+  "standard": "organizational",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S182": {
+  "form": "canceled",
+  "standard": "cancelled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S183": {
+  "form": "photoisomerisation",
+  "standard": "photoisomerization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S184": {
+  "form": "archeologist",
+  "standard": "archaeologist",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S185": {
+  "form": "esthetic",
+  "standard": "aesthetic",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S186": {
+  "form": "ageing",
+  "standard": "aging",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S187": {
+  "form": "prologs",
+  "standard": "prologues",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S188": {
+  "form": "characterisation",
+  "standard": "characterization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S189": {
+  "form": "internationalisation",
+  "standard": "internationalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S190": {
+  "form": "unpublicised",
+  "standard": "unpublicized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S191": {
+  "form": "signalization",
+  "standard": "signalisation",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S192": {
+  "form": "gage",
+  "standard": "gauge",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S193": {
+  "form": "romanisation",
+  "standard": "romanization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S194": {
+  "form": "industrialisation",
+  "standard": "industrialization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S195": {
+  "form": "offenses",
+  "standard": "offences",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S196": {
+  "form": "clangor",
+  "standard": "clangour",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S197": {
+  "form": "meagre",
+  "standard": "meager",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S198": {
+  "form": "criticising",
+  "standard": "criticizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S199": {
+  "form": "maximiser",
+  "standard": "maximizer",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S200": {
+  "form": "ardor",
+  "standard": "ardour",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S201": {
+  "form": "deputising",
+  "standard": "deputizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S202": {
+  "form": "neovascularisation",
+  "standard": "neovascularization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S203": {
+  "form": "penciled",
+  "standard": "pencilled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S204": {
+  "form": "marginalised",
+  "standard": "marginalized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S205": {
+  "form": "realizer",
+  "standard": "realiser",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S206": {
+  "form": "institutionalised",
+  "standard": "institutionalized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S207": {
+  "form": "anthropomorphised",
+  "standard": "anthropomorphized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S208": {
+  "form": "fulfil",
+  "standard": "fulfill",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S209": {
+  "form": "molting",
+  "standard": "moulting",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S210": {
+  "form": "gaged",
+  "standard": "gauged",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S211": {
+  "form": "clamored",
+  "standard": "clamoured",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S212": {
+  "form": "humanisation",
+  "standard": "humanization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S213": {
+  "form": "bedeviling",
+  "standard": "bedevilling",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S214": {
+  "form": "artefact",
+  "standard": "artifact",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S215": {
+  "form": "anaesthetics",
+  "standard": "anesthetics",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S216": {
+  "form": "europeanizing",
+  "standard": "europeanising",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S217": {
+  "form": "counselled",
+  "standard": "counseled",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S218": {
+  "form": "programme",
+  "standard": "program",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S219": {
+  "form": "signalling",
+  "standard": "signaling",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S220": {
+  "form": "unrivaled",
+  "standard": "unrivalled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S221": {
+  "form": "pharmacopeias",
+  "standard": "pharmacopoeias",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S222": {
+  "form": "anesthesised",
+  "standard": "anesthesized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S223": {
+  "form": "draftsman",
+  "standard": "draughtsman",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S224": {
+  "form": "labelling",
+  "standard": "labeling",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S225": {
+  "form": "tumourigenesis",
+  "standard": "tumorigenesis",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S226": {
+  "form": "mobilised",
+  "standard": "mobilized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S227": {
+  "form": "sceptical",
+  "standard": "skeptical",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S228": {
+  "form": "glamor",
+  "standard": "glamour",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S229": {
+  "form": "sanitised",
+  "standard": "sanitized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S230": {
+  "form": "recognise",
+  "standard": "recognize",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S231": {
+  "form": "generaliser",
+  "standard": "generalizer",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S232": {
+  "form": "assize",
+  "standard": "assise",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S233": {
+  "form": "denaturalised",
+  "standard": "denaturalized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S234": {
+  "form": "scepticism",
+  "standard": "skepticism",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S235": {
+  "form": "marshaled",
+  "standard": "marshalled",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S236": {
+  "form": "concretisation",
+  "standard": "concretization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S237": {
+  "form": "councilor",
+  "standard": "councillor",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S238": {
+  "form": "traumatised",
+  "standard": "traumatized",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S239": {
+  "form": "labors",
+  "standard": "labours",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S240": {
+  "form": "cataloged",
+  "standard": "catalogued",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S241": {
+  "form": "urbanisation",
+  "standard": "urbanization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S242": {
+  "form": "reconceptualisation",
+  "standard": "reconceptualization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S243": {
+  "form": "organised",
+  "standard": "organized",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S244": {
+  "form": "accessorising",
+  "standard": "accessorizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S245": {
+  "form": "fetishizing",
+  "standard": "fetishising",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S246": {
+  "form": "endeavour",
+  "standard": "endeavor",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S247": {
+  "form": "characterised",
+  "standard": "characterized",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "S248": {
+  "form": "worshiper",
+  "standard": "worshipper",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S249": {
+  "form": "summarise",
+  "standard": "summarize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S250": {
+  "form": "archeologically",
+  "standard": "archaeologically",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S251": {
+  "form": "immobilising",
+  "standard": "immobilizing",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S252": {
+  "form": "counselling",
+  "standard": "counseling",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S253": {
+  "form": "coziness",
+  "standard": "cosiness",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S254": {
+  "form": "aeons",
+  "standard": "eons",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S255": {
+  "form": "beveled",
+  "standard": "bevelled",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "uniform"
+ },
+ "S256": {
+  "form": "visualiser",
+  "standard": "visualizer",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S257": {
+  "form": "medicalise",
+  "standard": "medicalize",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S258": {
+  "form": "neutralisation",
+  "standard": "neutralization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S259": {
+  "form": "travelers",
+  "standard": "travellers",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S260": {
+  "form": "archeological",
+  "standard": "archaeological",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S261": {
+  "form": "luster",
+  "standard": "lustre",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S262": {
+  "form": "exorcizing",
+  "standard": "exorcising",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S263": {
+  "form": "behaviorists",
+  "standard": "behaviourists",
+  "sets": [
+   "sample",
+   "census:british_won"
+  ],
+  "drawn": "uniform"
+ },
+ "S264": {
+  "form": "lexicalisation",
+  "standard": "lexicalization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S265": {
+  "form": "behaviourally",
+  "standard": "behaviorally",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S266": {
+  "form": "pharmacopeia",
+  "standard": "pharmacopoeia",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S267": {
+  "form": "singularisation",
+  "standard": "singularization",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "S268": {
+  "form": "jewelers",
+  "standard": "jewellers",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S269": {
+  "form": "analysing",
+  "standard": "analyzing",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "S270": {
+  "form": "generalizes",
+  "standard": "generalises",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S271": {
+  "form": "utilizer",
+  "standard": "utiliser",
+  "sets": [
+   "census:british_won"
+  ],
+  "drawn": null
+ },
+ "S272": {
+  "form": "tranquillity",
+  "standard": "tranquility",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ }
+}

@@ -21,10 +21,15 @@ matching. It applies to each hyphen segment of a folded token, one token for one
 - **Direction** (the author, 2026-11-17). Each pair is written as the form the corpus uses more
   often, so *dialogue* stays (11,031 against 1,383 for *dialog*) while *behaviour* becomes
   *behavior*. A word-table lemma keeps its own spelling.
-- **The proposal** (`scripts/evidence/spelling_table.py`, code `be36a6ac`): 1,955 forms
-  (1,117 from the table, 838 from the rules), 172,251 tokens, 0.17% of the view. The British form
-  won 173 pairs. No word-table lemma is mapped away; the only pair touching the table is
+- **The proposal** (`scripts/evidence/spelling_table.py`, code `8e8e6522`): 1,954 forms
+  (1,116 from the table, 838 from the rules), 172,600 tokens, 0.17% of the view. The British form
+  won 116 pairs. No word-table lemma is mapped away; the only pair touching the table is
   *behaviour* → *behavior*.
+- **Corrected before judging (2026-11-17).** A first build let a British form used once win over
+  an American form that never occurs, mapping the absent form onto it (*civilizes* → *civilises*,
+  57 such pairs). The British form now wins only over an American form that occurs and is rarer.
+  Pairs of a plural noun in *-yses* and a verb in *-yzes* (*psychoanalyses*) are dropped as
+  different words.
 
 ## The audit, set before reading
 
@@ -41,8 +46,8 @@ matching. It applies to each hyphen segment of a folded token, one token for one
   - 65% at 2%;
   - 5% at 5% (the rate that must fail).
 - **The census, fixed one by one.** The census's errors are fixed one by one and do not count
-  against the bar. It covers 220 pairs: the one pair touching the word table, the 49 others with
-  most tokens, and the 170 others whose British form won.
+  against the bar. It covers 163 pairs: the one pair touching the word table, the 49 others with
+  most tokens, and the 113 others whose British form won.
 - **The judges.**
   - Two Claude Sonnet judges and a Claude Opus adjudicator for their differences, with the prompt
     saved in `curated/judging/spellings/prompt.md`.
@@ -50,7 +55,8 @@ matching. It applies to each hyphen segment of a folded token, one token for one
   - The author judges 30 pairs drawn from the sample (seed 20261121), blind. The agents' verdicts
     stand if they agree with the author on at least 27 of the 30; otherwise the author judges the
     150.
-  - Verdicts are kept in `data/review/spellings/`.
+  - The items, which quote corpus sentences, stay out of the public repository. The key
+    (`data/review/spellings/key.json`) and the verdicts are kept in `data/review/spellings/`.
 - **If the sample fails,** the agents review every pair of the failing source (table or rules),
   its errors are fixed, and a new sample (seed 20261120) is judged once against the same bar.
 - **Then.** `curated/spellings.tsv` is written from the proposal, minus the pairs judged wrong,
