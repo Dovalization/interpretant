@@ -109,3 +109,6 @@ data/review/spellings/batch_*.jsonl
 data/review/spellings/calibration.json
 data/review/spellings/adjudicate.jsonl
 data/review/spellings/calibration_2.json
+data/review/compounds/batch_*.jsonl
+data/review/compounds/calibration.json
+data/review/compounds/adjudicate.jsonl
