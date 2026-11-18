@@ -94,8 +94,11 @@ Set after the first calibration and before any pair was judged again.
   - 168 are written with an accent, almost all French (*utilisé*, *réalisation*). The map leaves
     accented tokens alone.
   - 9,502 (5.9%) are tagged as proper nouns. The tag marks names (the Labour party, James Armour)
-    and title-cased common words ("Child Behaviour Checklist") alike. The author's decision on
-    them is recorded here once made.
+    and title-cased common words ("Child Behaviour Checklist") alike, about half each in the seeded
+    examples. **The map applies to them** (the author, 2026-11-17): lowercasing already merges a
+    name with its common word across the view (*Armour* is *armour*), so the map adds no new
+    confusion, and title-cased words get merged. Names are handled for usages by step 6's entity
+    check; the datasheet records the limit when the map is applied (step 4).
 - **The census call:** *programme* and *programmes* leave the map (the author).
 - **Judged again.** The two judges judge all 273 items again with the clarified prompt
   (`curated/judging/spellings/prompt.md`; the first version is at commit `2e96b7e1`). The items
