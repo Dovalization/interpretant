@@ -29,8 +29,9 @@ from interpretant.pipelines.runs import record_run
 def build_sentence_view_command(catalog_file: Path, process_count: int | None) -> None:
     """Write one row per sentence of every kept work, marking those no usage is drawn from.
 
-    A sentence whose every non-space character is removed is marked removed; the unfinished last
-    sentence of a truncated work is marked cut off (docs/sentence_view.md).
+    Cuts the merge rules find wrong are joined first. A sentence whose every non-space character is
+    removed is marked removed; the unfinished last sentence of a truncated work is marked cut off
+    (docs/sentence_view.md).
 
     Each worker process takes whole parts. Progress is shown live: a bar in a terminal, a line
     every half minute in a log file.
@@ -45,6 +46,7 @@ def build_sentence_view_command(catalog_file: Path, process_count: int | None) -
     counts = {
         "works": result.work_count,
         "sentences": result.sentence_count,
+        "joined": result.joined_count,
         "removed": result.removed_count,
         "cut_off": result.cut_off_count,
     }
@@ -53,13 +55,14 @@ def build_sentence_view_command(catalog_file: Path, process_count: int | None) -
 
 
 def render_sentence_view_result(result: SentenceViewResult) -> Table:
-    """One table: the works and sentences written, and the sentences excluded from the draw."""
+    """One table: the works and sentences written, the joins, and the sentences not drawn from."""
     table = Table(title=f"The sentence view of {len(result.parts)} parts")
-    for column in ("Works", "Sentences", "Removed", "Cut off"):
+    for column in ("Works", "Sentences", "Joined", "Removed", "Cut off"):
         table.add_column(column, justify="right")
     table.add_row(
         f"{result.work_count:,}",
         f"{result.sentence_count:,}",
+        f"{result.joined_count:,}",
         f"{result.removed_count:,}",
         f"{result.cut_off_count:,}",
     )

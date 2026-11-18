@@ -1,4 +1,4 @@
-"""The contextual sentence view: which sentences are removed or cut off, and the stage."""
+"""The contextual sentence view: which cuts are joined, which sentences are removed or cut off."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ from interpretant.catalog.sentence_view import (
 from interpretant.corpus.sentence_view import (
     build_sentence_view,
     is_inside_removal,
+    join_rule,
     merge_ranges,
     word_count,
 )
@@ -149,8 +150,93 @@ def test_the_stage_writes_every_part_and_counts_its_sentences(catalog: CatalogCo
         part="ai_1970",
     )
     result = build_stage(catalog)
-    assert (result.work_count, result.sentence_count) == (2, 4)
+    assert (result.work_count, result.sentence_count, result.joined_count) == (2, 4, 0)
     assert (result.removed_count, result.cut_off_count) == (1, 1)
     assert result.parts == ["ai_1970", "ai_2010"]
     written = load_sentence_view(catalog).sort("work_id", "sentence_number").collect()
     assert written["exclusion"].to_list() == [None, "removed", None, "cut_off"]
+
+
+@pytest.mark.parametrize(
+    ("before", "after", "rule"),
+    [
+        (
+            "Notes [Landshut 1809][Schelling, p. 8",
+            ': "The absolute can be given',
+            "closing_punctuation",
+        ),
+        ("2", ". Subjects using booklets did better.", "no_letters"),
+        (
+            "They differ in how they are learned 2",
+            ". Subjects using booklets did better.",
+            "period",
+        ),
+        ("Sociological theory . .", "is for us that aspect of the theory", "spaced_dots"),
+        (
+            "The hypotheses to be tested were: 1.",
+            "Subjects using booklets did better.",
+            "list_number",
+        ),
+        (
+            "Moreover, n-2 is the best possible;(2)",
+            "If G is connected, then it holds.",
+            "list_number",
+        ),
+        (
+            "The Still Life as a Personal Object-A",
+            "Note on Heidegger and van Gogh.",
+            "function_word",
+        ),
+        ("(Cambridge: Cambridge Univ.", "Press, 1970).", "inside_brackets"),
+        ("Genealogy of Morality and Other Writings, ed.", "Keith Ansell-Pearson.", "abbreviation"),
+        ("These were studied in many ways, e.g.", "In the first two examples.", "abbreviation"),
+        ("This is discussed in ch.", "2 (Phonology) at length.", "reference_number"),
+        ("PROCESSING IN ORGANIZATIONS, VOL.", "I. Edited by Lee S. Sproull.", "reference_number"),
+        ("University School of Medicine-St.", "Louis, Missouri is proud.", "saint"),
+        ("The section ends here.", "The next one starts.", None),
+        ("Teaching methods, materials, etc.", "Teaching students well matters.", None),
+        ("As described by Smith et al.", "We then tested the model.", None),
+        ("Menlo Park, CA.", "Address reprint requests to the author.", None),
+        ("It ideologies, (1941:84)", "Mannheim envisaged all ideologies.", None),
+        ("The edges cross in p.", "In the CROSSING number problem, it is given.", None),
+        ("Industries have lost their huge leads. .", "A debilitating acceptance followed.", None),
+        ("A list of results follows.", "(b) What types of feedback were given?", None),
+    ],
+)
+def test_join_rule_finds_the_cuts_where_no_sentence_ends(
+    before: str, after: str, rule: str | None
+) -> None:
+    assert join_rule(before, after) == rule
+
+
+def test_build_sentence_view_joins_wrong_cuts_and_records_their_rules() -> None:
+    sentences = ["The hypotheses were: 1.", "Booklets help.", "See ch.", "2 for the details.", "5"]
+    view = build_sentence_view(abstracts_table([abstract_row(1, sentences)]))
+    text = " ".join(sentences)
+    assert [text[start:end] for start, end in view.select("start", "end").rows()] == [
+        "The hypotheses were: 1. Booklets help.",
+        "See ch. 2 for the details. 5",
+    ]
+    assert view["merge_rules"].to_list() == [["list_number"], ["reference_number", "no_letters"]]
+    assert view["sentence_number"].to_list() == [0, 1]
+
+
+def test_build_sentence_view_never_joins_a_removed_sentence() -> None:
+    sentences = ["The hypotheses were: 1.", "Booklets help a lot.", "And more."]
+    second = len(sentences[0]) + 1
+    row = abstract_row(1, sentences, removals=[removal(second, second + len(sentences[1]))])
+    view = build_sentence_view(abstracts_table([row]))
+    assert view.select("exclusion", "merge_rules").rows() == [
+        (None, []),
+        ("removed", []),
+        (None, []),
+    ]
+
+
+def test_build_sentence_view_gives_a_joined_sentence_its_longest_parts_language() -> None:
+    row = abstract_row(
+        1, ["See p.", "12 for the full and very long details of it."], flags=["truncated"]
+    )
+    row["sentences"][0] |= {"language": "und", "confidence": 0.1}
+    view = build_sentence_view(abstracts_table([row]))
+    assert view.select("language", "confidence", "exclusion").rows() == [("en", 0.99, "cut_off")]
