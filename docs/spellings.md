@@ -54,7 +54,8 @@ matching. It applies to each hyphen segment of a folded token, one token for one
   - Each pair is shown with up to two corpus sentences for each form, from kept works.
   - The author judges 30 pairs drawn from the sample (seed 20261121), blind. The agents' verdicts
     stand if they agree with the author on at least 27 of the 30; otherwise the author judges the
-    150.
+    150. An answer of "not sure" counts as a disagreement (set 2026-11-17, before the author's
+    answers).
   - The items, which quote corpus sentences, stay out of the public repository. The key
     (`data/review/spellings/key.json`) and the verdicts are kept in `data/review/spellings/`.
 - **If the sample fails,** the agents review every pair of the failing source (table or rules),
