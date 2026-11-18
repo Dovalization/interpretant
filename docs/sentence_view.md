@@ -222,6 +222,22 @@ with the same prompt:
 Cut precision and joined cuts carry over from round 3: the joins are unchanged, and removing
 splits only removes cuts, none of round 3's wrong cuts being a split.
 
+### Round 5: no split after the letters A to E (pre-registered 2026-11-18, before its build)
+
+**Why.** Round 4 (agents' verdicts) passed boundaries (2 of 150 wrong) and failed split cuts again:
+4 of 80 wrong, all splits at a letter label in non-prose, three after the options of 1950s
+multiple-choice items (*fresh and cool B.* | *The sky remains cloudy*) and one in a contents list
+(*65 B.* | *The College-Attending*).
+
+**The change (the author's choice, 2026-11-18).** The split rule also leaves the single letters A
+to E alone, the usual labels of lists, options and outlines. All nine wrong splits of rounds 3 and 4
+would have been left alone. Real breaks after those letters are given up (*in 3D. In addition*).
+
+**The audit.** As in round 4: 80 split cuts (seed 20261235; bar at most 2 wrong) and 150 boundaries
+(seed 20261234; bar at most 5 wrong), the other samples carrying over from round 3. **If the split
+cuts fail again, the split rule is dropped** and the view is rebuilt with the round-3 joins alone;
+its boundaries are then those of round 2's rules, judged once more on a fresh sample.
+
 ## Results
 
 To be written after the build and the audit.

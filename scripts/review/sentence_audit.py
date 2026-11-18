@@ -60,6 +60,7 @@ ROUNDS: dict[str, dict[str, int]] = {
         "shuffle": 20261216,
     },
     "4": {"boundaries": 20261224, "splits": 20261225, "shuffle": 20261226},
+    "5": {"boundaries": 20261234, "splits": 20261235, "shuffle": 20261236},
 }
 RECALIBRATION = (3, 6)
 PRECISION = (6, 2)

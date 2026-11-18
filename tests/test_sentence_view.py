@@ -289,7 +289,15 @@ def test_build_sentence_view_joins_a_removed_stray_period_back_to_its_ellipsis()
         ),
         (
             "It was sensed in 3D. In addition, a circuit converts it.",
-            ["It was sensed in 3D.", "In addition, a circuit converts it."],
+            ["It was sensed in 3D. In addition, a circuit converts it."],
+        ),
+        (
+            "The air seems fresh and cool B. The sky remains cloudy.",
+            ["The air seems fresh and cool B. The sky remains cloudy."],
+        ),
+        (
+            "The variable rose with T. Furthermore, it fell.",
+            ["The variable rose with T.", "Furthermore, it fell."],
         ),
         (
             "A portrait by artist George P. A. Healy hangs here.",

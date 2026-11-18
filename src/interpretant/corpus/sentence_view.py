@@ -64,13 +64,13 @@ _SENTENCE_END = re.compile(r"[a-z]{2}[)\]\"'”’]*[.!?]$")
 # A break the spaCy pass missed: a capital or short acronym with a period, after a word that starts
 # lowercase or a number (so not a name's initial, a reference's or a contents line's label), before
 # a common sentence opener that is not itself an initial (*over a VP. Also*, *of X. This is*). *I.*
-# is left alone: mostly a label.
+# and the single letters A to E are left alone: mostly labels of lists, options and outlines.
 OPENERS = (
     "The|This|These|That|Those|A|An|In|We|It|Its|Our|Also|However|Thus|Such|There|They|He|She"
     "|Finally|Moreover|Here|Furthermore|Although|When|Then|As|For|One|Two|Both|Each|No"
 )
 _MISSED_BREAK = re.compile(
-    rf"(?:(?<=[a-z0-9] )|(?<=\d))(?!I\.)[A-Z]{{1,3}}\.(\s+)(?=(?:{OPENERS})\b)(?!A\.)"
+    rf"(?:(?<=[a-z0-9] )|(?<=\d))(?![A-EI]\.)[A-Z]{{1,3}}\.(\s+)(?=(?:{OPENERS})\b)(?!A\.)"
 )
 _OPENERS, _CLOSERS = "([", ")]"
 
