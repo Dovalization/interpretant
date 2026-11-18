@@ -13,6 +13,7 @@ from spacy.tokens import Doc, DocBin
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exceptions
 from interpretant.corpus.audit import load_target_words
+from interpretant.corpus.compound_spelling import NO_COMPOUNDS
 from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.corpus.static_view import static_tokens
 
@@ -108,7 +109,7 @@ def test_auxiliaries_keep_their_form_whatever_the_exceptions() -> None:
     ruler = lemma_exception_ruler(
         vocab, [exception("has", "hav", "VBZ"), exception("senses", "sense", "NNS")]
     )
-    assert static_tokens(ruler(doc), {}).tokens == ["the", "model", "has", "sense"]
+    assert static_tokens(ruler(doc), {}, NO_COMPOUNDS).tokens == ["the", "model", "has", "sense"]
 
 
 def test_the_ruler_applies_to_documents_loaded_from_the_cache() -> None:

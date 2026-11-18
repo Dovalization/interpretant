@@ -163,6 +163,7 @@ stages:
     cmd: interpretant build-static-view
     deps:
       - src/interpretant/catalog/annotations.py
+      - src/interpretant/catalog/compounds.py
       - src/interpretant/catalog/config.py
       - src/interpretant/catalog/json_lines.py
       - src/interpretant/catalog/lemma_exceptions.py
@@ -173,6 +174,7 @@ stages:
       - src/interpretant/catalog/static_view.py
       - src/interpretant/cli/build_static_view.py
       - src/interpretant/corpus/attribute_rules.py
+      - src/interpretant/corpus/compound_spelling.py
       - src/interpretant/corpus/lemma_exceptions.py
       - src/interpretant/corpus/spelling.py
       - src/interpretant/corpus/static_view.py
@@ -185,6 +187,7 @@ stages:
       - ${annotations.path}
       - ${lemma_exceptions.path}
       - ${spellings.path}
+      - ${compounds.path}
     params:
       - corpus
     outs:

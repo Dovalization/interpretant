@@ -31,6 +31,7 @@ from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exceptions
 from interpretant.catalog.static_view import static_view_parts
+from interpretant.corpus.compound_spelling import NO_COMPOUNDS
 from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.corpus.static_view import static_tokens
 
@@ -62,7 +63,7 @@ def measure_part(
         if work_id not in kept_ids:
             continue
         doc = ruler(doc)
-        view = static_tokens(doc, {})
+        view = static_tokens(doc, {}, NO_COMPOUNDS)
         by_start = {token.idx: token for token in doc}
         for word, start in zip(view.tokens, view.starts, strict=True):
             mapped = [segment for segment in word.split("-") if segment in spellings]

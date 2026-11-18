@@ -31,6 +31,7 @@ from interpretant.catalog.config import read_catalog
 from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exceptions
 from interpretant.catalog.static_view import load_static_view, static_view_parts
 from interpretant.corpus.audit import load_target_words
+from interpretant.corpus.compound_spelling import NO_COMPOUNDS
 from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.corpus.static_view import fold, static_tokens
 
@@ -56,8 +57,8 @@ def count_part(
         ranges = removals.get(doc.user_data[WORK_ID])
         if ranges is None:
             continue
-        without = static_tokens(doc, {})
-        with_exceptions = static_tokens(ruler(doc), {})
+        without = static_tokens(doc, {}, NO_COMPOUNDS)
+        with_exceptions = static_tokens(ruler(doc), {}, NO_COMPOUNDS)
         by_start = {token.idx: token for token in doc}
         for start, a, b in zip(without.starts, without.tokens, with_exceptions.tokens, strict=True):
             if any(low <= start < high for low, high in ranges):
