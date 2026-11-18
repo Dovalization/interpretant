@@ -84,7 +84,9 @@ def count_part(
     forms: Counter[tuple[str, str]] = Counter()
     examples: dict[tuple[str, str], list[tuple[str, str, str]]] = defaultdict(list)
     phrase_counts: Counter[tuple[str, str, int]] = Counter()
-    by_head = {head: (name, modifier) for name, (modifier, head) in phrases.items()}
+    by_head: dict[str, list[tuple[str, str]]] = defaultdict(list)
+    for name, (modifier, head) in phrases.items():
+        by_head[head].append((name, modifier))
     joined = {f"{modifier}-{head}": name for name, (modifier, head) in phrases.items()} | {
         f"{modifier}{head}": name for name, (modifier, head) in phrases.items()
     }
@@ -121,9 +123,9 @@ def count_part(
                 )
                 if len(examples[key]) > 4 * EXAMPLES:
                     examples[key] = sorted(examples[key])[:EXAMPLES]
-            head = by_head.get(lemma) or by_head.get(form)
-            if head and previous == head[1]:
-                phrase_counts[(head[0], "spaced", decade)] += 1
+            for name, modifier in by_head.get(lemma, []) or by_head.get(form, []):
+                if previous == modifier:
+                    phrase_counts[(name, "spaced", decade)] += 1
             base = lemma if lemma in joined else form
             for candidate in {base, base.rstrip("s")}:
                 if candidate in joined:
