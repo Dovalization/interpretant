@@ -22,7 +22,7 @@ from dataclasses import dataclass
 
 from spacy.tokens import Doc, Token
 
-from interpretant.corpus.spelling import spell
+from interpretant.corpus.spelling import has_accent, spell
 
 # Fine-grained tags whose in-context lemma the view writes (agenda 3.2): plural nouns and
 # third-person singular present verbs, auxiliaries aside; other forms keep their own word.
@@ -50,7 +50,7 @@ def static_tokens(doc: Doc, spellings: Mapping[str, str]) -> StaticTokens:
         word = fold(_form(token))
         if not any(character.isalpha() for character in word):
             continue
-        tokens.append(word if _is_accented(token.text) else spell(word, spellings))
+        tokens.append(word if has_accent(token.text) else spell(word, spellings))
         starts.append(token.idx)
         finite_verbs.append("Fin" in token.morph.get("VerbForm", None))
     return StaticTokens(tokens=tokens, starts=starts, finite_verbs=finite_verbs)
@@ -60,12 +60,6 @@ def fold(word: str) -> str:
     """Lowercase, accents folded, the en dash written as a hyphen."""
     decomposed = unicodedata.normalize("NFKD", word.lower().replace(_EN_DASH, "-"))
     return "".join(character for character in decomposed if not unicodedata.combining(character))
-
-
-def _is_accented(text: str) -> bool:
-    return any(
-        unicodedata.combining(character) for character in unicodedata.normalize("NFKD", text)
-    )
 
 
 def _form(token: Token) -> str:

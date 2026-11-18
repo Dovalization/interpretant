@@ -8,6 +8,7 @@ not change, and the same function serves target matching on the folded lemma (4.
 
 from __future__ import annotations
 
+import unicodedata
 from collections.abc import Iterable, Mapping
 
 
@@ -16,6 +17,17 @@ def spell(word: str, spellings: Mapping[str, str]) -> str:
     if "-" not in word:
         return spellings.get(word, word)
     return "-".join(spellings.get(segment, segment) for segment in word.split("-"))
+
+
+def has_accent(text: str) -> bool:
+    """Whether the text carries an accent (a combining mark once decomposed).
+
+    The spelling and compound maps leave such tokens alone: they are mostly words of other
+    languages folded into English look-alikes (*utilisé*; `docs/spellings.md`).
+    """
+    return any(
+        unicodedata.combining(character) for character in unicodedata.normalize("NFKD", text)
+    )
 
 
 def mapped_away(spellings: Mapping[str, str], words: Iterable[str]) -> list[str]:
