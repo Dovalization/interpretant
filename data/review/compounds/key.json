@@ -1,0 +1,3465 @@
+{
+ "C000": {
+  "form": "after-effect",
+  "standard": "aftereffect",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C001": {
+  "form": "photointerpretation",
+  "standard": "photo interpretation",
+  "kind": "split",
+  "sets": [
+   "sample",
+   "census:word_table"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C002": {
+  "form": "longtime",
+  "standard": "long-time",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C003": {
+  "form": "ttable",
+  "standard": "t-table",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C004": {
+  "form": "image-processing",
+  "standard": "image processing",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C005": {
+  "form": "re-design",
+  "standard": "redesign",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C006": {
+  "form": "co-operative",
+  "standard": "cooperative",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C007": {
+  "form": "post-operative",
+  "standard": "postoperative",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C008": {
+  "form": "data base",
+  "standard": "database",
+  "kind": "merge",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C009": {
+  "form": "machine-learning",
+  "standard": "machine learning",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C010": {
+  "form": "nonuser",
+  "standard": "non-user",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:word_table"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C011": {
+  "form": "on-going",
+  "standard": "ongoing",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C012": {
+  "form": "information-handling",
+  "standard": "information handling",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C013": {
+  "form": "computer-vision",
+  "standard": "computer vision",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C014": {
+  "form": "reenter",
+  "standard": "re-enter",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C015": {
+  "form": "english-learning",
+  "standard": "english learning",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C016": {
+  "form": "spatio-temporal",
+  "standard": "spatiotemporal",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C017": {
+  "form": "re-ordering",
+  "standard": "reordering",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C018": {
+  "form": "cross reference",
+  "standard": "cross-reference",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C019": {
+  "form": "re-creation",
+  "standard": "recreation",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C020": {
+  "form": "multicriteria",
+  "standard": "multi-criteria",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C021": {
+  "form": "m age",
+  "standard": "mage",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C022": {
+  "form": "a-priori",
+  "standard": "apriori",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C023": {
+  "form": "multiagent",
+  "standard": "multi-agent",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C024": {
+  "form": "re-usability",
+  "standard": "reusability",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C025": {
+  "form": "operating-system",
+  "standard": "operating system",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C026": {
+  "form": "tele-presence",
+  "standard": "telepresence",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C027": {
+  "form": "non-profit",
+  "standard": "nonprofit",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C028": {
+  "form": "shiftwork",
+  "standard": "shift work",
+  "kind": "split",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C029": {
+  "form": "honey bee",
+  "standard": "honeybee",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C030": {
+  "form": "c terminus",
+  "standard": "c-terminus",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C031": {
+  "form": "on-line",
+  "standard": "online",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C032": {
+  "form": "psycho-analysis",
+  "standard": "psychoanalysis",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C033": {
+  "form": "w hen",
+  "standard": "when",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C034": {
+  "form": "pre-defined",
+  "standard": "predefined",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C035": {
+  "form": "x-window",
+  "standard": "x window",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C036": {
+  "form": "expert-system",
+  "standard": "expert system",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C037": {
+  "form": "pre-modern",
+  "standard": "premodern",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:prefix"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C038": {
+  "form": "world wide",
+  "standard": "worldwide",
+  "kind": "merge",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C039": {
+  "form": "re-assessment",
+  "standard": "reassessment",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C040": {
+  "form": "side-chain",
+  "standard": "side chain",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C041": {
+  "form": "copresence",
+  "standard": "co-presence",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C042": {
+  "form": "cooccur",
+  "standard": "co-occur",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C043": {
+  "form": "ebook",
+  "standard": "e-book",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C044": {
+  "form": "re-entry",
+  "standard": "reentry",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C045": {
+  "form": "re-training",
+  "standard": "retraining",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C046": {
+  "form": "in-formation",
+  "standard": "information",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C047": {
+  "form": "off-line",
+  "standard": "offline",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C048": {
+  "form": "information-gathering",
+  "standard": "information gathering",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C049": {
+  "form": "inter-processor",
+  "standard": "interprocessor",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C050": {
+  "form": "re-engineering",
+  "standard": "reengineering",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C051": {
+  "form": "intraindividual",
+  "standard": "intra-individual",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C052": {
+  "form": "preestablished",
+  "standard": "pre-established",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C053": {
+  "form": "standalone",
+  "standard": "stand-alone",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C054": {
+  "form": "pcreb",
+  "standard": "p-creb",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C055": {
+  "form": "n-variable",
+  "standard": "n variable",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C056": {
+  "form": "ngram",
+  "standard": "n-gram",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C057": {
+  "form": "look-up",
+  "standard": "lookup",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C058": {
+  "form": "case-study",
+  "standard": "case study",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C059": {
+  "form": "speech language",
+  "standard": "speech-language",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C060": {
+  "form": "flash card",
+  "standard": "flashcard",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C061": {
+  "form": "main-stream",
+  "standard": "mainstream",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C062": {
+  "form": "kbit",
+  "standard": "k-bit",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C063": {
+  "form": "user-experience",
+  "standard": "user experience",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C064": {
+  "form": "desk-top",
+  "standard": "desktop",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C065": {
+  "form": "afterimage",
+  "standard": "after-image",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C066": {
+  "form": "post-war",
+  "standard": "postwar",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C067": {
+  "form": "posttest",
+  "standard": "post-test",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C068": {
+  "form": "predeparture",
+  "standard": "pre-departure",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C069": {
+  "form": "body-image",
+  "standard": "body image",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C070": {
+  "form": "mirror-image",
+  "standard": "mirror image",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C071": {
+  "form": "pro-posed",
+  "standard": "proposed",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C072": {
+  "form": "re-structuring",
+  "standard": "restructuring",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C073": {
+  "form": "governor general",
+  "standard": "governor-general",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C074": {
+  "form": "life-span",
+  "standard": "lifespan",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C075": {
+  "form": "meta-model",
+  "standard": "metamodel",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C076": {
+  "form": "post-structuralist",
+  "standard": "poststructuralist",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C077": {
+  "form": "model-building",
+  "standard": "model building",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C078": {
+  "form": "multi-layer",
+  "standard": "multilayer",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C079": {
+  "form": "under-representation",
+  "standard": "underrepresentation",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:word_table"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C080": {
+  "form": "antireductionist",
+  "standard": "anti-reductionist",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C081": {
+  "form": "network-level",
+  "standard": "network level",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C082": {
+  "form": "re-present",
+  "standard": "represent",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C083": {
+  "form": "value-system",
+  "standard": "value system",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C084": {
+  "form": "reemergence",
+  "standard": "re-emergence",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C085": {
+  "form": "short-coming",
+  "standard": "shortcoming",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C086": {
+  "form": "s-phase",
+  "standard": "s phase",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C087": {
+  "form": "re-offending",
+  "standard": "reoffending",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C088": {
+  "form": "re-usable",
+  "standard": "reusable",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C089": {
+  "form": "sub-model",
+  "standard": "submodel",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C090": {
+  "form": "socio-demographic",
+  "standard": "sociodemographic",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C091": {
+  "form": "reexamine",
+  "standard": "re-examine",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C092": {
+  "form": "eye-gaze",
+  "standard": "eye gaze",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C093": {
+  "form": "service-learning",
+  "standard": "service learning",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C094": {
+  "form": "under-achievement",
+  "standard": "underachievement",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C095": {
+  "form": "prewar",
+  "standard": "pre-war",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C096": {
+  "form": "co-exist",
+  "standard": "coexist",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C097": {
+  "form": "point-cloud",
+  "standard": "point cloud",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C098": {
+  "form": "f-scale",
+  "standard": "f scale",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C099": {
+  "form": "proinflammatory",
+  "standard": "pro-inflammatory",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C100": {
+  "form": "w ill",
+  "standard": "will",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C101": {
+  "form": "presocratic",
+  "standard": "pre-socratic",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C102": {
+  "form": "check-list",
+  "standard": "checklist",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C103": {
+  "form": "touch pad",
+  "standard": "touchpad",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C104": {
+  "form": "reexamination",
+  "standard": "re-examination",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C105": {
+  "form": "f-test",
+  "standard": "f test",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C106": {
+  "form": "service-user",
+  "standard": "service user",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C107": {
+  "form": "sub-image",
+  "standard": "subimage",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C108": {
+  "form": "longstanding",
+  "standard": "long-standing",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C109": {
+  "form": "band pass",
+  "standard": "bandpass",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C110": {
+  "form": "speech-recognition",
+  "standard": "speech recognition",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C111": {
+  "form": "text-entry",
+  "standard": "text entry",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C112": {
+  "form": "side-effect",
+  "standard": "side effect",
+  "kind": "split",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C113": {
+  "form": "user-interface",
+  "standard": "user interface",
+  "kind": "split",
+  "sets": [
+   "sample",
+   "census:word_table"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C114": {
+  "form": "re-conceptualization",
+  "standard": "reconceptualization",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C115": {
+  "form": "multiaccess",
+  "standard": "multi-access",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C116": {
+  "form": "inter-frame",
+  "standard": "interframe",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C117": {
+  "form": "decision making",
+  "standard": "decision-making",
+  "kind": "merge",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C118": {
+  "form": "re-innervation",
+  "standard": "reinnervation",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C119": {
+  "form": "co-ordination",
+  "standard": "coordination",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C120": {
+  "form": "south west",
+  "standard": "southwest",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C121": {
+  "form": "re-evaluating",
+  "standard": "reevaluating",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C122": {
+  "form": "preand",
+  "standard": "pre-and",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C123": {
+  "form": "sentence-type",
+  "standard": "sentence type",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C124": {
+  "form": "parent-report",
+  "standard": "parent report",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C125": {
+  "form": "t-cell",
+  "standard": "t cell",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C126": {
+  "form": "pretrained",
+  "standard": "pre-trained",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C127": {
+  "form": "information-sharing",
+  "standard": "information sharing",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C128": {
+  "form": "re-imagine",
+  "standard": "reimagine",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C129": {
+  "form": "re-analyzed",
+  "standard": "reanalyzed",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C130": {
+  "form": "multi-dimensional",
+  "standard": "multidimensional",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C131": {
+  "form": "e-sport",
+  "standard": "esport",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C132": {
+  "form": "belief-system",
+  "standard": "belief system",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C133": {
+  "form": "phase-shift",
+  "standard": "phase shift",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C134": {
+  "form": "unet",
+  "standard": "u-net",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C135": {
+  "form": "highschool",
+  "standard": "high-school",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C136": {
+  "form": "plugin",
+  "standard": "plug-in",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C137": {
+  "form": "coevolution",
+  "standard": "co-evolution",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C138": {
+  "form": "sense-perception",
+  "standard": "sense perception",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C139": {
+  "form": "man machine",
+  "standard": "man-machine",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C140": {
+  "form": "re-think",
+  "standard": "rethink",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C141": {
+  "form": "sociopolitical",
+  "standard": "socio-political",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C142": {
+  "form": "a-beta",
+  "standard": "abeta",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C143": {
+  "form": "t value",
+  "standard": "t-value",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C144": {
+  "form": "coworker",
+  "standard": "co-worker",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C145": {
+  "form": "re-designed",
+  "standard": "redesigned",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C146": {
+  "form": "reemerged",
+  "standard": "re-emerged",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C147": {
+  "form": "web-site",
+  "standard": "website",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C148": {
+  "form": "sub-continent",
+  "standard": "subcontinent",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C149": {
+  "form": "daycare",
+  "standard": "day care",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C150": {
+  "form": "tradeoff",
+  "standard": "trade-off",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C151": {
+  "form": "re-test",
+  "standard": "retest",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C152": {
+  "form": "socio-pragmatic",
+  "standard": "sociopragmatic",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C153": {
+  "form": "re-analyze",
+  "standard": "reanalyze",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C154": {
+  "form": "cooccurrence",
+  "standard": "co-occurrence",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C155": {
+  "form": "countrywide",
+  "standard": "country-wide",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C156": {
+  "form": "re-tested",
+  "standard": "retested",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C157": {
+  "form": "t-score",
+  "standard": "t score",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C158": {
+  "form": "x ray",
+  "standard": "x-ray",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C159": {
+  "form": "reestablish",
+  "standard": "re-establish",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C160": {
+  "form": "non-linear",
+  "standard": "nonlinear",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C161": {
+  "form": "pre-occupation",
+  "standard": "preoccupation",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C162": {
+  "form": "re-orientation",
+  "standard": "reorientation",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C163": {
+  "form": "over-representation",
+  "standard": "overrepresentation",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C164": {
+  "form": "autism-spectrum",
+  "standard": "autism spectrum",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C165": {
+  "form": "end-point",
+  "standard": "endpoint",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C166": {
+  "form": "g-protein",
+  "standard": "g protein",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C167": {
+  "form": "re-uptake",
+  "standard": "reuptake",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C168": {
+  "form": "newsmagazine",
+  "standard": "news magazine",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C169": {
+  "form": "t-count",
+  "standard": "tcount",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C170": {
+  "form": "reevaluated",
+  "standard": "re-evaluated",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C171": {
+  "form": "self knowledge",
+  "standard": "self-knowledge",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C172": {
+  "form": "u-test",
+  "standard": "u test",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C173": {
+  "form": "hardcore",
+  "standard": "hard-core",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C174": {
+  "form": "ecommerce",
+  "standard": "e-commerce",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C175": {
+  "form": "force-feedback",
+  "standard": "force feedback",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C176": {
+  "form": "information-gap",
+  "standard": "information gap",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C177": {
+  "form": "sentence level",
+  "standard": "sentence-level",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C178": {
+  "form": "meta-cognition",
+  "standard": "metacognition",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:word_table"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C179": {
+  "form": "e-health",
+  "standard": "ehealth",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C180": {
+  "form": "role-model",
+  "standard": "role model",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C181": {
+  "form": "image-building",
+  "standard": "image building",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C182": {
+  "form": "eye tracking",
+  "standard": "eye-tracking",
+  "kind": "merge",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C183": {
+  "form": "non-specific",
+  "standard": "nonspecific",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C184": {
+  "form": "web site",
+  "standard": "website",
+  "kind": "merge",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C185": {
+  "form": "re-sampling",
+  "standard": "resampling",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C186": {
+  "form": "language-learning",
+  "standard": "language learning",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C187": {
+  "form": "re-ranking",
+  "standard": "reranking",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C188": {
+  "form": "coproduction",
+  "standard": "co-production",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C189": {
+  "form": "prereading",
+  "standard": "pre-reading",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:prefix"
+  ],
+  "drawn": "uniform"
+ },
+ "C190": {
+  "form": "n ach",
+  "standard": "nach",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C191": {
+  "form": "data set",
+  "standard": "dataset",
+  "kind": "merge",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C192": {
+  "form": "coevolve",
+  "standard": "co-evolve",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C193": {
+  "form": "multiuser",
+  "standard": "multi-user",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C194": {
+  "form": "multi-modal",
+  "standard": "multimodal",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C195": {
+  "form": "inter-religious",
+  "standard": "interreligious",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C196": {
+  "form": "fivefold",
+  "standard": "five-fold",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C197": {
+  "form": "rain forest",
+  "standard": "rainforest",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C198": {
+  "form": "antisemitism",
+  "standard": "anti-semitism",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C199": {
+  "form": "feed-back",
+  "standard": "feedback",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C200": {
+  "form": "net-work",
+  "standard": "network",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C201": {
+  "form": "decision-maker",
+  "standard": "decision maker",
+  "kind": "split",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C202": {
+  "form": "nondominant",
+  "standard": "non-dominant",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C203": {
+  "form": "preexisting",
+  "standard": "pre-existing",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C204": {
+  "form": "ingroup",
+  "standard": "in-group",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C205": {
+  "form": "socio-economic",
+  "standard": "socioeconomic",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C206": {
+  "form": "re-writing",
+  "standard": "rewriting",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C207": {
+  "form": "state action",
+  "standard": "state-action",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C208": {
+  "form": "re-appraisal",
+  "standard": "reappraisal",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C209": {
+  "form": "n-cam",
+  "standard": "ncam",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C210": {
+  "form": "sub-network",
+  "standard": "subnetwork",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C211": {
+  "form": "post-traumatic",
+  "standard": "posttraumatic",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C212": {
+  "form": "z transform",
+  "standard": "z-transform",
+  "kind": "merge",
+  "sets": [
+   "sample",
+   "census:one_letter"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C213": {
+  "form": "jet lag",
+  "standard": "jetlag",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C214": {
+  "form": "digit-symbol",
+  "standard": "digit symbol",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C215": {
+  "form": "f rom",
+  "standard": "from",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C216": {
+  "form": "ptau",
+  "standard": "p-tau",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C217": {
+  "form": "world view",
+  "standard": "worldview",
+  "kind": "merge",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C218": {
+  "form": "t maze",
+  "standard": "t-maze",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C219": {
+  "form": "bodymind",
+  "standard": "body-mind",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C220": {
+  "form": "multi-component",
+  "standard": "multicomponent",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C221": {
+  "form": "field-dependence",
+  "standard": "field dependence",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C222": {
+  "form": "nonsemantic",
+  "standard": "non-semantic",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C223": {
+  "form": "day-shift",
+  "standard": "day shift",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C224": {
+  "form": "attention-deficit",
+  "standard": "attention deficit",
+  "kind": "split",
+  "sets": [
+   "sample",
+   "census:word_table"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C225": {
+  "form": "re-presentation",
+  "standard": "representation",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C226": {
+  "form": "sense-experience",
+  "standard": "sense experience",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C227": {
+  "form": "ttest",
+  "standard": "t-test",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C228": {
+  "form": "policy maker",
+  "standard": "policymaker",
+  "kind": "merge",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C229": {
+  "form": "y axis",
+  "standard": "y-axis",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C230": {
+  "form": "reevaluate",
+  "standard": "re-evaluate",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C231": {
+  "form": "re-imagining",
+  "standard": "reimagining",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C232": {
+  "form": "re-assessed",
+  "standard": "reassessed",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C233": {
+  "form": "sleep-onset",
+  "standard": "sleep onset",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C234": {
+  "form": "mind-set",
+  "standard": "mindset",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C235": {
+  "form": "rule-learning",
+  "standard": "rule learning",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C236": {
+  "form": "socio-cultural",
+  "standard": "sociocultural",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C237": {
+  "form": "hindleg",
+  "standard": "hind leg",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C238": {
+  "form": "product moment",
+  "standard": "product-moment",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C239": {
+  "form": "reeducation",
+  "standard": "re-education",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:re_prefix"
+  ],
+  "drawn": "uniform"
+ },
+ "C240": {
+  "form": "codesign",
+  "standard": "co-design",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C241": {
+  "form": "grass-root",
+  "standard": "grassroot",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C242": {
+  "form": "co-existence",
+  "standard": "coexistence",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C243": {
+  "form": "number-line",
+  "standard": "number line",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C244": {
+  "form": "reidentification",
+  "standard": "re-identification",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C245": {
+  "form": "non-zero",
+  "standard": "nonzero",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C246": {
+  "form": "inter-network",
+  "standard": "internetwork",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C247": {
+  "form": "p value",
+  "standard": "p-value",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C248": {
+  "form": "t hat",
+  "standard": "that",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C249": {
+  "form": "re-reading",
+  "standard": "rereading",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C250": {
+  "form": "use-value",
+  "standard": "use value",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C251": {
+  "form": "z axis",
+  "standard": "z-axis",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C252": {
+  "form": "n-vertex",
+  "standard": "n vertex",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C253": {
+  "form": "reestablishing",
+  "standard": "re-establishing",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C254": {
+  "form": "information-retrieval",
+  "standard": "information retrieval",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C255": {
+  "form": "p wave",
+  "standard": "p-wave",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C256": {
+  "form": "foot shock",
+  "standard": "footshock",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C257": {
+  "form": "re-assess",
+  "standard": "reassess",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C258": {
+  "form": "nonconceptual",
+  "standard": "non-conceptual",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C259": {
+  "form": "jean jacques",
+  "standard": "jean-jacques",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C260": {
+  "form": "over-all",
+  "standard": "overall",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C261": {
+  "form": "nonmoral",
+  "standard": "non-moral",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C262": {
+  "form": "non-verbal",
+  "standard": "nonverbal",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C263": {
+  "form": "bar-press",
+  "standard": "bar press",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C264": {
+  "form": "truth-claim",
+  "standard": "truth claim",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C265": {
+  "form": "non-destructive",
+  "standard": "nondestructive",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C266": {
+  "form": "morpho-syntax",
+  "standard": "morphosyntax",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C267": {
+  "form": "nonneural",
+  "standard": "non-neural",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C268": {
+  "form": "pre-operative",
+  "standard": "preoperative",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C269": {
+  "form": "meta-theory",
+  "standard": "metatheory",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C270": {
+  "form": "inter-agency",
+  "standard": "interagency",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C271": {
+  "form": "re-id",
+  "standard": "reid",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C272": {
+  "form": "inter-individual",
+  "standard": "interindividual",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C273": {
+  "form": "timescale",
+  "standard": "time scale",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C274": {
+  "form": "re-create",
+  "standard": "recreate",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C275": {
+  "form": "w hat",
+  "standard": "what",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C276": {
+  "form": "wellbeing",
+  "standard": "well-being",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C277": {
+  "form": "reexamining",
+  "standard": "re-examining",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C278": {
+  "form": "coauthor",
+  "standard": "co-author",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C279": {
+  "form": "data-flow",
+  "standard": "data flow",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C280": {
+  "form": "reestablished",
+  "standard": "re-established",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C281": {
+  "form": "control-flow",
+  "standard": "control flow",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C282": {
+  "form": "re-interpreted",
+  "standard": "reinterpreted",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C283": {
+  "form": "co-morbid",
+  "standard": "comorbid",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C284": {
+  "form": "life world",
+  "standard": "lifeworld",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C285": {
+  "form": "reexamined",
+  "standard": "re-examined",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C286": {
+  "form": "b-cell",
+  "standard": "b cell",
+  "kind": "split",
+  "sets": [
+   "sample",
+   "census:one_letter"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C287": {
+  "form": "intra-cellular",
+  "standard": "intracellular",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C288": {
+  "form": "non-determinism",
+  "standard": "nondeterminism",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C289": {
+  "form": "pro-social",
+  "standard": "prosocial",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C290": {
+  "form": "world-system",
+  "standard": "world system",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C291": {
+  "form": "sign-language",
+  "standard": "sign language",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C292": {
+  "form": "pre-processing",
+  "standard": "preprocessing",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C293": {
+  "form": "nonnative",
+  "standard": "non-native",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C294": {
+  "form": "sub-district",
+  "standard": "subdistrict",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C295": {
+  "form": "mind-reading",
+  "standard": "mindreading",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C296": {
+  "form": "neo-classical",
+  "standard": "neoclassical",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C297": {
+  "form": "health care",
+  "standard": "healthcare",
+  "kind": "merge",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C298": {
+  "form": "nonseparable",
+  "standard": "non-separable",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C299": {
+  "form": "m-ary",
+  "standard": "mary",
+  "kind": "rejoin",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C300": {
+  "form": "re-thinking",
+  "standard": "rethinking",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C301": {
+  "form": "pretest",
+  "standard": "pre-test",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C302": {
+  "form": "elearning",
+  "standard": "e-learning",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C303": {
+  "form": "model-checking",
+  "standard": "model checking",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C304": {
+  "form": "student-teacher",
+  "standard": "student teacher",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C305": {
+  "form": "c-fiber",
+  "standard": "c fiber",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C306": {
+  "form": "pre-training",
+  "standard": "pretraining",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C307": {
+  "form": "host-country",
+  "standard": "host country",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C308": {
+  "form": "x-chromosome",
+  "standard": "x chromosome",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C309": {
+  "form": "re-analysis",
+  "standard": "reanalysis",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C310": {
+  "form": "touchscreen",
+  "standard": "touch screen",
+  "kind": "split",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C311": {
+  "form": "information-processing",
+  "standard": "information processing",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C312": {
+  "form": "word-meaning",
+  "standard": "word meaning",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C313": {
+  "form": "t-group",
+  "standard": "t group",
+  "kind": "split",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C314": {
+  "form": "reelection",
+  "standard": "re-election",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C315": {
+  "form": "re-organization",
+  "standard": "reorganization",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C316": {
+  "form": "re-creating",
+  "standard": "recreating",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C317": {
+  "form": "preservice",
+  "standard": "pre-service",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C318": {
+  "form": "audio-visual",
+  "standard": "audiovisual",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C319": {
+  "form": "multi-functional",
+  "standard": "multifunctional",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C320": {
+  "form": "life style",
+  "standard": "lifestyle",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C321": {
+  "form": "re-interpretation",
+  "standard": "reinterpretation",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C322": {
+  "form": "pre-linguistic",
+  "standard": "prelinguistic",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C323": {
+  "form": "nonlocal",
+  "standard": "non-local",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C324": {
+  "form": "co-ordinated",
+  "standard": "coordinated",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C325": {
+  "form": "energy-efficiency",
+  "standard": "energy efficiency",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C326": {
+  "form": "neuro-cognitive",
+  "standard": "neurocognitive",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C327": {
+  "form": "non-iterative",
+  "standard": "noniterative",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C328": {
+  "form": "multi-channel",
+  "standard": "multichannel",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C329": {
+  "form": "t test",
+  "standard": "t-test",
+  "kind": "merge",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C330": {
+  "form": "sub-component",
+  "standard": "subcomponent",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C331": {
+  "form": "re-read",
+  "standard": "reread",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C332": {
+  "form": "re-use",
+  "standard": "reuse",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C333": {
+  "form": "co-operating",
+  "standard": "cooperating",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C334": {
+  "form": "pre-eminent",
+  "standard": "preeminent",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C335": {
+  "form": "preexposure",
+  "standard": "pre-exposure",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C336": {
+  "form": "sub-system",
+  "standard": "subsystem",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C337": {
+  "form": "run-time",
+  "standard": "runtime",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C338": {
+  "form": "placemaking",
+  "standard": "place-making",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C339": {
+  "form": "re-search",
+  "standard": "research",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C340": {
+  "form": "pre-school",
+  "standard": "preschool",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C341": {
+  "form": "pre-treatment",
+  "standard": "pretreatment",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C342": {
+  "form": "nonclinical",
+  "standard": "non-clinical",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C343": {
+  "form": "sub-category",
+  "standard": "subcategory",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C344": {
+  "form": "e-mail",
+  "standard": "email",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C345": {
+  "form": "semi-lattice",
+  "standard": "semilattice",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C346": {
+  "form": "re-enactment",
+  "standard": "reenactment",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C347": {
+  "form": "inter-action",
+  "standard": "interaction",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C348": {
+  "form": "m ore",
+  "standard": "more",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C349": {
+  "form": "reevaluation",
+  "standard": "re-evaluation",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C350": {
+  "form": "re-defined",
+  "standard": "redefined",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C351": {
+  "form": "co-operation",
+  "standard": "cooperation",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C352": {
+  "form": "vice chairman",
+  "standard": "vice-chairman",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C353": {
+  "form": "coauthored",
+  "standard": "co-authored",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C354": {
+  "form": "co-morbidity",
+  "standard": "comorbidity",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C355": {
+  "form": "nonhuman",
+  "standard": "non-human",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C356": {
+  "form": "t table",
+  "standard": "t-table",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C357": {
+  "form": "re-created",
+  "standard": "recreated",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C358": {
+  "form": "north-west",
+  "standard": "northwest",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C359": {
+  "form": "multiplatform",
+  "standard": "multi-platform",
+  "kind": "rejoin",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C360": {
+  "form": "co-ordinate",
+  "standard": "coordinate",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C361": {
+  "form": "techno-scientific",
+  "standard": "technoscientific",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C362": {
+  "form": "down-regulation",
+  "standard": "downregulation",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C363": {
+  "form": "multi-level",
+  "standard": "multilevel",
+  "kind": "rejoin",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C364": {
+  "form": "sub-test",
+  "standard": "subtest",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C365": {
+  "form": "presleep",
+  "standard": "pre-sleep",
+  "kind": "rejoin",
+  "sets": [
+   "census:prefix"
+  ],
+  "drawn": null
+ },
+ "C366": {
+  "form": "daylength",
+  "standard": "day length",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C367": {
+  "form": "control-group",
+  "standard": "control group",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C368": {
+  "form": "z score",
+  "standard": "z-score",
+  "kind": "merge",
+  "sets": [
+   "census:one_letter"
+  ],
+  "drawn": null
+ },
+ "C369": {
+  "form": "brain stem",
+  "standard": "brainstem",
+  "kind": "merge",
+  "sets": [
+   "sample",
+   "census:top_tokens"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C370": {
+  "form": "information-integration",
+  "standard": "information integration",
+  "kind": "split",
+  "sets": [
+   "census:word_table"
+  ],
+  "drawn": null
+ },
+ "C371": {
+  "form": "postsecular",
+  "standard": "post-secular",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C372": {
+  "form": "policy making",
+  "standard": "policy-making",
+  "kind": "merge",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C373": {
+  "form": "re-used",
+  "standard": "reused",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C374": {
+  "form": "cut-off",
+  "standard": "cutoff",
+  "kind": "rejoin",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C375": {
+  "form": "reestablishment",
+  "standard": "re-establishment",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C376": {
+  "form": "hypothesis-testing",
+  "standard": "hypothesis testing",
+  "kind": "split",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "uniform"
+ },
+ "C377": {
+  "form": "guinea-pig",
+  "standard": "guinea pig",
+  "kind": "split",
+  "sets": [
+   "census:top_tokens"
+  ],
+  "drawn": null
+ },
+ "C378": {
+  "form": "re-interpret",
+  "standard": "reinterpret",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ },
+ "C379": {
+  "form": "subdimension",
+  "standard": "sub-dimension",
+  "kind": "rejoin",
+  "sets": [
+   "sample"
+  ],
+  "drawn": "by_tokens"
+ },
+ "C380": {
+  "form": "reexperiencing",
+  "standard": "re-experiencing",
+  "kind": "rejoin",
+  "sets": [
+   "census:re_prefix"
+  ],
+  "drawn": null
+ }
+}
