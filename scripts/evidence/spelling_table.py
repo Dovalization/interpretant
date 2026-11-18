@@ -42,12 +42,46 @@ SAMPLE_UNIFORM = 75
 TOP_BY_TOKENS = 50
 MIN_RATIO = 0.6
 INFORMAL = frozenset(
-    "cos cuz fav fave misc pls plz thx doin goin havin lovin nothin somethin tho thru wanna gonna".split()
+    [
+        "cos",
+        "cuz",
+        "fav",
+        "fave",
+        "misc",
+        "pls",
+        "plz",
+        "thx",
+        "doin",
+        "goin",
+        "havin",
+        "lovin",
+        "nothin",
+        "somethin",
+        "tho",
+        "thru",
+        "wanna",
+        "gonna",
+    ]
 )
 # Pairs whose two forms are different words in this corpus, not spellings of one word.
 DIFFERENT_WORDS = frozenset(
-    "analyses buses busing bussing gases storey storeys tonne tonnes philtre tranquilly cheque cheques "
-    "pummelled pummelling".split()
+    [
+        "analyses",
+        "buses",
+        "busing",
+        "bussing",
+        "gases",
+        "storey",
+        "storeys",
+        "tonne",
+        "tonnes",
+        "philtre",
+        "tranquilly",
+        "cheque",
+        "cheques",
+        "pummelled",
+        "pummelling",
+    ]
 )
 # Forms of other languages the project's rules read as British spellings (Portuguese *analise*).
 NOT_ENGLISH = frozenset({"analise", "analize"})
@@ -89,6 +123,9 @@ def kept_pair(form: str, norm: str) -> bool:
         return False
     if form in INFORMAL or form in DIFFERENT_WORDS:
         return False
+    # A plural noun in -yses beside a verb in -yzes (analyses, psychoanalyses): different words.
+    if form.endswith("yses") or norm.endswith("yzes"):
+        return False
     return difflib.SequenceMatcher(None, form, norm).ratio() >= MIN_RATIO
 
 
@@ -98,9 +135,10 @@ def oriented(
     """Each pair written toward the corpus's more frequent form, word-table lemmas kept."""
     rows = []
     for british, (american_form, source) in pairs.items():
-        if american_form in lemmas or (
-            british not in lemmas and counts[american_form] >= counts[british]
-        ):
+        # The British form wins only when the American form occurs and is rarer: with one form
+        # absent, the table's direction stands.
+        british_more = counts[american_form] > 0 and counts[british] > counts[american_form]
+        if american_form in lemmas or (british not in lemmas and not british_more):
             form, standard, british_won = british, american_form, False
         else:
             form, standard, british_won = american_form, british, True
