@@ -1,0 +1,411 @@
+{
+ "B000": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B001": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 5,
+    "word": "Maximum"
+   }
+  ]
+ },
+ "B002": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B003": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B004": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B005": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B006": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B007": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 2,
+    "word": "These"
+   }
+  ]
+ },
+ "B008": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B009": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B010": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 0,
+    "word": "On"
+   }
+  ]
+ },
+ "B011": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B012": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B013": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B014": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B015": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B016": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B017": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B018": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B019": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B020": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 0,
+    "word": "The"
+   }
+  ]
+ },
+ "B021": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B022": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B023": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 9,
+    "word": "Recently"
+   }
+  ]
+ },
+ "B024": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B025": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B026": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B027": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B028": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 4,
+    "word": "Thurstone"
+   }
+  ]
+ },
+ "B029": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B030": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B031": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 3,
+    "word": "Although"
+   }
+  ]
+ },
+ "B032": {
+  "wrong_cuts": [
+   14
+  ],
+  "missed_breaks": [
+   {
+    "sentence": 7,
+    "word": "JOHN"
+   },
+   {
+    "sentence": 7,
+    "word": "The"
+   },
+   {
+    "sentence": 11,
+    "word": "This"
+   }
+  ]
+ },
+ "B033": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B034": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B035": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B036": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B037": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B038": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B039": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B040": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 0,
+    "word": "Semantic"
+   }
+  ]
+ },
+ "B041": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B042": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B043": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B044": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B045": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B046": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 1,
+    "word": "nThe"
+   },
+   {
+    "sentence": 2,
+    "word": "nHowever"
+   }
+  ]
+ },
+ "B047": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B048": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B049": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B050": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B051": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B052": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B053": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B054": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B055": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B056": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B057": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B058": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B059": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B060": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B061": {
+  "wrong_cuts": [
+   4
+  ],
+  "missed_breaks": []
+ },
+ "B062": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B063": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B064": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B065": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B066": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B067": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B068": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 6,
+    "word": "I"
+   },
+   {
+    "sentence": 18,
+    "word": "Here"
+   },
+   {
+    "sentence": 18,
+    "word": "Here"
+   }
+  ]
+ },
+ "B069": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B070": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 1,
+    "word": "Changes"
+   }
+  ]
+ },
+ "B071": {
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "sentence": 11,
+    "word": "ADL"
+   }
+  ]
+ },
+ "B072": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B073": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B074": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B075": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B076": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B077": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B078": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ },
+ "B079": {
+  "wrong_cuts": [],
+  "missed_breaks": []
+ }
+}

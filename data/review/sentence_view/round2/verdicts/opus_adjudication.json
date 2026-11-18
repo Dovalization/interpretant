@@ -1,0 +1,22 @@
+{
+  "B007": {
+    "wrong_cuts": [],
+    "missed_breaks": [],
+    "note": "Semicolon joins the clauses; a capital after it does not end a sentence."
+  },
+  "B061": {
+    "wrong_cuts": [4],
+    "missed_breaks": [],
+    "note": "Cut after the abbreviation Conv. splits one folder caption."
+  },
+  "T035": {
+    "verdict": "right",
+    "where": null,
+    "note": "Quoted passage holds two full sentences; the cut falls at the first end."
+  },
+  "T109": {
+    "verdict": "right",
+    "where": null,
+    "note": "Footnote text interleaved by page layout; no sentence end missed inside."
+  }
+}

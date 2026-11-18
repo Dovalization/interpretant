@@ -1,0 +1,322 @@
+{
+ "J000": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J001": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J002": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J003": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J004": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J005": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J006": {
+  "verdict": "wrong",
+  "reason": "second starts new sentence"
+ },
+ "J007": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J008": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J009": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J010": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J011": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J012": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J013": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J014": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J015": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J016": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J017": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J018": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J019": {
+  "verdict": "wrong",
+  "reason": "two separate sentences"
+ },
+ "J020": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J021": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J022": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J023": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J024": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J025": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J026": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J027": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J028": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J029": {
+  "verdict": "wrong",
+  "reason": "two separate sentences"
+ },
+ "J030": {
+  "verdict": "wrong",
+  "reason": "heading then unrelated fragment"
+ },
+ "J031": {
+  "verdict": "wrong",
+  "reason": "two separate sentences"
+ },
+ "J032": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J033": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J034": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J035": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J036": {
+  "verdict": "wrong",
+  "reason": "two separate sentences"
+ },
+ "J037": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J038": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J039": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J040": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J041": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J042": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J043": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J044": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J045": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J046": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J047": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J048": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J049": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J050": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J051": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J052": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J053": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J054": {
+  "verdict": "wrong",
+  "reason": "ellipsis ends sentence, new one starts"
+ },
+ "J055": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J056": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J057": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J058": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J059": {
+  "verdict": "wrong",
+  "reason": "two separate sentences"
+ },
+ "J060": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J061": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J062": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J063": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J064": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J065": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J066": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J067": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J068": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J069": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J070": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J071": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J072": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J073": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J074": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J075": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J076": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J077": {
+  "verdict": "wrong",
+  "reason": "two separate sentences"
+ },
+ "J078": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ },
+ "J079": {
+  "verdict": "right",
+  "reason": "one sentence, abbreviation, list or reference"
+ }
+}

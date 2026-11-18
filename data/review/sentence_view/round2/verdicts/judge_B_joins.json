@@ -1,0 +1,322 @@
+{
+ "J000": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J001": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J002": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J003": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J004": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J005": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J006": {
+  "verdict": "wrong",
+  "reason": "two sentences inside parentheses"
+ },
+ "J007": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J008": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J009": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J010": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J011": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J012": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J013": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J014": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J015": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J016": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J017": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J018": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J019": {
+  "verdict": "wrong",
+  "reason": "first ends sentence, second starts another"
+ },
+ "J020": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J021": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J022": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J023": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J024": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J025": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J026": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J027": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J028": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J029": {
+  "verdict": "wrong",
+  "reason": "two separate sentences joined"
+ },
+ "J030": {
+  "verdict": "wrong",
+  "reason": "table title then separate text fragment"
+ },
+ "J031": {
+  "verdict": "wrong",
+  "reason": "two sentences inside parentheses"
+ },
+ "J032": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J033": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J034": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J035": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J036": {
+  "verdict": "wrong",
+  "reason": "two sentences inside parentheses"
+ },
+ "J037": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J038": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J039": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J040": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J041": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J042": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J043": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J044": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J045": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J046": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J047": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J048": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J049": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J050": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J051": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J052": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J053": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J054": {
+  "verdict": "wrong",
+  "reason": "ellipsis ends sentence, new one starts"
+ },
+ "J055": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J056": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J057": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J058": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J059": {
+  "verdict": "wrong",
+  "reason": "two sentences inside parentheses"
+ },
+ "J060": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J061": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J062": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J063": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J064": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J065": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J066": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J067": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J068": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J069": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J070": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J071": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J072": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J073": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J074": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J075": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J076": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J077": {
+  "verdict": "wrong",
+  "reason": "two sentences inside parentheses"
+ },
+ "J078": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ },
+ "J079": {
+  "verdict": "right",
+  "reason": "same sentence, list, citation or ellipsis"
+ }
+}
