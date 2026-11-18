@@ -24,14 +24,17 @@ tagger reads each word in context (`data/processed/lemmas_voted.tsv`, `docs/corp
 hand-kept part is `data/lemma_overrides.tsv`. *For the rebuilt corpus (2026-11-17):* neither
 `preprocess_text`, `TARGET_VARIANTS` nor the type-level map runs; the static view is written from
 spaCy's tokens and lemmas in context, with the reviewed exceptions of
-`curated/lemma_exceptions.tsv` (agenda 3.1–3.6, `docs/lemma_review.md`).
+`curated/lemma_exceptions.tsv` (agenda 3.1–3.6, `docs/lemma_review.md`). *Retired 2026-11-17:*
+the `corpus lemmas` commands and the map's code are removed; the lemmatised cells stay on disk.
 Round 4 of the predictions tested which findings survive this change: all of the robust ones did; *information*'s convergence did not.
 
 `corpus phrases learn` fits one gensim `Phrases` model (normalised PMI ≥ 0.5, minimum count 20)
 on a balanced sample of 300,000 tokens from every cell, so the large modern cells do not decide
 the phrases of the 1850s; `corpus phrases apply` joins the learned phrases with `_` in every
 cell. The phrase targets in `data/words_of_interest.txt` are always merged, and no learned phrase
-absorbs a single-word target.
+absorbs a single-word target. *Retired 2026-11-17:* the `corpus phrases` commands and the phrase
+model are removed; the phrased cells stay on disk as the grid's input, and the rebuilt static view
+joins no phrases.
 
 ## Embeddings: one model per cell, one space
 

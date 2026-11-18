@@ -2071,6 +2071,13 @@ The sized tasks come to about 4 hours; three are not yet sized.
   longer relevant, sort the rest into `reference/`, `records/` and `design/` (8.6), with step 10.
 - [ ] Remove the `../interpretant-split` worktree (branch `split-stage-2`, merged) after listing
   what it holds.
+- [x] Step 2's retirement (`preprocessing_phase.md`, step 2, item 9), done 2026-11-17:
+  `corpus openalex ingest`, `corpus lemmas`, `corpus phrases` and `corpus audit` are removed with
+  the type-level map (and its protected list), the phrase model, the audit and `rewrite_texts`;
+  the smoke test starts at the grid commands. Kept: the grid commands, `openalex download` and
+  `sources`, `OpenAlexSource`, `drift/senses.py`, `preprocess_text` and `TARGET_VARIANTS` (until
+  their scripts retire, 1b), the voted rules (`voted_lemma`, `american`), `load_target_words`,
+  and `source_texts`, `count_types` and `load_votes`, which an evidence script imports.
 
 ## Reference: what moves to spaCy
 

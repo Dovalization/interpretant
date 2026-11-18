@@ -92,7 +92,7 @@ Every question here compares something specific, one field across decades or sev
 
 ![Research abstracts per field and decade cell](figures/corpus_grid.png)
 
-Regular plurals and British spellings are collapsed before training (`corpus lemmas`); verbs, participles and _-ing_ nominalisations are left alone, because a general lemmatiser turns _learning_ into _learn_. The unlemmatised grid remains on disk as the frozen evidence for rounds 1–3.
+In the grid on disk, regular plurals and British spellings were collapsed before training; verbs, participles and _-ing_ nominalisations were left alone, because a general lemmatiser turns _learning_ into _learn_. The unlemmatised grid remains on disk as the frozen evidence for rounds 1–3. The commands that cleaned, lemmatised, phrase-merged and audited those cells retired on 2026-11-17: the rebuilt corpus takes spaCy's lemmas in context instead.
 
 **The OpenAlex grid** (about 677,000 abstracts): a seeded random sample of up to 10,000 English research abstracts per field and decade, 1950s–2020s, for eleven fields sharing OpenAlex's single topic taxonomy. Only research prose is kept (articles, reviews, book chapters, books, dissertations, conference papers); archive catalogue records, scraped web pages, duplicates and non-English text are removed, and no author may exceed 1% of a cell.
 
@@ -116,17 +116,11 @@ Word vectors are a natural instrument for this. The distributional hypothesis be
 # Install dependencies
 uv sync
 
-# OpenAlex grid: download (needs OPENALEX_API_KEY in .env) and clean
+# OpenAlex grid: download (needs OPENALEX_API_KEY in .env)
 uv run interpretant corpus openalex download
-uv run interpretant corpus openalex ingest
 
-# Collapse plurals and British spellings, merge multi-word terms, then audit coverage
-uv run interpretant corpus lemmas votes --workers 10  # spaCy's readings of every abstract
-uv run interpretant corpus lemmas learn      # writes data/processed/lemmas_voted.tsv for review
-uv run interpretant corpus lemmas apply      # default map: the grid's, data/processed/lemmas.tsv
-uv run interpretant corpus phrases learn
-uv run interpretant corpus phrases apply
-uv run interpretant corpus audit --processed-dir data/phrased --output data/phrased/audit.json
+# corpus openalex ingest, corpus lemmas, corpus phrases and corpus audit retired on
+# 2026-11-17; the grid commands read the cells already in data/phrased
 
 # Train one TWEC model per field x decade cell, then measure drift
 uv run interpretant twec grid
@@ -149,7 +143,7 @@ git log --oneline -- scripts/score_predictions.py
 | ---------------------- | ----------------------------------------------------- |
 | `uv`                   | Package management and environments                   |
 | `Click`                | CLI                                                   |
-| `gensim`               | Word2Vec training (TWEC compass and cell models), phrase detection |
+| `gensim`               | Word2Vec training (TWEC compass and cell models)      |
 | `scipy`                | PPMI-SVD (sparse SVD)                                 |
 | OpenAlex API           | Field × decade abstract samples                        |
 | `habanero`, Biopython (`Bio.Entrez`) | Each work's record in Crossref and PubMed (publisher abstracts, page ranges, MeSH, publication types) |

@@ -13,7 +13,9 @@ lemmatizer has to guess, and it guesses badly: on the corpus vocabulary it read 
 in *s* as a possible plural noun (*loss* → *los*, *discuss* → *discus*, *aesthetics* →
 *aesthetic*) and missed third-person verbs (*uses*, *identifies*). The type-level lemma map
 therefore takes its merges from votes: one spaCy pass over the raw abstracts counts how each word
-type is read in context (`corpus lemmas votes`, then `corpus lemmas learn`).
+type is read in context (`corpus lemmas votes`, then `corpus lemmas learn`). *Retired
+2026-11-17:* those commands and the map are removed; `lemma_votes`, `voted_lemma` and `american`
+stay in `corpus/lemmas.py` as tools for finding spaCy's errors.
 
 Even in context, three things needed rules of the project's own:
 

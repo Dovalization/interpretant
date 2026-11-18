@@ -20,14 +20,15 @@ uv run pytest tests/ -k "neighbour" -v        # one test by name
 
 ## Pipeline
 
-The pre-rebuild pipeline, run from the CLI in this order. Every command has `--help`. The
-rebuild replaces it phase by phase (`docs/decision_agenda.md`, steps 2–9).
+What remains of the pre-rebuild pipeline, run from the CLI. Every command has `--help`. The
+commands that wrote the cell text files (`corpus openalex ingest`, `corpus lemmas`,
+`corpus phrases`, `corpus audit`) retired on 2026-11-17; the grid commands read the cells
+already on disk (`data/phrased` by default). The rebuild replaces the rest phase by phase
+(`docs/decision_agenda.md`, steps 2–9).
 
 ```
-corpus openalex download|ingest                         data/processed/<layer>/texts/<cell>.txt
-corpus lemmas votes|learn|apply                         data/lemmatised/<layer>/texts/<cell>.txt
-corpus phrases learn|apply                              data/phrased/<layer>/texts/<cell>.txt
-corpus audit --processed-dir data/phrased --output data/phrased/audit.json
+corpus openalex download                                data/raw/openalex/<field>/<decade>.jsonl.gz
+corpus openalex sources                                 data/raw/openalex/<field>/sources_<decade>.jsonl
 twec grid [--seed 43 --output-dir models/twec_grid_seed43]   models/twec_grid/<layer>/<field>_<decade>.kv
 ppmi grid                                               models/ppmi_grid/...
 drift grid                                              data/drift/within_field.parquet, cross_field.parquet
@@ -92,15 +93,16 @@ analysis: predictions first, in their own commit.
   author cap) and `work_metadata.py` (OpenAlex's record of each work, fetched by id with pyalex;
   the repository-only flag).
 - `corpus/` (old pipeline, replaced as the rebuild lands): `openalex.py` (API client, sampling,
-  cleaning at ingest, `ingest_fields`), `files.py` (`source_texts`, `rewrite_texts`: one stage's
-  cell files into the next), `caps.py` (author caps), `lemmas.py` (type-level map: *-s*
-  inflections from spaCy's readings in context, and British spellings), `phrases.py` (gensim
-  `Phrases` on a balanced sample), `preprocessing.py` (`preprocess_text`, target variant map),
-  `audit.py` (cell counts and target coverage; `audit_corpus`).
+  `OpenAlexSource`, which cleans a cell as it loads it), `files.py` (`source_texts`: a stage's
+  cell files), `caps.py` (author caps), `lemmas.py` (the voted lemma rules: `voted_lemma` for
+  *-s* inflections from spaCy's readings in context, `american` for British spellings; tools for
+  finding spaCy's errors and the spelling map's backstop), `preprocessing.py` (`preprocess_text`,
+  target variant map), `audit.py` (`load_target_words`). The type-level map, the phrase model,
+  the audit and ingest retired with their commands on 2026-11-17.
 - `embedding/`: `base.py` (`training_sentences`: splits lines at 10,000 tokens, gensim's
   silent truncation limit), `twec.py` (`TWECTrainer`: balanced compass, frozen context
-  vectors per cell), `grid.py` (cell discovery, compass sample, `train_twec_grid`,
-  `build_ppmi_grid`), `ppmi.py` (PPMI-SVD with Levy et al. 2015 settings).
+  vectors per cell), `grid.py` (cell discovery, the compass sample (`sample_chunks`),
+  `train_twec_grid`, `build_ppmi_grid`), `ppmi.py` (PPMI-SVD with Levy et al. 2015 settings).
 - `drift/`: `grid.py` (`compare_cells`, `add_noise_floor`, `cell_neighbours`, pair
   enumeration, `measure_grid`; the constants `MEASURE_MIN`, `NEIGHBOUR_MIN`, `NEIGHBOURS`,
   `FLOOR_QUANTILE`), `metrics.py` (cosine distance, batched neighbourhood shift),
@@ -124,8 +126,9 @@ live in `curated/` (tracked). Old results are set aside under `data/retired/`. `
 
 Synthetic only: no corpus files, no network, and no real models except the ones installed as
 pinned dependencies and run offline (`en_core_web_sm` and lingua's language models, which
-`tests/test_annotation.py` loads once per session). `tests/test_pipeline.py` runs the whole CLI,
-ingest to drift grid, on a synthetic two-field, two-decade grid in a few seconds.
+`tests/test_annotation.py` loads once per session). `tests/test_pipeline.py` runs the grid
+commands (`twec grid`, `ppmi grid`, `drift grid`) on a synthetic two-field, two-decade grid of
+lemmatised cells in a few seconds.
 
 ## Code style
 

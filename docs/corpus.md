@@ -57,7 +57,9 @@ Irregular plurals and words kept on purpose (*data*, *media*, *means*, *odds*) a
 `data/lemma_overrides.tsv`. *For the rebuilt corpus (2026-11-17):* the static view takes spaCy's
 lemma in context with the reviewed exceptions of `curated/lemma_exceptions.tsv`, which carries
 the override file's decisions (agenda 3.2–3.6, `docs/lemma_review.md`); the type-level map stays
-only on the old grid's path.
+only on the old grid's path. *Retired 2026-11-17:* the `corpus lemmas votes|learn|apply`
+commands and the map's code are removed; `data/lemmatised/` stays on disk, and `voted_lemma` and
+`american` remain in `corpus/lemmas.py` as tools for finding spaCy's errors.
 
 Two maps exist. The grid was lemmatised with the first, learned from simplemma's lemmas of bare
 word types (`data/processed/lemmas.tsv`, about 37,000 types, 8.3% of tokens). The grid is frozen,
@@ -84,6 +86,9 @@ file: *cosmos* → *cosmo*, *thanks* → *thank*, *mises* → *mis*.
 uv run interpretant corpus openalex download   # needs OPENALEX_API_KEY in .env
 uv run interpretant corpus openalex ingest     # data/processed/openalex/texts/<field>_<decade>.txt
 ```
+
+*Retired 2026-11-17:* `corpus openalex ingest` is removed. `OpenAlexSource` still applies the
+cleaning described below when it loads a cell, and the processed files stay on disk.
 
 Each cell is a seeded random sample (seed 42) of up to 10,000 English works of research
 prose with abstracts (articles, reviews, book chapters, books, dissertations and conference
@@ -148,6 +153,10 @@ uv run interpretant corpus phrases learn   # data/lemmatised/phrases.model + phr
 uv run interpretant corpus phrases apply   # data/phrased/<source>/texts/<source>_<decade>.txt
 ```
 
+*Retired 2026-11-17:* the `corpus phrases` commands and the phrase model are removed;
+`data/phrased/` stays on disk as the grid commands' input. The rebuilt static view joins no
+phrases (`docs/preprocessing_phase.md`, step 3).
+
 One gensim `Phrases` model (normalised PMI ≥ 0.5, min count 20) is learned from a
 balanced sample, 300,000 tokens from every processed file, so the large modern cells do not
 decide the phrases of the early decades, and the same model is applied everywhere. Learned phrases
@@ -164,6 +173,9 @@ uv run interpretant corpus audit                       # tables in the terminal
 uv run interpretant corpus audit --output data/processed/audit.json
 uv run interpretant corpus audit --min-occurrences 300 # stricter reliability threshold
 ```
+
+*Retired 2026-11-17:* `corpus audit` is removed; only `load_target_words` remains of its module.
+In the rebuild, the gap report covers this (agenda 4.8).
 
 The audit reports two things:
 
