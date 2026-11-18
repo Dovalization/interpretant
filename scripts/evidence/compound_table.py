@@ -10,8 +10,8 @@ spaced pair counts only where it passes the view's noun-compound gate
 Each family's standard is its most frequent form (ties: closed, hyphenated, spaced), or a
 word-table lemma. A form becomes a pair when it and the standard both have at least 20 uses.
 Families are filtered, each with its reason:
-- letter codes (fewer than 4 letters, a Roman-numeral segment, a vowelless segment, a second
-  segment under 3 letters);
+- letter codes and broken words (fewer than 4 letters, a Roman-numeral segment, a vowelless
+  segment, a one-letter second segment: *gaba-a*, *group s*);
 - spaced forms whose share passing the gate is under 0.5 (mostly syntax);
 - spaced forms that contain a word-table lemma (merging them would remove target tokens).
 
@@ -54,7 +54,6 @@ from interpretant.corpus.static_view import static_tokens
 from interpretant.pipelines.workers import map_parts
 
 FLOOR = 20
-REPORTED_FLOORS = (5, 10, 20)
 SEED = 20261123
 SAMPLE_BY_TOKENS = 75
 SAMPLE_UNIFORM = 75
@@ -79,6 +78,7 @@ class PartJob:
     exceptions: tuple[LemmaException, ...]
     spellings: dict[str, str]
     closed_words: frozenset[str]
+    keys: frozenset[str]
     works: Works
 
 
@@ -125,7 +125,7 @@ def count_part(part: str, job: PartJob) -> PartCounts:
         for (first, left, first_removed), (second, right, second_removed) in pairwise(entries):
             if not (CLOSED.match(left) and CLOSED.match(right)):
                 continue
-            if left + right not in job.closed_words:
+            if left + right not in job.keys:
                 continue
             if has_accent(first.text) or has_accent(second.text):
                 continue
@@ -145,11 +145,14 @@ def count_part(part: str, job: PartJob) -> PartCounts:
     return counts
 
 
-def closed_candidates(catalog: CatalogConfig, spellings: dict[str, str]) -> frozenset[str]:
-    """The closed words a family can have: spelled letter-only types with at least the floor.
+def candidates(
+    catalog: CatalogConfig, spellings: dict[str, str]
+) -> tuple[frozenset[str], frozenset[str]]:
+    """The closed words a family can have, and the keys of the hyphenated forms it can have.
 
-    Counted over the whole static view (dropped works and removed ranges included), a superset of
-    the kept counts, so no family is missed.
+    Spelled letter-only types with at least the floor, counted over the whole static view (dropped
+    works and removed ranges included), a superset of the kept counts, so no family is missed. A
+    spaced pair is counted when its letters are a closed word or a hyphenated form's key.
     """
     types = (
         pl.scan_parquet(catalog.static_view.path / "*.parquet")
@@ -158,11 +161,19 @@ def closed_candidates(catalog: CatalogConfig, spellings: dict[str, str]) -> froz
         .len()
         .collect()
     )
-    counts: Counter[str] = Counter()
+    closed: Counter[str] = Counter()
+    hyphenated: Counter[str] = Counter()
     for token, count in types.iter_rows():
-        if token is not None and CLOSED.match(token) and len(token) >= MIN_LETTERS:
-            counts[spell(token, spellings)] += count
-    return frozenset(word for word, count in counts.items() if count >= FLOOR)
+        if token is None:
+            continue
+        if CLOSED.match(token) and len(token) >= MIN_LETTERS:
+            closed[spell(token, spellings)] += count
+        elif HYPHENATED.match(token):
+            hyphenated[compound_key(spell(token, spellings))] += count
+    return (
+        frozenset(word for word, count in closed.items() if count >= FLOOR),
+        frozenset(key for key, count in hyphenated.items() if count >= FLOOR),
+    )
 
 
 def segments_of(forms: list[str]) -> list[str]:
@@ -183,8 +194,8 @@ def filter_reason(key: str, segments: list[str]) -> str | None:
         return "roman_numeral"
     if any(len(segment) >= 2 and not set(segment) & VOWELS for segment in segments):
         return "no_vowel"
-    if len(segments) == 2 and len(segments[1]) < 3:
-        return "short_second"
+    if len(segments) == 2 and len(segments[1]) == 1:
+        return "one_letter_second"
     return None
 
 
@@ -235,14 +246,16 @@ def main() -> None:
         work_id: (decade, [(r["start"], r["end"]) for r in removals])
         for work_id, decade, removals in kept.select("work_id", "decade", "removals").iter_rows()
     }
-    closed_words = closed_candidates(catalog, spellings)
+    closed_words, hyphen_keys = candidates(catalog, spellings)
     exceptions = tuple(load_lemma_exceptions(catalog))
     parts = static_view_parts(catalog)
     jobs = {}
     for part in parts:
         ids = load_static_view(catalog, part, columns=["work_id"])["work_id"]
         own = {work_id: works[work_id] for work_id in ids if work_id in works}
-        jobs[part] = PartJob(catalog, exceptions, spellings, closed_words, own)
+        jobs[part] = PartJob(
+            catalog, exceptions, spellings, closed_words, closed_words | hyphen_keys, own
+        )
     with LiveProgress(Console()) as live:
         live.stage("counting compound forms", total=len(parts))
         results = map_parts(count_part, jobs, process_count=processes, progress=live)
@@ -301,7 +314,8 @@ def main() -> None:
                 "spaced_any": spaced_any,
                 "gated_share": round(gated_share, 4),
                 "standard": chosen[0] if chosen else None,
-                "reason": reason or spaced_out,
+                "reason": reason,
+                "spaced_reason": spaced_out,
             }
         )
         if chosen is None:
@@ -377,15 +391,6 @@ def main() -> None:
                     )
     pl.DataFrame(share_rows).write_parquet(out / "shares.parquet")
 
-    floors = {
-        str(floor): int(
-            families.filter(
-                pl.col("reason").is_null()
-                & (pl.max_horizontal("closed", "hyphenated", "spaced") >= floor)
-            ).height
-        )
-        for floor in REPORTED_FLOORS
-    }
     by_kind = proposal.group_by("kind").agg(pairs=pl.len(), tokens=pl.col("form_count").sum())
     merges = proposal.filter(pl.col("kind") == "merge")["form_count"].sum()
     splits = proposal.filter(pl.col("kind") == "split")
@@ -406,7 +411,9 @@ def main() -> None:
         "kept_tokens": kept_tokens,
         "families": families.height,
         "families_by_reason": dict(families.group_by("reason").len().iter_rows()),
-        "families_at_floor": floors,
+        "spaced_forms_left_out": dict(
+            families.drop_nulls("spaced_reason").group_by("spaced_reason").len().iter_rows()
+        ),
         "pairs_by_kind": {kind: {"pairs": n, "tokens": t} for kind, n, t in by_kind.iter_rows()},
         "changed_share_of_view": round(int(proposal["form_count"].sum()) / kept_tokens, 6),
         "words_removed_by_merges": int(merges or 0),
