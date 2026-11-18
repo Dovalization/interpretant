@@ -1,18 +1,19 @@
-"""The sentence view audit's items (`docs/sentence_view.md`): calibration, precision, boundaries.
+"""The fresh sentence view audit's items, after the merge rules (`docs/sentence_view.md`).
 
-- **Whole abstracts:** the 50 abstracts of run 3's sentence-break review, rebuilt from run 3's
-  table exactly as the author saw them, shuffled together with the 50 drawn for cut precision, so
-  the judges cannot tell the calibration from the sample. The cut-precision abstracts are kept works
-  with at least one cut: 6 per decade, then the 2 smallest keys among the rest, by the smallest
-  sha256 of (seed 20261127, work id).
+- **Whole abstracts:** 30 for the agents' recalibration (seed 20261201: 3 per decade, then the 6
+  smallest keys among the rest) and 50 for cut precision (seed 20261202: 6 per decade, then 2), kept
+  works with at least one cut in the view, the two sets apart. They are shuffled together (seed
+  20261205), so the agents cannot tell the recalibration from the sample; the author judges the 30.
+- **Joined cuts:** the 80 joins with the smallest sha256 of (seed 20261203, work id, sentence
+  number, join), from every rule but the no-letters one. Each shows the two pieces and the joined
+  sentence.
 - **Target sentences:** 150 sentences with no exclusion that hold a single-word target outside
-  removed ranges, by the static view's entries: 18 per decade, then the 6 smallest keys among the
-  rest, by the smallest sha256 of (seed 20261128, work id, sentence number). Each item has the
-  sentence before and the sentence after, as cut.
+  removed ranges, by the static view (seed 20261204: 18 per decade, then 6), each with the
+  sentence before and after as the view cuts them.
 
-The items quote corpus text, so they stay out of git; key.json maps each blind id to its source.
-Run from the repository root on the run machine:
-`python scripts/review/sentence_audit.py RUN3_ABSTRACTS_DIR OUT [PROCESSES]`.
+The first round's version of this script is `099301b6`. The items quote corpus text, so they stay
+out of git; key.json maps each blind id to its source. Run from the repository root on the run
+machine: `python scripts/review/sentence_audit.py OUT [PROCESSES]`.
 """
 
 from __future__ import annotations
@@ -38,13 +39,19 @@ from interpretant.cli.progress import LiveProgress
 from interpretant.corpus.sentence_view import merge_ranges
 from interpretant.pipelines.workers import map_parts
 
-PRECISION_SEED = 20261127
-BOUNDARY_SEED = 20261128
-SHUFFLE_SEED = 20261129
+RECALIBRATION_SEED = 20261201
+PRECISION_SEED = 20261202
+JOIN_SEED = 20261203
+BOUNDARY_SEED = 20261204
+SHUFFLE_SEED = 20261205
+RECALIBRATION = (3, 6)
 PRECISION = (6, 2)
+JOINS = 80
 BOUNDARIES = (18, 6)
 KEEP_PER_PART = 40
-RUN3_VERDICTS = Path("data/review/run3/verdicts.jsonl")
+CONTEXT = 600
+# A candidate: draw key, decade, work id, sentence number, join index (-1 when not a join).
+Candidate = tuple[str, int, str, int, int]
 
 
 @dataclass(frozen=True)
@@ -60,72 +67,115 @@ def draw_key(seed: int, *parts: object) -> str:
     return hashlib.sha256(":".join(str(part) for part in (seed, *parts)).encode()).hexdigest()
 
 
-def find_candidates(part: str, job: PartJob) -> dict[str, list[tuple[str, int, str, int]]]:
-    """The part's smallest-keyed candidates per decade: (key, decade, work id, sentence number)."""
+def find_candidates(part: str, job: PartJob) -> dict[str, list[Candidate]]:
+    """The part's smallest-keyed candidates of each kind."""
     abstracts = load_abstracts_part(
-        job.catalog, part, ["work_id", "decade", "removals", "sentences", "dropped_reason"]
+        job.catalog, part, ["work_id", "decade", "removals", "dropped_reason"]
     ).filter(pl.col("dropped_reason").is_null())
-    view = load_static_view(job.catalog, part, columns=["work_id", "tokens", "starts"])
-    entries = {work_id: (tokens, starts) for work_id, tokens, starts in view.iter_rows()}
-    sentences = pl.read_parquet(
-        part_path(job.catalog.sentence_view.path, part, ".parquet"),
-        columns=["work_id", "sentence_number", "start", "end", "exclusion"],
-    )
-    by_work: dict[str, list[tuple[int, int, int, str | None]]] = {}
-    for work_id, number, start, end, exclusion in sentences.iter_rows():
-        by_work.setdefault(work_id, []).append((start, end, number, exclusion))
-    abstracts_found: list[tuple[str, int, str, int]] = []
-    targets_found: list[tuple[str, int, str, int]] = []
-    for work_id, decade, removals, work_sentences, _ in abstracts.iter_rows():
-        if len(work_sentences) > 1:
-            abstracts_found.append((draw_key(PRECISION_SEED, work_id), decade, work_id, -1))
-        merged = merge_ranges((removal["start"], removal["end"]) for removal in removals)
-        lows = [low for low, _ in merged]
-        spans = sorted(by_work.get(work_id, []))
-        span_starts = [start for start, _, _, _ in spans]
-        tokens, starts = entries.get(work_id, ([], []))
-        held: set[int] = set()
-        for entry, start in zip(tokens, starts, strict=True):
-            if not job.targets.intersection(entry.split()):
-                continue
-            inside = bisect_right(lows, start) - 1
-            if inside >= 0 and start < merged[inside][1]:
-                continue
-            index = bisect_right(span_starts, start) - 1
-            if index >= 0 and start < spans[index][1] and spans[index][3] is None:
-                held.add(spans[index][2])
-        targets_found.extend(
-            (draw_key(BOUNDARY_SEED, work_id, number), decade, work_id, number) for number in held
-        )
+    decades = dict(zip(abstracts["work_id"], abstracts["decade"], strict=True))
+    removals = dict(zip(abstracts["work_id"], abstracts["removals"], strict=True))
+    view = pl.read_parquet(part_path(job.catalog.sentence_view.path, part, ".parquet"))
+    static = load_static_view(job.catalog, part, columns=["work_id", "tokens", "starts"])
+    entries = {work_id: (tokens, starts) for work_id, tokens, starts in static.iter_rows()}
+    found: dict[str, list[Candidate]] = {
+        "recalibration": [],
+        "precision": [],
+        "joins": [],
+        "targets": [],
+    }
+    for (work_id,), rows in view.group_by("work_id", maintain_order=True):
+        work = str(work_id)
+        decade = decades[work]
+        if rows.height > 1:
+            found["recalibration"].append(
+                (draw_key(RECALIBRATION_SEED, work), decade, work, -1, -1)
+            )
+            found["precision"].append((draw_key(PRECISION_SEED, work), decade, work, -1, -1))
+        for number, rules in rows.select("sentence_number", "merge_rules").iter_rows():
+            for index, rule in enumerate(rules):
+                if rule != "no_letters":
+                    key = draw_key(JOIN_SEED, work, number, index)
+                    found["joins"].append((key, decade, work, number, index))
+        found["targets"].extend(target_sentences(work, decade, rows, removals[work], entries, job))
     return {
-        "abstracts": smallest_per_decade(abstracts_found, KEEP_PER_PART),
-        "targets": smallest_per_decade(targets_found, KEEP_PER_PART),
+        "recalibration": smallest_per_decade(found["recalibration"], KEEP_PER_PART),
+        "precision": smallest_per_decade(found["precision"], KEEP_PER_PART),
+        "joins": sorted(found["joins"])[:JOINS],
+        "targets": smallest_per_decade(found["targets"], KEEP_PER_PART),
     }
 
 
-def smallest_per_decade(
-    found: list[tuple[str, int, str, int]], count: int
-) -> list[tuple[str, int, str, int]]:
+def target_sentences(
+    work: str,
+    decade: int,
+    rows: pl.DataFrame,
+    removals: list[dict[str, Any]],
+    entries: dict[str, tuple[list[str], list[int]]],
+    job: PartJob,
+) -> list[Candidate]:
+    """The work's sentences with no exclusion that hold a target outside removed ranges."""
+    merged = merge_ranges((removal["start"], removal["end"]) for removal in removals)
+    lows = [low for low, _ in merged]
+    spans = rows.select("start", "end", "sentence_number", "exclusion").rows()
+    span_starts = [start for start, _, _, _ in spans]
+    held: set[int] = set()
+    tokens, starts = entries.get(work, ([], []))
+    for entry, start in zip(tokens, starts, strict=True):
+        if not job.targets.intersection(entry.split()):
+            continue
+        inside = bisect_right(lows, start) - 1
+        if inside >= 0 and start < merged[inside][1]:
+            continue
+        index = bisect_right(span_starts, start) - 1
+        if index >= 0 and start < spans[index][1] and spans[index][3] is None:
+            held.add(spans[index][2])
+    return [(draw_key(BOUNDARY_SEED, work, number), decade, work, number, -1) for number in held]
+
+
+def smallest_per_decade(found: list[Candidate], count: int) -> list[Candidate]:
     """The ``count`` smallest keys of each decade."""
-    kept: list[tuple[str, int, str, int]] = []
+    kept: list[Candidate] = []
     for decade in sorted({row[1] for row in found}):
         kept.extend(sorted(row for row in found if row[1] == decade)[:count])
     return kept
 
 
-def draw(
-    found: list[tuple[str, int, str, int]], per_decade: int, extra: int
-) -> list[tuple[str, int, str, int]]:
+def draw(found: list[Candidate], per_decade: int, extra: int) -> list[Candidate]:
     """``per_decade`` smallest keys of each decade, then the ``extra`` smallest among the rest."""
     chosen = smallest_per_decade(found, per_decade)
     rest = sorted(set(found) - set(chosen))
     return sorted(chosen + rest[:extra])
 
 
+def load_sources(
+    catalog: CatalogConfig, wanted: list[str]
+) -> tuple[dict[str, str], dict[str, list[dict[str, Any]]], dict[str, list[tuple[Any, ...]]]]:
+    """The wanted works' texts, spaCy sentences and view rows (start, end, merge rules)."""
+    abstracts = (
+        pl.scan_parquet(sorted(catalog.abstracts.path.glob("*.parquet")))
+        .filter(pl.col("work_id").is_in(wanted))
+        .select("work_id", "text", "sentences")
+        .collect()
+    )
+    texts = dict(zip(abstracts["work_id"], abstracts["text"], strict=True))
+    sentences = dict(zip(abstracts["work_id"], abstracts["sentences"].to_list(), strict=True))
+    view = (
+        pl.scan_parquet(sorted(catalog.sentence_view.path.glob("*.parquet")))
+        .filter(pl.col("work_id").is_in(wanted))
+        .sort("work_id", "sentence_number")
+        .collect()
+    )
+    rows = {
+        str(work): list(group.select("start", "end", "merge_rules").iter_rows())
+        for (work,), group in view.group_by("work_id", maintain_order=True)
+    }
+    return texts, sentences, rows
+
+
 def main() -> None:
-    """Draw the samples, rebuild the calibration items, and write the items and the key."""
-    run3, out = Path(sys.argv[1]), Path(sys.argv[2])
-    processes = int(sys.argv[3]) if len(sys.argv) > 3 else 10
+    """Draw the samples and write the items and the key."""
+    out = Path(sys.argv[1])
+    processes = int(sys.argv[2]) if len(sys.argv) > 2 else 10
     out.mkdir(parents=True, exist_ok=True)
     catalog = read_catalog()
     targets = frozenset(word.lemma for word in load_words(catalog) if not word.is_phrase)
@@ -133,73 +183,82 @@ def main() -> None:
     with LiveProgress(Console()) as live:
         live.stage("finding candidates", total=len(jobs))
         results = map_parts(find_candidates, jobs, process_count=processes, progress=live)
-    precision = draw([row for r in results.values() for row in r["abstracts"]], *PRECISION)
-    boundaries = draw([row for r in results.values() for row in r["targets"]], *BOUNDARIES)
-    wanted = {row[2] for row in precision + boundaries}
-    current = (
-        pl.scan_parquet(sorted(catalog.abstracts.path.glob("*.parquet")))
-        .filter(pl.col("work_id").is_in(sorted(wanted)))
-        .select("work_id", "text", "sentences")
-        .collect()
-    )
-    texts = {work_id: (text, sentences) for work_id, text, sentences in current.iter_rows()}
-    calibration = [
-        json.loads(line)
-        for line in RUN3_VERDICTS.read_text(encoding="utf-8").splitlines()
-        if json.loads(line)["part"] == "sentence_breaks"
-    ]
-    old = (
-        pl.scan_parquet(sorted(run3.glob("*.parquet")))
-        .filter(pl.col("work_id").is_in([row["work_id"] for row in calibration]))
-        .select("work_id", "text", "sentences")
-        .collect()
-    )
-    old_texts = {work_id: (text, sentences) for work_id, text, sentences in old.iter_rows()}
 
-    def shown(source: dict[str, tuple[str, list[dict[str, Any]]]], work_id: str) -> list[str]:
-        text, sentences = source[work_id]
-        return [text[sentence["start"] : sentence["end"]] for sentence in sentences]
+    def pooled(name: str) -> list[Candidate]:
+        return [row for result in results.values() for row in result[name]]
 
-    whole: list[tuple[dict[str, Any], dict[str, Any]]] = []
-    for row in calibration:
-        sentences = shown(old_texts, row["work_id"])
-        if len(sentences) - 1 != row["cuts"]:
-            raise SystemExit(f"{row['id']}: run 3's table no longer matches the review")
-        whole.append(({"sentences": sentences}, {"set": "calibration", "review_id": row["id"]}))
-    for _, decade, work_id, _ in precision:
-        source = {"set": "precision", "work_id": work_id, "decade": decade}
-        whole.append(({"sentences": shown(texts, work_id)}, source))
-    random.Random(SHUFFLE_SEED).shuffle(whole)
+    recalibration = draw(pooled("recalibration"), *RECALIBRATION)
+    taken = {row[2] for row in recalibration}
+    precision = draw([row for row in pooled("precision") if row[2] not in taken], *PRECISION)
+    joins = sorted(pooled("joins"))[:JOINS]
+    boundaries = draw(pooled("targets"), *BOUNDARIES)
+    wanted = sorted({row[2] for row in recalibration + precision + joins + boundaries})
+    texts, spacy_sentences, rows = load_sources(catalog, wanted)
+
+    def shown(work: str) -> list[str]:
+        return [texts[work][start:end] for start, end, _ in rows[work]]
+
     key: dict[str, Any] = {}
+    whole = [(row, "recalibration") for row in recalibration]
+    whole += [(row, "precision") for row in precision]
+    random.Random(SHUFFLE_SEED).shuffle(whole)
     with (out / "abstracts.jsonl").open("w", encoding="utf-8") as handle:
-        for number, (item, source) in enumerate(whole):
-            item_id = f"A{number:03d}"
-            key[item_id] = source | {"cuts": len(item["sentences"]) - 1}
-            handle.write(json.dumps({"id": item_id} | item, ensure_ascii=False) + "\n")
+        for number, ((_, decade, work, _, _), name) in enumerate(whole):
+            item_id = f"B{number:03d}"
+            sentences = shown(work)
+            key[item_id] = {
+                "set": name,
+                "work_id": work,
+                "decade": decade,
+                "cuts": len(sentences) - 1,
+            }
+            item: dict[str, Any] = {"id": item_id, "sentences": sentences}
+            handle.write(json.dumps(item, ensure_ascii=False) + "\n")
+    with (out / "joins.jsonl").open("w", encoding="utf-8") as handle:
+        for number, (_, decade, work, sentence_number, index) in enumerate(joins):
+            item_id = f"J{number:03d}"
+            start, end, rules = rows[work][sentence_number]
+            parts = [s for s in spacy_sentences[work] if start <= s["start"] and s["end"] <= end]
+            first, second = parts[index], parts[index + 1]
+            low = max(start, (first["end"] + second["start"]) // 2 - CONTEXT // 2)
+            item = {
+                "id": item_id,
+                "first": texts[work][first["start"] : first["end"]],
+                "second": texts[work][second["start"] : second["end"]],
+                "context": texts[work][low : min(end, low + CONTEXT)],
+            }
+            key[item_id] = {
+                "set": "joins",
+                "work_id": work,
+                "decade": decade,
+                "sentence_number": sentence_number,
+                "join": index,
+                "rule": rules[index],
+            }
+            handle.write(json.dumps(item, ensure_ascii=False) + "\n")
     with (out / "sentences.jsonl").open("w", encoding="utf-8") as handle:
-        for number, (_, decade, work_id, sentence_number) in enumerate(boundaries):
+        for number, (_, decade, work, sentence_number, _) in enumerate(boundaries):
             item_id = f"T{number:03d}"
-            sentences = shown(texts, work_id)
+            sentences = shown(work)
             key[item_id] = {
                 "set": "boundaries",
-                "work_id": work_id,
+                "work_id": work,
                 "decade": decade,
                 "sentence_number": sentence_number,
             }
+            following = sentence_number + 1 < len(sentences)
             item = {
                 "id": item_id,
                 "before": sentences[sentence_number - 1] if sentence_number > 0 else None,
                 "target": sentences[sentence_number],
-                "after": sentences[sentence_number + 1]
-                if sentence_number + 1 < len(sentences)
-                else None,
+                "after": sentences[sentence_number + 1] if following else None,
             }
             handle.write(json.dumps(item, ensure_ascii=False) + "\n")
     (out / "key.json").write_text(json.dumps(key, indent=1) + "\n")
-    cuts = sum(entry["cuts"] for entry in key.values() if entry.get("set") == "precision")
+    cuts = sum(entry["cuts"] for entry in key.values() if entry["set"] == "precision")
     sys.stdout.write(
-        f"{len(whole)} whole abstracts ({len(calibration)} calibration, {len(precision)} for "
-        f"precision, {cuts} cuts to judge); {len(boundaries)} target sentences\n"
+        f"{len(whole)} whole abstracts ({len(recalibration)} recalibration, {len(precision)} "
+        f"precision with {cuts} cuts); {len(joins)} joins; {len(boundaries)} target sentences\n"
     )
 
 
