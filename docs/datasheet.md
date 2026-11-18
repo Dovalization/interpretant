@@ -210,9 +210,8 @@ added or sent back rules are recorded there with their records.
   author's. The maps' audits passed with 3 and 1 wrong pairs in samples of 150, so a few wrong
   merges remain. The map also hides how each compound's ways of writing drift across decades
   (in the families that vary, closed forms gain about 20 points from the 1950s to the 2020s), so
-  that drift is reported
-  separately in `docs/compounds.md`. Accented tokens (mostly French words) are left unmapped, and
-  three-part compounds (*state-of-the-art*) are left as written.
+  that drift is reported separately in `docs/compounds.md`. Accented tokens (mostly French words)
+  are left unmapped, and three-part compounds (*state-of-the-art*) are left as written.
 - **Sentences in other languages** remain: about 1% of the sentences sampled for the lemma review
   (33 of 3,551) read as another language, mostly French. A likely cause, not confirmed: in text
   whose accents were stripped, French *à* becomes *a*, which the language stage's list of English
