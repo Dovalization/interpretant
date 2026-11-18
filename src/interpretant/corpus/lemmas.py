@@ -1,16 +1,16 @@
-"""A type-level lemma map: -s inflections, plural nouns and British spellings, nothing else.
+"""The voted lemma rules: -s inflections, plural nouns and British spellings, nothing else.
 
-The cells are not lemmatised beyond the target words, so *structure* and *structures*,
-*embedding* and *embeddings*, *conceptualisation* and *conceptualization* train as separate
-words. A general lemmatiser is the wrong tool here: it turns *learning* into *learn*,
-*meaning* into *mean* and *embodied* into *embody*, which destroys the nominalisations the
-targets live on. So the map merges a word only into the singular or base form spaCy gives it
-in context (a plural noun, a third-person verb), when the readings agree and the word is a regular
--s form of it or one of spaCy's irregular plurals; it normalises British spellings to American
-through rules gated on spaCy's word list or the corpus and an exception list, and leaves every
-other form alone. The votes come from one spaCy pass over the raw abstracts (``lemma_votes``);
-the map is learned once from them, written to a reviewable file, and applied line by line like
-the phrase model.
+A general lemmatiser turns *learning* into *learn*, *meaning* into *mean* and *embodied* into
+*embody*, which destroys the nominalisations the targets live on. So ``voted_lemma`` merges a
+word only into the singular or base form spaCy gives it in context (a plural noun, a
+third-person verb), when the readings agree and the word is a regular -s form of it or one of
+spaCy's irregular plurals; ``american`` normalises British spellings through rules gated on
+spaCy's word list or the corpus and an exception list. The votes come from one spaCy pass over
+the raw abstracts (``lemma_votes``).
+
+The type-level map these rules once wrote onto the text retired on 2026-11-17: the static view
+takes spaCy's lemma in context with the reviewed exceptions. The rules stay as the tools that
+find spaCy's errors and as the spelling map's backstop for derived words.
 """
 
 from __future__ import annotations
@@ -19,7 +19,6 @@ import re
 from collections import Counter
 from collections.abc import Iterable, Iterator, Mapping, Sequence
 from concurrent.futures import FIRST_COMPLETED, Future, ProcessPoolExecutor, wait
-from dataclasses import dataclass, field
 from functools import cache
 from itertools import islice
 from pathlib import Path
@@ -38,10 +37,8 @@ SPACY_MODEL = "en_core_web_sm"
 # Parts of speech in spaCy's lemma index (WordNet's base forms).
 INDEX_POS = ("noun", "verb", "adj", "adv")
 MIN_SPELLING_LENGTH = 6
-RULE_OVERRIDE = "override"
 RULE_PLURAL = "plural"
 RULE_VERB = "verb"
-RULE_SPELLING = "spelling"
 # Fine-grained tags of the -s inflections a word may merge from: plural noun, third-person verb.
 INFLECTED_TAGS = {"NNS": RULE_PLURAL, "VBZ": RULE_VERB}
 PROPER_TAGS = frozenset({"NNP", "NNPS"})
@@ -288,12 +285,6 @@ def lemma_votes(
     return votes
 
 
-def save_votes(votes: Counter[tuple[str, str, str]], path: Path) -> None:
-    rows = [(form, tag, lemma, count) for (form, tag, lemma), count in votes.items()]
-    frame = pl.DataFrame(rows, schema=["type", "tag", "lemma", "count"], orient="row")
-    frame.sort(["type", "count"], descending=[False, True]).write_parquet(path)
-
-
 def load_votes(path: Path) -> dict[str, list[tuple[str, str, int]]]:
     votes: dict[str, list[tuple[str, str, int]]] = {}
     for form, tag, lemma, count in pl.read_parquet(path).iter_rows():
@@ -445,38 +436,6 @@ def american(token: str, counts: Counter[str] | None = None) -> str | None:
     return candidate if attested and _common_enough(candidate, token, counts) else None
 
 
-@dataclass
-class LemmaMap:
-    """Token type to normal form, with the rule that produced each entry."""
-
-    mapping: dict[str, str] = field(default_factory=dict)
-    rules: dict[str, str] = field(default_factory=dict)
-
-    def apply(self, line: str) -> str:
-        return " ".join(self.mapping.get(token, token) for token in line.split())
-
-    def save(self, path: Path, counts: Counter[str] | None = None) -> None:
-        counts = counts or Counter()
-        rows = sorted(self.mapping, key=lambda token: (-counts[token], token))
-        path.write_text(
-            "token\tlemma\tcount\trule\n"
-            + "".join(
-                f"{token}\t{self.mapping[token]}\t{counts[token]}\t{self.rules[token]}\n"
-                for token in rows
-            ),
-            encoding="utf-8",
-        )
-
-    @classmethod
-    def load(cls, path: Path) -> LemmaMap:
-        lemma_map = cls()
-        for line in path.read_text(encoding="utf-8").splitlines()[1:]:
-            token, lemma, _count, rule = line.split("\t")
-            lemma_map.mapping[token] = lemma
-            lemma_map.rules[token] = rule
-        return lemma_map
-
-
 def read_overrides(path: Path) -> dict[str, str]:
     """Read ``token<TAB>lemma`` lines; an empty lemma keeps the token as it is."""
     overrides: dict[str, str] = {}
@@ -487,62 +446,6 @@ def read_overrides(path: Path) -> dict[str, str]:
         token, _, lemma = line.partition("\t")
         overrides[token.strip()] = lemma.strip()
     return overrides
-
-
-def normal_form(
-    token: str,
-    protected: set[str],
-    overrides: dict[str, str],
-    votes: Votes,
-    counts: Counter[str] | None = None,
-) -> tuple[str, str]:
-    """Return ``(lemma, rule)`` for one token type; ``(token, "")`` when it stays as it is."""
-    if token in protected or not _WORD.match(token):
-        return token, ""
-    if token in overrides:
-        lemma = overrides[token] or token
-        return lemma, RULE_OVERRIDE if lemma != token else ""
-    lemma, rule = token, ""
-    if (voted := voted_lemma(token, votes, counts)) is not None:
-        lemma, rule = voted
-    if lemma in overrides:
-        return overrides[lemma] or lemma, rule or RULE_OVERRIDE
-    if lemma not in protected and (spelled := american(lemma, counts)) is not None:
-        lemma, rule = spelled, RULE_SPELLING if rule == "" else rule
-    return lemma, rule
-
-
-def learn_lemma_map(
-    counts: Counter[str], votes: Votes, protected: Iterable[str], overrides: dict[str, str]
-) -> LemmaMap:
-    """Map every type in ``counts`` that has a normal form other than itself.
-
-    A normal form that is itself mapped is followed to the end of the chain, so applying the map
-    once is final (*particularises* → *particularizes* → *particularize*).
-    """
-    protected_set = set(protected)
-    lemma_map = LemmaMap()
-    for token in counts:
-        lemma, rule = normal_form(token, protected_set, overrides, votes, counts)
-        if lemma != token:
-            lemma_map.mapping[token] = lemma
-            lemma_map.rules[token] = rule
-    for token in list(lemma_map.mapping):
-        lemma = _end_of_chain(token, lemma_map.mapping)
-        if lemma == token:
-            del lemma_map.mapping[token], lemma_map.rules[token]
-        else:
-            lemma_map.mapping[token] = lemma
-    return lemma_map
-
-
-def _end_of_chain(token: str, mapping: Mapping[str, str]) -> str:
-    seen = {token}
-    lemma = mapping[token]
-    while lemma in mapping and lemma not in seen:
-        seen.add(lemma)
-        lemma = mapping[lemma]
-    return lemma
 
 
 def count_types(paths: Iterable[Path]) -> Counter[str]:

@@ -1,4 +1,4 @@
-"""Tests for the type-level lemma map."""
+"""Tests for the voted lemma rules."""
 
 from __future__ import annotations
 
@@ -7,15 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from interpretant.corpus.lemmas import (
-    LemmaMap,
-    american,
-    learn_lemma_map,
-    lemma_votes,
-    normal_form,
-    read_overrides,
-    voted_lemma,
-)
+from interpretant.corpus.lemmas import american, lemma_votes, read_overrides, voted_lemma
 
 
 @pytest.mark.parametrize(
@@ -151,7 +143,8 @@ def test_lemma_votes_in_worker_processes_match_one_process(monkeypatch: pytest.M
     ["learning", "meaning", "embedding", "being", "embodied", "learned", "better", "was", "is"],
 )
 def test_verbs_participles_comparatives_and_ing_nouns_stay(token: str) -> None:
-    assert normal_form(token, set(), {}, {token: [("VBG", "learn", 9)]}) == (token, "")
+    assert voted_lemma(token, {token: [("VBG", "learn", 9)]}) is None
+    assert american(token) is None
 
 
 @pytest.mark.parametrize(
@@ -206,59 +199,11 @@ def test_spelling_rules_leave_lookalikes_alone(token: str) -> None:
     assert american(token) is None
 
 
-def test_plural_then_spelling_compose_in_one_pass() -> None:
-    votes = {"behaviours": [("NNS", "behaviour", 9)], "colours": [("NNS", "colour", 7)]}
-
-    assert normal_form("behaviours", set(), {}, votes) == ("behavior", "plural")
-    assert normal_form("colours", set(), {}, votes) == ("color", "plural")
-
-
-def test_targets_hyphens_and_phrases_are_never_mapped() -> None:
-    votes = {"networks": [("NNS", "network", 50)]}
-
-    assert normal_form("networks", {"networks"}, {}, votes) == ("networks", "")
-    assert normal_form("self-locations", set(), {}, votes) == ("self-locations", "")
-    assert normal_form("neural_networks", set(), {}, votes) == ("neural_networks", "")
-
-
-def test_overrides_win_and_an_empty_lemma_keeps_the_token(tmp_path: Path) -> None:
+def test_read_overrides_skips_comments_and_keeps_an_empty_lemma(tmp_path: Path) -> None:
     path = tmp_path / "overrides.tsv"
     path.write_text("# comment\nphenomena\tphenomenon\nmeans\t\n", encoding="utf-8")
 
-    overrides = read_overrides(path)
-
-    assert overrides == {"phenomena": "phenomenon", "means": ""}
-    assert normal_form("phenomena", set(), overrides, {}) == ("phenomenon", "override")
-    assert normal_form("means", set(), overrides, {}) == ("means", "")
-
-
-def test_learned_map_applies_to_a_line_and_round_trips(tmp_path: Path) -> None:
-    counts = Counter(
-        {
-            "structures": 5,
-            "structure": 7,
-            "learning": 9,
-            "behaviours": 2,
-            "behavior": 4,
-            "network": 3,
-        }
-    )
-
-    votes = {
-        "structures": [("NNS", "structure", 6)],
-        "behaviours": [("NNS", "behaviour", 5)],
-        "behaviour": [("NN", "behaviour", 6)],
-        "learning": [("VBG", "learn", 9)],
-    }
-
-    lemma_map = learn_lemma_map(counts, votes, protected={"network"}, overrides={})
-    lemma_map.save(tmp_path / "lemmas.tsv", counts)
-    loaded = LemmaMap.load(tmp_path / "lemmas.tsv")
-
-    assert loaded.mapping == {"structures": "structure", "behaviours": "behavior"}
-    assert loaded.apply("the structures of learning behaviours") == (
-        "the structure of learning behavior"
-    )
+    assert read_overrides(path) == {"phenomena": "phenomenon", "means": ""}
 
 
 def test_spelling_merges_need_the_american_form_in_the_corpus() -> None:
@@ -274,16 +219,3 @@ def test_american_forms_missing_from_spacys_word_list_count_when_the_corpus_has_
     assert american("contextualise") is None  # no corpus, so the word list decides
     assert american("contextualise", counts) == "contextualize"
     assert american("personalisation", counts) is None
-
-
-def test_chains_are_followed_to_their_end() -> None:
-    counts = Counter({"particularises": 6, "particularizes": 40, "particularize": 90})
-    votes = {
-        "particularizes": [("VBZ", "particularize", 30)],
-        "particularize": [("VB", "particularize", 60)],
-    }
-
-    lemma_map = learn_lemma_map(counts, votes, protected=set(), overrides={})
-
-    assert lemma_map.mapping["particularises"] == "particularize"
-    assert lemma_map.rules["particularises"] == "spelling"
