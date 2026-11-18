@@ -148,13 +148,15 @@ A joined sentence takes the language and confidence of its longest part. The vie
 **The fresh audit.**
 - **The judges' prompt** now says that a heading glued to a sentence is not an error, and covers
   a third kind of item, a joined cut.
-- **Recalibration:** 30 abstracts drawn fresh from the new view (seed 20261201), the author
-  judging blind. The agents' verdicts stand if they agree with the author on at least 27, with
+- **Recalibration:** 30 abstracts drawn fresh from the new view (seed 20261201; 3 per decade,
+  then the 6 smallest keys among the rest), the author judging blind. The agents' verdicts stand if they agree with the author on at least 27, with
   agreement defined as before (same wrong cuts, same sentences holding a missed break). Otherwise
   the author judges the three samples below.
 - **Cut precision:** 50 new abstracts (seed 20261202), drawn as before, apart from the
   recalibration set. Bar: at least 98%.
 - **Joined cuts:** 80 joins drawn from kept works (seed 20261203), each shown with its two parts.
+  Joins by the no-letters rule are left out of the draw (amended before drawing: they are 35,101
+  of the 46,888 joins, and a row without letters cannot be a second sentence).
   A join is wrong when the two parts are two sentences. Bar: at most 2 wrong. At a true rate of
   1% this passes 95% of the time; at 7%, about 8%.
 - **Boundaries:** 150 new target sentences (seed 20261204), drawn and judged as before. Bar: at
