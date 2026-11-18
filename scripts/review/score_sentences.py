@@ -129,47 +129,32 @@ def main() -> None:
 
 
 def score_samples(key: dict[str, Any], final: dict[str, Any]) -> None:
-    """Report each sample against its bar, and whether the audit passes."""
+    """Report each sample the round drew against its bar, and whether the round passes."""
     write = sys.stdout.write
+    passed = True
     precision_ids = [i for i, entry in key.items() if entry["set"] == "precision"]
-    cuts = sum(key[i]["cuts"] for i in precision_ids)
-    wrong_cuts = sum(len(final[i][0]) for i in precision_ids)
-    missed = sum(len(final[i][1]) for i in precision_ids)
-    precision = 1 - wrong_cuts / cuts
-    write(
-        f"cut precision: {wrong_cuts} wrong of {cuts} cuts, precision {precision:.1%} "
-        f"(rule: at least {PRECISION_MIN:.0%}); sentences with a missed break: {missed}\n"
-    )
-    wrong_joins = sorted(
-        i for i, entry in key.items() if entry["set"] == "joins" and final[i] == "wrong"
-    )
-    by_rule = dict(Counter(key[i]["rule"] for i in wrong_joins))
-    write(
-        f"joined cuts: {len(wrong_joins)} of 80 wrong (rule: at most {JOINS_MAX_WRONG}): "
-        f"{wrong_joins} {by_rule}\n"
-    )
-    wrong_splits = sorted(
-        i for i, entry in key.items() if entry["set"] == "splits" and final[i] == "wrong"
-    )
-    split_count = sum(1 for entry in key.values() if entry["set"] == "splits")
-    if split_count:
+    if precision_ids:
+        cuts = sum(key[i]["cuts"] for i in precision_ids)
+        wrong_cuts = sum(len(final[i][0]) for i in precision_ids)
+        missed = sum(len(final[i][1]) for i in precision_ids)
+        precision = 1 - wrong_cuts / cuts
+        passed &= precision >= PRECISION_MIN
         write(
-            f"split cuts: {len(wrong_splits)} of {split_count} wrong "
-            f"(rule: at most {SPLITS_MAX_WRONG}): {wrong_splits}\n"
+            f"cut precision: {wrong_cuts} wrong of {cuts} cuts, precision {precision:.1%} "
+            f"(rule: at least {PRECISION_MIN:.0%}); sentences with a missed break: {missed}\n"
         )
-    wrong_targets = sorted(
-        i for i, entry in key.items() if entry["set"] == "boundaries" and final[i] == "wrong"
-    )
-    write(
-        f"boundaries: {len(wrong_targets)} of 150 wrong (rule: at most {BOUNDARIES_MAX_WRONG}): "
-        f"{wrong_targets}\n"
-    )
-    passed = (
-        precision >= PRECISION_MIN
-        and len(wrong_joins) <= JOINS_MAX_WRONG
-        and len(wrong_splits) <= SPLITS_MAX_WRONG
-        and len(wrong_targets) <= BOUNDARIES_MAX_WRONG
-    )
+    for name, label, bar in (
+        ("joins", "joined cuts", JOINS_MAX_WRONG),
+        ("splits", "split cuts", SPLITS_MAX_WRONG),
+        ("boundaries", "boundaries", BOUNDARIES_MAX_WRONG),
+    ):
+        ids = [i for i, entry in key.items() if entry["set"] == name]
+        if not ids:
+            continue
+        wrong = sorted(i for i in ids if final[i] == "wrong")
+        passed &= len(wrong) <= bar
+        rules = dict(Counter(key[i]["rule"] for i in wrong)) if name == "joins" else ""
+        write(f"{label}: {len(wrong)} of {len(ids)} wrong (rule: at most {bar}): {wrong} {rules}\n")
     write(f"the audit {'passes' if passed else 'fails'}\n")
 
 

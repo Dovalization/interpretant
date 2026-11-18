@@ -61,15 +61,16 @@ _NUMBER_START = re.compile(r"\d|[(\[]|(?:[IVXLC]+|[ivxlc]+)(?![A-Za-z])")
 _SAINT = re.compile(r"(?<![A-Za-z])St\.$")
 # A word ending like a sentence: two lowercase letters, closing marks, then a stop.
 _SENTENCE_END = re.compile(r"[a-z]{2}[)\]\"'”’]*[.!?]$")
-# A break the spaCy pass missed: a capital or short acronym with a period, after a lowercase word
-# or a digit (so not a name's initial), before a common sentence opener that is not itself an
-# initial (*over a VP. Also*, *in Volume V. This work*). *I.* is left alone: mostly a label.
+# A break the spaCy pass missed: a capital or short acronym with a period, after a word that starts
+# lowercase or a number (so not a name's initial, a reference's or a contents line's label), before
+# a common sentence opener that is not itself an initial (*over a VP. Also*, *of X. This is*). *I.*
+# is left alone: mostly a label.
 OPENERS = (
     "The|This|These|That|Those|A|An|In|We|It|Its|Our|Also|However|Thus|Such|There|They|He|She"
     "|Finally|Moreover|Here|Furthermore|Although|When|Then|As|For|One|Two|Both|Each|No"
 )
 _MISSED_BREAK = re.compile(
-    rf"(?:(?<=[a-z0-9)\]] )|(?<=\d))(?!I\.)[A-Z]{{1,3}}\.(\s+)(?=(?:{OPENERS})\b)(?!A\.)"
+    rf"(?:(?<=[a-z0-9] )|(?<=\d))(?!I\.)[A-Z]{{1,3}}\.(\s+)(?=(?:{OPENERS})\b)(?!A\.)"
 )
 _OPENERS, _CLOSERS = "([", ")]"
 
@@ -140,7 +141,14 @@ def join_rule(before: str, after: str) -> JoinRule | None:
 
 def missed_breaks(sentence: str) -> list[tuple[int, int]]:
     """Where the split rule cuts a sentence: the first piece's end and the next one's start."""
-    return [(match.start(1), match.end(1)) for match in _MISSED_BREAK.finditer(sentence)]
+    cuts = []
+    for match in _MISSED_BREAK.finditer(sentence):
+        before = sentence[: match.start()]
+        words = before.split()
+        previous = words[-1].lstrip(".,;:([\"'“‘") if words else ""
+        if before[-1:].isdigit() or previous[:1].islower() or previous[:1].isdigit():
+            cuts.append((match.start(1), match.end(1)))
+    return cuts
 
 
 def build_sentence_view(abstracts: pl.DataFrame) -> pl.DataFrame:

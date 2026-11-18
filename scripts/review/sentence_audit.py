@@ -41,8 +41,9 @@ from interpretant.cli.progress import LiveProgress
 from interpretant.corpus.sentence_view import merge_ranges
 from interpretant.pipelines.workers import map_parts
 
-# Each round's seeds (`docs/sentence_view.md`): the fresh audit (2) and round 3, which drops the
-# recalibration (it carries over) and adds the split cuts.
+# Each round's seeds (`docs/sentence_view.md`): the fresh audit (2); round 3, which drops the
+# recalibration (it carries over) and adds the split cuts; round 4, which redraws only the split
+# cuts and the boundaries, the samples its narrower split rule can change.
 ROUNDS: dict[str, dict[str, int]] = {
     "2": {
         "recalibration": 20261201,
@@ -58,6 +59,7 @@ ROUNDS: dict[str, dict[str, int]] = {
         "splits": 20261215,
         "shuffle": 20261216,
     },
+    "4": {"boundaries": 20261224, "splits": 20261225, "shuffle": 20261226},
 }
 RECALIBRATION = (3, 6)
 PRECISION = (6, 2)
@@ -113,7 +115,7 @@ def find_candidates(part: str, job: PartJob) -> dict[str, list[Candidate]]:
             "sentence_number", "merge_rules", "split"
         ).iter_rows():
             for index, rule in enumerate(rules):
-                if rule != "no_letters":
+                if rule != "no_letters" and "joins" in seeds:
                     key = draw_key(seeds["joins"], work, number, index)
                     found["joins"].append((key, decade, work, number, index))
             if split and "splits" in seeds:

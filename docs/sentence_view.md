@@ -200,6 +200,28 @@ plus a fourth kind of item:
 The recalibration of the fresh audit carries over: it measures how the agents judge cuts against
 the author, which the rules do not change. If it fails, the author judges round 3's samples.
 
+### Round 4: a narrower split rule (pre-registered 2026-11-18, before its build)
+
+**Why.** Round 3 (agents' verdicts, standing only if the recalibration passes) passed cut precision
+(5 wrong of 297 cuts, 98.3%, all the spaCy pass's own cuts), joined cuts (0 of 80 wrong) and
+boundaries (2 of 150 wrong), and failed split cuts: 5 of 80 wrong, against a bar of 2. All five fell
+in non-prose: an author's initial in a reference (*Pickering G.* | *In: Swales*) or a contents line's
+label (*(Specification) E.* | *The Irregular Verb*, *Wildlife Part V.* | *The Local Effects*).
+
+**The change.** The split rule now needs the word before the capital to start with a lowercase
+letter or a digit (opening punctuation aside), or the capital to follow a digit directly: *over a
+VP. Also*, *of X. This is*, *at .15 M. These* still split; *Pickering G. In*, *(Specification) E.
+The*, *Part V. The* no longer do. It gives up real breaks after capitalised words (*in Chapter V.
+In Chapter VI*). The join rules do not change.
+
+**The audit.** Round 4 redraws only the samples the change can move, judged by the same agents
+with the same prompt:
+- **split cuts:** 80 splits (seed 20261225); bar at most 2 wrong;
+- **boundaries:** 150 target sentences (seed 20261224); bar at most 5 wrong.
+
+Cut precision and joined cuts carry over from round 3: the joins are unchanged, and removing
+splits only removes cuts, none of round 3's wrong cuts being a split.
+
 ## Results
 
 To be written after the build and the audit.

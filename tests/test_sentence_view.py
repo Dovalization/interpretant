@@ -304,6 +304,22 @@ def test_build_sentence_view_joins_a_removed_stray_period_back_to_its_ellipsis()
             "Studies by Werner, H. A. Witkin and others.",
             ["Studies by Werner, H. A. Witkin and others."],
         ),
+        (
+            "Platt versus Pickering G. In: Swales J, ed.",
+            ["Platt versus Pickering G. In: Swales J, ed."],
+        ),
+        (
+            "Nouns (Specification) E. The Irregular Verb",
+            ["Nouns (Specification) E. The Irregular Verb"],
+        ),
+        (
+            "This is treated in Chapter V. In Chapter VI it ends.",
+            ["This is treated in Chapter V. In Chapter VI it ends."],
+        ),
+        (
+            "Rats drank at .15 M. These rats lost weight.",
+            ["Rats drank at .15 M.", "These rats lost weight."],
+        ),
     ],
 )
 def test_missed_breaks_cut_after_a_capital_before_an_opener(
