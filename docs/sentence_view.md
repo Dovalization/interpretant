@@ -261,6 +261,66 @@ needed (`round2/verdicts/author_recalibration.json`; scorer code `840ff807` and 
 - **No third try.** If the agents agree with the author on fewer than 27 of the 30, the author
   judges the four samples.
 
-## Results
+### The second recalibration failed by one; the author accepted the agents' verdicts (2026-11-18)
 
-To be written after the build and the audit.
+- **Result.** The agents agree with the author on 26 of the 30 fresh abstracts, against 27 needed
+  (`round6/verdicts/author_recalibration.json`). On wrong cuts they agree on all 30; every
+  disagreement is a missed break. In three abstracts the agents marked a missed break the author
+  did not, and in one both marked a missed break in different rows: the agents marked 6 sentences
+  with a missed break the author did not, the author 1 the agents did not. Across both
+  recalibrations, the agents and the author agree on wrong cuts in 58 of 60 abstracts.
+- **The author's decision: the agents' verdicts stand, as a deviation from the rule above** (which
+  had the author judge the samples). Asked to review less after several rounds, the author chose it
+  on this evidence:
+  - cut precision and split cuts rest on judging where cuts fall, where the agents match the author;
+  - joined cuts and boundaries rest on missed breaks, where the agents are stricter than the author,
+    and they still find no wrong join and no wrong target sentence;
+  - the soft spot: cut precision sits exactly at its bar (5 wrong of 297). In the first
+    recalibration the agents missed the author's wrong cuts in 1 abstract of 30, so the true rate
+    may sit just under 98%. The errors are in OCR-damaged and non-prose text.
+
+## Results (2026-11-18)
+
+**The view of record** is the round-5 build (lock `9eeb2274`; rules `3f64d47d`; stage
+`build_sentence_view`, 30 s):
+
+| | Count |
+|---|---|
+| Kept works | 632,843 |
+| Sentences | 4,297,519 (median 21 words) |
+| Cuts joined by the merge rules | 45,593 |
+| Sentences split by the split rule | 1,337 |
+| Removed (every non-space character in removed ranges) | 92,204 |
+| Cut off (the unfinished last sentence of a truncated work) | 64,813 |
+| Eligible (no exclusion) | 4,140,502, of which 1,446 not read as English |
+
+Joins by rule: no letters 35,101; list number 4,175; period 2,269; abbreviation 1,588; closing
+punctuation 942; inside brackets 938; reference number 451; function word 96; saint 28; spaced dots
+5. Sentences of undetermined language fall from 37,141 to 2,239, since most were stray marks now
+joined to their neighbours. All 1,603 malformed works are kept.
+
+**The audit**, by the agents' verdicts under the settled prompt (`round6/`, which re-judged
+round 3's precision abstracts and joins and round 5's splits and target sentences):
+
+| Sample | Result | Bar |
+|---|---|---|
+| Cut precision (50 abstracts) | 5 wrong of 297 cuts, 98.3% | at least 98% |
+| Joined cuts | 0 of 80 wrong | at most 2 |
+| Split cuts | 1 of 80 wrong | at most 2 |
+| Boundaries of target sentences | 0 of 150 wrong | at most 5 |
+
+**Against the spaCy pass alone:** the first audit's agents found 9 wrong cuts in 314 (97.1%) and 6
+of 150 target sentences holding two sentences; the author found 7 wrong cuts in the 4 abstracts
+the curtailed inspection showed, 6 of which the rules now join (the seventh is a stray OCR period
+before a capital). Wrong cuts gathered in OCR-damaged early decades: every pattern the scans
+tested was 5 to 12 times more common per cut in the 1950s than in the 2020s, and so are the joins
+(7.5 per 1,000 sentences in the 1950s, 1.2 in the 2020s, at the first merge build).
+
+**Limits.**
+- Cut precision sits at its bar, and the agents' verdicts stand by the author's deviation, not by a
+  passed recalibration.
+- Breaks lost to OCR (a missing full stop) and breaks after a capitalised word (*in Chapter V. In*)
+  or a letter from A to E (*in 3D. In*) are not found.
+- The two Sonnet judges gave nearly identical answers throughout, so they acted as one judge; the
+  Opus adjudicator settled their few differences.
+- OCR damage is left to step 7's junk gate (agenda, preprocessing phase step 7).
