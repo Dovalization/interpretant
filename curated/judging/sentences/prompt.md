@@ -17,7 +17,7 @@ Rules for every kind of item:
   one makes a missed break. Judge text in another language by the same rules if you can read it;
   if you cannot, do not mark it.
 
-There are three kinds of item.
+There are four kinds of item.
 
 **A whole abstract** shows its sentences in order, numbered from 0. Between each two sentences is a
 cut. Mark:
@@ -44,5 +44,12 @@ sentence, with the text around them.
   text), so joining them was right.
 - **wrong:** the first piece ends one sentence and the second starts another, so the join glued two
   sentences together.
+
+**A split cut** shows two pieces a rule cut apart, where the splitter had left them in one sentence,
+with the text around them.
+
+- **right:** the first piece ends a sentence and the second starts another, so the cut was right.
+- **wrong:** the two pieces belong to one sentence (for example, the first ends with an initial of a
+  name), so the cut falls where no sentence ends.
 
 Do not look anything up and do not run code.

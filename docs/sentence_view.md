@@ -164,6 +164,42 @@ A joined sentence takes the language and confidence of its longest part. The vie
 - The agents judge the recalibration abstracts mixed in with the precision sample, so they cannot
   tell them apart.
 
+### Round 3: narrower joins and a split rule (pre-registered 2026-11-18, before its build)
+
+**Why.** On the fresh audit, the agents' verdicts (which stand only if the recalibration passes,
+not yet scored) gave:
+- **cut precision:** 1 wrong of 356 cuts (99.7%);
+- **joined cuts:** 9 of 80 wrong, against a bar of 2. Six came from the bracket rule, all
+  sentences inside long parenthetical notes; two from the period rule (a period glued to the next
+  sentence's capital, and table junk); one from *ST.* as an acronym;
+- **boundaries:** 6 of 150 wrong, against a bar of 5, all two sentences in one, none made by a
+  join. Four were breaks spaCy missed after a capital or short acronym with a period (*over a VP.
+  Also*, *in Volume V. This work*); two had lost their full stop to OCR.
+
+**The changes** (code `8d50facb`):
+- the bracket rule no longer joins when the first piece ends like a sentence (two lowercase
+  letters, closing marks, a stop) and the second starts with a capital; the abbreviation rule
+  still joins *Univ.* and gains *eg.*;
+- the period rule no longer joins a piece whose period is glued to a capital (*.Desire for*);
+- the saint rule keeps *St.* and drops *ST.*;
+- **a split rule:** a sentence is cut after a capital or an acronym of up to three capitals with a
+  period, when a lowercase word or a digit comes before it and a common sentence opener (*The,
+  This, A, We, Also, However, …*) after it, unless the opener is itself an initial (*A.*). *I.* is
+  left alone, mostly a label. A scan of the view (`scripts/evidence/sentence_missed_breaks.py`,
+  `a72e6732`) found 6,702 candidates before these limits, most of them initials; the limits come
+  from its examples. The view gains a column, `split`, true for a row that starts at such a cut.
+
+**The audit.** Fresh draws from the round-3 view, judged by the same agents with the same prompt,
+plus a fourth kind of item:
+- **cut precision:** 50 abstracts (seed 20261212), as before; bar at least 98%;
+- **joined cuts:** 80 joins, no-letters joins left out (seed 20261213); bar at most 2 wrong;
+- **split cuts:** 80 splits (seed 20261215), each shown with its two pieces and the text around
+  them; a split is wrong when no sentence ends there; bar at most 2 wrong;
+- **boundaries:** 150 target sentences (seed 20261214); bar at most 5 wrong.
+
+The recalibration of the fresh audit carries over: it measures how the agents judge cuts against
+the author, which the rules do not change. If it fails, the author judges round 3's samples.
+
 ## Results
 
 To be written after the build and the audit.
