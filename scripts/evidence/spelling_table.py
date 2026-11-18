@@ -49,6 +49,8 @@ DIFFERENT_WORDS = frozenset(
     "analyses buses busing bussing gases storey storeys tonne tonnes philtre tranquilly cheque cheques "
     "pummelled pummelling".split()
 )
+# Forms of other languages the project's rules read as British spellings (Portuguese *analise*).
+NOT_ENGLISH = frozenset({"analise", "analize"})
 
 
 def type_counts(view: Path) -> tuple[Counter[str], Counter[str]]:
@@ -149,7 +151,11 @@ def main() -> None:
         candidate = american(form, counts)
         if candidate is not None and candidate != form:
             pairs[form] = (candidate, "rules")
-    pairs = {form: pair for form, pair in pairs.items() if form not in lemmas}
+    pairs = {
+        form: pair
+        for form, pair in pairs.items()
+        if form not in lemmas and form not in NOT_ENGLISH and pair[0] not in NOT_ENGLISH
+    }
     proposal = pl.DataFrame(oriented(pairs, counts, lemmas)).sort("form_count", descending=True)
     proposal.write_parquet(out / "proposal.parquet")
 
