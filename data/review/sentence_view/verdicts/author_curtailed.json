@@ -1,0 +1,51 @@
+{
+ "A060": {
+  "kind": "abstract",
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T14:38:28.111Z",
+  "wrong_cuts": [
+   1
+  ]
+ },
+ "A070": {
+  "kind": "abstract",
+  "missed_breaks": [
+   {
+    "offset": 278,
+    "sentence": 5,
+    "word": "ideas.iii"
+   },
+   {
+    "offset": 394,
+    "sentence": 10,
+    "word": "Although"
+   }
+  ],
+  "unsure": false,
+  "updated": "2026-11-18T14:41:16.303Z",
+  "wrong_cuts": [
+   3,
+   7,
+   8,
+   10
+  ]
+ },
+ "A071": {
+  "kind": "abstract",
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T14:42:35.582Z",
+  "wrong_cuts": []
+ },
+ "A086": {
+  "kind": "abstract",
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T14:43:51.495Z",
+  "wrong_cuts": [
+   7,
+   9
+  ]
+ }
+}
