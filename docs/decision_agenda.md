@@ -691,7 +691,28 @@ sequences (the `PhraseMatcher`, as for compounds in 4.2), not through the norm t
 form the corpus writes apart or hyphenated at least ten times as often is damage, not a
 variant, and run 8 repairs it before the pass (*selfesteem* into *self-esteem*).
 
-**3.5 Phrases** (static pipeline). Term candidates from spaCy's `Matcher` on tags and morphology
+*Compound variants, as decided (the author, 2026-11-18; phase step 3,
+`docs/preprocessing_phase.md`; audit in `docs/compounds.md`):*
+- **Three forms, one corpus-wide standard.** The hyphenated, solid and spaced forms of a two-part
+  compound become its most frequent form over kept works, a word-table lemma keeping its own.
+- **Spaced pairs only as noun-noun compounds.** The `PhraseMatcher` above gave way to adjacent
+  pairs with a part-of-speech gate (`corpus/compound_spelling.is_noun_compound`): both tokens
+  tagged as nouns, adjacent and in one sentence. So *is a* never merges, and neither does an
+  adjective-first pair (*long term*, *high level*), whose hyphen before a noun is grammar.
+- **One entry per token.** The static view keeps one entry per spaCy token: a merged pair writes
+  its standard then `""`, and a form whose standard is spaced writes it with its space.
+- **The map is audited like the spellings.** Each form's share per decade is reported, since the
+  spelling shift is a finding of its own.
+
+**3.5 Phrases** (static pipeline). *No phrase list (the author, 2026-11-18; phase step 3).*
+Single words stay unjoined in the static view, as in the main semantic-change studies and
+SemEval-2020, which change only target tokens (Schlechtweg et al. 2020; Dubossarsky et al. 2019).
+Joining changes the vectors of the words inside the phrases (Camacho-Collados and Pilehvar
+2018), and no study shows it helps diachronic measures. The candidates below would also need a
+large review: 13,940 occur at least 100 times, ranked with stock phrases (*present study*, *other
+hand*) among the terms. The plan that follows is kept as the record of what was weighed.
+
+Term candidates from spaCy's `Matcher` on tags and morphology
 (adjectives and nouns ending in a noun, up to four words), scored by **C-value** with a frequency
 floor in Polars (Frantzi and Ananiadou 1999; Frantzi, Ananiadou and Mima 2000), which discounts
 candidates nested in longer terms; not gensim's `Phrases`, whose 3,502 current phrases include
@@ -866,8 +887,9 @@ role: targets and their controls share one, so they stay comparable; candidates 
 in the whole store today, where the control word *paper* alone has 125,784). Caps and the floor
 start as provisional values in the parameter files (step 9) and may be revised by the experiments.
 Controls are encoded only in the cells of their comparisons. The static pipeline reads its own
-list; the static outputs record the word tables' version, since the phrase rule of 3.5 makes the
-normalised text depend on them. Same-abstract controls are drawn from the abstracts table when
+list; the static outputs record the word tables' version, since the compound map's guard (3.4)
+makes the normalised text depend on them (with no phrase list, 2026-11-18, that guard is the only
+link). Same-abstract controls are drawn from the abstracts table when
 needed, not listed. These tables replace `words_of_interest.txt`, the control-word files as
 sources, the list typed into `build_vector_store.py` and the scope part of `longlist.json` (the
 static and contextual target lists barely overlap today: 39 against 11).
@@ -1946,9 +1968,9 @@ and the gap report (stage 8) can send new abstracts through stages 2–7.
 |---|---|---|
 | 0 | Leftovers: the datasheet's known limits, dated notes in the living docs, the housekeeping list | A reviewed diff |
 | 1 | The word table (4.7, `curated/words.tsv`): lemma, part of speech, match by lemma or form, held out, drafted from each target's part-of-speech shares in the corpus | The author's approval; held-out words fixed before any target result is read |
-| 2 | Spellings (3.4): `norm_` filtered and versioned, the project's rules as backstop, compound forms mapped to the most frequent; retiring `TARGET_VARIANTS`, the protected list and the voted map on the text; the hyphenated rule's spelling-only entries | A random sample of mapped pairs judged at a rate set in its plan; no target mapped away |
-| 3 | Phrases (3.5), planned in a pass of its own: `Matcher` candidates, C-value with a frequency floor | The top of the list reviewed by the author; no phrase containing a single-word target joined |
-| 4 | The full static view: exceptions, spellings and phrases | Token alignment, spot checks and the target check, as at 3.6 |
+| 2 | Spellings (3.4): `norm_` filtered and versioned, the project's rules as backstop; retiring `TARGET_VARIANTS`, the protected list and the voted map on the text; the hyphenated rule's spelling-only entries (*done 2026-11-17, `docs/spellings.md`*) | A random sample of mapped pairs judged at a rate set in its plan; no target mapped away |
+| 3 | Compound variants (3.4) in their three forms; no phrase list (3.5); decided in a pass of its own (2026-11-18) | The compound map's audit (`docs/compounds.md`); no target written away |
+| 4 | The full static view: exceptions, spellings and compounds | Alignment with R_B, every change explained by the maps, the target check and a spot check (`docs/preprocessing_phase.md`, step 4) |
 | 5 | The contextual sentence view (2.2) | An audit of sentence boundaries |
 | 6 | Matching and the usages table (4.1–4.6), in one `usages` package as the code review of 2026-11-12 advised; the small or transformer model for entities by the one-field comparison (4.9) | An audit of matched usages (the right word, part of speech and scope) and a recall check |
 | 7 | The junk gate (4b) | Its threshold pre-registered before the usages are drawn |
