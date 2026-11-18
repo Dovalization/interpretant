@@ -501,6 +501,17 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
   look like semantic change. The study released a classification prompt that the judge setup can
   adapt.
 
+- **OCR damage (the author, 2026-11-18).** No OCR correction before this step. The gate scores
+  OCR damage per target usage (for example, the share of its words no lexicon knows) and tests
+  whether OCR-heavy usages move J; correction is considered only if they do.
+  - OCR errors harm sentence splitting most (van Strien et al. 2020, with spaCy) and degrade
+    embeddings (Todorov and Colavizza 2022). No study measures their effect on semantic change
+    detection itself.
+  - Post-OCR correction gains are modest and uneven: the ICDAR 2019 competition's best English
+    result cut character errors by about 11%, and LLM correction helps English more than other
+    languages (Kanerva et al. 2025).
+  - OCR'd works gather in the early decades, so a correction would itself differ by decade.
+
 **To decide:**
 - the threshold (absolute, e.g. ≤10% per word and decade, or relative to the corpus);
 - n per cell and the sampling rule;

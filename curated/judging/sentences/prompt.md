@@ -4,7 +4,20 @@ human-computer interaction, computer science, cognitive psychology, linguistics,
 sociology, philosophy and history of science). Older texts often carry OCR damage. Check only where
 the cuts fall, not the text itself: spelling, spacing and noise do not matter.
 
-There are two kinds of item.
+Rules for every kind of item:
+
+- **Headings are not errors.** A heading glued to the start of a sentence (*Abstract*, *ABSTRACT*,
+  *Introduction*, *Background:*, *Methods:*, *Results:*, *Conclusions:*) is fine: do not mark a
+  break after it, and do not count a sentence that starts with one as wrong. A heading left as its
+  own row is fine too.
+- **Text that is not prose,** such as reference lists, tables, contents or catalogue lines: mark
+  only cuts that are plainly wrong.
+- **OCR noise and other languages.** A cut caused by OCR damage is judged like any other: a stray
+  period that splits one sentence makes a wrong cut; a lost full stop that leaves two sentences in
+  one makes a missed break. Judge text in another language by the same rules if you can read it;
+  if you cannot, do not mark it.
+
+There are three kinds of item.
 
 **A whole abstract** shows its sentences in order, numbered from 0. Between each two sentences is a
 cut. Mark:
@@ -15,9 +28,7 @@ cut. Mark:
 - **a missed break:** two sentences left in one. Give the sentence's number and the word that
   should start the second sentence, copied exactly as it appears.
 
-Most abstracts need no marks. Headings such as Methods or Conclusion are not sentences: leave them
-however they were cut. In text that is not prose, such as reference lists or catalogue lines, mark
-only the cuts that are plainly wrong.
+Most abstracts need no marks.
 
 **One sentence** shows the sentence to judge, marked TARGET, with the sentence before it and the
 sentence after it as the splitter cut them. Judge only the target:
@@ -26,5 +37,12 @@ sentence after it as the splitter cut them. Judge only the target:
 - **wrong:** the cut before it is wrong (it starts in the middle of a sentence), the cut after it is
   wrong (it stops in the middle of a sentence), or it holds two sentences. Say which.
 
-The same rules for headings and for text that is not prose apply. Do not look anything up and do
-not run code.
+**A joined cut** shows two pieces the splitter first cut apart and a rule then joined back into one
+sentence, with the text around them.
+
+- **right:** the two pieces belong to one sentence (or one heading, reference or line of non-prose
+  text), so joining them was right.
+- **wrong:** the first piece ends one sentence and the second starts another, so the join glued two
+  sentences together.
+
+Do not look anything up and do not run code.

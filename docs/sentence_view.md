@@ -100,6 +100,58 @@ author. The chosen splitter applies to the contextual view only, never to the ca
     on the splitter kept.
   - Otherwise the author judges the other 46 abstracts and the 150 target sentences.
 
+### The merge rules and the fresh audit (pre-registered 2026-11-18, before the rules were applied)
+
+**How the rules were found.** `scripts/evidence/sentence_cuts.py` scanned all 3,708,932 cuts
+between consecutive sentences of kept works, in two passes (`c8b27460` broad patterns, `236bafce`
+narrowed rules), with 40 seeded examples of each pattern. Every pattern is 5 to 12 times more
+common per cut in the 1950s than in the 2020s, so wrong cuts gather where OCR damage does. A
+pattern became a rule only if its examples were nearly all wrong cuts.
+
+**The rules** (`corpus/sentence_view.py`) join two consecutive sentences of a kept work, neither
+removed, when:
+1. **closing punctuation:** the second starts with *, ; : ) ] }* (1,223 cuts in the scan);
+2. **a period:** the second starts with *.* (13,029);
+3. **spaced dots:** the first ends with spaced dots (*. .*) and the second starts lowercase (part
+   of 4,857);
+4. **a list number:** the first ends with a list number after a colon or semicolon, not after a
+   digit (*were: 1.*, *;(2)*; 4,633);
+5. **a function word:** the first ends with a word such as *the*, *of*, *and* or *a*, with no
+   punctuation after it (106);
+6. **inside brackets:** the first leaves a bracket open and the second closes one it never opened
+   (2,501);
+7. **an abbreviation that never ends a sentence:** *ed., eds., trans., tr., cf., e.g., i.e.,
+   viz., vs., esp., Univ., Dept., Dr., Prof., Mr., Mrs.* in their usual case;
+8. **a reference abbreviation and a number:** *p., pp., vol., vols., ch., chap., no., nos., fig.,
+   figs., eq., ref., refs., sec.* followed by a digit, a Roman numeral or a bracket, and *St.*
+   followed by a capital;
+9. **no letters:** a row without letters joins the row before it (the first row joins the next).
+
+Left out because their examples also caught real sentence ends: *etc.*, *et al.*, *Jr.*, *Inc.*,
+*Co.*, *sec* as seconds, all-capital acronyms (*CA.*, *NO.*, *IE.*), and a second sentence that
+merely starts lowercase. The rules catch 6 of the author's 7 wrong cuts; the seventh, a stray OCR
+period before a capital, looks like a sentence end to any rule.
+
+A joined sentence takes the language and confidence of its longest part. The view gains a column,
+`merge_rules`, listing the rule of each join, and its sentence numbers count joined sentences.
+
+**The fresh audit.**
+- **The judges' prompt** now says that a heading glued to a sentence is not an error, and covers
+  a third kind of item, a joined cut.
+- **Recalibration:** 30 abstracts drawn fresh from the new view (seed 20261201), the author
+  judging blind. The agents' verdicts stand if they agree with the author on at least 27, with
+  agreement defined as before (same wrong cuts, same sentences holding a missed break). Otherwise
+  the author judges the three samples below.
+- **Cut precision:** 50 new abstracts (seed 20261202), drawn as before, apart from the
+  recalibration set. Bar: at least 98%.
+- **Joined cuts:** 80 joins drawn from kept works (seed 20261203), each shown with its two parts.
+  A join is wrong when the two parts are two sentences. Bar: at most 2 wrong. At a true rate of
+  1% this passes 95% of the time; at 7%, about 8%.
+- **Boundaries:** 150 new target sentences (seed 20261204), drawn and judged as before. Bar: at
+  most 5 wrong.
+- The agents judge the recalibration abstracts mixed in with the precision sample, so they cannot
+  tell them apart.
+
 ## Results
 
 To be written after the build and the audit.
