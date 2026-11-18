@@ -14,7 +14,8 @@ against that:
   word count is R_B's plus the words written into it, and no merged pair holds a word of the
   table. Held-out words are counted, never printed.
 - **Straddles:** merged pairs with one token inside a removed range, in kept works.
-- **Reconciliation:** merges and one-token rewrites in kept works against the builder's counts.
+- **Reconciliation:** merges and one-token rewrites in kept works against the builder's counts
+  of the audited map's forms.
 - **Spot check:** 80 changed entries in kept works, drawn by the smallest sha256 of (seed, work
   id, start), with R_B's and the new entries around them and the text near the token. The items
   quote corpus text, so they stay out of git; the key (blind id to work, start and kind) does not.
@@ -297,7 +298,12 @@ def main() -> None:
         "accented" if has_accent(token_text(texts.get(work_id), start)) else "not_accented"
         for work_id, start in not_applied
     )
-    built = dict(pl.read_parquet(proposal_path).select("form", "form_count").iter_rows())
+    mapped = set(compounds.one_token) | {" ".join(pair) for pair in compounds.spaced}
+    built = {
+        form: count
+        for form, count in pl.read_parquet(proposal_path).select("form", "form_count").iter_rows()
+        if form in mapped
+    }
     merged, rewritten = total("merged_forms"), total("rewritten_forms")
     bar = {
         "alignment": counts["works_misaligned"] == 0
