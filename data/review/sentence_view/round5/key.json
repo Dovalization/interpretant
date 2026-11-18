@@ -1,0 +1,1382 @@
+{
+ "S000": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4248201201",
+  "decade": 1980,
+  "sentence_number": 2
+ },
+ "S001": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W108819547",
+  "decade": 1990,
+  "sentence_number": 6
+ },
+ "S002": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4388246247",
+  "decade": 1990,
+  "sentence_number": 3
+ },
+ "S003": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2029039199",
+  "decade": 1990,
+  "sentence_number": 4
+ },
+ "S004": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1593863122",
+  "decade": 2000,
+  "sentence_number": 1
+ },
+ "S005": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4237739577",
+  "decade": 1990,
+  "sentence_number": 6
+ },
+ "S006": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2026757310",
+  "decade": 2000,
+  "sentence_number": 3
+ },
+ "S007": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2012264835",
+  "decade": 1960,
+  "sentence_number": 3
+ },
+ "S008": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1970595003",
+  "decade": 1980,
+  "sentence_number": 2
+ },
+ "S009": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W3195360474",
+  "decade": 2020,
+  "sentence_number": 8
+ },
+ "S010": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2089163920",
+  "decade": 2000,
+  "sentence_number": 3
+ },
+ "S011": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4406908780",
+  "decade": 1950,
+  "sentence_number": 1
+ },
+ "S012": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4205887994",
+  "decade": 1960,
+  "sentence_number": 4
+ },
+ "S013": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1493291218",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "S014": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W3206478467",
+  "decade": 2020,
+  "sentence_number": 3
+ },
+ "S015": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1849215389",
+  "decade": 1970,
+  "sentence_number": 4
+ },
+ "S016": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2036777717",
+  "decade": 2010,
+  "sentence_number": 8
+ },
+ "S017": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W46396430",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "S018": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W94511659",
+  "decade": 1950,
+  "sentence_number": 5
+ },
+ "S019": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2061074815",
+  "decade": 1990,
+  "sentence_number": 1
+ },
+ "S020": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2071570375",
+  "decade": 1980,
+  "sentence_number": 3
+ },
+ "S021": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2085006582",
+  "decade": 1970,
+  "sentence_number": 3
+ },
+ "S022": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2018957675",
+  "decade": 1960,
+  "sentence_number": 3
+ },
+ "S023": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2109729196",
+  "decade": 1970,
+  "sentence_number": 1
+ },
+ "S024": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2512947881",
+  "decade": 2010,
+  "sentence_number": 3
+ },
+ "S025": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2066358185",
+  "decade": 1980,
+  "sentence_number": 6
+ },
+ "S026": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2023668640",
+  "decade": 1980,
+  "sentence_number": 7
+ },
+ "S027": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2309998332",
+  "decade": 2010,
+  "sentence_number": 4
+ },
+ "S028": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2036604615",
+  "decade": 1970,
+  "sentence_number": 5
+ },
+ "S029": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2051699386",
+  "decade": 1970,
+  "sentence_number": 5
+ },
+ "S030": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2626473161",
+  "decade": 1980,
+  "sentence_number": 5
+ },
+ "S031": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4252986160",
+  "decade": 1980,
+  "sentence_number": 30
+ },
+ "S032": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2038370531",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "S033": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4404931382",
+  "decade": 2020,
+  "sentence_number": 12
+ },
+ "S034": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2023505507",
+  "decade": 1970,
+  "sentence_number": 1
+ },
+ "S035": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4416605587",
+  "decade": 2020,
+  "sentence_number": 3
+ },
+ "S036": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W7217837764",
+  "decade": 1990,
+  "sentence_number": 1
+ },
+ "S037": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1003910663",
+  "decade": 1980,
+  "sentence_number": 5
+ },
+ "S038": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W3000014344",
+  "decade": 1960,
+  "sentence_number": 3
+ },
+ "S039": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1974439680",
+  "decade": 1980,
+  "sentence_number": 1
+ },
+ "S040": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W138499553",
+  "decade": 1990,
+  "sentence_number": 3
+ },
+ "S041": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2314571996",
+  "decade": 1950,
+  "sentence_number": 23
+ },
+ "S042": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W17037777",
+  "decade": 1970,
+  "sentence_number": 3
+ },
+ "S043": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2317904609",
+  "decade": 1970,
+  "sentence_number": 2
+ },
+ "S044": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W7214163396",
+  "decade": 2020,
+  "sentence_number": 9
+ },
+ "S045": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2095365648",
+  "decade": 1960,
+  "sentence_number": 3
+ },
+ "S046": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1993138363",
+  "decade": 1970,
+  "sentence_number": 2
+ },
+ "S047": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2473207798",
+  "decade": 1990,
+  "sentence_number": 15
+ },
+ "S048": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1976356883",
+  "decade": 1960,
+  "sentence_number": 2
+ },
+ "S049": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2047852309",
+  "decade": 1960,
+  "sentence_number": 5
+ },
+ "S050": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2085933887",
+  "decade": 1970,
+  "sentence_number": 2
+ },
+ "S051": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4241966673",
+  "decade": 1990,
+  "sentence_number": 4
+ },
+ "S052": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2113928781",
+  "decade": 2000,
+  "sentence_number": 7
+ },
+ "S053": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2052941903",
+  "decade": 1960,
+  "sentence_number": 2
+ },
+ "S054": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2327488171",
+  "decade": 1980,
+  "sentence_number": 1
+ },
+ "S055": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2486243814",
+  "decade": 2010,
+  "sentence_number": 6
+ },
+ "S056": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W7165480869",
+  "decade": 2020,
+  "sentence_number": 9
+ },
+ "S057": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2070784404",
+  "decade": 1990,
+  "sentence_number": 14
+ },
+ "S058": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1479998324",
+  "decade": 2000,
+  "sentence_number": 22
+ },
+ "S059": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2007588466",
+  "decade": 1990,
+  "sentence_number": 5
+ },
+ "S060": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W3087052406",
+  "decade": 1980,
+  "sentence_number": 11
+ },
+ "S061": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2040280780",
+  "decade": 1990,
+  "sentence_number": 1
+ },
+ "S062": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2039744511",
+  "decade": 1970,
+  "sentence_number": 9
+ },
+ "S063": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2071263260",
+  "decade": 1980,
+  "sentence_number": 1
+ },
+ "S064": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W176543985",
+  "decade": 1990,
+  "sentence_number": 3
+ },
+ "S065": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2007790601",
+  "decade": 1980,
+  "sentence_number": 33
+ },
+ "S066": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W4410396060",
+  "decade": 2020,
+  "sentence_number": 4
+ },
+ "S067": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2141045044",
+  "decade": 1960,
+  "sentence_number": 1
+ },
+ "S068": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W3102896941",
+  "decade": 1980,
+  "sentence_number": 2
+ },
+ "S069": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2592625379",
+  "decade": 1950,
+  "sentence_number": 15
+ },
+ "S070": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1993603947",
+  "decade": 1980,
+  "sentence_number": 4
+ },
+ "S071": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2614117841",
+  "decade": 1980,
+  "sentence_number": 22
+ },
+ "S072": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1802099963",
+  "decade": 2000,
+  "sentence_number": 6
+ },
+ "S073": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W1966262816",
+  "decade": 1990,
+  "sentence_number": 3
+ },
+ "S074": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2152801638",
+  "decade": 1990,
+  "sentence_number": 5
+ },
+ "S075": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2064612156",
+  "decade": 2010,
+  "sentence_number": 4
+ },
+ "S076": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2046173585",
+  "decade": 2010,
+  "sentence_number": 6
+ },
+ "S077": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W7140460965",
+  "decade": 2020,
+  "sentence_number": 2
+ },
+ "S078": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W2074417667",
+  "decade": 1990,
+  "sentence_number": 1
+ },
+ "S079": {
+  "set": "splits",
+  "work_id": "https://openalex.org/W3080646814",
+  "decade": 2020,
+  "sentence_number": 6
+ },
+ "T000": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2035630636",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T001": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2746801147",
+  "decade": 1980,
+  "sentence_number": 0
+ },
+ "T002": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2043508514",
+  "decade": 1990,
+  "sentence_number": 1
+ },
+ "T003": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2491742978",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T004": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2315922106",
+  "decade": 2010,
+  "sentence_number": 3
+ },
+ "T005": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4401152133",
+  "decade": 2020,
+  "sentence_number": 0
+ },
+ "T006": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4316338838",
+  "decade": 2020,
+  "sentence_number": 2
+ },
+ "T007": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7172517630",
+  "decade": 2020,
+  "sentence_number": 9
+ },
+ "T008": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1975582568",
+  "decade": 1970,
+  "sentence_number": 0
+ },
+ "T009": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2009127446",
+  "decade": 1980,
+  "sentence_number": 2
+ },
+ "T010": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7118253995",
+  "decade": 2020,
+  "sentence_number": 1
+ },
+ "T011": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2023289174",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T012": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2575018051",
+  "decade": 2010,
+  "sentence_number": 0
+ },
+ "T013": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2040605836",
+  "decade": 2010,
+  "sentence_number": 1
+ },
+ "T014": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2742558588",
+  "decade": 2010,
+  "sentence_number": 3
+ },
+ "T015": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4291248335",
+  "decade": 2010,
+  "sentence_number": 3
+ },
+ "T016": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2324625756",
+  "decade": 1980,
+  "sentence_number": 7
+ },
+ "T017": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2164486606",
+  "decade": 2000,
+  "sentence_number": 2
+ },
+ "T018": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2625309679",
+  "decade": 1950,
+  "sentence_number": 27
+ },
+ "T019": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2090152053",
+  "decade": 2000,
+  "sentence_number": 1
+ },
+ "T020": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W3000645392",
+  "decade": 2000,
+  "sentence_number": 8
+ },
+ "T021": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W3135661718",
+  "decade": 2020,
+  "sentence_number": 2
+ },
+ "T022": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2778661163",
+  "decade": 2010,
+  "sentence_number": 6
+ },
+ "T023": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1535308931",
+  "decade": 1980,
+  "sentence_number": 9
+ },
+ "T024": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2061712160",
+  "decade": 1980,
+  "sentence_number": 3
+ },
+ "T025": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2042991160",
+  "decade": 1950,
+  "sentence_number": 3
+ },
+ "T026": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W590765577",
+  "decade": 1990,
+  "sentence_number": 3
+ },
+ "T027": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W3176275026",
+  "decade": 2020,
+  "sentence_number": 2
+ },
+ "T028": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2767117652",
+  "decade": 2010,
+  "sentence_number": 6
+ },
+ "T029": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2032882033",
+  "decade": 1980,
+  "sentence_number": 2
+ },
+ "T030": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4410502888",
+  "decade": 2020,
+  "sentence_number": 6
+ },
+ "T031": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2393798271",
+  "decade": 2000,
+  "sentence_number": 1
+ },
+ "T032": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2044400279",
+  "decade": 1980,
+  "sentence_number": 2
+ },
+ "T033": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7215992699",
+  "decade": 2020,
+  "sentence_number": 39
+ },
+ "T034": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1983807210",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T035": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2478025228",
+  "decade": 2010,
+  "sentence_number": 0
+ },
+ "T036": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1781433246",
+  "decade": 1990,
+  "sentence_number": 4
+ },
+ "T037": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2361791220",
+  "decade": 2000,
+  "sentence_number": 2
+ },
+ "T038": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1820941567",
+  "decade": 2000,
+  "sentence_number": 9
+ },
+ "T039": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1537800814",
+  "decade": 2000,
+  "sentence_number": 4
+ },
+ "T040": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2010288650",
+  "decade": 1980,
+  "sentence_number": 4
+ },
+ "T041": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2942502000",
+  "decade": 2010,
+  "sentence_number": 0
+ },
+ "T042": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W855932776",
+  "decade": 1970,
+  "sentence_number": 8
+ },
+ "T043": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1847401883",
+  "decade": 2000,
+  "sentence_number": 4
+ },
+ "T044": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2066149233",
+  "decade": 2000,
+  "sentence_number": 1
+ },
+ "T045": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W965432",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "T046": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2128676811",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "T047": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7221017965",
+  "decade": 2020,
+  "sentence_number": 0
+ },
+ "T048": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2003922467",
+  "decade": 2000,
+  "sentence_number": 1
+ },
+ "T049": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2156551507",
+  "decade": 2010,
+  "sentence_number": 48
+ },
+ "T050": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2625845258",
+  "decade": 2010,
+  "sentence_number": 0
+ },
+ "T051": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7223603609",
+  "decade": 1960,
+  "sentence_number": 18
+ },
+ "T052": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4391643034",
+  "decade": 2020,
+  "sentence_number": 66
+ },
+ "T053": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2125031227",
+  "decade": 2000,
+  "sentence_number": 3
+ },
+ "T054": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1969318049",
+  "decade": 2010,
+  "sentence_number": 0
+ },
+ "T055": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2012686974",
+  "decade": 1980,
+  "sentence_number": 1
+ },
+ "T056": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2024469950",
+  "decade": 2000,
+  "sentence_number": 1
+ },
+ "T057": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2052751703",
+  "decade": 1970,
+  "sentence_number": 1
+ },
+ "T058": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2792127339",
+  "decade": 2010,
+  "sentence_number": 5
+ },
+ "T059": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W201760231",
+  "decade": 1980,
+  "sentence_number": 1
+ },
+ "T060": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2024454225",
+  "decade": 2000,
+  "sentence_number": 0
+ },
+ "T061": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4317745658",
+  "decade": 2020,
+  "sentence_number": 2
+ },
+ "T062": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1804794091",
+  "decade": 1980,
+  "sentence_number": 0
+ },
+ "T063": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2063265623",
+  "decade": 1980,
+  "sentence_number": 5
+ },
+ "T064": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2006464886",
+  "decade": 1960,
+  "sentence_number": 11
+ },
+ "T065": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4389296605",
+  "decade": 2020,
+  "sentence_number": 0
+ },
+ "T066": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1563605622",
+  "decade": 1980,
+  "sentence_number": 11
+ },
+ "T067": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2249693142",
+  "decade": 2010,
+  "sentence_number": 3
+ },
+ "T068": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7204303000",
+  "decade": 1950,
+  "sentence_number": 2
+ },
+ "T069": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2314343206",
+  "decade": 1960,
+  "sentence_number": 1
+ },
+ "T070": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2078041711",
+  "decade": 1990,
+  "sentence_number": 11
+ },
+ "T071": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2126035918",
+  "decade": 1990,
+  "sentence_number": 0
+ },
+ "T072": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4389383912",
+  "decade": 2020,
+  "sentence_number": 6
+ },
+ "T073": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2053807077",
+  "decade": 1990,
+  "sentence_number": 1
+ },
+ "T074": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2093157967",
+  "decade": 1960,
+  "sentence_number": 4
+ },
+ "T075": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2035569178",
+  "decade": 1960,
+  "sentence_number": 2
+ },
+ "T076": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2171127113",
+  "decade": 2010,
+  "sentence_number": 0
+ },
+ "T077": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1998418746",
+  "decade": 1970,
+  "sentence_number": 1
+ },
+ "T078": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2348203943",
+  "decade": 2010,
+  "sentence_number": 4
+ },
+ "T079": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4394850297",
+  "decade": 2020,
+  "sentence_number": 12
+ },
+ "T080": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2133630544",
+  "decade": 1980,
+  "sentence_number": 7
+ },
+ "T081": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2376945212",
+  "decade": 2000,
+  "sentence_number": 2
+ },
+ "T082": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W3115948817",
+  "decade": 2020,
+  "sentence_number": 2
+ },
+ "T083": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4312088487",
+  "decade": 2020,
+  "sentence_number": 2
+ },
+ "T084": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2948503569",
+  "decade": 1970,
+  "sentence_number": 3
+ },
+ "T085": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2991591717",
+  "decade": 2010,
+  "sentence_number": 6
+ },
+ "T086": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1989497011",
+  "decade": 1960,
+  "sentence_number": 4
+ },
+ "T087": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7131854870",
+  "decade": 2020,
+  "sentence_number": 3
+ },
+ "T088": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2016226445",
+  "decade": 1980,
+  "sentence_number": 6
+ },
+ "T089": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W60043063",
+  "decade": 2020,
+  "sentence_number": 0
+ },
+ "T090": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W752461747",
+  "decade": 1990,
+  "sentence_number": 0
+ },
+ "T091": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W334562318",
+  "decade": 1980,
+  "sentence_number": 3
+ },
+ "T092": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2895444900",
+  "decade": 2010,
+  "sentence_number": 0
+ },
+ "T093": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2562562248",
+  "decade": 2010,
+  "sentence_number": 9
+ },
+ "T094": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2152499340",
+  "decade": 1960,
+  "sentence_number": 3
+ },
+ "T095": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W562818419",
+  "decade": 1980,
+  "sentence_number": 1
+ },
+ "T096": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2320921219",
+  "decade": 2000,
+  "sentence_number": 6
+ },
+ "T097": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2181927560",
+  "decade": 1980,
+  "sentence_number": 2
+ },
+ "T098": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7160399550",
+  "decade": 2020,
+  "sentence_number": 0
+ },
+ "T099": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2143630918",
+  "decade": 1970,
+  "sentence_number": 6
+ },
+ "T100": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4408860856",
+  "decade": 2020,
+  "sentence_number": 4
+ },
+ "T101": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2392411993",
+  "decade": 2000,
+  "sentence_number": 2
+ },
+ "T102": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2271947865",
+  "decade": 1970,
+  "sentence_number": 12
+ },
+ "T103": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2033938174",
+  "decade": 2010,
+  "sentence_number": 3
+ },
+ "T104": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1535472637",
+  "decade": 2010,
+  "sentence_number": 2
+ },
+ "T105": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1553600379",
+  "decade": 1990,
+  "sentence_number": 15
+ },
+ "T106": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1895457362",
+  "decade": 1990,
+  "sentence_number": 8
+ },
+ "T107": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2132343601",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T108": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4230602607",
+  "decade": 2000,
+  "sentence_number": 3
+ },
+ "T109": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2755867571",
+  "decade": 2010,
+  "sentence_number": 2
+ },
+ "T110": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2154487742",
+  "decade": 2000,
+  "sentence_number": 0
+ },
+ "T111": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1780359946",
+  "decade": 1960,
+  "sentence_number": 2
+ },
+ "T112": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2097728333",
+  "decade": 1990,
+  "sentence_number": 3
+ },
+ "T113": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W20969415",
+  "decade": 1990,
+  "sentence_number": 7
+ },
+ "T114": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2018990890",
+  "decade": 1970,
+  "sentence_number": 4
+ },
+ "T115": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2326879670",
+  "decade": 1950,
+  "sentence_number": 1
+ },
+ "T116": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2460225697",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "T117": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W95950311",
+  "decade": 1970,
+  "sentence_number": 7
+ },
+ "T118": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1996593908",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "T119": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1756131902",
+  "decade": 1990,
+  "sentence_number": 2
+ },
+ "T120": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1043462027",
+  "decade": 1970,
+  "sentence_number": 1
+ },
+ "T121": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1991382922",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T122": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2106409243",
+  "decade": 1970,
+  "sentence_number": 0
+ },
+ "T123": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2025189804",
+  "decade": 1990,
+  "sentence_number": 1
+ },
+ "T124": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W284233951",
+  "decade": 1970,
+  "sentence_number": 1
+ },
+ "T125": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2106219209",
+  "decade": 1990,
+  "sentence_number": 6
+ },
+ "T126": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W7162014153",
+  "decade": 1960,
+  "sentence_number": 1
+ },
+ "T127": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1513666103",
+  "decade": 1970,
+  "sentence_number": 2
+ },
+ "T128": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2049070842",
+  "decade": 1950,
+  "sentence_number": 6
+ },
+ "T129": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2054941857",
+  "decade": 1970,
+  "sentence_number": 3
+ },
+ "T130": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2130075554",
+  "decade": 1970,
+  "sentence_number": 3
+ },
+ "T131": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2013768214",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T132": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2328311370",
+  "decade": 1960,
+  "sentence_number": 1
+ },
+ "T133": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2032835806",
+  "decade": 1950,
+  "sentence_number": 8
+ },
+ "T134": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2321930214",
+  "decade": 1960,
+  "sentence_number": 0
+ },
+ "T135": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2037191018",
+  "decade": 1970,
+  "sentence_number": 16
+ },
+ "T136": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2155780799",
+  "decade": 1970,
+  "sentence_number": 4
+ },
+ "T137": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2126315049",
+  "decade": 1970,
+  "sentence_number": 15
+ },
+ "T138": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4206294670",
+  "decade": 1950,
+  "sentence_number": 9
+ },
+ "T139": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2070597661",
+  "decade": 1950,
+  "sentence_number": 1
+ },
+ "T140": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4243749837",
+  "decade": 1950,
+  "sentence_number": 1
+ },
+ "T141": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W946361059",
+  "decade": 1950,
+  "sentence_number": 3
+ },
+ "T142": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2063414837",
+  "decade": 1950,
+  "sentence_number": 0
+ },
+ "T143": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2042581443",
+  "decade": 1950,
+  "sentence_number": 16
+ },
+ "T144": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2801618468",
+  "decade": 1950,
+  "sentence_number": 3
+ },
+ "T145": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2320864427",
+  "decade": 1950,
+  "sentence_number": 4
+ },
+ "T146": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4248282614",
+  "decade": 1950,
+  "sentence_number": 14
+ },
+ "T147": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W1982570764",
+  "decade": 1950,
+  "sentence_number": 1
+ },
+ "T148": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W4299359911",
+  "decade": 1950,
+  "sentence_number": 7
+ },
+ "T149": {
+  "set": "boundaries",
+  "work_id": "https://openalex.org/W2023363382",
+  "decade": 1950,
+  "sentence_number": 3
+ }
+}
