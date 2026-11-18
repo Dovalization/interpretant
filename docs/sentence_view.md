@@ -238,6 +238,29 @@ would have been left alone. Real breaks after those letters are given up (*in 3D
 cuts fail again, the split rule is dropped** and the view is rebuilt with the round-3 joins alone;
 its boundaries are then those of round 2's rules, judged once more on a fresh sample.
 
+### The recalibration failed by one; the rule settled, a second recalibration (2026-11-18)
+
+**Result.** The agents agree with the author on 26 of the 30 recalibration abstracts, against 27
+needed (`round2/verdicts/author_recalibration.json`; scorer code `840ff807` and later).
+- Two disagreements came from a point the prompt never settled. In B077 the author marked breaks
+  at bullets (•) and before a heading standing between two sentences (*imagery: Scientific and
+  Microscopic Subjects Several slides*), which the agents left alone; in B061, a folder caption,
+  the agents marked a cut after *Conv.* that the author did not.
+- Two were ordinary disagreements in prose: in B020 the author marked two wrong cuts the agents
+  missed; in B071 the agents marked a missed break the author did not.
+
+**The author's decisions.**
+- **Bullets and headings between sentences start new units.** Each bullet item, and a heading
+  standing between two sentences, starts a new unit, so a row holding several is a missed break. A
+  heading glued to the start of a sentence stays fine. The prompt says so.
+- **A second recalibration**, the same move as for the spellings: 30 fresh abstracts from the
+  round-5 view (seed 20261241; 3 per decade, then the 6 smallest keys among the rest), judged by
+  the author blind. The agents re-judge, under the settled prompt, these 30 shuffled together with
+  round 3's 50 precision abstracts (seed 20261246), and round 3's 80 joins, round 5's 80 splits
+  and round 5's 150 target sentences; the bars are unchanged.
+- **No third try.** If the agents agree with the author on fewer than 27 of the 30, the author
+  judges the four samples.
+
 ## Results
 
 To be written after the build and the audit.

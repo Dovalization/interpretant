@@ -6,10 +6,14 @@ the cuts fall, not the text itself: spelling, spacing and noise do not matter.
 
 Rules for every kind of item:
 
-- **Headings are not errors.** A heading glued to the start of a sentence (*Abstract*, *ABSTRACT*,
-  *Introduction*, *Background:*, *Methods:*, *Results:*, *Conclusions:*) is fine: do not mark a
-  break after it, and do not count a sentence that starts with one as wrong. A heading left as its
-  own row is fine too.
+- **Headings glued to the start of a sentence are not errors.** A heading glued to the start of a
+  sentence (*Abstract*, *ABSTRACT*, *Introduction*, *Background:*, *Methods:*, *Results:*,
+  *Conclusions:*) is fine: do not mark a break after it, and do not count a sentence that starts
+  with one as wrong. A heading left as its own row is fine too.
+- **Bullets and headings between sentences start new units.** Each bullet item (•, –, *) starts a
+  new unit, and so does a heading standing between two sentences (as in *two categories of
+  imagery: Scientific Subjects Several slides depict*, where *Scientific Subjects* is a heading).
+  A row holding several such units has a missed break at the start of each further one.
 - **Text that is not prose,** such as reference lists, tables, contents or catalogue lines: mark
   only cuts that are plainly wrong.
 - **OCR noise and other languages.** A cut caused by OCR damage is judged like any other: a stray
