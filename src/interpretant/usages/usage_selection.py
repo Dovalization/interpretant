@@ -28,9 +28,16 @@ NAME_LABELS = frozenset(
 )  # fmt: skip
 
 
-def is_in_scope(pos: str, word: Word, entity: str | None, name_labels: Collection[str]) -> bool:
-    """Whether a usage has a part of speech its word allows and sits inside no name."""
-    return pos in word.pos and entity not in name_labels
+def is_in_scope(
+    pos: str, word: Word, entity: str | None, name_labels: Collection[str], *, hyphen_part: bool
+) -> bool:
+    """Whether a usage has a part of speech its word allows and sits inside no name.
+
+    A target that is one part of a hyphenated word is in scope whatever that word's tag (agenda
+    4.2: compounds are in scope by default): the tagger tags the whole word, so *attention* in
+    *attention-based* would read as an adjective.
+    """
+    return (hyphen_part or pos in word.pos) and entity not in name_labels
 
 
 def mark_drawn(usages: pl.DataFrame) -> pl.DataFrame:

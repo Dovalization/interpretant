@@ -249,7 +249,13 @@ def _usage_rows(
                 sentence.language,
                 sentence.confidence,
                 sentence.exclusion,
-                is_in_scope(head.pos_, words[mention.word], entity, settings.name_labels),
+                is_in_scope(
+                    head.pos_,
+                    words[mention.word],
+                    entity,
+                    settings.name_labels,
+                    hyphen_part=mention.position is not None,
+                ),
                 False,
                 settings.model,
             )

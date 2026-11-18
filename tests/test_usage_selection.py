@@ -35,10 +35,15 @@ def drawn(rows: list[dict[str, object]]) -> set[tuple[str, str, str]]:
 
 
 def test_is_in_scope_needs_the_part_of_speech_and_no_name() -> None:
-    assert is_in_scope("NOUN", MEDIUM, None, NAME_LABELS)
-    assert not is_in_scope("ADJ", MEDIUM, None, NAME_LABELS)
-    assert not is_in_scope("PROPN", MEDIUM, "ORG", NAME_LABELS)
-    assert is_in_scope("NOUN", MEDIUM, "DATE", NAME_LABELS)
+    assert is_in_scope("NOUN", MEDIUM, None, NAME_LABELS, hyphen_part=False)
+    assert not is_in_scope("ADJ", MEDIUM, None, NAME_LABELS, hyphen_part=False)
+    assert not is_in_scope("PROPN", MEDIUM, "ORG", NAME_LABELS, hyphen_part=False)
+    assert is_in_scope("NOUN", MEDIUM, "DATE", NAME_LABELS, hyphen_part=False)
+
+
+def test_is_in_scope_keeps_a_hyphen_part_whatever_its_words_tag_but_not_in_a_name() -> None:
+    assert is_in_scope("ADJ", MEDIUM, None, NAME_LABELS, hyphen_part=True)
+    assert not is_in_scope("ADJ", MEDIUM, "ORG", NAME_LABELS, hyphen_part=True)
 
 
 def test_mark_drawn_draws_one_eligible_usage_per_work_and_word() -> None:
