@@ -1,6 +1,1978 @@
-# The compound map (decision agenda 3.4; phase step 3; docs/compounds.md): form<TAB>standard<TAB>source.
-# Each spelling of a two-part compound is written as its family's most frequent form over kept
-# works (source frequency), or as a word-table lemma (source word_table). A form with a space is
-# a spaced pair, merged only as a noun-noun compound; any other form is one token, rewritten whole.
-# Empty until the audit passes. Built by scripts/review/score_compounds.py; do not edit by hand.
+# The compound map (decision agenda 3.4; phase step 3; docs/compounds.md).
+# Columns form<TAB>standard<TAB>source. Each spelling of a two-part compound is written as its
+# family's most frequent form over kept works (source frequency), or as a word-table lemma (source
+# word_table). A form with a space is a spaced pair, merged only as a noun-noun compound; any other
+# form is one token, rewritten whole.
+# Built by scripts/review/score_compounds.py from the audited proposal; do not edit by hand.
 form	standard	source
+a-priori	apriori	frequency
+aanat	aa-nat	frequency
+action-effect	action effect	frequency
+action-research	action research	frequency
+adhoc	ad-hoc	frequency
+adult-child	adult child	frequency
+adultlike	adult-like	frequency
+african-americans	african americans	frequency
+afro-asiatic	afroasiatic	frequency
+after-care	aftercare	frequency
+after-discharge	afterdischarge	frequency
+after-effect	aftereffect	frequency
+after-hyperpolarization	afterhyperpolarization	frequency
+afterimage	after-image	frequency
+afterschool	after-school	frequency
+age-group	age group	frequency
+agenda building	agenda-building	frequency
+agenda setting	agenda-setting	frequency
+air flow	airflow	frequency
+air time	airtime	frequency
+air-conduction	air conduction	frequency
+al jazeera	al-jazeera	frequency
+al qaeda	al-qaeda	frequency
+alfarabi	al-farabi	frequency
+alpha beta	alpha-beta	frequency
+alpha-band	alpha band	frequency
+alpha-numeric	alphanumeric	frequency
+american-english	american english	frequency
+amino-acid	amino acid	frequency
+amyloid beta	amyloid-beta	frequency
+anti-anxiety	antianxiety	frequency
+anti-cancer	anticancer	frequency
+anti-depressant	antidepressant	frequency
+anti-oxidant	antioxidant	frequency
+anti-panic	antipanic	frequency
+anti-reductionism	antireductionism	frequency
+anti-saccade	antisaccade	frequency
+anti-slavery	antislavery	frequency
+anti-social	antisocial	frequency
+antiaging	anti-aging	frequency
+antiapoptotic	anti-apoptotic	frequency
+antiblack	anti-black	frequency
+anticolonial	anti-colonial	frequency
+anticommunism	anti-communism	frequency
+anticommunist	anti-communist	frequency
+anticorruption	anti-corruption	frequency
+antidemocratic	anti-democratic	frequency
+antidoping	anti-doping	frequency
+antinuclear	anti-nuclear	frequency
+antipoverty	anti-poverty	frequency
+antiracism	anti-racism	frequency
+antiracist	anti-racist	frequency
+antirealism	anti-realism	frequency
+antirealist	anti-realist	frequency
+antireductionist	anti-reductionist	frequency
+antisemitic	anti-semitic	frequency
+antisemitism	anti-semitism	frequency
+antiwar	anti-war	frequency
+application-level	application level	frequency
+arginine-vasopressin	arginine vasopressin	frequency
+arginine-vasotocin	arginine vasotocin	frequency
+art work	artwork	frequency
+asia pacific	asia-pacific	frequency
+asylum-seeker	asylum seeker	frequency
+attention-deficit	attention deficit	frequency
+attribute-value	attribute value	frequency
+audio-tape	audiotape	frequency
+audio-taped	audiotaped	frequency
+audio-visual	audiovisual	frequency
+audiolingual	audio-lingual	frequency
+autism-spectrum	autism spectrum	frequency
+auto-associative	autoassociative	frequency
+auto-correlation	autocorrelation	frequency
+auto-encoder	autoencoder	frequency
+auto-ethnographic	autoethnographic	frequency
+auto-regressive	autoregressive	frequency
+axo-dendritic	axodendritic	frequency
+axo-somatic	axosomatic	frequency
+b-cell	b cell	frequency
+back-channel	backchannel	frequency
+back-end	backend	frequency
+back-ground	background	frequency
+back-propagation	backpropagation	frequency
+back-up	backup	frequency
+band pass	bandpass	frequency
+band width	bandwidth	frequency
+band-pass	bandpass	frequency
+bandlimited	band-limited	frequency
+bar code	barcode	frequency
+bar-press	bar press	frequency
+base line	baseline	frequency
+base-line	baseline	frequency
+base-rate	base rate	frequency
+baseform	base form	frequency
+beam-forming	beamforming	frequency
+bed rest	bedrest	frequency
+bed time	bedtime	frequency
+belief-system	belief system	frequency
+bender gestalt	bender-gestalt	frequency
+best-seller	bestseller	frequency
+bestselling	best-selling	frequency
+beta amyloid	beta-amyloid	frequency
+beta app	betaapp	frequency
+beta protein	beta-protein	frequency
+beta receptor	beta-receptor	frequency
+beta-peptide	beta peptide	frequency
+bi-directional	bidirectional	frequency
+bi-lingual	bilingual	frequency
+bi-manual	bimanual	frequency
+bi-modal	bimodal	frequency
+bi-polar	bipolar	frequency
+bi-weekly	biweekly	frequency
+bilevel	bi-level	frequency
+bio-medical	biomedical	frequency
+bio-signal	biosignal	frequency
+birth-order	birth order	frequency
+birthdate	birth date	frequency
+birthrate	birth rate	frequency
+birthweight	birth weight	frequency
+bit-error	bit error	frequency
+bit-rate	bit rate	frequency
+bitrate	bit rate	frequency
+bitstream	bit stream	frequency
+blood brain	blood-brain	frequency
+blood-pressure	blood pressure	frequency
+bloodstream	blood stream	frequency
+body-image	body image	frequency
+body-part	body part	frequency
+body-weight	body weight	frequency
+bodymind	body-mind	frequency
+bone-conduction	bone conduction	frequency
+boundary-crossing	boundary crossing	frequency
+boundary-value	boundary value	frequency
+brain computer	brain-computer	frequency
+brain stem	brainstem	frequency
+brain-imaging	brain imaging	frequency
+brain-stem	brainstem	frequency
+brainwave	brain wave	frequency
+break point	breakpoint	frequency
+break-down	breakdown	frequency
+break-through	breakthrough	frequency
+break-up	breakup	frequency
+breast-feeding	breastfeeding	frequency
+broad-band	broadband	frequency
+building-block	building block	frequency
+buildup	build-up	frequency
+business man	businessman	frequency
+business person	businessperson	frequency
+businesspeople	business people	frequency
+button-press	button press	frequency
+by-law	bylaw	frequency
+by-pass	bypass	frequency
+byproduct	by-product	frequency
+c terminus	c-terminus	frequency
+c-fiber	c fiber	frequency
+capacity-building	capacity building	frequency
+card-sorting	card sorting	frequency
+care giver	caregiver	frequency
+care-giver	caregiver	frequency
+care-giving	caregiving	frequency
+carnegie-mellon	carnegie mellon	frequency
+carry-over	carryover	frequency
+case-base	case base	frequency
+case-marker	case marker	frequency
+case-study	case study	frequency
+catch phrase	catchphrase	frequency
+cathode-ray	cathode ray	frequency
+ceasefire	cease-fire	frequency
+cell-cycle	cell cycle	frequency
+cell-phone	cell phone	frequency
+cell-surface	cell surface	frequency
+cell-type	cell type	frequency
+cellphone	cell phone	frequency
+change-detection	change detection	frequency
+change-point	change point	frequency
+check list	checklist	frequency
+check-list	checklist	frequency
+checkup	check-up	frequency
+chi square	chi-square	frequency
+child rearing	child-rearing	frequency
+child-care	child care	frequency
+childcare	child care	frequency
+childrearing	child-rearing	frequency
+christ church	christchurch	frequency
+cipher text	ciphertext	frequency
+city state	city-state	frequency
+citywide	city-wide	frequency
+class room	classroom	frequency
+class-room	classroom	frequency
+clean-up	cleanup	frequency
+clearcut	clear-cut	frequency
+clearing house	clearinghouse	frequency
+client side	client-side	frequency
+cluster-analysis	cluster analysis	frequency
+co-activation	coactivation	frequency
+co-articulation	coarticulation	frequency
+co-educational	coeducational	frequency
+co-efficient	coefficient	frequency
+co-evolutionary	coevolutionary	frequency
+co-exist	coexist	frequency
+co-existed	coexisted	frequency
+co-existence	coexistence	frequency
+co-existing	coexisting	frequency
+co-expressed	coexpressed	frequency
+co-extensive	coextensive	frequency
+co-factor	cofactor	frequency
+co-localization	colocalization	frequency
+co-localize	colocalize	frequency
+co-localized	colocalized	frequency
+co-morbid	comorbid	frequency
+co-morbidity	comorbidity	frequency
+co-operate	cooperate	frequency
+co-operating	cooperating	frequency
+co-operation	cooperation	frequency
+co-operative	cooperative	frequency
+co-ordinate	coordinate	frequency
+co-ordinated	coordinated	frequency
+co-ordinating	coordinating	frequency
+co-ordination	coordination	frequency
+co-ordinator	coordinator	frequency
+co-processor	coprocessor	frequency
+co-reference	coreference	frequency
+co-variance	covariance	frequency
+co-variation	covariation	frequency
+co-vary	covary	frequency
+coadministration	co-administration	frequency
+coauthor	co-author	frequency
+coauthored	co-authored	frequency
+cochannel	co-channel	frequency
+cocktail-party	cocktail party	frequency
+coculture	co-culture	frequency
+cocultured	co-cultured	frequency
+code book	codebook	frequency
+code mixing	code-mixing	frequency
+code switching	code-switching	frequency
+code word	codeword	frequency
+code-division	code division	frequency
+codesign	co-design	frequency
+codeswitching	code-switching	frequency
+coeditor	co-editor	frequency
+coevolution	co-evolution	frequency
+coevolve	co-evolve	frequency
+coexpression	co-expression	frequency
+cofounder	co-founder	frequency
+college age	college-age	frequency
+college-level	college level	frequency
+color-coding	color coding	frequency
+color-matching	color matching	frequency
+color-naming	color naming	frequency
+color-word	color word	frequency
+colorblind	color-blind	frequency
+colorblindness	color blindness	frequency
+command-line	command line	frequency
+common-sense	commonsense	frequency
+community-building	community building	frequency
+community-level	community level	frequency
+compile time	compile-time	frequency
+computer-vision	computer vision	frequency
+concept-formation	concept formation	frequency
+consensus building	consensus-building	frequency
+content-analysis	content analysis	frequency
+context awareness	context-awareness	frequency
+context sensitivity	context-sensitivity	frequency
+context-dependence	context dependence	frequency
+control-flow	control flow	frequency
+control-group	control group	frequency
+cooccur	co-occur	frequency
+cooccurrence	co-occurrence	frequency
+copresence	co-presence	frequency
+coproduction	co-production	frequency
+coresidence	co-residence	frequency
+corona virus	coronavirus	frequency
+cortico-cortical	corticocortical	frequency
+cortico-striatal	corticostriatal	frequency
+corticotropin releasing	corticotropin-releasing	frequency
+cosleeping	co-sleeping	frequency
+cost benefit	cost-benefit	frequency
+cost effectiveness	cost-effectiveness	frequency
+cost-saving	cost saving	frequency
+counter-argument	counterargument	frequency
+counter-attack	counterattack	frequency
+counter-attitudinal	counterattitudinal	frequency
+counter-balanced	counterbalanced	frequency
+counter-clockwise	counterclockwise	frequency
+counter-culture	counterculture	frequency
+counter-evidence	counterevidence	frequency
+counter-example	counterexample	frequency
+counter-intuitive	counterintuitive	frequency
+counter-measure	countermeasure	frequency
+counter-productive	counterproductive	frequency
+counter-terrorism	counterterrorism	frequency
+counter-transference	countertransference	frequency
+counternarrative	counter-narrative	frequency
+counterrevolutionary	counter-revolutionary	frequency
+countrywide	country-wide	frequency
+county-level	county level	frequency
+course book	coursebook	frequency
+course work	coursework	frequency
+coworker	co-worker	frequency
+crewmember	crew member	frequency
+cross correlation	cross-correlation	frequency
+cross country	cross-country	frequency
+cross culture	cross-culture	frequency
+cross examination	cross-examination	frequency
+cross reference	cross-reference	frequency
+cross section	cross-section	frequency
+cross talk	crosstalk	frequency
+cross validation	cross-validation	frequency
+cross-over	crossover	frequency
+cross-talk	crosstalk	frequency
+crosscorrelation	cross-correlation	frequency
+crosscutting	cross-cutting	frequency
+crosslinguistic	cross-linguistic	frequency
+crosslinguistically	cross-linguistically	frequency
+crosslinking	cross-linking	frequency
+crossmodal	cross-modal	frequency
+crossref	cross ref	frequency
+crowd-sourced	crowdsourced	frequency
+culture fair	culture-fair	frequency
+cut-off	cutoff	frequency
+cutpoint	cut point	frequency
+cyber attack	cyberattack	frequency
+cyber bullying	cyberbullying	frequency
+cyber-attack	cyberattack	frequency
+cyber-bullying	cyberbullying	frequency
+data base	database	frequency
+data set	dataset	frequency
+data-base	database	frequency
+data-collection	data collection	frequency
+data-entry	data entry	frequency
+data-flow	data flow	frequency
+data-gathering	data gathering	frequency
+data-handling	data handling	frequency
+data-mining	data mining	frequency
+data-processing	data processing	frequency
+data-set	dataset	frequency
+data-sharing	data sharing	frequency
+data-structure	data structure	frequency
+databank	data bank	frequency
+datacenter	data center	frequency
+dataflow	data flow	frequency
+dataglove	data glove	frequency
+datapath	data path	frequency
+day time	daytime	frequency
+day-care	day care	frequency
+day-hospital	day hospital	frequency
+day-shift	day shift	frequency
+day-time	daytime	frequency
+daycare	day care	frequency
+daylength	day length	frequency
+dayworker	day worker	frequency
+de-noising	denoising	frequency
+decision making	decision-making	frequency
+decision-maker	decision maker	frequency
+decision-support	decision support	frequency
+decision-tree	decision tree	frequency
+deemphasize	de-emphasize	frequency
+deemphasized	de-emphasized	frequency
+default-mode	default mode	frequency
+dejong	de jong	frequency
+delay-line	delay line	frequency
+delta-receptor	delta receptor	frequency
+design-time	design time	frequency
+desk-top	desktop	frequency
+devries	de vries	frequency
+di erent	dierent	frequency
+digit-symbol	digit symbol	frequency
+direction-finding	direction finding	frequency
+director general	director-general	frequency
+distortion-product	distortion product	frequency
+dorso-ventral	dorsoventral	frequency
+dose response	dose-response	frequency
+dot probe	dot-probe	frequency
+down-regulate	downregulate	frequency
+down-regulated	downregulated	frequency
+down-regulating	downregulating	frequency
+down-regulation	downregulation	frequency
+drop-out	dropout	frequency
+drug seeking	drug-seeking	frequency
+du pont	dupont	frequency
+dubois	du bois	frequency
+duty-cycle	duty cycle	frequency
+dwell-time	dwell time	frequency
+e-health	ehealth	frequency
+e-mail	email	frequency
+e-sport	esport	frequency
+east central	east-central	frequency
+ebook	e-book	frequency
+ecommerce	e-commerce	frequency
+effect-size	effect size	frequency
+eigen value	eigenvalue	frequency
+elearning	e-learning	frequency
+electro-magnetic	electromagnetic	frequency
+electro-mechanical	electromechanical	frequency
+electro-oculogram	electrooculogram	frequency
+electro-oculographic	electrooculographic	frequency
+electro-oculography	electrooculography	frequency
+embedded-figures	embedded figures	frequency
+end plate	end-plate	frequency
+end point	endpoint	frequency
+end state	end-state	frequency
+end-organ	end organ	frequency
+end-point	endpoint	frequency
+end-product	end product	frequency
+endorgan	end organ	frequency
+endplate	end-plate	frequency
+energy-efficiency	energy efficiency	frequency
+energy-saving	energy saving	frequency
+english-learning	english learning	frequency
+englishspeaking	english-speaking	frequency
+entertainment education	entertainment-education	frequency
+entity relationship	entity-relationship	frequency
+entry level	entry-level	frequency
+error-correction	error correction	frequency
+error-rate	error rate	frequency
+etal	et al	frequency
+etcetera	et cetera	frequency
+ethno-cultural	ethnocultural	frequency
+evening-type	evening type	frequency
+every-day	everyday	frequency
+ex-vivo	ex vivo	frequency
+execution-time	execution time	frequency
+expectation maximization	expectation-maximization	frequency
+expert-system	expert system	frequency
+extra-curricular	extracurricular	frequency
+extra-legal	extralegal	frequency
+extra-linguistic	extralinguistic	frequency
+extramental	extra-mental	frequency
+eye ball	eyeball	frequency
+eye blink	eyeblink	frequency
+eye tracking	eye-tracking	frequency
+eye-blink	eyeblink	frequency
+eye-contact	eye contact	frequency
+eye-gaze	eye gaze	frequency
+eye-movement	eye movement	frequency
+eye-opening	eye opening	frequency
+eye-position	eye position	frequency
+eye-tracker	eye tracker	frequency
+f-scale	f scale	frequency
+f-test	f test	frequency
+factor alpha	factor-alpha	frequency
+fairytale	fairy tale	frequency
+family work	family-work	frequency
+family-resemblance	family resemblance	frequency
+fanfiction	fan fiction	frequency
+farm worker	farmworker	frequency
+fault-tolerance	fault tolerance	frequency
+feature-extraction	feature extraction	frequency
+feature-level	feature level	frequency
+feed-back	feedback	word_table
+feed-forward	feedforward	frequency
+fiber-optic	fiber optic	frequency
+fiberoptic	fiber optic	frequency
+field programmable	field-programmable	frequency
+field work	fieldwork	frequency
+field-dependence	field dependence	frequency
+field-independence	field independence	frequency
+field-work	fieldwork	frequency
+fieldnote	field note	frequency
+fieldworker	field worker	frequency
+filter-bank	filter bank	frequency
+filterbank	filter bank	frequency
+finger spelling	fingerspelling	frequency
+finger tip	fingertip	frequency
+finger-tip	fingertip	frequency
+finite-element	finite element	frequency
+firstborn	first-born	frequency
+firsthand	first-hand	frequency
+fivefold	five-fold	frequency
+flash card	flashcard	frequency
+floorplan	floor plan	frequency
+flow chart	flowchart	frequency
+flow-chart	flowchart	frequency
+fluoro-gold	fluorogold	frequency
+focus-group	focus group	frequency
+folk tale	folktale	frequency
+followup	follow-up	frequency
+foot shock	footshock	frequency
+foot-shock	footshock	frequency
+force-feedback	force feedback	frequency
+force-field	force field	frequency
+form-class	form class	frequency
+form-factor	form factor	frequency
+four-fold	fourfold	frequency
+frame work	framework	frequency
+frame-work	framework	frequency
+free-hand	freehand	frequency
+free-lance	freelance	frequency
+freeform	free-form	frequency
+freestanding	free-standing	frequency
+freewill	free-will	frequency
+frequency-domain	frequency domain	frequency
+frequency-hopping	frequency hopping	frequency
+front-line	frontline	frequency
+frontend	front-end	frequency
+fronto-parallel	frontoparallel	frequency
+fronto-parietal	frontoparietal	frequency
+fronto-temporal	frontotemporal	frequency
+frontocentral	fronto-central	frequency
+fund raising	fundraising	frequency
+fund-raising	fundraising	frequency
+g-protein	g protein	frequency
+gaba-ergic	gabaergic	frequency
+game play	gameplay	frequency
+game theoretic	game-theoretic	frequency
+game-playing	game playing	frequency
+gamma secretase	gamma-secretase	frequency
+gamma-band	gamma band	frequency
+garden-path	garden path	frequency
+gastro-intestinal	gastrointestinal	frequency
+gate level	gate-level	frequency
+gaze-tracking	gaze tracking	frequency
+gen ai	genai	frequency
+gen-ai	genai	frequency
+gender-role	gender role	frequency
+gene editing	gene-editing	frequency
+geo-political	geopolitical	frequency
+gift-giving	gift giving	frequency
+goal setting	goal-setting	frequency
+goal-box	goal box	frequency
+god-like	godlike	frequency
+gold-standard	gold standard	frequency
+governor general	governor-general	frequency
+grade-level	grade level	frequency
+grade-point	grade point	frequency
+graduate-level	graduate level	frequency
+grammar translation	grammar-translation	frequency
+grass root	grassroot	frequency
+grass-root	grassroot	frequency
+grass-roots	grassroots	frequency
+gray-scale	grayscale	frequency
+ground work	groundwork	frequency
+ground-breaking	groundbreaking	frequency
+ground-state	ground state	frequency
+ground-truth	ground truth	frequency
+group-level	group level	frequency
+guide line	guideline	frequency
+guinea-pig	guinea pig	frequency
+hair-cell	hair cell	frequency
+half time	half-time	frequency
+half-tone	halftone	frequency
+half-way	halfway	frequency
+half-year	half year	frequency
+hand grip	handgrip	frequency
+hand-crafted	handcrafted	frequency
+hand-gesture	hand gesture	frequency
+hand-held	handheld	frequency
+hand-shape	hand shape	frequency
+hand-tracking	hand tracking	frequency
+hand-written	handwritten	frequency
+handprinted	hand-printed	frequency
+handshape	hand shape	frequency
+hard-copy	hardcopy	frequency
+hard-wired	hardwired	frequency
+hardcore	hard-core	frequency
+hardworking	hard-working	frequency
+head teacher	headteacher	frequency
+head word	headword	frequency
+head-direction	head direction	frequency
+head-movement	head movement	frequency
+head-tracking	head tracking	frequency
+health care	healthcare	frequency
+health-care	healthcare	frequency
+heart beat	heartbeat	frequency
+heart-rate	heart rate	frequency
+heat map	heatmap	frequency
+help desk	helpdesk	frequency
+highpass	high-pass	frequency
+highschool	high-school	frequency
+hill climbing	hill-climbing	frequency
+hind limb	hindlimb	frequency
+hind paw	hindpaw	frequency
+hind-limb	hindlimb	frequency
+hindleg	hind leg	frequency
+hip hop	hip-hop	frequency
+hitech	hi-tech	frequency
+hold-out	holdout	frequency
+home page	homepage	frequency
+home town	hometown	frequency
+home-cage	home cage	frequency
+home-made	homemade	frequency
+homeownership	home ownership	frequency
+honey bee	honeybee	frequency
+horse-race	horse race	frequency
+host-country	host country	frequency
+hot-spot	hotspot	frequency
+house fly	housefly	frequency
+how-ever	however	frequency
+hpa-axis	hpa axis	frequency
+humanlike	human-like	frequency
+hydro-electric	hydroelectric	frequency
+hyper-parameter	hyperparameter	frequency
+hypothesis-testing	hypothesis testing	frequency
+image-building	image building	frequency
+image-processing	image processing	frequency
+in-built	inbuilt	frequency
+in-formation	information	word_table
+in-patient	inpatient	frequency
+indo-china	indochina	frequency
+inference-time	inference time	frequency
+inflight	in-flight	frequency
+information-gap	information gap	frequency
+information-gathering	information gathering	frequency
+information-handling	information handling	frequency
+information-integration	information integration	frequency
+information-processing	information processing	word_table
+information-retrieval	information retrieval	frequency
+information-sharing	information sharing	frequency
+infra-red	infrared	frequency
+ingroup	in-group	frequency
+inline	in-line	frequency
+inservice	in-service	frequency
+instrument-maker	instrument maker	frequency
+inter-action	interaction	frequency
+inter-agency	interagency	frequency
+inter-connected	interconnected	frequency
+inter-correlation	intercorrelation	frequency
+inter-cultural	intercultural	frequency
+inter-dependent	interdependent	frequency
+inter-disciplinary	interdisciplinary	frequency
+inter-ethnic	interethnic	frequency
+inter-frame	interframe	frequency
+inter-generational	intergenerational	frequency
+inter-group	intergroup	frequency
+inter-hemispheric	interhemispheric	frequency
+inter-individual	interindividual	frequency
+inter-judge	interjudge	frequency
+inter-language	interlanguage	frequency
+inter-level	interlevel	frequency
+inter-modal	intermodal	frequency
+inter-network	internetwork	frequency
+inter-observer	interobserver	frequency
+inter-organizational	interorganizational	frequency
+inter-personal	interpersonal	frequency
+inter-process	interprocess	frequency
+inter-processor	interprocessor	frequency
+inter-regional	interregional	frequency
+inter-related	interrelated	frequency
+inter-relation	interrelation	frequency
+inter-relationship	interrelationship	frequency
+inter-religious	interreligious	frequency
+inter-response	interresponse	frequency
+inter-state	interstate	frequency
+inter-stimulus	interstimulus	frequency
+inter-subjective	intersubjective	frequency
+inter-trial	intertrial	frequency
+inter-war	interwar	frequency
+interclass	inter-class	frequency
+interitem	inter-item	frequency
+interrater	inter-rater	frequency
+interspeaker	inter-speaker	frequency
+intersubject	inter-subject	frequency
+interword	inter-word	frequency
+intra-cellular	intracellular	frequency
+intra-class	intraclass	frequency
+intra-group	intragroup	frequency
+intra-modal	intramodal	frequency
+intra-oral	intraoral	frequency
+intra-pair	intrapair	frequency
+intra-sentential	intrasentential	frequency
+intraarterial	intra-arterial	frequency
+intraindividual	intra-individual	frequency
+intrasubject	intra-subject	frequency
+intraurban	intra-urban	frequency
+ion-exchange	ion exchange	frequency
+ischemia reperfusion	ischemia-reperfusion	frequency
+item level	item-level	frequency
+item set	itemset	frequency
+jean baptiste	jean-baptiste	frequency
+jean paul	jean-paul	frequency
+jet lag	jetlag	frequency
+jet-lag	jetlag	frequency
+kappa-receptor	kappa receptor	frequency
+key-frame	keyframe	frequency
+key-word	keyword	frequency
+knock-down	knockdown	frequency
+knock-out	knockout	frequency
+knowl-edge	knowledge	frequency
+knowledge-acquisition	knowledge acquisition	frequency
+knowledge-base	knowledge base	frequency
+knowledge-building	knowledge building	frequency
+knowledge-claim	knowledge claim	frequency
+knowledge-sharing	knowledge sharing	frequency
+labor-market	labor market	frequency
+labor-power	labor power	frequency
+land grant	land-grant	frequency
+land-use	land use	frequency
+language-game	language game	frequency
+language-learning	language learning	frequency
+language-teaching	language teaching	frequency
+language-use	language use	frequency
+lasalle	la salle	frequency
+lavie	la vie	frequency
+law-enforcement	law enforcement	frequency
+law-like	lawlike	frequency
+lay-out	layout	frequency
+leisure-time	leisure time	frequency
+lever-press	lever press	frequency
+lexical functional	lexical-functional	frequency
+lexicogrammatical	lexico-grammatical	frequency
+life extension	life-extension	frequency
+life span	lifespan	frequency
+life style	lifestyle	frequency
+life time	lifetime	frequency
+life world	lifeworld	frequency
+life-course	life course	frequency
+life-cycle	life cycle	frequency
+life-event	life event	frequency
+life-form	life form	frequency
+life-history	life history	frequency
+life-like	lifelike	frequency
+life-long	lifelong	frequency
+life-satisfaction	life satisfaction	frequency
+life-span	lifespan	frequency
+life-story	life story	frequency
+life-style	lifestyle	frequency
+life-time	lifetime	frequency
+life-world	lifeworld	frequency
+lifecycle	life cycle	frequency
+lifesaving	life-saving	frequency
+light-weight	lightweight	frequency
+lighthearted	light-hearted	frequency
+likert type	likert-type	frequency
+likert-scale	likert scale	frequency
+line-drawing	line drawing	frequency
+line-up	lineup	frequency
+lip-reading	lipreading	frequency
+load-balancing	load balancing	frequency
+loan word	loanword	frequency
+loan-word	loanword	frequency
+log likelihood	log-likelihood	frequency
+log-normal	lognormal	frequency
+loglinear	log-linear	frequency
+long evans	long-evans	frequency
+long short	long-short	frequency
+longstanding	long-standing	frequency
+longtime	long-time	frequency
+look-up	lookup	frequency
+lookahead	look-ahead	frequency
+looking glass	looking-glass	frequency
+lower-case	lowercase	frequency
+lowpass	low-pass	frequency
+lysine-vasopressin	lysine vasopressin	frequency
+machine-learning	machine learning	frequency
+macos	mac os	frequency
+macro-economic	macroeconomic	frequency
+macrolevel	macro-level	frequency
+main-stream	mainstream	frequency
+make-up	makeup	frequency
+man machine	man-machine	frequency
+manmade	man-made	frequency
+mann whitney	mann-whitney	frequency
+mark-up	markup	frequency
+market place	marketplace	frequency
+market-place	marketplace	frequency
+masking-level	masking level	frequency
+mass market	mass-market	frequency
+mate-selection	mate selection	frequency
+media pipe	mediapipe	frequency
+medico-legal	medicolegal	frequency
+mel frequency	mel-frequency	frequency
+meta-cognition	metacognition	frequency
+meta-cognitive	metacognitive	frequency
+meta-data	metadata	frequency
+meta-ethical	metaethical	frequency
+meta-heuristic	metaheuristic	frequency
+meta-language	metalanguage	frequency
+meta-model	metamodel	frequency
+meta-narrative	metanarrative	frequency
+meta-philosophical	metaphilosophical	frequency
+meta-scientific	metascientific	frequency
+meta-theoretical	metatheoretical	frequency
+meta-theory	metatheory	frequency
+metaknowledge	meta-knowledge	frequency
+metalevel	meta-level	frequency
+metarule	meta-rule	frequency
+meth-od	method	frequency
+methylester	methyl ester	frequency
+micro-analysis	microanalysis	frequency
+micro-blog	microblog	frequency
+micro-blogging	microblogging	frequency
+micro-computer	microcomputer	frequency
+micro-electrode	microelectrode	frequency
+micro-organism	microorganism	frequency
+micro-scale	microscale	frequency
+micro-structure	microstructure	frequency
+microgesture	micro-gesture	frequency
+microlevel	micro-level	frequency
+mid-brain	midbrain	frequency
+mid-life	midlife	frequency
+mid-point	midpoint	frequency
+mid-sagittal	midsagittal	frequency
+mid-sleep	midsleep	frequency
+mid-term	midterm	frequency
+mid-western	midwestern	frequency
+midair	mid-air	frequency
+midcentury	mid-century	frequency
+milk-ejection	milk ejection	frequency
+millimeter wave	millimeter-wave	frequency
+mind-reading	mindreading	frequency
+mind-set	mindset	frequency
+mini-computer	minicomputer	frequency
+minmax	min-max	frequency
+mirror-image	mirror image	frequency
+mockup	mock-up	frequency
+model-building	model building	frequency
+model-checking	model checking	frequency
+monte-carlo	monte carlo	frequency
+morning-type	morning type	frequency
+morpho-phonological	morphophonological	frequency
+morpho-syntactic	morphosyntactic	frequency
+morpho-syntax	morphosyntax	frequency
+mother-tongue	mother tongue	frequency
+motion-capture	motion capture	frequency
+motion-picture	motion picture	frequency
+mu receptor	mu-receptor	frequency
+multi layer	multilayer	frequency
+multi-band	multiband	frequency
+multi-center	multicenter	frequency
+multi-channel	multichannel	frequency
+multi-component	multicomponent	frequency
+multi-computer	multicomputer	frequency
+multi-cultural	multicultural	frequency
+multi-dimensional	multidimensional	frequency
+multi-directional	multidirectional	frequency
+multi-disciplinary	multidisciplinary	frequency
+multi-electrode	multielectrode	frequency
+multi-element	multielement	frequency
+multi-faceted	multifaceted	frequency
+multi-factor	multifactor	frequency
+multi-factorial	multifactorial	frequency
+multi-functional	multifunctional	frequency
+multi-generational	multigenerational	frequency
+multi-layer	multilayer	frequency
+multi-level	multilevel	frequency
+multi-lingual	multilingual	frequency
+multi-media	multimedia	frequency
+multi-modal	multimodal	frequency
+multi-modality	multimodality	frequency
+multi-national	multinational	frequency
+multi-parameter	multiparameter	frequency
+multi-path	multipath	frequency
+multi-player	multiplayer	frequency
+multi-point	multipoint	frequency
+multi-process	multiprocess	frequency
+multi-processor	multiprocessor	frequency
+multi-purpose	multipurpose	frequency
+multi-racial	multiracial	frequency
+multi-rate	multirate	frequency
+multi-resolution	multiresolution	frequency
+multi-sensor	multisensor	frequency
+multi-sensory	multisensory	frequency
+multi-spectral	multispectral	frequency
+multi-stage	multistage	frequency
+multi-tasking	multitasking	frequency
+multi-threaded	multithreaded	frequency
+multi-threading	multithreading	frequency
+multi-unit	multiunit	frequency
+multi-valued	multivalued	frequency
+multi-variable	multivariable	frequency
+multi-variate	multivariate	frequency
+multi-word	multiword	frequency
+multiaccess	multi-access	frequency
+multiagent	multi-agent	frequency
+multiattribute	multi-attribute	frequency
+multiclass	multi-class	frequency
+multicore	multi-core	frequency
+multicriteria	multi-criteria	frequency
+multidomain	multi-domain	frequency
+multiethnic	multi-ethnic	frequency
+multiframe	multi-frame	frequency
+multigroup	multi-group	frequency
+multihop	multi-hop	frequency
+multilabel	multi-label	frequency
+multilayered	multi-layered	frequency
+multimethod	multi-method	frequency
+multimode	multi-mode	frequency
+multiobjective	multi-objective	frequency
+multiparty	multi-party	frequency
+multiperspective	multi-perspective	frequency
+multiphase	multi-phase	frequency
+multiplatform	multi-platform	frequency
+multiscale	multi-scale	frequency
+multisite	multi-site	frequency
+multisource	multi-source	frequency
+multistep	multi-step	frequency
+multitarget	multi-target	frequency
+multitask	multi-task	frequency
+multitemporal	multi-temporal	frequency
+multitouch	multi-touch	frequency
+multiuser	multi-user	frequency
+multiview	multi-view	frequency
+multiyear	multi-year	frequency
+narrowband	narrow-band	frequency
+nation building	nation-building	frequency
+nation state	nation-state	frequency
+nation-wide	nationwide	frequency
+nativelike	native-like	frequency
+near field	near-field	frequency
+neo-classical	neoclassical	frequency
+neo-conservative	neoconservative	frequency
+neo-liberal	neoliberal	frequency
+neo-liberalism	neoliberalism	frequency
+neo-platonic	neoplatonic	frequency
+neo-platonism	neoplatonism	frequency
+net-work	network	word_table
+network-level	network level	frequency
+neuro-cognitive	neurocognitive	frequency
+neuro-linguistic	neurolinguistic	frequency
+neuro-muscular	neuromuscular	frequency
+neuro-physiological	neurophysiological	frequency
+neurofuzzy	neuro-fuzzy	frequency
+new-born	newborn	frequency
+new-found	newfound	frequency
+news gathering	newsgathering	frequency
+news paper	newspaper	frequency
+news worker	newsworker	frequency
+news-gathering	newsgathering	frequency
+news-making	newsmaking	frequency
+newsmagazine	news magazine	frequency
+newsreader	news reader	frequency
+newswork	news work	frequency
+newswriting	news writing	frequency
+ngram	n-gram	frequency
+night club	nightclub	frequency
+night time	nighttime	frequency
+night-shift	night shift	frequency
+night-time	nighttime	frequency
+nightwork	night work	frequency
+nigro-striatal	nigrostriatal	frequency
+nmda-receptor	nmda receptor	frequency
+nogo	no-go	frequency
+non-additive	nonadditive	frequency
+non-adjacent	nonadjacent	frequency
+non-aggressive	nonaggressive	frequency
+non-associative	nonassociative	frequency
+non-blocking	nonblocking	frequency
+non-competitive	noncompetitive	frequency
+non-compliance	noncompliance	frequency
+non-conforming	nonconforming	frequency
+non-conformist	nonconformist	frequency
+non-conformity	nonconformity	frequency
+non-contingent	noncontingent	frequency
+non-creative	noncreative	frequency
+non-depressed	nondepressed	frequency
+non-deprived	nondeprived	frequency
+non-destructive	nondestructive	frequency
+non-determinism	nondeterminism	frequency
+non-deterministic	nondeterministic	frequency
+non-empty	nonempty	frequency
+non-gifted	nongifted	frequency
+non-homogeneous	nonhomogeneous	frequency
+non-institutionalized	noninstitutionalized	frequency
+non-iterative	noniterative	frequency
+non-linear	nonlinear	frequency
+non-linearity	nonlinearity	frequency
+non-linearly	nonlinearly	frequency
+non-living	nonliving	frequency
+non-matching	nonmatching	frequency
+non-metric	nonmetric	frequency
+non-metropolitan	nonmetropolitan	frequency
+non-monotonic	nonmonotonic	frequency
+non-musician	nonmusician	frequency
+non-negative	nonnegative	frequency
+non-obese	nonobese	frequency
+non-organic	nonorganic	frequency
+non-parametric	nonparametric	frequency
+non-partisan	nonpartisan	frequency
+non-pathological	nonpathological	frequency
+non-patient	nonpatient	frequency
+non-pharmacologic	nonpharmacologic	frequency
+non-phobic	nonphobic	frequency
+non-preferred	nonpreferred	frequency
+non-pregnant	nonpregnant	frequency
+non-procedural	nonprocedural	frequency
+non-productive	nonproductive	frequency
+non-profit	nonprofit	frequency
+non-psychotic	nonpsychotic	frequency
+non-recursive	nonrecursive	frequency
+non-redundant	nonredundant	frequency
+non-reinforced	nonreinforced	frequency
+non-reinforcement	nonreinforcement	frequency
+non-respondent	nonrespondent	frequency
+non-response	nonresponse	frequency
+non-routine	nonroutine	frequency
+non-scientist	nonscientist	frequency
+non-sense	nonsense	frequency
+non-sexual	nonsexual	frequency
+non-shared	nonshared	frequency
+non-significant	nonsignificant	frequency
+non-significantly	nonsignificantly	frequency
+non-singular	nonsingular	frequency
+non-smooth	nonsmooth	frequency
+non-specific	nonspecific	frequency
+non-speech	nonspeech	frequency
+non-stationary	nonstationary	frequency
+non-stop	nonstop	frequency
+non-stressed	nonstressed	frequency
+non-suppression	nonsuppression	frequency
+non-symmetric	nonsymmetric	frequency
+non-syndromic	nonsyndromic	frequency
+non-terminal	nonterminal	frequency
+non-treated	nontreated	frequency
+non-uniformity	nonuniformity	frequency
+non-verbal	nonverbal	frequency
+non-verbally	nonverbally	frequency
+non-violence	nonviolence	frequency
+non-violent	nonviolent	frequency
+non-white	nonwhite	frequency
+non-word	nonword	frequency
+non-zero	nonzero	frequency
+nonacademic	non-academic	frequency
+nonadaptive	non-adaptive	frequency
+nonadrenergic	non-adrenergic	frequency
+nonanxious	non-anxious	frequency
+nonathlete	non-athlete	frequency
+nonbeing	non-being	frequency
+nonbeliever	non-believer	frequency
+nonbenzodiazepine	non-benzodiazepine	frequency
+nonbinary	non-binary	frequency
+nonbiological	non-biological	frequency
+noncanonical	non-canonical	frequency
+noncausal	non-causal	frequency
+noncholinergic	non-cholinergic	frequency
+noncitizen	non-citizen	frequency
+nonclassical	non-classical	frequency
+nonclinical	non-clinical	frequency
+noncoding	non-coding	frequency
+noncognitive	non-cognitive	frequency
+noncognitivism	non-cognitivism	frequency
+noncognitivist	non-cognitivist	frequency
+noncombatant	non-combatant	frequency
+noncommercial	non-commercial	frequency
+nonconceptual	non-conceptual	frequency
+nonconscious	non-conscious	frequency
+noncontact	non-contact	frequency
+noncontroversial	non-controversial	frequency
+nonconventional	non-conventional	frequency
+nonconvex	non-convex	frequency
+noncooperative	non-cooperative	frequency
+noncritical	non-critical	frequency
+nondelinquent	non-delinquent	frequency
+nondemented	non-demented	frequency
+nondiabetic	non-diabetic	frequency
+nondirective	non-directive	frequency
+nondisabled	non-disabled	frequency
+nondominant	non-dominant	frequency
+nondrug	non-drug	frequency
+nonemotional	non-emotional	frequency
+nonempirical	non-empirical	frequency
+nonequilibrium	non-equilibrium	frequency
+nonequivalent	non-equivalent	frequency
+nonessential	non-essential	frequency
+nonevaluative	non-evaluative	frequency
+nonexistence	non-existence	frequency
+nonexistent	non-existent	frequency
+nonexperimental	non-experimental	frequency
+nonexpert	non-expert	frequency
+nonface	non-face	frequency
+nonfarm	non-farm	frequency
+nonfiction	non-fiction	frequency
+nonfinal	non-final	frequency
+nonfinite	non-finite	frequency
+nonfluent	non-fluent	frequency
+nonfunctional	non-functional	frequency
+nongenetic	non-genetic	frequency
+nongovernmental	non-governmental	frequency
+nonhierarchical	non-hierarchical	frequency
+nonhuman	non-human	frequency
+nonidentical	non-identical	frequency
+noninteractive	non-interactive	frequency
+noninterference	non-interference	frequency
+nonintrusive	non-intrusive	frequency
+noninvasive	non-invasive	frequency
+noninvasively	non-invasively	frequency
+nonjudgmental	non-judgmental	frequency
+nonlexical	non-lexical	frequency
+nonlinguistic	non-linguistic	frequency
+nonlocal	non-local	frequency
+nonlogical	non-logical	frequency
+nonmammalian	non-mammalian	frequency
+nonmanual	non-manual	frequency
+nonmaterial	non-material	frequency
+nonmathematical	non-mathematical	frequency
+nonmedical	non-medical	frequency
+nonmember	non-member	frequency
+nonmigrant	non-migrant	frequency
+nonmilitary	non-military	frequency
+nonmoral	non-moral	frequency
+nonmotor	non-motor	frequency
+nonmyelinated	non-myelinated	frequency
+nonnative	non-native	frequency
+nonneural	non-neural	frequency
+nonneuronal	non-neuronal	frequency
+nonnumerical	non-numerical	frequency
+nonobvious	non-obvious	frequency
+nonoptimal	non-optimal	frequency
+nonoverlapping	non-overlapping	frequency
+nonparticipant	non-participant	frequency
+nonpharmacological	non-pharmacological	frequency
+nonphysical	non-physical	frequency
+nonpolitical	non-political	frequency
+nonprimary	non-primary	frequency
+nonprobability	non-probability	frequency
+nonprofessional	non-professional	frequency
+nonprogrammer	non-programmer	frequency
+nonpsychiatric	non-psychiatric	frequency
+nonpyramidal	non-pyramidal	frequency
+nonrandom	non-random	frequency
+nonrandomized	non-randomized	frequency
+nonrapid	non-rapid	frequency
+nonrational	non-rational	frequency
+nonreductive	non-reductive	frequency
+nonrelative	non-relative	frequency
+nonreligious	non-religious	frequency
+nonrem	non-rem	frequency
+nonrepresentational	non-representational	frequency
+nonresponder	non-responder	frequency
+nonrestorative	non-restorative	frequency
+nonrestrictive	non-restrictive	frequency
+nonrigid	non-rigid	frequency
+nonscience	non-science	frequency
+nonscientific	non-scientific	frequency
+nonselective	non-selective	frequency
+nonsemantic	non-semantic	frequency
+nonseparable	non-separable	frequency
+nonsequential	non-sequential	frequency
+nonsmoker	non-smoker	frequency
+nonsocial	non-social	frequency
+nonspatial	non-spatial	frequency
+nonspecialist	non-specialist	frequency
+nonstandard	non-standard	frequency
+nonstate	non-state	frequency
+nonstationarity	non-stationarity	frequency
+nonstudent	non-student	frequency
+nonsuicidal	non-suicidal	frequency
+nonsymbolic	non-symbolic	frequency
+nonsynaptic	non-synaptic	frequency
+nonsystematic	non-systematic	frequency
+nontarget	non-target	frequency
+nontechnical	non-technical	frequency
+nontemporal	non-temporal	frequency
+nonthreatening	non-threatening	frequency
+nontoxic	non-toxic	frequency
+nontraditional	non-traditional	frequency
+nontrivial	non-trivial	frequency
+nonuniform	non-uniform	frequency
+nonuse	non-use	frequency
+nonuser	non-user	frequency
+nonvisual	non-visual	frequency
+nonvolatile	non-volatile	frequency
+nonwork	non-work	frequency
+north east	northeast	frequency
+north west	northwest	frequency
+north-central	north central	frequency
+north-east	northeast	frequency
+north-eastern	northeastern	frequency
+north-west	northwest	frequency
+north-western	northwestern	frequency
+notetaking	note-taking	frequency
+noun-phrase	noun phrase	frequency
+number-line	number line	frequency
+object level	object-level	frequency
+object-language	object language	frequency
+object-location	object location	frequency
+object-relation	object relation	frequency
+occipito-temporal	occipitotemporal	frequency
+octave-band	octave band	frequency
+oe ri	oeri	frequency
+off-line	offline	frequency
+off-shore	offshore	frequency
+office holder	officeholder	frequency
+oil field	oilfield	frequency
+olivo-cochlear	olivocochlear	frequency
+omni-directional	omnidirectional	frequency
+on-board	onboard	frequency
+on-going	ongoing	frequency
+on-line	online	frequency
+onscreen	on-screen	frequency
+onsite	on-site	frequency
+operating-system	operating system	frequency
+opto-electronic	optoelectronic	frequency
+other-worldly	otherworldly	frequency
+out-dated	outdated	frequency
+out-group	outgroup	frequency
+out-patient	outpatient	frequency
+out-perform	outperform	frequency
+outmigration	out-migration	frequency
+over-all	overall	frequency
+over-arching	overarching	frequency
+over-emphasis	overemphasis	frequency
+over-estimation	overestimation	frequency
+over-expression	overexpression	frequency
+over-fitting	overfitting	frequency
+over-generalization	overgeneralization	frequency
+over-relaxation	overrelaxation	frequency
+over-representation	overrepresentation	frequency
+over-represented	overrepresented	frequency
+over-riding	overriding	frequency
+over-sampling	oversampling	frequency
+over-simplification	oversimplification	frequency
+over-simplified	oversimplified	frequency
+overreliance	over-reliance	frequency
+p value	p-value	frequency
+p wave	p-wave	frequency
+pair-wise	pairwise	frequency
+paper work	paperwork	frequency
+para-social	parasocial	frequency
+parent child	parent-child	frequency
+parent-report	parent report	frequency
+parity check	parity-check	frequency
+part time	part-time	frequency
+pass band	passband	frequency
+passersby	passers-by	frequency
+patch clamp	patch-clamp	frequency
+pathbreaking	path-breaking	frequency
+pattern-matching	pattern matching	frequency
+pattern-recognition	pattern recognition	frequency
+pay-off	payoff	frequency
+peace building	peacebuilding	frequency
+peace-building	peacebuilding	frequency
+peer-group	peer group	frequency
+peer-review	peer review	frequency
+petri-net	petri net	frequency
+phase-contrast	phase contrast	frequency
+phase-shift	phase shift	frequency
+phase-space	phase space	frequency
+photo-realistic	photorealistic	frequency
+photointerpretation	photo interpretation	frequency
+phrase level	phrase-level	frequency
+phrase-structure	phrase structure	frequency
+physico-chemical	physicochemical	frequency
+pick-up	pickup	frequency
+picture-naming	picture naming	frequency
+picturebook	picture book	frequency
+piece-wise	piecewise	frequency
+piecewise-linear	piecewise linear	frequency
+pitch-accent	pitch accent	frequency
+place-name	place name	frequency
+placemaking	place-making	frequency
+plugin	plug-in	frequency
+point-cloud	point cloud	frequency
+point-spread	point spread	frequency
+point-wise	pointwise	frequency
+policy maker	policymaker	frequency
+policy making	policy-making	frequency
+policy-maker	policymaker	frequency
+policymaking	policy-making	frequency
+population level	population-level	frequency
+popup	pop-up	frequency
+port royal	port-royal	frequency
+post graduate	postgraduate	frequency
+post intervention	post-intervention	frequency
+post mortem	postmortem	frequency
+post partum	postpartum	frequency
+post processing	post-processing	frequency
+post test	post-test	frequency
+post treatment	post-treatment	frequency
+post world	post-world	frequency
+post-colonial	postcolonial	frequency
+post-discharge	postdischarge	frequency
+post-doctoral	postdoctoral	frequency
+post-ganglionic	postganglionic	frequency
+post-graduate	postgraduate	frequency
+post-human	posthuman	frequency
+post-humanist	posthumanist	frequency
+post-hypnotic	posthypnotic	frequency
+post-injection	postinjection	frequency
+post-ischemic	postischemic	frequency
+post-lesion	postlesion	frequency
+post-mitotic	postmitotic	frequency
+post-modern	postmodern	frequency
+post-modernism	postmodernism	frequency
+post-modernist	postmodernist	frequency
+post-modernity	postmodernity	frequency
+post-mortem	postmortem	frequency
+post-natal	postnatal	frequency
+post-operative	postoperative	frequency
+post-operatively	postoperatively	frequency
+post-partum	postpartum	frequency
+post-rotatory	postrotatory	frequency
+post-saccadic	postsaccadic	frequency
+post-structuralism	poststructuralism	frequency
+post-structuralist	poststructuralist	frequency
+post-synaptic	postsynaptic	frequency
+post-tested	posttested	frequency
+post-testing	posttesting	frequency
+post-traumatic	posttraumatic	frequency
+post-verbal	postverbal	frequency
+post-vocalic	postvocalic	frequency
+post-war	postwar	frequency
+postcommunist	post-communist	frequency
+postdeployment	post-deployment	frequency
+postevent	post-event	frequency
+postexposure	post-exposure	frequency
+postindustrial	post-industrial	frequency
+postinjury	post-injury	frequency
+postintervention	post-intervention	frequency
+postmetaphysical	post-metaphysical	frequency
+postprocessing	post-processing	frequency
+postrelease	post-release	frequency
+postrevolutionary	post-revolutionary	frequency
+postsecondary	post-secondary	frequency
+postsecular	post-secular	frequency
+poststimulus	post-stimulus	frequency
+poststroke	post-stroke	frequency
+posttest	post-test	frequency
+posttraining	post-training	frequency
+posttranslational	post-translational	frequency
+posttreatment	post-treatment	frequency
+power sharing	power-sharing	frequency
+power-law	power law	frequency
+pre-adolescent	preadolescent	frequency
+pre-arranged	prearranged	frequency
+pre-attentive	preattentive	frequency
+pre-clinical	preclinical	frequency
+pre-computed	precomputed	frequency
+pre-condition	precondition	frequency
+pre-defined	predefined	frequency
+pre-determined	predetermined	frequency
+pre-eminent	preeminent	frequency
+pre-emptive	preemptive	frequency
+pre-exposed	preexposed	frequency
+pre-formed	preformed	frequency
+pre-history	prehistory	frequency
+pre-incubation	preincubation	frequency
+pre-linguistic	prelinguistic	frequency
+pre-literate	preliterate	frequency
+pre-marital	premarital	frequency
+pre-modern	premodern	frequency
+pre-natal	prenatal	frequency
+pre-nominal	prenominal	frequency
+pre-occupation	preoccupation	frequency
+pre-operative	preoperative	frequency
+pre-process	preprocess	frequency
+pre-processed	preprocessed	frequency
+pre-processing	preprocessing	frequency
+pre-processor	preprocessor	frequency
+pre-programmed	preprogrammed	frequency
+pre-registered	preregistered	frequency
+pre-requisite	prerequisite	frequency
+pre-school	preschool	frequency
+pre-schooler	preschooler	frequency
+pre-selected	preselected	frequency
+pre-set	preset	frequency
+pre-socratics	presocratics	frequency
+pre-specified	prespecified	frequency
+pre-stimulus	prestimulus	frequency
+pre-symptomatic	presymptomatic	frequency
+pre-synaptic	presynaptic	frequency
+pre-tested	pretested	frequency
+pre-testing	pretesting	frequency
+pre-training	pretraining	frequency
+pre-treated	pretreated	frequency
+pre-treatment	pretreatment	frequency
+pre-trial	pretrial	frequency
+pre-verbal	preverbal	frequency
+pre-writing	prewriting	frequency
+precollege	pre-college	frequency
+precolonial	pre-colonial	frequency
+precritical	pre-critical	frequency
+predeparture	pre-departure	frequency
+preeminence	pre-eminence	frequency
+preeminently	pre-eminently	frequency
+preestablished	pre-established	frequency
+preexisting	pre-existing	frequency
+preexposure	pre-exposure	frequency
+preindustrial	pre-industrial	frequency
+prentice hall	prentice-hall	frequency
+prereading	pre-reading	frequency
+prerecorded	pre-recorded	frequency
+prereflective	pre-reflective	frequency
+prerelease	pre-release	frequency
+prerevolutionary	pre-revolutionary	frequency
+prescientific	pre-scientific	frequency
+preservice	pre-service	frequency
+presleep	pre-sleep	frequency
+presma	pre-sma	frequency
+presocratic	pre-socratic	frequency
+pretask	pre-task	frequency
+pretest	pre-test	frequency
+pretrained	pre-trained	frequency
+prewar	pre-war	frequency
+primetime	prime-time	frequency
+print-out	printout	frequency
+pro-active	proactive	frequency
+pro-opiomelanocortin	proopiomelanocortin	frequency
+pro-posed	proposed	frequency
+pro-social	prosocial	frequency
+prob-lem	problem	frequency
+problem-solution	problem solution	frequency
+problem-solver	problem solver	frequency
+product moment	product-moment	frequency
+proinflammatory	pro-inflammatory	frequency
+proof-reading	proofreading	frequency
+protolanguage	proto-language	frequency
+pseudo label	pseudo-label	frequency
+pseudo-inverse	pseudoinverse	frequency
+pseudo-random	pseudorandom	frequency
+pseudo-science	pseudoscience	frequency
+pseudo-word	pseudoword	frequency
+pseudocleft	pseudo-cleft	frequency
+pseudoscientific	pseudo-scientific	frequency
+psycho-acoustic	psychoacoustic	frequency
+psycho-analysis	psychoanalysis	frequency
+psycho-analytic	psychoanalytic	frequency
+psycho-education	psychoeducation	frequency
+psycho-educational	psychoeducational	frequency
+psycho-linguistic	psycholinguistic	frequency
+psycho-physical	psychophysical	frequency
+psycho-physiological	psychophysiological	frequency
+psycho-social	psychosocial	frequency
+psychoemotional	psycho-emotional	frequency
+push button	push-button	frequency
+pushbutton	push-button	frequency
+quarter-century	quarter century	frequency
+radio television	radio-television	frequency
+radio-frequency	radio frequency	frequency
+rain forest	rainforest	frequency
+rank-order	rank order	frequency
+rank-ordering	rank ordering	frequency
+rate distortion	rate-distortion	frequency
+re-analysis	reanalysis	frequency
+re-analyze	reanalyze	frequency
+re-analyzed	reanalyzed	frequency
+re-appraisal	reappraisal	frequency
+re-assess	reassess	frequency
+re-assessed	reassessed	frequency
+re-assessment	reassessment	frequency
+re-conceptualization	reconceptualization	frequency
+re-defined	redefined	frequency
+re-design	redesign	frequency
+re-designed	redesigned	frequency
+re-enactment	reenactment	frequency
+re-engineering	reengineering	frequency
+re-entry	reentry	frequency
+re-evaluating	reevaluating	frequency
+re-imagine	reimagine	frequency
+re-imagining	reimagining	frequency
+re-innervation	reinnervation	frequency
+re-interpret	reinterpret	frequency
+re-interpretation	reinterpretation	frequency
+re-interpreted	reinterpreted	frequency
+re-offending	reoffending	frequency
+re-ordering	reordering	frequency
+re-organization	reorganization	frequency
+re-orientation	reorientation	frequency
+re-ranking	reranking	frequency
+re-read	reread	frequency
+re-reading	rereading	frequency
+re-sampling	resampling	frequency
+re-structuring	restructuring	frequency
+re-test	retest	frequency
+re-tested	retested	frequency
+re-think	rethink	frequency
+re-thinking	rethinking	frequency
+re-training	retraining	frequency
+re-uptake	reuptake	frequency
+re-usability	reusability	frequency
+re-usable	reusable	frequency
+re-use	reuse	frequency
+re-used	reused	frequency
+re-writing	rewriting	frequency
+reaction-time	reaction time	frequency
+read-out	readout	frequency
+reader-response	reader response	frequency
+record-keeping	record keeping	frequency
+reeducation	re-education	frequency
+reelection	re-election	frequency
+reemerged	re-emerged	frequency
+reemergence	re-emergence	frequency
+reenter	re-enter	frequency
+reestablish	re-establish	frequency
+reestablished	re-established	frequency
+reestablishing	re-establishing	frequency
+reestablishment	re-establishment	frequency
+reevaluate	re-evaluate	frequency
+reevaluated	re-evaluated	frequency
+reevaluation	re-evaluation	frequency
+reexamination	re-examination	frequency
+reexamine	re-examine	frequency
+reexamined	re-examined	frequency
+reexamining	re-examining	frequency
+reexperiencing	re-experiencing	frequency
+reidentification	re-identification	frequency
+relation ship	relationship	frequency
+relation-ship	relationship	frequency
+relationship-building	relationship building	frequency
+rem-sleep	rem sleep	frequency
+resource-sharing	resource sharing	frequency
+rise-time	rise time	frequency
+risk taking	risk-taking	frequency
+road map	roadmap	frequency
+role play	role-play	frequency
+role playing	role-playing	frequency
+role-model	role model	frequency
+roleplay	role-play	frequency
+roleplaying	role-playing	frequency
+rostro-caudal	rostrocaudal	frequency
+round table	roundtable	frequency
+round-off	roundoff	frequency
+round-table	roundtable	frequency
+rule-base	rule base	frequency
+rule-learning	rule learning	frequency
+rule-set	rule set	frequency
+run-time	runtime	frequency
+rundown	run-down	frequency
+s-phase	s phase	frequency
+scale space	scale-space	frequency
+scatter plot	scatterplot	frequency
+school age	school-age	frequency
+school boy	schoolboy	frequency
+school-community	school community	frequency
+school-leaver	school leaver	frequency
+school-level	school level	frequency
+schoolday	school day	frequency
+schoolgirl	school girl	frequency
+schoolteacher	school teacher	frequency
+schoolwork	school work	frequency
+science direct	sciencedirect	frequency
+science technology	science-technology	frequency
+science-fiction	science fiction	frequency
+scroll bar	scrollbar	frequency
+sea-level	sea level	frequency
+seawater	sea water	frequency
+secondhand	second-hand	frequency
+secretary general	secretary-general	frequency
+self assessment	self-assessment	frequency
+self awareness	self-awareness	frequency
+self concept	self-concept	frequency
+self confidence	self-confidence	frequency
+self determination	self-determination	frequency
+self development	self-development	frequency
+self efficacy	self-efficacy	frequency
+self esteem	self-esteem	frequency
+self evaluation	self-evaluation	frequency
+self harm	self-harm	frequency
+self identity	self-identity	frequency
+self knowledge	self-knowledge	frequency
+self organizing	self-organizing	frequency
+self rating	self-rating	frequency
+self regulation	self-regulation	frequency
+self report	self-report	frequency
+self test	self-test	frequency
+semi-continuous	semicontinuous	frequency
+semi-definite	semidefinite	frequency
+semi-group	semigroup	frequency
+semi-lattice	semilattice	frequency
+semi-quantitative	semiquantitative	frequency
+semi-vowel	semivowel	frequency
+semiautomated	semi-automated	frequency
+semiautomatic	semi-automatic	frequency
+semistructured	semi-structured	frequency
+sensation-seeking	sensation seeking	frequency
+sense data	sense-data	frequency
+sense-experience	sense experience	frequency
+sense-organ	sense organ	frequency
+sense-perception	sense perception	frequency
+sensemaking	sense-making	frequency
+sensori-motor	sensorimotor	frequency
+sensori-neural	sensorineural	frequency
+sentence level	sentence-level	frequency
+sentence-completion	sentence completion	frequency
+sentence-type	sentence type	frequency
+septo-hippocampal	septohippocampal	frequency
+server side	server-side	frequency
+service-learning	service learning	frequency
+service-user	service user	frequency
+servomotor	servo motor	frequency
+set point	set-point	frequency
+set-size	set size	frequency
+set-up	setup	frequency
+setpoint	set-point	frequency
+sex-role	sex role	frequency
+sham-operation	sham operation	frequency
+shift-work	shift work	frequency
+shift-worker	shift worker	frequency
+shift-working	shift working	frequency
+shiftwork	shift work	frequency
+shiftworker	shift worker	frequency
+shockwave	shock wave	frequency
+short-coming	shortcoming	frequency
+short-cut	shortcut	frequency
+shortsighted	short-sighted	frequency
+shortwave	short-wave	frequency
+shuttle-box	shuttle box	frequency
+shuttlebox	shuttle box	frequency
+side channel	side-channel	frequency
+side-chain	side chain	frequency
+side-effect	side effect	frequency
+sign-language	sign language	frequency
+signal-detection	signal detection	frequency
+signal-processing	signal processing	frequency
+sinewave	sine-wave	frequency
+skillset	skill set	frequency
+skin-color	skin color	frequency
+sleep-deprivation	sleep deprivation	frequency
+sleep-length	sleep length	frequency
+sleep-loss	sleep loss	frequency
+sleep-onset	sleep onset	frequency
+sleep-quality	sleep quality	frequency
+slide show	slideshow	frequency
+smart-phone	smartphone	frequency
+socio-cultural	sociocultural	frequency
+socio-demographic	sociodemographic	frequency
+socio-economic	socioeconomic	frequency
+socio-economically	socioeconomically	frequency
+socio-emotional	socioemotional	frequency
+socio-linguistic	sociolinguistic	frequency
+socio-pragmatic	sociopragmatic	frequency
+sociocognitive	socio-cognitive	frequency
+socioecological	socio-ecological	frequency
+socioenvironmental	socio-environmental	frequency
+sociohistorical	socio-historical	frequency
+sociopolitical	socio-political	frequency
+sociopsychological	socio-psychological	frequency
+sociotechnical	socio-technical	frequency
+source-language	source language	frequency
+source-text	source text	frequency
+sourcebook	source book	frequency
+south central	south-central	frequency
+south east	southeast	frequency
+south west	southwest	frequency
+south-east	southeast	frequency
+south-eastern	southeastern	frequency
+south-west	southwest	frequency
+south-western	southwestern	frequency
+spaceflight	space flight	frequency
+spacetime	space-time	frequency
+spatio-temporal	spatiotemporal	frequency
+spatio-temporally	spatiotemporally	frequency
+spectrotemporal	spectro-temporal	frequency
+speech language	speech-language	frequency
+speech-act	speech act	frequency
+speech-communication	speech communication	frequency
+speech-recognition	speech recognition	frequency
+speech-sound	speech sound	frequency
+speechlike	speech-like	frequency
+speed-up	speedup	frequency
+spino-cerebellar	spinocerebellar	frequency
+spinoff	spin-off	frequency
+sprague dawley	sprague-dawley	frequency
+stand point	standpoint	frequency
+standalone	stand-alone	frequency
+stanford binet	stanford-binet	frequency
+start-up	startup	frequency
+starting-point	starting point	frequency
+state action	state-action	frequency
+state building	state-building	frequency
+state trait	state-trait	frequency
+state-anxiety	state anxiety	frequency
+state-level	state level	frequency
+state-space	state space	frequency
+state-transition	state transition	frequency
+state-variable	state variable	frequency
+state-wide	statewide	frequency
+steam-engine	steam engine	frequency
+step-size	step size	frequency
+step-wise	stepwise	frequency
+stepsize	step size	frequency
+stimulus response	stimulus-response	frequency
+stop signal	stop-signal	frequency
+story book	storybook	frequency
+story line	storyline	frequency
+story telling	storytelling	frequency
+story world	storyworld	frequency
+story-teller	storyteller	frequency
+story-telling	storytelling	frequency
+straight-forward	straightforward	frequency
+stu-dent	student	frequency
+student athlete	student-athlete	frequency
+student-teacher	student teacher	frequency
+studies-depression	studies depression	frequency
+sub-area	subarea	frequency
+sub-band	subband	frequency
+sub-category	subcategory	frequency
+sub-class	subclass	frequency
+sub-classification	subclassification	frequency
+sub-clinical	subclinical	frequency
+sub-committee	subcommittee	frequency
+sub-component	subcomponent	frequency
+sub-continent	subcontinent	frequency
+sub-cortical	subcortical	frequency
+sub-cultural	subcultural	frequency
+sub-culture	subculture	frequency
+sub-discipline	subdiscipline	frequency
+sub-district	subdistrict	frequency
+sub-divided	subdivided	frequency
+sub-division	subdivision	frequency
+sub-domain	subdomain	frequency
+sub-event	subevent	frequency
+sub-factor	subfactor	frequency
+sub-field	subfield	frequency
+sub-genre	subgenre	frequency
+sub-goal	subgoal	frequency
+sub-group	subgroup	frequency
+sub-grouping	subgrouping	frequency
+sub-image	subimage	frequency
+sub-model	submodel	frequency
+sub-module	submodule	frequency
+sub-national	subnational	frequency
+sub-network	subnetwork	frequency
+sub-optimal	suboptimal	frequency
+sub-pixel	subpixel	frequency
+sub-population	subpopulation	frequency
+sub-problem	subproblem	frequency
+sub-process	subprocess	frequency
+sub-region	subregion	frequency
+sub-sample	subsample	frequency
+sub-scale	subscale	frequency
+sub-score	subscore	frequency
+sub-section	subsection	frequency
+sub-set	subset	frequency
+sub-skill	subskill	frequency
+sub-space	subspace	frequency
+sub-structure	substructure	frequency
+sub-system	subsystem	frequency
+sub-task	subtask	frequency
+sub-test	subtest	frequency
+sub-theme	subtheme	frequency
+sub-theory	subtheory	frequency
+sub-threshold	subthreshold	frequency
+sub-title	subtitle	frequency
+sub-topic	subtopic	frequency
+sub-type	subtype	frequency
+sub-unit	subunit	frequency
+sub-word	subword	frequency
+subdimension	sub-dimension	frequency
+super-ego	superego	frequency
+superresolution	super-resolution	frequency
+supply side	supply-side	frequency
+supply-chain	supply chain	frequency
+supra-segmental	suprasegmental	frequency
+supra-threshold	suprathreshold	frequency
+surface-level	surface level	frequency
+surplus-value	surplus value	frequency
+t maze	t-maze	frequency
+t table	t-table	frequency
+t test	t-test	frequency
+t value	t-value	frequency
+t-cell	t cell	frequency
+t-group	t group	frequency
+t-score	t score	frequency
+table-top	tabletop	frequency
+tai-chi	tai chi	frequency
+takeoff	take-off	frequency
+tape-recorder	tape recorder	frequency
+tape-recording	tape recording	frequency
+target-language	target language	frequency
+task level	task-level	frequency
+task-switching	task switching	frequency
+teacher student	teacher-student	frequency
+teacher-training	teacher training	frequency
+team level	team-level	frequency
+team work	teamwork	frequency
+team-building	team building	frequency
+techno-scientific	technoscientific	frequency
+teen-age	teenage	frequency
+teen-ager	teenager	frequency
+tele-presence	telepresence	frequency
+template-matching	template matching	frequency
+temporo-parietal	temporoparietal	frequency
+ten-fold	tenfold	frequency
+test bed	testbed	frequency
+test taking	test-taking	frequency
+test-anxiety	test anxiety	frequency
+test-bed	testbed	frequency
+test-taker	test taker	frequency
+test-time	test time	frequency
+text book	textbook	frequency
+text-book	textbook	frequency
+text-editing	text editing	frequency
+text-entry	text entry	frequency
+text-mining	text mining	frequency
+text-type	text type	frequency
+thalamo-cortical	thalamocortical	frequency
+theory-building	theory building	frequency
+third-world	third world	frequency
+thorough-going	thoroughgoing	frequency
+thought-experiment	thought experiment	frequency
+three-fold	threefold	frequency
+tik tok	tiktok	frequency
+time error	time-error	frequency
+time lapse	time-lapse	frequency
+time line	timeline	frequency
+time sharing	time-sharing	frequency
+time space	time-space	frequency
+time stamp	timestamp	frequency
+time-course	time course	frequency
+time-delay	time delay	frequency
+time-division	time division	frequency
+time-domain	time domain	frequency
+time-frame	time frame	frequency
+time-interval	time interval	frequency
+time-keeping	timekeeping	frequency
+time-lag	time lag	frequency
+time-line	timeline	frequency
+time-out	timeout	frequency
+time-period	time period	frequency
+time-point	time point	frequency
+time-saving	time saving	frequency
+time-scale	time scale	frequency
+time-series	time series	frequency
+time-slot	time slot	frequency
+time-step	time step	frequency
+time-zone	time zone	frequency
+timeframe	time frame	frequency
+timepoint	time point	frequency
+timescale	time scale	frequency
+timesharing	time-sharing	frequency
+title-page	title page	frequency
+to-day	today	frequency
+tone-burst	tone burst	frequency
+tool kit	toolkit	frequency
+tool-use	tool use	frequency
+touch pad	touchpad	frequency
+touch-panel	touch panel	frequency
+touch-screen	touch screen	frequency
+touchpoint	touch point	frequency
+touchscreen	touch screen	frequency
+tradeoff	trade-off	frequency
+trait-anxiety	trait anxiety	frequency
+trans-atlantic	transatlantic	frequency
+trans-cultural	transcultural	frequency
+trans-disciplinary	transdisciplinary	frequency
+trans-national	transnational	frequency
+travel-time	travel time	frequency
+trouble-shooting	troubleshooting	frequency
+trust building	trust-building	frequency
+truth telling	truth-telling	frequency
+truth-claim	truth claim	frequency
+truth-condition	truth condition	frequency
+truth-function	truth function	frequency
+truth-maker	truthmaker	frequency
+truth-table	truth table	frequency
+truth-value	truth value	frequency
+tryout	try-out	frequency
+ttest	t-test	frequency
+turn-around	turnaround	frequency
+turning-point	turning point	frequency
+two-fold	twofold	frequency
+u-test	u test	frequency
+under-achievement	underachievement	frequency
+under-appreciated	underappreciated	frequency
+under-developed	underdeveloped	frequency
+under-examined	underexamined	frequency
+under-explored	underexplored	frequency
+under-reported	underreported	frequency
+under-reporting	underreporting	frequency
+under-representation	underrepresentation	frequency
+under-represented	underrepresented	frequency
+under-standing	understanding	frequency
+under-studied	understudied	frequency
+under-theorized	undertheorized	frequency
+under-utilized	underutilized	frequency
+underrecognized	under-recognized	frequency
+underresearched	under-researched	frequency
+uni-directional	unidirectional	frequency
+university-level	university level	frequency
+up-front	upfront	frequency
+up-regulate	upregulate	frequency
+up-regulated	upregulated	frequency
+up-regulation	upregulation	frequency
+upper-case	uppercase	frequency
+use-case	use case	frequency
+use-value	use value	frequency
+user-experience	user experience	frequency
+user-interface	user interface	word_table
+value-judgment	value judgment	frequency
+value-orientation	value orientation	frequency
+value-system	value system	frequency
+vander	van der	frequency
+vestibulo-spinal	vestibulospinal	frequency
+vestibuloocular	vestibulo-ocular	frequency
+vice chairman	vice-chairman	frequency
+vice-president	vice president	frequency
+video conference	videoconference	frequency
+video conferencing	videoconferencing	frequency
+video tape	videotape	frequency
+video-conferencing	videoconferencing	frequency
+video-game	video game	frequency
+video-recording	video recording	frequency
+video-tape	videotape	frequency
+video-taped	videotaped	frequency
+videocassette	video cassette	frequency
+videogame	video game	frequency
+viet nam	vietnam	frequency
+view point	viewpoint	frequency
+view-point	viewpoint	frequency
+visuo-motor	visuomotor	frequency
+visuo-spatial	visuospatial	frequency
+visuotactile	visuo-tactile	frequency
+voice-onset	voice onset	frequency
+voicemail	voice mail	frequency
+voltage clamp	voltage-clamp	frequency
+wait-list	waitlist	frequency
+waiting-list	waiting list	frequency
+walk-through	walkthrough	frequency
+war-time	wartime	frequency
+wash-out	washout	frequency
+water-level	water level	frequency
+wave form	waveform	frequency
+wave front	wavefront	frequency
+wave length	wavelength	frequency
+wave-form	waveform	frequency
+wave-length	wavelength	frequency
+wavefunction	wave function	frequency
+way-finding	wayfinding	frequency
+web log	weblog	frequency
+web site	website	frequency
+web-page	web page	frequency
+web-site	website	frequency
+webpage	web page	frequency
+weight-loss	weight loss	frequency
+wellbeing	well-being	frequency
+wheel chair	wheelchair	frequency
+whitehouse	white house	frequency
+wide-band	wideband	frequency
+wide-spread	widespread	frequency
+wifi	wi-fi	frequency
+word level	word-level	frequency
+word play	wordplay	frequency
+word-association	word association	frequency
+word-class	word class	frequency
+word-form	word form	frequency
+word-formation	word formation	frequency
+word-frequency	word frequency	frequency
+word-length	word length	frequency
+word-list	word list	frequency
+word-meaning	word meaning	frequency
+word-order	word order	frequency
+word-pair	word pair	frequency
+word-processing	word processing	frequency
+word-processor	word processor	frequency
+word-recognition	word recognition	frequency
+word-sense	word sense	frequency
+wordlength	word length	frequency
+wordlist	word list	frequency
+work ability	workability	frequency
+work day	workday	frequency
+work flow	workflow	frequency
+work force	workforce	frequency
+work life	work-life	frequency
+work load	workload	frequency
+work place	workplace	frequency
+work site	worksite	frequency
+work space	workspace	frequency
+work station	workstation	frequency
+work-load	workload	frequency
+work-up	workup	frequency
+workgroup	work group	frequency
+workweek	work week	frequency
+world class	world-class	frequency
+world view	worldview	frequency
+world-picture	world picture	frequency
+world-system	world system	frequency
+world-view	worldview	frequency
+world-wide	worldwide	frequency
+wrongheaded	wrong-headed	frequency
+x ray	x-ray	frequency
+x-chromosome	x chromosome	frequency
+x-window	x window	frequency
+xiao-ping	xiaoping	frequency
+y axis	y-axis	frequency
+year book	yearbook	frequency
+yearlong	year-long	frequency
+z axis	z-axis	frequency
+z score	z-score	frequency
+z transform	z-transform	frequency
+ze-dong	zedong	frequency
+zero-trust	zero trust	frequency

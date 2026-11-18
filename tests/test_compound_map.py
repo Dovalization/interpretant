@@ -37,7 +37,13 @@ def test_load_compounds_reads_a_small_map(catalog: CatalogConfig) -> None:
 
 
 def test_load_compounds_reads_the_repository_map() -> None:
-    assert load_compounds(read_catalog()) == []
+    compounds = {compound.form: compound for compound in load_compounds(read_catalog())}
+    assert len(compounds) == 1971
+    assert compounds["on-line"].standard == "online"
+    assert compounds["data base"].standard == "database"
+    assert compounds["user-interface"].standard == "user interface"
+    assert compounds["net-work"].source == "word_table"
+    assert {"re-presentation", "re-creation", "w hen", "world wide"}.isdisjoint(compounds)
 
 
 @pytest.mark.parametrize(
