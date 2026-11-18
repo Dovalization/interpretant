@@ -286,7 +286,8 @@ families.
 **Bar:**
 - **Alignment:** 100% of works have the same starts as R_B, so the same entry counts.
 - **Changes explained:** 100% of changed entries come from the maps (a spelling, a one-token
-  compound, or a merged standard followed by `""`).
+  compound, or a merged standard followed by `""`). A rewrite the maps call for but the new view
+  did not apply is allowed only in accented tokens, as the text shows.
 - **Targets:**
   - Each single-word target's word count equals R_B's plus the tokens spelled or compounded into
     it.
@@ -295,6 +296,13 @@ families.
 - **Straddles** (a merged pair cut by a removal) are reported.
 - **Spot check:** 80 changed entries in context, at most 1 wrong. A 0.5% error rate passes 94% of
   the time; 5% passes 9%.
+  - The entries are drawn from kept works, outside removed ranges, by the smallest sha256 of
+    (seed 20261126, work id, start).
+  - They are judged by the two Claude Sonnet judges and the Claude Opus adjudicator, with
+    `curated/judging/static_view/prompt.md` (added 2026-11-18, before the rebuild). The author
+    calibrated these judges on the compound audit, where they agreed with the author on 30 of 30.
+  - The items quote corpus text and stay out of git; the key and the verdicts go in
+    `data/review/static_view/`.
 
 ## Step 5: the contextual sentence view (2.2)
 
