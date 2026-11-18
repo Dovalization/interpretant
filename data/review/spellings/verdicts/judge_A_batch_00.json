@@ -1,0 +1,502 @@
+{
+"S000": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S001": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S002": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S003": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S004": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S005": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S006": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S007": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S008": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S009": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S010": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S011": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S012": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S013": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S014": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S015": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S016": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S017": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S018": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S019": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S020": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S021": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S022": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S023": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S024": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S025": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S026": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S027": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S028": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S029": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S030": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S031": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S032": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S033": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S034": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S035": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S036": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S037": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S038": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S039": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S040": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S041": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S042": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S043": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S044": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S045": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S046": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S047": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S048": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S049": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S050": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S051": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S052": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S053": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S054": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S055": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S056": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S057": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S058": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S059": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S060": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S061": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S062": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S063": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S064": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S065": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S066": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S067": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S068": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S069": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S070": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S071": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S072": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S073": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S074": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S075": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S076": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S077": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S078": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S079": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S080": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S081": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S082": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S083": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S084": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S085": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S086": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S087": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S088": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S089": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S090": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S091": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S092": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S093": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S094": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S095": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S096": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S097": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S098": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S099": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S100": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S101": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S102": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S103": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S104": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S105": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S106": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S107": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S108": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S109": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S110": {
+"verdict": "wrong",
+"reason": "prologue vs Prolog language"
+},
+"S111": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S112": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S113": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S114": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S115": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S116": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S117": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S118": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S119": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S120": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S121": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S122": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S123": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S124": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+}
+}

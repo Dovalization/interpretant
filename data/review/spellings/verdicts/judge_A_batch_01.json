@@ -1,0 +1,502 @@
+{
+"S125": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S126": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S127": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S128": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S129": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S130": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S131": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S132": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S133": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S134": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S135": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S136": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S137": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S138": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S139": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S140": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S141": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S142": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S143": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S144": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S145": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S146": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S147": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S148": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S149": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S150": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S151": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S152": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S153": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S154": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S155": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S156": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S157": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S158": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S159": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S160": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S161": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S162": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S163": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S164": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S165": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S166": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S167": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S168": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S169": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S170": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S171": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S172": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S173": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S174": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S175": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S176": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S177": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S178": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S179": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S180": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S181": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S182": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S183": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S184": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S185": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S186": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S187": {
+"verdict": "wrong",
+"reason": "Prolog possessive vs prologues"
+},
+"S188": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S189": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S190": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S191": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S192": {
+"verdict": "wrong",
+"reason": "gage is name/OCR split of engages"
+},
+"S193": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S194": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S195": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S196": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S197": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S198": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S199": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S200": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S201": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S202": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S203": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S204": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S205": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S206": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S207": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S208": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S209": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S210": {
+"verdict": "wrong",
+"reason": "en gaged is split of engaged"
+},
+"S211": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S212": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S213": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S214": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S215": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S216": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S217": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S218": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S219": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S220": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S221": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S222": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S223": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S224": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S225": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S226": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S227": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S228": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S229": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S230": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S231": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S232": {
+"verdict": "wrong",
+"reason": "assise is French, not English"
+},
+"S233": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S234": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S235": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S236": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S237": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S238": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S239": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S240": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S241": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S242": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S243": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S244": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S245": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S246": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S247": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S248": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+},
+"S249": {
+"verdict": "right",
+"reason": "same word, spelling variants"
+}
+}

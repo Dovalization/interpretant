@@ -1,0 +1,9 @@
+{
+  "S012": {"verdict": "wrong", "reason": "louvre only as the Louvre museum, not slats"},
+  "S102": {"verdict": "right", "reason": "epilog used as epilogue section heading"},
+  "S138": {"verdict": "wrong", "reason": "different surnames, Banister vs Bannister"},
+  "S154": {"verdict": "wrong", "reason": "filet is French/math term, fillet is geometry"},
+  "S210": {"verdict": "wrong", "reason": "gaged is a fragment of split engaged"},
+  "S222": {"verdict": "wrong", "reason": "both misspell anesthetized; standard not real"},
+  "S271": {"verdict": "wrong", "reason": "utiliser is French verb in corpus"}
+}
