@@ -43,7 +43,8 @@ from interpretant.pipelines.workers import map_parts
 
 # Each round's seeds (`docs/sentence_view.md`): the fresh audit (2); round 3, which drops the
 # recalibration (it carries over) and adds the split cuts; round 4, which redraws only the split
-# cuts and the boundaries, the samples its narrower split rule can change.
+# cuts and the boundaries, the samples its narrower split rule can change; round 5 likewise; and
+# round 6, the second recalibration's 30 abstracts.
 ROUNDS: dict[str, dict[str, int]] = {
     "2": {
         "recalibration": 20261201,
@@ -61,6 +62,7 @@ ROUNDS: dict[str, dict[str, int]] = {
     },
     "4": {"boundaries": 20261224, "splits": 20261225, "shuffle": 20261226},
     "5": {"boundaries": 20261234, "splits": 20261235, "shuffle": 20261236},
+    "6": {"recalibration": 20261241, "shuffle": 20261246},
 }
 RECALIBRATION = (3, 6)
 PRECISION = (6, 2)
@@ -122,7 +124,10 @@ def find_candidates(part: str, job: PartJob) -> dict[str, list[Candidate]]:
             if split and "splits" in seeds:
                 key = draw_key(seeds["splits"], work, number)
                 found["splits"].append((key, decade, work, number, -1))
-        found["targets"].extend(target_sentences(work, decade, rows, removals[work], entries, job))
+        if "boundaries" in seeds:
+            found["targets"].extend(
+                target_sentences(work, decade, rows, removals[work], entries, job)
+            )
     return {
         "recalibration": smallest_per_decade(found["recalibration"], KEEP_PER_PART),
         "precision": smallest_per_decade(found["precision"], KEEP_PER_PART),
