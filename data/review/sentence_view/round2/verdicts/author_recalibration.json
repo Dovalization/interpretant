@@ -1,0 +1,249 @@
+{
+ "B004": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:45:47.455Z"
+ },
+ "B007": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:46:20.426Z"
+ },
+ "B009": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:47:44.837Z"
+ },
+ "B011": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:47:52.752Z"
+ },
+ "B012": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:48:21.083Z"
+ },
+ "B020": {
+  "kind": "abstract",
+  "wrong_cuts": [
+   7,
+   11
+  ],
+  "missed_breaks": [
+   {
+    "offset": 123,
+    "sentence": 0,
+    "word": ".The"
+   }
+  ],
+  "unsure": false,
+  "updated": "2026-11-18T19:51:16.842Z"
+ },
+ "B022": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": true,
+  "updated": "2026-11-18T19:51:48.790Z"
+ },
+ "B024": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:52:27.714Z"
+ },
+ "B026": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:52:42.390Z"
+ },
+ "B027": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:53:07.242Z"
+ },
+ "B030": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:53:26.994Z"
+ },
+ "B031": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "offset": 194,
+    "sentence": 3,
+    "word": "Mind.\"1Although"
+   }
+  ],
+  "unsure": false,
+  "updated": "2026-11-18T19:54:13.422Z"
+ },
+ "B036": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:54:52.875Z"
+ },
+ "B040": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "offset": 197,
+    "sentence": 0,
+    "word": "Semantic"
+   }
+  ],
+  "unsure": false,
+  "updated": "2026-11-18T19:55:47.451Z"
+ },
+ "B042": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:56:42.302Z"
+ },
+ "B043": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:57:03.089Z"
+ },
+ "B050": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:57:17.606Z"
+ },
+ "B052": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:57:36.098Z"
+ },
+ "B054": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:58:13.382Z"
+ },
+ "B056": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:58:38.568Z"
+ },
+ "B058": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T19:58:51.980Z"
+ },
+ "B060": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:00:12.957Z"
+ },
+ "B061": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:00:35.534Z"
+ },
+ "B066": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:00:42.650Z"
+ },
+ "B067": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:00:51.607Z"
+ },
+ "B069": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:01:08.199Z"
+ },
+ "B071": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:01:40.973Z"
+ },
+ "B072": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:01:49.389Z"
+ },
+ "B077": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [
+   {
+    "offset": 60,
+    "sentence": 3,
+    "word": "Scientific"
+   },
+   {
+    "offset": 167,
+    "sentence": 3,
+    "word": "•"
+   },
+   {
+    "offset": 15,
+    "sentence": 7,
+    "word": "•"
+   }
+  ],
+  "unsure": false,
+  "updated": "2026-11-18T20:03:05.687Z"
+ },
+ "B079": {
+  "kind": "abstract",
+  "wrong_cuts": [],
+  "missed_breaks": [],
+  "unsure": false,
+  "updated": "2026-11-18T20:03:23.424Z"
+ }
+}
