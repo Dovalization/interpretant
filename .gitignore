@@ -107,3 +107,5 @@ yarn-error.log*
 # The spelling audit's items quote corpus sentences; only the key and the verdicts are committed.
 data/review/spellings/batch_*.jsonl
 data/review/spellings/calibration.json
+data/review/spellings/adjudicate.jsonl
+data/review/spellings/calibration_2.json

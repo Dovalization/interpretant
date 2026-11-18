@@ -50,12 +50,20 @@ mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3
 .done { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; text-align: center; padding: 32px 20px; }
 .done h2 { font: 650 1.4rem/1.3 var(--display); margin: 0 0 6px; }
 @media (max-width: 560px) { .pair, .options { grid-template-columns: 1fr; } }
+.rules { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: 0.95rem; max-width: 64ch; }
+.rules strong { color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
 </style>
 <div class="page">
   <header>
     <h1>Are these two spellings of one word?</h1>
-    <p class="lede">The word lists will write the left form as the right one, because they look like two spellings of the same word (British and American, -ise and -ize, -our and -or). Read the sentences and say whether that is right here. It is wrong when the two are different words or meanings, when one is not English or is a misspelling of another word, or when the right-hand form is not a real spelling. Which side is the standard was set by how often the corpus uses each, so don't judge that. Keys: 1 same word, 2 not the same, 3 not sure; arrows move.</p>
+    <p class="lede">The word lists will write the left form as the right one, because they look like two spellings of the same word (British and American, -ise and -ize, -our and -or). Say whether that is right for the word.</p>
+    <ul class="rules">
+      <li><strong>Same word</strong> when the two are spellings of one word, even if the sentences show different senses of it: both spellings carry every sense (economic and optical <em>polarisation</em>).</li>
+      <li><strong>Not the same</strong> when the spelling itself marks a different word or sense (<em>analyses</em>, the plural noun, against <em>analyzes</em>, the verb), when one is not English or is a misspelling of another word, or when the right-hand form is not a real spelling.</li>
+      <li>Names and other languages are handled by a rule. If a sentence shows the word only as a name or in another language, judge the English word.</li>
+    </ul>
+    <p class="lede">Which side is the standard was set by how often the corpus uses each, so don't judge that. Keys: 1 same word, 2 not the same, 3 not sure; arrows move.</p>
   </header>
   <div class="status"><strong id="count">0 / 0</strong><div class="bar"><span id="bar"></span></div></div>
   <main id="main"></main>
@@ -68,8 +76,8 @@ mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 3
 </div>
 <script>
 const ITEMS = __ITEMS__;
-const STORE = "spelling-calibration";
-const COLLECTION = "spelling_calibration";
+const STORE = "__COLLECTION__";
+const COLLECTION = "__COLLECTION__";
 const CHOICES = [["right", "1", "Same word"], ["wrong", "2", "Not the same"], ["unsure", "3", "Not sure"]];
 const answers = {};
 let db = null, at = 0;
@@ -105,7 +113,7 @@ function render() {
   const item = ITEMS[at], chosen = answers[item.id];
   main.innerHTML = `
     <div class="pair">${side("Written as", item.form, item.form_sentences)}${side("Standard", item.standard, item.standard_sentences)}</div>
-    <p class="question">Are <em>${esc(item.form)}</em> and <em>${esc(item.standard)}</em> two spellings of one word, with one meaning here?</p>
+    <p class="question">Are <em>${esc(item.form)}</em> and <em>${esc(item.standard)}</em> two spellings of the same word?</p>
     <div class="options">${CHOICES.map(([value, key, label]) => `<button class="opt${chosen && chosen.verdict === value ? " chosen" : ""}" data-choice="${value}" type="button"><kbd>${key}</kbd><span>${label}</span></button>`).join("")}</div>`;
 }
 
