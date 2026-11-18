@@ -1,0 +1,752 @@
+{
+ "T000": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T001": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T002": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T003": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T004": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T005": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T006": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T007": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T008": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T009": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T010": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T011": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T012": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T013": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T014": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T015": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T016": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T017": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T018": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T019": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T020": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T021": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T022": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T023": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T024": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T025": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T026": {
+  "verdict": "wrong",
+  "where": "end",
+  "reason": "sentence continues in next piece"
+ },
+ "T027": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T028": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T029": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T030": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T031": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T032": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T033": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T034": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T035": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T036": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T037": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T038": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T039": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T040": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T041": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T042": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T043": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T044": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T045": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T046": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T047": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T048": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T049": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T050": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T051": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T052": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T053": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T054": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T055": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T056": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T057": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T058": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T059": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T060": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T061": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T062": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T063": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T064": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T065": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T066": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T067": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T068": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T069": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T070": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T071": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T072": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T073": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T074": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T075": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T076": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T077": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T078": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T079": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T080": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T081": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T082": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T083": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T084": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T085": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T086": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T087": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T088": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T089": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T090": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T091": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T092": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T093": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T094": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T095": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T096": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T097": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T098": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T099": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T100": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T101": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T102": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T103": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T104": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T105": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T106": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T107": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T108": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T109": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T110": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T111": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T112": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T113": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T114": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T115": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T116": {
+  "verdict": "wrong",
+  "where": "start",
+  "reason": "lowercase fragment, starts mid-sentence"
+ },
+ "T117": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T118": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T119": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T120": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T121": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T122": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T123": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T124": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T125": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T126": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T127": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T128": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T129": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T130": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T131": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T132": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T133": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T134": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T135": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T136": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T137": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T138": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T139": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T140": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T141": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T142": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T143": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T144": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T145": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T146": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T147": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T148": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ },
+ "T149": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts at sentence boundaries"
+ }
+}

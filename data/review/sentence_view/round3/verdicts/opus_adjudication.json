@@ -1,0 +1,23 @@
+{
+  "B024": {
+    "wrong_cuts": [3],
+    "missed_breaks": [
+      {"sentence": 2, "word": "3."},
+      {"sentence": 5, "word": "5."}
+    ],
+    "note": "list numerals 3 and 5 attached to the preceding sentence"
+  },
+  "S060": {
+    "verdict": "wrong",
+    "note": "cut after roman numeral separates part label from its title"
+  },
+  "S062": {
+    "verdict": "wrong",
+    "note": "cut after author initial inside one reference entry"
+  },
+  "T064": {
+    "verdict": "right",
+    "where": null,
+    "note": "author's full stop precedes fragment; cuts follow real punctuation"
+  }
+}

@@ -1,0 +1,322 @@
+{
+ "J000": {
+  "verdict": "right",
+  "reason": "list marker mid-sentence"
+ },
+ "J001": {
+  "verdict": "right",
+  "reason": "list marker after semicolon"
+ },
+ "J002": {
+  "verdict": "right",
+  "reason": "ellipsis inside sentence"
+ },
+ "J003": {
+  "verdict": "right",
+  "reason": "list marker inside enumeration"
+ },
+ "J004": {
+  "verdict": "right",
+  "reason": "reference line continues"
+ },
+ "J005": {
+  "verdict": "right",
+  "reason": "abbreviation vols. then parenthetical"
+ },
+ "J006": {
+  "verdict": "right",
+  "reason": "ellipsis inside quotation"
+ },
+ "J007": {
+  "verdict": "right",
+  "reason": "ellipsis inside sentence"
+ },
+ "J008": {
+  "verdict": "right",
+  "reason": "quoted terms inside brackets"
+ },
+ "J009": {
+  "verdict": "right",
+  "reason": "abbreviation inside parenthesis"
+ },
+ "J010": {
+  "verdict": "right",
+  "reason": "citation inside parenthesis"
+ },
+ "J011": {
+  "verdict": "right",
+  "reason": "list marker mid-sentence"
+ },
+ "J012": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J013": {
+  "verdict": "right",
+  "reason": "ellipsis inside quotation"
+ },
+ "J014": {
+  "verdict": "right",
+  "reason": "abbreviated journal reference"
+ },
+ "J015": {
+  "verdict": "right",
+  "reason": "ed. abbreviation in catalogue line"
+ },
+ "J016": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J017": {
+  "verdict": "right",
+  "reason": "ellipsis inside title"
+ },
+ "J018": {
+  "verdict": "right",
+  "reason": "ellipsis inside quotation"
+ },
+ "J019": {
+  "verdict": "right",
+  "reason": "ellipsis inside quotation"
+ },
+ "J020": {
+  "verdict": "right",
+  "reason": "ed. abbreviation in citation"
+ },
+ "J021": {
+  "verdict": "right",
+  "reason": "trans. abbreviation in citation"
+ },
+ "J022": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J023": {
+  "verdict": "right",
+  "reason": "Dr. abbreviation"
+ },
+ "J024": {
+  "verdict": "right",
+  "reason": "initial inside citation"
+ },
+ "J025": {
+  "verdict": "right",
+  "reason": "list marker mid-sentence"
+ },
+ "J026": {
+  "verdict": "right",
+  "reason": "formula split inside math"
+ },
+ "J027": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J028": {
+  "verdict": "right",
+  "reason": "ed. abbreviation in citation"
+ },
+ "J029": {
+  "verdict": "right",
+  "reason": "page number inside parenthesis"
+ },
+ "J030": {
+  "verdict": "right",
+  "reason": "cut inside parenthesis"
+ },
+ "J031": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J032": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J033": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J034": {
+  "verdict": "right",
+  "reason": "cut inside parenthesis"
+ },
+ "J035": {
+  "verdict": "right",
+  "reason": "Pp. abbreviation"
+ },
+ "J036": {
+  "verdict": "right",
+  "reason": "contents chapter numbering"
+ },
+ "J037": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J038": {
+  "verdict": "right",
+  "reason": "list marker mid-sentence"
+ },
+ "J039": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J040": {
+  "verdict": "right",
+  "reason": "OCR noise, one sentence"
+ },
+ "J041": {
+  "verdict": "right",
+  "reason": "list marker mid-sentence"
+ },
+ "J042": {
+  "verdict": "right",
+  "reason": "sec. abbreviation in note"
+ },
+ "J043": {
+  "verdict": "right",
+  "reason": "bracketed reference continues"
+ },
+ "J044": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J045": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J046": {
+  "verdict": "right",
+  "reason": "prof. abbreviation"
+ },
+ "J047": {
+  "verdict": "right",
+  "reason": "list marker mid-sentence"
+ },
+ "J048": {
+  "verdict": "right",
+  "reason": "ed. abbreviation in citation"
+ },
+ "J049": {
+  "verdict": "right",
+  "reason": "ellipsis inside formula"
+ },
+ "J050": {
+  "verdict": "right",
+  "reason": "ellipsis inside quotation"
+ },
+ "J051": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J052": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J053": {
+  "verdict": "right",
+  "reason": "ellipsis inside parenthesis"
+ },
+ "J054": {
+  "verdict": "right",
+  "reason": "ellipsis inside garbled text"
+ },
+ "J055": {
+  "verdict": "right",
+  "reason": "list marker after colon"
+ },
+ "J056": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J057": {
+  "verdict": "right",
+  "reason": "cut inside brackets"
+ },
+ "J058": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J059": {
+  "verdict": "right",
+  "reason": "chap. abbreviation"
+ },
+ "J060": {
+  "verdict": "right",
+  "reason": "sec. abbreviation"
+ },
+ "J061": {
+  "verdict": "right",
+  "reason": "list marker after colon"
+ },
+ "J062": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J063": {
+  "verdict": "right",
+  "reason": "list marker after colon"
+ },
+ "J064": {
+  "verdict": "right",
+  "reason": "ellipsis inside quotation"
+ },
+ "J065": {
+  "verdict": "right",
+  "reason": "reference line continues"
+ },
+ "J066": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J067": {
+  "verdict": "right",
+  "reason": "list marker after colon"
+ },
+ "J068": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J069": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J070": {
+  "verdict": "right",
+  "reason": "list marker after colon"
+ },
+ "J071": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J072": {
+  "verdict": "right",
+  "reason": "list number marker"
+ },
+ "J073": {
+  "verdict": "right",
+  "reason": "ed. abbreviation in citation"
+ },
+ "J074": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J075": {
+  "verdict": "right",
+  "reason": "citation abbreviation"
+ },
+ "J076": {
+  "verdict": "right",
+  "reason": "list marker after colon"
+ },
+ "J077": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J078": {
+  "verdict": "right",
+  "reason": "contents numbering"
+ },
+ "J079": {
+  "verdict": "right",
+  "reason": "ed. abbreviation in citation"
+ }
+}
