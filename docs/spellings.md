@@ -111,6 +111,31 @@ Set after the first calibration and before any pair was judged again.
   counting as a disagreement. Otherwise the author judges the sample's 150 pairs on the clarified
   page. The sample's bar (at most 3 wrong of 150) does not change.
 
-## Results
+## Results (2026-11-17)
 
-To be written after judging.
+- **The second calibration passes.** The agents agree with the author on 30 of the 30 pairs
+  (`verdicts/author_calibration_2.json`; `scripts/review/score_spellings.py`, code `5277a42f`).
+  The author called all 30 right, and so did the agents. A draw of 30 at a 2% error rate holds no
+  wrong pair about half the time, so this calibration shows that the agents do not over-flag. It
+  does not show that they catch wrong pairs. That evidence comes from the pairs the agents did
+  flag (*prologue*, *assize*, *meters*, *anesthesised*) and from the first calibration, whose
+  misses (names, French) now fall to the rule above.
+- **The judges.** With the clarified prompt the two judges agree on 267 of the 273 items; the Opus
+  adjudicator settled the other 6 (`verdicts_v2/`). The first round, with the first prompt, agreed
+  on 266.
+- **The sample passes, at its limit.** 3 of the 150 pairs are wrong (2.0%, Wilson 95% interval
+  0.7% to 5.7%; the bar is at most 3):
+  - *prologue* → *prolog*: the corpus's *prolog* is mostly the programming language;
+  - *programme* → *program*: the author's call;
+  - *anesthesised* → *anesthesized*: both misspell *anesthetized*.
+- **The census errors, fixed one by one:** *assize* → *assise* (French), *meters* → *metres*
+  (device against unit), *programmes* → *programs* (the author's call), *prologs* → *prologues*.
+  A pair judged wrong also takes its singular or plural with it, since the view writes plural
+  nouns as their lemma before the map applies, so *metre* → *meter* leaves too.
+- **The map:** `curated/spellings.tsv`, 1,946 pairs (the proposal's 1,954 minus 8). No standard is
+  also a form, and no word-table lemma is mapped away.
+- **Known inconsistencies, left as they are:**
+  - Direction is set form by form, so a singular and its plural can go opposite ways (*disc* →
+    *disk*, *disks* → *discs*). Plural nouns reach the map as their lemma, so both end as *disk*.
+  - *micrometre* → *micrometer* stays (11 against 201 tokens), although British usage also keeps
+    the unit apart from the device there. The judges did not flag it.
