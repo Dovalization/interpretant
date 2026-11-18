@@ -1,0 +1,8 @@
+{
+  "S115": {"verdict": "right", "reason": "disk/disc one word; corpus mixes senses"},
+  "S154": {"verdict": "right", "reason": "filet is a fillet variant; French uses aside"},
+  "S177": {"verdict": "right", "reason": "disc/disk one word; floppy disc attested"},
+  "S192": {"verdict": "right", "reason": "gage is US variant of gauge"},
+  "S218": {"verdict": "right", "reason": "programme/program one word"},
+  "S222": {"verdict": "wrong", "reason": "misspellings of anesthetized"}
+}
