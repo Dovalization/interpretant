@@ -304,6 +304,36 @@ families.
   - The items quote corpus text and stay out of git; the key and the verdicts go in
     `data/review/static_view/`.
 
+**Results (2026-11-18).**
+- **The run.** The view was rebuilt on bazzite at code `e937c9f0` in 132 s: 705,283 documents and
+  104,176,115 entries, the same as R_B. The lock is `8fad6e8f`, the run record `43e4897f`. The
+  other stages were re-committed unchanged first, since `catalog/config.py` only gained the map
+  paths. The check (`scripts/evidence/static_view_check.py`, code `e62fb8f4`; summary in
+  `data/review/static_view/summary.json`) ran in 25 s.
+- **Alignment passes.** Every work is in the same part with R_B's starts.
+- **Changes explained passes, with one source the bar did not name.**
+  - 263,582 entries are rewritten (a spelling or a one-token compound), 29,415 are split and
+    34,276 pairs are merged, all as the maps say.
+  - All 437 rewrites left unapplied are in accented tokens.
+  - 14 entries change for another reason: the seven exception rows dropped in step 2
+    (`docs/lemma_review.md`, 2026-11-17) had kept a plural or *-s* verb unlemmatised. Examples are
+    *four-colourings* and *re-singularises*. Without them, the view writes spaCy's lemma, spelled
+    (*four-coloring*), as its rule for plural nouns and *-s* verbs says. The change was intended in
+    step 2; the bar named only the maps.
+- **Targets pass.**
+  - No target entry of R_B changes, and no merged pair holds a word of the table. No held-out word
+    is affected.
+  - Over kept works, with removed ranges skipped, the targets gain words: *behavior* 16,876 (from
+    *behaviour*), *information* 710, *learning* 460, *user* 367, *interface* 316, *image* 213,
+    *attention* 167, *system* 152, *feedback* 146, and 10 more under 100.
+- **Straddles:** none.
+- **Reconciliation** (kept works, removed ranges skipped):
+  - Merges: 33,432 against the builder's 33,461. The 29 short are overlaps, where an earlier merge
+    took the first word (*amyloid beta* before *beta protein*, *family work* before *work life*).
+  - One-token rewrites: 126,767 against 126,765.
+- **The spot check passes.** Both judges called all 80 entries right: 64 rewrites, 8 merges and 8
+  splits. With no disagreement, the adjudicator was not needed.
+
 ## Step 5: the contextual sentence view (2.2)
 
 **Rule (the author):**

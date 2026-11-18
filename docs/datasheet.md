@@ -2,7 +2,9 @@
 
 The written record of agenda step 4b: "Datasheets for Datasets" (Gebru et al. 2018), with a Data
 Statement (Bender and Friedman 2018) after it. It describes the build of record `75f36a82`
-(the cleaning batch of runs 9, 10, 12 and 14) and the static view recorded at `2c547e7a`. The
+(the cleaning batch of runs 9, 10, 12 and 14) and the static view recorded at `8fad6e8f` (phase
+step 4: the lemma exceptions, the spelling map and the compound map; first recorded at
+`2c547e7a`). The
 counts come from `metrics/corpus.json` and the corpus report (`interpretant report-corpus`,
 `data/processed/corpus_report.md`), which holds the full layer-2 tables.
 
@@ -101,6 +103,22 @@ one spaCy pass (`en_core_web_sm` 3.8.0) cached as `DocBin`s, sentence languages 
 the cleaning patterns (spaCy's `SpanRuler`) and keeping rules, then the corpus-level rules
 (template and repeated sentences, near-duplicates, the author cap, the record kinds).
 
+**The static view** (`corpus/static_view.py`; checked against the previous view in
+`docs/preprocessing_phase.md`, step 4) holds one entry per word token of every cached document,
+104,176,115 in all, each with its character offset:
+- the token lowercased, its accents folded, the en dash written as a hyphen;
+- plural nouns and third-person singular verbs written as their lemma, with the lemma exceptions;
+- each spelling variant written one way by the audited spelling map (1,946 pairs,
+  `docs/spellings.md`), per hyphen segment;
+- each two-part compound written one way, open, hyphenated or closed, by the audited compound map
+  (1,971 pairs, `docs/compounds.md`).
+
+Both maps leave accented tokens alone. A spaced compound merges only as two adjacent nouns in one
+sentence; it writes its standard in the first entry and an empty string in the second. A token
+whose standard is open holds that standard with its space (*user interface*). Readers take the
+entries as words (`corpus/cell_versions.segment_words`), so the empty entries drop out. Single
+words are not joined into phrases (agenda 3.5).
+
 Dropped abstracts, by reason:
 
 | Reason | Abstracts |
@@ -184,11 +202,17 @@ added or sent back rules are recorded there with their records.
   abstracts; flagged truncated abstracts (79,091) are kept.
 - **Repository-only works** (96,267) are flagged, not dropped: theses, reports and preprints mixed
   with articles, most in the early humanities cells.
-- **Lemmas** are spaCy's small model's in context, with the 3,297 exceptions of the lemma review
+- **Lemmas** are spaCy's small model's in context, with the 3,287 exceptions of the lemma review
   (2026-11-17, `curated/lemma_exceptions.tsv`, `docs/lemma_review.md`): *senses* becomes *sense*,
   *data* and *media* keep their form, and a plural whose singular is mostly an adjective keeps
-  its form (*professionals*). British and American spellings stay apart until step 3.4
-  (*behaviour*, *behavior*).
+  its form (*professionals*).
+- **Spellings and compounds** are written one way in the static view only; the text keeps the
+  author's. The maps' audits passed with 3 and 1 wrong pairs in samples of 150, so a few wrong
+  merges remain. The map also hides how each compound's ways of writing drift across decades
+  (in the families that vary, closed forms gain about 20 points from the 1950s to the 2020s), so
+  that drift is reported
+  separately in `docs/compounds.md`. Accented tokens (mostly French words) are left unmapped, and
+  three-part compounds (*state-of-the-art*) are left as written.
 - **Sentences in other languages** remain: about 1% of the sentences sampled for the lemma review
   (33 of 3,551) read as another language, mostly French. A likely cause, not confirmed: in text
   whose accents were stripped, French *à* becomes *a*, which the language stage's list of English
@@ -223,7 +247,8 @@ counts are regenerated with every build in the corpus report.
   history can be followed with comparable samples; English only, since the measures are English
   models.
 - **Language variety.** English (`en`), the academic register of published research; American
-  and British spelling mixed; many authors write English as a second language, more so in recent
+  and British spelling mixed in the text (the static view writes each spelling one way); many
+  authors write English as a second language, more so in recent
   decades. Sentences lingua reads as another language are removed, and abstracts mostly in
   another language are dropped.
 - **Speaker demographic.** The authors of indexed research works, recorded by OpenAlex author ids

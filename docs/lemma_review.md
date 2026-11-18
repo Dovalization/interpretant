@@ -208,6 +208,9 @@ a singular mostly used attributively (*keys*, *tokens*, *firms*, *squares*).
   verb lemma *hypothesize*, which the map leaves as it is. The builder reads the target words from
   the word table (`curated/words.tsv`). The static view of record (R_B) still applies the 3,297
   forms; the rebuild is phase step 4.
+- **Rebuilt (2026-11-18, phase step 4, lock `8fad6e8f`).** The view now applies the 3,287 forms.
+  Of the seven plurals above, the corpus held 14 entries; they now take spaCy's singular, spelled
+  (*four-coloring*). No other entry changed except through the two maps.
 - **The target words on the cache (3.6, `scripts/evidence/target_lemmas.py`, 2 min 34 s).**
   Over the kept text, no token of a target's own spelling is written as another word with the
   exceptions (0), so the contingency of round L1 (`docs/predictions_lemmas.md`) does not apply.
