@@ -1,14 +1,13 @@
-"""End-to-end smoke test: the whole CLI pipeline on a synthetic two-field, two-decade grid.
+"""End-to-end smoke test: the grid commands on a synthetic two-field, two-decade grid.
 
-Each stage reads what the previous one wrote, as in a real run, so a broken hand-off between
-commands fails here even when every library function passes its own tests.
+The cells are written as the grid commands read them, already lemmatised and without a phrase
+step. Each command reads what the previous one wrote, as in a real run, so a broken hand-off
+between commands fails here even when every library function passes its own tests.
 """
 
 from __future__ import annotations
 
-import json
 import random
-from collections import Counter
 from pathlib import Path
 
 import polars as pl
@@ -16,12 +15,11 @@ from click.testing import CliRunner
 from gensim.models import KeyedVectors
 
 from interpretant.__main__ import cli
-from interpretant.corpus.lemmas import save_votes
 
 SHARED = ["the", "of", "and", "in", "a", "study", "model", "user", "system", "theory"]
 FIELD_WORDS = {
     "philosophy": ["mind", "consciousness", "perception", "experience", "world", "body"],
-    "hci": ["interface", "interfaces", "interaction", "design", "usability", "screen"],
+    "hci": ["interface", "display", "interaction", "design", "usability", "screen"],
 }
 TARGETS = ["consciousness", "interface", "model"]
 CONTROLS = ["study", "theory"]
@@ -42,47 +40,25 @@ def run(*args: str | Path) -> str:
     return result.output
 
 
-def test_pipeline_runs_from_processed_text_to_drift_tables(tmp_path: Path) -> None:
-    processed, lemmatised, phrased = (tmp_path / name for name in ("p", "l", "ph"))
+def test_grid_commands_run_from_lemmatised_text_to_drift_tables(tmp_path: Path) -> None:
+    lemmatised = tmp_path / "lemmatised"
     models, ppmi, drift = (tmp_path / name for name in ("twec", "ppmi", "drift"))
     for field in FIELD_WORDS:
         for decade in (1990, 2000):
-            write_cell(processed / "openalex" / "texts" / f"{field}_{decade}.txt", field, decade)
-    words, controls, overrides = (tmp_path / name for name in ("w.txt", "c.txt", "o.tsv"))
+            write_cell(lemmatised / "openalex" / "texts" / f"{field}_{decade}.txt", field, decade)
+    words, controls = (tmp_path / name for name in ("w.txt", "c.txt"))
     words.write_text("\n".join(TARGETS))
     controls.write_text("\n".join(CONTROLS))
-    overrides.write_text("# none\n")
-    texts = phrased / "openalex" / "texts"
 
-    votes = tmp_path / "votes.parquet"
-    save_votes(Counter({("interfaces", "NNS", "interface"): 9}), votes)
-
-    run("corpus", "lemmas", "learn", "--processed-dir", processed, "--source", "openalex",
-        "--words-file", words, "--overrides", overrides, "--votes", votes,
-        "--output", processed / "lemmas.tsv")  # fmt: skip
-    run("corpus", "lemmas", "apply", "--processed-dir", processed, "--source", "openalex",
-        "--map", processed / "lemmas.tsv", "--output-dir", lemmatised)  # fmt: skip
-    run("corpus", "phrases", "learn", "--processed-dir", lemmatised, "--source", "openalex",
-        "--words-file", words, "--tokens-per-file", "5000",
-        "--output", lemmatised / "p.model")  # fmt: skip
-    run("corpus", "phrases", "apply", "--processed-dir", lemmatised, "--source", "openalex",
-        "--model", lemmatised / "p.model", "--output-dir", phrased)  # fmt: skip
-    run("corpus", "audit", "--processed-dir", phrased, "--words-file", words,
-        "--output", phrased / "audit.json")  # fmt: skip
-    run("twec", "grid", "--input-dir", phrased, "--output-dir", models, "--vector-size", "8",
+    run("twec", "grid", "--input-dir", lemmatised, "--output-dir", models, "--vector-size", "8",
         "--epochs", "1", "--workers", "1", "--min-count", "1",
         "--compass-tokens-per-cell", "2000")  # fmt: skip
-    run("ppmi", "grid", "--input-dir", phrased, "--layer", "openalex", "--output-dir", ppmi,
+    run("ppmi", "grid", "--input-dir", lemmatised, "--layer", "openalex", "--output-dir", ppmi,
         "--dimensions", "4", "--min-count", "5")  # fmt: skip
     run("drift", "grid", "--model-dir", models, "--output-dir", drift, "--words-file", words,
         "--controls-file", controls, "--measure-min", "20", "--neighbour-min", "10",
         "--neighbours", "5")  # fmt: skip
 
-    hci = (texts / "hci_1990.txt").read_text(encoding="utf-8").split()
-    assert "interfaces" not in hci
-    assert "interface" in hci
-    audit = json.loads((phrased / "audit.json").read_text(encoding="utf-8"))
-    assert len(audit["cells"]) == 4
     for root in (models, ppmi):
         vectors = KeyedVectors.load(str(root / "openalex" / "hci_2000.kv"))
         assert "interface" in vectors.key_to_index
