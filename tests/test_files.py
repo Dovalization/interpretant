@@ -1,10 +1,10 @@
-"""Tests for finding and rewriting a pipeline stage's cell files."""
+"""Tests for finding a pipeline stage's cell files."""
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from interpretant.corpus.files import rewrite_texts, source_texts
+from interpretant.corpus.files import source_texts
 
 
 def write(path: Path, text: str) -> None:
@@ -23,16 +23,3 @@ def test_source_texts_lists_only_the_requested_sources(tmp_path: Path) -> None:
         "openalex/texts/hci_1990.txt",
         "openalex_full/texts/hci_1990.txt",
     ]
-
-
-def test_rewrite_texts_mirrors_the_layout_and_transforms_every_line(tmp_path: Path) -> None:
-    stage = tmp_path / "processed"
-    write(stage / "openalex" / "texts" / "hci_1990.txt", "user interfaces\nmental models\n")
-
-    def shout(line: str) -> str:
-        return " ".join(line.split()).upper()
-
-    written = rewrite_texts(source_texts(stage, ("openalex",)), stage, tmp_path / "next", shout)
-
-    assert written == [tmp_path / "next" / "openalex" / "texts" / "hci_1990.txt"]
-    assert written[0].read_text(encoding="utf-8") == "USER INTERFACES\nMENTAL MODELS\n"

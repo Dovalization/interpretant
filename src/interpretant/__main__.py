@@ -6,7 +6,6 @@ from pathlib import Path
 
 import click
 from rich.console import Console
-from rich.table import Table
 
 from interpretant.cli.annotate_corpus import annotate_corpus_command
 from interpretant.cli.build_corpus import build_corpus_command
@@ -149,49 +148,6 @@ def corpus_openalex_sources(
         for decade in decades:
             output = fetch_sources(client, raw_dir, field, decade)
             console.print(f"  {field} {decade}s → {output}")
-
-
-@corpus_openalex.command("ingest")
-@click.option(
-    "--raw-dir",
-    type=click.Path(path_type=Path),
-    default=Path("data/raw/openalex"),
-    show_default=True,
-)
-@click.option(
-    "--output-dir",
-    type=click.Path(path_type=Path),
-    default=Path("data/processed/openalex/texts"),
-    show_default=True,
-)
-@click.option("--start", default=1950, show_default=True, help="First decade (inclusive).")
-@click.option("--end", default=2030, show_default=True, help="Last decade (exclusive).")
-def corpus_openalex_ingest(raw_dir: Path, output_dir: Path, start: int, end: int) -> None:
-    """Clean and preprocess downloaded cells into ``<field>_<decade>.txt``, one per line.
-
-    The table shows documents kept per cell and, after the minus sign, how many were dropped
-    as duplicates, archive catalogue or citation records, scraped web pages, or by the 1% author
-    cap.
-    """
-    from interpretant.corpus.openalex import ingest_fields
-
-    decades = list(range(start, end, 10))
-    cleaned = ingest_fields(raw_dir, output_dir, decades)
-    table = Table(title="OpenAlex ingest (kept −dropped per cell)", show_lines=False)
-    table.add_column("Field", style="cyan")
-    for decade in decades:
-        table.add_column(str(decade), justify="right")
-    for field, cells in cleaned.items():
-        table.add_row(
-            field,
-            *(
-                f"{len(cell.documents):,} −{cell.dropped:,}"
-                if cell.dropped
-                else f"{len(cell.documents):,}"
-                for cell in cells.values()
-            ),
-        )
-    console.print(table)
 
 
 # ---------------------------------------------------------------------------

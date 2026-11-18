@@ -4,9 +4,9 @@ OpenAlex labels every work with one topic taxonomy, so philosophy, psychology, n
 computer science and the social sciences share field labels across the whole series. Each
 cell of the field × decade grid is a seeded random sample of English research prose with
 abstracts (``RESEARCH_TYPES``), stored as ``data/raw/openalex/<field>/<decade>.jsonl.gz``
-with one work per line. Ingest drops duplicate abstracts and archive catalogue records
-("Letter from X to Y dated ...", "Script from ..."), which OpenAlex indexes as works, then
-caps any author at 1% of a cell's works (``interpretant.corpus.caps``).
+with one work per line. Loading a cell (``OpenAlexSource``) drops duplicate abstracts and
+archive catalogue records ("Letter from X to Y dated ...", "Script from ..."), which OpenAlex
+indexes as works, then caps any author at 1% of a cell's works (``interpretant.corpus.caps``).
 
 Requests need an API key (``OPENALEX_API_KEY`` in the environment or ``.env``): a list page
 of 200 works costs one credit from the key's daily budget.
@@ -184,8 +184,8 @@ def strip_boilerplate(abstract: str) -> str:
     return _COPYRIGHT.sub(" ", _APPENDED_FOOTER.sub(" ", abstract))
 
 
-# Field slug → OpenAlex filter. Slugs are alphanumeric so processed files follow the
-# ``<source>_<decade>.txt`` convention the audit reads.
+# Field slug → OpenAlex filter. Slugs are alphanumeric so cell files follow the
+# ``<field>_<decade>.txt`` convention the grid commands read.
 FIELDS: dict[str, str] = {
     "philosophy": "primary_topic.subfield.id:1211",
     "histphilsci": "primary_topic.subfield.id:1207",
@@ -489,23 +489,3 @@ class OpenAlexSource:
 
     def cell(self, decade: int) -> CleanedCell:
         return clean_cell(self._records(decade))
-
-
-def ingest_fields(
-    raw_dir: Path, output_dir: Path, decades: Iterable[int]
-) -> dict[str, dict[int, CleanedCell]]:
-    """Clean every field's downloaded cells and write the non-empty ones to
-    ``<output_dir>/<field>_<decade>.txt``; return the cleaned cells by field and decade."""
-    output_dir.mkdir(parents=True, exist_ok=True)
-    cleaned: dict[str, dict[int, CleanedCell]] = {}
-    for field in FIELDS:
-        source = OpenAlexSource(raw_dir, field)
-        cleaned[field] = {}
-        for decade in decades:
-            cell = source.cell(decade)
-            if cell.documents:
-                (output_dir / f"{field}_{decade}.txt").write_text(
-                    "\n".join(cell.documents), "utf-8"
-                )
-            cleaned[field][decade] = cell
-    return cleaned
