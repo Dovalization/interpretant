@@ -37,6 +37,18 @@ def key(work_id: str, start: int) -> str:
     return hashlib.sha256(f"{SEED}:{work_id}:{start}".encode()).hexdigest()
 
 
+def window(sentence: str, offset: int, width: int = 300) -> str:
+    """The sentence, or a window of it centred on the word when it is longer than ``width``."""
+    if len(sentence) <= width:
+        return sentence.strip()
+    begin = max(0, min(offset - width // 2, len(sentence) - width))
+    return (
+        ("…" if begin else "")
+        + sentence[begin : begin + width].strip()
+        + ("…" if begin + width < len(sentence) else "")
+    )
+
+
 def main() -> None:
     """Build the items, the batches, the key and the calibration set."""
     review, out = Path(sys.argv[1]), Path(sys.argv[2])
@@ -95,7 +107,9 @@ def main() -> None:
             text, bounds = texts[work_id]
             sentence = next((s for s in bounds if s["start"] <= start < s["end"]), None)
             if sentence is not None:
-                found.append(text[sentence["start"] : sentence["end"]].strip()[:300])
+                found.append(
+                    window(text[sentence["start"] : sentence["end"]], start - sentence["start"])
+                )
         return found
 
     rng = random.Random(SEED)
