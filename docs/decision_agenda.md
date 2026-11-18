@@ -849,7 +849,16 @@ Roles follow from the data: a target heads a comparison, a control is listed und
 has three comparisons (AI 2010s→2020s, AI 1990s→2000s, psychology 2010s→2020s), each with its own
 controls; a check that no word is both target and control is a join. Held-out words are filtered
 from every development output (6.2). *component* and *having* are stable checks (check 2b's
-author-judged words, 7.1); the six-word shortlist gets a role after checking its history.
+author-judged words, 7.1); the six-word shortlist gets a role after checking its history. *Built (2026-11-17,
+the author):* `curated/words.tsv` holds 46 words and the 7 phrase targets, the shortlist included
+(roles wait for `comparisons.tsv`). A word lists a **set** of parts of speech, not one: the small
+tagger reads many noun uses as other parts of speech (*learning* in "the learning process" as a
+verb, 39% of its uses; *Transformer* as a name, 37%; *cloud* before a noun as an adjective), so each
+noun accepts `PROPN`, with real names left to entity recognition (4.1), and *learning*, *embedding*
+(`VERB`), *embodiment*, *transformer* and *cloud* (`ADJ`) accept their tagger errors; real other
+readings stay out (*control* and *experience* as verbs, *medium* as an adjective, *prompt* as a
+verb). The sets are checked again after the model comparison (4.9). The held-out column is filled
+before stage 7 (6.2).
 Candidates come from the long list (`data/discovery/longlist.json`, kept as data;
 `scripts/discovery/` deleted; the list regenerated from the rebuilt static grid later). Caps by
 role: targets and their controls share one, so they stay comparable; candidates keep a lower one
