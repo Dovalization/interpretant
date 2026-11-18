@@ -63,7 +63,10 @@ def write_pending(
     """The items the adjudicator must see, each with both judges' verdicts."""
     items = {}
     for kind in KINDS.values():
-        for line in (review / f"{kind}.jsonl").read_text(encoding="utf-8").splitlines():
+        path = review / f"{kind}.jsonl"
+        if not path.exists():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
             item = json.loads(line)
             items[item["id"]] = item
     with (review / "adjudicate.jsonl").open("w", encoding="utf-8") as handle:
@@ -95,7 +98,7 @@ def main() -> None:
             pending.append(item_id)
     write = sys.stdout.write
     totals = Counter(KINDS[item_id[0]] for item_id in key)
-    agreement = ", ".join(f"{agreed[kind]} of {totals[kind]} {kind}" for kind in KINDS.values())
+    agreement = ", ".join(f"{agreed[kind]} of {totals[kind]} {kind}" for kind in totals)
     write(f"judges agree on {agreement}\n")
     if mode == "pending":
         write_pending(review, pending, first, second)
