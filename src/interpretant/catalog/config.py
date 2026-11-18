@@ -51,6 +51,7 @@ class CatalogConfig(BaseModel):
     annotations: DatasetEntry
     sentences: DatasetEntry
     static_view: DatasetEntry
+    sentence_view: DatasetEntry
     lemma_exceptions: DatasetEntry
     words: DatasetEntry
     spellings: DatasetEntry

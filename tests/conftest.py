@@ -71,6 +71,7 @@ def catalog_text() -> str:
         "annotations:\n  path: data/annotations\n  format: docbin\n"
         "sentences:\n  path: data/sentences\n  format: parquet\n"
         "static_view:\n  path: data/static_view\n  format: parquet\n"
+        "sentence_view:\n  path: data/sentence_view\n  format: parquet\n"
         "lemma_exceptions:\n  path: curated/lemma_exceptions.tsv\n  format: tsv\n"
         "words:\n  path: curated/words.tsv\n  format: tsv\n"
         "spellings:\n  path: curated/spellings.tsv\n  format: tsv\n"

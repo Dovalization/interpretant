@@ -107,6 +107,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "annotations:\n  path: annotations\n  format: docbin\n"
         "sentences:\n  path: sentences\n  format: parquet\n"
         "static_view:\n  path: static_view\n  format: parquet\n"
+        "sentence_view:\n  path: sentence_view\n  format: parquet\n"
         f"lemma_exceptions:\n  path: '{repository.lemma_exceptions.path}'\n  format: tsv\n"
         f"words:\n  path: '{repository.words.path}'\n  format: tsv\n"
         f"spellings:\n  path: '{repository.spellings.path}'\n  format: tsv\n"

@@ -73,6 +73,28 @@ def load_abstracts_from(folder: Path) -> pl.LazyFrame:
     return table
 
 
+def abstracts_parts(catalog: CatalogConfig) -> list[str]:
+    """The parts the abstracts table holds, sorted."""
+    return sorted(
+        path.name.removesuffix(_SUFFIX) for path in catalog.abstracts.path.glob(f"*{_SUFFIX}")
+    )
+
+
+def load_abstracts_part(
+    catalog: CatalogConfig, part: str, columns: Sequence[str] | None = None
+) -> pl.DataFrame:
+    """One saved part of the table; only ``columns`` when given.
+
+    Raises:
+        ValueError: if the part name is not safe as a file name.
+        FileNotFoundError: if the part has not been saved.
+    """
+    path = part_path(catalog.abstracts.path, part, _SUFFIX)
+    if not path.exists():
+        raise FileNotFoundError(f"no part {part!r} of the abstracts table at {path}")
+    return pl.read_parquet(path, columns=list(columns) if columns is not None else None)
+
+
 def load_annotated_abstracts(
     catalog: CatalogConfig, parts: Sequence[str]
 ) -> dict[str, pl.DataFrame]:

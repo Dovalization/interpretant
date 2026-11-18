@@ -140,6 +140,13 @@ static_view:
   path: data/interim/static_view
   format: parquet
 
+# The contextual sentence view (decision agenda 2.2; docs/sentence_view.md): one row per sentence
+# of a kept work, with its span, language, word count and exclusion from the usage draw
+# (removed or cut_off), one part per field and decade.
+sentence_view:
+  path: data/processed/sentence_view
+  format: parquet
+
 # The forms whose static-view lemma differs from spaCy's in-context lemma, each under one reading
 # (NNS or VBZ), from the lemma review (docs/lemma_review.md), applied to the cached documents.
 lemma_exceptions:
