@@ -1,0 +1,752 @@
+{
+ "T000": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T001": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T002": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T003": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T004": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T005": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T006": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T007": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T008": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T009": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T010": {
+  "verdict": "wrong",
+  "where": "start",
+  "reason": "fragment First. split from sentence"
+ },
+ "T011": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T012": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T013": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T014": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T015": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T016": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T017": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T018": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T019": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T020": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T021": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T022": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T023": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T024": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T025": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T026": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T027": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T028": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T029": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T030": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T031": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T032": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T033": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T034": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T035": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T036": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T037": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T038": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T039": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T040": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T041": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T042": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T043": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T044": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T045": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T046": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T047": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T048": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T049": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T050": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T051": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T052": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T053": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T054": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T055": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T056": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T057": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T058": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T059": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T060": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T061": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T062": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T063": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T064": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T065": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T066": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T067": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T068": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T069": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T070": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T071": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T072": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T073": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T074": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T075": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T076": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T077": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T078": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T079": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T080": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T081": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T082": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T083": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T084": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T085": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T086": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T087": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T088": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T089": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T090": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T091": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T092": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T093": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T094": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T095": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T096": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T097": {
+  "verdict": "wrong",
+  "where": "two sentences",
+  "reason": "second sentence starts at THE"
+ },
+ "T098": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T099": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T100": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T101": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T102": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T103": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T104": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T105": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T106": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T107": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T108": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T109": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T110": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T111": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T112": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T113": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T114": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T115": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T116": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T117": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T118": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T119": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T120": {
+  "verdict": "wrong",
+  "where": "two sentences",
+  "reason": "missed break before similarity"
+ },
+ "T121": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T122": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T123": {
+  "verdict": "wrong",
+  "where": "start",
+  "reason": "list label (2) cut from its item"
+ },
+ "T124": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T125": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T126": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T127": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T128": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T129": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T130": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T131": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T132": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T133": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T134": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T135": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T136": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T137": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T138": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T139": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T140": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T141": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T142": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T143": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T144": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T145": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T146": {
+  "verdict": "wrong",
+  "where": "two sentences",
+  "reason": "missed break before If"
+ },
+ "T147": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T148": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ },
+ "T149": {
+  "verdict": "right",
+  "where": null,
+  "reason": "both cuts fall at sentence ends"
+ }
+}
