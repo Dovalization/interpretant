@@ -10,10 +10,12 @@ must see (`adjudicate.jsonl`, out of git) and stops. Otherwise it scores:
 - **recalibration:** the agents' marks equal the author's on at least 27 of the 30;
 - **cut precision:** wrong cuts are at most 2% of the sample's cuts;
 - **joined cuts:** at most 2 of the 80 joins are wrong;
+- **split cuts** (round 3): at most 2 of the 80 splits are wrong;
 - **boundaries:** at most 5 of the 150 target sentences are wrong.
 
 The first round's version is `854691ea`. Usage:
-`python scripts/review/score_sentences.py REVIEW_DIR pending` or `... REVIEW_DIR AUTHOR.json`.
+`python scripts/review/score_sentences.py REVIEW_DIR pending`, `... REVIEW_DIR AUTHOR.json`, or
+`... REVIEW_DIR carried` for a round whose recalibration carries over.
 """
 
 from __future__ import annotations
@@ -27,8 +29,9 @@ from typing import Any
 RECALIBRATION_AGREEMENT = 27
 PRECISION_MIN = 0.98
 JOINS_MAX_WRONG = 2
+SPLITS_MAX_WRONG = 2
 BOUNDARIES_MAX_WRONG = 5
-KINDS = {"B": "abstracts", "J": "joins", "T": "sentences"}
+KINDS = {"B": "abstracts", "J": "joins", "S": "splits", "T": "sentences"}
 Marks = tuple[frozenset[int], frozenset[int]]
 
 
@@ -99,8 +102,12 @@ def main() -> None:
         return
     if pending:
         raise SystemExit("items still need the adjudicator: run with pending first")
-    author = {i: marks(a) for i, a in json.loads(Path(mode).read_text()).items()}
     recalibration = sorted(i for i, entry in key.items() if entry["set"] == "recalibration")
+    if mode == "carried":
+        write("recalibration: carried over from the fresh audit (round 2)\n")
+        score_samples(key, final)
+        return
+    author = {i: marks(a) for i, a in json.loads(Path(mode).read_text()).items()}
     disagreements = [i for i in recalibration if final[i] != author.get(i)]
     agreed_with_author = len(recalibration) - len(disagreements)
     write(
@@ -115,6 +122,12 @@ def main() -> None:
         )
     if agreed_with_author < RECALIBRATION_AGREEMENT:
         raise SystemExit("the recalibration does not pass: the author judges the samples")
+    score_samples(key, final)
+
+
+def score_samples(key: dict[str, Any], final: dict[str, Any]) -> None:
+    """Report each sample against its bar, and whether the audit passes."""
+    write = sys.stdout.write
     precision_ids = [i for i, entry in key.items() if entry["set"] == "precision"]
     cuts = sum(key[i]["cuts"] for i in precision_ids)
     wrong_cuts = sum(len(final[i][0]) for i in precision_ids)
@@ -132,6 +145,15 @@ def main() -> None:
         f"joined cuts: {len(wrong_joins)} of 80 wrong (rule: at most {JOINS_MAX_WRONG}): "
         f"{wrong_joins} {by_rule}\n"
     )
+    wrong_splits = sorted(
+        i for i, entry in key.items() if entry["set"] == "splits" and final[i] == "wrong"
+    )
+    split_count = sum(1 for entry in key.values() if entry["set"] == "splits")
+    if split_count:
+        write(
+            f"split cuts: {len(wrong_splits)} of {split_count} wrong "
+            f"(rule: at most {SPLITS_MAX_WRONG}): {wrong_splits}\n"
+        )
     wrong_targets = sorted(
         i for i, entry in key.items() if entry["set"] == "boundaries" and final[i] == "wrong"
     )
@@ -142,6 +164,7 @@ def main() -> None:
     passed = (
         precision >= PRECISION_MIN
         and len(wrong_joins) <= JOINS_MAX_WRONG
+        and len(wrong_splits) <= SPLITS_MAX_WRONG
         and len(wrong_targets) <= BOUNDARIES_MAX_WRONG
     )
     write(f"the audit {'passes' if passed else 'fails'}\n")

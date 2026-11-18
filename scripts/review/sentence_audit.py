@@ -11,9 +11,11 @@
   removed ranges, by the static view (seed 20261204: 18 per decade, then 6), each with the
   sentence before and after as the view cuts them.
 
-The first round's version of this script is `099301b6`. The items quote corpus text, so they stay
-out of git; key.json maps each blind id to its source. Run from the repository root on the run
-machine: `python scripts/review/sentence_audit.py OUT [PROCESSES]`.
+Round 3 drops the recalibration (it carries over) and adds 80 split cuts (each row the split rule
+starts, with the row before it); its seeds are in `ROUNDS`. The first round's version of this
+script is `099301b6`. The items quote corpus text, so they stay out of git; key.json maps each
+blind id to its source. Run from the repository root on the run machine:
+`python scripts/review/sentence_audit.py ROUND OUT [PROCESSES]`.
 """
 
 from __future__ import annotations
@@ -39,14 +41,28 @@ from interpretant.cli.progress import LiveProgress
 from interpretant.corpus.sentence_view import merge_ranges
 from interpretant.pipelines.workers import map_parts
 
-RECALIBRATION_SEED = 20261201
-PRECISION_SEED = 20261202
-JOIN_SEED = 20261203
-BOUNDARY_SEED = 20261204
-SHUFFLE_SEED = 20261205
+# Each round's seeds (`docs/sentence_view.md`): the fresh audit (2) and round 3, which drops the
+# recalibration (it carries over) and adds the split cuts.
+ROUNDS: dict[str, dict[str, int]] = {
+    "2": {
+        "recalibration": 20261201,
+        "precision": 20261202,
+        "joins": 20261203,
+        "boundaries": 20261204,
+        "shuffle": 20261205,
+    },
+    "3": {
+        "precision": 20261212,
+        "joins": 20261213,
+        "boundaries": 20261214,
+        "splits": 20261215,
+        "shuffle": 20261216,
+    },
+}
 RECALIBRATION = (3, 6)
 PRECISION = (6, 2)
 JOINS = 80
+SPLITS = 80
 BOUNDARIES = (18, 6)
 KEEP_PER_PART = 40
 CONTEXT = 600
@@ -60,6 +76,7 @@ class PartJob:
 
     catalog: CatalogConfig
     targets: frozenset[str]
+    seeds: dict[str, int]
 
 
 def draw_key(seed: int, *parts: object) -> str:
@@ -81,26 +98,33 @@ def find_candidates(part: str, job: PartJob) -> dict[str, list[Candidate]]:
         "recalibration": [],
         "precision": [],
         "joins": [],
+        "splits": [],
         "targets": [],
     }
+    seeds = job.seeds
     for (work_id,), rows in view.group_by("work_id", maintain_order=True):
         work = str(work_id)
         decade = decades[work]
         if rows.height > 1:
-            found["recalibration"].append(
-                (draw_key(RECALIBRATION_SEED, work), decade, work, -1, -1)
-            )
-            found["precision"].append((draw_key(PRECISION_SEED, work), decade, work, -1, -1))
-        for number, rules in rows.select("sentence_number", "merge_rules").iter_rows():
+            for name in ("recalibration", "precision"):
+                if name in seeds:
+                    found[name].append((draw_key(seeds[name], work), decade, work, -1, -1))
+        for number, rules, split in rows.select(
+            "sentence_number", "merge_rules", "split"
+        ).iter_rows():
             for index, rule in enumerate(rules):
                 if rule != "no_letters":
-                    key = draw_key(JOIN_SEED, work, number, index)
+                    key = draw_key(seeds["joins"], work, number, index)
                     found["joins"].append((key, decade, work, number, index))
+            if split and "splits" in seeds:
+                key = draw_key(seeds["splits"], work, number)
+                found["splits"].append((key, decade, work, number, -1))
         found["targets"].extend(target_sentences(work, decade, rows, removals[work], entries, job))
     return {
         "recalibration": smallest_per_decade(found["recalibration"], KEEP_PER_PART),
         "precision": smallest_per_decade(found["precision"], KEEP_PER_PART),
         "joins": sorted(found["joins"])[:JOINS],
+        "splits": sorted(found["splits"])[:SPLITS],
         "targets": smallest_per_decade(found["targets"], KEEP_PER_PART),
     }
 
@@ -129,7 +153,8 @@ def target_sentences(
         index = bisect_right(span_starts, start) - 1
         if index >= 0 and start < spans[index][1] and spans[index][3] is None:
             held.add(spans[index][2])
-    return [(draw_key(BOUNDARY_SEED, work, number), decade, work, number, -1) for number in held]
+    seed = job.seeds["boundaries"]
+    return [(draw_key(seed, work, number), decade, work, number, -1) for number in held]
 
 
 def smallest_per_decade(found: list[Candidate], count: int) -> list[Candidate]:
@@ -174,12 +199,12 @@ def load_sources(
 
 def main() -> None:
     """Draw the samples and write the items and the key."""
-    out = Path(sys.argv[1])
-    processes = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+    seeds, out = ROUNDS[sys.argv[1]], Path(sys.argv[2])
+    processes = int(sys.argv[3]) if len(sys.argv) > 3 else 10
     out.mkdir(parents=True, exist_ok=True)
     catalog = read_catalog()
     targets = frozenset(word.lemma for word in load_words(catalog) if not word.is_phrase)
-    jobs = {part: PartJob(catalog, targets) for part in abstracts_parts(catalog)}
+    jobs = {part: PartJob(catalog, targets, seeds) for part in abstracts_parts(catalog)}
     with LiveProgress(Console()) as live:
         live.stage("finding candidates", total=len(jobs))
         results = map_parts(find_candidates, jobs, process_count=processes, progress=live)
@@ -191,8 +216,10 @@ def main() -> None:
     taken = {row[2] for row in recalibration}
     precision = draw([row for row in pooled("precision") if row[2] not in taken], *PRECISION)
     joins = sorted(pooled("joins"))[:JOINS]
+    splits = sorted(pooled("splits"))[:SPLITS]
     boundaries = draw(pooled("targets"), *BOUNDARIES)
-    wanted = sorted({row[2] for row in recalibration + precision + joins + boundaries})
+    drawn = recalibration + precision + joins + splits + boundaries
+    wanted = sorted({row[2] for row in drawn})
     texts, spacy_sentences, rows = load_sources(catalog, wanted)
 
     def shown(work: str) -> list[str]:
@@ -201,7 +228,7 @@ def main() -> None:
     key: dict[str, Any] = {}
     whole = [(row, "recalibration") for row in recalibration]
     whole += [(row, "precision") for row in precision]
-    random.Random(SHUFFLE_SEED).shuffle(whole)
+    random.Random(seeds["shuffle"]).shuffle(whole)
     with (out / "abstracts.jsonl").open("w", encoding="utf-8") as handle:
         for number, ((_, decade, work, _, _), name) in enumerate(whole):
             item_id = f"B{number:03d}"
@@ -236,6 +263,26 @@ def main() -> None:
                 "rule": rules[index],
             }
             handle.write(json.dumps(item, ensure_ascii=False) + "\n")
+    with (out / "splits.jsonl").open("w", encoding="utf-8") as handle:
+        for number, (_, decade, work, sentence_number, _) in enumerate(splits):
+            item_id = f"S{number:03d}"
+            (_, end_before, _), (start, end, _) = rows[work][
+                sentence_number - 1 : sentence_number + 1
+            ]
+            low = max(0, (end_before + start) // 2 - CONTEXT // 2)
+            item = {
+                "id": item_id,
+                "first": texts[work][rows[work][sentence_number - 1][0] : end_before],
+                "second": texts[work][start:end],
+                "context": texts[work][low : low + CONTEXT],
+            }
+            key[item_id] = {
+                "set": "splits",
+                "work_id": work,
+                "decade": decade,
+                "sentence_number": sentence_number,
+            }
+            handle.write(json.dumps(item, ensure_ascii=False) + "\n")
     with (out / "sentences.jsonl").open("w", encoding="utf-8") as handle:
         for number, (_, decade, work, sentence_number, _) in enumerate(boundaries):
             item_id = f"T{number:03d}"
@@ -258,7 +305,8 @@ def main() -> None:
     cuts = sum(entry["cuts"] for entry in key.values() if entry["set"] == "precision")
     sys.stdout.write(
         f"{len(whole)} whole abstracts ({len(recalibration)} recalibration, {len(precision)} "
-        f"precision with {cuts} cuts); {len(joins)} joins; {len(boundaries)} target sentences\n"
+        f"precision with {cuts} cuts); {len(joins)} joins; {len(splits)} splits; "
+        f"{len(boundaries)} target sentences\n"
     )
 
 
