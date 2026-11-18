@@ -1924,8 +1924,12 @@ and nothing waits on work that comes later:
 **9.2 Preprocessing to a standard before inference** (decided 2026-11-17, the author). The rest
 of steps 3 and 4 and stages 6–8 are finished, each to a quality bar fixed in its plan before it
 runs, before any encoding or model (stage 9 on). After stage 8 the corpus and the usages table are
-frozen for inference. Not reopened: corpus cleaning (rounds S1 and S1b found the identifiable junk
-below the measurement's noise) and lemma polishing (round L1 found the same of the exceptions).
+the version of record that inference starts from. Later changes stay possible when evidence calls
+for them (an audit, the junk gate, a measurement): each is recorded as a new version and reruns the
+steps after it. Corpus cleaning and lemma work are not priorities in this phase, since rounds S1,
+S1b and L1 found them below the static measurement's noise; they come back if later evidence, such
+as the junk gate or the contextual measures, shows they matter. The phase's plan, with each step's
+quality bar and the sources behind it, is kept with the steps' own documents as they are written.
 Target extraction (stage 7) belongs to this phase: its quality shows only once usages are drawn,
 and the gap report (stage 8) can send new abstracts through stages 2–7.
 
