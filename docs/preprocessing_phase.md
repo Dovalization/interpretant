@@ -518,6 +518,15 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
     result cut character errors by about 11%, and LLM correction helps English more than other
     languages (Kanerva et al. 2025).
   - OCR'd works gather in the early decades, so a correction would itself differ by decade.
+  - **The kinds of damage left after preprocessing** (the author, 2026-11-18), which the score
+    should catch and a correction would target:
+    - full stops lost to OCR, which leave two sentences in one (no rule can find these; a model
+      built for text without punctuation, such as Segment Any Text, `wtpsplit`, would be a new
+      dependency; `docs/sentence_view.md`);
+    - words hyphenated at a line break (*meth- od*, *re-search*), which the word repairs and the
+      compound map mend only in part;
+    - sentences glued together with no space or stop between them;
+    - other OCR noise inside words (*l* for *I*, *rn* for *m*, stray characters).
 
 **To decide:**
 - the threshold (absolute, e.g. ≤10% per word and decade, or relative to the corpus);
