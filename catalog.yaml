@@ -147,6 +147,12 @@ sentence_view:
   path: data/processed/sentence_view
   format: parquet
 
+# The usages table (decision agenda 4.1-4.6; phase step 6): one row per target mention in a kept
+# work, pointing into the abstracts table, with its scope and whether it is the one drawn.
+usages:
+  path: data/processed/usages
+  format: parquet
+
 # The forms whose static-view lemma differs from spaCy's in-context lemma, each under one reading
 # (NNS or VBZ), from the lemma review (docs/lemma_review.md), applied to the cached documents.
 lemma_exceptions:

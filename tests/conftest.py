@@ -72,6 +72,7 @@ def catalog_text() -> str:
         "sentences:\n  path: data/sentences\n  format: parquet\n"
         "static_view:\n  path: data/static_view\n  format: parquet\n"
         "sentence_view:\n  path: data/sentence_view\n  format: parquet\n"
+        "usages:\n  path: data/usages\n  format: parquet\n"
         "lemma_exceptions:\n  path: curated/lemma_exceptions.tsv\n  format: tsv\n"
         "words:\n  path: curated/words.tsv\n  format: tsv\n"
         "spellings:\n  path: curated/spellings.tsv\n  format: tsv\n"
