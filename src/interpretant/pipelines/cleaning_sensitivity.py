@@ -31,7 +31,9 @@ from interpretant.corpus.cell_versions import (
     kept_segments,
     placebo_cut,
     seeded,
+    segment_words,
     token_count,
+    word_count,
 )
 from interpretant.drift.grid import add_shift_floor, compare_cells
 from interpretant.drift.stability import movement
@@ -336,11 +338,11 @@ def _treatment(
         for work_id, ranges in plan.later_removals.items()
         if work_id not in dropped
     }
-    removed = sum(token_count(base_segments[work_id]) for work_id in dropped) + sum(
-        token_count(base_segments[work_id]) - token_count(segments)
+    removed = sum(word_count(base_segments[work_id]) for work_id in dropped) + sum(
+        word_count(base_segments[work_id]) - word_count(segments)
         for work_id, segments in passages.items()
     )
-    total = sum(token_count(segments) for segments in base_segments.values())
+    total = sum(word_count(segments) for segments in base_segments.values())
     return (
         base_segments,
         dropped,
@@ -354,7 +356,11 @@ def load_cell_view(catalog: CatalogConfig, plan: CellPlan) -> dict[str, WorkView
     wanted = set(plan.work_ids)
     view: dict[str, WorkView] = {}
     for part in plan.view_parts:
-        rows = load_static_view(catalog, part).filter(pl.col("work_id").is_in(wanted))
+        rows = (
+            load_static_view(catalog, part)
+            .filter(pl.col("work_id").is_in(wanted))
+            .select("work_id", "tokens", "starts", "finite_verbs")
+        )
         for work_id, tokens, starts, finite in rows.iter_rows():
             view.setdefault(work_id, (tokens, starts, finite))
     return view
@@ -546,13 +552,18 @@ def _count_targets(
 ) -> None:
     """Add the cell's target tokens in P, and those C removes, to the running counts."""
     for work_id, segments in base_segments.items():
-        before = Counter(word for segment in segments for word in segment if word in targets)
+        before = Counter(
+            word for segment in segments for word in segment_words(segment) if word in targets
+        )
         tokens.update(before)
         if work_id in dropped:
             removed.update(before)
         elif work_id in passages:
             after = Counter(
-                word for segment in passages[work_id] for word in segment if word in targets
+                word
+                for segment in passages[work_id]
+                for word in segment_words(segment)
+                if word in targets
             )
             removed.update(before - after)
 

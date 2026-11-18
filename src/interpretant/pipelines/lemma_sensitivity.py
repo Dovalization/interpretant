@@ -19,7 +19,7 @@ import polars as pl
 from gensim.models import KeyedVectors
 
 from interpretant.catalog.config import CatalogConfig
-from interpretant.corpus.cell_versions import kept_segments, token_count
+from interpretant.corpus.cell_versions import kept_segments, segment_words, word_count
 from interpretant.embedding.ppmi import SvdBackend, train_lines
 from interpretant.pipelines.cleaning_sensitivity import (
     AVERAGED_SETS,
@@ -161,7 +161,8 @@ def cell_segments(
 ) -> tuple[Segments, Segments, tuple[int, int, int]]:
     """Each view's lines of the cell's works under their removals, and the cell's dose.
 
-    The dose is the works, the kept tokens, and the kept tokens whose string differs.
+    The dose is the works, the kept words of view A, and the kept entries whose string differs
+    (a merged compound's two entries count twice).
 
     Raises:
         ValueError: if a work is missing from a view, or its offsets differ between the views.
@@ -184,7 +185,7 @@ def cell_segments(
             for line_a, line_b in zip(segments_a[work_id], segments_b[work_id], strict=True)
             for word_a, word_b in zip(line_a, line_b, strict=True)
         )
-    total = sum(token_count(segments) for segments in segments_a.values())
+    total = sum(word_count(segments) for segments in segments_a.values())
     return segments_a, segments_b, (len(plan.work_ids), total, changed)
 
 
@@ -229,5 +230,9 @@ def _measure_field(name: str, job: _FieldJob, report: Report) -> _FieldResult:
 def _target_tokens(segments: Segments, targets: frozenset[str]) -> Counter[str]:
     """The target words' tokens in a cell's lines."""
     return Counter(
-        word for lines in segments.values() for line in lines for word in line if word in targets
+        word
+        for lines in segments.values()
+        for line in lines
+        for word in segment_words(line)
+        if word in targets
     )

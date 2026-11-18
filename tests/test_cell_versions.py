@@ -12,7 +12,9 @@ from interpretant.corpus.cell_versions import (
     kept_segments,
     placebo_cut,
     seeded,
+    segment_words,
     token_count,
+    word_count,
 )
 
 TOKENS = ["a", "b", "c", "d"]
@@ -93,3 +95,35 @@ def test_bootstrap_sample_draws_as_many_works_with_replacement() -> None:
     assert len(sample) == 50
     assert set(sample) <= set(ids)
     assert len(set(sample)) < 50
+
+
+def test_segment_words_drop_empty_entries_and_split_open_standards() -> None:
+    assert segment_words(["the", "database", "", "and", "user interface"]) == [
+        "the",
+        "database",
+        "and",
+        "user",
+        "interface",
+    ]
+
+
+def test_cell_lines_leave_out_empty_entries_and_empty_lines() -> None:
+    works = {"w1": [["the", "database", ""], [""]], "w2": [["user interface", "design"]]}
+    assert cell_lines(works) == ["the database", "user interface design"]
+
+
+def test_word_count_counts_words_and_token_count_counts_entries() -> None:
+    plain = [["a", "b"], ["c"]]
+    compounded = [["database", "", "user interface"]]
+    assert word_count(plain) == token_count(plain) == 3
+    assert (word_count(compounded), token_count(compounded)) == (3, 3)
+    assert word_count([["database", ""]]) == 1
+
+
+def test_a_removal_after_a_merged_compound_keeps_its_standard() -> None:
+    assert kept_segments(["the", "database", ""], [0, 4, 9], [(9, 13)]) == [["the", "database"]]
+
+
+def test_a_removal_of_a_merged_compounds_first_entry_loses_the_pair() -> None:
+    segments = kept_segments(["the", "database", ""], [0, 4, 9], [(4, 8)])
+    assert [segment_words(segment) for segment in segments] == [["the"], []]

@@ -2,7 +2,12 @@
 
 A work's static tokens (``corpus/static_view.py``) keep their character offsets, so a build's
 removed ranges apply to them here: tokens inside a range are dropped and a range ends the line,
-so no window crosses it. A version of a cell is its works with some left out and some spans cut;
+so no window crosses it. A work keeps one entry per spaCy token: a merged compound's second entry
+is empty and a standard written open holds a space (phase step 3), so a line's words are its
+entries split on spaces (`segment_words`), and counts of words and of entries differ only there.
+A removal that splits a merged pair keeps the standard if it keeps the first entry, and loses the
+second word if it keeps only the second. A version of a cell is its works with some left out and
+some spans cut;
 placebos match a treatment's removal in works (within tenths of token length) and in tokens, and
 bootstrap samples draw the cell's works with replacement. Every draw is seeded per version,
 replicate and cell.
@@ -71,12 +76,22 @@ def cell_lines(
         segments = works[work_id]
         if work_id in cut.spans:
             segments = _cut_span(segments, *cut.spans[work_id])
-        lines.extend(" ".join(segment) for segment in segments if segment)
+        lines.extend(" ".join(words) for words in map(segment_words, segments) if words)
     return lines
 
 
+def segment_words(segment: Sequence[str]) -> list[str]:
+    """A segment's words: an empty entry gives none, an entry holding a space gives two."""
+    return [word for entry in segment for word in entry.split()]
+
+
+def word_count(segments: list[list[str]]) -> int:
+    """A work's kept words, as the static models read them."""
+    return sum(len(segment_words(segment)) for segment in segments)
+
+
 def token_count(segments: list[list[str]]) -> int:
-    """A work's kept tokens."""
+    """A work's kept entries, one per spaCy token: the unit of placebo spans."""
     return sum(len(segment) for segment in segments)
 
 

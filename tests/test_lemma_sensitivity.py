@@ -82,3 +82,11 @@ def test_cell_segments_count_the_changed_tokens_outside_the_removals() -> None:
     _, segments_b, dose = cell_segments(view_a, view_b, cut)
     assert dose == (1, 2, 1)
     assert segments_b["W1"] == [["drift", "sense"]]
+
+
+def test_cell_segments_count_words_of_view_a_and_changed_entries() -> None:
+    view_a = {"W1": (["data", "base", "grew"], [0, 5, 10], [False, False, True])}
+    view_b = {"W1": (["database", "", "grew"], [0, 5, 10], [False, False, True])}
+    plan = CellPlan(work_ids=["W1"], base_removals={"W1": []})
+    assert cell_segments(view_a, view_b, plan)[2] == (1, 3, 2)
+    assert cell_segments(view_b, view_a, plan)[2] == (1, 2, 2)
