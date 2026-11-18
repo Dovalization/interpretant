@@ -70,6 +70,26 @@ The failing cases are compared with pySBD or scispaCy, the splitters built for s
 (Sadvilkar and Neumann 2020; Neumann et al. 2019). Adding either is a dependency decision for the
 author. The chosen splitter applies to the contextual view only, never to the cached documents.
 
+### The calibration failed; the author judges both samples (2026-11-18)
+
+- **Result.** The agents agree with the author on 40 of the 50 run-3 abstracts, so the calibration
+  fails (`scripts/review/score_sentences.py`, code `854691ea`; verdicts in
+  `data/review/sentence_view/verdicts/`).
+  - In 5 of the 10 disagreements the author had marked a break after a heading glued to the first
+    words of a sentence (*ABSTRACT ‖ Meta-analyses*, *Methods: ‖ A hospital*). The run-3 page, and
+    the judges' prompt copied from it, said to leave headings however they were cut.
+  - The two Sonnet judges' answers are nearly identical, reasons included (146 of 150 sentence
+    verdicts word for word), so with one prompt and one model they act as one judge.
+- **The author's decisions.**
+  - The author judges both samples on a page, the agents' verdicts hidden, as the rule above says.
+  - A heading glued to the start of a sentence is not a boundary error: it adds a word or two of
+    context, and the sentence and its words stay right. Only a cut inside a sentence, or two
+    sentences in one, counts.
+- **Set before the author judges.**
+  - A target sentence the author marks "not sure" counts as wrong.
+  - An abstract's marks count as given, with "not sure" reported.
+  - The bars are unchanged: at most 2% wrong cuts, at most 5 wrong target sentences.
+
 ## Results
 
 To be written after the build and the audit.
