@@ -28,8 +28,8 @@ The author settled four questions on 2026-11-17:
 - the cut-off last sentence of a truncated abstract is flagged, not drawn;
 - the old grid commands stay until the static-models step.
 
-**Steps 3 (phrases) and 7 (junk gate) get their own planning pass.** Below are only the facts and
-decisions they start from.
+**Step 7 (junk gate) gets its own planning pass**; below are only the facts and decisions it
+starts from. Step 3 had its own pass on 2026-11-18, recorded under step 3.
 
 ## Ground rules for every step
 
@@ -186,59 +186,115 @@ spelling-normalised (*organisations* → *organisation*).
 - Judged by agents calibrated on 30 pairs the author judges blind.
 - The "no target mapped away" test passes.
 
-## Step 3: phrases and compound variants (its own planning pass)
+## Step 3: compound variants (3.4), and no phrase list (3.5)
 
-**It starts from these decisions:**
-- **Design (ii).** The static token list stays one-to-one with spaCy's tokens. Phrases become a
-  span column (first token, length, phrase), applied when a cell's lines are made. This keeps R_B
-  alignment, `kept_segments` and the L1 invariants.
-- **No joining across targets.** A span never contains a word-table lemma (held-out words
-  included, read but not printed). Phrase targets are matched only in step 6.
-- **Candidates.** The `Matcher` runs on cached tags (adjectives and nouns ending in a noun, ≤4
-  tokens), counting spelled tokens over kept text, with C-value and a floor in Polars
-  (`corpus/phrase_counts.count_forms` can be reused).
-- **Compound variants.** They apply to the static view only, never to the lemma that matching
-  reads.
+*Planned in its own pass and decided by the author on 2026-11-18. Three scouts (code, data on
+bazzite, literature and library docs) and a design pass informed it. The audit's pre-registration
+and results go in `docs/compounds.md`.*
 
-**Facts:**
-- gensim's 3,502 phrases include junk.
-- Spaced counts of the phrase targets: neural network 13,714, user interface 9,667, artificial
-  intelligence 7,028, information processing 2,769 (+465 hyphenated), social network 2,557,
-  mental representation 675, feedback loop 426.
-- 1,217 compound families have both a hyphenated and a solid form at ≥20 uses (753 mostly solid),
-  many of them broken-word artefacts (*in-formation*).
-- The agenda's damage rule misfires on spaced pairs (*maybe*, *bean*), so it needs a part-of-speech
-  or lexicon gate.
-- **C-value precision falls past the top few thousand terms** (0.91 at the top 1,000, 0.68 at the
-  top 10,000 on GENIA; Zhang et al. 2008). The best automatic English system at TermEval 2020
-  reached F1 46.7. So a reviewed list is the safer route.
-- **Compound forms should be merged before counting** (Nenadic et al. 2004).
-- **The list should be fixed corpus-wide,** not learned per decade.
+**Decisions:**
+1. **No phrase list.** Single words stay unjoined in the static view. The 7 phrase targets are
+   studied only in the contextual pipeline (agenda 3.5). The evidence:
+   - The main semantic-change studies and SemEval-2020 join no phrases; they change only the target
+     tokens (Schlechtweg et al. 2020; Dubossarsky et al. 2019).
+   - Joining changes the vectors of the words inside the phrases (Camacho-Collados and Pilehvar
+     2018), and no study shows it helps diachronic measures.
+   - A list would need a large review: 13,940 noun-phrase candidates occur at least 100 times, and
+     their ranking mixes terms with stock phrases (*present study*, *other hand*). C-value
+     precision falls past the top few thousand (Zhang et al. 2008); the best TermEval 2020 system
+     reached F1 46.7.
+2. **Compound variants are merged, all three forms.** The hyphenated, solid and spaced forms of one
+   two-part compound become the form the corpus uses most often, counted over kept works for the
+   whole corpus (Nenadic et al. 2004; spelling normalisation as in VARD2 and CCOHA). A word-table
+   lemma keeps its own spelling. Each merged family's share per decade is reported, since the
+   spelling shift is a finding in its own right (the Shorter OED dropped some 16,000 hyphens in
+   2007; Sun and Baayen 2021 find hyphenated compounds persist).
+3. **Spaced forms merge only as noun-noun compounds.** A spaced pair counts and merges only where
+   both tokens are tagged NOUN or PROPN, are adjacent in the document and in one sentence:
+   - *data base*, *web site* and *user interface* merge;
+   - *is a*, *would be* and *how to* never do;
+   - nor do adjective-first pairs (*long term*, *high level*, *real time*): before a noun the
+     hyphen is grammar, not spelling.
 
-**To decide:**
-- the patterns and maximum length;
-- the floor and the cut-off;
-- the review size and its bar;
-- how overlapping spans are resolved;
-- compound minimum counts, and whether hyphen↔solid pairs join step 2's map;
-- the file `curated/phrases.tsv`.
+   Hyphen and solid pairs merge whatever their first part (*on-line*, *online*).
+4. **Targets are guarded.** A spaced pair containing a word-table lemma never merges, and no lemma
+   is written away. Splits that add target tokens are allowed and reported per target
+   (*user-interface* becomes *user interface*).
+5. **One entry per spaCy token.** This replaces the span column first planned, so the view stays
+   aligned with R_B:
+   - a merged spaced pair writes its standard in the first token's entry and `""` in the second's;
+   - a token whose standard is spaced writes it with its space;
+   - a hyphen and solid pair rewrites the entry.
+
+   Lines for the static models drop `""` and split entries on spaces
+   (`corpus/cell_versions.segment_words`).
+6. **The map is audited like the spellings:**
+   - a seeded sample of 150 pairs passes with at most 3 wrong;
+   - the census is fixed one by one;
+   - two Sonnet judges and an Opus adjudicator use a saved prompt, judging at the word level;
+   - the author judges 30 sample pairs blind, and the agents are accepted at 27 or more of 30.
+
+**Design.**
+- **Order in `static_tokens(doc, spellings, compounds)`:**
+  - each token is folded, spelled per hyphen segment, then rewritten whole by the one-token
+    compound map;
+  - spaced pairs then merge left to right without overlaps, looked up on the spelled words and
+    gated on the two tokens;
+  - accented tokens are left alone by both passes.
+- **`corpus/compound_spelling.py`** holds the gate (`is_noun_compound`), the map and the invariant
+  check, shared by the view, the builder and the audit so all three count the same thing.
+- **The map** is `curated/compounds.tsv` (`form`, `standard`, `source`), loaded by
+  `catalog/compounds.py`. Its validators:
+  - two letter-only parts joined by a hyphen, a space or nothing;
+  - the same letters on both sides;
+  - no chains, and one standard per family.
+- **The builder** `scripts/evidence/compound_table.py` counts each family's forms over kept works
+  per decade (2–4 min on bazzite). Its filters are recorded with their reasons:
+  - letter codes (fewer than 4 letters, Roman-numeral or vowelless segments);
+  - three-part tokens, reported but not paired;
+  - spaced forms whose share passing the gate is under 0.5;
+  - anything touching a word-table lemma.
+- **The audit's scripts copy the spelling audit's** (the second occurrence is copied, not
+  abstracted).
+
+**Facts (data scout, 2026-11-18, kept works):**
+- 1,296 compounds occur both hyphenated and solid (each form at least 20 times); 2,845 both
+  hyphenated and spaced, the spaced counts swollen by syntax; 290 in all three forms.
+- The largest hyphen and solid pairs are line-break remnants (*re-search* 42 against *research*
+  173,445; *meth-od*, *in-formation*).
+- A seeded sample of 30 such pairs held 28 real variants (*pre-test*, *non-profit*) and 2 letter
+  codes. About 50–60 of the 1,296 are letter codes.
+- None of the 7 phrase targets has a solid form.
+
+**Left out, counts reported:**
+- three-part compounds (*state-of-the-art*);
+- forms under the floor of 20;
+- accented tokens;
+- adjective-first spaced and hyphenated pairs.
+
+Solid forms are not spelled per segment, so *colourblind* and *color-blind* fall in separate
+families.
 
 ## Step 4: the full static view
 
 **Commits:**
-- The span column in `STATIC_VIEW_SCHEMA`, with "thin" dropped from the docs. A function makes a
-  cell's lines with the spans applied. New dependencies go in `dvc.yaml`.
 - `scripts/evidence/static_view_check.py`, comparing the new view with the R_B copy.
 - The bar, committed first.
 - `dvc repro build_static_view` (5–9 min with the check), then the lock commit. Then the results
-  and the datasheet limit updated.
+  and the datasheet updated (spellings, compounds, the entry convention of step 3).
 
 **Bar:**
-- **Alignment:** 100% equal starts and token counts against R_B.
-- **Targets:** each single-word target's count equals R_B's count plus the forms mapped into it.
-  No target loses tokens. Zero spans contain a word-table lemma.
-- **Spot check:** 80 changed tokens in context, ≤1 wrong. 0.5% errors pass 94% of the time; 5%
-  passes 9%.
+- **Alignment:** 100% of works have the same starts as R_B, so the same entry counts.
+- **Changes explained:** 100% of changed entries come from the maps (a spelling, a one-token
+  compound, or a merged standard followed by `""`).
+- **Targets:**
+  - Each single-word target's word count equals R_B's plus the tokens spelled or compounded into
+    it.
+  - No target token of R_B changes.
+  - Zero merged pairs hold a word-table lemma; held-out words are reported as a count.
+- **Straddles** (a merged pair cut by a removal) are reported.
+- **Spot check:** 80 changed entries in context, at most 1 wrong. A 0.5% error rate passes 94% of
+  the time; 5% passes 9%.
 
 ## Step 5: the contextual sentence view (2.2)
 
@@ -458,10 +514,10 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
 
 ## Order, gates and runtimes
 
-0 → 1 → 2 → 3 (own pass) → 4 → 5 → 6 → 7's pre-registration → 6's full run → 7's gate → 8.
+0 → 1 → 2 → 3 → 4 → 5 → 6 → 7's pre-registration → 6's full run → 7's gate → 8.
 
 - The held-out words are fixed before step 6.
-- Step 6's code can be written while step 3 is planned. Its full run needs step 4 (each usage
+- Step 6's code can be written while step 3's audit runs. Its full run needs step 4 (each usage
   records the static token).
 
 **Runtimes on bazzite (estimates):**
@@ -470,7 +526,7 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
 |---|---|
 | Step 1 draft | 5 min |
 | Step 2 spelling table | 3–5 min |
-| Step 3 candidates | 5–12 min |
+| Step 3 compound builder and audit items | 2–4 min each |
 | Step 4 build and check | 5–9 min |
 | Step 5 sentence view | 1–2 min |
 | Step 6, small model | 6–10 min |
@@ -498,7 +554,7 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
   step's doc. `dvc status` clean after each lock commit, and `git diff --stat` empty on the three
   fingerprint modules before each run.
 - **Invariants carried through:**
-  - no target mapped away (exceptions and spellings);
+  - no target mapped away (exceptions, spellings and compounds);
   - static views aligned with R_B;
   - draws independent of other abstracts;
   - matching refuses documents without entity annotation;
