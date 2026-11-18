@@ -1,38 +1,35 @@
-"""Score the sentence view audit by `docs/sentence_view.md`'s rules.
+"""Score the fresh sentence view audit by `docs/sentence_view.md`'s rules.
 
-Reads the key and the judges' verdicts in `data/review/sentence_view/`. A whole abstract's marks are
-its wrong cuts and the sentences holding a missed break; a target sentence's verdict is right or
-wrong. Where the two judges differ, the Opus adjudicator's verdict stands
+Reads a review folder's key, the judges' verdicts in its `verdicts/` and, to score, the author's
+recalibration answers (the page's store: wrong cuts, missed breaks, not sure). A whole abstract's
+marks are its wrong cuts and the sentences holding a missed break; a join or a target sentence is
+right or wrong. Where the two judges differ, the Opus adjudicator's verdict stands
 (`verdicts/opus_adjudication.json`). With `pending`, the script writes the items the adjudicator
-must see (`adjudicate.jsonl`, out of git) and stops; otherwise it scores:
+must see (`adjudicate.jsonl`, out of git) and stops. Otherwise it scores:
 
-- **calibration:** the agents' marks equal the author's from run 3's review on at least 45 of 50;
+- **recalibration:** the agents' marks equal the author's on at least 27 of the 30;
 - **cut precision:** wrong cuts are at most 2% of the sample's cuts;
+- **joined cuts:** at most 2 of the 80 joins are wrong;
 - **boundaries:** at most 5 of the 150 target sentences are wrong.
 
-Usage: `python scripts/review/score_sentences.py [pending]`.
+The first round's version is `854691ea`. Usage:
+`python scripts/review/score_sentences.py REVIEW_DIR pending` or `... REVIEW_DIR AUTHOR.json`.
 """
 
 from __future__ import annotations
 
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
-REVIEW = Path("data/review/sentence_view")
-VERDICTS = REVIEW / "verdicts"
-RUN3 = Path("data/review/run3/verdicts.jsonl")
-CALIBRATION_AGREEMENT = 45
+RECALIBRATION_AGREEMENT = 27
 PRECISION_MIN = 0.98
+JOINS_MAX_WRONG = 2
 BOUNDARIES_MAX_WRONG = 5
+KINDS = {"B": "abstracts", "J": "joins", "T": "sentences"}
 Marks = tuple[frozenset[int], frozenset[int]]
-
-
-def load(name: str) -> dict[str, Any]:
-    """A verdict file, or nothing when it does not exist yet."""
-    path = VERDICTS / name
-    return json.loads(path.read_text()) if path.exists() else {}
 
 
 def marks(verdict: dict[str, Any]) -> Marks:
@@ -42,116 +39,111 @@ def marks(verdict: dict[str, Any]) -> Marks:
     return wrong, missed
 
 
-def author_marks(review: dict[str, Any]) -> Marks:
-    """The author's marks in run 3's review: wrong breaks, and missed breaks by sentence."""
-    missed = frozenset(int(miss.split(":")[0]) for miss in review["missed_breaks"])
-    return frozenset(review["wrong_breaks"]), missed
+def judged(item_id: str, verdict: dict[str, Any]) -> Marks | str:
+    """What is compared for an item: an abstract's marks, else the verdict."""
+    return marks(verdict) if item_id.startswith("B") else verdict["verdict"]
 
 
-def final_verdicts(
-    first: dict[str, Any], second: dict[str, Any], settled: dict[str, Any], *, whole: bool
-) -> tuple[dict[str, Any], list[str], int]:
-    """Each id's final verdict, the ids still pending, and how many the judges agree on.
-
-    The final verdict is the judges' when they agree, otherwise the adjudicator's.
-    """
-    final: dict[str, Any] = {}
-    pending = []
-    agreed = 0
-    for item_id in first:
-        one, two = (
-            (marks(first[item_id]), marks(second[item_id]))
-            if whole
-            else (first[item_id]["verdict"], second[item_id]["verdict"])
-        )
-        if one == two:
-            final[item_id] = one
-            agreed += 1
-        elif item_id in settled:
-            final[item_id] = marks(settled[item_id]) if whole else settled[item_id]["verdict"]
-        else:
-            pending.append(item_id)
-    return final, pending, agreed
+def load_verdicts(folder: Path, judge: str) -> dict[str, Any]:
+    """One judge's verdicts on every kind of item, merged."""
+    found: dict[str, Any] = {}
+    for kind in KINDS.values():
+        path = folder / f"judge_{judge}_{kind}.json"
+        if path.exists():
+            found |= json.loads(path.read_text())
+    return found
 
 
-def write_pending(pending: list[str], first: dict[str, Any], second: dict[str, Any]) -> None:
+def write_pending(
+    review: Path, pending: list[str], first: dict[str, Any], second: dict[str, Any]
+) -> None:
     """The items the adjudicator must see, each with both judges' verdicts."""
     items = {}
-    for name in ("abstracts.jsonl", "sentences.jsonl"):
-        for line in (REVIEW / name).read_text(encoding="utf-8").splitlines():
+    for kind in KINDS.values():
+        for line in (review / f"{kind}.jsonl").read_text(encoding="utf-8").splitlines():
             item = json.loads(line)
             items[item["id"]] = item
-    with (REVIEW / "adjudicate.jsonl").open("w", encoding="utf-8") as handle:
+    with (review / "adjudicate.jsonl").open("w", encoding="utf-8") as handle:
         for item_id in pending:
             row = items[item_id] | {"judge_1": first[item_id], "judge_2": second[item_id]}
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
-    sys.stdout.write(f"{len(pending)} items to adjudicate in {REVIEW / 'adjudicate.jsonl'}\n")
+    sys.stdout.write(f"{len(pending)} items to adjudicate in {review / 'adjudicate.jsonl'}\n")
 
 
 def main() -> None:
     """Apply the rules and report, or write the items to adjudicate."""
-    key = json.loads((REVIEW / "key.json").read_text())
-    settled = load("opus_adjudication.json")
-    first = load("judge_A_abstracts.json") | load("judge_A_sentences.json")
-    second = load("judge_B_abstracts.json") | load("judge_B_sentences.json")
-    whole_ids = [item_id for item_id in key if item_id.startswith("A")]
-    whole, pending_whole, whole_agreed = final_verdicts(
-        {i: first[i] for i in whole_ids}, {i: second[i] for i in whole_ids}, settled, whole=True
-    )
-    target_ids = [item_id for item_id in key if item_id.startswith("T")]
-    targets, pending_targets, targets_agreed = final_verdicts(
-        {i: first[i] for i in target_ids}, {i: second[i] for i in target_ids}, settled, whole=False
-    )
+    review, mode = Path(sys.argv[1]), sys.argv[2]
+    key = json.loads((review / "key.json").read_text())
+    folder = review / "verdicts"
+    first, second = load_verdicts(folder, "A"), load_verdicts(folder, "B")
+    settled_path = folder / "opus_adjudication.json"
+    settled = json.loads(settled_path.read_text()) if settled_path.exists() else {}
+    final: dict[str, Any] = {}
+    pending: list[str] = []
+    agreed: Counter[str] = Counter()
+    for item_id in key:
+        one, two = judged(item_id, first[item_id]), judged(item_id, second[item_id])
+        if one == two:
+            final[item_id] = one
+            agreed[KINDS[item_id[0]]] += 1
+        elif item_id in settled:
+            final[item_id] = judged(item_id, settled[item_id])
+        else:
+            pending.append(item_id)
     write = sys.stdout.write
-    write(
-        f"judges agree on {whole_agreed} of {len(whole_ids)} abstracts and {targets_agreed} of "
-        f"{len(target_ids)} sentences\n"
-    )
-    if len(sys.argv) > 1 and sys.argv[1] == "pending":
-        write_pending(pending_whole + pending_targets, first, second)
+    totals = Counter(KINDS[item_id[0]] for item_id in key)
+    agreement = ", ".join(f"{agreed[kind]} of {totals[kind]} {kind}" for kind in KINDS.values())
+    write(f"judges agree on {agreement}\n")
+    if mode == "pending":
+        write_pending(review, pending, first, second)
         return
-    if pending_whole or pending_targets:
+    if pending:
         raise SystemExit("items still need the adjudicator: run with pending first")
-    reviews = {
-        row["id"]: row
-        for row in map(json.loads, RUN3.read_text(encoding="utf-8").splitlines())
-        if row["part"] == "sentence_breaks"
-    }
-    calibration = [i for i in whole_ids if key[i]["set"] == "calibration"]
-    disagreements = [
-        i for i in calibration if whole[i] != author_marks(reviews[key[i]["review_id"]])
-    ]
-    agreed = len(calibration) - len(disagreements)
+    author = {i: marks(a) for i, a in json.loads(Path(mode).read_text()).items()}
+    recalibration = sorted(i for i, entry in key.items() if entry["set"] == "recalibration")
+    disagreements = [i for i in recalibration if final[i] != author.get(i)]
+    agreed_with_author = len(recalibration) - len(disagreements)
     write(
-        f"calibration: the agents agree with the author on {agreed} of {len(calibration)} "
-        f"(rule: at least {CALIBRATION_AGREEMENT})\n"
+        f"recalibration: the agents agree with the author on {agreed_with_author} of "
+        f"{len(recalibration)} (rule: at least {RECALIBRATION_AGREEMENT})\n"
     )
     for item_id in disagreements:
-        review = reviews[key[item_id]["review_id"]]
-        agent_wrong, agent_missed = whole[item_id]
-        author_wrong, author_missed = author_marks(review)
+        agents, mine = final[item_id], author.get(item_id, (frozenset(), frozenset()))
         write(
-            f"  {key[item_id]['review_id']}: author wrong {sorted(author_wrong)} missed "
-            f"{sorted(author_missed)}; agents wrong {sorted(agent_wrong)} missed "
-            f"{sorted(agent_missed)}\n"
+            f"  {item_id}: author wrong {sorted(mine[0])} missed {sorted(mine[1])}; "
+            f"agents wrong {sorted(agents[0])} missed {sorted(agents[1])}\n"
         )
-    if agreed < CALIBRATION_AGREEMENT:
-        raise SystemExit("the calibration does not pass: the author judges both samples")
-    precision_ids = [i for i in whole_ids if key[i]["set"] == "precision"]
+    if agreed_with_author < RECALIBRATION_AGREEMENT:
+        raise SystemExit("the recalibration does not pass: the author judges the samples")
+    precision_ids = [i for i, entry in key.items() if entry["set"] == "precision"]
     cuts = sum(key[i]["cuts"] for i in precision_ids)
-    wrong_cuts = sum(len(whole[i][0]) for i in precision_ids)
-    missed = sum(len(whole[i][1]) for i in precision_ids)
+    wrong_cuts = sum(len(final[i][0]) for i in precision_ids)
+    missed = sum(len(final[i][1]) for i in precision_ids)
     precision = 1 - wrong_cuts / cuts
     write(
         f"cut precision: {wrong_cuts} wrong of {cuts} cuts, precision {precision:.1%} "
         f"(rule: at least {PRECISION_MIN:.0%}); sentences with a missed break: {missed}\n"
     )
-    wrong_targets = sorted(i for i in target_ids if targets[i] == "wrong")
-    write(
-        f"boundaries: {len(wrong_targets)} of {len(target_ids)} target sentences wrong "
-        f"(rule: at most {BOUNDARIES_MAX_WRONG}): {wrong_targets}\n"
+    wrong_joins = sorted(
+        i for i, entry in key.items() if entry["set"] == "joins" and final[i] == "wrong"
     )
-    passed = precision >= PRECISION_MIN and len(wrong_targets) <= BOUNDARIES_MAX_WRONG
+    by_rule = dict(Counter(key[i]["rule"] for i in wrong_joins))
+    write(
+        f"joined cuts: {len(wrong_joins)} of 80 wrong (rule: at most {JOINS_MAX_WRONG}): "
+        f"{wrong_joins} {by_rule}\n"
+    )
+    wrong_targets = sorted(
+        i for i, entry in key.items() if entry["set"] == "boundaries" and final[i] == "wrong"
+    )
+    write(
+        f"boundaries: {len(wrong_targets)} of 150 wrong (rule: at most {BOUNDARIES_MAX_WRONG}): "
+        f"{wrong_targets}\n"
+    )
+    passed = (
+        precision >= PRECISION_MIN
+        and len(wrong_joins) <= JOINS_MAX_WRONG
+        and len(wrong_targets) <= BOUNDARIES_MAX_WRONG
+    )
     write(f"the audit {'passes' if passed else 'fails'}\n")
 
 
