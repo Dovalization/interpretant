@@ -211,6 +211,54 @@ stages:
     outs:
       - ${sentence_view.path}
 
+  build_usages:
+    cmd: interpretant build-usages
+    deps:
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/annotations.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/json_lines.py
+      - src/interpretant/catalog/lemma_exceptions.py
+      - src/interpretant/catalog/metadata.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/sentence_view.py
+      - src/interpretant/catalog/spellings.py
+      - src/interpretant/catalog/static_view.py
+      - src/interpretant/catalog/usages.py
+      - src/interpretant/catalog/words.py
+      - src/interpretant/cli/build_usages.py
+      - src/interpretant/corpus/attribute_rules.py
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/compound_spelling.py
+      - src/interpretant/corpus/lemma_exceptions.py
+      - src/interpretant/corpus/sentence_view.py
+      - src/interpretant/corpus/spelling.py
+      - src/interpretant/corpus/static_view.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/build_usages.py
+      - src/interpretant/pipelines/corpus.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - src/interpretant/usages/entities.py
+      - src/interpretant/usages/identifiers.py
+      - src/interpretant/usages/target_matching.py
+      - src/interpretant/usages/usage_selection.py
+      - ${abstracts.path}
+      - ${annotations.path}
+      - ${sentence_view.path}
+      - ${static_view.path}
+      - ${lemma_exceptions.path}
+      - ${spellings.path}
+      - ${words.path}
+    params:
+      - build_usages
+      - corpus
+    outs:
+      - ${usages.path}
+
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:

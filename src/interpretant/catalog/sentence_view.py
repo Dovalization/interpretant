@@ -120,6 +120,19 @@ def save_sentence_view(catalog: CatalogConfig, view: pl.DataFrame, part: str) ->
     return target
 
 
+def load_sentence_view_part(catalog: CatalogConfig, part: str) -> pl.DataFrame:
+    """One saved part of the sentence view.
+
+    Raises:
+        ValueError: if the part name is not safe as a file name.
+        FileNotFoundError: if the part has not been saved.
+    """
+    path = part_path(catalog.sentence_view.path, part, _SUFFIX)
+    if not path.exists():
+        raise FileNotFoundError(f"no part {part!r} of the sentence view at {path}")
+    return pl.read_parquet(path, schema=SENTENCE_VIEW_COLUMNS)
+
+
 def load_sentence_view(catalog: CatalogConfig) -> pl.LazyFrame:
     """Every saved part as one lazy table, so callers stream only what they select.
 

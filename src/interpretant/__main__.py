@@ -12,6 +12,7 @@ from interpretant.cli.build_corpus import build_corpus_command
 from interpretant.cli.build_linked_tables import build_linked_tables_command
 from interpretant.cli.build_sentence_view import build_sentence_view_command
 from interpretant.cli.build_static_view import build_static_view_command
+from interpretant.cli.build_usages import build_usages_command
 from interpretant.cli.clean_corpus import clean_corpus_command
 from interpretant.cli.compare_corpus import compare_corpus_command
 from interpretant.cli.count_word_repairs import count_word_repairs_command
@@ -41,6 +42,7 @@ cli.add_command(build_static_view_command)
 cli.add_command(clean_corpus_command)
 cli.add_command(build_corpus_command)
 cli.add_command(build_sentence_view_command)
+cli.add_command(build_usages_command)
 cli.add_command(report_corpus_command)
 cli.add_command(compare_corpus_command)
 cli.add_command(measure_cleaning_sensitivity_command)
