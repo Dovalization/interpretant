@@ -42,7 +42,6 @@ form	lemma	tag	source
 2-implies	2-imply	NNS	hyphen_rule
 3-axes	3-axis	NNS	hyphen_rule
 3-classes	3-class	NNS	hyphen_rule
-3-colourings	3-colorings	NNS	hyphen_rule
 3d-entities	3d-entity	NNS	hyphen_rule
 74-categories	74-category	NNS	hyphen_rule
 a-boxes	a-box	NNS	hyphen_rule
@@ -179,7 +178,6 @@ anti-farc-rallies	anti-farc-rally	NNS	hyphen_rule
 anti-geographies	anti-geography	NNS	hyphen_rule
 anti-heroes	anti-hero	NNS	hyphen_rule
 anti-phenomenologies	anti-phenomenology	NNS	hyphen_rule
-anti-sceptics	anti-skeptic	NNS	hyphen_rule
 anti-tgf-beta-antibodies	anti-tgf-beta-antibody	NNS	hyphen_rule
 antibiotics	antibiotics	NNS	adjective_rule
 anticholinergics	anticholinergics	NNS	adjective_rule
@@ -665,7 +663,6 @@ crustaceans	crustaceans	NNS	adjective_rule
 cryogenics	cryogenics	NNS	override
 cryonics	cryonics	NNS	override
 cryptanalyses	cryptanalysis	NNS	agents
-crypto-sceptics	crypto-skeptic	NNS	hyphen_rule
 cryptocurrencies	cryptocurrency	NNS	author
 cryptographics	cryptographics	NNS	adjective_rule
 ctml-studies	ctml-study	NNS	hyphen_rule
@@ -877,7 +874,6 @@ economics	economics	NNS	override
 ecstacies	ecstasy	NNS	agents
 ecstatics	ecstatics	NNS	adjective_rule
 ecurrencies	ecurrency	NNS	agents
-edge-colourings	edge-colorings	NNS	hyphen_rule
 edge-frequencies	edge-frequency	NNS	hyphen_rule
 edibles	edibles	NNS	adjective_rule
 edifies	edify	NNS	agents
@@ -1065,7 +1061,6 @@ fearfuls	fearfuls	NNS	adjective_rule
 feces	feces	NNS	agents
 federals	federals	NNS	adjective_rule
 felines	felines	NNS	adjective_rule
-fellow-travellers	fellow-traveler	NNS	hyphen_rule
 felt-qualities	felt-quality	NNS	hyphen_rule
 females	females	NNS	adjective_rule
 feminines	feminines	NNS	adjective_rule
@@ -1118,7 +1113,6 @@ fouls	fouls	NNS	adjective_rule
 foundation-hierarchy-boundaries	foundation-hierarchy-boundary	NNS	hyphen_rule
 foundation-theories	foundation-theory	NNS	hyphen_rule
 foundations-difficulties	foundations-difficulty	NNS	hyphen_rule
-four-colourings	four-colorings	NNS	hyphen_rule
 fourths	fourths	NNS	adjective_rule
 framing-processes	framing-process	NNS	hyphen_rule
 fraternals	fraternals	NNS	adjective_rule
@@ -1523,7 +1517,6 @@ joints	joints	NNS	adjective_rule
 juniors	juniors	NNS	adjective_rule
 junkies	junkie	NNS	agents
 juveniles	juveniles	NNS	adjective_rule
-k-colourings	k-colorings	NNS	hyphen_rule
 k-complexes	k-complex	NNS	hyphen_rule
 k-properties	k-property	NNS	hyphen_rule
 k-suffixes	k-suffix	NNS	hyphen_rule
@@ -1895,7 +1888,6 @@ mycoses	mycosis	NNS	agents
 myriads	myriads	NNS	adjective_rule
 mystics	mystics	NNS	adjective_rule
 mystifies	mystify	NNS	agents
-n-colourings	n-colorings	NNS	hyphen_rule
 n-matrices	n-matrix	NNS	hyphen_rule
 n-possibilities	n-possibility	NNS	hyphen_rule
 n-sexes	n-sex	NNS	hyphen_rule
@@ -2477,7 +2469,6 @@ re-establishes	re-establish	VBZ	hyphen_rule
 re-focuses	re-focus	VBZ	hyphen_rule
 re-lives	re-life	VBZ	hyphen_rule
 re-searches	re-search	NNS	hyphen_rule
-re-singularises	re-singularizes	VBZ	hyphen_rule
 re-studies	re-study	NNS	hyphen_rule
 re-verifies	re-verify	VBZ	hyphen_rule
 reactionaries	reactionaries	NNS	adjective_rule
@@ -3299,7 +3290,6 @@ zoroastrians	zoroastrians	NNS	adjective_rule
 α-frequencies	α-frequency	NNS	hyphen_rule
 α1-matrices	α1-matrix	NNS	hyphen_rule
 α2-matrices	α2-matrix	NNS	hyphen_rule
-λ-colourings	λ-colorings	NNS	hyphen_rule
 π-complexes	π-complex	NNS	hyphen_rule
 ππ-boundaries	ππ-boundary	NNS	hyphen_rule
 ω-matrices	ω-matrix	NNS	hyphen_rule

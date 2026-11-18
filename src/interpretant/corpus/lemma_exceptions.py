@@ -3,7 +3,7 @@
 Each exception sets one form's lemma under one reading: a single-token pattern on ``LOWER`` and
 ``TAG`` with the ``LEMMA`` attribute, added through the ruler's ``add`` (spaCy's
 ``attribute_ruler.add``, 8.2). The project's ``LookupAttributeRuler`` finds such rules by lookup,
-so 3,297 of them cost no more than a few. The documents are not parsed again: the ruler runs on
+so some 3,300 of them cost no more than a few. The documents are not parsed again: the ruler runs on
 documents loaded from the annotation cache, whose tags it reads.
 
 Build the ruler on the vocab the documents load into. spaCy interns a rule's lemma in the ruler's

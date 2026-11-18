@@ -29,7 +29,7 @@ def write_exceptions(catalog: CatalogConfig, rows: str, header: str = HEADER) ->
 
 def test_load_lemma_exceptions_reads_the_repository_file() -> None:
     exceptions = load_lemma_exceptions(read_catalog())
-    assert len(exceptions) == 3297
+    assert len(exceptions) == 3287
     assert {exception.tag for exception in exceptions} == {"NNS", "VBZ"}
     by_form = {exception.form: exception for exception in exceptions}
     assert by_form['clitics"--entities'].lemma == 'clitics"--entity'

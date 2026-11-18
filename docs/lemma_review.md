@@ -197,6 +197,17 @@ a singular mostly used attributively (*keys*, *tokens*, *firms*, *squares*).
   *thanks* as a verb still merges. No target word is mapped to another word, and no exception
   merges a form into a target word. The check on spaCy's own lemmas of the target words runs on
   the rebuilt view (3.6).
+- **Spelling left to the map (2026-11-17, phase step 2).** The hyphenated rule's entries that only
+  respell are dropped, since spelling is now the spelling map's job (`docs/spellings.md`):
+  - seven respelled a plural without lemmatising it, undoing spaCy's singular (*edge-colourings*
+    as *edge-colorings*, *re-singularises* as *re-singularizes*);
+  - three differed from spaCy's lemma only in spelling (*anti-sceptics*, *crypto-sceptics*,
+    *fellow-travellers*).
+
+  The file now holds 3,287 forms (1,081 by the hyphenated rule). *hypothesises* keeps the author's
+  verb lemma *hypothesize*, which the map leaves as it is. The builder reads the target words from
+  the word table (`curated/words.tsv`). The static view of record (R_B) still applies the 3,297
+  forms; the rebuild is phase step 4.
 - **The target words on the cache (3.6, `scripts/evidence/target_lemmas.py`, 2 min 34 s).**
   Over the kept text, no token of a target's own spelling is written as another word with the
   exceptions (0), so the contingency of round L1 (`docs/predictions_lemmas.md`) does not apply.
