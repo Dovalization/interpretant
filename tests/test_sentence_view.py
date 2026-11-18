@@ -18,6 +18,7 @@ from interpretant.corpus.sentence_view import (
     is_inside_removal,
     join_rule,
     merge_ranges,
+    missed_breaks,
     word_count,
 )
 from interpretant.pipelines.build_sentence_view import build_sentence_view as build_stage
@@ -151,6 +152,7 @@ def test_the_stage_writes_every_part_and_counts_its_sentences(catalog: CatalogCo
     )
     result = build_stage(catalog)
     assert (result.work_count, result.sentence_count, result.joined_count) == (2, 4, 0)
+    assert result.split_count == 0
     assert (result.removed_count, result.cut_off_count) == (1, 1)
     assert result.parts == ["ai_1970", "ai_2010"]
     written = load_sentence_view(catalog).sort("work_id", "sentence_number").collect()
@@ -187,7 +189,12 @@ def test_the_stage_writes_every_part_and_counts_its_sentences(catalog: CatalogCo
             "Note on Heidegger and van Gogh.",
             "function_word",
         ),
-        ("(Cambridge: Cambridge Univ.", "Press, 1970).", "inside_brackets"),
+        ("(Cambridge: Cambridge Univ.", "Press, 1970).", "abbreviation"),
+        (
+            "tongue movements (Kier WM and Smith KK.",
+            "Zool J Linn Soc 83: 207-324, 1985).",
+            "inside_brackets",
+        ),
         ("Genealogy of Morality and Other Writings, ed.", "Keith Ansell-Pearson.", "abbreviation"),
         ("These were studied in many ways, e.g.", "In the first two examples.", "abbreviation"),
         ("This is discussed in ch.", "2 (Phonology) at length.", "reference_number"),
@@ -201,6 +208,10 @@ def test_the_stage_writes_every_part_and_counts_its_sentences(catalog: CatalogCo
         ("The edges cross in p.", "In the CROSSING number problem, it is given.", None),
         ("Industries have lost their huge leads. .", "A debilitating acceptance followed.", None),
         ("A list of results follows.", "(b) What types of feedback were given?", None),
+        ("Rushby [1993] . .", ".Desire for correctness proofs spawned research.", None),
+        ("(as in the study of resistance to intimacy.", "We need to be careful.)", None),
+        ("Mastication in patients with ST.", "Likewise, no data are available.", None),
+        ("(the transfer is shown, eg.", "Ketterson and Nolan 1992)", "abbreviation"),
     ],
 )
 def test_join_rule_finds_the_cuts_where_no_sentence_ends(
@@ -267,3 +278,53 @@ def test_build_sentence_view_joins_a_removed_stray_period_back_to_its_ellipsis()
     view = build_sentence_view(abstracts_table([row]))
     assert view.height == 1
     assert view["merge_rules"].to_list() == [["no_letters", "period", "function_word"]]
+
+
+@pytest.mark.parametrize(
+    ("sentence", "pieces"),
+    [
+        (
+            "Streams run over a VP. Also, we propose two schemes.",
+            ["Streams run over a VP.", "Also, we propose two schemes."],
+        ),
+        (
+            "It was sensed in 3D. In addition, a circuit converts it.",
+            ["It was sensed in 3D.", "In addition, a circuit converts it."],
+        ),
+        (
+            "A portrait by artist George P. A. Healy hangs here.",
+            ["A portrait by artist George P. A. Healy hangs here."],
+        ),
+        (
+            "For a review, see E. A. Goerner on natural law.",
+            ["For a review, see E. A. Goerner on natural law."],
+        ),
+        ("I. The Man and his background.", ["I. The Man and his background."]),
+        (
+            "Studies by Werner, H. A. Witkin and others.",
+            ["Studies by Werner, H. A. Witkin and others."],
+        ),
+    ],
+)
+def test_missed_breaks_cut_after_a_capital_before_an_opener(
+    sentence: str, pieces: list[str]
+) -> None:
+    cuts = missed_breaks(sentence)
+    starts = [0] + [after for _, after in cuts]
+    ends = [before for before, _ in cuts] + [len(sentence)]
+    assert [sentence[low:high] for low, high in zip(starts, ends, strict=True)] == pieces
+
+
+def test_build_sentence_view_splits_and_keeps_joins_with_their_piece() -> None:
+    sentences = ["See ch.", "2 for streams over a VP. Also, we propose more", "e.g."]
+    row = abstract_row(1, sentences[:2], flags=["truncated"])
+    view = build_sentence_view(abstracts_table([row]))
+    text = " ".join(sentences[:2])
+    assert [text[low:high] for low, high in view.select("start", "end").rows()] == [
+        "See ch. 2 for streams over a VP.",
+        "Also, we propose more",
+    ]
+    assert view.select("merge_rules", "split", "exclusion").rows() == [
+        (["reference_number"], False, None),
+        ([], True, "cut_off"),
+    ]

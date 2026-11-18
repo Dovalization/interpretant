@@ -2,10 +2,10 @@
 
 One row per sentence of a kept work, in the abstracts table's order: its work, its number within
 the work (from 0), its character span in the repaired text, its language and confidence as the
-language stage read them, its word count, its exclusion, and the merge rules that joined it from
-several of the spaCy pass's sentences. The exclusion is ``removed`` when every non-space character
-lies in removed ranges, ``cut_off`` for the unfinished last sentence of a truncated work, null
-otherwise. A part is written whole or not at all.
+language stage read them, its word count, its exclusion, the merge rules that joined it from several
+of the spaCy pass's sentences, and whether it starts where the split rule cut one. The exclusion is
+``removed`` when every non-space character lies in removed ranges, ``cut_off`` for the unfinished
+last sentence of a truncated work, null otherwise. A part is written whole or not at all.
 """
 
 from __future__ import annotations
@@ -47,6 +47,7 @@ SENTENCE_VIEW_COLUMNS = pl.Schema(
         "word_count": pl.Int64(),
         "exclusion": pl.String(),
         "merge_rules": pl.List(pl.String()),
+        "split": pl.Boolean(),
     }
 )
 _SUFFIX = ".parquet"
@@ -86,6 +87,7 @@ SENTENCE_VIEW_SCHEMA = pa.DataFrameSchema(
             checks=pa.Check.isin([REMOVED, CUT_OFF]),
         ),
         "merge_rules": pa.Column(SENTENCE_VIEW_COLUMNS["merge_rules"]),
+        "split": pa.Column(SENTENCE_VIEW_COLUMNS["split"]),
     },
     checks=[
         pa.Check(_spans_are_valid, name="each span starts at or after 0, before its end"),

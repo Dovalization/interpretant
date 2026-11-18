@@ -22,11 +22,12 @@ _COLUMNS = ("work_id", "text", "sentences", "removals", "flags", "dropped_reason
 
 @dataclass(frozen=True)
 class SentenceViewResult:
-    """What the stage wrote: kept works, sentences, joins, those removed or cut off, and parts."""
+    """What the stage wrote: works, sentences, joins, splits, those removed or cut off, parts."""
 
     work_count: int
     sentence_count: int
     joined_count: int
+    split_count: int
     removed_count: int
     cut_off_count: int
     parts: list[str]
@@ -55,6 +56,7 @@ def build_sentence_view(
         work_count=counts["works"],
         sentence_count=counts["sentences"],
         joined_count=counts["joined"],
+        split_count=counts["split"],
         removed_count=counts[REMOVED],
         cut_off_count=counts[CUT_OFF],
         parts=parts,
@@ -62,7 +64,7 @@ def build_sentence_view(
 
 
 def _build_part(part: str, catalog: CatalogConfig) -> Counter[str]:
-    """Write one part's sentence view; its counts of works, sentences, joins, removed, cut off."""
+    """Write one part's sentence view; its counts of works, sentences, joins, splits and kinds."""
     abstracts = load_abstracts_part(catalog, part, _COLUMNS)
     view = sentence_rows(abstracts)
     save_sentence_view(catalog, view, part=part)
@@ -71,6 +73,7 @@ def _build_part(part: str, catalog: CatalogConfig) -> Counter[str]:
             "works": view["work_id"].n_unique(),
             "sentences": view.height,
             "joined": int(view["merge_rules"].list.len().sum()),
+            "split": int(view["split"].sum()),
             REMOVED: int((view["exclusion"] == REMOVED).sum()),
             CUT_OFF: int((view["exclusion"] == CUT_OFF).sum()),
         }

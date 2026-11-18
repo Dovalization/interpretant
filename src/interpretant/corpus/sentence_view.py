@@ -9,6 +9,8 @@ merge rules find wrong and decides what each sentence of a kept work may be used
   The rules came from a scan of every cut in the corpus (`scripts/evidence/sentence_cuts.py`);
   wrong cuts gather in OCR-damaged early decades. A joined sentence takes the language and
   confidence of its longest part;
+- **split:** a sentence is cut where the spaCy pass missed a break after a capital or short
+  acronym with a period, before a common sentence opener (`missed_breaks`);
 - **removed:** every non-space character lies inside the work's removed ranges, merged, so a
   sentence spanning two adjacent ranges counts as removed;
 - **cut_off:** the sentence holding the end of a work flagged truncated, whose text stops
@@ -47,7 +49,7 @@ _LIST_NUMBER = re.compile(r"(?<!\d)[:;]\s*\(?\d{1,2}[.)]$")
 _FINAL_WORD = re.compile(r"(?<![A-Za-z])([A-Za-z]+)$")
 # Abbreviations that never end a sentence, in their usual case (all-capital forms are acronyms).
 _NEVER_FINAL = re.compile(
-    r"(?<![A-Za-z])(?:ed|Ed|eds|Eds|trans|Trans|tr|Tr|cf|Cf|e\.g|i\.e|viz|Viz|vs|esp|univ|Univ"
+    r"(?<![A-Za-z])(?:ed|Ed|eds|Eds|trans|Trans|tr|Tr|cf|Cf|e\.g|eg|i\.e|viz|Viz|vs|esp|univ|Univ"
     r"|dept|Dept|Dr|Prof|prof|Mr|Mrs)\.$"
 )
 # Reference abbreviations, which end a sentence only when no number follows them.
@@ -56,7 +58,19 @@ _REFERENCE = re.compile(
     r"|figs|Figs|eq|Eq|eqs|Eqs|ref|Ref|refs|Refs|sec|Sec)\.$"
 )
 _NUMBER_START = re.compile(r"\d|[(\[]|(?:[IVXLC]+|[ivxlc]+)(?![A-Za-z])")
-_SAINT = re.compile(r"(?<![A-Za-z])(?:St|ST)\.$")
+_SAINT = re.compile(r"(?<![A-Za-z])St\.$")
+# A word ending like a sentence: two lowercase letters, closing marks, then a stop.
+_SENTENCE_END = re.compile(r"[a-z]{2}[)\]\"'”’]*[.!?]$")
+# A break the spaCy pass missed: a capital or short acronym with a period, after a lowercase word
+# or a digit (so not a name's initial), before a common sentence opener that is not itself an
+# initial (*over a VP. Also*, *in Volume V. This work*). *I.* is left alone: mostly a label.
+OPENERS = (
+    "The|This|These|That|Those|A|An|In|We|It|Its|Our|Also|However|Thus|Such|There|They|He|She"
+    "|Finally|Moreover|Here|Furthermore|Although|When|Then|As|For|One|Two|Both|Each|No"
+)
+_MISSED_BREAK = re.compile(
+    rf"(?:(?<=[a-z0-9)\]] )|(?<=\d))(?!I\.)[A-Z]{{1,3}}\.(\s+)(?=(?:{OPENERS})\b)(?!A\.)"
+)
 _OPENERS, _CLOSERS = "([", ")]"
 
 
@@ -103,7 +117,7 @@ def join_rule(before: str, after: str) -> JoinRule | None:
         return "no_letters"
     if after[:1] in ",;:)]}":
         return "closing_punctuation"
-    if after[:1] == ".":
+    if after[:1] == "." and not after[1:2].isupper():
         return "period"
     if _SPACED_DOTS.search(before) and after[:1].islower():
         return "spaced_dots"
@@ -112,7 +126,8 @@ def join_rule(before: str, after: str) -> JoinRule | None:
     final = _FINAL_WORD.search(before)
     if final and final.group(1).lower() in FUNCTION_WORDS:
         return "function_word"
-    if _unclosed(before) > 0 and _closes_first(after):
+    sentence_ends = bool(_SENTENCE_END.search(before)) and _starts_upper(after)
+    if _unclosed(before) > 0 and _closes_first(after) and not sentence_ends:
         return "inside_brackets"
     if _NEVER_FINAL.search(before):
         return "abbreviation"
@@ -123,8 +138,13 @@ def join_rule(before: str, after: str) -> JoinRule | None:
     return None
 
 
+def missed_breaks(sentence: str) -> list[tuple[int, int]]:
+    """Where the split rule cuts a sentence: the first piece's end and the next one's start."""
+    return [(match.start(1), match.end(1)) for match in _MISSED_BREAK.finditer(sentence)]
+
+
 def build_sentence_view(abstracts: pl.DataFrame) -> pl.DataFrame:
-    """One row per sentence of every kept work, in text order, joined, with its exclusion."""
+    """One row per sentence of every kept work, in text order, joined and split, excluded or not."""
     rows = []
     kept = abstracts.filter(pl.col("dropped_reason").is_null())
     for work_id, text, sentences, removals, flags in kept.select(
@@ -135,31 +155,48 @@ def build_sentence_view(abstracts: pl.DataFrame) -> pl.DataFrame:
             bool(merged) and is_inside_removal(text, s["start"], s["end"], merged)
             for s in sentences
         ]
-        groups = _join(text, sentences, removed)
         last = len(sentences) - 1 if TRUNCATED in flags else None
-        for number, (parts, rules) in enumerate(groups):
+        number = 0
+        for parts, rules in _join(text, sentences, removed):
             start, end = sentences[parts[0]]["start"], sentences[parts[-1]]["end"]
             longest = sentences[
                 max(parts, key=lambda i: sentences[i]["end"] - sentences[i]["start"])
             ]
-            exclusion = None
-            if len(parts) == 1 and removed[parts[0]]:
-                exclusion = REMOVED
-            elif last in parts:
-                exclusion = CUT_OFF
-            rows.append(
-                (
-                    work_id,
-                    number,
-                    start,
-                    end,
-                    longest["language"],
-                    longest["confidence"],
-                    word_count(text[start:end]),
-                    exclusion,
-                    rules,
+            is_removed = len(parts) == 1 and removed[parts[0]]
+            cuts = [] if is_removed else missed_breaks(text[start:end])
+            pieces = list(
+                zip(
+                    [start] + [start + after for _, after in cuts],
+                    [start + before for before, _ in cuts] + [end],
+                    strict=True,
                 )
             )
+            joins = [sentences[part]["start"] for part in parts[1:]]
+            for index, (low, high) in enumerate(pieces):
+                exclusion = None
+                if is_removed:
+                    exclusion = REMOVED
+                elif last in parts and index == len(pieces) - 1:
+                    exclusion = CUT_OFF
+                upper = pieces[index + 1][0] if index + 1 < len(pieces) else end + 1
+                piece_rules = [
+                    rule for rule, at in zip(rules, joins, strict=True) if low <= at < upper
+                ]
+                rows.append(
+                    (
+                        work_id,
+                        number,
+                        low,
+                        high,
+                        longest["language"],
+                        longest["confidence"],
+                        word_count(text[low:high]),
+                        exclusion,
+                        piece_rules,
+                        index > 0,
+                    )
+                )
+                number += 1
     return pl.DataFrame(rows, schema=SENTENCE_VIEW_COLUMNS, orient="row")
 
 
@@ -197,6 +234,11 @@ def _has_letter(text: str) -> bool:
 
 def _has_digit(text: str) -> bool:
     return any(character.isdigit() for character in text)
+
+
+def _starts_upper(text: str) -> bool:
+    """Whether the text, opening quotes and brackets aside, starts with a capital."""
+    return text.lstrip("\"'“‘([")[:1].isupper()
 
 
 def _unclosed(text: str) -> int:
