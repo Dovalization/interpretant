@@ -9,6 +9,14 @@ Pre-registered 2026-11-17, before any form was judged. The list comes from
 The static view writes spaCy's in-context lemma (3.2), so the review looks for spaCy's errors,
 with the voted lemma map as the tool that finds them. Forms with at least 20 uses unless stated.
 
+*Correction (2026-11-17):* the map the list read, here called "the voted map", is
+`data/processed/lemmas.tsv`, the frozen grid's type-level map from simplemma's lemmas of bare word
+types (36,726 rows, `docs/corpus.md`), not the map voted from spaCy's tagger in context
+(`data/processed/lemmas_voted.tsv`, 22,313 rows). It shaped which forms are `disagree` and the
+voted lemma of the tail check; it is not rerun, since round L1 found the exceptions below the
+static measurement's noise (`docs/predictions_lemmas.md`). Below, "the voted map" keeps that
+meaning.
+
 | Kind | Forms | Tokens | What it is |
 |---|---:|---:|---|
 | disagree | 489 | 24,745 | Both merge, to different lemmas, spelling aside (3.3's list; any count) |

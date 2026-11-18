@@ -5,8 +5,9 @@ removed ranges, and counts every plural noun (`NNS`) and third-person singular v
 its lowercased form and spaCy's in-context lemma, and every token's coarse tag by form. Three
 kinds of form go on the list:
 
-- `disagree`: both spaCy and the voted lemma map (`data/processed/lemmas.tsv`, with
-  `data/lemma_overrides.tsv`) merge the form and they disagree, the difference not being spelling
+- `disagree`: both spaCy and the voted lemma map (`data/processed/lemmas.tsv`, the frozen grid's
+  type-level map from simplemma, not `lemmas_voted.tsv`, with `data/lemma_overrides.tsv`; see
+  `docs/lemma_review.md`) merge the form and they disagree, the difference not being spelling
   only (the British and American pairs of `scripts/evidence/first_review/review_coverage.py`);
 - `hyphenated`: a hyphenated form whose spaCy lemma differs from the last segment's voted lemma
   rejoined (*self-reports* → *self-report*; 3.5's note);
