@@ -9,6 +9,7 @@ from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.spellings import load_spellings
 from interpretant.catalog.words import load_words
 from interpretant.corpus.spelling import mapped_away, spell
+from tests.sealed import fail_sealed
 
 HEADER = "# A comment line.\nform\tstandard\tsource\n"
 
@@ -62,7 +63,7 @@ def test_no_spelling_sends_a_word_of_the_table_away() -> None:
     catalog = read_catalog()
     spellings = {spelling.form: spelling.standard for spelling in load_spellings(catalog)}
     words = [word.lemma for word in load_words(catalog)]
-    assert mapped_away(spellings, words) == []
+    fail_sealed(mapped_away(spellings, words), "mapped away")
 
 
 def test_no_standard_merges_two_words_of_the_table() -> None:

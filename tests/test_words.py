@@ -8,6 +8,7 @@ import pytest
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.lemma_exceptions import load_lemma_exceptions
 from interpretant.catalog.words import load_words
+from tests.sealed import fail_sealed
 
 HEADER = "# A comment line.\nlemma\tpos\tmatch\theld_out\n"
 
@@ -56,4 +57,4 @@ def test_no_lemma_exception_maps_a_word_of_the_table_away() -> None:
         for exception in load_lemma_exceptions(catalog)
         if exception.form in words and exception.lemma != exception.form
     ]
-    assert mapped_away == []
+    fail_sealed(mapped_away, "mapped away by a lemma exception")

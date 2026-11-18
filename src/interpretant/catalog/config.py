@@ -54,6 +54,7 @@ class CatalogConfig(BaseModel):
     lemma_exceptions: DatasetEntry
     words: DatasetEntry
     spellings: DatasetEntry
+    compounds: DatasetEntry
     sentence_languages: DatasetEntry
 
 

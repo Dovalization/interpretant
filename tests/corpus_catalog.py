@@ -110,6 +110,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         f"lemma_exceptions:\n  path: '{repository.lemma_exceptions.path}'\n  format: tsv\n"
         f"words:\n  path: '{repository.words.path}'\n  format: tsv\n"
         f"spellings:\n  path: '{repository.spellings.path}'\n  format: tsv\n"
+        f"compounds:\n  path: '{repository.compounds.path}'\n  format: tsv\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
         "corpus_report:\n  path: corpus_report.md\n  format: markdown\n"
         "corpus_comparison:\n  path: corpus_comparison.md\n  format: markdown\n"

@@ -158,6 +158,12 @@ spellings:
   path: curated/spellings.tsv
   format: tsv
 
+# The compound map (decision agenda 3.4; docs/compounds.md): each spelling of a two-part compound
+# and the form it is written as, the family's most frequent; audited before use.
+compounds:
+  path: curated/compounds.tsv
+  format: tsv
+
 # lingua's language for every sentence of the annotation cache, one part per field and decade.
 sentence_languages:
   path: data/interim/sentence_languages
