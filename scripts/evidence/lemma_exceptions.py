@@ -11,14 +11,18 @@ From the lemma review (`docs/lemma_review.md`), each form takes, in this order o
 4. the author's answer on the calls, for the 50 suspects and homographs the author saw;
 5. the agents' verdict, for the other suspects and homographs (the calibration counts as passed)
    and for the untested `disagree` tail;
-6. the rejoined last segment, for every hyphenated form (the hyphenated rule passed).
+6. the rejoined last segment, for every hyphenated form (the hyphenated rule passed), except
+   where, under the spelling map (`curated/spellings.tsv`, 3.4), it only respells the form
+   (*edge-colourings* as *edge-colorings*, undoing spaCy's singular) or differs from spaCy's lemma
+   only in spelling (*anti-sceptics*): spelling is the map's job (2026-11-17).
 
 A form is written only when its lemma differs from spaCy's, except the override file's forms,
 which are all written as the project's policy list. The lemma is spelled out even when it is the
 form itself. Each entry names the reading it applies to (`NNS` or `VBZ`): the override file's
 forms and the rule's as plural nouns (every override form is read mostly as one; *goes*, the only
-verb, is not carried), and each judged form as the judges saw it. The build fails if a target word
-would be mapped to another word, and it reports every earlier answer the rule changes.
+verb, is not carried), and each judged form as the judges saw it. The build fails if a word of the
+word table (`curated/words.tsv`) would be mapped to another word, and it reports every earlier
+answer the rule changes.
 
 Usage, from the repository root: `python scripts/evidence/lemma_exceptions.py REVIEW_LIST.parquet
 PLURAL_MERGES.parquet`: the judged review list with the tail (`lemma_review_list.py --tail`) and
@@ -36,12 +40,14 @@ from typing import NamedTuple
 
 import polars as pl
 
-from interpretant.corpus.audit import load_target_words
-from interpretant.corpus.lemmas import read_overrides
+from interpretant.catalog.config import read_catalog
+from interpretant.catalog.spellings import load_spellings
+from interpretant.catalog.words import load_words
+from interpretant.corpus.lemmas import american, read_overrides
+from interpretant.corpus.spelling import spell
 
 OVERRIDES = Path("data/lemma_overrides.tsv")
 JUDGEMENTS = Path("curated/lemma_review_judgements.tsv")
-TARGETS = Path("data/words_of_interest.txt")
 OUT = Path("curated/lemma_exceptions.tsv")
 NOT_CARRIED = frozenset({"goes"})
 AUTHOR_GROUPS = frozenset({"author", "tail_sample", "policy_keep"})
@@ -105,8 +111,24 @@ def read_judgements() -> dict[str, dict[str, str]]:
         return {row["form"]: row for row in csv.DictReader(handle, delimiter="\t")}
 
 
+def respelled(word: str, spellings: dict[str, str]) -> str:
+    """The word with each hyphen segment respelled by the project's rules, then by the map."""
+    return "-".join(spell(american(segment) or segment, spellings) for segment in word.split("-"))
+
+
+def respells_only(row: dict[str, str], spellings: dict[str, str]) -> bool:
+    """Whether a hyphenated form's rejoined lemma only respells the form, or spaCy's lemma."""
+    if row["voted_lemma"] == row["spacy_lemma"]:
+        return False
+    lemma = respelled(row["voted_lemma"], spellings)
+    return lemma in {respelled(row["form"], spellings), respelled(row["spacy_lemma"], spellings)}
+
+
 def exceptions(
-    review_list: pl.DataFrame, rule: dict[str, str], judgements: dict[str, dict[str, str]]
+    review_list: pl.DataFrame,
+    rule: dict[str, str],
+    judgements: dict[str, dict[str, str]],
+    spellings: dict[str, str],
 ) -> dict[str, Entry]:
     """Each form's exception, by the precedence in the module docstring."""
     result = {
@@ -126,7 +148,7 @@ def exceptions(
         if choice[0] != listed[form]["spacy_lemma"]:
             result[form] = Entry(choice[0], listed[form]["tag"], choice[1])
     for row in listed.values():
-        if row["kind"] == "hyphenated":
+        if row["kind"] == "hyphenated" and not respells_only(row, spellings):
             result.setdefault(row["form"], Entry(row["voted_lemma"], row["tag"], "hyphen_rule"))
     return result
 
@@ -180,8 +202,18 @@ def main() -> None:
     merges = pl.read_parquet(sys.argv[2])
     judgements = read_judgements()
     rule = rule_plurals(merges)
-    result = exceptions(review_list, rule, judgements)
-    targets = {word for word in load_target_words(TARGETS) if "_" not in word}
+    catalog = read_catalog()
+    spellings = {spelling.form: spelling.standard for spelling in load_spellings(catalog)}
+    result = exceptions(review_list, rule, judgements, spellings)
+    left_to_the_map = sorted(
+        row["form"]
+        for row in review_list.iter_rows(named=True)
+        if row["kind"] == "hyphenated"
+        and row["form"] not in result
+        and respells_only(row, spellings)
+    )
+    sys.stdout.write(f"hyphenated forms left to the spelling map: {left_to_the_map}\n")
+    targets = {word.lemma for word in load_words(catalog) if not word.is_phrase}
     mapped_away = sorted(
         f"{form} -> {result[form].lemma}"
         for form in targets & result.keys()
