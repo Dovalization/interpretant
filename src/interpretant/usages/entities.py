@@ -16,13 +16,19 @@ the lemma exceptions applied after it, for the comparison of agenda 4.9 and, if 
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any
 
 import spacy
 from spacy.language import Language
+from spacy.pipeline import AttributeRuler
 from spacy.tokens import Doc, Span
+
+from interpretant.corpus.attribute_rules import LOOKUP_ATTRIBUTE_RULER, LookupAttributeRuler
 
 SMALL_MODEL = "en_core_web_sm"
 TRANSFORMER_MODEL = "en_core_web_trf"
+# Spans per transformer forward pass: 128 keeps four processes within the GPU's 12 GB.
+SPANS_PER_FORWARD = 128
 
 
 class MissingEntityAnnotationError(ValueError):
@@ -39,8 +45,47 @@ def load_entity_recognizer() -> Language:
 
 
 def load_transformer() -> Language:
-    """The transformer model without its parser (dependencies are not read)."""
-    return spacy.load(TRANSFORMER_MODEL, exclude=["parser"])
+    """The transformer without its parser, in float16, with the lookup attribute ruler.
+
+    Measured on target sentences (`docs/performance.md`, 2026-11-18): float16 autocast on the GPU's
+    tensor cores changed 5 tags and 4 lemmas in 192,828 tokens and no entity; the lookup attribute
+    ruler gives spaCy's annotation a fifth faster. Run it on sentences sorted by length, in a few
+    processes sharing the GPU, each with its own model.
+    """
+    nlp = spacy.load(
+        TRANSFORMER_MODEL,
+        exclude=["parser"],
+        config={
+            "components": {
+                "transformer": {
+                    "model": {
+                        "mixed_precision": True,
+                        "with_spans": {"batch_size": SPANS_PER_FORWARD},
+                    }
+                }
+            }
+        },
+    )
+    _use_lookup_attribute_ruler(nlp)
+    return nlp
+
+
+def _use_lookup_attribute_ruler(nlp: Language) -> None:
+    """Replace the model's attribute ruler with the lookup one, without the parser's rules."""
+    ruler = nlp.get_pipe("attribute_ruler")
+    if not isinstance(ruler, AttributeRuler):
+        raise TypeError(f"expected spaCy's attribute ruler, got {type(ruler).__name__}")
+    rules = [rule for rule in ruler.patterns if not _tests_dependency(dict(rule))]
+    lookup = nlp.replace_pipe("attribute_ruler", LOOKUP_ATTRIBUTE_RULER)
+    if not isinstance(lookup, LookupAttributeRuler):
+        raise TypeError(f"expected the lookup attribute ruler, got {type(lookup).__name__}")
+    lookup.add_patterns(rules)
+
+
+def _tests_dependency(rule: dict[str, Any]) -> bool:
+    """Whether one of an attribute rule's token patterns tests the dependency label."""
+    patterns: list[list[dict[str, Any]]] = rule["patterns"]
+    return any("DEP" in token for pattern in patterns for token in pattern)
 
 
 def require_entity_annotation(doc: Doc) -> None:

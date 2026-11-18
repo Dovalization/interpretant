@@ -245,6 +245,41 @@ but added about 5%, because the GPU's arithmetic was the bottleneck, not the tok
 was measured only after the change was made. Batching by a token budget and writing shards on a
 background thread followed for later stores.
 
+## The transformer on target sentences (2026-11-18)
+
+Step 6 may annotate every target sentence with `en_core_web_trf` (agenda 4.9). Measured on bazzite's
+RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_speed.py`,
+`transformer_parallel.py`), the pipeline without its parser:
+
+| Setup | Sentences per second |
+|---|---|
+| Full precision, sentences as found (the shipped config) | about 275 |
+| Full precision, sorted by length | about 350 |
+| TF32 matrix products, sorted | about 385 |
+| Float16 autocast on the tensor cores, sorted | about 420 |
+| Float16, sorted, the lookup attribute ruler | about 445 |
+| The same on 2 GPU processes | about 700 |
+| 3 GPU processes | about 880 |
+| 4 GPU processes | about 990 |
+
+- **Float16 is safe here.** Against full precision it changed 5 tags and 4 lemmas in 192,828 tokens,
+  and no entity. The curated transformer's `mixed_precision` switch, off in the shipped config,
+  becomes `torch.autocast("cuda")` at prediction in thinc's PyTorch shim.
+- **It gains little alone (1.2 times), unlike XL-LEXEME (3.3 times),** because the transformer is a
+  quarter of the pipeline. Over 3,000 sentences: the entity recognizer 3.45 s, the transformer
+  1.93 s (0.65 s of it CPU piece encoding), the attribute ruler 1.41 s, the lemmatizer 0.82 s, the
+  tagger 0.09 s. The rest runs on the CPU while the GPU waits.
+- **The lookup attribute ruler** (`corpus/attribute_rules.py`) gave the same annotation on all
+  34,937 tokens checked and saved a fifth.
+- **Sorting by length** saved 15–20%; the batch size (64 to 1,024 documents) changed nothing.
+- **Several processes sharing the GPU,** each holding its own model (spaCy warns against
+  `n_process` with a GPU model), overlap one process's CPU work with another's GPU work: 4
+  processes ran 2.2 times as fast as one, peaking at 7.6 GB of the GPU's 12 with batches of 64
+  documents and 128 spans. The GPU stayed about a third busy, so the six physical cores are the
+  limit and more processes would add little.
+- **The settings kept:** float16, the lookup attribute ruler, sentences sorted by length, 4
+  processes. Together about 3.6 times the shipped config.
+
 ## Planned: reusing unchanged documents
 
 Planned 2026-11-15 (the author), measured first. A full run reannotates every text, while run
