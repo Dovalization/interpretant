@@ -1,0 +1,48 @@
+{
+  "B003": {
+    "wrong_cuts": [8],
+    "missed_breaks": [{"sentence": 7, "word": "(3)"}],
+    "note": "List marker (3) stranded on previous row; belongs with next item"
+  },
+  "B016": {
+    "wrong_cuts": [3, 10, 11],
+    "missed_breaks": [
+      {"sentence": 8, "word": "The"},
+      {"sentence": 9, "word": "(2)"},
+      {"sentence": 10, "word": "(3)"}
+    ],
+    "note": "Jl. abbreviation split; lost full stop; list markers stranded on prior rows"
+  },
+  "B035": {
+    "wrong_cuts": [3],
+    "missed_breaks": [
+      {"sentence": 2, "word": "3."},
+      {"sentence": 5, "word": "5."}
+    ],
+    "note": "Paragraph number 3. stranded; comma before 5. hides a break"
+  },
+  "B039": {
+    "wrong_cuts": [],
+    "missed_breaks": [{"sentence": 9, "word": "The"}],
+    "note": "Comma typo for full stop before capitalised new sentence"
+  },
+  "B068": {
+    "wrong_cuts": [11, 16, 17],
+    "missed_breaks": [
+      {"sentence": 11, "word": "lThis"},
+      {"sentence": 15, "word": "in"},
+      {"sentence": 15, "word": "1."},
+      {"sentence": 15, "word": "2."},
+      {"sentence": 16, "word": "3."}
+    ],
+    "note": "Split title, stranded list numbers; mid-sentence footnote left unmarked"
+  },
+  "J030": {
+    "verdict": "right",
+    "note": "Cut fell inside parenthesis embedded in the outer sentence"
+  },
+  "S017": {
+    "verdict": "right",
+    "note": "Free-standing parenthetical holds two full sentences; cut at sentence end"
+  }
+}
