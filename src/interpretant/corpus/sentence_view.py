@@ -4,12 +4,13 @@ The contextual pipeline draws its usages from sentences. The spaCy pass already 
 into sentences and the language stage read each one's language. This module joins the cuts the
 merge rules find wrong and decides what each sentence of a kept work may be used for:
 
-- **joined:** two consecutive sentences, neither removed, become one when a merge rule says the
-  cut between them falls where no sentence ends (`join_rule`). The rules came from a scan of every
-  cut in the corpus (`scripts/evidence/sentence_cuts.py`); wrong cuts gather in OCR-damaged early
-  decades. A joined sentence takes the language and confidence of its longest part;
+- **joined:** two consecutive sentences become one when a merge rule says the cut between them
+  falls where no sentence ends (`join_rule`); a removed sentence joins only if it has no letters.
+  The rules came from a scan of every cut in the corpus (`scripts/evidence/sentence_cuts.py`);
+  wrong cuts gather in OCR-damaged early decades. A joined sentence takes the language and
+  confidence of its longest part;
 - **removed:** every non-space character lies inside the work's removed ranges, merged, so a
-  sentence spanning two adjacent ranges counts as removed. A removed sentence is never joined;
+  sentence spanning two adjacent ranges counts as removed;
 - **cut_off:** the sentence holding the end of a work flagged truncated, whose text stops
   mid-sentence: its words are real uses up to the cut, so it stays in the view, but no usage is
   drawn from it;
@@ -165,13 +166,23 @@ def build_sentence_view(abstracts: pl.DataFrame) -> pl.DataFrame:
 def _join(
     text: str, sentences: Sequence[dict[str, Any]], removed: Sequence[bool]
 ) -> list[tuple[list[int], list[JoinRule]]]:
-    """The sentences grouped by the merge rules: each group's sentence indexes and its rules."""
+    """The sentences grouped by the merge rules: each group's sentence indexes and its rules.
+
+    A removed sentence is never joined, unless it has no letters: a stray mark such as *.* or *2*
+    is removed as a template sentence for being common, not because it is a citation or a notice.
+    A row of no letters that holds a digit, before a row starting with *.* or *)*, is a list number
+    cut from its item, so it starts a group and the item joins it.
+    """
+    rows = [text[sentence["start"] : sentence["end"]] for sentence in sentences]
+    joinable = [not removed[i] or not _has_letter(row) for i, row in enumerate(rows)]
     groups: list[tuple[list[int], list[JoinRule]]] = []
-    for index, sentence in enumerate(sentences):
-        if groups and not removed[index] and not removed[groups[-1][0][-1]]:
+    for index, row in enumerate(rows):
+        following = rows[index + 1] if index + 1 < len(rows) else ""
+        list_number = not _has_letter(row) and _has_digit(row) and following[:1] in (".", ")")
+        if groups and joinable[index] and joinable[groups[-1][0][-1]] and not list_number:
             parts, rules = groups[-1]
             before = text[sentences[parts[0]]["start"] : sentences[parts[-1]]["end"]]
-            rule = join_rule(before, text[sentence["start"] : sentence["end"]])
+            rule = join_rule(before, row)
             if rule is not None:
                 parts.append(index)
                 rules.append(rule)
@@ -182,6 +193,10 @@ def _join(
 
 def _has_letter(text: str) -> bool:
     return any(character.isalpha() for character in text)
+
+
+def _has_digit(text: str) -> bool:
+    return any(character.isdigit() for character in text)
 
 
 def _unclosed(text: str) -> int:

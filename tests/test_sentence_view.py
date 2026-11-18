@@ -240,3 +240,30 @@ def test_build_sentence_view_gives_a_joined_sentence_its_longest_parts_language(
     row["sentences"][0] |= {"language": "und", "confidence": 0.1}
     view = build_sentence_view(abstracts_table([row]))
     assert view.select("language", "confidence", "exclusion").rows() == [("en", 0.99, "cut_off")]
+
+
+def test_build_sentence_view_keeps_a_removed_list_number_with_its_item() -> None:
+    sentences = ["Two hypotheses were: 1.", "Booklets help.", "2", ". Drills help.", "Then more."]
+    third = len(sentences[0]) + len(sentences[1]) + 2
+    row = abstract_row(1, sentences, removals=[removal(third, third + 1, "template_sentence")])
+    view = build_sentence_view(abstracts_table([row]))
+    text = " ".join(sentences)
+    assert [text[start:end] for start, end in view.select("start", "end").rows()] == [
+        "Two hypotheses were: 1. Booklets help.",
+        "2 . Drills help.",
+        "Then more.",
+    ]
+    assert view.select("exclusion", "merge_rules").rows() == [
+        (None, ["list_number"]),
+        (None, ["no_letters"]),
+        (None, []),
+    ]
+
+
+def test_build_sentence_view_joins_a_removed_stray_period_back_to_its_ellipsis() -> None:
+    sentences = ["It may be a looking glasse. .", ".", ".*-The", "Mutable estate of France."]
+    second = len(sentences[0]) + 1
+    row = abstract_row(1, sentences, removals=[removal(second, second + 1, "template_sentence")])
+    view = build_sentence_view(abstracts_table([row]))
+    assert view.height == 1
+    assert view["merge_rules"].to_list() == [["no_letters", "period", "function_word"]]

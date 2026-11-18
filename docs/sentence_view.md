@@ -132,6 +132,16 @@ Left out because their examples also caught real sentence ends: *etc.*, *et al.*
 merely starts lowercase. The rules catch 6 of the author's 7 wrong cuts; the seventh, a stray OCR
 period before a capital, looks like a sentence end to any rule.
 
+**Amended the same day, after the first build and before any audit item was drawn.** The first
+build joined 13,411 cuts but only 4 of the author's 7 wrong cuts. Two were next to a stray *.* or
+*2* that the template rule had removed (a lone mark is common across abstracts), and removed
+sentences were never joined. So:
+- a removed sentence with no letters joins like any row without letters (a removed sentence with
+  letters, such as a citation line, still never joins);
+- a row without letters that holds a digit, before a row starting with *.* or *)*, joins that
+  next row instead of the one before it: it is a list number cut from its item (*2* | *. Subjects
+  using*).
+
 A joined sentence takes the language and confidence of its longest part. The view gains a column,
 `merge_rules`, listing the rule of each join, and its sentence numbers count joined sentences.
 
