@@ -1,0 +1,322 @@
+{
+ "S000": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S001": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S002": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S003": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S004": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S005": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S006": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S007": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S008": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S009": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S010": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S011": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S012": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S013": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S014": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S015": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S016": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S017": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S018": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S019": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S020": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S021": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S022": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S023": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S024": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S025": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S026": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S027": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S028": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S029": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S030": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S031": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S032": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S033": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S034": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S035": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S036": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S037": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S038": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S039": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S040": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S041": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S042": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S043": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S044": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S045": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S046": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S047": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S048": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S049": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S050": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S051": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S052": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S053": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S054": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S055": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S056": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S057": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S058": {
+  "verdict": "wrong",
+  "reason": "cut after author initial in citation"
+ },
+ "S059": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S060": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S061": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S062": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S063": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S064": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S065": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S066": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S067": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S068": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S069": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S070": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S071": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S072": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S073": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S074": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S075": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S076": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S077": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S078": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ },
+ "S079": {
+  "verdict": "right",
+  "reason": "first piece ends a sentence"
+ }
+}
