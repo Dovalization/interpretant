@@ -193,6 +193,24 @@ stages:
     outs:
       - ${static_view.path}
 
+  build_sentence_view:
+    cmd: interpretant build-sentence-view
+    deps:
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/sentence_view.py
+      - src/interpretant/cli/build_sentence_view.py
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/sentence_view.py
+      - src/interpretant/pipelines/build_sentence_view.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - ${abstracts.path}
+    outs:
+      - ${sentence_view.path}
+
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:
