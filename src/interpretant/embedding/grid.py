@@ -11,6 +11,7 @@ The compass is trained on the same token budget from every main cell, so the lar
 
 from __future__ import annotations
 
+import random
 import re
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -18,11 +19,11 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-from interpretant.corpus.phrases import sample_chunks
 from interpretant.embedding.ppmi import train_cell
 from interpretant.embedding.twec import EpochProgress, TWECTrainer
 
 _CELL_FILENAME = re.compile(r"^(?P<name>[a-z0-9]+)_(?P<decade>\d{4})$")
+CHUNK_TOKENS = 1_000
 
 
 @dataclass(frozen=True)
@@ -46,6 +47,29 @@ def discover_cells(input_dir: Path, layers: tuple[str, ...]) -> list[Cell]:
             if match:
                 cells.append(Cell(layer, match["name"], int(match["decade"]), path))
     return cells
+
+
+def sample_chunks(path: Path, token_budget: int, seed: int = 42) -> list[list[str]]:
+    """Return random chunks of ``CHUNK_TOKENS`` tokens from a file, up to ``token_budget``.
+
+    Chunking makes long documents and short abstracts (one per line) comparable units, so
+    every file contributes the same amount of text.
+    """
+    chunks = [
+        tokens[start : start + CHUNK_TOKENS]
+        for line in path.read_text(encoding="utf-8").splitlines()
+        for tokens in [line.split()]
+        for start in range(0, len(tokens), CHUNK_TOKENS)
+    ]
+    random.Random(seed).shuffle(chunks)
+    sample: list[list[str]] = []
+    total = 0
+    for chunk in chunks:
+        if total >= token_budget:
+            break
+        sample.append(chunk)
+        total += len(chunk)
+    return sample
 
 
 def write_compass_sample(cells: list[Cell], tokens_per_cell: int, output: Path) -> int:

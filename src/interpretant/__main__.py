@@ -250,11 +250,8 @@ def corpus_phrases_learn(
     """
     from interpretant.corpus.audit import load_target_words
     from interpretant.corpus.files import source_texts
-    from interpretant.corpus.phrases import (
-        learn_phrases,
-        sample_chunks,
-        split_targets,
-    )
+    from interpretant.corpus.phrases import learn_phrases, split_targets
+    from interpretant.embedding.grid import sample_chunks
 
     paths = source_texts(processed_dir, sources)
     protected, forced = split_targets(load_target_words(words_file))

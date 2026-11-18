@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from interpretant.corpus.phrases import PhraseModel, learn_phrases, sample_chunks, split_targets
+from interpretant.corpus.phrases import PhraseModel, learn_phrases, split_targets
 
 TRAINING = (
     [["the", "new", "york", "times", "reported", "it"]] * 40
@@ -37,16 +37,6 @@ def test_forced_phrase_targets_merge_even_when_never_seen() -> None:
     model = learn_phrases(TRAINING, protected={"network"}, forced={"neural_network"}, min_count=5)
 
     assert model.apply("a neural network learns") == "a neural_network learns"
-
-
-def test_sample_chunks_respects_the_token_budget(tmp_path: Path) -> None:
-    path = tmp_path / "hci_1990.txt"
-    path.write_text(" ".join(["word"] * 2_500) + "\n" + " ".join(["other"] * 500) + "\n")
-
-    chunks = sample_chunks(path, token_budget=1_200)
-
-    assert all(len(chunk) <= 1_000 for chunk in chunks)
-    assert 1_200 <= sum(len(chunk) for chunk in chunks) < 2_200
 
 
 def test_broken_words_are_repaired_and_one_letter_pairs_dropped() -> None:

@@ -6,7 +6,12 @@ from pathlib import Path
 
 from gensim.models import KeyedVectors
 
-from interpretant.embedding.grid import discover_cells, train_twec_grid, write_compass_sample
+from interpretant.embedding.grid import (
+    discover_cells,
+    sample_chunks,
+    train_twec_grid,
+    write_compass_sample,
+)
 from interpretant.embedding.twec import TWECTrainer
 
 SENTENCE = "the mind forms a representation of the world through perception and memory "
@@ -28,6 +33,16 @@ def test_discover_cells_reads_layer_name_and_decade(tmp_path: Path) -> None:
 
     assert [cell.label for cell in cells] == ["openalex/philosophy_1990", "openalex_full/hci_1960"]
     assert [cell.decade for cell in cells] == [1990, 1960]
+
+
+def test_sample_chunks_respects_the_token_budget(tmp_path: Path) -> None:
+    path = tmp_path / "hci_1990.txt"
+    path.write_text(" ".join(["word"] * 2_500) + "\n" + " ".join(["other"] * 500) + "\n")
+
+    chunks = sample_chunks(path, token_budget=1_200)
+
+    assert all(len(chunk) <= 1_000 for chunk in chunks)
+    assert 1_200 <= sum(len(chunk) for chunk in chunks) < 2_200
 
 
 def test_compass_sample_takes_the_same_budget_from_every_cell(tmp_path: Path) -> None:
