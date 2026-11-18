@@ -89,6 +89,16 @@ author. The chosen splitter applies to the contextual view only, never to the ca
   - A target sentence the author marks "not sure" counts as wrong.
   - An abstract's marks count as given, with "not sure" reported.
   - The bars are unchanged: at most 2% wrong cuts, at most 5 wrong target sentences.
+- **Curtailed inspection (the author asked for a shorter review, 2026-11-18).** The precision
+  sample holds 314 cuts, so 7 wrong cuts fail the bar, and judging more abstracts can only add
+  errors.
+  - The agents marked 9 wrong cuts, all in 4 abstracts (A060, A070, A071, A086). In the
+    calibration they marked fewer errors than the author, not more.
+  - The author first judges those 4 abstracts, blind to the agents' marks.
+  - If the author's wrong cuts there reach 7, the precision bar fails and judging stops. Step 5
+    then moves to the comparison with pySBD or scispaCy, and the boundary sample is judged once,
+    on the splitter kept.
+  - Otherwise the author judges the other 46 abstracts and the 150 target sentences.
 
 ## Results
 

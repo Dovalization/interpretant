@@ -1,0 +1,260 @@
+<title>Sentence cuts check</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Two parts in one flow: whole abstracts (rows of sentences with a cut strip between each two, a word tapped marks a missed break) and single target sentences (one key each). Same family as the project's other judging pages. */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --ink: #1b2330; --muted: #5d6878; --rule: #dde2ea;
+  --accent: #2f5aa8; --accent-soft: #e6edf9; --mark: #fff1b8; --ok: #2c7a4b; --ok-soft: #e3f3e9;
+  --bad: #b3261e; --bad-soft: #fbe9e7;
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12; --ok: #7fd3a1; --ok-soft: #173426;
+  --bad: #f2a29b; --bad-soft: #3a1d1b; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1a2029; --ink: #e6ebf2; --muted: #9aa5b5; --rule: #2c3442;
+  --accent: #8fb1ee; --accent-soft: #1f2c44; --mark: #5a4a12; --ok: #7fd3a1; --ok-soft: #173426;
+  --bad: #f2a29b; --bad-soft: #3a1d1b; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); margin: 0; }
+.page { max-width: 860px; margin: 0 auto; padding-block: 24px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 18px; }
+h1 { font: 650 1.6rem/1.2 var(--display); margin: 0; text-wrap: balance; }
+.lede { margin: 4px 0 0; color: var(--muted); max-width: 66ch; font-size: 0.95rem; }
+details { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 14px; }
+summary { cursor: pointer; font-weight: 600; }
+.rules { margin: 8px 0 4px; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: 0.93rem; max-width: 66ch; }
+.rules strong { color: var(--ink); }
+.status { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--muted); }
+.status strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.bar { flex: 1; height: 6px; border-radius: 3px; background: var(--rule); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+.part { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sentence { display: grid; grid-template-columns: 2.2em 1fr; gap: 10px; align-items: baseline; padding: 6px 0; }
+.num { font: 500 0.8rem/1 var(--mono); color: var(--muted); text-align: right; }
+.text { font: 500 0.98rem/1.6 var(--display); overflow-wrap: anywhere; min-width: 0; }
+.w { cursor: pointer; border-radius: 3px; }
+.w:hover { background: var(--accent-soft); }
+.w.first { cursor: default; }
+.w.first:hover { background: none; }
+.w.miss { background: var(--mark); box-shadow: inset 2px 0 0 var(--bad); font-weight: 650; }
+.cut { display: grid; grid-template-columns: 2.2em 1fr auto; gap: 10px; align-items: center; padding: 3px 6px 3px 0; border-radius: 6px; border: 1px dashed var(--rule); background: var(--bg); font-size: 0.82rem; color: var(--muted); }
+.cut .icon { text-align: right; }
+.cut .junction { overflow-wrap: anywhere; min-width: 0; }
+.cut .seam { color: var(--accent); font-weight: 700; padding: 0 4px; }
+.cut.wrong { border-style: solid; border-color: var(--bad); background: var(--bad-soft); color: var(--ink); }
+.cut button { font: inherit; font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); cursor: pointer; white-space: nowrap; }
+.cut.wrong button { border-color: var(--bad); color: var(--bad); }
+.actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.save { font: 600 1rem var(--body); padding: 12px 18px; border-radius: 10px; border: 2px solid var(--ok); background: var(--ok-soft); color: var(--ink); cursor: pointer; }
+.save kbd, .opt kbd { font: 600 0.82rem/1 var(--body); border: 1px solid var(--rule); border-radius: 5px; padding: 4px 7px; background: var(--bg); margin-left: 8px; }
+.unsure { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 0.92rem; cursor: pointer; }
+.saved { color: var(--ok); font-size: 0.9rem; }
+.ctx { font: 500 0.95rem/1.6 var(--display); color: var(--muted); border-left: 3px solid var(--rule); padding: 6px 0 6px 12px; overflow-wrap: anywhere; }
+.ctx.none { font: italic 0.9rem var(--body); }
+.target { font: 500 1.05rem/1.6 var(--display); border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 12px; border-radius: 0 8px 8px 0; overflow-wrap: anywhere; }
+.question { margin: 4px 0 0; font-weight: 600; }
+.options { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.opt { display: flex; justify-content: space-between; align-items: center; gap: 6px; text-align: left; font: inherit; font-size: 0.92rem; color: inherit;
+  background: var(--surface); border: 2px solid var(--rule); border-radius: 10px; padding: 12px; cursor: pointer; min-width: 0; }
+.opt:hover { border-color: var(--accent); }
+.opt.chosen { border-color: var(--ok); background: var(--ok-soft); }
+button:focus-visible, .w:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.nav button, .copy { font: inherit; font-size: 0.9rem; color: var(--accent); background: none; border: 1px solid var(--rule); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.nav button:disabled { color: var(--muted); cursor: default; opacity: .6; }
+.note { color: var(--muted); font-size: 0.85rem; min-height: 1.2em; }
+.done { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; text-align: center; padding: 32px 20px; }
+.done h2 { font: 650 1.4rem/1.3 var(--display); margin: 0 0 6px; }
+@media (max-width: 640px) { .options { grid-template-columns: 1fr 1fr; } .cut { grid-template-columns: 1.6em 1fr; } .cut button { grid-column: 2; justify-self: start; } .sentence { grid-template-columns: 1.6em 1fr; } }
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }
+</style>
+<div class="page">
+  <header>
+    <h1>Where did the splitter cut?</h1>
+    <p class="lede" id="lede">Check only where the cuts fall, not the text itself: spelling, spacing and OCR noise don't matter.</p>
+  </header>
+  <details open>
+    <summary>How to judge</summary>
+    <ul class="rules">
+      <li><strong>Part 1, whole abstracts.</strong> Each numbered row is one sentence as cut; each dashed strip between two rows is a cut.</li>
+      <li><strong>A wrong cut</strong> falls where no sentence ends: after an abbreviation (<em>p.</em>, <em>et al.</em>, <em>e.g.</em>), an initial or a number, or inside brackets. Press <em>Wrong cut</em> on its strip.</li>
+      <li><strong>A missed break</strong>: two sentences left in one row. Tap the word that should start the second one; tap again to undo.</li>
+      <li><strong>Headings are not errors.</strong> A heading glued to a sentence (<em>Abstract</em>, <em>Methods:</em>, <em>Background:</em>) is fine: leave it. In text that isn't prose, such as reference lists or catalogue lines, mark only the cuts that are plainly wrong.</li>
+      <li>Then press <em>No mistakes</em> or <em>Save marks</em> (or Enter).</li>
+      <li id="part2rule"><strong>Part 2, single sentences.</strong> The highlighted sentence is right when both its cuts fall where a sentence ends and it holds one sentence (a heading at its start is fine). Otherwise say whether its start is wrong, its end is wrong, or it holds two sentences. Keys 1 to 5.</li>
+    </ul>
+  </details>
+  <div class="status"><strong id="count">0 / 0</strong><div class="bar"><span id="bar"></span></div></div>
+  <main id="main"></main>
+  <div class="nav">
+    <button id="prev" type="button">← Previous</button>
+    <button id="skip" type="button">Next unanswered</button>
+    <button id="next" type="button">Next →</button>
+  </div>
+  <p class="note" id="note">Connecting…</p>
+</div>
+<script>
+const ITEMS = __ITEMS__;
+const COLLECTION = "__COLLECTION__";
+const CHOICES = [["right", null, "1", "Right"], ["wrong", "start", "2", "Wrong start"], ["wrong", "end", "3", "Wrong end"], ["wrong", "two", "4", "Two sentences"], ["unsure", null, "5", "Not sure"]];
+const answers = {}, drafts = {};
+let db = null, at = 0;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const answered = () => ITEMS.filter(i => answers[i.id]).length;
+const firstOpen = from => { for (let k = 0; k < ITEMS.length; k++) { const n = (from + k) % ITEMS.length; if (!answers[ITEMS[n].id]) return n; } return -1; };
+const edge = (text, tail) => { const words = text.trim().split(/\s+/); return tail ? words.slice(-5).join(" ") : words.slice(0, 5).join(" "); };
+
+function draftOf(item) {
+  if (!drafts[item.id]) {
+    const saved = answers[item.id];
+    drafts[item.id] = saved
+      ? { wrong: new Set(saved.wrong_cuts), missed: saved.missed_breaks.map(m => `${m.sentence}:${m.offset}`).reduce((set, key) => set.add(key), new Set()), unsure: !!saved.unsure }
+      : { wrong: new Set(), missed: new Set(), unsure: false };
+  }
+  return drafts[item.id];
+}
+
+function words(sentence, index, draft) {
+  let html = "", last = 0, first = true;
+  for (const match of sentence.matchAll(/\S+/g)) {
+    html += esc(sentence.slice(last, match.index));
+    const key = `${index}:${match.index}`;
+    html += first
+      ? `<span class="w first">${esc(match[0])}</span>`
+      : `<span class="w${draft.missed.has(key) ? " miss" : ""}" data-key="${key}" role="button" tabindex="0">${esc(match[0])}</span>`;
+    last = match.index + match[0].length;
+    first = false;
+  }
+  return html + esc(sentence.slice(last));
+}
+
+function renderAbstract(item) {
+  const draft = draftOf(item), rows = [];
+  item.sentences.forEach((sentence, index) => {
+    if (index > 0) {
+      const wrong = draft.wrong.has(index);
+      rows.push(`<div class="cut${wrong ? " wrong" : ""}"><span class="icon">✂</span><span class="junction">…${esc(edge(item.sentences[index - 1], true))}<span class="seam">|</span>${esc(edge(sentence, false))}…</span><button type="button" data-cut="${index}" aria-pressed="${wrong}">${wrong ? "Marked wrong" : "Wrong cut"}</button></div>`);
+    }
+    rows.push(`<div class="sentence"><span class="num">${index + 1}</span><span class="text">${words(sentence, index, draft)}</span></div>`);
+  });
+  const marks = draft.wrong.size + draft.missed.size;
+  return `<p class="part">Part 1 · abstract ${ITEMS.indexOf(item) + 1} of ${PART1}</p>
+    <div class="card">${rows.join("")}</div>
+    <div class="actions"><button class="save" type="button" data-save="1">${marks ? `Save ${marks} mark${marks > 1 ? "s" : ""}` : "No mistakes"}<kbd>Enter</kbd></button>
+    <label class="unsure"><input type="checkbox" id="unsure"${draft.unsure ? " checked" : ""}> Not sure about this one</label>
+    ${answers[item.id] ? `<span class="saved">Saved</span>` : ""}</div>`;
+}
+
+function renderSentence(item) {
+  const chosen = answers[item.id], ctx = (text, label) => text === null ? `<div class="ctx none">${label}</div>` : `<div class="ctx">${esc(text)}</div>`;
+  return `<p class="part">Part 2 · sentence ${ITEMS.indexOf(item) - PART1 + 1} of ${ITEMS.length - PART1}</p>
+    ${ctx(item.before, "Start of the abstract")}
+    <div class="target">${esc(item.target)}</div>
+    ${ctx(item.after, "End of the abstract")}
+    <p class="question">Is the highlighted sentence cut right?</p>
+    <div class="options">${CHOICES.map(([verdict, where, key, label]) => `<button class="opt${chosen && chosen.verdict === verdict && (chosen.where || null) === where ? " chosen" : ""}" data-verdict="${verdict}" data-where="${where || ""}" type="button"><span>${label}</span><kbd>${key}</kbd></button>`).join("")}</div>`;
+}
+
+const PART1 = ITEMS.filter(i => i.kind === "abstract").length;
+const PART2 = ITEMS.length - PART1;
+document.getElementById("part2rule").hidden = PART2 === 0;
+document.getElementById("lede").textContent = (PART2 ? `${PART1} whole abstracts, then ${PART2} single sentences. ` : `${PART1} whole abstracts. `) + document.getElementById("lede").textContent;
+
+function render() {
+  const main = document.getElementById("main"), n = answered();
+  document.getElementById("count").textContent = `${n} / ${ITEMS.length}`;
+  document.getElementById("bar").style.width = ITEMS.length ? `${100 * n / ITEMS.length}%` : "0";
+  document.getElementById("prev").disabled = at <= 0;
+  document.getElementById("next").disabled = at < 0 || at >= ITEMS.length - 1;
+  if (at < 0) {
+    main.innerHTML = `<div class="done"><h2>All ${ITEMS.length} answered</h2><p>Thank you. ${db ? "Tell Claude you're done." : "Copy your answers and paste them to Claude."} You can still go back and change any answer.</p>${db ? "" : `<p><button class="copy" type="button">Copy answers</button></p><textarea id="answers" readonly rows="4" style="width:100%;font:12px/1.4 monospace">${esc(JSON.stringify(answers))}</textarea>`}</div>`;
+    return;
+  }
+  const item = ITEMS[at];
+  main.innerHTML = item.kind === "abstract" ? renderAbstract(item) : renderSentence(item);
+}
+
+async function store(item, answer) {
+  answers[item.id] = answer;
+  at = firstOpen(at + 1);
+  render();
+  window.scrollTo({ top: 0 });
+  const note = document.getElementById("note");
+  if (!db) {
+    try { localStorage.setItem(COLLECTION, JSON.stringify(answers)); note.textContent = "Kept in this browser."; }
+    catch (e) { note.textContent = "Answers can't be kept in this browser; finish in one sitting and copy them at the end."; }
+    return;
+  }
+  try { await db.collection(COLLECTION).doc(item.id).set(answer); note.textContent = "Saved."; }
+  catch (e) { note.textContent = "Not saved: " + (e && e.message ? e.message : "try again"); }
+}
+
+function saveAbstract() {
+  const item = ITEMS[at], draft = draftOf(item);
+  const box = document.getElementById("unsure");
+  draft.unsure = !!(box && box.checked);
+  const missed = [...draft.missed].map(key => { const [sentence, offset] = key.split(":").map(Number); const word = item.sentences[sentence].slice(offset).split(/\s/)[0]; return { sentence, offset, word }; })
+    .sort((a, b) => a.sentence - b.sentence || a.offset - b.offset);
+  store(item, { kind: "abstract", wrong_cuts: [...draft.wrong].sort((a, b) => a - b), missed_breaks: missed, unsure: draft.unsure, updated: new Date().toISOString() });
+}
+
+function move(delta) { at = at < 0 ? (delta < 0 ? ITEMS.length - 1 : 0) : Math.max(0, Math.min(ITEMS.length - 1, at + delta)); render(); window.scrollTo({ top: 0 }); }
+
+document.addEventListener("click", e => {
+  const word = e.target.closest(".w[data-key]");
+  if (word && at >= 0) { const draft = draftOf(ITEMS[at]); const key = word.dataset.key; draft.missed.has(key) ? draft.missed.delete(key) : draft.missed.add(key); render(); return; }
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.classList.contains("copy")) {
+    const text = JSON.stringify(answers);
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(
+      () => { b.textContent = "Copied"; },
+      () => { b.textContent = "Select the text below and copy it"; const area = document.getElementById("answers"); if (area) area.select(); });
+    return;
+  }
+  if (b.dataset.cut) { const draft = draftOf(ITEMS[at]); const cut = Number(b.dataset.cut); draft.wrong.has(cut) ? draft.wrong.delete(cut) : draft.wrong.add(cut); render(); }
+  else if (b.dataset.save) saveAbstract();
+  else if (b.dataset.verdict) store(ITEMS[at], { kind: "sentence", verdict: b.dataset.verdict, where: b.dataset.where || null, updated: new Date().toISOString() });
+  else if (b.id === "prev") move(-1);
+  else if (b.id === "next") move(1);
+  else if (b.id === "skip") { at = firstOpen(Math.max(at, 0)); render(); }
+});
+document.addEventListener("change", e => { if (e.target.id === "unsure" && at >= 0) draftOf(ITEMS[at]).unsure = e.target.checked; });
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || at < 0) return;
+  const item = ITEMS[at];
+  if (e.target.classList && e.target.classList.contains("w") && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); e.target.click(); return; }
+  if (item.kind === "abstract" && e.key === "Enter" && !(e.target.tagName === "BUTTON")) { e.preventDefault(); saveAbstract(); }
+  else if (item.kind === "sentence" && /^[1-5]$/.test(e.key)) { e.preventDefault(); const [verdict, where] = CHOICES[Number(e.key) - 1]; store(item, { kind: "sentence", verdict, where, updated: new Date().toISOString() }); }
+  else if (e.key === "ArrowLeft") move(-1);
+  else if (e.key === "ArrowRight") move(1);
+});
+
+render();
+(async () => {
+  const note = document.getElementById("note");
+  db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+  if (!db) {
+    try { Object.assign(answers, JSON.parse(localStorage.getItem(COLLECTION) || "{}")); } catch (e) { /* nothing kept */ }
+    at = firstOpen(0); render();
+    note.textContent = "Answers are kept in this browser; copy them at the end.";
+    return;
+  }
+  const timer = setTimeout(() => { note.textContent = "Saved answers can't be reached yet; answers may not save."; }, 10000);
+  let first = true;
+  db.collection(COLLECTION).onSnapshot(snap => {
+    snap.docs.forEach(d => { const data = d.data(); if (data && data.kind) answers[d.id] = data; });
+    clearTimeout(timer);
+    note.textContent = "Answers save as you go.";
+    if (first) { first = false; at = firstOpen(0); }
+    render();
+  }, err => { clearTimeout(timer); note.textContent = "Saved answers are unavailable (" + err.code + ")."; });
+})();
+</script>
