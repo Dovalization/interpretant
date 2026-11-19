@@ -133,6 +133,27 @@ or noun modifier (the author); and noun modifiers, coined names and identifiers 
 judges had mostly read them. The audit of record is drawn from the transformer's table with the
 same seeds and judged fresh under the amended codebook; no pilot verdict is reused.
 
+**The judging setup (2026-11-19, before any verdict of record was scored).** The judges are
+`claude-sonnet-5-5` and the adjudicator `claude-opus-5-5`, called through Claude Code's command
+line (`scripts/review/judge_cli.py`) at high effort, one item per call. Each call sees only the saved
+codebook, as its whole system prompt, and the item: no tools, settings, MCP servers or project
+files, no saved session, and an answer constrained to the codebook's schema. A first run through
+the Message Batches API at low effort was stopped after 1,000 items per judge, and none of its
+verdicts is used: at low effort Sonnet does not think (69 output tokens per item with thinking on,
+64 with it off, in the trial), so the verdict comes before the note, and two of the 50 notes
+checked contradicted their own verdicts. On those 50 items (`batch_00`), the setups compared:
+
+| Setup | Agrees with the API judges | Notes match verdicts |
+|---|---|---|
+| API, low effort, one item per request (the two judges agree on all 50) | — | 48 of 50 |
+| Command line, low effort, 50 items per call | 44 of 50 | several contradict |
+| Command line, low effort, one item per call | 47 of 50 | 50 of 50 |
+| Command line, high effort, one item per call (chosen) | 45 of 50 | 50 of 50 |
+
+Where the chosen setup differs from the API judges, its reading follows the codebook (a cited
+title or a product's name left out as a name, an -ing form taking an object read as a verb, a
+hyphen part counted).
+
 **If a bar fails.** The rule is fixed and the failed part of the audit is drawn again, seed
 20261306, after a note here records the fix before the redraw. Any change to `words.tsv` needs
 the author. If the calibration fails, the prompt is amended on the disagreements and 60 fresh
