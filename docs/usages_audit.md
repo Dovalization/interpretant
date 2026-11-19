@@ -140,12 +140,12 @@ codebook, as its whole system prompt, and the item: no tools, settings, MCP serv
 files, no saved session, and an answer constrained to the codebook's schema. A first run through
 the Message Batches API at low effort was stopped after 1,000 items per judge, and none of its
 verdicts is used: at low effort Sonnet does not think (69 output tokens per item with thinking on,
-64 with it off, in the trial), so the verdict comes before the note, and two of the 50 notes
-checked contradicted their own verdicts. On those 50 items (`batch_00`), the setups compared:
+64 with it off, in the trial), so the verdict comes before the note, and two of the notes read
+(those of the nine items the setups disputed) contradicted their own verdicts. On those 50 items (`batch_00`), the setups compared:
 
 | Setup | Agrees with the API judges | Notes match verdicts |
 |---|---|---|
-| API, low effort, one item per request (the two judges agree on all 50) | — | 48 of 50 |
+| API, low effort, one item per request (the two judges agree on all 50) | — | 2 of 9 disputed contradict |
 | Command line, low effort, 50 items per call | 44 of 50 | several contradict |
 | Command line, low effort, one item per call | 47 of 50 | 50 of 50 |
 | Command line, high effort, one item per call (chosen) | 45 of 50 | 50 of 50 |
