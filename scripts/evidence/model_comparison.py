@@ -2,13 +2,14 @@
 
 Draws 300 usages per word from the usages table, spread evenly over decades (seed 20261302). Worker
 processes read each sampled usage's sentence tokens from the cached documents and recognise the
-small model's entities on the whole abstract too (the sentence context check). The transformer
-then re-annotates every sampled sentence on the GPU (`usages/entities.load_transformer`, sentences
-sorted by length), followed by the lemma exceptions, and each usage is matched and scoped again
-under the same rules. A usage flips if the transformer's lemma stops matching it (whole tokens
-only) or its scope changes. Writes `summary.json` (counts only, no sentence; held-out words
-counted, never named), the 50 disagreements to judge (seed 20261303, readings shown as A and B in
-an order set by the key) and their key. Run from the repository root on the GPU machine:
+small model's entities on the whole abstract too, in batches (the sentence context check). The
+transformer then re-annotates every sampled sentence on the GPU
+(`usages/entities.load_transformer`, sentences sorted by length), followed by the lemma
+exceptions, and each usage is matched and scoped again under the same rules. A usage flips if the
+transformer's lemma stops matching it (whole tokens only) or its scope changes. Writes
+`summary.json` (counts only, no sentence; held-out words counted, never named), the 50
+disagreements to judge (seed 20261303, readings shown as A and B in an order set by the key) and
+their key. Run from the repository root on the GPU machine:
 `python scripts/evidence/model_comparison.py OUT_DIR [PROCESSES]`.
 """
 
@@ -35,7 +36,12 @@ from interpretant.cli.progress import LiveProgress
 from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.pipelines.build_usages import UsagesSettings
 from interpretant.pipelines.workers import map_parts
-from interpretant.usages.entities import entity_label, load_entity_recognizer, load_transformer
+from interpretant.usages.entities import (
+    entity_label,
+    load_entity_recognizer,
+    load_transformer,
+    recognise_sentence_entities,
+)
 from interpretant.usages.identifiers import build_draw_key
 from interpretant.usages.target_matching import build_target_matcher, match_targets
 from interpretant.usages.usage_selection import is_in_scope
@@ -116,7 +122,7 @@ def read_part(part: str, job: PartJob) -> list[dict[str, Any]]:
     wanted: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in job.rows:
         wanted[row["work_id"]].append(row)
-    found = []
+    read: list[tuple[Doc, list[dict[str, Any]], list[dict[str, Any]]]] = []
     for doc in load_annotations(job.catalog, part, recognizer.vocab):
         rows = wanted.get(doc.user_data[WORK_ID])
         if not rows:
@@ -136,8 +142,12 @@ def read_part(part: str, job: PartJob) -> list[dict[str, Any]]:
                     "sentence": doc.text[row["sentence_start"] : row["sentence_end"]],
                 }
             )
-        doc.set_ents([], default="missing")
-        abstract = recognizer.get_pipe("ner")(doc)
+        read.append((doc, rows, sentences))
+    abstracts = recognise_sentence_entities(
+        (doc[:] for doc, _, _ in read), recognizer, batch_size=64
+    )
+    found = []
+    for (_, rows, sentences), abstract in zip(read, abstracts, strict=True):
         for row, sentence in zip(rows, sentences, strict=True):
             entity = entity_label(abstract, row["target_start"], row["target_end"])
             found.append(row | sentence | {"abstract_entity": entity})
