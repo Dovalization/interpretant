@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 import os
+import time
+from pathlib import Path
+
+import pytest
 
 from interpretant.pipelines.progress import SILENT
 from interpretant.pipelines.workers import Report, map_parts, map_parts_reporting, worker_pool
@@ -84,3 +88,19 @@ def test_map_parts_reporting_relays_the_workers_reports() -> None:
     )
     assert results == {"a": "A", "b": "B", "c": "C"}
     assert progress.stages == [("items", 9, 9)]
+
+
+def fail_first_or_mark(part: str, folder: str) -> str:
+    """Fail on part p00; on any other part wait a little and leave a marker (importable)."""
+    if part == "p00":
+        raise ValueError("this part fails")
+    time.sleep(0.3)
+    Path(folder, part).touch()
+    return part
+
+
+def test_map_parts_cancels_the_queued_parts_when_one_fails(tmp_path: Path) -> None:
+    parts = {f"p{index:02d}": str(tmp_path) for index in range(40)}
+    with pytest.raises(ValueError, match="this part fails"):
+        map_parts(fail_first_or_mark, parts, process_count=2, progress=SILENT)
+    assert len(list(tmp_path.iterdir())) < 20

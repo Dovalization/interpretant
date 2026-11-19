@@ -105,10 +105,17 @@ def _run_in(
 ) -> dict[str, _Result]:
     futures = {pool.submit(function, part, inputs[part]): part for part in order}
     finished = {}
-    for future in as_completed(futures):
-        part = futures[future]
-        finished[part] = future.result()
-        advance(part)
+    try:
+        for future in as_completed(futures):
+            part = futures[future]
+            finished[part] = future.result()
+            advance(part)
+    except BaseException:
+        # A failed part stops the run: the parts not yet started are cancelled, so the pool's
+        # shutdown waits only for those running instead of every part still queued.
+        for future in futures:
+            future.cancel()
+        raise
     return finished
 
 
