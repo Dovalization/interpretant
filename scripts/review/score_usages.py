@@ -3,9 +3,10 @@
 Reads an audit folder's key, counts and calibration list, and the judges' verdicts in its
 `verdicts/` folder: `judge_A_part_*.json` and `judge_B_part_*.json`, each mapping an item id to
 `{"verdict": "right" | "wrong", "reason": ..., "note": ...}`. Where the two judges differ, the Opus
-adjudicator's verdict stands (`verdicts/opus_adjudication.json`). With `pending`, the script writes
-the items the adjudicator must see, with both judges' verdicts, to `adjudicate.jsonl` (they quote
-corpus sentences and stay out of git). Otherwise it scores the pre-registered bars:
+adjudicator's verdict stands (`verdicts/opus_adjudication.json` or its part files). With
+`pending`, the script writes the items the adjudicator must see, with both judges' verdicts, to
+`adjudicate.jsonl` (they quote corpus sentences and stay out of git). Otherwise it scores the
+pre-registered bars:
 
 - precision: the kept items' errors pooled, against the smallest number that passes at least 96% of
   the time at a true error rate of 2% for the number judged; and per word, at most 2 errors;
@@ -37,17 +38,28 @@ CALIBRATION_AGREEMENT = 54
 
 
 def load_judge(folder: Path, judge: str) -> dict[str, dict[str, Any]]:
-    """One judge's verdicts, merged over its part files (not the judge script's manifests).
+    """One judge's verdicts, merged over its part files.
+
+    Raises:
+        SystemExit: if an item is judged twice.
+    """
+    return load_parts(folder, f"judge_{judge}")
+
+
+def load_parts(folder: Path, name: str) -> dict[str, dict[str, Any]]:
+    """Verdicts merged over ``NAME.json`` and ``NAME_part_*.json``, not the judges' manifests.
 
     Raises:
         SystemExit: if an item is judged twice.
     """
     verdicts: dict[str, dict[str, Any]] = {}
-    paths = folder.glob(f"judge_{judge}_part_*.json")
-    for path in sorted(path for path in paths if not path.name.endswith(".manifest.json")):
+    paths = [folder / f"{name}.json", *sorted(folder.glob(f"{name}_part_*.json"))]
+    for path in paths:
+        if not path.exists() or path.name.endswith(".manifest.json"):
+            continue
         for item_id, verdict in json.loads(path.read_text()).items():
             if item_id in verdicts:
-                raise SystemExit(f"judge {judge} judged {item_id} twice")
+                raise SystemExit(f"{name} judged {item_id} twice")
             verdicts[item_id] = verdict
     return verdicts
 
@@ -78,8 +90,7 @@ def final_verdicts(audit: Path, key: dict[str, Any]) -> tuple[dict[str, str], in
     missing = sorted(set(key) - set(first) | set(key) - set(second))
     if missing:
         raise SystemExit(f"{len(missing)} items lack a judge's verdict, such as {missing[:5]}")
-    adjudication_path = folder / "opus_adjudication.json"
-    settled = json.loads(adjudication_path.read_text()) if adjudication_path.exists() else {}
+    settled = load_parts(folder, "opus_adjudication")
     final, agreed, unsettled = {}, 0, []
     for item_id in key:
         one, two = first[item_id]["verdict"], second[item_id]["verdict"]

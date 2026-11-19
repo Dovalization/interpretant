@@ -41,3 +41,10 @@ def test_an_item_judged_twice_by_one_judge_is_refused(tmp_path: Path) -> None:
     (tmp_path / "judge_B_part_1.json").write_text(json.dumps({"item-1": RIGHT}))
     with pytest.raises(SystemExit, match="twice"):
         scorer.load_judge(tmp_path, "B")
+
+
+def test_the_adjudication_is_read_from_one_file_or_its_parts(tmp_path: Path) -> None:
+    (tmp_path / "opus_adjudication.json").write_text(json.dumps({"item-1": RIGHT}))
+    (tmp_path / "opus_adjudication_part_00.json").write_text(json.dumps({"item-2": RIGHT}))
+    (tmp_path / "opus_adjudication.manifest.json").write_text(json.dumps({"judged": 1}))
+    assert scorer.load_parts(tmp_path, "opus_adjudication") == {"item-1": RIGHT, "item-2": RIGHT}
