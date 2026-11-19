@@ -327,6 +327,59 @@ RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_s
 - **Before GPU work,** `nvidia-smi` is checked for other users of the card (the remote runner is also used
   for other work).
 
+## The transformer path of the usages stage (2026-11-19)
+
+The model comparison chose the transformer (`docs/usages_audit.md`), so the stage annotates every
+target sentence with `en_core_web_trf`: 1,333,751 sentences. GPU figures come from the homelab's
+Prometheus (15 s samples); the remote runner's card has 11.65 GB, the desktop holds about 1.5 GB.
+
+- **Two failed runs, diagnosed.** With four processes the card filled within two minutes of the GPU
+  phase and stayed at its limit; the first out-of-memory failure came early, and because the
+  reporting pool did not cancel its queued parts, most later parts failed unseen while the
+  progress kept climbing (86% annotated, 5 parts saved). Now a failed part cancels the rest.
+- **Where the memory goes** (`scripts/evidence/transformer_memory.py`, one process, batch by batch):
+  a batch peaks at about 0.3–0.37 MB per token above the model's 0.46 GB, and PyTorch's cache
+  keeps the largest batch's memory reserved. Sentences are sorted by length, so each part ends
+  with its longest ones: with batches of 64 documents the worst batch (26,499 tokens, one 3,727-token
+  run) peaked at 3.9 GB and left 6.3 GB reserved. Four processes holding such reserves overflow.
+- **The fixes:** batches capped by tokens as well as documents; a target sentence over 512 tokens
+  read as a window of 256 tokens either side of the target (`windowed` in the table); spaCy's
+  `doc_cleaner` dropping the transformer's output after each batch; the cache emptied after each
+  part; each process limited to its share of the card after the desktop and every process's CUDA
+  context (0.3 GB, outside PyTorch's count); expandable segments.
+
+  | Token cap | Worst batch peak | Reserved | One process on the card |
+  |---|---|---|---|
+  | 64 documents, no cap | 3.91 GB | 6.29 GB | — |
+  | 4,000 | 1.96 GB | 2.31 GB | ~2.6 GB |
+  | 2,000 | 1.46 GB | 1.61 GB | 1.90 GB |
+  | 1,000 | 0.98 GB | 1.09 GB | 1.33 GB |
+
+  At 1,000 tokens one process is 4% slower than at 2,000 (14,765 against 15,414 tokens a second).
+- **Where the time goes** (`scripts/evidence/transformer_time.py`, one process, 21,237 sentences,
+  485 a second): the entity recognizer 56% (its transition decisions run on the CPU), the
+  transformer 27% (GPU), the lemmatizer 8% and the attribute ruler 4% (CPU), the rest 5%. Each
+  process spends about three quarters of its time on one CPU core, so throughput scales with the
+  processes sharing the card, until the GPU saturates or memory runs out.
+- **Fused attention is not available:** curated-transformers 0.1.1 computes attention by hand; the
+  releases with PyTorch's fused attention need spaCy 4, which exists only as development releases.
+- **The full runs:**
+
+  | Setting | Annotating | GPU busy | GPU memory peak |
+  |---|---|---|---|
+  | 5 processes, 2,000 tokens | 15 min 44 s (1,413 sentences a second) | 72% | 9.83 GB |
+  | 7 processes, 1,000 tokens | 14 min 20 s | 86% | 10.17 GB |
+
+  Seven processes at 1,000 tokens is the setting kept: the GPU nears saturation and an eighth
+  process would leave almost no memory spare. Batch composition shifts float16 results very
+  slightly: between the two settings one usage of 1,976,843 changed scope.
+- **The annotation cache** (`catalog/annotation_cache.py`): each target sentence's annotation is kept
+  under a hash of its tokens, the model's settings, the lemma exceptions and a version. A rerun
+  annotates only sentences it has not seen (identical sentences once: 1,566 repeats). Cold, the
+  stage takes about 16 minutes and writes 290 MB; warm, the annotation takes 39 s instead of
+  14 min 20 s, without the GPU, and the table is identical to the cold run's in every row. A rerun
+  after a rule change now takes about 2 minutes 15 seconds, most of it finding the mentions.
+
 ## Planned: reusing unchanged documents
 
 Planned 2026-11-15 (the author), measured first. A full run reannotates every text, while run
