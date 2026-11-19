@@ -88,8 +88,11 @@ _TRANSFORMER_BATCH_SIZE = 64
 _TOKENS_PER_BATCH = 2000
 # A sentence longer than this is read as a window of half that either side of each target.
 _LONG_SENTENCE_TOKENS = 512
-# The share of the GPU's memory left for other programs; the rest is split between the processes.
-_GPU_MEMORY_RESERVE = 0.15
+# GPU memory left for other programs (the desktop held 1.5 GB), and each process's CUDA context,
+# which PyTorch's allocator does not count (measured 0.3 GB); the rest is split between the
+# processes (`docs/performance.md`).
+_OTHER_PROGRAMS_GB = 1.6
+_CUDA_CONTEXT_GB = 0.3
 _REPORT_EVERY = 1000
 _COLUMN_NAMES = USAGES_COLUMNS.names()
 _POS = _COLUMN_NAMES.index("pos")
@@ -384,7 +387,9 @@ def _transformer(process_count: int) -> Language:
     os.environ.setdefault("PYTORCH_ALLOC_CONF", "expandable_segments:True")
     set_gpu_allocator("pytorch")
     require_gpu(0)
-    torch.cuda.set_per_process_memory_fraction((1 - _GPU_MEMORY_RESERVE) / process_count)
+    total = torch.cuda.get_device_properties(0).total_memory / 2**30
+    share = (total - _OTHER_PROGRAMS_GB - _CUDA_CONTEXT_GB * process_count) / process_count
+    torch.cuda.set_per_process_memory_fraction(share / total)
     return load_transformer()
 
 
