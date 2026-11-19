@@ -1,28 +1,40 @@
 """The usages table (decision agenda 4.1-4.6; `docs/preprocessing_phase.md` step 6), part by part.
 
-Each worker process takes whole parts. For every kept work it reads the cached spaCy document into
-the small model's vocabulary, checks that its text is the abstracts table's, applies the lemma
-exceptions, and matches the word table's targets (`usages/target_matching.py`). A mention inside a
-removed range, or in a sentence the sentence view marks removed, is never a usage. Each mention is
-placed in its sentence of the contextual sentence view; the sentence's entities are recognised on
-it alone (`usages/entities.py`), and the mention gets its content key, draw key and scope. Then one
-in-scope usage per work and word, in a sentence no exclusion keeps out, is drawn
-(`usages/usage_selection.py`), and the part is written and checked against the table's schema.
+Each worker process takes whole parts. For every kept work it reads the cached spaCy document,
+checks that its text is the abstracts table's, applies the lemma exceptions, and matches the word
+table's targets (`usages/target_matching.py`). A mention inside a removed range, or in a sentence
+the sentence view marks removed, is never a usage. Each mention is placed in its sentence of the
+contextual sentence view and gets its content key and draw key.
+
+The model then annotates each usage (agenda 4.9). With the small model, the cached document's tags
+stand and entities are recognised on each sentence alone, in batches. With the transformer, which
+the model comparison chose (`docs/usages_audit.md`), the workers stage each usage and the tokens of
+each target sentence; then a few processes sharing the GPU annotate every target sentence once, in
+float16 and sorted by length (`docs/performance.md`), and its part of speech, tag, morphology,
+lemma (after the lemma exceptions) and entity replace the cached ones. Either way each usage gets
+its scope, one in-scope usage per work and word in a sentence no exclusion keeps out is drawn
+(`usages/usage_selection.py`), and the part is checked against the text and the schema and written.
 """
 
 from __future__ import annotations
 
+import tempfile
 from bisect import bisect_right
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from functools import cache
+from pathlib import Path
 from typing import Any, Literal, NamedTuple
 
 import polars as pl
+import spacy
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 from spacy.language import Language
 from spacy.tokens import Doc, Span
+from spacy.vocab import Vocab
+from thinc.api import require_gpu, set_gpu_allocator
 
 from interpretant.catalog.abstracts import load_abstracts_part
 from interpretant.catalog.annotations import WORK_ID, load_annotations
@@ -38,12 +50,16 @@ from interpretant.corpus.sentence_view import merge_ranges
 from interpretant.pipelines.corpus import corpus_cells, corpus_parts
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
-from interpretant.pipelines.workers import map_parts
+from interpretant.pipelines.workers import Report, map_parts, map_parts_reporting
 from interpretant.usages.checks import validate_usages_against_text
 from interpretant.usages.entities import (
+    SMALL_MODEL,
+    TRANSFORMER_MODEL,
     entity_label,
     load_entity_recognizer,
+    load_transformer,
     recognise_sentence_entities,
+    require_entity_annotation,
 )
 from interpretant.usages.identifiers import build_content_key, build_draw_key
 from interpretant.usages.target_matching import TargetMention, build_target_matcher, match_targets
@@ -51,21 +67,21 @@ from interpretant.usages.usage_selection import is_in_scope, mark_drawn
 
 
 class UsagesSettings(ParamsSettings):
-    """The ``build_usages`` section of ``params.yaml``: the draw's seed, the model, the names.
-
-    Only the small model annotates the table until the model comparison (agenda 4.9) decides.
-    """
+    """The ``build_usages`` section of ``params.yaml``: the draw's seed, the model, the names."""
 
     model_config = SettingsConfigDict(yaml_config_section="build_usages")
 
     seed: int
-    model: Literal["en_core_web_sm"]
+    model: Literal["en_core_web_sm", "en_core_web_trf"]
     name_labels: tuple[str, ...] = Field(min_length=1)
 
 
 # Sentences queued before their entities are recognised, and sentences per recognizer batch.
 _SENTENCES_PER_FLUSH = 2048
 _ENTITY_BATCH_SIZE = 256
+# Documents per transformer batch, and sentences annotated between two progress reports.
+_TRANSFORMER_BATCH_SIZE = 64
+_REPORT_EVERY = 1000
 _COLUMN_NAMES = USAGES_COLUMNS.names()
 _POS = _COLUMN_NAMES.index("pos")
 _ENTITY = _COLUMN_NAMES.index("entity")
@@ -93,6 +109,7 @@ class _PartJob:
     words: tuple[Word, ...]
     spellings: dict[str, str]
     exceptions: tuple[LemmaException, ...]
+    staging: str = ""
 
 
 class _Sentence(NamedTuple):
@@ -125,9 +142,13 @@ def build_usages(
     settings: UsagesSettings,
     *,
     process_count: int = 1,
+    gpu_process_count: int = 4,
     progress: Progress = SILENT,
 ) -> UsagesResult:
     """Write the usages table of every part of the selection.
+
+    With the transformer, ``gpu_process_count`` processes share the GPU (four measured fastest
+    within its memory, `docs/performance.md`).
 
     Raises:
         ValueError: if no raw cell matches the selection, or a curated file is malformed.
@@ -146,24 +167,61 @@ def build_usages(
     )
     # Largest parts start first, so a long part does not finish alone (`docs/performance.md`).
     sizes = {part: _kept_work_count(catalog, part) for part in parts}
-    progress.stage("building the usages", total=sum(sizes.values()))
-    results = map_parts(
-        _build_part,
-        dict.fromkeys(parts, job),
-        process_count=process_count,
-        progress=progress,
-        sizes=sizes,
-    )
     counts: Counter[str] = Counter()
-    for result in results.values():
-        counts.update(result)
+    if settings.model == SMALL_MODEL:
+        progress.stage("building the usages", total=sum(sizes.values()))
+        results = map_parts(
+            _build_part,
+            dict.fromkeys(parts, job),
+            process_count=process_count,
+            progress=progress,
+            sizes=sizes,
+        )
+        for result in results.values():
+            counts.update(result)
+        return UsagesResult(parts=parts, counts=dict(counts))
+    catalog.usages.path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=catalog.usages.path.parent, prefix="staging_") as staging:
+        staged_job = _PartJob(
+            job.catalog, settings, job.words, job.spellings, job.exceptions, staging
+        )
+        progress.stage("finding the mentions", total=sum(sizes.values()))
+        found = map_parts(
+            _stage_part,
+            dict.fromkeys(parts, staged_job),
+            process_count=process_count,
+            progress=progress,
+            sizes=sizes,
+        )
+        sentences = {part: found[part]["staged_sentences"] for part in parts}
+        progress.stage("annotating with the transformer", total=sum(sentences.values()))
+        annotated = map_parts_reporting(
+            _annotate_part,
+            dict.fromkeys(parts, staged_job),
+            process_count=gpu_process_count,
+            progress=progress,
+            sizes=sentences,
+        )
+    for part in parts:
+        counts.update(found[part])
+        counts.update(annotated[part])
     return UsagesResult(parts=parts, counts=dict(counts))
 
 
 def _build_part(part: str, job: _PartJob) -> Counter[str]:
-    """Write one part's usages; its counts of mentions by what became of them."""
+    """Write one part's usages with the small model; its counts of mentions."""
     recognizer = load_entity_recognizer()
-    ruler = lemma_exception_ruler(recognizer.vocab, job.exceptions)
+    batch = _EntityBatch(recognizer, job.settings.name_labels)
+    texts, counts = _match_part(part, job, recognizer.vocab, batch)
+    table = pl.DataFrame(batch.rows, schema=USAGES_COLUMNS, orient="row")
+    return counts + _finish_part(part, job, table, texts)
+
+
+def _match_part(
+    part: str, job: _PartJob, vocab: Vocab, sink: _EntityBatch | _StagedUsages
+) -> tuple[dict[str, str], Counter[str]]:
+    """Find one part's mentions and give each usage's row to the sink; the kept texts, counts."""
+    ruler = lemma_exception_ruler(vocab, job.exceptions)
     matcher = build_target_matcher(job.words, job.spellings)
     words = {word.lemma: word for word in job.words}
     texts, removals = _kept_works(job.catalog, part)
@@ -172,10 +230,8 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
     # every work at once took 270 MB a worker (`docs/performance.md`).
     static_view = load_static_view(job.catalog, part, columns=["work_id", "tokens", "starts"])
     static_rows = {work_id: index for index, work_id in enumerate(static_view["work_id"])}
-    rows: list[tuple[Any, ...]] = []
     counts: Counter[str] = Counter()
-    batch = _EntityBatch(recognizer, job.settings.name_labels)
-    for doc in load_annotations(job.catalog, part, recognizer.vocab):
+    for doc in load_annotations(job.catalog, part, vocab):
         work_id = doc.user_data[WORK_ID]
         if work_id not in texts:
             continue
@@ -191,17 +247,168 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
         )
         mentions = match_targets(ruler(doc), matcher)
         counts["mentions"] += len(mentions)
-        _add_usages(work, mentions, words, job.settings, counts, batch)
-        if batch.is_full:
-            rows.extend(batch.flush())
-    rows.extend(batch.flush())
-    table = mark_drawn(pl.DataFrame(rows, schema=USAGES_COLUMNS, orient="row"))
+        _add_usages(work, mentions, words, job.settings, counts, sink)
+        if sink.is_full:
+            sink.flush()
+    sink.flush()
+    return texts, counts
+
+
+def _finish_part(
+    part: str, job: _PartJob, table: pl.DataFrame, texts: Mapping[str, str]
+) -> Counter[str]:
+    """Draw one usage per work and word, check the part against the text, write it; its counts."""
+    table = mark_drawn(table)
     validate_usages_against_text(table, texts)
     save_usages(job.catalog, table, part=part)
-    counts["usages"] += table.height
-    counts["in_scope"] += int(table["in_scope"].sum())
-    counts["drawn"] += int(table["drawn"].sum())
+    return Counter(
+        {
+            "usages": table.height,
+            "in_scope": int(table["in_scope"].sum()),
+            "drawn": int(table["drawn"].sum()),
+        }
+    )
+
+
+# A staged usage: its row with the cached annotation, and where its target is in its sentence.
+_STAGED_COLUMNS = pl.Schema(
+    dict(USAGES_COLUMNS)
+    | {"head_offset": pl.Int64(), "span_start": pl.Int64(), "hyphen_part": pl.Boolean()}
+)
+_STAGED_SENTENCES = pl.Schema(
+    {
+        "work_id": pl.String(),
+        "sentence_number": pl.Int64(),
+        "words": pl.List(pl.String()),
+        "spaces": pl.List(pl.Boolean()),
+    }
+)
+
+
+class _StagedUsages:
+    """Usages waiting for the transformer, and the tokens of each of their sentences."""
+
+    is_full = False
+
+    def __init__(self) -> None:
+        self.rows: list[tuple[Any, ...]] = []
+        self.sentences: dict[tuple[str, int], tuple[list[str], list[bool]]] = {}
+
+    def add(
+        self, work: _Work, sentence: _Sentence, mention: TargetMention, row: list[Any], word: Word
+    ) -> None:
+        """Stage a usage's row, and its sentence's tokens if no usage staged them yet.
+
+        Raises:
+            ValueError: if the sentence covers no token.
+        """
+        del word  # the transformer's reading decides the scope later
+        span = work.doc.char_span(sentence.start, sentence.end, alignment_mode="expand")
+        if span is None:
+            raise ValueError(f"{work.work_id}: sentence {sentence.number} has no tokens")
+        key = (work.work_id, sentence.number)
+        if key not in self.sentences:
+            self.sentences[key] = (
+                [token.text for token in span],
+                [bool(token.whitespace_) for token in span],
+            )
+        hyphen_part = mention.position is not None
+        self.rows.append((*row, mention.token_index - span.start, span.start_char, hyphen_part))
+
+    def flush(self) -> None:
+        """Nothing waits to be flushed: the staged rows are written once the part is matched."""
+
+
+def _stage_part(part: str, job: _PartJob) -> Counter[str]:
+    """Stage one part's usages and target sentences for the transformer; its counts."""
+    sink = _StagedUsages()
+    _, counts = _match_part(part, job, spacy.blank("en").vocab, sink)
+    folder = Path(job.staging)
+    pl.DataFrame(sink.rows, schema=_STAGED_COLUMNS, orient="row").write_parquet(
+        folder / f"{part}.rows.parquet"
+    )
+    pl.DataFrame(
+        [(w, n, words, spaces) for (w, n), (words, spaces) in sink.sentences.items()],
+        schema=_STAGED_SENTENCES,
+        orient="row",
+    ).write_parquet(folder / f"{part}.sentences.parquet")
+    counts["staged_sentences"] = len(sink.sentences)
     return counts
+
+
+@cache
+def _transformer() -> Language:
+    """The transformer on the GPU, loaded once per process."""
+    set_gpu_allocator("pytorch")
+    require_gpu(0)
+    return load_transformer()
+
+
+def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
+    """Annotate one part's target sentences with the transformer, then finish and write it."""
+    transformer = _transformer()
+    exceptions = lemma_exception_ruler(transformer.vocab, job.exceptions)
+    words = {word.lemma: word for word in job.words}
+    folder = Path(job.staging)
+    rows = pl.read_parquet(folder / f"{part}.rows.parquet")
+    sentences = pl.read_parquet(folder / f"{part}.sentences.parquet").sort(
+        pl.col("words").list.len()
+    )
+    waiting: dict[tuple[str, int], list[int]] = defaultdict(list)
+    for index, key in enumerate(rows.select("work_id", "sentence_number").iter_rows()):
+        waiting[key].append(index)
+    staged = rows.select(
+        "word", "target_start", "target_end", "head_offset", "span_start", "hyphen_part"
+    ).rows()
+    annotation: dict[str, list[Any]] = {name: [None] * rows.height for name in _ANNOTATED}
+    docs = (
+        Doc(transformer.vocab, words=words_, spaces=spaces)
+        for words_, spaces in sentences.select("words", "spaces").iter_rows()
+    )
+    keys = sentences.select("work_id", "sentence_number").iter_rows()
+    done = 0
+    for key, doc in zip(
+        keys, transformer.pipe(docs, batch_size=_TRANSFORMER_BATCH_SIZE), strict=True
+    ):
+        doc = exceptions(doc)
+        require_entity_annotation(doc)
+        for index in waiting[key]:
+            word, start, end, head_offset, span_start, hyphen_part = staged[index]
+            head = doc[head_offset]
+            entity = entity_label(doc, start - span_start, end - span_start)
+            values = {
+                "pos": head.pos_,
+                "tag": head.tag_,
+                "morph": str(head.morph),
+                "lemma": head.lemma_,
+                "entity": entity,
+                "in_scope": is_in_scope(
+                    head.pos_,
+                    words[word],
+                    entity,
+                    job.settings.name_labels,
+                    hyphen_part=hyphen_part,
+                ),
+            }
+            for name, value in values.items():
+                annotation[name][index] = value
+        done += 1
+        if done % _REPORT_EVERY == 0:
+            report(_REPORT_EVERY)
+    report(done % _REPORT_EVERY)
+    table = rows.with_columns(
+        *(
+            pl.Series(name, values, dtype=USAGES_COLUMNS[name])
+            for name, values in annotation.items()
+        ),
+        pl.lit(TRANSFORMER_MODEL).alias("model"),
+    ).select(USAGES_COLUMNS.names())
+    texts, _ = _kept_works(job.catalog, part)
+    return _finish_part(part, job, table, texts)
+
+
+# The columns the transformer's reading sets.
+_ANNOTATED = ("pos", "tag", "morph", "lemma", "entity", "in_scope")
 
 
 @dataclass(frozen=True)
@@ -228,6 +435,7 @@ class _EntityBatch:
         self.name_labels = name_labels
         self.spans: dict[tuple[str, int], Span] = {}
         self.waiting: list[_Waiting] = []
+        self.rows: list[tuple[Any, ...]] = []
 
     @property
     def is_full(self) -> bool:
@@ -260,14 +468,13 @@ class _EntityBatch:
             )
         )
 
-    def flush(self) -> list[tuple[Any, ...]]:
-        """Recognise the queued sentences' entities and return their usages' finished rows."""
+    def flush(self) -> None:
+        """Recognise the queued sentences' entities and keep their usages' finished rows."""
         keys = list(self.spans)
         recognised = recognise_sentence_entities(
             (self.spans[key] for key in keys), self.recognizer, batch_size=_ENTITY_BATCH_SIZE
         )
         entity_docs = dict(zip(keys, recognised, strict=True))
-        rows = []
         for waiting in self.waiting:
             entity = entity_label(entity_docs[waiting.sentence], waiting.start, waiting.end)
             row = waiting.row
@@ -275,10 +482,9 @@ class _EntityBatch:
             row[_IN_SCOPE] = is_in_scope(
                 row[_POS], waiting.word, entity, self.name_labels, hyphen_part=waiting.hyphen_part
             )
-            rows.append(tuple(row))
+            self.rows.append(tuple(row))
         self.spans.clear()
         self.waiting.clear()
-        return rows
 
 
 def _add_usages(
@@ -287,9 +493,9 @@ def _add_usages(
     words: Mapping[str, Word],
     settings: UsagesSettings,
     counts: Counter[str],
-    batch: _EntityBatch,
+    sink: _EntityBatch | _StagedUsages,
 ) -> None:
-    """Queue one work's usages, in the table's column order, for their entities and scope."""
+    """Give one work's usages, in the table's column order, to the sink for their annotation."""
     sentence_starts = [sentence.start for sentence in work.sentences]
     removed_starts = [start for start, _ in work.removed]
     for mention in mentions:
@@ -337,7 +543,7 @@ def _add_usages(
             False,
             settings.model,
         ]
-        batch.add(work, sentence, mention, row, words[mention.word])
+        sink.add(work, sentence, mention, row, words[mention.word])
 
 
 def _static_entries(view: pl.DataFrame, row: int | None) -> dict[int, str]:
