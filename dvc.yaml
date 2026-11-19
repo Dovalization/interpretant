@@ -215,6 +215,7 @@ stages:
     cmd: interpretant build-usages
     deps:
       - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/annotation_cache.py
       - src/interpretant/catalog/annotations.py
       - src/interpretant/catalog/config.py
       - src/interpretant/catalog/json_lines.py

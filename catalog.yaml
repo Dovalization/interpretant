@@ -153,6 +153,12 @@ usages:
   path: data/processed/usages
   format: parquet
 
+# The transformer's annotation of target sentences, keyed by their tokens and the model's settings
+# (docs/performance.md): a cache the usages stage reads and adds to, not a stage output.
+annotation_cache:
+  path: data/interim/annotation_cache
+  format: parquet
+
 # The forms whose static-view lemma differs from spaCy's in-context lemma, each under one reading
 # (NNS or VBZ), from the lemma review (docs/lemma_review.md), applied to the cached documents.
 lemma_exceptions:

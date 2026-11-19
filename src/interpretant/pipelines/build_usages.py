@@ -18,6 +18,8 @@ its scope, one in-scope usage per work and word in a sentence no exclusion keeps
 
 from __future__ import annotations
 
+import hashlib
+import json
 import os
 import tempfile
 from bisect import bisect_right
@@ -39,6 +41,11 @@ from spacy.vocab import Vocab
 from thinc.api import require_gpu, set_gpu_allocator
 
 from interpretant.catalog.abstracts import load_abstracts_part
+from interpretant.catalog.annotation_cache import (
+    ANNOTATION_CACHE_COLUMNS,
+    load_annotation_cache,
+    save_annotation_cache,
+)
 from interpretant.catalog.annotations import WORK_ID, load_annotations
 from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exceptions
@@ -56,6 +63,7 @@ from interpretant.pipelines.workers import Report, map_parts, map_parts_reportin
 from interpretant.usages.checks import validate_usages_against_text
 from interpretant.usages.entities import (
     SMALL_MODEL,
+    SPANS_PER_FORWARD,
     TRANSFORMER_MODEL,
     entity_label,
     load_entity_recognizer,
@@ -94,6 +102,8 @@ _LONG_SENTENCE_TOKENS = 512
 _OTHER_PROGRAMS_GB = 1.6
 _CUDA_CONTEXT_GB = 0.3
 _REPORT_EVERY = 1000
+# Bumped whenever the code that annotates a sentence changes, so the cache is rebuilt.
+_ANNOTATION_VERSION = 1
 _COLUMN_NAMES = USAGES_COLUMNS.names()
 _POS = _COLUMN_NAMES.index("pos")
 _ENTITY = _COLUMN_NAMES.index("entity")
@@ -408,9 +418,12 @@ def _batches(lengths: Sequence[int]) -> list[range]:
 
 
 def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
-    """Annotate one part's target sentences with the transformer, then finish and write it."""
-    transformer = _transformer(job.gpu_process_count)
-    exceptions = lemma_exception_ruler(transformer.vocab, job.exceptions)
+    """Annotate one part's target sentences, from the cache or with the transformer; write it.
+
+    A sentence whose key is in the part's annotation cache is rebuilt from it without the GPU; the
+    others go through the transformer, in batches capped by documents and tokens, and are added to
+    the cache. The model loads only if some sentence is missing from the cache.
+    """
     words = {word.lemma: word for word in job.words}
     folder = Path(job.staging)
     rows = pl.read_parquet(folder / f"{part}.rows.parquet")
@@ -427,36 +440,66 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     annotation: dict[str, list[Any]] = {name: [None] * rows.height for name in _ANNOTATED}
     texts_of = sentences.select("words", "spaces").rows()
     keys = sentences.select(key_columns).rows()
+    prefix = _annotation_prefix(job.exceptions)
+    cache_keys = [_annotation_key(prefix, words_, spaces) for words_, spaces in texts_of]
+    cached = {row[0]: row[1:] for row in load_annotation_cache(job.catalog, part).iter_rows()}
+    added: list[tuple[Any, ...]] = []
     done = 0
-    for batch in _batches([len(words_) for words_, _ in texts_of]):
-        docs = [Doc(transformer.vocab, words=texts_of[i][0], spaces=texts_of[i][1]) for i in batch]
-        for position, doc in zip(batch, transformer.pipe(docs, batch_size=len(docs)), strict=True):
-            doc = exceptions(doc)
-            require_entity_annotation(doc)
-            for index in waiting[keys[position]]:
-                word, start, end, head_offset, span_start, hyphen_part = staged[index]
-                head = doc[head_offset]
-                entity = entity_label(doc, start - span_start, end - span_start)
-                values = {
-                    "pos": head.pos_,
-                    "tag": head.tag_,
-                    "morph": str(head.morph),
-                    "lemma": head.lemma_,
-                    "entity": entity,
-                    "in_scope": is_in_scope(
-                        head.pos_,
-                        words[word],
-                        entity,
-                        job.settings.name_labels,
-                        hyphen_part=hyphen_part,
-                    ),
-                }
-                for name, value in values.items():
-                    annotation[name][index] = value
-            done += 1
-            if done % _REPORT_EVERY == 0:
-                report(_REPORT_EVERY)
+
+    def read(position: int, doc: Doc) -> None:
+        nonlocal done
+        for index in waiting[keys[position]]:
+            word, start, end, head_offset, span_start, hyphen_part = staged[index]
+            head = doc[head_offset]
+            entity = entity_label(doc, start - span_start, end - span_start)
+            values = {
+                "pos": head.pos_,
+                "tag": head.tag_,
+                "morph": str(head.morph),
+                "lemma": head.lemma_,
+                "entity": entity,
+                "in_scope": is_in_scope(
+                    head.pos_,
+                    words[word],
+                    entity,
+                    job.settings.name_labels,
+                    hyphen_part=hyphen_part,
+                ),
+            }
+            for name, value in values.items():
+                annotation[name][index] = value
+        done += 1
+        if done % _REPORT_EVERY == 0:
+            report(_REPORT_EVERY)
+
+    missing = [position for position, cache_key in enumerate(cache_keys) if cache_key not in cached]
+    for position, cache_key in enumerate(cache_keys):
+        if cache_key in cached:
+            words_, spaces = texts_of[position]
+            read(position, _cached_doc(words_, spaces, cached[cache_key]))
+    if missing:
+        transformer = _transformer(job.gpu_process_count)
+        exceptions = lemma_exception_ruler(transformer.vocab, job.exceptions)
+        for batch in _batches([len(texts_of[position][0]) for position in missing]):
+            positions = [missing[i] for i in batch]
+            docs = [
+                Doc(transformer.vocab, words=texts_of[i][0], spaces=texts_of[i][1])
+                for i in positions
+            ]
+            pipe = transformer.pipe(docs, batch_size=len(docs))
+            for position, doc in zip(positions, pipe, strict=True):
+                doc = exceptions(doc)
+                require_entity_annotation(doc)
+                added.append((cache_keys[position], *_cache_row(doc)))
+                read(position, doc)
+        # A part's longest sentences come last; give their memory back to the other processes.
+        torch.cuda.empty_cache()
     report(done % _REPORT_EVERY)
+    if added:
+        new = pl.DataFrame(added, schema=ANNOTATION_CACHE_COLUMNS, orient="row")
+        save_annotation_cache(
+            job.catalog, pl.concat([load_annotation_cache(job.catalog, part), new]), part
+        )
     table = rows.with_columns(
         *(
             pl.Series(name, values, dtype=USAGES_COLUMNS[name])
@@ -465,9 +508,61 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
         pl.lit(TRANSFORMER_MODEL).alias("model"),
     ).select(USAGES_COLUMNS.names())
     texts, _ = _kept_works(job.catalog, part)
-    # A part's longest sentences come last; give their memory back to the other processes.
-    torch.cuda.empty_cache()
-    return _finish_part(part, job, table, texts)
+    counts = _finish_part(part, job, table, texts)
+    counts["cache_hits"] += len(cache_keys) - len(missing)
+    counts["cache_misses"] += len(missing)
+    return counts
+
+
+def _annotation_prefix(exceptions: Sequence[LemmaException]) -> str:
+    """The hash of everything besides the tokens that shapes a sentence's annotation."""
+    settings = {
+        "model": TRANSFORMER_MODEL,
+        "spans_per_forward": SPANS_PER_FORWARD,
+        "float16": True,
+        "version": _ANNOTATION_VERSION,
+        "exceptions": sorted((e.form, e.tag, e.lemma) for e in exceptions),
+    }
+    return hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()
+
+
+def _annotation_key(prefix: str, words: Sequence[str], spaces: Sequence[bool]) -> str:
+    """A sentence's key in the annotation cache: its tokens hashed with the settings' hash."""
+    tokens = "\x1f".join(words) + "\x1e" + "".join("1" if space else "0" for space in spaces)
+    return hashlib.sha256(f"{prefix}\x1d{tokens}".encode()).hexdigest()[:32]
+
+
+def _cache_row(doc: Doc) -> tuple[list[str], ...]:
+    """A document's annotation as the cache keeps it: tags, parts of speech, morphs, lemmas, IOB."""
+    return (
+        [token.tag_ for token in doc],
+        [token.pos_ for token in doc],
+        [str(token.morph) for token in doc],
+        [token.lemma_ for token in doc],
+        [f"{token.ent_iob_}-{token.ent_type_}" if token.ent_type_ else "O" for token in doc],
+    )
+
+
+def _cached_doc(words: list[str], spaces: list[bool], row: tuple[Any, ...]) -> Doc:
+    """A sentence rebuilt from its cached annotation."""
+    tags, pos, morphs, lemmas, ents = row
+    return Doc(
+        _blank_vocab(),
+        words=words,
+        spaces=spaces,
+        tags=tags,
+        pos=pos,
+        morphs=morphs,
+        lemmas=lemmas,
+        ents=ents,
+    )
+
+
+@cache
+def _blank_vocab() -> Vocab:
+    """A vocabulary for documents rebuilt from the cache, one per process."""
+    vocab: Vocab = spacy.blank("en").vocab
+    return vocab
 
 
 def _annotated_by_transformer(catalog: CatalogConfig, part: str) -> bool:

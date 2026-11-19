@@ -11,7 +11,13 @@ from click.testing import CliRunner
 
 from interpretant.__main__ import cli
 from interpretant.catalog.abstracts import load_abstracts, load_abstracts_part
+from interpretant.catalog.annotation_cache import (
+    ANNOTATION_CACHE_COLUMNS,
+    load_annotation_cache,
+    save_annotation_cache,
+)
 from interpretant.catalog.config import CatalogConfig, read_catalog
+from interpretant.catalog.lemma_exceptions import LemmaException
 from interpretant.catalog.parts import part_path
 from interpretant.catalog.usages import USAGES_COLUMNS, load_usages
 from interpretant.pipelines import build_usages as build_usages_module
@@ -189,3 +195,40 @@ def test_staging_reads_a_window_around_the_target_of_a_long_sentence() -> None:
     assert len(words) == 513 and words[256] == "attention"
     assert sink.rows[0][-4:-1][0] == 256
     assert row[build_usages_module._WINDOWED] is True
+
+
+@pytest.mark.usefixtures("stand_in_transformer")
+def test_build_usages_reuses_the_annotation_cache_for_the_same_table(
+    prepared_catalog: CatalogConfig,
+) -> None:
+    transformer = SETTINGS.model_copy(update={"model": "en_core_web_trf"})
+    cold = build_usages(prepared_catalog, SELECTION, transformer, gpu_process_count=1)
+    first = load_usages(prepared_catalog).collect().sort("work_id", "word", "content_key")
+    warm = build_usages(prepared_catalog, SELECTION, transformer, gpu_process_count=1)
+    second = load_usages(prepared_catalog).collect().sort("work_id", "word", "content_key")
+    assert cold.counts["cache_misses"] == cold.counts["staged_sentences"]
+    assert cold.counts.get("cache_hits", 0) == 0
+    assert warm.counts["cache_hits"] == warm.counts["staged_sentences"]
+    assert warm.counts.get("cache_misses", 0) == 0
+    assert second.equals(first)
+
+
+def test_the_annotation_key_changes_with_the_lemma_exceptions() -> None:
+    exception = LemmaException(form="data", lemma="data", tag="NNS", source="author")
+    words, spaces = ["The", "data"], [True, False]
+    plain = build_usages_module._annotation_prefix(())
+    with_exception = build_usages_module._annotation_prefix((exception,))
+    assert build_usages_module._annotation_key(plain, words, spaces) != (
+        build_usages_module._annotation_key(with_exception, words, spaces)
+    )
+    assert build_usages_module._annotation_key(plain, words, spaces) != (
+        build_usages_module._annotation_key(plain, words, [False, False])
+    )
+
+
+def test_the_annotation_cache_refuses_a_repeated_key(prepared_catalog: CatalogConfig) -> None:
+    assert load_annotation_cache(prepared_catalog, "ai_2010").height == 0
+    row = ("k1", ["NN"], ["NOUN"], [""], ["data"], ["O"])
+    cache = pl.DataFrame([row, row], schema=ANNOTATION_CACHE_COLUMNS, orient="row")
+    with pytest.raises(ValueError, match="repeats a key"):
+        save_annotation_cache(prepared_catalog, cache, "ai_2010")

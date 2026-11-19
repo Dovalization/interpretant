@@ -21,6 +21,8 @@ COUNT_LABELS = {
     "mentions": "Mentions",
     "staged_sentences": "Target sentences annotated",
     "skipped_parts": "Parts kept from an earlier run",
+    "cache_hits": "Sentences read from the annotation cache",
+    "cache_misses": "Sentences annotated by the transformer",
     "inside_removed_ranges": "In removed ranges",
     "outside_sentences": "Outside sentences",
     "in_removed_sentences": "In removed sentences",
