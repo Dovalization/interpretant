@@ -3,10 +3,12 @@
 `python scripts/review/judge_cli.py ITEMS VERDICTS_DIR --name NAME --codebook PROMPT.md
 --answers usages|comparison --model MODEL --effort LEVEL [--slice N] [--parallel N] [--claude PATH]`
 
-ITEMS is a folder of `batch_*.jsonl` files or one `.jsonl` file (an adjudication list), judged in
-parts of at most `--slice` items (50). One call of `claude -p` per part writes
-`VERDICTS_DIR/NAME_part_NN.json`, item id to answer, the layout the scorers read; a part whose
-file exists is skipped, so a stopped run resumes. Each call sees only the codebook, as the whole
+ITEMS is a folder of `batch_*.jsonl` files, or one `.jsonl` file (an adjudication list) cut into
+parts of 50. Each part's items are judged `--slice` per call of `claude -p` (one, by default: an
+item judged on its own; calls holding many items gave verdicts their own notes contradicted), and
+the part's answers go to `VERDICTS_DIR/NAME_part_NN.json`, item id to answer, the layout the
+scorers read, once all its calls have answered; a part whose file exists is skipped, so a stopped
+run resumes. Each call sees only the codebook, as the whole
 system prompt, and its items: no tools, no settings, MCP servers or CLAUDE.md (it runs in an empty
 temporary folder), no saved session; the answer is constrained to the codebook's schema. A call
 that fails, or answers another set of ids, is tried once more, then reported. The tokens of every
@@ -40,7 +42,7 @@ from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.progress import SILENT, Progress, StageTimer
 from interpretant.pipelines.runs import record_run
 
-SLICE = 50
+PART_SIZE = 50
 ATTEMPTS = 2
 TIMEOUT_SECONDS = 1200
 USAGE_FIELDS = (
@@ -58,26 +60,17 @@ def load_lines(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
-def parts_of(source: Path, size: int = SLICE) -> dict[str, list[dict[str, Any]]]:
-    """The items to judge in parts of at most ``size``: each batch file's slices, or one file's.
-
-    A batch file that fits in one part keeps its number (``07``); a longer one is numbered by
-    slice (``07_00``, ``07_01``). Changing ``size`` renames the parts, so a run resumes only
-    with the size it started with.
-    """
-    if not source.is_dir():
-        return _slices(load_lines(source), size, prefix="")
-    parts: dict[str, list[dict[str, Any]]] = {}
-    for path in sorted(source.glob("batch_*.jsonl")):
-        number, items = path.stem.removeprefix("batch_"), load_lines(path)
-        parts |= {number: items} if len(items) <= size else _slices(items, size, f"{number}_")
-    return parts
-
-
-def _slices(items: list[dict[str, Any]], size: int, prefix: str) -> dict[str, list[dict[str, Any]]]:
+def parts_of(source: Path) -> dict[str, list[dict[str, Any]]]:
+    """The items in parts, one verdict file each: each batch file, or one file in slices of 50."""
+    if source.is_dir():
+        return {
+            path.stem.removeprefix("batch_"): load_lines(path)
+            for path in sorted(source.glob("batch_*.jsonl"))
+        }
+    items = load_lines(source)
     return {
-        f"{prefix}{start // size:02d}": items[start : start + size]
-        for start in range(0, len(items), size)
+        f"{start // PART_SIZE:02d}": items[start : start + PART_SIZE]
+        for start in range(0, len(items), PART_SIZE)
     }
 
 
@@ -148,10 +141,10 @@ def run_claude(arguments: list[str], text: str) -> dict[str, Any]:
     return result
 
 
-def judge_part(
+def judge_call(
     items: list[dict[str, Any]], arguments: list[str], text: str, call: Call
 ) -> tuple[dict[str, Any] | None, Counter[str], set[str], str]:
-    """One part's answers by item id (None if every attempt failed), its usage, models, problem."""
+    """One call's answers by item id (None if every attempt failed), its usage, models, problem."""
     expected = [item["id"] for item in items]
     usage: Counter[str] = Counter()
     models: set[str] = set()
@@ -179,7 +172,11 @@ def judge_all(
     *,
     progress: Progress = SILENT,
 ) -> dict[str, Any]:
-    """Judge every part without a verdict file, in parallel; this run's usage and failures."""
+    """Judge every part without a verdict file, ``options.slice`` items per call, in parallel.
+
+    A part's file is written once all of its calls have answered; a part with a failed call is
+    reported and left for the next run. Returns this run's usage and failures.
+    """
     out: Path = options.verdicts
     out.mkdir(parents=True, exist_ok=True)
     pending = {
@@ -192,24 +189,32 @@ def judge_all(
     usage: Counter[str] = Counter()
     models: set[str] = set()
     failed: dict[str, str] = {}
+    answered: dict[str, dict[str, Any]] = {part: {} for part in pending}
+    calls_left = dict.fromkeys(pending, 0)
     judged = 0
     with ThreadPoolExecutor(max_workers=options.parallel) as pool:
-        futures = {
-            pool.submit(judge_part, items, arguments, message(items, options.answers), call): part
-            for part, items in pending.items()
-        }
+        futures = {}
+        for part, items in pending.items():
+            for start in range(0, len(items), options.slice):
+                chunk = items[start : start + options.slice]
+                text = message(chunk, options.answers)
+                futures[pool.submit(judge_call, chunk, arguments, text, call)] = part
+                calls_left[part] += 1
         for future in as_completed(futures):
             part = futures[future]
-            answers, part_usage, part_models, problem = future.result()
-            usage.update(part_usage)
-            models |= part_models
+            answers, call_usage, call_models, problem = future.result()
+            usage.update(call_usage)
+            models |= call_models
+            calls_left[part] -= 1
             if answers is None:
-                failed[part] = problem
-                continue
-            path = out / f"{options.name}_part_{part}.json"
-            path.write_text(json.dumps(answers, indent=1, ensure_ascii=False) + "\n")
-            judged += len(answers)
-            progress.advance(len(answers))
+                failed.setdefault(part, problem)
+            else:
+                answered[part] |= answers
+                progress.advance(len(answers))
+            if calls_left[part] == 0 and part not in failed:
+                path = out / f"{options.name}_part_{part}.json"
+                path.write_text(json.dumps(answered[part], indent=1, ensure_ascii=False) + "\n")
+                judged += len(answered[part])
     return {"judged": judged, "tokens": dict(usage), "models": sorted(models), "failed": failed}
 
 
@@ -239,7 +244,7 @@ def main() -> None:
     parser.add_argument(
         "--effort", choices=["low", "medium", "high", "xhigh", "max"], required=True
     )
-    parser.add_argument("--slice", type=int, default=SLICE, help="most items in one call")
+    parser.add_argument("--slice", type=int, default=1, help="items in one call")
     parser.add_argument("--parallel", type=int, default=4)
     parser.add_argument("--claude", default="claude", help="the command line's executable")
     options = parser.parse_args()
@@ -248,7 +253,7 @@ def main() -> None:
     ).stdout.strip()
     with LiveProgress(Console()) as live:
         timer = StageTimer(live)
-        run = judge_all(parts_of(options.items, options.slice), options, run_claude, progress=timer)
+        run = judge_all(parts_of(options.items), options, run_claude, progress=timer)
     manifest_path = options.verdicts / f"{options.name}.manifest.json"
     earlier = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     manifest = merged_manifest(
