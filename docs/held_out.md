@@ -3,7 +3,10 @@
 Fixed 2026-11-19, before the model comparison, the matching audit and any measurement. **Not for
 use until the confirmation plan is committed.** Development outputs never name these words: the
 word table marks them `held_out: yes`, committed outputs show `Word.reported_name` (a hash), and
-the tests check the set by its hash.
+the tests check the set by its hash. Judges' free-text notes are sealed before they are committed
+(`scripts/review/seal_notes.py`: each held-out word, in its common forms, becomes its hash), and a
+test checks every committed note. Notes committed before 2026-11-19 evening were sealed in place;
+earlier, unpushed commits still hold them.
 
 ## How it was drafted
 
