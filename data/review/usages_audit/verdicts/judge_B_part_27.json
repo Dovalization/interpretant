@@ -1,0 +1,252 @@
+{
+ "U1350": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'systems' used generically, not in a name; span covers the word exactly."
+ },
+ "U1351": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"nervous system\" is a generic noun use of system, not a name; marks cover the word exactly."
+ },
+ "U1352": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"consciousness\" is used as an ordinary noun in the phrase \"consciousness without body\". It is not part of a name, and the marks cover exactly the word."
+ },
+ "U1353": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Adjective 'held-out:32a54748ce0a' (less held-out:32a54748ce0a group), not in a name; span covers the word exactly."
+ },
+ "U1355": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behavior Recorder\" is a specific named software product (CTAT tool), so leaving it out as a name was correct."
+ },
+ "U1354": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" here is part of a French example phrase (je fais attention à lui), not an English use. Leaving it out was correct."
+ },
+ "U1356": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the named register 'Cochrane Depression, held-out:07afa72fe9fc and Neurosis Controlled Trials Register' (and the Cochrane group name), so it is a name and leaving it out was correct."
+ },
+ "U1359": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'embedding' used as a noun (a vector representation of microphone signals); a valid use, not part of a name, and the marks cover the whole word."
+ },
+ "U1358": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'agencies' (news agencies) in a plural, not part of a name; marks cover the word exactly."
+ },
+ "U1357": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use; 'Experiences' is a plural noun and the marks cover the word exactly."
+ },
+ "U1361": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic 'transformer-based' model type, part of a hyphenated word, not a name."
+ },
+ "U1360": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is the (Latin) title of Oeder's cited work, so it is a name and not a use. Leaving it out was correct."
+ },
+ "U1363": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"self-consciousness\" is a noun; consciousness is part of the hyphenated word, marks cover exactly it, not a name."
+ },
+ "U1362": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"center embedding\" is a syntactic noun (noun modifier/compound head), a genuine use of embedding; not a name."
+ },
+ "U1366": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is a plural noun meaning views/opinions, not in a name; marks cover the word exactly."
+ },
+ "U1364": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Graphical User Interfaces (GUIs)\" is a generic term, not a name. It is a noun use of interface, and the marks cover exactly the word."
+ },
+ "U1367": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:7d0f24edc7fd communities' is a noun modifier (noun use), not a name; marks cover the word exactly."
+ },
+ "U1369": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plain noun use, not in a name; the span covers the word."
+ },
+ "U1371": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:f66e6d2190f6' used generically, not in a name; span covers the word."
+ },
+ "U1365": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. 'Conditional held-out:bd686ff4fd74' is a noun use and not a name."
+ },
+ "U1370": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Leslie's Illustrated held-out:861f9da96b43\" is the name of a specific publication, so leaving it out was correct."
+ },
+ "U1368": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a noun in a definition, not part of a name. The program missed it, probably because of the attached quote mark, but it should have been kept."
+ },
+ "U1373": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs\" is a plural noun (\"shows no signs of ending\"), a normal use of the noun sign, not in a name."
+ },
+ "U1374": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'Artificial Intelligence' used as a noun; capitalised but not a name. The marks cover exactly the term."
+ },
+ "U1372": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:02b12c17f936\" is a plural noun (people of antiquity, as opposed to Moderns), not the adjective \"held-out:02b12c17f936\"."
+ },
+ "U1375": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"alignment process\" - alignment used as a noun modifier in a generic technique; not a name."
+ },
+ "U1376": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agent\" as part of hyphenated \"multi-agent\", a noun use; span covers just the word."
+ },
+ "U1377": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'memory' is a plain noun naming a tested ability, not part of a name; the marks cover exactly the word."
+ },
+ "U1379": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intentionality', not in a name or title."
+ },
+ "U1378": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "The quoted passage is Spanish (\"held-out:96da49af8e67\" in Spanish), inside an English sentence. The sentence is mostly English, but the marked word is in a Spanish quotation, so it is not an English use."
+ },
+ "U1380": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'affordance' (affordance in articulation); not a name, marks cover the word exactly."
+ },
+ "U1382": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Prompted by\" is a verb (past participle); the word is studied only as noun/proper noun, so leaving it out was correct."
+ },
+ "U1381": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Adaptive held-out:bd686ff4fd74-assisted Water Strider Algorithm (AP-WSA)\" is the name of one specific proposed algorithm, so \"held-out:bd686ff4fd74\" sits inside a name and leaving it out was correct."
+ },
+ "U1383": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interface development\": interface is a noun modifier in a generic term, not a name; marks cover the word exactly."
+ },
+ "U1385": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a cited reference title (authors listed, then title), so it counts as a name, not a use."
+ },
+ "U1384": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is a noun modifier in \"held-out:ff37e32092ff categories\"; it is a generic use, not a name, and the marks cover exactly the word."
+ },
+ "U1387": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control\" is a noun here (care and control), not part of a name; span covers the word exactly."
+ },
+ "U1388": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67\" is a plural noun (user held-out:96da49af8e67), a generic HCI term, not a name; marks cover the word exactly."
+ },
+ "U1389": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:912b00c7764c' in 'I am in held-out:912b00c7764c'; not a name, and the marks cover the word exactly, so it should have been kept."
+ },
+ "U1390": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experienced\" is a past-participle verb (incidents experienced by...), not a noun, so leaving it out was correct."
+ },
+ "U1392": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"representations\" is a plural noun, a plain use of the target word, not in a name. The marks cover exactly the word."
+ },
+ "U1386": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Asynchronous Production System\" is a descriptive, generic term (a kind of rule-based production system), not a coined product name. \"System\" is an ordinary noun use and should have been kept."
+ },
+ "U1391": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"model\" is a noun modifier in \"model selection\", an ordinary generic term. The marks cover exactly the word."
+ },
+ "U1395": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. \"System\" is a noun here and is not part of a name."
+ },
+ "U1394": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"User Interface Management System\" is a generic type of system (a UIMS), not a coined name. Peridot is the name, so this is a use that should have been kept."
+ },
+ "U1396": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"presence\" is used as an ordinary noun (the presence of breathing); not in a name, marks cover the whole word."
+ },
+ "U1393": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"A Piece of My Mind\" is the name of a JAMA column, so it is a name and not a use of the word."
+ },
+ "U1397": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:ee104561c1ce is part of the title of Nernst's monograph, which is a cited work. A title counts as a name, so leaving it out was correct."
+ },
+ "U1398": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Social Network Analysis\" is a generic technique, not a named organisation. It is a noun-modifier use of social network and should have been kept."
+ },
+ "U1399": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"teach and held-out:7dc7c59f90ed\" are parallel bare verbs, naming learning steps (held-out:7dc7c59f90ed the gesture). It is a verb use, so leaving it out was correct."
+ }
+}

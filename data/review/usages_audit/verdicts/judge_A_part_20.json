@@ -1,0 +1,252 @@
+{
+ "U1000": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experienced\" is a passive verb here (abuse is experienced), not a noun use, so leaving it out was correct."
+ },
+ "U1001": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"simulations\" is a plural common noun, a plain use of the target word, and the marks cover exactly the word."
+ },
+ "U1002": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'our emergence' is a noun use of emergence, not in a name; span covers exactly the word."
+ },
+ "U1003": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a cited book title (author listed with title), so it is a name; leaving it out was correct."
+ },
+ "U1005": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Looks like a reference-list entry (\"The Behavioral Treatment of held-out:912b00c7764c.- 10.\"), so it is the title of another work and not a use."
+ },
+ "U1004": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Having\" is a perfect-participle auxiliary (\"Having loosen'd...\"), an AUX use of the target word. It is not in a name and the marks cover the word exactly."
+ },
+ "U1006": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"its fusion with auditory phonological features\" is an ordinary noun use in the abstract's own text, not inside the cited title that follows."
+ },
+ "U1007": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun (word-word held-out:50fa17396b00, verbal associations); a genuine use, not in a name, span is exact."
+ },
+ "U1009": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Mind\" is part of the film title Eternal Sunshine of the Spotless Mind, a name, so leaving it out was correct."
+ },
+ "U1011": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of Homans' book \"held-out:e39a19f9b2b4 and Activities\", a cited work, so it counts as a name and not a use."
+ },
+ "U1008": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the Image Selection System\" has its own operations manuals, so it is one specific named system. Leaving it out as a name was correct."
+ },
+ "U1010": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:15a9a9ab2b92' in a section heading (an ordinary use, not a name); the marks cover exactly the word."
+ },
+ "U1012": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"by held-out:11f8f1ec4ec9\" uses held-out:11f8f1ec4ec9 as a noun in an idiom, not inside a name; span is exact."
+ },
+ "U1014": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plural noun (others' held-out:912b00c7764c), a genuine use of held-out:912b00c7764c; marks cover the word exactly."
+ },
+ "U1013": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plural noun meaning adherents of Leibniz and Newton; it is not part of a name and the marks cover the word exactly."
+ },
+ "U1015": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'consciousness' in running text, not part of a name or title."
+ },
+ "U1016": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experienced\" is a verb (past participle) here, so leaving it out of the noun-only target was correct."
+ },
+ "U1017": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:6b293b43d2b1' is used as an ordinary noun, not part of a name, and the marks cover exactly the word."
+ },
+ "U1018": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed\" is a plural noun (physical held-out:7dc7c59f90ed in an interferometer), used as a noun modifier/noun; marks cover the word exactly, not a name."
+ },
+ "U1020": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the named test Wechsler Intelligence Scale for Children (WISC-III), a specific named scale."
+ },
+ "U1023": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning\" is a noun in the generic term \"computer-aided learning\". It is not a name, and the marks cover just the word."
+ },
+ "U1021": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Generic term 'User Interface' (capitalized) for a management server UI, not a specific named product; should have been kept."
+ },
+ "U1025": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'information' in a plain sentence, not in a name; span covers exactly the word."
+ },
+ "U1026": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective modifying \"philosophies\"; not part of a name, and the marks cover exactly the word."
+ },
+ "U1019": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents style heading; 'Symbol' is a noun use, and headings count as ordinary uses."
+ },
+ "U1024": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Garbled text, but \"component\" sits in a verb slot (\"Words can component out\"), not as a noun. Leaving it out as a verb was correct."
+ },
+ "U1022": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is a plural noun, and the marks cover exactly the word. The line reads as the work's own title or heading, not a cited title, so it counts as an ordinary use."
+ },
+ "U1027": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f6604b2573e2\" is an adjective modifying \"infections\" (brain held-out:f6604b2573e2 infections); a genuine use, not in a name."
+ },
+ "U1028": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936 times\" is an adjective use of held-out:02b12c17f936, not in a name; span covers exactly the word."
+ },
+ "U1030": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Thyroid stimulating held-out:5350e5a87b0b\" is a generic noun term, not a name, and the marks cover just the word."
+ },
+ "U1031": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"social networks\" is a generic noun use (family and social networks), not a name; marks cover the whole term."
+ },
+ "U1033": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"imaged\" is a passive verb (spectrum is imaged onto the object), not a noun use, so leaving it out is correct."
+ },
+ "U1032": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is a generic term (field), noun use of intelligence, not a name; span covers exactly the word."
+ },
+ "U1034": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'simulation' is a noun, part of hyphenated 'simulation-based'; not a name; span covers just the word."
+ },
+ "U1029": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'perception' in a chapter heading from the book's own table of contents, which counts as an ordinary use, not a cited title."
+ },
+ "U1036": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Grand held-out:d573b31a4663\" is a place name, and \"held-out:d573b31a4663\" is a noun there, not the adjective \"held-out:d573b31a4663\"."
+ },
+ "U1035": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in a table-of-contents style heading (\"The Business of held-out:86a125382979.- 3.\"); headings count as ordinary uses, so it should have been kept."
+ },
+ "U1037": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:d573b31a4663' is an adjective modifying 'expression' (part of the compound 'stimulation-induced held-out:d573b31a4663 expression'); an ordinary use, not in a name."
+ },
+ "U1039": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:baa86b4dabfd' (rigours of held-out:baa86b4dabfd), not in a name; span is exact."
+ },
+ "U1038": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Section heading uses 'held-out:e7866e6303be' as a plural noun. Headings count as ordinary uses, and the marks cover exactly the word."
+ },
+ "U1040": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is the plural noun in the hyphenated \"held-out:5350e5a87b0b-based\". It is a real use, not a name, and the marks cover just the word."
+ },
+ "U1041": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of a cited work, listed with its author (P. Ketola), so it is a name and not a use."
+ },
+ "U1043": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fusion first wall\" uses fusion as a noun modifier (nuclear fusion reactor); not part of the ITER name."
+ },
+ "U1042": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Law of Feedback\" is one of the named laws of the author's Symbiotic Doctrine, so it is a name and leaving it out was correct."
+ },
+ "U1045": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed\" is a verb here (plans held-out:7dc7c59f90ed strategic management), not a noun, so leaving it out was correct."
+ },
+ "U1044": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"feedback negativity\" is an ERP component. Here feedback is a noun modifier, which counts as a noun use, and the term is generic, not a name. It should have been kept."
+ },
+ "U1046": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Convolutional Neural Networks\" is a generic technique, not a coined name. The marks cover exactly \"Neural Networks\", a noun use, so the program should have kept it."
+ },
+ "U1049": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control\" here is a verb (users who wear it and control it), so leaving it out is correct for a noun-only target."
+ },
+ "U1047": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Fusion\" is part of the named scale \"Avoidance and Fusion Questionnaire for Youth (AFQ-Y8)\", so leaving it out as a name was correct."
+ },
+ "U1048": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"World held-out:5ff5c82d203d.\" is a bare title-like fragment. It looks like the name of a specific work, event or product, not a use of the generic word. This is a judgement call, since it could be the abstract's own title."
+ }
+}

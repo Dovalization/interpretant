@@ -1,0 +1,252 @@
+{
+ "U1500": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is a plural noun, a generic use outside any name, and the marks cover exactly the word."
+ },
+ "U1501": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"reported held-out:15a9a9ab2b92\" is a noun use of held-out:15a9a9ab2b92 (grammar term), not in a name; span covers the word exactly."
+ },
+ "U1502": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'held-out:07afa72fe9fc' in a list with depression; not in a name; span is exact."
+ },
+ "U1505": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'representation' (a perceived or measured representation of the scene); not in a name."
+ },
+ "U1503": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This is a table-of-contents heading, so it counts as an ordinary use. \"Mass held-out:d573b31a4663 Transit\" is a generic transport term, not a coined name. \"held-out:d573b31a4663\" is an adjective here, so it should have been kept."
+ },
+ "U1506": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behavior of beast\" is an ordinary noun use of behavior, not in a name; marks cover exactly the word."
+ },
+ "U1507": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:779d6b6eedf0\" is in the title of another author's book (Terrosi's A New Cultural Theory of Aesthetics), so it counts as a name, not a use."
+ },
+ "U1508": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'visual hallucinations'; the footnote digit 5 follows but the marks cover only the word. It is a valid use the program should have kept."
+ },
+ "U1510": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" modifies \"units\" (noun modifier) in \"genetic-information processing units\"; it's a genuine use, not in a name, and the marks cover exactly the phrase."
+ },
+ "U1504": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Memories\" is the plural noun, a real use. The line looks like the item's own title, which counts as an ordinary use, not the title of another cited work."
+ },
+ "U1511": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is used as an ordinary noun (emergence of nationalism), not in a name; the marks cover exactly the word."
+ },
+ "U1509": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Affordance Account of Value Embedding\" is a descriptive theory label the authors use, not a title or a specific named product. Here affordance is an ordinary noun use, so it should have been kept."
+ },
+ "U1514": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"more held-out:32a54748ce0a\" is the adjective held-out:32a54748ce0a, used as a normal word, not in a name; the marks cover exactly the word."
+ },
+ "U1515": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\"-based social work: plural noun as part of a hyphenated word, a generic approach, not a name; span covers the word."
+ },
+ "U1512": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Little attention has been paid\" is a noun use of attention. The trailing '12 is a footnote marker and the marks cover just the word."
+ },
+ "U1517": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plain noun use, not in a name, and the marks cover exactly the word."
+ },
+ "U1516": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Section/table-of-contents heading \"Conceptual Representation\"; headings count as ordinary noun uses, and the span covers the word."
+ },
+ "U1513": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Standard held-out:d7b1fc674098\" is a descriptive, generic term for an account of perception, not a law or other named entity. Here held-out:d7b1fc674098 is a noun use and should have been kept."
+ },
+ "U1518": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexities\" is the plural noun of complexity. It is an ordinary use, not in a name, and the marks cover the word exactly. The trailing dash is punctuation."
+ },
+ "U1521": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:1c5d119c45e3' of Hegel, ordinary use, not in a name; span covers the word."
+ },
+ "U1519": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"antidiuretic held-out:5350e5a87b0b\" is a generic noun use. The trailing footnote digit \"2\" doesn't change that, and the marks cover exactly \"held-out:5350e5a87b0b\"."
+ },
+ "U1520": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is used as a generic noun (adrenocortical held-out:5350e5a87b0b, i.e., ACTH-type), not a name; span covers the word exactly."
+ },
+ "U1523": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff harmony\" is a noun modifier use of held-out:ff37e32092ff; generic linguistic term, not a name."
+ },
+ "U1522": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"prompts atheism by stealth\" uses prompt as a verb (encourages), and only the noun is studied."
+ },
+ "U1524": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'user interface' (a described interface), not a named system; marks cover the full term."
+ },
+ "U1525": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plural noun, a generic use of the target word, outside any name, and the marks cover the whole word."
+ },
+ "U1528": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'affordances' in ordinary use, not in a name; span covers the word."
+ },
+ "U1527": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\" is a plural noun (advantages), marks cover the whole word, not in a name."
+ },
+ "U1526": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading in the abstract, and the word is mentioned as a word in quotes. Both count as uses, and it is a noun."
+ },
+ "U1529": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the name of a specific project, the Integrated Information Support System (IISS), so it isn't a use."
+ },
+ "U1532": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:164ebb5df0ea\" is a plural noun (school held-out:164ebb5df0ea), a use of the target word, not in a name; marks cover the word."
+ },
+ "U1531": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Simple General Awareness held-out:c0dcb92b6a30 (SGAP)\" is the coined name of one specific system the authors designed, so leaving it out as a name was correct."
+ },
+ "U1533": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"extrapyramidal sign\" is the noun (clinical sign), outside any name. The marks cover exactly the word, so the program should have kept it."
+ },
+ "U1530": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Embodiments\" is in the title of a journal special issue ('Palestinian Futures Anticipation, Imagination, Embodiments'). That is the title of another work, so it counts as a name and not a use."
+ },
+ "U1537": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"think-aloud held-out:c0dcb92b6a30\" is a generic research method term, a plural noun, not a name; marks cover the word exactly."
+ },
+ "U1534": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of another work (a thesis listed with its author), so it counts as a name, not a use."
+ },
+ "U1538": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'news agency's' is a generic noun use (possessive); the marks cover just 'agency', and it is not a name."
+ },
+ "U1536": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Infrared Sensor Simulation\" is a generic descriptive phrase for the contract's subject, not a coined product or organisation name. Here \"simulation\" is an ordinary noun use, so it should have been kept."
+ },
+ "U1540": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:10c5166f4af0 from the Murrah Building\" is an ordinary noun use, not part of a name."
+ },
+ "U1539": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is the title of a chapter in the book being reviewed, so it is the title of another work and counts as a name. Leaving it out was correct."
+ },
+ "U1535": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'representations' in a table-of-contents heading (no authors or reference list), so it counts as an ordinary use."
+ },
+ "U1541": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "The sentence is in French, so it is not an English use."
+ },
+ "U1543": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:164ebb5df0ea\" is the generic neural-network technique, only capitalized. It is a noun use, not a name, so it should have been kept."
+ },
+ "U1544": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"sales agents\" is a plain noun use (a person acting for a company), and the marks cover exactly the word."
+ },
+ "U1542": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of Ricoeur's book 'Le conflit des interprétations', a cited work (and French), so leaving it out as a name was correct."
+ },
+ "U1545": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a cited work's title listed with its author, so \"held-out:34711782a046\" is part of a name. Leaving it out was correct."
+ },
+ "U1547": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is an ordinary noun here (Kant's ethics of held-out:19d5e41de2db), not part of a name; span covers the word exactly."
+ },
+ "U1548": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Deep neural networks\" in the abstract's own title is a generic technique, so it is an ordinary noun use. The program should have kept it."
+ },
+ "U1546": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Time held-out:7b1df4aa54d0 Questionnaire\" is a specific named instrument, so the word sits inside a scale name and is not a use."
+ },
+ "U1549": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"sign\" is the tail of the surname Ensign (split by OCR as \"En sign\"), in the Ensign-Ricker report. It is part of a person's name, not the noun sign."
+ }
+}

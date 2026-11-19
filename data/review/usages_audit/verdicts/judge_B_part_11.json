@@ -1,0 +1,252 @@
+{
+ "U0551": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning networks\" is a generic noun use of network (plural), not a name; marks cover the word exactly."
+ },
+ "U0550": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited work, \"Authentic Intentionality\" (2002), so it is a name and leaving it out was correct."
+ },
+ "U0552": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Dart Symposium on Learning and Memory\" is the name of a specific event, so leaving it out was correct."
+ },
+ "U0555": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:96da49af8e67' used as a common noun (a person/personality); not in a name, marks cover the word exactly."
+ },
+ "U0554": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:e39a19f9b2b4 of Rationality\" is the title of James's essay, a cited work, so it counts as a name. Leaving it out was correct."
+ },
+ "U0553": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:02b12c17f936\" is a plural noun (people of antiquity), not the adjective. It also looks like a cited work title."
+ },
+ "U0557": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"prompts\" here is a verb (a cover prompts a closer reading); only noun/proper noun studied, so leaving it out was correct."
+ },
+ "U0556": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the name of a specific named conference (Eli Glatstein, MD held-out:f151e0c23aaf Research Conference), so leaving it out was correct."
+ },
+ "U0558": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interface\" is a generic noun use; the marked word is exactly \"interface\" and is not part of a name."
+ },
+ "U0559": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is a plain noun use, plural of held-out:b3ea1fd57831, not in a name; marks cover the word exactly."
+ },
+ "U0560": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective modifying \"advances\"; ordinary use, not in a name, span covers the word exactly."
+ },
+ "U0561": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun (language held-out:50fa17396b00), a normal use of held-out:50fa17396b00; the marks cover the word exactly."
+ },
+ "U0562": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is a plural noun used as an ordinary word, not in a name; span covers the word exactly."
+ },
+ "U0563": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67\" is a plural noun for the generic design technique of user held-out:96da49af8e67, not a name; the marks cover the whole word."
+ },
+ "U0565": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meanings\" is a plural noun, an ordinary use of the target word, not in a name; marks cover the word exactly."
+ },
+ "U0567": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Electrical transformers (cooling channels), a noun use of the word, not a name."
+ },
+ "U0566": {
+  "verdict": "right",
+  "reason": "not_english",
+  "note": "French word 'mêmes' (same), not the English noun held-out:779d6b6eedf0; leaving it out was correct."
+ },
+ "U0568": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective modifying \"appreciation\"; ordinary use, not in a name, span is exact."
+ },
+ "U0564": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:11ee3fc840ad' in a table-of-contents chapter heading. Such headings count as ordinary uses, not as titles of other works."
+ },
+ "U0569": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1b596f30c66f\" is a plural noun in \"system of functional held-out:1b596f30c66f\"; a generic use, not a name, and the marks cover the whole word."
+ },
+ "U0572": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'complexity' is used as an ordinary noun (penalizing complexity in the model); not in a name, span exact."
+ },
+ "U0570": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a cited work's title in a reference-style entry (author, then title), so it counts as a name and was correctly left out."
+ },
+ "U0571": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "'held-out:e39a19f9b2b4' is an ordinary noun in 'anti-Asian held-out:e39a19f9b2b4', not inside a name. It should have been kept."
+ },
+ "U0575": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intentionality' in a quoted definition; not part of a name or title, and the marks cover exactly the word."
+ },
+ "U0576": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9 logics\" is a generic family of logics, with \"held-out:11f8f1ec4ec9\" as a noun modifier. It is not a name."
+ },
+ "U0574": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"information\" (lack of information); the \"(t)\" is a time argument and the marks cover only the word."
+ },
+ "U0577": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'learning' is used as a noun (a topic) in the list, outside any name; the marks cover the whole word."
+ },
+ "U0573": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"APL Users Group\" is the name of a specific organisation being formed, so leaving \"Users\" out as a name was correct."
+ },
+ "U0579": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:1b596f30c66f' (an held-out:1b596f30c66f of days remaining of life), not a name."
+ },
+ "U0580": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control\" is a noun (\"relinquish all control over...\"), not in a name; span covers the word exactly."
+ },
+ "U0581": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67\" is a plural noun, a generic use (chat held-out:96da49af8e67) outside any name; the marks cover the word exactly, so it should have been kept."
+ },
+ "U0578": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" in \"held-out:19d5e41de2db cycle\" (OCR'd as \"held-out:19d5e41de2db.eyele\") is a real noun use as a noun modifier. The marks cover just \"held-out:19d5e41de2db\". The OCR damage is in \"cycle\", not in the target word."
+ },
+ "U0582": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is used as a generic noun, part of the hyphenated \"artificial intelligence-based\"; the marks cover the term exactly, and it isn't a name."
+ },
+ "U0583": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7d0f24edc7fd\" here is a verbal gerund taking a direct object (\"high utility itemsets\"), so it works as a verb. Leaving it out was correct."
+ },
+ "U0587": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cloud\" here is a noun modifier (cloud computing offerings), a generic use, not part of a name."
+ },
+ "U0584": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:9384bbe72d46 in Arms\" is the title of a cited book (the sentence says it \"details the role...\"), so the word is inside a name and leaving it out was correct."
+ },
+ "U0586": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:10c5166f4af0' ('apparent held-out:10c5166f4af0 of German adjective endings'); not in a name, and the marks cover exactly the word."
+ },
+ "U0585": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plain noun (noun modifier-free) in the paper's own title, which counts as an ordinary use. The program should have kept it."
+ },
+ "U0590": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning\" is a noun here (related to learning), a plain use, not in a name; marks cover exactly the word."
+ },
+ "U0588": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"multi_Agent technology\" is multi-agent (underscore stands in for the hyphen). It is a real use of the noun agent, not a name, and the marks cover just the word."
+ },
+ "U0592": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:34711782a046' is a plain noun use as a covariate, not in a name; the marks cover exactly the word."
+ },
+ "U0591": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun (students' mental representation), generic term, not in a name; span covers exactly the term."
+ },
+ "U0594": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is a plural noun (egalitarian held-out:e39a19f9b2b4), a plain use outside any name; the marks cover the word exactly."
+ },
+ "U0593": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Russian held-out:b3ea1fd57831 in an Era of Reform and Revolution\" is the title of a book being described, so the word is inside a name. Leaving it out was correct."
+ },
+ "U0589": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Refers to Leśniewski's held-out:86a125382979, a specific named logical system (names category, ε functor), not the generic term."
+ },
+ "U0596": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Social Network Analysis\" is a generic technique, not an organisation name, so it should have been kept as a use."
+ },
+ "U0597": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun use of 'held-out:15a9a9ab2b92' in a generic phrase, not part of a name; marks cover the word exactly."
+ },
+ "U0595": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'held-out:861f9da96b43' in a keyword list (Nigerian held-out:861f9da96b43); not a specific named paper, so it should have been kept."
+ },
+ "U0599": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"deep neural networks\" is a generic noun use of neural network; marks cover the term exactly."
+ },
+ "U0598": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Agent\" here is the generic noun (agent technologies, as in the agent-based application that follows), not a named product. It should have been kept."
+ }
+}

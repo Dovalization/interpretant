@@ -1,0 +1,252 @@
+{
+ "U2051": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the name of a specific faculty (Faculty of Computational Science and Digital Intelligence, FASANDI), so leaving it out as a name was correct."
+ },
+ "U2050": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interfaces\" is a plural noun (interface between thought and language), not in a name; the sentence is garbled but the word is a valid noun use."
+ },
+ "U2053": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:164ebb5df0ea\" is a plural noun (people who left therapy); the marks cover the whole word, and it is not part of a name."
+ },
+ "U2052": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Intelligence\" is part of the organisation name \"Navy Center for Applied Research in Artificial Intelligence\", so leaving it out was correct."
+ },
+ "U2054": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"prompted\" is a verb (past participle) here, not a noun, so leaving it out was correct."
+ },
+ "U2056": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d displays\" uses held-out:5ff5c82d203d as a noun modifier (held-out:5ff5c82d203d displays = displays of held-out:5ff5c82d203d), a generic term, not a name."
+ },
+ "U2055": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents chapter heading of the work itself, which counts as an ordinary use. \"held-out:15a9a9ab2b92\" is a noun here."
+ },
+ "U2057": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intelligent agent\" is a noun use, not part of a name; Fox is the named system, not agent."
+ },
+ "U2058": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"minds\" is a plural noun (our modern minds), not in a name; span covers the word."
+ },
+ "U2062": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun, a generic term, and the marks cover the full phrase."
+ },
+ "U2061": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"consciousness\" is used as an ordinary noun (problems of consciousness); the Macy Foundation is a name, but the target word is outside it."
+ },
+ "U2060": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embeddings\" is a plural noun use (psychological embeddings), not in a name; the marks cover exactly the word, and the dash compound \"embeddings–rich\" does not change that."
+ },
+ "U2059": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"foreign language held-out:07afa72fe9fc (FLA)\" is a generic noun use of the concept, not part of the scale name (that is the earlier FLCAS mention). The span covers just \"held-out:07afa72fe9fc\"."
+ },
+ "U2063": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This is a chapter heading in the work's own table of contents, which counts as an ordinary use. It is not the title of another cited work, so \"held-out:10c5166f4af0\" is a noun use that should have been kept."
+ },
+ "U2064": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:9384bbe72d46\" is a plural noun use of held-out:9384bbe72d46; marks cover the word (apostrophe outside), not in a name."
+ },
+ "U2065": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Worry and held-out:07afa72fe9fc Questionnaire (WAQ)\" is a specific named scale, so leaving it out as a name was correct."
+ },
+ "U2066": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a cited work's title in a reference list (\"Complexity: What, Why, and How\"), so it counts as a name, not a use."
+ },
+ "U2067": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"a solid held-out:3cff64e5f947\" is a noun (foundation), outside any name, and the marks cover the whole word."
+ },
+ "U2068": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'perception' used as an ordinary noun (local bias in perception); not part of a name."
+ },
+ "U2070": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embeddings\" as a plural noun (phrasal constituent embeddings, i.e., syntactic embedding); a real use, not a name, span exact."
+ },
+ "U2069": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perception\" is a plain noun use in a list of cognitive processes; the marks cover exactly the word, so it should have been kept."
+ },
+ "U2072": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plain noun (medical images), not in a name; span covers the word exactly."
+ },
+ "U2073": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intelligent transportation systems\" is a generic noun use of systems, not a named system."
+ },
+ "U2071": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"theory of held-out:10c5166f4af0\" is a generic noun use (held-out:10c5166f4af0 theory), not an event name, so it should have been kept."
+ },
+ "U2074": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited book with its author, so it is a name; leaving it out was correct."
+ },
+ "U2075": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f6604b2573e2 diseases\" uses held-out:f6604b2573e2 as an adjective (relating to viruses); not a name, span is exact."
+ },
+ "U2077": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947\" is a noun here (a foundation of knowledge in social science), not in a name, and the marks cover the whole word."
+ },
+ "U2076": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"User Interface component\" is a generic system component, only capitalized, not a named product. It is a noun use and should have been kept."
+ },
+ "U2078": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mind\" is used as a common noun (an achievement of mind), not in a name; the marks cover exactly the word."
+ },
+ "U2081": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"database held-out:d7b1fc674098\" is a generic noun use of held-out:d7b1fc674098, not a name; the span covers exactly the word."
+ },
+ "U2079": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:50fa17396b00\" is the name of one specific device (the held-out:50fa17396b00 necklace), so it is a product name and not a use of the word."
+ },
+ "U2080": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Generic noun 'held-out:d7b1fc674098' (held-out:d7b1fc674098-based reading teaching pattern), merely capitalized; not a person's name, so it should have been kept."
+ },
+ "U2083": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the organisation name 'Study Group on Artificial Intelligence and Simulation of Behavior' (AISB), so leaving it out as a name was correct."
+ },
+ "U2086": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"phenomenal intentionality\" is a generic philosophical term, a noun use of intentionality, not a name; marks cover exactly the word."
+ },
+ "U2085": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" in \"held-out:ff37e32092ff + closure\" is a plain noun use, marked exactly. It is not a name, so the program should have kept it."
+ },
+ "U2084": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"non-intelligence\" (hyphen garbled as \\|) is a noun use of intelligence as part of a hyphenated word; marks cover just the word."
+ },
+ "U2089": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'feedback' is used as a noun (provide feedback), not in a name, and the marks cover the whole word."
+ },
+ "U2087": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Advanced Interfaces Group\" is the name of a specific research group at the University of Manchester, so the word is inside an organisation name and the program was right to skip it."
+ },
+ "U2082": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computations\" is a plural noun in a contents-list heading. Contents headings count as ordinary uses, and there are no authors or citation marks here to make it a cited title."
+ },
+ "U2088": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"KA held-out:da17f59c700d\" is a generic plural noun (held-out:da17f59c700d in a library), not a specific named product; the marks cover the word exactly."
+ },
+ "U2093": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun use, not in a name; the marks cover the word exactly."
+ },
+ "U2091": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(re)held-out:2c676bb34422\" is a noun use of held-out:2c676bb34422 (gerund coordinated with \"held-out:7b1df4aa54d0\" and \"conceptual blending\"). It is not in a name, and the marks cover the word itself."
+ },
+ "U2095": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"in the clouds\" is the plural noun cloud (figurative/literal sky sense); not a name, span covers the word."
+ },
+ "U2090": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Platform\" is part of the coined name of one specific system the authors introduce (GAI-ACP), so leaving it out as a name was correct."
+ },
+ "U2096": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"minds\" is a plural noun meaning people's minds, in a quoted legal opinion, not part of a name."
+ },
+ "U2094": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Agencies\" is in the title of another cited work, listed with its author (Marchionini). Under the titles rule, that makes it a name and not a use."
+ },
+ "U2097": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Natural User Interface (NUI)\" is a generic term for a kind of interface, not one specific product, so it is a use of the noun and should have been kept."
+ },
+ "U2098": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning\" is used as an ordinary noun (the meaning of ...), not in a name."
+ },
+ "U2092": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Rouché's held-out:ee104561c1ce\" is the name of one specific named held-out:ee104561c1ce, like a named law, so \"held-out:ee104561c1ce\" sits inside a name."
+ },
+ "U2099": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"presence\" is used as an ordinary noun (\"the presence of ... symptoms\"), not in a name, and the marks cover exactly the word."
+ }
+}

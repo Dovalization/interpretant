@@ -1,0 +1,252 @@
+{
+ "U2350": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Adjective use of 'held-out:f151e0c23aaf' modifying 'approach'; not in a name, span covers the whole word."
+ },
+ "U2351": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"ideological alignment\" is a noun use of alignment, not in a name; marks cover the whole word."
+ },
+ "U2352": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'symbol' used generically (serpent as a symbol); not part of a name."
+ },
+ "U2353": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memory capacity\" - noun used as modifier, ordinary use, not in a name; span covers the word exactly."
+ },
+ "U2354": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agent\" is a common noun here (pedagogical agent); \"Rex\" is its given name, but the marked word is the generic term, not part of a name."
+ },
+ "U2355": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'intentionality' as a philosophical concept (criterion of the mental); not part of a name."
+ },
+ "U2358": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"electron held-out:7b5614820786\" is a generic instrument, a noun use of held-out:7b5614820786, not a name."
+ },
+ "U2356": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:d573b31a4663\" is part of the place name Grand held-out:d573b31a4663, Michigan, not the adjective held-out:d573b31a4663."
+ },
+ "U2357": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"clouded\" is a verb (passive, 'obscured'); cloud is studied only as noun/proper noun/adjective, so leaving it out was correct."
+ },
+ "U2360": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"paying attention\" is a noun use of attention, not in a name, and the marks cover exactly the word."
+ },
+ "U2361": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use in historical linguistics: a word inherited from PIE. Not a name, and the marks cover the whole word."
+ },
+ "U2359": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Theory of Mind\" is a generic concept, not a name. \"Mind\" is a noun here and the marks cover exactly that word, so it should have been kept."
+ },
+ "U2362": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun in a generic sense (of syntax); not a name, span is exact."
+ },
+ "U2363": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning(s)\" is a noun use, plural marked with (s). The marks cover just the word, and it is not in a name."
+ },
+ "U2364": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun use of 'artificial intelligences' (AI systems), generic, not a name; marks cover the full term."
+ },
+ "U2366": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Memory\" is part of the named test Rivermead Behavioural Memory Test (RBMT), so leaving it out as a name was correct."
+ },
+ "U2365": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"math held-out:07afa72fe9fc\" is a plain noun use of held-out:07afa72fe9fc, not a name. The marks cover just the word, and the missing space before \"(MA)\" likely caused the miss."
+ },
+ "U2368": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the journal title \"Journal of Applied Behavior Analysis\", a name, so leaving it out was correct."
+ },
+ "U2367": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited book in a reference, so it is a name and leaving it out was correct."
+ },
+ "U2369": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"explainable artificial intelligence\" is a generic technique term, not a name; noun use of intelligence, marks cover exactly the word."
+ },
+ "U2371": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'cognition' is used as a plain noun, not in a name; the marks cover exactly the word."
+ },
+ "U2370": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'HM held-out:bafa5557897f Service (HMPS)' is the name of an organisation, so leaving it out was correct."
+ },
+ "U2372": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Scientific held-out:f66e6d2190f6 Studio\" is the specific named NASA Goddard unit, so the word sits inside an organisation name and leaving it out was correct."
+ },
+ "U2373": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:6b293b43d2b1\" is a noun modifier in \"held-out:6b293b43d2b1 address terms\", so it is a noun use and should have been kept. The ADJ tag is a mistake."
+ },
+ "U2374": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"presence\" is used as an ordinary noun (presence/absence of parallelism), not in a name; marks cover exactly the word."
+ },
+ "U2376": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Control monkeys\" uses control as a noun modifier (the control group), which counts as a noun use. It is not in a name, and the marks cover the whole word."
+ },
+ "U2378": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:861f9da96b43 Society\" is the name of a specific organisation (UK trade body), so leaving it out as a name was correct."
+ },
+ "U2375": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Components\" is a plain plural noun for software components (Interactable, Throwable). It is not a named product, so it counts as a use."
+ },
+ "U2380": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' (visual hallucinations), ordinary use, marks cover the word exactly."
+ },
+ "U2381": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information fusion\" uses information as a noun modifier; generic term, not a name."
+ },
+ "U2377": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:c0dcb92b6a30' in 'a stable cluster held-out:c0dcb92b6a30', a descriptive lowercase phrase. The span is exact. The attached '(SCP)' abbreviation probably caused the miss."
+ },
+ "U2382": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Learning\" is part of the journal title New Directions for Teaching and Learning, so it is a name and leaving it out was correct."
+ },
+ "U2383": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"User Interface Management Systems (UIMS)\" is a generic term for a class of systems, not one named product. It is a real use of \"user interface\" and should have been kept."
+ },
+ "U2379": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"model\" is a noun in the spelled-out generic term \"component object model\", written in lowercase. It reads as a technique or concept, not a named product, so it counts as a use."
+ },
+ "U2384": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:f151e0c23aaf Medicine\" is a generic field name, not a coined name. The word is an adjective modifying \"Medicine\", so it should have been kept."
+ },
+ "U2386": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'cognition' used as an ordinary noun, not in a name; marks cover the exact word."
+ },
+ "U2385": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" is a plural noun for a generic artifact type, not a name. The slash in Models/held-out:d4bed87430ea probably caused the miss. The marks cover the word exactly."
+ },
+ "U2388": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cloud\" in \"Cloud Community portals\" is a generic noun modifier (cloud computing sense), not a name; marks cover the word exactly."
+ },
+ "U2387": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'having no job' is a participle of the main verb 'have' (possession), so it is a verb use and should have been kept."
+ },
+ "U2389": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f151e0c23aaf vector\" is an adjective use of held-out:f151e0c23aaf, not in a name, and the marks cover exactly the word."
+ },
+ "U2391": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:da17f59c700d\" is part of the named scale \"Sexual held-out:da17f59c700d Overlap Scale (SSOS)\", so it is inside a name and was correctly left out."
+ },
+ "U2390": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:7dc7c59f90ed\" is a verb here (the glass which held-out:7dc7c59f90ed her perfection), not a noun."
+ },
+ "U2392": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"component parts\" is a noun modifier before a noun, which counts as a noun use. The ADJ tag was a mistake, so it should have been kept."
+ },
+ "U2393": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so it is an ordinary use. \"Community of interpretation\" is a generic concept, and the word is a noun."
+ },
+ "U2397": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is a noun, a plain use of the target word; the marks cover exactly the word."
+ },
+ "U2396": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Attention\" is part of the name of a specific named measure, the Survey for Memory, Attention, and Reaction Time (SMART), so leaving it out was correct."
+ },
+ "U2395": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1b596f30c66f\" is in the title of Euler's work E430, a cited work, so it is a name and leaving it out was correct."
+ },
+ "U2399": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'Artificial Intelligence' as part of hyphenated 'Artificial Intelligence-driven'; a noun use, not a name, and the marks cover the phrase."
+ },
+ "U2398": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"House of held-out:912b00c7764c and Hope\" is the title of a cited book (Harvey et al.), so it is a name. Leaving it out was correct."
+ },
+ "U2394": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Chapter title listed with its author (Gilles L. Talbot) is the title of another work, so it counts as a name, not a use."
+ }
+}

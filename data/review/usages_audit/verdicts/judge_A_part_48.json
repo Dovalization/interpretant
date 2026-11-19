@@ -1,0 +1,252 @@
+{
+ "U2400": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intentionality\" is a noun in \"conscious intentionality\"; it is not in a name, and the span covers just the word (the \"2\" is a footnote mark)."
+ },
+ "U2401": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective meaning old, modifying a generic tradition; it is not part of a name and the marks cover just the word."
+ },
+ "U2402": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'Bayesian Networks' is a noun use of network, not a name; the marks cover exactly the word."
+ },
+ "U2403": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading \"What is held-out:bd686ff4fd74?\" is an ordinary noun use, not a cited title."
+ },
+ "U2405": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:86a125382979' (of the Eleatics), a genuine use; not in a name, span exact."
+ },
+ "U2404": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Science Fiction held-out:d4bed87430ea\" is a generic technique term, not a named system. \"held-out:d4bed87430ea\" is a plural noun, so it is a use, and the marks cover exactly the word."
+ },
+ "U2406": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is a plural noun use of held-out:34711782a046, outside any name, and the marks cover exactly the word. The program should have kept it."
+ },
+ "U2407": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is used as an ordinary noun (its held-out:e7866e6303be), not in a name; the marks cover the whole word."
+ },
+ "U2408": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun (evacuation experiences), a genuine use outside any name, and the marks cover the word exactly."
+ },
+ "U2409": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic \"convolutional neural networks\" as a noun modifier in \"-based\" compound; not a name, and the marks cover exactly \"neural networks\"."
+ },
+ "U2411": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behavior\" here is a noun (his speech or behavior), a plain use, not in a name; marks cover the word exactly."
+ },
+ "U2412": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"prompts\" is a plural noun (cues serving as prompts) in a memory paradigm; not a name, and the marks cover the whole word."
+ },
+ "U2414": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so it is an ordinary use. 'Artificial Intelligence' is a generic term, not a name, and 'intelligence' is a noun here."
+ },
+ "U2413": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plural noun, an ordinary use of held-out:e7866e6303be, and the marks cover the word exactly. It is not part of a name."
+ },
+ "U2415": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'strength' is a noun here (strength of identification), not in a name, and the marks cover the whole word."
+ },
+ "U2410": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Experience' in a chapter heading in the book's own table of contents, which counts as an ordinary use, not a cited title."
+ },
+ "U2416": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Experiences\" is a plural noun in a generic concept (Memorable User Experiences), not a specific named product. The marks cover the whole word, so it should have been kept."
+ },
+ "U2419": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the journal name 'Applied Mathematics and Computation' in a reference list, so it is a name, not a use."
+ },
+ "U2417": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" works as a noun modifier in a generic theory description (not a name), and the marks cover the phrase exactly."
+ },
+ "U2418": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"simulation\" is used as a common noun, in the generic phrase \"simulation of human behavior\". It is not part of a name, and the marks cover exactly the word."
+ },
+ "U2421": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"theological meaning\" is the common noun meaning, not in a name; the marks cover exactly the word."
+ },
+ "U2420": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Social Networks\" in the spelled-out generic term Location-based Social Networks (LBSN) is a generic noun use, not a name; marks cover the words exactly."
+ },
+ "U2423": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading of the work itself, so an ordinary use. It is the noun 'Representation', and the marks cover exactly the word."
+ },
+ "U2425": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"human behavior\" is an ordinary noun use, not in a name; marks cover exactly the word."
+ },
+ "U2426": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f66e6d2190f6 environment\" - noun used as a noun modifier; generic term, not a name."
+ },
+ "U2424": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use. \"Experience\" is a noun (noun modifier in \"illness experience\"), and the marks cover exactly the word."
+ },
+ "U2422": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'minds' in the chapter heading 'Other Minds' (the philosophical problem). Table-of-contents headings count as ordinary uses, and it is not a name."
+ },
+ "U2427": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plain noun here (feeling of held-out:912b00c7764c), not in a name, and the marks cover exactly the word."
+ },
+ "U2429": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a noun modifier (held-out:1c5d119c45e3 insight data) referring to social media held-out:1c5d119c45e3; ordinary use, not a name."
+ },
+ "U2428": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:07afa72fe9fc\" labels the held-out:07afa72fe9fc group (n=40). It is an ordinary noun use, not a name, and the marks cover just the word."
+ },
+ "U2431": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use: \"quantum leader election held-out:c0dcb92b6a30\" is a general held-out:c0dcb92b6a30, not a named system; the marks cover the word exactly."
+ },
+ "U2435": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fusion\" is a noun modifier in \"fusion problem\" (data fusion); a generic use, not a name."
+ },
+ "U2434": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"simulation\" is used as a noun (the simulation of motion), not in a name, and the marks cover exactly the word."
+ },
+ "U2432": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use: the escape platform in a water-maze test. It is not a name, and the marks cover just the word, so it should have been kept."
+ },
+ "U2436": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:7b1df4aa54d0' is a plain noun use, not in a name or title; marks cover the word exactly."
+ },
+ "U2433": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:e39a19f9b2b4 Analysis / Opinion held-out:7d0f24edc7fd is a generic technique, not a named product; the noun use should have been kept."
+ },
+ "U2430": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:c0dcb92b6a30 Layer\" is the authors' coined name for one specific component of their system, like \"Tree of Intelligence\", so leaving it out as a name was correct."
+ },
+ "U2437": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun (sexual held-out:50fa17396b00), a regular use of held-out:50fa17396b00; the span covers the word and it is not in a name."
+ },
+ "U2438": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Complexity\" is part of the organisation's name (FRINGE Centre for the Study of Social and Cultural Complexity), so leaving it out was correct."
+ },
+ "U2439": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the organisation name 'German Federal Job Agency' (Bundesagentur für Arbeit), a named institution, so not a use."
+ },
+ "U2443": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"minds\" is a plural noun in \"rots children's minds\"; it is an ordinary use of the word, not inside a name, and the marks cover exactly the word."
+ },
+ "U2440": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"executive agency\" is a generic noun use. The name \"Atomic Energy Commission\" comes after it and doesn't contain the word. The marks cover exactly \"agency\"."
+ },
+ "U2441": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Convolutional Neural Networks\" is a generic technique, not a named system. The marks cover exactly \"Neural Networks\", so this is a valid use as a noun."
+ },
+ "U2445": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (The Mechanical Mind by Tim Crane), so it is a name and correctly left out."
+ },
+ "U2442": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d plantarum et animalium\" is the title of a cited work (Latin), so it is a name and leaving it out was correct."
+ },
+ "U2444": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"general intelligence\" is a noun use. The OCR noise sits only in the neighbouring word, and the marks cover exactly \"intelligence\"."
+ },
+ "U2446": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"systems\" is a plain plural noun, a generic use, not part of a name; marks cover the word exactly."
+ },
+ "U2447": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is a plural common noun (UI held-out:5ff5c82d203d), marks cover the word exactly, not a name."
+ },
+ "U2448": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"negative feedbacks\" is a plural noun use of feedback, not in a name; marks cover the word exactly."
+ },
+ "U2449": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"model\" in \"linear/nonlinear model(s)\". It is not in a name, and the marks cover the word, with the plural \"(s)\" left outside. The program should have kept it."
+ }
+}

@@ -1,0 +1,252 @@
+{
+ "U4050": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"few will experience\" is a verb, which isn't a studied part of speech, so leaving it out was correct."
+ },
+ "U4052": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:9384bbe72d46' is a plain noun use, outside any name, and the marks cover exactly the word."
+ },
+ "U4051": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Bayesian network\" is a generic technique, used as a noun; not a name."
+ },
+ "U4054": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bd686ff4fd74 theory\" is a generic field; held-out:bd686ff4fd74 is a noun modifier here, not a name."
+ },
+ "U4053": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Chronic held-out:912b00c7764c\" is the name of one specific research project, so leaving it out as a name was correct."
+ },
+ "U4056": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" is a noun here (types of held-out:2c676bb34422, as in held-out:2c676bb34422 theory), generic term, not a name; marks cover the word exactly."
+ },
+ "U4055": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is a common noun used as a concept (the held-out:d7b1fc674098 of organization-charisma), not a person's name. It should have been kept."
+ },
+ "U4058": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947\" here is a verbal gerund taking a direct object (\"held-out:3cff64e5f947 teleology\"), so it works as a verb, not a noun. Leaving it out was correct."
+ },
+ "U4059": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'information processing' used as noun modifier for models (Gregg and Simon's approach); not a name; span covers the phrase exactly."
+ },
+ "U4057": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control?theoretic\" is a garbled hyphen for \"control-theoretic\". Control is a noun modifier, part of a hyphenated word, and the marks cover exactly \"control\"."
+ },
+ "U4060": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "It's the title of a cited work, listed with its author (Goban-Klas). A word inside another work's title is a name, so leaving it out was correct. The program's 'ORG' label is wrong, but the outcome is right."
+ },
+ "U4062": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbol\" is a noun modifier in \"flow chart symbol stencil\"; generic use, not a name, span is exact."
+ },
+ "U4064": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a title of another work in a list of titles with authors (held-out:34711782a046 in held-out:15a9a9ab2b92), so it is a name; leaving it out was correct."
+ },
+ "U4063": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here 'strength' is used as a verb (a slip for 'strengthen'), so leaving it out was correct."
+ },
+ "U4065": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'recurrent neural networks', a plural noun, not a name; marks cover the full term."
+ },
+ "U4061": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Biomedical Platforms\" is the title of a work (a book) that the abstract describes as adding a new dimension. A title is a name, so this is not a use."
+ },
+ "U4067": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:f66e6d2190f6' (three-dimensional held-out:f66e6d2190f6), not in a name; span covers the word exactly."
+ },
+ "U4068": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:baa86b4dabfd' (declines in held-out:baa86b4dabfd); not in a name."
+ },
+ "U4069": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intentionality\" is used as an ordinary noun (the intentionality of piety and sacredness), not in a name; the marks cover the whole word."
+ },
+ "U4070": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:d7b1fc674098' used as a common noun (a dialectical scheme/framework); not part of a name, span is exact."
+ },
+ "U4066": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the book's own table of contents, so it counts as an ordinary use of the noun \"social networks\", not a cited title."
+ },
+ "U4072": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"text held-out:7d0f24edc7fd\" is a noun use (noun modifier/compound); generic technique, not a name."
+ },
+ "U4071": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is used as an ordinary noun (emergence of subjective phenomena); not in a name, span is exact."
+ },
+ "U4073": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:7dc7c59f90ed/II is the name of a specific software tool, so the word is part of a name and not a use of the noun."
+ },
+ "U4075": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plural noun in a table-of-contents heading, which counts as an ordinary use, not a cited title."
+ },
+ "U4074": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cloud\" is a noun modifier in \"terminal+cloud computing\", which is a genuine use. The marks cover exactly the word. The \"+\" joining probably caused the miss."
+ },
+ "U4077": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'perception' (audiences' perception of images); marks cover exactly the word, not in a name. Should have been kept."
+ },
+ "U4079": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "French \"elle-même\" (herself), not the English noun held-out:779d6b6eedf0; the marked span is also only part of the French word."
+ },
+ "U4078": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the work's own table of contents, which counts as an ordinary use. \"held-out:50fa17396b00\" is a noun here and the span is exact."
+ },
+ "U4080": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the book's own table of contents, so it counts as an ordinary use. It is the noun 'consciousness', and the marks cover it exactly."
+ },
+ "U4083": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (Black Culture and Black Consciousness), so it is a name and leaving it out was correct."
+ },
+ "U4082": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use; 'held-out:50fa17396b00' is a plural noun and the marks cover the word exactly."
+ },
+ "U4081": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Continually Learning held-out:d4bed87430ea (CLP)\" is the coined name of one specific model, so \"held-out:d4bed87430ea\" is inside a name and the program was right to leave it out."
+ },
+ "U4084": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"one-party system\" is a generic noun use of system, not a name; marks cover exactly the word."
+ },
+ "U4076": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Platforms\" is a plural noun in \"Digital Platforms and the Press\". That is the title of the very work this abstract describes, not another work's title. The codebook treats the abstract's own title as an ordinary use, so this is a use that should have been kept."
+ },
+ "U4085": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"network\" in \"mobile ad hoc network\" is a generic noun use, not a name; the marks cover exactly the word."
+ },
+ "U4086": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plural noun (bodily held-out:912b00c7764c and pleasures), a regular use of held-out:912b00c7764c, not in a name."
+ },
+ "U4087": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:32a54748ce0a' is an adjective modifying 'adaption'; a genuine use, not in a name, span exact."
+ },
+ "U4089": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretation theory\" is a generic noun modifier use, not a name."
+ },
+ "U4088": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretations\" is a plain plural noun use, not in a name, and the marks cover the word exactly. The program should have kept it."
+ },
+ "U4090": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plural common noun, a genuine use, not in a name; the marks cover the word exactly."
+ },
+ "U4091": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a generic noun term, not a name; the marks cover the full phrase."
+ },
+ "U4092": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:164ebb5df0ea' is a plural noun meaning people who left the movement; a genuine noun use, not in a name, and the span covers the whole word."
+ },
+ "U4093": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Symbols is in the title of a cited book (Wedeen's Ambiguities of Domination), so it is a name and leaving it out was correct."
+ },
+ "U4095": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"rat model\" is an animal model; model is a noun (noun modifier context), not in a name, and the marks cover exactly the word."
+ },
+ "U4096": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun (their experiences with hypertext systems), not in a name; span covers the word."
+ },
+ "U4098": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:15a9a9ab2b92 analysis\" is a noun modifier use of held-out:15a9a9ab2b92, a generic technique, not a name."
+ },
+ "U4094": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The marked word is in the title of another work, the book Rabdoligy (Computation with Napier's Bones). A word in a cited title is a name, not a use."
+ },
+ "U4097": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cerebral held-out:11ee3fc840ad\" is the name of a journal, so it is a name and not a use of the word. Leaving it out was correct."
+ },
+ "U4099": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"by held-out:2c676bb34422 health issues\" is a verb use (gerund taking an object), not a noun; leaving it out was correct."
+ }
+}

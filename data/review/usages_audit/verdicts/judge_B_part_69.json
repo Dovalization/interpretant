@@ -1,0 +1,252 @@
+{
+ "U3450": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'neural network'; marks cover the full term, not a name."
+ },
+ "U3452": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is a noun in \"pay attention\" (passive); ordinary use, not a name, span correct."
+ },
+ "U3451": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "In \"non-held-out:bd686ff4fd74 sampling\", held-out:bd686ff4fd74 is a noun modifier and part of a hyphenated word, so it is a use and should have been kept."
+ },
+ "U3453": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:9384bbe72d46\" is a plural common noun, used generically, not in a name; the marks cover the word exactly."
+ },
+ "U3455": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:6b293b43d2b1\" is a noun modifier in \"held-out:6b293b43d2b1 interactions\"; ordinary use, not a name, span covers the whole word."
+ },
+ "U3454": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is the plural noun held-out:ff37e32092ff (just capitalised), a normal use that should have been kept."
+ },
+ "U3456": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plain noun use (thinking in terms of images); the mojibake is only in the quote marks, and the marks cover exactly the word."
+ },
+ "U3457": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interface designs\" uses user interface as a generic noun modifier; not a name, and the marks cover the whole term."
+ },
+ "U3458": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plain noun use, not in a name; marks cover the word exactly."
+ },
+ "U3459": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"moral consciousness\" is an ordinary noun use, not part of a name, and the marks cover exactly the word."
+ },
+ "U3461": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Office of Information Technology\" is the name of a specific organisational unit, so leaving it out as a name was correct."
+ },
+ "U3460": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The Human Agent\" is the title of a cited book volume (Royal Institute of Philosophy Lectures), so it is a name; leaving it out was correct."
+ },
+ "U3462": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'intentionality'; the marks cover just the word, and the following '(2)' is a list marker. The program should have kept it."
+ },
+ "U3464": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:7dc7c59f90ed' in a metaphorical phrase ('hall of distorting held-out:7dc7c59f90ed'); ordinary use, not a name, span covers the word."
+ },
+ "U3463": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. 'held-out:86a125382979' is a noun and not part of a person's name, so it should have been kept."
+ },
+ "U3467": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plain noun use, plural inflection, not in a name; marks cover the word exactly."
+ },
+ "U3466": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective modifying \"binary multiplier\"; ordinary use, not a name."
+ },
+ "U3468": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having tried\" is the perfect-participle auxiliary use of have, which is a studied part of speech. The marks cover just the word."
+ },
+ "U3465": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(un)learning\" is a noun use of learning (Hebbian learning/unlearning). The marks cover exactly \"learning\"."
+ },
+ "U3469": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Television Information Office\" is a real organization's name (and the luncheon an event), so leaving \"Information\" out as a name was correct."
+ },
+ "U3470": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fusion\" is used as a generic noun (SVMs for fusion); not part of the name CDF-SVM."
+ },
+ "U3472": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"p.m. held-out:19d5e41de2db\" is a noun use (shift work), not in a name; span covers the word exactly."
+ },
+ "U3473": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d Books\" is a publisher's name (organisation) in a citation, so leaving it out was correct."
+ },
+ "U3475": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:b3ea1fd57831' is a plain noun use, not in a name; marks cover the word exactly."
+ },
+ "U3474": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the original prompt\" is a noun use (an LLM prompt), outside any name, and the marks cover exactly the word."
+ },
+ "U3471": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This is a chapter/table-of-contents heading, which counts as an ordinary use, not a cited title. \"Having\" is a verb form (possess), so it should have been kept."
+ },
+ "U3476": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:07afa72fe9fc' (reducing held-out:07afa72fe9fc), not in a name; span is exact."
+ },
+ "U3477": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the journal name 'Journal of held-out:f151e0c23aaf Medicine' in a reference; a name, so correctly left out."
+ },
+ "U3479": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The Library of Living held-out:ab139acf9360\" is the title of a book series (a named work), so the word is part of a name; leaving it out was correct."
+ },
+ "U3478": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Heading \"Social Media Platforms\" is an ordinary noun use of platform (section heading, not a cited title), so it should have been kept."
+ },
+ "U3480": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Laurentian held-out:5350e5a87b0b Conference\" is a named, specific event, so the word is inside a name and leaving it out was correct."
+ },
+ "U3483": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f66e6d2190f6 technology\" is a noun used as a noun modifier, not a name, and the marks cover the whole word."
+ },
+ "U3481": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'information' is a noun in a table-of-contents heading (\"Propositions as information\"). Such headings count as ordinary uses, and the marks cover exactly the word."
+ },
+ "U3484": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of a cited work (proceedings of a named congress), so it is a name, not a use."
+ },
+ "U3482": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents section heading, which counts as an ordinary use. \"Interfaces\" is a plural noun and the marks cover exactly that word."
+ },
+ "U3487": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behavior\" is used as an ordinary noun (the system's behavior), not in a name, and the marks cover exactly the word."
+ },
+ "U3485": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fusion\" is a plain noun here (consciousness of fusion, responsibility and service). It is not part of a name, because the held-out:861f9da96b43 name is \"Chutian Golden held-out:861f9da96b43\". The marks cover exactly the word."
+ },
+ "U3486": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Interpretations of May 1968\" is the title of a chapter in a cited book, so it counts as a name. Leaving it out was correct."
+ },
+ "U3488": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the journal name \"Information Processing Letters\" in a reference list, so it is a name, not a use."
+ },
+ "U3490": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plural noun use of image, outside any name; marks cover exactly the word. The trailing text is just sentence-boundary noise."
+ },
+ "U3491": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"History of Consciousness Board of Studies\" is the name of a specific UC Santa Cruz department/program, so leaving it out as a name is correct."
+ },
+ "U3489": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Information Retrieval\" is a generic term, not a name. \"Information\" is a noun modifier and the marks cover just that word, so the program should have kept it."
+ },
+ "U3492": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The word is in the title of a cited book (Sociology and Liturgy: Re-presentations of the Holy). Titles of other works count as names, so leaving it out was correct."
+ },
+ "U3493": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:779d6b6eedf0\" is a plural common noun, used generically (not a name), and the marks cover exactly the word."
+ },
+ "U3494": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"imaging\" takes a direct object (\"an active or dormant process\"), so it is verbal, not a noun or noun modifier. Leaving it out was correct."
+ },
+ "U3495": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"deserves attention\" is an ordinary noun use, not in a name; span covers just the word."
+ },
+ "U3496": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"INTERFACES\" is a plural noun in the abstract's own title (all caps), so it is a real use and the program should have kept it."
+ },
+ "U3498": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"simulation\" is a noun modifier in \"simulation studies\"; an ordinary use, not a name."
+ },
+ "U3497": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "Noun modifier before 'structures' counts as a noun use; the ADJ tag is a mistake, so it should have been kept."
+ },
+ "U3499": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"held-out:779d6b6eedf0 sensor\" is a misspelling of MEMS (micro-electro-mechanical systems) sensor, an accelerometer. It is not the noun held-out:779d6b6eedf0."
+ }
+}

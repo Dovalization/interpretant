@@ -1,0 +1,252 @@
+{
+ "U1552": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"neural networks\" in the brain: a plain noun use, not a name."
+ },
+ "U1551": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Section/contents heading \"Technology Affordances\" is an ordinary noun use, not a name; the marks cover the word exactly."
+ },
+ "U1550": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having\" is the main verb \"have\" (possess) in a gerund clause taking an object, \"the material resources\". The word is a verb, not part of a name, and the marks cover exactly the word."
+ },
+ "U1553": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of a cited book (Computation: Finite and Infinite Machines by Minsky), so it is a name, not a use."
+ },
+ "U1555": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"five-component categorization\": component is a noun used as a modifier in a hyphenated compound; marks cover exactly the word and it isn't in a name."
+ },
+ "U1556": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'agency' is used as an ordinary noun (philosophical concept of agency), not in a name; marks cover exactly the word."
+ },
+ "U1554": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Network complexity\" is a table-of-contents entry of the volume. Contents headings count as ordinary uses. Here \"complexity\" is a noun, and the marks cover exactly the word."
+ },
+ "U1557": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memory\" is used as a noun (distorted memory), not in a name; span covers the word exactly."
+ },
+ "U1558": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"rhabdom fusion\" is a noun (head noun of the phrase), ordinary use, not a name; marks cover the word exactly."
+ },
+ "U1560": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signed\" is a verb (past participle, passive) here; sign is studied only as noun/proper noun, so leaving it out was correct."
+ },
+ "U1561": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control group\": noun used as a modifier, so it counts as a noun use. It is not part of a name."
+ },
+ "U1562": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:861f9da96b43 coverage\" is a noun used as a noun modifier, not part of a name, and the marks cover the whole word."
+ },
+ "U1559": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Elman Recurrent Wavelet Neural Network (ERWNN)\" is the authors' name for one specific new model, so leaving it out as a name is correct."
+ },
+ "U1563": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:d573b31a4663\" is part of the place name Grand held-out:d573b31a4663, and is a noun here, not the adjective \"held-out:d573b31a4663\"."
+ },
+ "U1567": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a cited book title (van Niel's book), so it is a name; leaving it out was correct."
+ },
+ "U1565": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" is part of the hyphenated word \"medium-level\". Hyphenated parts count in any part of speech, and the marks cover just that word."
+ },
+ "U1566": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic plural noun (national statistical agencies as a category), not a specific named organisation, so it should have been kept."
+ },
+ "U1568": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is used as an ordinary noun, not in a name, and the marks cover exactly the word."
+ },
+ "U1569": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:6b293b43d2b1\" modifies \"foster care\" as a noun modifier, which counts as a noun use. The program should have kept it, so tagging it ADJ was a mistake."
+ },
+ "U1571": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Fusion\" is part of the organisation name National Magnetic Fusion Energy Computer Center, so leaving it out is correct."
+ },
+ "U1564": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:ab139acf9360' Stone\" is the name of one specific legendary substance, so the word sits inside a name and is not a use of held-out:ab139acf9360."
+ },
+ "U1572": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embeddings\" is a plural noun (feature vectors), a generic term, not a name; the marks cover the whole word."
+ },
+ "U1570": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Hawaii Family Study of Cognition (HFSC)\" is the name of one specific named study, so leaving it out as a name was correct."
+ },
+ "U1574": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Image\" is part of the organisation name Cambridge University Moving Image Studio (CUMIS), so leaving it out was correct."
+ },
+ "U1573": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Users\" is a plain noun in a guideline heading (\"Co-Development with Users\"). It is not a name or title, and the marks cover exactly the word."
+ },
+ "U1578": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"presence\" is a common noun here (the increased presence of Chinese media), not in a name, and the marks cover the whole word."
+ },
+ "U1577": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agency/client relationship\" uses agency as a noun (advertising agency) and a noun modifier; the marks cover exactly the word, and it is not a name."
+ },
+ "U1575": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of \"artificial intelligence\" in the hyphenated modifier \"artificial intelligence-related methods\". It is not a name, and the marks cover the term exactly."
+ },
+ "U1576": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:7b1df4aa54d0' in a table-of-contents heading, which counts as an ordinary use, not a name."
+ },
+ "U1579": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a plural noun, an ordinary use in 'moral held-out:19d5e41de2db', not in a name; marks cover the word exactly."
+ },
+ "U1582": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fusion research\" uses fusion as a noun modifier (nuclear fusion), not part of a name."
+ },
+ "U1581": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'neural network' used as a noun, not a name; span covers exactly the word."
+ },
+ "U1580": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plural noun in the measure \"percent held-out:e7866e6303be stuttered\". That is a generic measure, not a named scale, so it should count as a use."
+ },
+ "U1584": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intelligence' (the trait), not in a name; span covers exactly the word."
+ },
+ "U1585": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'position held-out:50fa17396b00' is a noun use of held-out:50fa17396b00 (noun modifier/compound), not a name; marks cover exactly the word."
+ },
+ "U1583": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Healing held-out:912b00c7764c\" is the title of a book being described (it is the subject of \"investigates\"), so it is a name. Leaving it out was correct."
+ },
+ "U1587": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:ab139acf9360' (plural), a genuine use, not in a name; span covers the word."
+ },
+ "U1586": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is a plain noun (prevailing held-out:10c5166f4af0); the \"2\" is a footnote marker, and the marks cover only the word."
+ },
+ "U1589": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun in a generic sense, not in a name; marks cover the full term."
+ },
+ "U1590": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of Smith's book The Theory of Moral held-out:e39a19f9b2b4, a cited work, so it is a name and not a use."
+ },
+ "U1591": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11ee3fc840ad\" is a plain noun use (orbitofrontal held-out:11ee3fc840ad), not in a name; the marks cover exactly the word. The citation marker [11] is outside the span."
+ },
+ "U1592": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Mediums\" is the plural noun medium (spiritualist sense). Every sense counts, so the program should have kept it. It is not in a name, and the span covers the whole word."
+ },
+ "U1588": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is part of the title of Smith's book, The Theory of Moral held-out:e39a19f9b2b4, a named work, so it is a name and leaving it out was correct."
+ },
+ "U1593": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'cognition' (translation of Foucault's sense of knowing), not in a name; span covers the word exactly."
+ },
+ "U1594": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This is the title of another work listed with its author (P. Dewan), so \"Interfaces\" is part of a name and not a use."
+ },
+ "U1595": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:b3ea1fd57831' in the abstract's own title (held-out:b3ea1fd57831-Musicians). It is a real use, not a cited title or a name."
+ },
+ "U1596": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a plural common noun (held-out:19d5e41de2db of the king), not in a name; span covers the whole word."
+ },
+ "U1598": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" is a noun in the paper's own title (not a cited work), so it is an ordinary use and should have been kept."
+ },
+ "U1597": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"single-image file system\" (single system image idea): image is a noun use in a hyphenated compound; the odd \"\\|\" separator likely hid it from the program. The marks cover exactly the word."
+ },
+ "U1599": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading \"Four held-out:86a125382979\" is an ordinary noun use (plural of held-out:86a125382979), not a cited title; the program should have kept it."
+ }
+}

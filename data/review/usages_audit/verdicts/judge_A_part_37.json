@@ -1,0 +1,252 @@
+{
+ "U1851": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is a plural noun, a generic term (held-out:d7b1fc674098 theory), not a name; the marks cover the whole word, so it should have been kept."
+ },
+ "U1850": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Knight held-out:861f9da96b43, Inc.\" is the name of a company, so the word is inside an organisation name and doesn't count."
+ },
+ "U1853": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'a very powerful medium' is a noun meaning means of communication; not part of a name."
+ },
+ "U1852": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"presence\" is an ordinary noun here (the presence of acedia), not in a name; span covers exactly the word."
+ },
+ "U1854": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Dictionary headword, the word mentioned as a word, used as a noun; this counts as a use."
+ },
+ "U1855": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:baa86b4dabfd\" is a plain noun use, not in a name; the marks cover exactly the word."
+ },
+ "U1857": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"protest consciousness\" is a noun use of consciousness, not in a name; marks cover the exact word."
+ },
+ "U1858": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"affordances\" is a plural noun used generically (aesthetic affordances), not in a name; span covers the word."
+ },
+ "U1856": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'modeled' is a verb (passive 'can be modeled'), not a studied noun use; leaving it out was correct."
+ },
+ "U1859": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interfaces\" (plural noun) in \"multi-user interfaces\" is a real use of the term, not in a name, and the marks cover exactly the phrase."
+ },
+ "U1860": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'computation' is used as an ordinary noun (sensory computation), not in a name; the span covers exactly the word."
+ },
+ "U1862": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Sentence-initial noun 'Information' (on localization), a plain use outside any name; should have been kept."
+ },
+ "U1861": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9 held-out:67415e178146\" is a noun modifier before a noun, which counts as a noun use. It is not part of a name."
+ },
+ "U1865": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Convolutional Neural Network is a generic technique, not a specific named system, so it is a use that should have been kept."
+ },
+ "U1863": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Embeddings\" is part of the coined name of one specific model, Affective Word Embeddings for Sarcasm (AWES), so it is not a use."
+ },
+ "U1866": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"candidate images\" is a plain noun use (agenda-setting sense of image). The marks cover exactly the word, and it isn't part of a name."
+ },
+ "U1868": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intentionality' (affective intentionality of hatred); not in a name, span is exact."
+ },
+ "U1864": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'consciousness' in a table-of-contents style heading (the trailing '- 10' looks like a page number). Such headings count as ordinary uses, not cited titles."
+ },
+ "U1869": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"BP neural network\" is a generic technique (backpropagation network), a noun use, not a specific named system; marks cover the term exactly."
+ },
+ "U1870": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'alignment' (physical alignment of components); not in a name, span exact."
+ },
+ "U1871": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"controls\" is a plural noun meaning control subjects/comparison group; a valid noun use."
+ },
+ "U1873": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:baa86b4dabfd of Historicism\" is the title of Popper's book, a cited work, so it is a name and leaving it out was correct."
+ },
+ "U1867": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:7b1df4aa54d0\" is part of the name of one specific method (MDExT), spelled out from its acronym, so it sits inside a name."
+ },
+ "U1872": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:11ee3fc840ad-A53 is a named ARM processor product, so leaving it out as a name was correct."
+ },
+ "U1876": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"polynomial held-out:1b596f30c66f\" is a plain noun use of held-out:1b596f30c66f, not in a name; marks cover the word."
+ },
+ "U1874": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning\" as part of hyphenated \"meaning-preserving\" counts as a use (noun); not a name; span covers the word."
+ },
+ "U1875": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perception\" is used as a noun (taste intensity perception), not in a name; the span covers the word exactly."
+ },
+ "U1877": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Ordinary noun use (brain held-out:11ee3fc840ad, tissue in situ); not a product name, so it should have been kept."
+ },
+ "U1879": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'strength' is a noun modifier (node strength rankings), a noun use, not part of a name; PSQI is separate."
+ },
+ "U1878": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Embeddings\" is part of the name of one specific system, the GENESIS held-out:d4bed87430ea, so it is not a use of the word."
+ },
+ "U1882": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is part of the game title Call of held-out:19d5e41de2db, a named product, so leaving it out was correct."
+ },
+ "U1880": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"MEANING\" is a noun in what looks like the abstract's own title, which counts as an ordinary use. The marks cover exactly the word."
+ },
+ "U1881": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use; 'held-out:c0dcb92b6a30' is a plural noun, and the marks cover the word exactly."
+ },
+ "U1883": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:164ebb5df0ea\" is a noun modifier in the hyphenated \"held-out:164ebb5df0ea-regularized\" (the regularization technique), a generic technique and not a name; the part of a hyphenated word counts."
+ },
+ "U1885": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plain noun (role in dance/instruction context), not in a name; marks cover exactly the word."
+ },
+ "U1884": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'Artificial Intelligence' in a standalone title or heading line. Capitalisation does not make it a name, and nothing marks it as a cited work."
+ },
+ "U1890": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behaviors\" is a plural noun, used as an ordinary word (target behaviors), not in a name."
+ },
+ "U1889": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is a plain noun (\"received widespread attention\"), not in a name; span covers exactly the word, so it should have been kept."
+ },
+ "U1891": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is a plural noun, a plain use of held-out:b3ea1fd57831; the marks cover the whole word and it is not in a name."
+ },
+ "U1886": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Channel-Spatial Integration Attention Module (CSIAM)\" is the coined name of one specific proposed module, so leaving it out as a name was correct."
+ },
+ "U1892": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:da17f59c700d\" is a plural common noun (command held-out:da17f59c700d), a generic use, not a name; the marks cover the word exactly."
+ },
+ "U1893": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'held-out:07afa72fe9fc' (the held-out:07afa72fe9fc shown by patients); not in a name, span is exact."
+ },
+ "U1888": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" is a gerund taking a direct object (\"systems\"), so it works as a verb here, not as a noun or noun modifier. Leaving it out was correct."
+ },
+ "U1896": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is used as an ordinary noun, and the marks cover exactly that word. It is not part of a name."
+ },
+ "U1895": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"graphical user interfaces\" (GUI spelled out) is a generic noun term, not a name. The marked span covers \"user interfaces\" exactly, so it should have been kept."
+ },
+ "U1887": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "The papers are named Inilah Koran and Pikiran Rakyat. 'Daily held-out:861f9da96b43' only describes them, so 'held-out:861f9da96b43' is a plain noun use that should have been kept. This is a judgement call, because the capitalised phrase could be read as part of the name."
+ },
+ "U1894": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Platforms\" is a plural noun used generically (a stage in a funding model), not a name. The marks cover exactly the word, so it should have been kept."
+ },
+ "U1898": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning\" is part of the hyphenated word \"learning-based\"; it is a generic use, not a name, and the marks cover just the word."
+ },
+ "U1899": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Advanced held-out:f66e6d2190f6 Interactive Environment\" (AVIE) is the name of one specific installation, so leaving it out as a name was correct."
+ },
+ "U1897": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Platforms\" is a plain noun, used as a heading or title (not a name), so it should have been kept."
+ }
+}

@@ -1,0 +1,252 @@
+{
+ "U2101": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "French sentence; 'même' in 'moi-même' is French, not the English noun held-out:779d6b6eedf0."
+ },
+ "U2103": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:67415e178146\" is used as an ordinary noun (behavior determined by held-out:67415e178146); not a name, marks cover the word exactly."
+ },
+ "U2104": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'meaning' used as a noun (meaning and significance), not in a name; span covers the word exactly."
+ },
+ "U2102": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Strengths\" is part of the coined name of one specific model (COMPASS), so it is inside a name and should be left out."
+ },
+ "U2106": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computation\" is a noun (modifier in \"percentage and frequency computation\"), not in a name, span correct."
+ },
+ "U2105": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behaviour\" is a noun (repetitive behaviour), a spelling variant, not in a name; the marks cover just the word."
+ },
+ "U2108": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is used as a common noun (moral obligation), not in a name; span covers exactly the word."
+ },
+ "U2107": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:3cff64e5f947 facts\" is a noun modifier (the metaphysical relation of held-out:3cff64e5f947), not a verb, so it should have been kept."
+ },
+ "U2109": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:d7b1fc674098' is used as an ordinary noun (Kantian held-out:d7b1fc674098) in running text, not in a name; span covers the word exactly."
+ },
+ "U2110": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"descriptor complexity\" is a generic noun use of complexity, not a name; marks cover exactly the word."
+ },
+ "U2100": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun use of 'system'. The sentence reads as the abstract's own title, which counts as an ordinary use. Nothing shows it is a cited work's title."
+ },
+ "U2111": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading of the work itself, so an ordinary use of the noun 'intentionality', not a cited title."
+ },
+ "U2114": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"working memory\" is a noun use (noun modifier/compound), not a named test or scale; the marks cover the word exactly."
+ },
+ "U2112": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the forth medium\" uses medium as a noun (a communication channel, like mass media). It is a generic term, not a name, so it should have been kept."
+ },
+ "U2115": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the organisation name Australian Agency for International Development (AUSAID), so leaving it out as a name is correct."
+ },
+ "U2113": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is a noun in the list of user attributes. It is a plain use, not part of a name, and the marks cover exactly the word. The program probably missed it because of the \").then\" punctuation."
+ },
+ "U2116": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Flicker fusion frequency\" is a generic psychophysical measure, not a named test. \"Fusion\" is a noun modifier here and the marks cover exactly the word."
+ },
+ "U2118": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user\" is a plain noun, the person being tracked; not a name, and the marks cover exactly the word."
+ },
+ "U2117": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"thyrotropine-releasing held-out:5350e5a87b0b\" is a generic noun use of held-out:5350e5a87b0b, not a name. The marks cover exactly the word, so it should have been kept."
+ },
+ "U2122": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Literal meteorological 'clouds' (plural noun), not in a name; marks cover the word exactly."
+ },
+ "U2120": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" is a noun here, a film technique listed alongside selection and editing. It is not in a name and the marks cover the whole word."
+ },
+ "U2121": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'modelled after' is a verb (past participle), not a noun use, so leaving it out was correct."
+ },
+ "U2123": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea system\": held-out:d4bed87430ea as a noun modifier, generic use, not a name."
+ },
+ "U2119": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:ff37e32092ff' in a chapter heading in a table of contents with its number. The rules count these as ordinary uses. The program should have kept it."
+ },
+ "U2124": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs of saturation\" is the plural noun sign (evidence/indication), not in a name; span covers the word."
+ },
+ "U2125": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"social network\" is used as a generic noun phrase (the social network as a web space), not a name; marks cover exactly the term."
+ },
+ "U2126": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:86a125382979' as part of hyphenated 'held-out:86a125382979-based'; generic term, not a name; marks cover the word exactly."
+ },
+ "U2127": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:7b5614820786' in 'single lens held-out:7b5614820786'; a generic device, not a name, and the span covers the word exactly."
+ },
+ "U2129": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading 'Data Representations' is an ordinary noun use, and the marks cover the whole word."
+ },
+ "U2130": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:9384bbe72d46\" is a quoted mention of the noun (the concept of \"held-out:9384bbe72d46\"), not an adjective, so it should have been kept."
+ },
+ "U2131": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" in hyphenated \"after-images\" is a noun use; the marks cover exactly the word part."
+ },
+ "U2128": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents chapter heading, which counts as an ordinary use. \"Intelligence\" is a noun, and the marks cover exactly the word."
+ },
+ "U2132": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is used as a predicate adjective (\"not as held-out:d573b31a4663 as before\"), outside any name, and the marks cover exactly the word."
+ },
+ "U2133": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is a noun use (differences in held-out:34711782a046). The marks cover just the word, and the missing space before \"(p.05)\" probably caused the miss."
+ },
+ "U2134": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"FET Presence Research Initiative\" is the name of a specific EC program, so \"Presence\" sits inside a name. Leaving it out was correct."
+ },
+ "U2135": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Consciousness' in a chapter heading of the abstract's own table of contents, which counts as an ordinary use. It is not a cited title."
+ },
+ "U2137": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:b3ea1fd57831\" is part of the name of a specific event, the XVIII All-Union Congress of held-out:b3ea1fd57831, so it is not a use."
+ },
+ "U2138": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'social network' (a patient's social network); not a name, and the marks cover exactly the term."
+ },
+ "U2139": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use: \"Price's interpretation of the claims of conscience\"; not part of a name or title."
+ },
+ "U2136": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Coriolis Acceleration Platform\" is the name of one specific NAMRL device, so leaving it out as a name was correct."
+ },
+ "U2140": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is used as an ordinary noun (public feeling), not in a name, and the marks cover exactly the word."
+ },
+ "U2142": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'interpretation' (an original interpretation of his thought); not a name, span is exact."
+ },
+ "U2141": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"anti-held-out:f6604b2573e2\" is a hyphenated word with the adjective \"held-out:f6604b2573e2\" (of viruses); the marks cover exactly \"held-out:f6604b2573e2\", and it is not in a name."
+ },
+ "U2143": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff Colour Chart\" is the name of one specific teaching system, so \"held-out:ff37e32092ff\" sits inside a name and leaving it out was correct."
+ },
+ "U2144": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Wechsler Memory Scale is a specific named test, so 'Memory' is part of a name and was correctly left out."
+ },
+ "U2147": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:f66e6d2190f6' (mental images), a real use, not in a name; marks cover the whole word."
+ },
+ "U2148": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is the verb (past participle, passive) here, and only the adjective is studied, so leaving it out was correct."
+ },
+ "U2146": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a chapter title listed with its author (Konrad Ng) in a contents list. That is the title of another work, so it is a name, not a use."
+ },
+ "U2145": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Transformer\" is part of the spelled-out name of GPT, a specific named model (GPT-4o-mini), so it sits inside a model name, not a free use."
+ },
+ "U2149": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "The marked text is the subscript in the variable name n_consciousness, which works as an identifier and not as a use of the word. The real uses are the earlier 'the consciousness threshold', which is outside the marks."
+ }
+}

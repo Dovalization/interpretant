@@ -1,0 +1,252 @@
+{
+ "U1450": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:e7866e6303be' used as an ordinary noun, not in a name; marks cover the word exactly."
+ },
+ "U1452": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun (perceived experiences of racism), not in a name; the marks cover the word exactly."
+ },
+ "U1451": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"model of learning\" is a noun use. The period that runs into \"knowledge\" is a missing space, which probably caused the miss. The marks cover exactly the word."
+ },
+ "U1453": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947 itself upon\" is a verbal gerund taking a reflexive object, so it is a verb use and was correctly left out."
+ },
+ "U1454": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun use (animal users of designed systems), not inside a name."
+ },
+ "U1455": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'strength' is used as a noun (signal strength), not part of a name, and the marks cover exactly the word."
+ },
+ "U1457": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"bring ... to applied linguists' attention\" uses attention as an ordinary noun, not in a name, and the marks cover just the word."
+ },
+ "U1456": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"that very having\" is a nominalized gerund (noun, with determiner), not a verb or auxiliary, so leaving it out was correct."
+ },
+ "U1458": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the named software product held-out:f66e6d2190f6 Tool Kit (VTK); a name, so correctly left out."
+ },
+ "U1459": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"time alignment\" uses alignment as a noun, outside any name, and the marks cover exactly the word."
+ },
+ "U1462": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strength\" is a noun naming a network centrality index (node strength); a generic term, not a name."
+ },
+ "U1463": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the journal name 'The Journal of held-out:9384bbe72d46 Studies', so it is a name and was correctly left out."
+ },
+ "U1464": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Hateful held-out:779d6b6eedf0\" is the name of a specific named dataset, so the word is inside a name and leaving it out was correct."
+ },
+ "U1461": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning(s)\" is the noun (\"possible meanings\"), not in a name. The marks cover the word, with the plural \"(s)\" outside them, so this is a valid use the program missed."
+ },
+ "U1465": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experienced\" is a past participle verb (difficulties experienced by students), not a noun, so leaving it out was correct."
+ },
+ "U1460": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a chapter title in a list of contents of an edited volume (a title of another work), so it is a name rather than a use."
+ },
+ "U1467": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Here 'Alignment' is a generic evaluation metric (layout alignment) used as a noun, not a named product or scale, so it should have been kept."
+ },
+ "U1468": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"somatomotor held-out:11ee3fc840ad\" is a plain noun use of held-out:11ee3fc840ad, not a name. The marks cover exactly the word."
+ },
+ "U1466": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"a Perception Test\" is a generic test of perception, not a specific named test or organisation. It is a noun-modifier use of the word and should have been kept."
+ },
+ "U1471": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interfaces\" is a plural noun for the tool's user interfaces; not part of a name (the tool is described generically)."
+ },
+ "U1469": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Unit for Memory Disorders\" is a specific research unit named in an author affiliation, so it is an organisation name and leaving it out was correct."
+ },
+ "U1470": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Feedback decision\" uses feedback as a noun modifier, not in a name, so it is a valid use that should have been kept."
+ },
+ "U1473": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbol system theories\": symbol is a noun modifier, generic term, not a name."
+ },
+ "U1472": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:7b1df4aa54d0' used as an ordinary generic term; not in a name; span covers the word."
+ },
+ "U1474": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'presence' is mentioned as a term in quotes, a noun use that counts; not part of a name."
+ },
+ "U1476": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"platforms\" is a plural noun (social media platforms), a generic use, not a name; span covers the word exactly."
+ },
+ "U1475": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"international news agencies\" is a generic noun use (plural of agency); not a name, marks cover the word."
+ },
+ "U1480": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun 'held-out:1c5d119c45e3' (of King), not part of a name; span covers the word."
+ },
+ "U1478": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Symbols\" is in the title of a cited book (A New Cultural Theory of Aesthetics), so it counts as a name, not a use."
+ },
+ "U1477": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fusion\" is a noun modifier in \"fusion illusions\", a generic term for a perceptual phenomenon, not a name. The marks cover the word exactly."
+ },
+ "U1479": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Autobiographical Memories\" is a generic term, with memory as a noun. It is capitalised but not a name, and the marks cover the word."
+ },
+ "U1484": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:bd686ff4fd74' (held-out:bd686ff4fd74 of a hypothesis); not a name, span exact."
+ },
+ "U1482": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'clouds' (Lucretius discussion); ordinary use, not a name, marks cover the word exactly."
+ },
+ "U1481": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Phototropic Memories\" is the name of one specific device, so the word sits inside a product name and is not a use."
+ },
+ "U1483": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meanings\" is a plural noun use of meaning (new concepts and meanings), not in a name; the marks cover the word exactly, so the program should have kept it."
+ },
+ "U1486": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"turn his attention to\" uses attention as an ordinary noun, not inside a name, and the marks cover exactly the word."
+ },
+ "U1488": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun, a general use of held-out:50fa17396b00; not part of a name (Polish Language Unit is unrelated)."
+ },
+ "U1485": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The Whole held-out:19d5e41de2db of Man\" is the title of a specific book, so it is a name and leaving it out was correct."
+ },
+ "U1487": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Web-based Lexical Complexity Analyzer\" is a specific named software tool, so the word sits inside a product name and leaving it out was correct."
+ },
+ "U1489": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"careful attention\" is a noun use. The stray period is just a formatting glitch. The word is outside the title The Bell Curve, and the marks cover it exactly."
+ },
+ "U1490": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Maryland held-out:7dc7c59f90ed/II\" is the name of one specific software tool, so \"held-out:7dc7c59f90ed\" here is part of a name and not a use."
+ },
+ "U1491": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:779d6b6eedf0 AND MIND\" is the text's own section heading, so it is an ordinary use of the noun held-out:779d6b6eedf0 (plural). The program should have kept it."
+ },
+ "U1492": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Having\" is the gerund of the main verb \"have\" (possess), taking the object \"adequate knowledge\". It is a verb use, not a name, and the marks cover the word."
+ },
+ "U1494": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67 method\" is a generic design technique, not a coined name. It is a noun use, so it should have been kept."
+ },
+ "U1496": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:ab139acf9360' used generally, not in a name; marks cover the word exactly."
+ },
+ "U1495": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. \"Behaviour\" is the noun, spelled the British way, so it is a valid use."
+ },
+ "U1497": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663 Serial Visual Presentation\" is a generic paradigm, not a named test. \"held-out:d573b31a4663\" is an adjective use and should have been kept."
+ },
+ "U1498": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. 'Computation' is a noun in 'Evolutionary Computation', a generic technique and not a name."
+ },
+ "U1493": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Here 'held-out:d4bed87430ea' is the ordinary noun, used as a modifier in scare quotes. The sense is that the held-out:d4bed87430ea endpoint is ready for industrial use. It is not a named work, so it should have been kept."
+ },
+ "U1499": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here \"held-out:d4bed87430ea\" is a verb in a list of parallel verbs (empathize, define, ideate, held-out:d4bed87430ea, test), so leaving it out is correct."
+ }
+}

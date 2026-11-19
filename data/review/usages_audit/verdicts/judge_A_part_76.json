@@ -1,0 +1,252 @@
+{
+ "U3800": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user\" is a common noun here, a person at a remote terminal; it is not part of a name and the marks cover exactly the word."
+ },
+ "U3802": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:ff37e32092ff\" is in the title of a cited article (Peterson's 'The Phonetic Value of held-out:ff37e32092ff'), so it is a name, not a use."
+ },
+ "U3801": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"OWL Web held-out:86a125382979 Language\" is the name of one specific W3C language, so leaving it out as a name was correct."
+ },
+ "U3803": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"an empirical held-out:3cff64e5f947 for religious belief\" — noun use, not in a name; span covers exactly the word."
+ },
+ "U3804": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behaviors\" is a plain noun use, not in a name; marks cover the word exactly."
+ },
+ "U3805": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use meaning a code of conduct/etiquette; not a name, span is exact."
+ },
+ "U3806": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0 Computer Club\" is the name of a specific organisation, so leaving it out was correct."
+ },
+ "U3809": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"prompts\" is a plural noun (traffic signs as prompts for seat belt use), a studied part of speech, not in a name, and the marks cover the word exactly."
+ },
+ "U3808": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Wireless Sensor Networks\" is a generic technology term, not a name, so this is a noun use of network. The program should have kept it."
+ },
+ "U3807": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"noise components\" is the noun, plural. The hyphen is a dash joining the next clause, and the marks cover exactly the word."
+ },
+ "U3810": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"User Interface Management System\" is a generic type of system, not one named product, so \"User Interface\" is a real noun use and should have been kept."
+ },
+ "U3812": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interface design\": noun used as a modifier, generic term, not a name."
+ },
+ "U3811": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Symbols is in the title of a cited work in a reference list, so it counts as a name and leaving it out was correct."
+ },
+ "U3814": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"affordances\" is a plural noun used as an ordinary term (affordances of smartphones); span covers the word exactly."
+ },
+ "U3815": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Kyoto University Computation Center\" is the name of a specific organisation, so leaving it out was correct."
+ },
+ "U3817": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:779d6b6eedf0\" is a plural noun use of held-out:779d6b6eedf0 (internet held-out:779d6b6eedf0), not part of a name; span covers the word."
+ },
+ "U3813": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. 'held-out:bd686ff4fd74' is a plural noun use, so the program should have kept it."
+ },
+ "U3819": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use: a network of threshold components (logic network), not a name."
+ },
+ "U3816": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial neural network\" is a generic technique, so it is not a name. Here \"network\" is a noun and the marks cover exactly that word, so it should have been kept."
+ },
+ "U3820": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited paper (Rudwick 1976), so it is a name and was correctly left out."
+ },
+ "U3818": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Perception\" is a noun in \"Emotion&Perception data\", a generic label for the data type and not a named scale. The program probably missed it because of the \"&\" joining it to \"Emotion\"."
+ },
+ "U3821": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Population Information Network\" (POPIN) is the name of a specific organisation/network, so leaving it out was correct."
+ },
+ "U3822": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is used as an ordinary noun (covariate), not in a name; the marks cover exactly the word."
+ },
+ "U3823": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cloud\" is a noun (a sea surface scene type) in ordinary use, not a name; span covers exactly the word."
+ },
+ "U3826": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'consciousness' in 'philosophies of consciousness'; not a name or title."
+ },
+ "U3824": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bd686ff4fd74\" is a noun modifier in \"held-out:bd686ff4fd74 transformer\". The marks cover just the word. The stray \"]\" is only OCR noise next to it."
+ },
+ "U3827": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(sub-)cloud\" is a noun use, a generic \"LOD sub-cloud\" of linguistic resources. It is not a name, and the span covers just \"cloud\"."
+ },
+ "U3825": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947 intuition\" means an intuition that grounds, so this is a participial adjective from the verb. It is not a noun or noun modifier, so leaving it out was correct."
+ },
+ "U3828": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"time held-out:2c676bb34422\" is a noun use of held-out:2c676bb34422 (a concept in a list), not a verb and not a name."
+ },
+ "U3830": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"active held-out:19d5e41de2db\" is a common phrase with held-out:19d5e41de2db as a noun (here a noun modifier before \"military sample\"). It is not a name."
+ },
+ "U3831": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in a table-of-contents heading (\"mono- or biphonematic interpretation\"). Headings count as ordinary uses, and the marks cover exactly the word."
+ },
+ "U3832": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Impula Network\" is the name of one specific blockchain platform, so \"Network\" is part of a product name and leaving it out was correct."
+ },
+ "U3829": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"representation\" (\"representation(s)\"), not in a name; the mark covers the word and the \"(s)\" is only an optional plural."
+ },
+ "U3833": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Tangible User Interfaces\" is a generic technique term, not a named system. \"Interfaces\" is a noun use, and the marks cover exactly that word."
+ },
+ "U3835": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Meanings\" is a plural noun in a table-of-contents heading, which counts as an ordinary use, so the program should have kept it."
+ },
+ "U3837": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a cited reference (authors listed, then the title of another work), so the title counts as a name, not a use."
+ },
+ "U3834": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Movie held-out:da17f59c700d\" is a generic noun phrase (the held-out:da17f59c700d of the movie \"The Flash\"); only \"The Flash\" is a name, so this is a real use of held-out:da17f59c700d and should have been kept."
+ },
+ "U3839": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:86a125382979\" is part of the organisation name held-out:86a125382979 Alignment Evaluation Initiative (OAEI), so leaving it out was correct."
+ },
+ "U3838": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The word is in the title of a cited work, listed with its author, so it counts as a name and not a use."
+ },
+ "U3840": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c experience\" - held-out:912b00c7764c as a noun modifier, ordinary use, not in a name; marks cover exactly the word."
+ },
+ "U3841": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"System\" is a noun in a table-of-contents heading, which counts as an ordinary use, not a cited title. The marks cover exactly the word."
+ },
+ "U3836": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Agents' in a table-of-contents heading (no authors listed), which counts as an ordinary use; the marks cover the word exactly."
+ },
+ "U3844": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"CONTROLS\" is a plural noun (\"the controls of location and design\"), a genuine use of the noun; the all-caps text explains why it was missed."
+ },
+ "U3843": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the Moral held-out:e39a19f9b2b4\" is a short reference to Adam Smith's book The Theory of Moral held-out:e39a19f9b2b4, so it is a title (a name). Leaving it out was correct."
+ },
+ "U3842": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Emergence\" is a real noun here, in Rogers' definition of creativity (\"emergence in action of a novel relational product\"). The OCR damage is in other words, so the program should have kept it."
+ },
+ "U3847": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexities\" is a plural noun use of complexity; the marks cover the word exactly, and it is not in a name."
+ },
+ "U3846": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexity\" is a plain noun use, outside any name. The \"3\" after it is a footnote marker, and the marks cover just the word."
+ },
+ "U3845": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Histology sense: 'embedding' of tissue slices, used as a noun after 'Before'. Same word, a studied part of speech, not in a name."
+ },
+ "U3849": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The sentence is a quoted title of another work (a cited paper), so the word in it is part of a name and not a use."
+ },
+ "U3848": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here \"held-out:1c5d119c45e3\" is a mistaken form of \"as follows\", used as a predicate adjective. It is not the noun, so leaving it out was correct."
+ }
+}

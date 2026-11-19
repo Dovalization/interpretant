@@ -1,0 +1,212 @@
+{
+ "U4401": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Arab embodiment\" is a generic noun use of embodiment, not inside a name; span covers exactly the word."
+ },
+ "U4400": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use meaning intellectual legacy (\"phenomenological held-out:67415e178146\"); not in a name, span covers the word exactly."
+ },
+ "U4402": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Part of a file path/identifier (table_scripts/running_time.json), not a use of the word."
+ },
+ "U4405": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"electron held-out:7b5614820786\" is a generic instrument, used as a noun; marks cover exactly the word."
+ },
+ "U4404": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67\" is a plural noun, the HCI design-tool sense; it's a generic use, not a name, and the marks cover the word exactly."
+ },
+ "U4403": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:ff37e32092ff Shift Rule\" is a generic phonological rule, not a named law. \"held-out:ff37e32092ff\" is a noun modifier and a real use, so the program should have kept it."
+ },
+ "U4406": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited book in a reference entry, so it counts as a name; leaving it out was correct."
+ },
+ "U4409": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is a plural common noun, a generic use outside any name, and the marks cover exactly the word."
+ },
+ "U4408": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of Berkeley's book 'Alciphron, or the Minute held-out:ab139acf9360'. A cited work's title is a name, so leaving it out was correct."
+ },
+ "U4407": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"non-held-out:d573b31a4663 eye movement sleep\" is a generic sleep-stage term, not a name. \"held-out:d573b31a4663\" is an adjective and part of a hyphenated word. The marks cover just \"held-out:d573b31a4663\"."
+ },
+ "U4412": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"choice held-out:2c676bb34422\" is a noun use (noun modifier/compound head), not a name or verb."
+ },
+ "U4410": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"a symbol of the hope\" is a plain noun use, not in a name, and the marks cover exactly the word."
+ },
+ "U4411": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1b596f30c66f\" is a plural noun in \"partial differential held-out:1b596f30c66f\", a generic term, not a name; the marks cover the whole word."
+ },
+ "U4413": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Synergistic Image and Feature Alignment (SIFA)\" is the name of one specific named framework, so leaving it out as a name was correct."
+ },
+ "U4415": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"midwife held-out:7b1df4aa54d0\" is a generic use of the noun held-out:7b1df4aa54d0 (noun modifier context), not a name; the marks cover exactly the word."
+ },
+ "U4414": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in \"O(1) complexity\" (computational complexity). The marks cover exactly the word, and it is not in a name. The program probably missed it because of the adjacent LaTeX."
+ },
+ "U4416": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun in a list of tasks (interpretation, diagnosis, design, simulation); a genuine use, not a name."
+ },
+ "U4417": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"controls\" is a plural noun (the controls) modifying \"condition\" in a hyphenated compound. The marks cover exactly the word, and it is not part of a name."
+ },
+ "U4419": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cerebral held-out:11ee3fc840ad\" is an ordinary noun use of held-out:11ee3fc840ad, not a name; marks cover exactly the word."
+ },
+ "U4421": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (Significations: Signs, Symbols, and Images...), so it is a name; leaving it out was correct."
+ },
+ "U4418": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user\" is a noun (possessive \"user's\", with an odd quote mark). It is not in a name, and the marks cover exactly the word, so it should have been kept."
+ },
+ "U4420": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:5ff5c82d203d is part of the title of Hooker & Greville's book held-out:5ff5c82d203d Filicum (a Latin title), so it is a name and not a use of held-out:5ff5c82d203d."
+ },
+ "U4423": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behaviour\" is a noun (British spelling) in \"intelligent adaptive behaviour\"; not in a name; the marks cover the whole word."
+ },
+ "U4424": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embedding data\" is a gerund used as a verb (embed), and VERB is a studied part of speech; not in a name, span is exact."
+ },
+ "U4422": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This is the title of another work, listed with its author (Tracey Owens Patton). A word in a cited title is a name, not a use. Here \"held-out:2c676bb34422\" is also a verb-like gerund taking an object."
+ },
+ "U4426": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f6604b2573e2 media\" - adjective modifying media; a genuine use of held-out:f6604b2573e2, not in a name."
+ },
+ "U4425": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the having of beliefs\" is a nominalized noun use, not verb or aux, so leaving it out was correct."
+ },
+ "U4428": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1b596f30c66f\" is a noun in the generic statistical technique (Generalized Estimating held-out:1b596f30c66f), not a name. The marks cover exactly the word, so the program should have kept it."
+ },
+ "U4429": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Artificial Neural Network\" is a generic technique, not a name. It is a noun use, and the marks cover exactly the word."
+ },
+ "U4430": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun meaning routine behaviors (media held-out:50fa17396b00); not inside a name (Times-held-out:7dc7c59f90ed Center is the name, not this word)."
+ },
+ "U4427": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Medium ethics\" is a noun modifier (meaning media ethics), so it is a use of the noun. It is not in a name. The missing space after the period probably caused the miss."
+ },
+ "U4433": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a cited work's title (listed with authors, reference-style), so it counts as a name, not a use."
+ },
+ "U4434": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is used as a noun (Roman held-out:ab139acf9360/poet), not in a name; marks cover just the word, so it should have been kept."
+ },
+ "U4431": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"IaaS clouds\" is a plural noun use of cloud (cloud computing), not a name, so it should have been kept."
+ },
+ "U4432": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The passage is Latin. The marked \"cognition\" is a fragment of \"cognitionis\" split by OCR, and it also sits in a cited work title (De cognitione). It is not an English use, so leaving it out was correct."
+ },
+ "U4435": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:2c676bb34422 of hypotheses\" is a nominal -ing form (with the and of), so it is a noun use, not in a name."
+ },
+ "U4436": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"simulations\" is a plural noun, a generic use outside any name, and the marks cover the word exactly."
+ },
+ "U4437": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"controlling\" here is a verb gerund taking a direct object (\"nuclear reactor power\"), not a noun use, so leaving it out was correct."
+ },
+ "U4438": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:d573b31a4663\" is French, in the place name Canal des held-out:d573b31a4663 (a waterway); not the English adjective held-out:d573b31a4663."
+ },
+ "U4439": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexity\" is a noun (modified by \"system\"), a plain use, not in a name; marks cover exactly the word."
+ },
+ "U4441": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:6b293b43d2b1' (affinity); not in a name or title."
+ },
+ "U4440": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agency\" is used as a noun (capacity to act) in \"social agency\", not inside a name, and the marks cover exactly the word."
+ }
+}

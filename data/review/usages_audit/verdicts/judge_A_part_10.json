@@ -1,0 +1,252 @@
+{
+ "U0500": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67\" is a plural noun, a generic term for user held-out:96da49af8e67 in design, not a name; the marks cover the word exactly."
+ },
+ "U0501": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a plain noun (a scholar's held-out:19d5e41de2db), not in a name; the marks cover the word exactly."
+ },
+ "U0502": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective modifying \"Greeks and Egyptians\"; it is not part of a name."
+ },
+ "U0505": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intentionality\" is used as a noun (perceptual intentionality), not in a name; the marks cover the whole word."
+ },
+ "U0504": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'the held-out:bafa5557897f' as an institution, not a name; marks cover exactly the word."
+ },
+ "U0503": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(mis)alignment\" means alignment or misalignment. Here it is a noun modifier in \"alignment combinations\", and the marks cover exactly \"alignment\"."
+ },
+ "U0507": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9\" is a plural noun (grammatical held-out:11f8f1ec4ec9) in linguistic underspecification; a genuine noun use, not a name, span is exact."
+ },
+ "U0509": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"underlying representations\" is a plural noun use of representation, in a generic phonological sense, not part of a name."
+ },
+ "U0508": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"data held-out:7d0f24edc7fd\" is a noun use (-ing form as noun/modifier), generic technique, not a name; span covers the word."
+ },
+ "U0511": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun, object of \"stimulated\". The marks cover exactly the word, and the following en dash is punctuation. The program should have kept it."
+ },
+ "U0512": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Vehicle Social Networks\" is a generic term (VSNs), not a named system. The marked span covers exactly \"Social Networks\", a noun use."
+ },
+ "U0506": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Value Embedding\" is a descriptive, capitalised label for the concept of embedding values. It is the authors' own proposed account, not a named work, product or title, so it is a noun use that should have been kept."
+ },
+ "U0515": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective modifying \"Zen philosophy\"; Zen philosophy is a general tradition, not a named entity, so it is a valid use."
+ },
+ "U0516": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Spelled-out generic term \"Artificial Intelligence\" in an acronym expansion; a generic term, not a name, so it is a valid noun use."
+ },
+ "U0514": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited chapter, which counts as a name, so leaving it out was correct."
+ },
+ "U0513": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence rates\" is a noun used as a modifier. It is a real use, with the marks covering exactly the word. The attached parenthesis probably caused the miss."
+ },
+ "U0517": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun use (oral contraceptive users), the marks cover the word exactly, and it is not in a name. The program should have kept it."
+ },
+ "U0518": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:c0dcb92b6a30\" is a plain noun use (the study's held-out:c0dcb92b6a30), not in a name; the marks cover exactly the word. The program should have kept it."
+ },
+ "U0519": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information appliances\" is a noun modifier, a generic term, not a name; marks cover exactly the word."
+ },
+ "U0520": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'interpretation' (a more logical interpretation of Factor M); not in a name, and the marks cover exactly the word."
+ },
+ "U0521": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"models\" is a plain noun (scientific models), not part of a name; span covers the word."
+ },
+ "U0522": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"court held-out:c0dcb92b6a30\" means official records of proceedings. This is a noun use of the word, not part of a name, and the marks cover exactly the word."
+ },
+ "U0524": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:1b596f30c66f' (the act of equating or identifying), not in a name. The marks cover exactly the word."
+ },
+ "U0523": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Numerical Aerodynamic Simulation Facility (NASF)\" is the name of one specific facility, so leaving it out as a name was correct."
+ },
+ "U0510": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "The sentence is a bare title with no signs of citing another work (no authors, no quotation, no reference). It most likely stands as the abstract's own title, which counts as an ordinary use of 'cognition', a noun. It should have been kept."
+ },
+ "U0527": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"in mind\" is the noun mind, in the idiom 'purpose we have in mind'; not a name, span covers exactly the word."
+ },
+ "U0526": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cerebral held-out:11ee3fc840ad\" is an ordinary noun use of held-out:11ee3fc840ad; the publisher/book citation earlier doesn't contain the word, and the marks cover exactly the word."
+ },
+ "U0525": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Models\" in Hidden Markov Models is a noun in a generic technique, not a name; the marks cover the word exactly, so it should have been kept."
+ },
+ "U0528": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Meaning(s)' in a table-of-contents heading, which counts as an ordinary use. The mark covers the word, and the '(s)' is just the plural."
+ },
+ "U0529": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Iconic memory\" is a generic cognitive-psychology term, used as a noun modifier/noun; not a name."
+ },
+ "U0532": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"social held-out:96da49af8e67\" is a generic noun use (Goffman/face theory sense), not a name; span covers the word exactly."
+ },
+ "U0530": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"minds\" is a plural noun (\"can be minds\"), not a verb, so it should have been kept."
+ },
+ "U0531": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'social networks' (online platforms); capitalization doesn't make it a name; span covers the phrase exactly."
+ },
+ "U0533": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:7b5614820786' (observations with the held-out:7b5614820786); not part of a name."
+ },
+ "U0534": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'transformers' (neural transformer models that encode numerical methods); not a name, and the marks cover the whole word."
+ },
+ "U0536": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiments of existential authenticity\" is a noun use of embodiment, not in a name; the marks cover the word."
+ },
+ "U0537": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memory\" is a noun modifier in \"memory interventions\"; ordinary use, not a name."
+ },
+ "U0539": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fusion of the images\" is a noun use (binocular image fusion), not in a name; span covers the word exactly."
+ },
+ "U0541": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbols\" is a plural noun, a generic use outside any name; the marks cover the word exactly."
+ },
+ "U0535": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1b596f30c66f\" here is the name of a specific math game (a product), used as a modifier in \"an held-out:1b596f30c66f tournament\". It is a name, so leaving it out was correct."
+ },
+ "U0540": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" is a noun here, Bernstein's concept of held-out:2c676bb34422 alongside classification. It is a generic theoretical term, not a name."
+ },
+ "U0544": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"this embedding\" is a noun use (a mathematical embedding), not inside a name, and the marks cover the whole word."
+ },
+ "U0542": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"component parts\" is a noun modifier before a noun, which counts as a noun use even if tagged ADJ. It should have been kept."
+ },
+ "U0543": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbols\" is a noun, used as a modifier before \"network\". It is not in a name, and the marks cover exactly the word."
+ },
+ "U0538": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Hypertext Transfer held-out:c0dcb92b6a30\" is the spelled-out form of a generic technical standard (HTTP), not a product name. The sentence itself uses \"held-out:c0dcb92b6a30\" as a noun, so it is a use and should have been kept."
+ },
+ "U0545": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' in ordinary use, not in a name; marks cover the word."
+ },
+ "U0547": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"presence of any DSM-IV held-out:07afa72fe9fc disorders\" is an ordinary noun use, not inside a name, and the marks cover exactly the word."
+ },
+ "U0546": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun in the title of the abstract itself, which counts as an ordinary use. The marks cover the whole word."
+ },
+ "U0548": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Part of a directory/file identifier (table_scripts/), a code path, not a use of the word."
+ },
+ "U0549": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"weighted graph neural network\" is a generic technique, not a named system; noun use, marks cover exactly the term."
+ }
+}

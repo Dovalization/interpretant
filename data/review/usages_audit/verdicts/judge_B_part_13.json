@@ -1,0 +1,252 @@
+{
+ "U0651": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:ab139acf9360 Pupil\" is the title of a novel (Iris Murdoch), a named work, so leaving it out as a name was correct."
+ },
+ "U0652": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'symbol' (of unity), a real use; marks cover the exact word; not part of a name."
+ },
+ "U0653": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perception\" is in the French title of a cited work (\"Science et perception dans Descartes\"), so it is a name and not a use. Leaving it out was correct."
+ },
+ "U0650": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning\" in \"multicriteria learning (MCL) algorithm\" is a noun use, a generic technique and not a name. The marks cover exactly the word. Only the missing space before \"(MCL)\" likely caused the program to miss it."
+ },
+ "U0655": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11ee3fc840ad\" is a plain noun (left brain held-out:11ee3fc840ad) in a generic anatomical sense. It is not in a name, and the marks cover exactly the word."
+ },
+ "U0657": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a noun here (model-making held-out:50fa17396b00), a plain use outside any name; marks cover the word exactly."
+ },
+ "U0658": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"political alignment\" is an ordinary noun use, not part of a name; marks cover the whole word."
+ },
+ "U0659": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a noun, part of the hyphenated compound \"held-out:912b00c7764c-controlling\"; it is not in a name and the marks cover just the word."
+ },
+ "U0654": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"develop control of those\" uses control as a noun. The underscore is only a joining artifact, and the marks cover exactly the word."
+ },
+ "U0656": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Guided Social Simulation (GuSS)\" is the coined name of one specific software architecture (\"called ...\"), so leaving it out as a name was correct."
+ },
+ "U0664": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memories\" is a plural noun (mass-storage holographic memories, i.e. storage devices); a valid use of memory, not in a name, and the span covers the word."
+ },
+ "U0663": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"data held-out:7d0f24edc7fd\" is a noun use (noun modifier/compound noun), generic technique, not a name; span covers exactly the word."
+ },
+ "U0661": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:861f9da96b43\" is a plain plural noun. The sentence looks like the abstract's own title or heading, which counts as a use. Nothing shows it is a cited work's title."
+ },
+ "U0666": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memory\" is a noun modifier in \"memory consolidation\", a generic term, not a name; the marked span covers exactly the word."
+ },
+ "U0660": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"eXperiences\" is only part of the spelled-out name of one specific model (DEMOX), so it is inside a name and not a use."
+ },
+ "U0662": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"prompting\" works as a noun here, contrasted with \"confirmation\" as a teaching technique. The marks cover the whole word."
+ },
+ "U0667": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Intentionality (1983) is the title of Searle's book, a cited work, so it is a name and leaving it out was correct."
+ },
+ "U0669": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67\" is a plural noun (generic term for user held-out:96da49af8e67), not a name; should have been kept."
+ },
+ "U0670": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use: a physical held-out:7dc7c59f90ed that reflects light (held-out:7b5614820786-like base)."
+ },
+ "U0674": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'perceptions' is a plural noun, an ordinary use, not in a name; marks cover the word."
+ },
+ "U0665": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Why held-out:bd686ff4fd74?\" is a noun in what looks like the item's own title or heading, so it is an ordinary use. The program should have kept it."
+ },
+ "U0668": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(tele)presence\" means \"telepresence\" and \"presence\". It is a noun use, not a name, and the marks cover the word \"presence\"."
+ },
+ "U0671": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Blind Image Decomposition Network (BIDeN)\" is the name of one specific model, so leaving \"Image\" out as a name was correct."
+ },
+ "U0673": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun modifier in the abstract's own title (the page header of the article itself), so it is an ordinary use, not a cited title. Marks cover exactly 'held-out:ff37e32092ff'."
+ },
+ "U0672": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun in a chapter title within a table of contents (no authors or citations). The codebook counts table-of-contents headings as ordinary uses, so the program should have kept it."
+ },
+ "U0675": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"information processing paradigms\"; generic term, not a name, span covers the full phrase."
+ },
+ "U0676": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Tangible User Interfaces\" is a generic technique term, not a specific named system. \"Interfaces\" is a noun use, so it should have been kept."
+ },
+ "U0679": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interface\" is a noun use, generic term, not a name; marks cover exactly the word."
+ },
+ "U0678": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"minimum held-out:bd686ff4fd74 of error detector\": held-out:bd686ff4fd74 is a noun (noun modifier), a generic term, not a name."
+ },
+ "U0680": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Section heading \"Logical Strength\"; headings are ordinary uses, and \"strength\" is a noun here."
+ },
+ "U0677": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Transformers\" is part of the spelled-out name of the specific model BERT, so it is inside a name and not a use."
+ },
+ "U0682": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"visual prompt\" is a noun, a stimulus on the smartwatch; not a name, and the marks cover exactly the word."
+ },
+ "U0684": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"components\" is a plural noun, a genuine use of the target word, not in a name; the marks cover the word exactly."
+ },
+ "U0683": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"network\" is a plain noun in \"dispersed blockchain network\", a generic term and not a name. The marks cover exactly the word, so it should have been kept."
+ },
+ "U0681": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"platforms\" is a plural noun (software platforms users already use). Not a name, and the marks cover the whole word, so it should have been kept."
+ },
+ "U0685": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"sense of agency\" is a common noun use, not in a name; the marks cover exactly the word."
+ },
+ "U0686": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'held-out:ee104561c1ce' (plural), generic, not in a name; marks cover the word exactly."
+ },
+ "U0687": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"system\" is a noun modifier in \"AI system building\"; generic use, not a name, and the marks cover exactly the word."
+ },
+ "U0688": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the online medium\" is a noun use (means of delivery), not in a name; span covers exactly the word."
+ },
+ "U0689": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"component tasks\" is a noun modifier, which counts as a noun use; the ADJ tag was a mistake, so it should have been kept."
+ },
+ "U0692": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Clouds\" is the title of Aristophanes' play, a title of another work, so it counts as a name and not a use."
+ },
+ "U0693": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intentionality' in a list of aspects; not a name, span is exact."
+ },
+ "U0695": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretations\" is a plural noun, an ordinary use of the target word, not in a name; the marks cover the word exactly."
+ },
+ "U0694": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"dietary held-out:50fa17396b00\" is a plain noun use of held-out:50fa17396b00, not in a name; span covers the word."
+ },
+ "U0690": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is a plural noun use inside the hyphenated WIMP expansion. WIMP is a generic interface paradigm, not a name, and the marks cover exactly the word."
+ },
+ "U0691": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:e7866e6303be constraints\" is a noun modifier (like \"held-out:e7866e6303be structure\"), so it counts as a noun use. It is not a name, and leaving it out as ADJ was a mistake."
+ },
+ "U0696": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbol\" is used as an ordinary noun (the lotus as a recurring symbol), not in a name; the marks cover exactly the word."
+ },
+ "U0697": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is an ordinary noun (the held-out:19d5e41de2db of philosophy), not part of a name."
+ },
+ "U0699": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'held-out:5ff5c82d203d' (UI held-out:5ff5c82d203d for a parameter); not a name, span is exact."
+ },
+ "U0698": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Here \"Alignment\" is a noun for a generic constraint family in Optimality Theory, not an organisation name. It should have been kept."
+ }
+}

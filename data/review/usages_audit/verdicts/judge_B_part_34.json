@@ -1,0 +1,252 @@
+{
+ "U1700": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Convolutional Neural Network\" is a generic technique, not a coined name, so it should have been kept as a use."
+ },
+ "U1702": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'consciousness' (regained consciousness); not a name, span exact."
+ },
+ "U1704": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representations\" is a plural noun use of the target term, not in a name, and the marks cover the whole phrase."
+ },
+ "U1703": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"medium-density\" is adjectival (medium = moderate), not the noun sense; a hyphenated part but the word is an adjective here and the missed item should not count as noun use."
+ },
+ "U1705": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:86a125382979\" is a plural noun and part of the hyphenated compound \"held-out:86a125382979-based\"; generic use, not a name, so it should have been kept."
+ },
+ "U1706": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The marked words are in the title of another cited work (a Garnet conference paper), so they are a name and not a use."
+ },
+ "U1701": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"noise-feedback loop\" is a noun use of feedback loop (a control loop in a quantizer system); not a name, and the marks cover the term."
+ },
+ "U1708": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0 theory\" is a generic scientific theory; held-out:10c5166f4af0 is a noun modifier, not a name."
+ },
+ "U1709": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"neural network\" is a generic noun (modifier in a hyphenated compound with correlator); a valid use, not a name, and the span covers exactly the term."
+ },
+ "U1712": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'cognitions' is a plural noun use of cognition, not in a name, and the marks cover the word exactly."
+ },
+ "U1710": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is used as an ordinary noun, contrasted with logic; not a name, and the span is exact."
+ },
+ "U1707": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(re)held-out:2c676bb34422\" is a noun use (\"patterns of narrative (re)held-out:2c676bb34422\"). The marks cover \"held-out:2c676bb34422\" exactly, and it is not in a name."
+ },
+ "U1711": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (Intentionality, Minds and Perception, ed. Castaneda), so it is a name and leaving it out was correct."
+ },
+ "U1713": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'held-out:9384bbe72d46' in a table-of-contents heading; ordinary use, not a name."
+ },
+ "U1714": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'behaviour' is a noun (spelling variant of behavior) describing the beetle's behavior; not part of a name, span is exact."
+ },
+ "U1715": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intentionality\" is a noun use, a dimension of self-disclosure. It is not in a name, and the marks cover exactly the word."
+ },
+ "U1716": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Inside the title of another cited article (in quotes), so it is a name and leaving it out was correct."
+ },
+ "U1718": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"models\" is a plain noun (statistical models an end-user uses), not in a name; span covers the word exactly."
+ },
+ "U1717": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behavior Therapy Training Institute\" is a named organisation, so leaving it out as a name was correct."
+ },
+ "U1720": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feedback synapse\" uses feedback as a noun modifier, so it is a noun use and not part of a name."
+ },
+ "U1722": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:e39a19f9b2b4' (feelings/views) used as an ordinary word, not in a name; span covers the word."
+ },
+ "U1721": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"point of fusion\" (flicker fusion) is an ordinary noun use, not in a name; it should have been kept."
+ },
+ "U1723": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"minds\" is a plural noun (creative minds), a genuine use of mind; marks cover the whole word. OCR noise elsewhere (look:_ng) is irrelevant."
+ },
+ "U1724": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'emergence' (the appearance of variations); not in a name, and the marks cover the whole word."
+ },
+ "U1726": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'computation' used as an ordinary noun, in 'the computation of the series'; not a name, marks cover the word exactly."
+ },
+ "U1727": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun, a plain use. The marks cover just the word, and the dash after it is punctuation."
+ },
+ "U1719": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"hierarchical attention fusion (HAF)\" is the coined name of the authors' own specific framework, so \"fusion\" sits inside a name. The later \"hierarchical fusion\" is a separate, generic use."
+ },
+ "U1729": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"components\" is a plain noun use (system parts), not in a name; the marks cover the word exactly."
+ },
+ "U1725": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce\" in \"Godel's held-out:ee104561c1ce\" is a plural common noun for Gödel's results, not a title or named law. It is a real use the program should have kept."
+ },
+ "U1730": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"components\" is a plural noun, a genuine use of the target word. The marks cover exactly the word, and it isn't in a name."
+ },
+ "U1732": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Social cognition\" is a generic noun use of cognition, not a name; the marks cover the word exactly."
+ },
+ "U1731": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behaviour\" is part of the organisation name Association of Malaysian Environment-Behaviour Researchers, so leaving it out was correct."
+ },
+ "U1728": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67 non grata\" is an English-borrowed phrase, and \"held-out:96da49af8e67\" is a noun in it. It is not a name, so it should have been kept as a use."
+ },
+ "U1733": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plural noun, a plain use of user, not in a name; span covers the word."
+ },
+ "U1734": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:86a125382979\" is used as a common noun for the philosophical topic, not in a name; the marks cover exactly the word."
+ },
+ "U1735": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"most held-out:32a54748ce0a\" is an adjective use of held-out:32a54748ce0a; marks cover exactly the word."
+ },
+ "U1736": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective modifying \"eye movement\"; a generic description, not a name."
+ },
+ "U1738": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Social Control\" is a table-of-contents heading, which counts as an ordinary use; \"control\" is a noun here (noun modifier/head)."
+ },
+ "U1739": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is used as an ordinary noun (descended into held-out:10c5166f4af0), not in a name; marks cover the word exactly."
+ },
+ "U1737": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Memories\" is a plural noun use of memory inside the generic technique term Long Short-Term Memory (LSTM). It is not a coined name, and the marks cover the whole word."
+ },
+ "U1740": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plain noun use, not in a name; marks cover exactly the word."
+ },
+ "U1743": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the place name Grand held-out:d573b31a4663, Mich. (a city), in a citation; also a noun, not the adjective."
+ },
+ "U1742": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plain noun use, not in a name or title; marks cover the word exactly."
+ },
+ "U1741": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'held-out:07afa72fe9fc' (correlated with held-out:07afa72fe9fc); not in a name, marks cover exactly the word, so it should have been kept."
+ },
+ "U1744": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:6b293b43d2b1\" in \"held-out:6b293b43d2b1 foster care\" is a noun modifier, which counts as a noun use. The ADJ tag was a mistake, so the program should have kept it."
+ },
+ "U1745": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"a thorough held-out:3cff64e5f947 in\" is a noun use (foundational knowledge), not in a name, and the marks cover exactly the word."
+ },
+ "U1748": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is used as an ordinary noun (the emergence of Internet held-out:15a9a9ab2b92); not in a name, and the marks cover the word exactly."
+ },
+ "U1747": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cloud computing\" is a generic technique term, not a name; \"cloud\" is a noun modifier here."
+ },
+ "U1749": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meanings\" is a plural noun, a plain use of meaning (senses of 'get'); marks cover the word exactly."
+ },
+ "U1746": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Mediums and Magical Things\" is the title of the book under review, so it is a name and not a use of the word."
+ }
+}

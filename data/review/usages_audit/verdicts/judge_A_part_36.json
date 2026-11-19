@@ -1,0 +1,252 @@
+{
+ "U1801": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"spatial held-out:f66e6d2190f6\" is the ability being tested, outside the test name \"Identical Blocks Test\"; noun use, marks exact."
+ },
+ "U1802": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective modifying \"held-out:d4bed87430ea\"; \"held-out:d573b31a4663 held-out:d4bed87430ea\" is a generic technique, not a name."
+ },
+ "U1803": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"platforms\" is a plural noun (hardware and operating system platforms), not part of a name."
+ },
+ "U1800": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f151e0c23aaf Health in Nutrition and Kinesiology (THINK)\" is the name of one specific program, so leaving the word out as a name was correct."
+ },
+ "U1805": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is a plural common noun meaning opinions or views expressed; it is not part of a name. The marks cover the whole word."
+ },
+ "U1804": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Section heading of the chapter's own table of contents; 'held-out:ee104561c1ce' is an ordinary plural noun use, not a name."
+ },
+ "U1806": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a cited work's title in a reference list, so it counts as a name and leaving it out was correct."
+ },
+ "U1808": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Perceptions\" is a plural noun in the document's own title, which counts as an ordinary use. The OCR noise before it is unrelated."
+ },
+ "U1809": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11ee3fc840ad\" is in the title of a cited book (Oskar and Cecile Vogt: from the Neo-held-out:11ee3fc840ad to Bumble Bees), listed with author and genre. Titles of other works count as names, so leaving it out was correct."
+ },
+ "U1810": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Call of held-out:19d5e41de2db\" is a specific named game (product), so \"held-out:19d5e41de2db\" is inside a name; leaving it out was correct."
+ },
+ "U1811": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the organisation name 'American held-out:b3ea1fd57831 Fellowship', so it is not a use."
+ },
+ "U1807": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"multi_Agent\" is a variant spelling of \"multi-agent\". It is the noun agent as part of a compound, used generically, and the marks cover exactly \"Agent\"."
+ },
+ "U1812": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intelligence' (embodiment of intelligence), not in a name; span covers the word exactly."
+ },
+ "U1813": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'computation' is a plain noun here (SRAM-type computation), not in a name."
+ },
+ "U1814": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"CGI-held-out:da17f59c700d\" is a plural noun use of held-out:da17f59c700d as part of a hyphenated word; it's a generic term, not a name, and the marks cover just \"held-out:da17f59c700d\"."
+ },
+ "U1815": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of \"information processing\" (haptic-information processing); marks cover exactly the term, not a name."
+ },
+ "U1816": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cloud free\" data: the noun cloud as a modifier, not in a name; the marks cover exactly the word."
+ },
+ "U1819": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" is a noun here (optical medium, e.g. glass); a genuine use that should have been kept."
+ },
+ "U1820": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use (strength assessment); quotation marks don't make it a name; span covers the word."
+ },
+ "U1818": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Electrical transformer, a noun naming a device; it describes the equipment and is not part of a coined name, and the marks cover just the word."
+ },
+ "U1822": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" used as an ordinary noun, not in a name; marks cover the word exactly."
+ },
+ "U1817": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here \"modeling\" takes a direct object (\"a target\"), so it is a verbal gerund, not a noun use. Leaving it out as a verb was correct."
+ },
+ "U1821": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun in a table-of-contents heading, which counts as an ordinary use. The marks cover exactly the word."
+ },
+ "U1823": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Developmental Embodiment Research\" is a generic field/approach, not a named organisation, so this is a real use of embodiment (noun) and should have been kept."
+ },
+ "U1826": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' used as an ordinary noun (perceptual illusion), not in a name; marks cover the whole word."
+ },
+ "U1827": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is used as a common noun for melatonin, not in a name; the marks cover exactly the word."
+ },
+ "U1824": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "CLOUDS is the name of one specific app (a coined system name), not a use of the noun cloud, so it was correctly not kept."
+ },
+ "U1829": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" as a noun (communication medium) in hyphenated \"medium-specific\"; any part of speech counts in hyphenated compounds; not a name; span covers exactly the word."
+ },
+ "U1828": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning that...\" is a participle of the verb \"mean\" (= which means that), not the noun, so leaving it out was correct."
+ },
+ "U1830": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:e7866e6303be' used generically; not in a name; span covers the word."
+ },
+ "U1825": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(bi)simulation\" is shorthand for \"simulation\" and \"bisimulation\". The marked \"simulation\" is a noun use in a generic technical term, not a name, and the span is exact."
+ },
+ "U1831": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"CULTURAL SYMBOLS\" in the keywords line is a plain noun use of symbol (plural), not a name; the marks cover the whole word."
+ },
+ "U1832": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7d0f24edc7fd official\" uses held-out:7d0f24edc7fd as a noun modifier (the held-out:7d0f24edc7fd industry). It isn't part of a name, so it counts as a noun use."
+ },
+ "U1834": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user\" is a noun modifier in \"user preferences\"; a real use, not in a name, and the marks cover exactly the word."
+ },
+ "U1833": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun \"hallucinations\" in a generic coined phrase (\"pedagogical hallucinations\"), not a name. Should have been kept."
+ },
+ "U1835": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexity\" is a noun in \"perceived complexity\", a generic term and not a name. Mentioning it as a term counts as a use, and the marks cover exactly the word."
+ },
+ "U1837": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"under the control of\" is a noun use of control; typo \"fo\" doesn't affect it; span covers the word exactly."
+ },
+ "U1836": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:32a54748ce0a' is used as a verb (visit often), not an adjective, so leaving it out was correct."
+ },
+ "U1839": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mind\" is a noun here (in the mind), outside any name, and the marks cover exactly the word."
+ },
+ "U1840": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'transformer' (device converting forces, in the sense of a transducer); not a name; span covers the word exactly."
+ },
+ "U1838": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The marked word is in the title of a book (cited work), so it counts as a name, not a use."
+ },
+ "U1844": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'writing prompts' is a plural noun use of prompt; the marks cover exactly the word."
+ },
+ "U1842": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"line of held-out:15a9a9ab2b92\" is an ordinary noun use, not in a name; marks cover the word exactly."
+ },
+ "U1843": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:15a9a9ab2b92\" is used as an ordinary noun in \"prowar held-out:15a9a9ab2b92\"; it is not in a name, and the marks cover the whole word."
+ },
+ "U1841": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"knowledge representation\" is a generic term used as a noun. The underscore only replaces a space in a list of terms. It is not a code identifier, and the marks cover exactly the word."
+ },
+ "U1845": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is an adjective modifying \"sleep snoring\"; the marks cover exactly the word, and the missing space after the comma explains why it was missed."
+ },
+ "U1847": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cognition\" is used as an ordinary noun, not in a name, and the marks cover exactly the word."
+ },
+ "U1846": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"consciousness raising\" is a generic technique term. Consciousness is a noun modifier here, so it is a valid use and not a name. The attached quote mark probably caused the miss."
+ },
+ "U1849": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"linear held-out:1b596f30c66f\" is a plain noun use, not in a name, and the marks cover the word exactly."
+ },
+ "U1848": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'intelligence' is the ordinary noun, part of the hyphenated 'intelligence-display'. It is not in a name, and the marks cover just the word."
+ }
+}

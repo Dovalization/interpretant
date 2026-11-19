@@ -1,0 +1,252 @@
+{
+ "U0073": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The text says the agent is \"named interactive agent\", so the phrase is the name of this one system. Leaving it out as a name is correct."
+ },
+ "U0135": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun in the volume's own table-of-contents heading, which counts as an ordinary use. It is not a quoted citation of another work's title, so it should have been kept."
+ },
+ "U0298": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Gödel's Incompleteness held-out:ee104561c1ce\" names specific results, like a named law, so the word is inside a name."
+ },
+ "U0301": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Participial adjective (the structure that grounds Christianity), like 'supporting structure'. It is a verb form, not a noun modifier, so leaving it out was correct. Borderline."
+ },
+ "U0323": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9\" labels the held-out:11f8f1ec4ec9 key-mapping condition, set against the random ones. It works as a noun or noun modifier, outside any name, and the marks cover exactly the word."
+ },
+ "U0406": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Capitalised 'Information Processing Department' names one specific organisational unit at Westinghouse Baltimore; words inside the name are not a use, so leaving it out was correct despite the indefinite article."
+ },
+ "U0372": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Garbled 'most frequently used': the word acts as an adverb on 'used', not an adjective. The NOUN tag is wrong, but leaving it out is fine."
+ },
+ "U0155": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Reads as [non-mental] representations: 'mental' belongs to the adjective 'non-mental', so the compound 'mental representation' isn't used. Borderline."
+ },
+ "U0491": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The sentence is just a title. Nothing marks it as another work being cited (no authors, no reference list), so it is most likely the abstract's own title, which counts as an ordinary use. 'held-out:bafa5557897f' is a noun modifier in 'held-out:bafa5557897f camp', and the marks cover exactly the word."
+ },
+ "U0510": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "A bare title with no authors, quotes or reference context, so most likely the abstract's own title. 'Cognition' is an ordinary noun use and should have been kept."
+ },
+ "U0506": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Affordance Account of Value Embedding\" is the capitalised name the paper gives its own specific proposed account, much like a named model, so leaving it out as a name was correct."
+ },
+ "U0573": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "'an APL Users Group' is a proposed group, and the indefinite article makes it generic. 'Users group' is a common term, here only capitalised, not the name of an existing organisation. 'Users' is a noun use and should have been kept."
+ },
+ "U0623": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun in 'distributed simulation', in the volume's own table of contents, which counts as an ordinary use under the codebook. Marks cover the word exactly."
+ },
+ "U1022": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:ff37e32092ff'. The line stands alone as the abstract's own title, not a cited work, so it is an ordinary use. The marks are exact."
+ },
+ "U1115": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'held-out:02b12c17f936' sits inside the hyphenated word 'held-out:02b12c17f936-moderns', where any part of speech counts; the lowercase phrase is a description, not a name."
+ },
+ "U0645": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'time to held-out:d4bed87430ea' reads as an infinitive verb (time needed to held-out:d4bed87430ea). A countable noun would need an article, so the VERB tag is correct and leaving it out is right."
+ },
+ "U0792": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Inside the title of a chapter credited to its author (Y. Kato) in an edited volume's contents list. That makes it the title of another work, so it is a name."
+ },
+ "U1241": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Decision Invariance held-out:ee104561c1ce\" names one specific result, the same as a named law, so leaving it out as a name was correct. Borderline."
+ },
+ "U1460": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the volume's own table of contents counts as an ordinary use; 'Artificial Intelligence' is a generic term, noun."
+ },
+ "U1431": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Request-Subrequest held-out:c0dcb92b6a30\" is the capitalised coined name of one specific held-out:c0dcb92b6a30 the authors introduce (paired with \"Local Caching held-out:c0dcb92b6a30\"), so it is a name; leaving it out was correct."
+ },
+ "U1535": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun in the abstract's own table-of-contents heading, with no authors or reference list. The codebook counts these as ordinary uses."
+ },
+ "U1703": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of hyphenated 'medium-density'; any part of speech counts in a hyphenated word; not a name; the marks cover exactly 'medium'."
+ },
+ "U1434": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'Embeddings' inside a descriptive technique term (the sentence calls it a 'technique'). Capitalisation and the acronym don't make it a name under the codebook, and the marks cover the word exactly."
+ },
+ "U1706": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This reads like an entry in an annotated bibliography: a paper title, a reference number (13), then a description ('Conference paper presenting an overview of the Garnet project'). The word sits inside the title of a cited work, so it counts as a name."
+ },
+ "U1624": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a quoted part title of another work, the volume under review, so it counts as a title (a name). It is not the abstract's own heading, so leaving it out was correct."
+ },
+ "U1719": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"hierarchical attention fusion (HAF)\" is the coined name of the authors' own framework, introduced with \"we propose X (acronym), a ... framework\", so this occurrence is inside a name. The later \"hierarchical fusion\" in the same sentence is the generic use."
+ },
+ "U1887": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "The held-out:861f9da96b43' names are Inilah Koran and Pikiran Rakyat. 'Daily held-out:861f9da96b43' is a generic descriptor in title case, so this is a plain noun use that should have been kept. Borderline, since the capitalised phrase could be read as part of the name."
+ },
+ "U1758": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic plural noun 'coding held-out:ee104561c1ce'. This line is the record's own title, which counts as a use. It is not cited with authors as another work."
+ },
+ "U1888": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Gerund 'held-out:d4bed87430ea' takes direct object 'systems' (shared with 'testing'), so it is verbal, not a noun/noun modifier; leaving it out was correct."
+ },
+ "U1971": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The authors give their own technique a coined name: \"a technique, called zone_alignment\", written in identifier style. That makes it a name, so the program was correct not to keep it."
+ },
+ "U1905": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun in the title of the book this abstract describes. That is the abstract's own work, not a cited one, so it is an ordinary use."
+ },
+ "U1963": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Lowercase \"held-out:ab139acf9360 stone\" is a set phrase, not a coined name. \"held-out:ab139acf9360\" is still the noun, and the marks cover exactly that word."
+ },
+ "U2005": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Complexity' in a chapter heading from the abstract's own table of contents. The codebook counts TOC headings as ordinary uses, so it should have been kept."
+ },
+ "U1928": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Trusted Platform Module\" is the coined name of one specific standard (TPM, Trusted Computing Group / ISO/IEC), so \"Platform\" is inside a name and leaving it out was correct."
+ },
+ "U1799": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Parses as (non-mental) representations, i.e. representations that are not mental (photographs); the term 'mental representation' does not occur as a unit, and the span crosses the hyphen."
+ },
+ "U2041": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Running header of this chapter showing its own author and title; the text's own title counts as an ordinary noun use. ORG tag is a mistake, so it should have been kept."
+ },
+ "U2092": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "I agree with judge 2. \"Rouché's held-out:ee104561c1ce\" names one specific held-out:ee104561c1ce, the way a named law does, so \"held-out:ee104561c1ce\" here sits inside a name."
+ },
+ "U2195": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the abstract's own table of contents, which counts as an ordinary use of the noun, not a cited title."
+ },
+ "U2331": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Most likely a non-native rendering of Spanish 'señal' (open-signal TV). The token is still the English word sign, used as a noun modifier, and it is not in a name."
+ },
+ "U2303": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'complexity' in a table-of-contents heading of the volume itself. The codebook counts such headings as ordinary uses, not cited titles."
+ },
+ "U2394": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun in a chapter heading of the book's own table of contents, so an ordinary use. The author in brackets only credits a chapter of this volume; it is not a cited outside work."
+ },
+ "U2323": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'held-out:15a9a9ab2b92' (plural via '(s)') in what reads as the text's own title plus affiliation; no authors or citation marking it as another work, so an ordinary use."
+ },
+ "U2532": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "HWMP is the name of one specific held-out:c0dcb92b6a30 (the IEEE 802.11s routing held-out:c0dcb92b6a30), so \"held-out:c0dcb92b6a30\" sits inside a coined name even though it is lowercase."
+ },
+ "U2620": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in a heading from the book's own table of contents; the codebook counts these as ordinary uses, not titles of other works."
+ },
+ "U2734": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'transformers' meaning hardware units that perform the FFT, a real sense of the word. Not OCR damage, not a name, and the span is exact."
+ },
+ "U3236": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in a chapter heading from the volume's own table of contents. The codebook counts these as ordinary uses, not cited titles."
+ },
+ "U2618": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"a Jordanian Medical Social Network\" uses the indefinite article, so it describes a kind of system rather than naming one product. Capitals and an ad hoc acronym don't make it a name, so it is a noun use the program should have kept."
+ },
+ "U2886": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the coined label of the authors' specific proposed model, \"BERTSUM Penultimate+Transformer\", so it is inside a name and not a use."
+ },
+ "U3263": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Title of Aristophanes' play 'The Clouds' (singular verb 'fails', capitalised mid-sentence, a source of testimony about Socrates). A work title is a name, not a use."
+ },
+ "U3667": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:c0dcb92b6a30\" is inside the coined name of the paper's own proposed system, the Distance And Utilization based Routing held-out:c0dcb92b6a30 (DAU). This is a name, not a generic term."
+ }
+}

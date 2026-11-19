@@ -1,0 +1,252 @@
+{
+ "U1300": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'agencies' is a plain common noun, not part of a name, and the marks cover the whole word."
+ },
+ "U1301": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is used as a noun (grammatical held-out:34711782a046 / noun class system), generic term, not a name; marks cover exactly the word."
+ },
+ "U1302": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Convolutional Neural Network is a generic technique, not a named system; \"Neural Network\" is a valid use, and the marks cover the full term."
+ },
+ "U1303": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"structural held-out:1b596f30c66f model\" is a generic technique; held-out:1b596f30c66f is a noun modifier, not a name."
+ },
+ "U1304": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'social networks' (online social networking sites); marks cover the whole term and it is not a name."
+ },
+ "U1306": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'held-out:861f9da96b43' (national held-out:861f9da96b43), not a name; span covers the word exactly."
+ },
+ "U1307": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"image generator function\": image is a noun modifier, a generic term and not part of a name (the name is CHARGE Interactive Graphics System)."
+ },
+ "U1309": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:1b596f30c66f' is a plain noun use (linear prediction held-out:1b596f30c66f), not in a name; span covers the word."
+ },
+ "U1308": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'Presence' is part of the title of a cited book (Eucharistic Presence: A Study in the Theology of Disclosure), so it counts as a name and was correctly left out."
+ },
+ "U1305": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"ventral attention\" network is a generic descriptive brain-network term, not a coined name. \"attention\" works as a noun modifier and the marks cover exactly the word."
+ },
+ "U1311": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Graph Transformers\" is a generic architecture type, plural noun use of transformer, not a specific named model; should be kept."
+ },
+ "U1312": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mind\" is used as a noun (positing mind as a tabula rasa), not part of a name; span covers exactly the word."
+ },
+ "U1310": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Graph Attention Network is a generic model type, not a specific named product; 'Attention' is a noun use and should have been kept."
+ },
+ "U1313": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading; headings count as ordinary uses. 'held-out:bd686ff4fd74' is a noun here, marks cover the word exactly."
+ },
+ "U1314": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'held-out:7b1df4aa54d0' (town and social held-out:7b1df4aa54d0), not a name; span covers the whole word."
+ },
+ "U1315": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"visual perception\" is a plain noun use of perception, not in a name; the marks cover exactly the word."
+ },
+ "U1317": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cognition\" is part of the organisation name Nijmegen Institute for Cognition Research and Information Technology, so leaving it out was correct."
+ },
+ "U1320": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"working memory\" is a general cognitive term, a noun use of memory, not a name; the marks cover the word exactly."
+ },
+ "U1316": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mind\" is a noun in \"ideas in the mind\"; it is a plain use, not part of a name or title, and the marks cover exactly the word."
+ },
+ "U1318": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'Artificial Intelligence' used as a noun, not a name; marks cover the full term."
+ },
+ "U1319": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the name of a specific NSF program (International Research Experiences for Students, IRES), so leaving it out was correct."
+ },
+ "U1322": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic control-engineering noun 'feedback loop', not a name; span covers the full term."
+ },
+ "U1321": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is a plural noun and a generic term (early maladaptive held-out:d7b1fc674098), not a name, so it is a valid use that should have been kept."
+ },
+ "U1323": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective modifying \"Greek world\"; a generic use, not part of a name."
+ },
+ "U1327": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"neural networks\" is a generic noun use (Ising spin neural networks), not a name; the marks cover the full term."
+ },
+ "U1326": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium category\" is an adjective (level), not the noun, so leaving it out was correct."
+ },
+ "U1324": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of Adam Smith's book 'The Theory of Moral held-out:e39a19f9b2b4'. A cited work's title is a name, not a use."
+ },
+ "U1325": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Accelerated held-out:164ebb5df0ea\" is the coined name of the one specific algorithm the authors propose, so leaving it out as a name is correct."
+ },
+ "U1330": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"remote interface\" is a noun use of interface, not in a name, and the marks cover just the word."
+ },
+ "U1329": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'Virtual Reality system', not a named system; span covers the word exactly."
+ },
+ "U1328": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Chapter title listed with its authors (Geschwind and Behan) in a contents list, so it counts as the title of another work, which is a name and not a use."
+ },
+ "U1334": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited work (authors and journal listed), so it counts as a name; leaving it out was correct."
+ },
+ "U1332": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"flow held-out:f66e6d2190f6\" is a noun use, not part of a name; marks cover the word exactly."
+ },
+ "U1331": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Web held-out:86a125382979 Language\" (OWL) is the name of one specific W3C language, so \"held-out:86a125382979\" sits inside a name. Leaving it out was correct."
+ },
+ "U1333": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Hidden Markov model\" is a generic technique, not a name. \"model\" is a noun here, and the marks cover exactly that word. The program probably missed it because \"(HMM)\" is attached to it."
+ },
+ "U1336": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is used as an ordinary noun (diachronic emergence of rara), not in a name, and the marks cover the whole word."
+ },
+ "U1337": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is a verb (visits a brothel), but the word is studied only as an adjective, so leaving it out was correct."
+ },
+ "U1335": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:da17f59c700d\" is a verb (passive participle, \"developed and held-out:da17f59c700d by\"), not a noun use, so leaving it out was correct."
+ },
+ "U1338": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun use, not in a name; marks cover the word exactly."
+ },
+ "U1339": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experience\" is used as a noun (one experience of time), not in a name; span covers the word exactly."
+ },
+ "U1341": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831 diagnosed\" works as a noun modifier (diagnosed by a held-out:b3ea1fd57831), so it is a noun use of the target word. It is not in a name, and the marks cover the whole word."
+ },
+ "U1343": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use in 'graphic user interface' (GUI); not a name, span covers the term exactly."
+ },
+ "U1344": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective modifying Greece; ordinary use, not part of a name (held-out:02b12c17f936 Greece is a generic period/place description)."
+ },
+ "U1342": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:e7866e6303be' in a section heading. Headings count as ordinary uses, and the marks cover the whole word."
+ },
+ "U1345": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a cited work's title (Weizenbaum's 'The Myth of the Last held-out:7b1df4aa54d0') listed with its author, so it is a name; leaving it out was correct."
+ },
+ "U1340": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"User Experience Evaluation Framework for eModeration\" is the coined name of one specific framework, so leaving \"User\" out as a name was correct."
+ },
+ "U1346": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'intentionality' in a generic sense, not in a name or title; marks cover the word exactly."
+ },
+ "U1347": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of another work (English Liberties: Or, the Free-Born Subject's held-out:67415e178146), so it is a name; leaving it out was correct."
+ },
+ "U1349": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Strengths and Difficulties Questionnaire\" is a named scale, so leaving it out as a name was correct."
+ },
+ "U1348": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a noun in \"held-out:19d5e41de2db-based\" (underscore stands in for hyphen) and is not part of a name. The marks cover exactly the word, so it should have been kept."
+ }
+}

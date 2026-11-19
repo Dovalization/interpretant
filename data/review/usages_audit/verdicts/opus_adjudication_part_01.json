@@ -1,0 +1,37 @@
+{
+ "U3766": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:779d6b6eedf0 of Translation\" is the title of Chesterman's book, used here as the name of one specific theory, so the word is inside a name."
+ },
+ "U3896": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "The product name is 'Bio-Rad MRC-500'; 'Confocal Laser Scanning held-out:7b5614820786' is a generic instrument term, and 'held-out:7b5614820786' is a real noun use that should have been kept."
+ },
+ "U4394": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:e39a19f9b2b4' here is part of a quoted French phrase ('le held-out:e39a19f9b2b4 intérieur'), so it is a French word, not an English noun use. The X tag and leaving it out were correct."
+ },
+ "U4232": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This is the title of the book the abstract itself describes, not a cited work. The codebook treats the abstract's own title as an ordinary use, so 'Perception' (noun) should have been kept."
+ },
+ "U4109": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "A chapter title listed with its author (C. Crangle), likely from a contents list, is the title of another work, so it counts as a name."
+ },
+ "U4076": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The book title 'Digital Platforms and the Press' is used in the sentence as the name of the work, not as a heading, so it is a name and leaving it out was correct."
+ },
+ "U4172": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Greek spelling schêma of held-out:d7b1fc674098, used as a noun glossing 'stance' in an English sentence; any spelling and sense counts, so the X tag is a mistake and it should have been kept."
+ }
+}

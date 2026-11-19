@@ -1,0 +1,252 @@
+{
+ "U1101": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:5350e5a87b0b Quest\" is a book title (a work by Mr. Maisel), so the word is part of a name and leaving it out was correct."
+ },
+ "U1103": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Table-of-contents heading, an ordinary use of 'held-out:34711782a046' (noun); not a name, so it should have been kept."
+ },
+ "U1100": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce\" is a plural noun for the generic held-out:ee104561c1ce of Arc Pair Grammar, not the name of one specific held-out:ee104561c1ce, so it is a valid use."
+ },
+ "U1104": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"generative adversarial networks\" is a generic technique, not a named system; noun use, marks cover the word exactly."
+ },
+ "U1102": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "OCR-damaged 'enthymemes'; 'held-out:779d6b6eedf0' is only the end of that word, not the held-out:779d6b6eedf0 noun."
+ },
+ "U1105": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information architecture\" is a generic term, with information as a noun modifier; not a name."
+ },
+ "U1106": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'feedback connections': noun modifier before a noun, a generic term and not a name."
+ },
+ "U1108": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attracted little attention\" is a plain noun use, and the marks cover exactly the word."
+ },
+ "U1109": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computational complexity\" is a generic noun use of complexity, not a name; marks cover exactly the word."
+ },
+ "U1107": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce\" labels the statement that follows, so it is an ordinary noun use and not part of a name. The marks cover exactly the word."
+ },
+ "U1111": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user\" is a plain noun, the recipient of information, and not part of a name. The marks cover exactly the word."
+ },
+ "U1110": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"skeptical held-out:67415e178146\" is a generic noun use (held-out:67415e178146 in held-out:11f8f1ec4ec9 reasoning), not a name; marks cover the word exactly."
+ },
+ "U1112": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'learning' in a table-of-contents heading, which counts as an ordinary use. The marks cover exactly the word."
+ },
+ "U1113": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading, so an ordinary use. \"Java Components\" is a generic noun use of component, not a name, and the marks cover the word."
+ },
+ "U1114": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:bafa5557897f' is a common noun (place where ethics is considered, e.g., held-out:bafa5557897f writing programs); not a name, span is exact."
+ },
+ "U1116": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'held-out:d7b1fc674098' (a classification framework), not a name; span covers exactly the word."
+ },
+ "U1118": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:ee104561c1ce' (a held-out:ee104561c1ce awaiting proof), not in a name; marks cover exactly the word."
+ },
+ "U1117": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "'Minds' is in the title of a cited book (God and Other Minds), so it is a name, not a use."
+ },
+ "U1121": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11ee3fc840ad\" in \"posterior cingulate held-out:11ee3fc840ad\" is a generic anatomical noun use, not a name; the program should have kept it."
+ },
+ "U1119": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The Complexity Principle\" is a specific, capitalised principle the paper itself introduces, so it is a named law and leaving it out was correct."
+ },
+ "U1122": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:15a9a9ab2b92\" is a plural common noun, a generic use. The marks cover the word exactly, and the names after it do not make it a name."
+ },
+ "U1123": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:ff37e32092ff' used as a noun modifier (held-out:ff37e32092ff samples); generic term, not a name; marks cover the word exactly."
+ },
+ "U1115": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is a noun, but it is part of the hyphenated word \"held-out:02b12c17f936-moderns\", where any part of speech counts. The lowercase \"held-out:02b12c17f936-moderns dispute\" is a generic descriptor, not a formal name, so it counts as a use."
+ },
+ "U1120": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading counts as an ordinary use. 'Representations' is a noun, as part of the hyphenated 'LF-Representations', and the marks cover exactly that word."
+ },
+ "U1124": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"grammatical held-out:34711782a046\" is a noun use of held-out:34711782a046 (noun modifier-free, a typological feature); not a name."
+ },
+ "U1125": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embedding\" is a noun here (noun modifier/head in \"2-dimensional word embedding\"), a generic technique, not a name; marks cover the word exactly."
+ },
+ "U1126": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited work (Mandler), so it is a name; leaving it out was correct."
+ },
+ "U1128": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" in \"held-out:ab139acf9360-counselors\" is a plain noun use, part of a hyphenated word; the marks cover the word exactly."
+ },
+ "U1127": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the name of a standards sub-committee (X3L8), so leaving it out as an organisation name was correct."
+ },
+ "U1129": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is an ordinary noun (priority of attention), not in a name."
+ },
+ "U1131": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun use of 'intelligence' (smartness and intelligence), not in a name; span covers exactly the word."
+ },
+ "U1132": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"hallucinations\" is a plural noun use of the target word, outside any name, and the marks cover exactly the word. It should have been kept."
+ },
+ "U1130": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Clouds\" is Aristophanes' play, cited by line number. It is the title of another work, so it is a name and not a use."
+ },
+ "U1133": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Maryland held-out:7dc7c59f90ed/II is the name of a specific system, so it is not a use of the word held-out:7dc7c59f90ed."
+ },
+ "U1135": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'learning' is a noun here (outcome of learning), a plain use, not in a name; span covers the word exactly."
+ },
+ "U1137": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'complexity' is used as an ordinary noun, not in a name; the marks cover exactly the word."
+ },
+ "U1134": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:da17f59c700d\" is a plural noun in what looks like the abstract's own title (a series part IV). Own titles count as ordinary uses, so it should have been kept."
+ },
+ "U1139": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited article in a reference list, so it counts as a name; leaving it out was correct."
+ },
+ "U1136": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'medium' (communication medium, echoing McLuhan's phrase); not a name or title, and the span covers just the word."
+ },
+ "U1138": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having\" is a participle of the verb \"have\" (activities having potential adverse effects), in a studied part of speech, not in a name, and the marks cover exactly the word."
+ },
+ "U1141": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'neural networks' as models; span covers the full term, not a name."
+ },
+ "U1140": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:e7866e6303be' in a table-of-contents heading, which counts as an ordinary use. The marks cover exactly the word."
+ },
+ "U1145": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'agents' is a plural noun, a generic use (algorithmic agents), not in a name; span covers the word."
+ },
+ "U1142": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b Production in Endocrine Tumors\" is the quoted title of a colloquium, so it is a name/title, not the authors' own use. Leaving it out was correct."
+ },
+ "U1148": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'interpretations', an ordinary use, not in a name; the marks cover the word exactly."
+ },
+ "U1143": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"representation\" (with the plural written as \"(s)\"). It is not in a name, and the marks cover the word."
+ },
+ "U1144": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"networked\" is a participle/adjective (\"institutions that are networked\"), not a noun or noun modifier, so leaving it out was correct."
+ },
+ "U1149": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"On the strength of\" is an idiom, but \"strength\" is still the noun, used normally and not in a name."
+ },
+ "U1146": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'having' is the verb 'have' (possession) in a gerund phrase after 'despite'; not in a name, and the marks cover exactly the word."
+ },
+ "U1147": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Systems\" in \"Systems-Based Thinking\" is a plain noun use of system in a hyphenated word. It is in the item's own heading, not a name, and the marks cover just the word."
+ }
+}

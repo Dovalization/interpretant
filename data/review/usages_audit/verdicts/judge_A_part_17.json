@@ -1,0 +1,252 @@
+{
+ "U0850": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'Attention' is in the title of a cited essay, which counts as a name, so leaving it out was correct."
+ },
+ "U0851": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"presence\" in \"virtual and corporeal presence\" is an ordinary noun use, not in a name. The marks cover just the word; the \".iv\" is a footnote marker."
+ },
+ "U0852": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:f66e6d2190f6' in the abstract's own title (all caps). It is an ordinary use, not a name, and the marks cover the whole word."
+ },
+ "U0853": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Verbal held-out:c0dcb92b6a30\" is a table-of-contents part heading, which counts as an ordinary use. It is a generic noun (verbal held-out:c0dcb92b6a30), not a name, and the marks cover just the word."
+ },
+ "U0854": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"writing systems\" is a generic noun use of system, plural, and the marks cover the whole word; it is not part of a name."
+ },
+ "U0855": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use. \"Human Perception\" is the noun, and the marks cover exactly the word."
+ },
+ "U0857": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f6604b2573e2\" is an adjective (relating to viruses) modifying \"screening processes\"; ordinary use, not a name."
+ },
+ "U0856": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plain plural noun, not in a name, and the marks cover exactly the word. The program should have kept it."
+ },
+ "U0858": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Strengths and Difficulties Questionnaire\" is a named scale, so leaving it out as a name was correct."
+ },
+ "U0861": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"System\" is in the title of a cited book (Harrington's A New System on Fire and Planetary Life), so it is a name and leaving it out was correct."
+ },
+ "U0860": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:96da49af8e67', the generic design technique (user held-out:96da49af8e67), capitalised but not a name; marks cover the whole word."
+ },
+ "U0859": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents chapter heading, which counts as an ordinary use. \"Interpretation\" is a noun here and the marks cover exactly the word."
+ },
+ "U0863": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"school systems\" is a generic noun use of system, plural, not a name."
+ },
+ "U0864": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is a plural noun, a generic UI element, not part of a name; the marks cover the word exactly."
+ },
+ "U0865": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"network\" is a noun (noun modifier) in hyphenated \"large-electrical-network analysis\"; generic use, not a name, and the marks cover exactly the word."
+ },
+ "U0866": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:912b00c7764c' is a verb here (\"held-out:912b00c7764c me\"), so leaving it out was correct."
+ },
+ "U0868": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (History and Class Consciousness), so it is a name and leaving it out was correct."
+ },
+ "U0862": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:ee104561c1ce' used generically in what looks like the abstract's own title (a pun on Bolzano-Weierstrass), so it is an ordinary use and the program should have kept it."
+ },
+ "U0867": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:861f9da96b43\" is inside the title of a cited thesis (Hall's thesis), so it is a name and not a use."
+ },
+ "U0869": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Section heading \"held-out:d7b1fc674098\" is the plural noun held-out:d7b1fc674098; headings count as ordinary uses, and the marks cover the whole word."
+ },
+ "U0872": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is used as a noun naming a sensation in a list; not a name, span is exact."
+ },
+ "U0873": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Mentioned as a word (the term \"held-out:86a125382979\"), a noun use; marks cover exactly the word."
+ },
+ "U0871": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Generic noun use ('the held-out:02b12c17f936 Greek held-out:ab139acf9360' = held-out:02b12c17f936 thinkers), not a work title or name; should have been kept."
+ },
+ "U0874": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:d573b31a4663\" is part of the place name Grand held-out:d573b31a4663, Michigan, and is a noun here, not the adjective."
+ },
+ "U0875": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'held-out:ee104561c1ce' (the two held-out:ee104561c1ce in the paper), not a name."
+ },
+ "U0870": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Transformers\" is inside \"Bidirectional Encoder Representations from Transformers\", the spelled-out name of the specific BERT model, so it is a name and not a use."
+ },
+ "U0876": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:bafa5557897f is part of the organisation name held-out:bafa5557897f Advice and Care Trust (Pact), so leaving it out was correct."
+ },
+ "U0877": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:7dc7c59f90ed/II is the name of one specific system (Maryland held-out:7dc7c59f90ed/II), so it is not a use of the noun held-out:7dc7c59f90ed."
+ },
+ "U0878": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Industrial held-out:86a125382979 Group\" is a specific organisation's name, so leaving the word out was correct."
+ },
+ "U0880": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"platforms\" is a plain noun (source/target platforms) and the marks cover just the word; MigriXML is the name, not platforms."
+ },
+ "U0883": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is used as a generic noun term (mentioned as a word); not a name, and the span covers the phrase exactly."
+ },
+ "U0879": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The word is in the title of a cited book, listed with its author (Walter J. Garre). A title is a name, so this is not a use."
+ },
+ "U0882": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning\" modifies \"history\" as a noun modifier (learning history). It is a noun use and not part of a name."
+ },
+ "U0881": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" in the chapter heading is the plural noun. Section headings count as ordinary uses, so it should have been kept."
+ },
+ "U0885": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:07afa72fe9fc\" is a plain noun here (pre- and postoperative held-out:07afa72fe9fc), not in a name; the marks cover exactly the word."
+ },
+ "U0884": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce 1.1\" is a reference to a numbered result in the paper itself, not a name or title, so it is an ordinary noun use that should have been kept."
+ },
+ "U0886": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited work (Dahlbeck's article), so it is a name; leaving it out was correct."
+ },
+ "U0887": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'representation' (development of representation), not in a name; span covers exactly the word."
+ },
+ "U0888": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"30 sec/image\" is the noun image (acquisition time per image/projection); the marks cover exactly the word, not a name."
+ },
+ "U0889": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:07afa72fe9fc\" is part of the named scale Hamilton Rating Scale for held-out:07afa72fe9fc (HAMA), so it is not a use."
+ },
+ "U0890": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"conceptual held-out:10c5166f4af0\" uses held-out:10c5166f4af0 as a common noun, outside any name, and the marks cover exactly the word."
+ },
+ "U0891": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"network\" modifies \"perspective\" (network perspective), so it is a noun modifier and a noun use. The ADJ tag is a mistake, and it should have been kept."
+ },
+ "U0892": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:34711782a046' is a plain noun (age, held-out:34711782a046) with exact span; a valid use that should have been kept."
+ },
+ "U0893": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic use of 'artificial intelligence' as noun modifier in 'artificial intelligence technologies'; not a name; span covers exactly the term."
+ },
+ "U0894": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is a plural noun, a generic use of the target word, and the marks cover the whole word."
+ },
+ "U0895": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:6b293b43d2b1' (degrees of held-out:6b293b43d2b1 between spouses); not in a name, span is exact."
+ },
+ "U0897": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'representation' (political/legal representation of consumer rights); not in a name, span is exact."
+ },
+ "U0898": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:11f8f1ec4ec9 should be...\" is a noun use (the held-out:11f8f1ec4ec9 option/assumption), not in a name, and the marks cover just the word."
+ },
+ "U0896": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Feedback from oncologists\" is a plain noun use, not in a name. The marks cover exactly the word, so it should have been kept."
+ },
+ "U0899": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium quality\" uses medium as an adjective (moderate level), not the noun, so leaving it out was correct."
+ }
+}

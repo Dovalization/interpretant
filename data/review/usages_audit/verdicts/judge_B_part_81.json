@@ -1,0 +1,252 @@
+{
+ "U4051": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Bayesian network\" is a generic technique, used as a noun; not a name."
+ },
+ "U4050": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"few will experience\" is a verb, which is not a studied part of speech, so leaving it out was correct."
+ },
+ "U4052": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:9384bbe72d46\" is a plain noun use, outside any name, and the marks cover the word exactly."
+ },
+ "U4054": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bd686ff4fd74 theory\" is a generic field; held-out:bd686ff4fd74 is a noun modifier here, not a name."
+ },
+ "U4056": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" is used as a noun (types of held-out:2c676bb34422, a generic concept), not part of a name."
+ },
+ "U4053": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Chronic held-out:912b00c7764c\" is the name of one specific research project (\"The research project Chronic held-out:912b00c7764c\"), so it is a name and leaving it out was correct."
+ },
+ "U4055": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Here \"held-out:d7b1fc674098\" is an ordinary noun, a conceptual held-out:d7b1fc674098 of \"organization-Charisma\". It is not a person's name, so it should have been kept."
+ },
+ "U4059": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'information processing' as noun modifier of 'models' (theory/approach), not a named system; span covers exactly the term."
+ },
+ "U4058": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947\" is a verbal gerund taking a direct object (teleology), so it works as a verb, not a noun. Leaving it out was correct."
+ },
+ "U4060": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is the title of another work, listed with its author (Goban-Klas). A word in a cited title is a name, so leaving it out was correct."
+ },
+ "U4057": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control-theoretic\" (hyphen garbled to ?): \"control\" is a noun use as part of a hyphenated word; the marks cover exactly the word and it is not in a name."
+ },
+ "U4061": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Biomedical Platforms\" is the title of a work (book or issue) that \"adds a new dimension\", so it is a name and not a use."
+ },
+ "U4062": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbol\" is a noun modifier in \"flow chart symbol stencil\"; generic use, not a name."
+ },
+ "U4064": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a title of another work in a listed series (held-out:34711782a046 in held-out:15a9a9ab2b92, with authors), so it is a name; leaving it out was correct."
+ },
+ "U4065": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'recurrent neural networks' used as a noun, not a name; marks cover the term exactly."
+ },
+ "U4063": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here 'strength' is used as a verb (meaning 'strengthen'), not a noun, so leaving it out was correct."
+ },
+ "U4067": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:f66e6d2190f6' (three-dimensional held-out:f66e6d2190f6), not in a name; marks cover the word exactly."
+ },
+ "U4068": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:baa86b4dabfd' (declines in held-out:baa86b4dabfd); not in a name, span is exact."
+ },
+ "U4070": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is used as a common noun (a dialectical framework), not inside a name; span covers exactly the word."
+ },
+ "U4069": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intentionality' (the intentionality of piety and sacredness); not in a name or title, and marks cover the word exactly."
+ },
+ "U4071": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is used as an ordinary noun (emergence of subjective phenomena); not in a name, and the marks cover the whole word."
+ },
+ "U4066": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the book's own table of contents, so it is an ordinary use of the noun 'social network'. The author names beside it do not make it a cited title."
+ },
+ "U4072": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"text held-out:7d0f24edc7fd\" is a noun use (data-held-out:7d0f24edc7fd type compound), not a name; marks cover the word exactly."
+ },
+ "U4073": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:7dc7c59f90ed/II is the name of a specific software tool, so the word is part of a product name and not a use of 'held-out:7dc7c59f90ed'."
+ },
+ "U4074": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cloud\" is a noun modifier in \"terminal+cloud computing\". It is a real use and the marks cover exactly the word. The \"+\" probably made the program miss it."
+ },
+ "U4075": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plural noun in a table-of-contents heading, which counts as an ordinary use. The marks cover exactly the word."
+ },
+ "U4077": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perception\" is a noun use, not in a name, and the marks cover exactly the word. The attached apostrophe likely caused the miss."
+ },
+ "U4079": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "\"elle-même\" is French (accent lost); it is not the English noun held-out:779d6b6eedf0."
+ },
+ "U4080": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the book's own table of contents, so an ordinary use of the noun 'consciousness', not a cited title."
+ },
+ "U4078": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a chapter heading in the book's own table of contents, which counts as an ordinary use. It is a noun and the marks cover the word exactly."
+ },
+ "U4083": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (Black Culture and Black Consciousness), so it is a name; leaving it out was correct."
+ },
+ "U4082": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use; 'held-out:50fa17396b00' is a plural noun and the marks cover the word exactly."
+ },
+ "U4081": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Continually Learning held-out:d4bed87430ea (CLP)\" is the coined name of one specific method, so the word sits inside a name and is not a use."
+ },
+ "U4084": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"one-party system\" is a generic noun use of system, not a name; marks cover the word exactly."
+ },
+ "U4076": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Digital Platforms and the Press\" is a book title named in running text, so it is a name and not a use. Leaving it out was correct."
+ },
+ "U4086": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plural noun (bodily held-out:912b00c7764c and pleasures), a genuine use of held-out:912b00c7764c, not in a name; the marks cover the word exactly."
+ },
+ "U4085": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mobile ad hoc network\" (MANET) is a generic term, not a name. This is a noun use, and the marks cover exactly the word, so it should have been kept."
+ },
+ "U4087": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is an adjective modifying \"adaption\"; a normal use, not in a name, span is exact."
+ },
+ "U4089": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretation theory\" is a generic noun modifier use, not a name; marks cover exactly the word."
+ },
+ "U4091": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a generic noun use, not a name, and the marks cover exactly the term."
+ },
+ "U4090": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:ab139acf9360' used as an ordinary word; marks cover the whole word, not in a name."
+ },
+ "U4088": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretations\" is a plural noun use of the target word, not in a name, and the marks cover exactly the word, so it should have been kept."
+ },
+ "U4092": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:164ebb5df0ea\" is a plural noun, a generic use of the word (people who dropped out of the movement), not in a name; the marks cover the word exactly."
+ },
+ "U4093": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited book (Ambiguities of Domination...), so it is a name; leaving it out was correct."
+ },
+ "U4095": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"rat model\" is an animal model; model is a noun (noun modifier use), not a name, and the span covers the word exactly."
+ },
+ "U4098": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:15a9a9ab2b92 analysis\" is a noun modifier; a generic technique, not a name."
+ },
+ "U4096": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun (their experiences with hypertext systems); not in a name, span covers the word."
+ },
+ "U4094": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Marked 'Computation' is part of the title of a cited book (Rabdology: Computation with Napier's Bones), so it is a name, not a use."
+ },
+ "U4097": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cerebral held-out:11ee3fc840ad\" is a journal name, so it is a name and not a use. Leaving it out was correct."
+ },
+ "U4099": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"by held-out:2c676bb34422 health issues\" is a gerund acting as a verb with a direct object, not a noun use, so leaving it out was correct."
+ }
+}

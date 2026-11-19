@@ -1,0 +1,252 @@
+{
+ "U0751": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'user interface' (a consistent user interface), not a name; marks cover the term exactly."
+ },
+ "U0750": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Clouds\" here is Aristophanes' play title (Clouds 518), a cited work, so it is a name and not a use of the word cloud."
+ },
+ "U0752": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plural noun in a table-of-contents heading (\"Pythagoras and His held-out:1c5d119c45e3\"). Headings count as ordinary uses, and it isn't part of a name or title."
+ },
+ "U0753": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'sign' as a noun modifier in 'sign-object' (semiotic term); a genuine noun use, not a name; marks cover exactly the word."
+ },
+ "U0754": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"symbol\" is a stand-in for an unrendered phonetic character in the nonword (\"see text\"). It is not the word used by the authors."
+ },
+ "U0755": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"affordance\" is a noun modifier in \"affordance selection\"; it is not in a name and the marks cover exactly the word."
+ },
+ "U0756": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"in mind\" is the noun mind in the idiom \"have in mind\"; not part of a name, and the marks cover exactly the word."
+ },
+ "U0758": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\" is a plural noun meaning good points; a plain use, not in a name, and the marks cover the word."
+ },
+ "U0757": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behaviours\" is a plural noun (British spelling of behavior). It is one component of the generic ABC analysis, not a name, so it should have been kept."
+ },
+ "U0759": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plural common noun, a valid use; the marks cover the whole word and it is not part of a name."
+ },
+ "U0760": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" is a noun (culture medium) in a plain use, not in a name; the marks cover exactly the word."
+ },
+ "U0761": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"particular attention to\" is an ordinary noun use; the word is not part of a name, and the marks cover exactly the word."
+ },
+ "U0762": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'computation' (an analog computation), not in a name; span covers the word exactly."
+ },
+ "U0763": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:ab139acf9360' used generically; marks cover the whole word, not in a name."
+ },
+ "U0765": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Here 'held-out:d7b1fc674098' is an ordinary noun (held-out:d7b1fc674098 theory in reading), not a name or title, so it should have been kept."
+ },
+ "U0764": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information\" is a noun modifier in the hyphenated generic term \"information-processing system\"; not a name, and the marks cover just the word."
+ },
+ "U0766": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'embodiment' (graphical representation of users in a virtual environment); not a name."
+ },
+ "U0767": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"clinical experience\" - ordinary noun use, not in a name; marks cover exactly the word."
+ },
+ "U0768": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Artificial Intelligence\" here is a generic field term, not a named organisation, so it is a noun use and should have been kept."
+ },
+ "U0769": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use: 'his interpretation of the Bible'; not part of a name or title."
+ },
+ "U0771": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:baa86b4dabfd\" is a noun modifier in \"held-out:baa86b4dabfd wages\", so it counts as a noun use. It is not part of a name."
+ },
+ "U0773": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'affordances' used as an ordinary generic term; not in a name, and the marks cover the whole word."
+ },
+ "U0770": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental image\" is a noun use of image, not in a name, and the marks cover exactly the word. The program should have kept it."
+ },
+ "U0775": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the journal name 'IEEE Transactions on held-out:f66e6d2190f6 and Computer Graphics', a named publication, so leaving it out was correct."
+ },
+ "U0772": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"seven-held-out:e7866e6303be lines\": held-out:e7866e6303be is a noun modifier, which counts as a noun use. The ADJ tag is a mistake, so it should have been kept."
+ },
+ "U0774": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Particle Swarm Intelligence\" is a generic technique term, not a name. \"Intelligence\" is a noun here, and the marks cover exactly the word."
+ },
+ "U0776": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Carr P. and Ruth Collins Learning Center\" is the name of a specific building, so leaving it out as a name was correct."
+ },
+ "U0777": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embedding\" here is the verb (gerund) 'embedding an image in a causal framework'; verb is a studied part of speech, not in a name."
+ },
+ "U0778": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Coaching Behavior Assessment System\" is a specific named instrument (CBAS), so \"Behavior\" is inside a name and was correctly left out."
+ },
+ "U0781": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use: 'the interpretation of experimental observations'; not part of a name, and the marks cover exactly the word."
+ },
+ "U0779": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"transformer toys\" is a noun used as a modifier. It refers to toys that transform, not to a named model or system, so it counts as a use."
+ },
+ "U0783": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"system\" is a plain noun in \"structure of cognitive system\", a generic term not a name, and the marks cover exactly the word."
+ },
+ "U0782": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed\" is a noun in Hume's held-out:7b1df4aa54d0 of the held-out:7dc7c59f90ed of sympathy; the mark covers exactly the word and it is not part of a name."
+ },
+ "U0780": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This looks like the abstract's own title, which counts as an ordinary use. \"Digital Cloud\" is a generic noun use (cloud computing), not a named work, so the program should have kept it."
+ },
+ "U0785": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is a plural noun, a generic term (maladaptive cognitive held-out:d7b1fc674098), not a name; the marks cover the word. It should have been kept."
+ },
+ "U0784": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' in ordinary use. The marks cover exactly the word, and the footnote digit is outside them. The program should have kept it."
+ },
+ "U0788": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"component failure\" is a noun modifier use of component, not in a name; span covers the word exactly."
+ },
+ "U0790": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:10c5166f4af0 is the name of one specific parser system (an acronym-style product name), so leaving it out as a name was correct."
+ },
+ "U0789": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"controls\" is a plural noun (control participants), a valid noun use; the marks cover exactly the word and it is not part of a name."
+ },
+ "U0786": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:15a9a9ab2b92\" is a short form of a specific cited work's title (likely Descartes' held-out:15a9a9ab2b92 on Method), so it is a name and leaving it out was correct."
+ },
+ "U0787": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Convolutional Neural Network\" is a generic technique, even capitalised. EfficientNet-B0 is the named model, but it doesn't make this a name. The program should have kept it as a use."
+ },
+ "U0791": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning\" is used as a noun in a table-of-contents heading, which is an ordinary use. It should have been kept."
+ },
+ "U0793": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Embodiment and Mechanisation\" is the title of a book being reviewed, so it is a name and leaving it out was correct."
+ },
+ "U0792": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Word is in a chapter title listed with its author (Y. Kato) in a contents list of other works, so it counts as a title/name, not a use."
+ },
+ "U0797": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"command and control\" is a noun use of control, not part of a name."
+ },
+ "U0796": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"map alignment\" is a noun use of alignment (the map alignment effect in cognitive psychology), not a name; the marks cover exactly the word."
+ },
+ "U0795": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:2c676bb34422 of constitutions\" is a nominal -ing form (drafting), used as a noun, not in a name."
+ },
+ "U0798": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use of the noun 'mental representation' (plural). The marks cover the whole phrase."
+ },
+ "U0799": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Title of a cited chapter listed with its author (G.E.L. Owen), so it is a name; leaving it out was correct."
+ },
+ "U0794": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a table-of-contents entry of the volume itself, with no authors listed. The codebook counts such headings as ordinary uses. \"Experience\" is a noun here."
+ }
+}

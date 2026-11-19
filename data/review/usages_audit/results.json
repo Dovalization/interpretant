@@ -1,0 +1,779 @@
+{
+ "items": 4442,
+ "judges_agreed": 4385,
+ "precision": {
+  "judged": 1980,
+  "errors": 42,
+  "bar": 51,
+  "passes": true,
+  "error_reasons": {
+   "other_word": 10,
+   "name": 21,
+   "part_of_speech": 3,
+   "not_english": 8
+  },
+  "words_over_two_errors": [
+   "held-out:96da49af8e67",
+   "held-out:779d6b6eedf0",
+   "held-out:5ff5c82d203d"
+  ]
+ },
+ "scope": {
+  "words_sent_back": [
+   "affordance",
+   "agent",
+   "alignment",
+   "artificial intelligence",
+   "cloud",
+   "component",
+   "embodiment",
+   "feedback",
+   "fusion",
+   "held-out:7b1df4aa54d0",
+   "held-out:50fa17396b00",
+   "held-out:164ebb5df0ea",
+   "held-out:da17f59c700d",
+   "held-out:7d0f24edc7fd",
+   "held-out:c0dcb92b6a30",
+   "held-out:11f8f1ec4ec9",
+   "held-out:bd686ff4fd74",
+   "held-out:02b12c17f936",
+   "held-out:f151e0c23aaf",
+   "held-out:6b293b43d2b1",
+   "held-out:ab139acf9360",
+   "held-out:ff37e32092ff",
+   "held-out:96da49af8e67",
+   "held-out:9384bbe72d46",
+   "held-out:d573b31a4663",
+   "held-out:f6604b2573e2",
+   "held-out:d4bed87430ea",
+   "held-out:15a9a9ab2b92",
+   "held-out:ee104561c1ce",
+   "held-out:e7866e6303be",
+   "held-out:34711782a046",
+   "held-out:d7b1fc674098",
+   "held-out:e39a19f9b2b4",
+   "held-out:861f9da96b43",
+   "information processing",
+   "intelligence",
+   "intentionality",
+   "interface",
+   "network",
+   "neural network",
+   "presence",
+   "simulation",
+   "social network",
+   "system",
+   "transformer",
+   "user",
+   "user interface"
+  ]
+ },
+ "recall": {
+  "pooled_missed_share": 0.0042,
+  "passes_pooled": true,
+  "words_over_two_percent": [
+   "held-out:96da49af8e67",
+   "held-out:b3ea1fd57831",
+   "held-out:d7b1fc674098",
+   "intentionality",
+   "neural network",
+   "user interface"
+  ],
+  "by_word": {
+   "affordance": {
+    "candidates": 5,
+    "judged": 5,
+    "right": 3,
+    "estimated_misses": 3.0,
+    "missed_share": 0.0022
+   },
+   "agency": {
+    "candidates": 33,
+    "judged": 20,
+    "right": 15,
+    "estimated_misses": 24.8,
+    "missed_share": 0.0026
+   },
+   "agent": {
+    "candidates": 68,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 57.8,
+    "missed_share": 0.0027
+   },
+   "alignment": {
+    "candidates": 8,
+    "judged": 8,
+    "right": 7,
+    "estimated_misses": 7.0,
+    "missed_share": 0.0021
+   },
+   "held-out:02b12c17f936": {
+    "candidates": 10,
+    "judged": 10,
+    "right": 5,
+    "estimated_misses": 5.0,
+    "missed_share": 0.0007
+   },
+   "held-out:07afa72fe9fc": {
+    "candidates": 53,
+    "judged": 20,
+    "right": 16,
+    "estimated_misses": 42.4,
+    "missed_share": 0.0012
+   },
+   "artificial intelligence": {
+    "candidates": 126,
+    "judged": 20,
+    "right": 20,
+    "estimated_misses": 126.0,
+    "missed_share": 0.0182
+   },
+   "attention": {
+    "candidates": 30,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 25.5,
+    "missed_share": 0.0006
+   },
+   "behavior": {
+    "candidates": 182,
+    "judged": 20,
+    "right": 16,
+    "estimated_misses": 145.6,
+    "missed_share": 0.002
+   },
+   "held-out:10c5166f4af0": {
+    "candidates": 5,
+    "judged": 5,
+    "right": 3,
+    "estimated_misses": 3.0,
+    "missed_share": 0.0029
+   },
+   "cloud": {
+    "candidates": 20,
+    "judged": 20,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0014
+   },
+   "cognition": {
+    "candidates": 27,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 24.3,
+    "missed_share": 0.0026
+   },
+   "complexity": {
+    "candidates": 17,
+    "judged": 17,
+    "right": 15,
+    "estimated_misses": 15.0,
+    "missed_share": 0.0009
+   },
+   "component": {
+    "candidates": 250,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 225.0,
+    "missed_share": 0.0068
+   },
+   "computation": {
+    "candidates": 19,
+    "judged": 19,
+    "right": 10,
+    "estimated_misses": 10.0,
+    "missed_share": 0.0013
+   },
+   "consciousness": {
+    "candidates": 58,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 52.2,
+    "missed_share": 0.0047
+   },
+   "control": {
+    "candidates": 213,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 191.7,
+    "missed_share": 0.0026
+   },
+   "held-out:11ee3fc840ad": {
+    "candidates": 19,
+    "judged": 19,
+    "right": 19,
+    "estimated_misses": 19.0,
+    "missed_share": 0.0014
+   },
+   "held-out:11f8f1ec4ec9": {
+    "candidates": 2,
+    "judged": 2,
+    "right": 2,
+    "estimated_misses": 2.0,
+    "missed_share": 0.0026
+   },
+   "held-out:15a9a9ab2b92": {
+    "candidates": 36,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 32.4,
+    "missed_share": 0.0016
+   },
+   "held-out:164ebb5df0ea": {
+    "candidates": 1,
+    "judged": 1,
+    "right": 1,
+    "estimated_misses": 1.0,
+    "missed_share": 0.0017
+   },
+   "held-out:19d5e41de2db": {
+    "candidates": 15,
+    "judged": 15,
+    "right": 15,
+    "estimated_misses": 15.0,
+    "missed_share": 0.0038
+   },
+   "embedding": {
+    "candidates": 15,
+    "judged": 15,
+    "right": 8,
+    "estimated_misses": 8.0,
+    "missed_share": 0.0027
+   },
+   "embodiment": {
+    "candidates": 8,
+    "judged": 8,
+    "right": 3,
+    "estimated_misses": 3.0,
+    "missed_share": 0.0018
+   },
+   "emergence": {
+    "candidates": 7,
+    "judged": 7,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0009
+   },
+   "held-out:1b596f30c66f": {
+    "candidates": 49,
+    "judged": 20,
+    "right": 15,
+    "estimated_misses": 36.8,
+    "missed_share": 0.0038
+   },
+   "experience": {
+    "candidates": 200,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 170.0,
+    "missed_share": 0.0024
+   },
+   "feedback": {
+    "candidates": 12,
+    "judged": 12,
+    "right": 12,
+    "estimated_misses": 12.0,
+    "missed_share": 0.0007
+   },
+   "feedback loop": {
+    "candidates": 6,
+    "judged": 6,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0138
+   },
+   "held-out:1c5d119c45e3": {
+    "candidates": 19,
+    "judged": 19,
+    "right": 18,
+    "estimated_misses": 18.0,
+    "missed_share": 0.0116
+   },
+   "held-out:2c676bb34422": {
+    "candidates": 8,
+    "judged": 8,
+    "right": 7,
+    "estimated_misses": 7.0,
+    "missed_share": 0.0027
+   },
+   "held-out:32a54748ce0a": {
+    "candidates": 3,
+    "judged": 3,
+    "right": 3,
+    "estimated_misses": 3.0,
+    "missed_share": 0.0006
+   },
+   "fusion": {
+    "candidates": 6,
+    "judged": 6,
+    "right": 5,
+    "estimated_misses": 5.0,
+    "missed_share": 0.0011
+   },
+   "held-out:34711782a046": {
+    "candidates": 21,
+    "judged": 20,
+    "right": 20,
+    "estimated_misses": 21.0,
+    "missed_share": 0.0013
+   },
+   "held-out:3cff64e5f947": {
+    "candidates": 0,
+    "judged": 0,
+    "right": 0,
+    "estimated_misses": 0.0,
+    "missed_share": 0.0
+   },
+   "held-out:50fa17396b00": {
+    "candidates": 13,
+    "judged": 13,
+    "right": 9,
+    "estimated_misses": 9.0,
+    "missed_share": 0.002
+   },
+   "hallucination": {
+    "candidates": 6,
+    "judged": 6,
+    "right": 5,
+    "estimated_misses": 5.0,
+    "missed_share": 0.0048
+   },
+   "having": {
+    "candidates": 8,
+    "judged": 8,
+    "right": 8,
+    "estimated_misses": 8.0,
+    "missed_share": 0.0004
+   },
+   "held-out:5350e5a87b0b": {
+    "candidates": 63,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 53.5,
+    "missed_share": 0.0105
+   },
+   "held-out:5ff5c82d203d": {
+    "candidates": 11,
+    "judged": 11,
+    "right": 10,
+    "estimated_misses": 10.0,
+    "missed_share": 0.0057
+   },
+   "image": {
+    "candidates": 135,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 128.2,
+    "missed_share": 0.0024
+   },
+   "information": {
+    "candidates": 113,
+    "judged": 20,
+    "right": 15,
+    "estimated_misses": 84.8,
+    "missed_share": 0.0008
+   },
+   "information processing": {
+    "candidates": 17,
+    "judged": 17,
+    "right": 16,
+    "estimated_misses": 16.0,
+    "missed_share": 0.0054
+   },
+   "held-out:67415e178146": {
+    "candidates": 4,
+    "judged": 4,
+    "right": 4,
+    "estimated_misses": 4.0,
+    "missed_share": 0.0024
+   },
+   "intelligence": {
+    "candidates": 61,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 54.9,
+    "missed_share": 0.0026
+   },
+   "intentionality": {
+    "candidates": 26,
+    "judged": 20,
+    "right": 20,
+    "estimated_misses": 26.0,
+    "missed_share": 0.0237
+   },
+   "interface": {
+    "candidates": 312,
+    "judged": 20,
+    "right": 12,
+    "estimated_misses": 187.2,
+    "missed_share": 0.0057
+   },
+   "interpretation": {
+    "candidates": 64,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 60.8,
+    "missed_share": 0.0025
+   },
+   "held-out:6b293b43d2b1": {
+    "candidates": 3,
+    "judged": 3,
+    "right": 3,
+    "estimated_misses": 3.0,
+    "missed_share": 0.003
+   },
+   "learning": {
+    "candidates": 143,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 128.7,
+    "missed_share": 0.0012
+   },
+   "meaning": {
+    "candidates": 115,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 109.2,
+    "missed_share": 0.0032
+   },
+   "medium": {
+    "candidates": 20,
+    "judged": 20,
+    "right": 11,
+    "estimated_misses": 11.0,
+    "missed_share": 0.0014
+   },
+   "held-out:779d6b6eedf0": {
+    "candidates": 12,
+    "judged": 12,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0119
+   },
+   "memory": {
+    "candidates": 188,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 159.8,
+    "missed_share": 0.004
+   },
+   "mental representation": {
+    "candidates": 9,
+    "judged": 9,
+    "right": 4,
+    "estimated_misses": 4.0,
+    "missed_share": 0.0059
+   },
+   "held-out:7b1df4aa54d0": {
+    "candidates": 47,
+    "judged": 20,
+    "right": 16,
+    "estimated_misses": 37.6,
+    "missed_share": 0.0067
+   },
+   "held-out:7b5614820786": {
+    "candidates": 6,
+    "judged": 6,
+    "right": 5,
+    "estimated_misses": 5.0,
+    "missed_share": 0.0031
+   },
+   "mind": {
+    "candidates": 100,
+    "judged": 20,
+    "right": 9,
+    "estimated_misses": 45.0,
+    "missed_share": 0.0023
+   },
+   "held-out:7d0f24edc7fd": {
+    "candidates": 6,
+    "judged": 6,
+    "right": 5,
+    "estimated_misses": 5.0,
+    "missed_share": 0.0014
+   },
+   "held-out:7dc7c59f90ed": {
+    "candidates": 20,
+    "judged": 20,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0029
+   },
+   "model": {
+    "candidates": 431,
+    "judged": 20,
+    "right": 20,
+    "estimated_misses": 431.0,
+    "missed_share": 0.0028
+   },
+   "network": {
+    "candidates": 598,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 538.2,
+    "missed_share": 0.0078
+   },
+   "neural network": {
+    "candidates": 1109,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 998.1,
+    "missed_share": 0.0682
+   },
+   "held-out:861f9da96b43": {
+    "candidates": 102,
+    "judged": 20,
+    "right": 14,
+    "estimated_misses": 71.4,
+    "missed_share": 0.0059
+   },
+   "held-out:86a125382979": {
+    "candidates": 37,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 33.3,
+    "missed_share": 0.0044
+   },
+   "held-out:912b00c7764c": {
+    "candidates": 41,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 34.9,
+    "missed_share": 0.0041
+   },
+   "held-out:9384bbe72d46": {
+    "candidates": 6,
+    "judged": 6,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0082
+   },
+   "perception": {
+    "candidates": 73,
+    "judged": 20,
+    "right": 16,
+    "estimated_misses": 58.4,
+    "missed_share": 0.0017
+   },
+   "held-out:96da49af8e67": {
+    "candidates": 89,
+    "judged": 20,
+    "right": 20,
+    "estimated_misses": 89.0,
+    "missed_share": 0.0754
+   },
+   "held-out:ab139acf9360": {
+    "candidates": 62,
+    "judged": 20,
+    "right": 14,
+    "estimated_misses": 43.4,
+    "missed_share": 0.0027
+   },
+   "held-out:b3ea1fd57831": {
+    "candidates": 586,
+    "judged": 20,
+    "right": 10,
+    "estimated_misses": 293.0,
+    "missed_share": 0.0373
+   },
+   "platform": {
+    "candidates": 50,
+    "judged": 20,
+    "right": 12,
+    "estimated_misses": 30.0,
+    "missed_share": 0.0022
+   },
+   "held-out:baa86b4dabfd": {
+    "candidates": 6,
+    "judged": 6,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0012
+   },
+   "presence": {
+    "candidates": 7,
+    "judged": 7,
+    "right": 7,
+    "estimated_misses": 7.0,
+    "missed_share": 0.0004
+   },
+   "held-out:bafa5557897f": {
+    "candidates": 13,
+    "judged": 13,
+    "right": 9,
+    "estimated_misses": 9.0,
+    "missed_share": 0.0029
+   },
+   "held-out:bd686ff4fd74": {
+    "candidates": 46,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 43.7,
+    "missed_share": 0.0034
+   },
+   "prompt": {
+    "candidates": 7,
+    "judged": 7,
+    "right": 4,
+    "estimated_misses": 4.0,
+    "missed_share": 0.0023
+   },
+   "held-out:c0dcb92b6a30": {
+    "candidates": 41,
+    "judged": 20,
+    "right": 9,
+    "estimated_misses": 18.4,
+    "missed_share": 0.0019
+   },
+   "held-out:d4bed87430ea": {
+    "candidates": 28,
+    "judged": 20,
+    "right": 16,
+    "estimated_misses": 22.4,
+    "missed_share": 0.0024
+   },
+   "held-out:d573b31a4663": {
+    "candidates": 66,
+    "judged": 20,
+    "right": 1,
+    "estimated_misses": 3.3,
+    "missed_share": 0.0003
+   },
+   "representation": {
+    "candidates": 80,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 76.0,
+    "missed_share": 0.0025
+   },
+   "held-out:d7b1fc674098": {
+    "candidates": 679,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 645.0,
+    "missed_share": 0.1712
+   },
+   "held-out:da17f59c700d": {
+    "candidates": 57,
+    "judged": 20,
+    "right": 8,
+    "estimated_misses": 22.8,
+    "missed_share": 0.009
+   },
+   "held-out:e39a19f9b2b4": {
+    "candidates": 41,
+    "judged": 20,
+    "right": 5,
+    "estimated_misses": 10.2,
+    "missed_share": 0.0024
+   },
+   "sign": {
+    "candidates": 32,
+    "judged": 20,
+    "right": 16,
+    "estimated_misses": 25.6,
+    "missed_share": 0.0018
+   },
+   "simulation": {
+    "candidates": 15,
+    "judged": 15,
+    "right": 13,
+    "estimated_misses": 13.0,
+    "missed_share": 0.0008
+   },
+   "social network": {
+    "candidates": 54,
+    "judged": 20,
+    "right": 15,
+    "estimated_misses": 40.5,
+    "missed_share": 0.0136
+   },
+   "strength": {
+    "candidates": 85,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 72.2,
+    "missed_share": 0.0074
+   },
+   "held-out:e7866e6303be": {
+    "candidates": 60,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 57.0,
+    "missed_share": 0.0069
+   },
+   "symbol": {
+    "candidates": 68,
+    "judged": 20,
+    "right": 12,
+    "estimated_misses": 40.8,
+    "missed_share": 0.0058
+   },
+   "system": {
+    "candidates": 1649,
+    "judged": 20,
+    "right": 13,
+    "estimated_misses": 1071.9,
+    "missed_share": 0.0049
+   },
+   "held-out:ee104561c1ce": {
+    "candidates": 105,
+    "judged": 20,
+    "right": 16,
+    "estimated_misses": 84.0,
+    "missed_share": 0.0163
+   },
+   "transformer": {
+    "candidates": 11,
+    "judged": 11,
+    "right": 5,
+    "estimated_misses": 5.0,
+    "missed_share": 0.0038
+   },
+   "held-out:f151e0c23aaf": {
+    "candidates": 0,
+    "judged": 0,
+    "right": 0,
+    "estimated_misses": 0.0,
+    "missed_share": 0.0
+   },
+   "user": {
+    "candidates": 209,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 198.5,
+    "missed_share": 0.0022
+   },
+   "user interface": {
+    "candidates": 335,
+    "judged": 20,
+    "right": 13,
+    "estimated_misses": 217.8,
+    "missed_share": 0.0218
+   },
+   "held-out:f6604b2573e2": {
+    "candidates": 0,
+    "judged": 0,
+    "right": 0,
+    "estimated_misses": 0.0,
+    "missed_share": 0.0
+   },
+   "held-out:f66e6d2190f6": {
+    "candidates": 7,
+    "judged": 7,
+    "right": 6,
+    "estimated_misses": 6.0,
+    "missed_share": 0.0013
+   },
+   "held-out:ff37e32092ff": {
+    "candidates": 112,
+    "judged": 20,
+    "right": 17,
+    "estimated_misses": 95.2,
+    "missed_share": 0.0059
+   }
+  }
+ }
+}

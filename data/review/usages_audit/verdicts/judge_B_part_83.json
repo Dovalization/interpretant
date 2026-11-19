@@ -1,0 +1,252 @@
+{
+ "U4150": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'cognition' (users' cognition), not in a name; span is exact."
+ },
+ "U4151": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:ab139acf9360' in plain use, not in a name; marks cover the word exactly."
+ },
+ "U4152": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f151e0c23aaf\" is an adjective (meta-languages that are non-held-out:f151e0c23aaf, i.e. not based on translation), and the marks cover exactly that part of the hyphenated word."
+ },
+ "U4153": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:164ebb5df0ea\" is a plural noun (students who leave school), a generic use, not a name; marks cover the word exactly."
+ },
+ "U4154": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a conference name (International Conference on Inventive Computation Technologies) in a reference list; a name, so leaving it out was correct."
+ },
+ "U4155": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "'Perception' is in the cited title 'The Primacy of Perception' (Merleau-Ponty, ed. Edie), a title of another work, so it's a name and not a use."
+ },
+ "U4156": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the title of a cited book (Socrates: Ironist and Moral held-out:ab139acf9360), so it is a name and not a use. The OCR damage and the missing space are also present."
+ },
+ "U4158": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"IEEE Transactions on held-out:f66e6d2190f6 and Computer Graphics\" is the name of a specific journal, so leaving it out as a name was correct."
+ },
+ "U4159": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"public mind\" is a noun use of mind, not inside a name, and the marks cover exactly the word."
+ },
+ "U4161": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"digital media platforms\" is a generic noun use of platform, not a name; marks cover exactly the word."
+ },
+ "U4160": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control\" is the noun (the untreated control value, K(i) control), marked exactly; the \"=\" glued to it likely hid it from the program."
+ },
+ "U4157": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Cardinal held-out:ff37e32092ff\" is a generic phonetic term (a noun modifier in \"system\"). It is not an organisation, so the ORG tag is a mistake and this should have been kept."
+ },
+ "U4162": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Section heading of the chapter's own table of contents; 'Components' is a plain noun use, so it should be kept."
+ },
+ "U4163": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"won't mind\" is a verb (care/object), not a noun; leaving it out was correct."
+ },
+ "U4165": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"on held-out:19d5e41de2db\" uses held-out:19d5e41de2db as a noun, not in a name, and the marks cover exactly the word."
+ },
+ "U4164": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:779d6b6eedf0 in J!NS held-out:779d6b6eedf0 is a product name (smart glasses), not the noun held-out:779d6b6eedf0; leaving it out was correct."
+ },
+ "U4166": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'representation' (political theory sense); not part of a name or title."
+ },
+ "U4167": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing approach\" is a generic term used as a noun modifier, not a name; marks cover the whole term."
+ },
+ "U4170": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"alignment\" is a noun here (assess alignment between need and support), not in a name; span covers the whole word."
+ },
+ "U4168": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'control rats' - noun modifier, a use of control as a noun; not a name."
+ },
+ "U4169": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"inferior parietal held-out:11ee3fc840ad\" is a plain noun use of held-out:11ee3fc840ad, not in a name. The marks cover exactly the word, so the program should have kept it."
+ },
+ "U4171": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Google Images\" is a named product, so \"Images\" is part of a name and not a use."
+ },
+ "U4174": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "X-held-out:5ff5c82d203d is the name of a specific window system interface (a product), so leaving it out as a name was correct."
+ },
+ "U4173": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Manifest image\" is Sellars's generic philosophical term, with image used as a noun. The marks cover exactly the word, and the trailing slash is only punctuation."
+ },
+ "U4176": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'social networks' (families and social networks of patients), not a name; span covers the whole term."
+ },
+ "U4175": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Strengths\" is a plural noun used as a noun modifier in the abstract's own title, so it is an ordinary use. The marks cover exactly the word."
+ },
+ "U4177": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use in 'cooperative cognitive radio network'. It is not a name, and the marks cover exactly the word. The missing space before '(CCRN)' likely caused the miss."
+ },
+ "U4178": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"A Bedside Wellness System\" is a descriptive phrase for the system the authors propose, not a coined product name. \"System\" is a noun use and should have been kept."
+ },
+ "U4172": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Transliterated Greek word (σχῆμα) glossed as 'stance', italicised foreign term, not the English noun 'held-out:d7b1fc674098'. Leaving it out was correct."
+ },
+ "U4179": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"twenty held-out:96da49af8e67 of Italian extraction\" is a typo or OCR error for \"persons\", not the noun held-out:96da49af8e67."
+ },
+ "U4181": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'cloud' is a noun modifier in 'cloud technique' (likely cloud-chamber work); it is an ordinary use, not a name."
+ },
+ "U4183": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"media held-out:2c676bb34422\" is a noun use of held-out:2c676bb34422 (the communication concept), not a name."
+ },
+ "U4180": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'agent' (the agent(s)), meaning the person acting. The mark covers the stem and the '(s)' is an optional plural, so the span is fine."
+ },
+ "U4184": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f151e0c23aaf\" is an adjective in the generic mathematical term \"held-out:f151e0c23aaf hull\" of a semigroup. It is not a name, and the marks cover the whole word."
+ },
+ "U4185": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'information' meaning data/knowledge about values; not in a name; marks cover the word exactly."
+ },
+ "U4182": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The marked word is in a quoted chapter title of the book under review, which is another work's title. Titles of other works count as names, so leaving it out was correct."
+ },
+ "U4188": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is a plural noun, a generic term for knowledge representation held-out:d7b1fc674098, not a name; the marks cover the whole word."
+ },
+ "U4189": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plural noun for Twitter users who follow accounts; ordinary use, not a name, and the marks cover the word."
+ },
+ "U4190": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is a noun in the generic term adrenocorticotrophic held-out:5350e5a87b0b; it is not a name, and the marks cover exactly the word."
+ },
+ "U4186": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"held-out:15a9a9ab2b92(s)\" (held-out:15a9a9ab2b92 of renewal), not in a name. The mark covers the word, and \"(s)\" is just an optional plural."
+ },
+ "U4187": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Refers to the Hospital held-out:07afa72fe9fc and Depression Scale (HADS), a named scale, so 'held-out:07afa72fe9fc' is inside a name and was rightly not kept."
+ },
+ "U4191": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"consciousness\" is used as a common noun for the concept, not in a name; span is exact."
+ },
+ "U4192": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Transactional Analysis Freehand held-out:da17f59c700d Maze\" is a named instrument (specific test), so held-out:da17f59c700d is inside a name; leaving it out was correct."
+ },
+ "U4193": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'neural networks' (biological circuits), not a name; span covers the term exactly."
+ },
+ "U4194": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:11ee3fc840ad' is a plain noun (brain region) outside any name. Marks cover exactly the word; the missing space before '(' is only a formatting glitch."
+ },
+ "U4195": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'feedback' (characteristics of feedback); marks cover exactly the word, not in a name, so it should have been kept."
+ },
+ "U4196": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user's knowledge\" is a plain noun use (possessive). The marks cover exactly \"user\", so it should have been kept."
+ },
+ "U4198": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feedback loops\" is a plural noun use of the target; the marks cover it exactly, and the \"feedforward-\" prefix doesn't change that."
+ },
+ "U4197": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(re)held-out:2c676bb34422 may be achieved\" is a gerund used as a noun subject. The marks cover \"held-out:2c676bb34422\" exactly, and it is not part of a name."
+ },
+ "U4199": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:da17f59c700d\" is in the quoted title of a specific seminar, which is a title and so a name, not a use."
+ }
+}

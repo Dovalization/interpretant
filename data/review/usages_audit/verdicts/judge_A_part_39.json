@@ -1,0 +1,252 @@
+{
+ "U1950": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Symbols and Emblemata\" is the title of a cited book, so the word is part of a name and does not count as a use."
+ },
+ "U1951": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Affordances\" is a generic design-theory concept (noun use), not a title or coined name; it should have been kept."
+ },
+ "U1953": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"error-held-out:bd686ff4fd74\" is a noun use of held-out:bd686ff4fd74 as part of a hyphenated word; the marks cover exactly the word. It's missed by the program but should be kept."
+ },
+ "U1952": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cloud\" is part of the name of a specific conference (3rd IEEE International Conference on Mobile Cloud Computing...), so leaving it out as a name is correct."
+ },
+ "U1954": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'perception' in ordinary text, not in a name; marks cover exactly the word."
+ },
+ "U1956": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computational complexity\" is a plain noun use, not a name, and the marks cover exactly the word."
+ },
+ "U1955": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Youn[g/th] in held-out:bafa5557897f\" is listed as a named partner agency/program, so the word is part of a name. Leaving it out was correct."
+ },
+ "U1957": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Grammatical held-out:34711782a046 as a noun, in a generic use and not part of a name; the marks cover exactly the word."
+ },
+ "U1958": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:e7866e6303be' is a plain use of the target word, and the marks cover exactly the word."
+ },
+ "U1959": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perceptions\" is a plural noun, a plain use of the target word, not in a name; the marks cover the word exactly."
+ },
+ "U1960": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'symbols' used generically (Christian symbols); not a name, span is exact."
+ },
+ "U1961": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"PROMPTS\" is a plural noun in the abstract's own title (\"stimulus and response prompts\"), so it is an ordinary use of the noun."
+ },
+ "U1962": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9 values\" is a noun modifier, which counts as a noun use. The heading is the authors' own, not a name. It should have been kept."
+ },
+ "U1965": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a noun modifier in \"held-out:50fa17396b00 formation\"; an ordinary use, not a name, and the marks cover exactly the word."
+ },
+ "U1964": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Generic term 'information processing system' (capitalised), not a specific named product; it is a noun use that should have been kept."
+ },
+ "U1967": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"more held-out:32a54748ce0a\" is a predicate adjective, the target word, not in a name; span covers exactly the word."
+ },
+ "U1966": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs\" is a plural noun (semiotic signs), not in a name, and the marks cover exactly the word, so it should have been kept."
+ },
+ "U1963": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:ab139acf9360 stone\" is the fixed name of one legendary substance, so \"held-out:ab139acf9360\" sits inside a name and is not a use of the word."
+ },
+ "U1969": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control\" is a noun modifier in \"auditory control task\" (a control condition). It is a generic term, not a name, so it counts as a noun use."
+ },
+ "U1968": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"duty_based\" is a compound like \"held-out:19d5e41de2db-based\" (underscore for hyphen). held-out:19d5e41de2db is used as a noun, as a part of a compound, and the marks cover just the word. It is not a name."
+ },
+ "U1972": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiment\" is used as a noun for a general concept, not within a name, and the marks cover exactly the word."
+ },
+ "U1973": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'consciousness' (communicators' consciousness), not in a name; span is exact."
+ },
+ "U1970": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Dynamic Switching held-out:bd686ff4fd74\" is a generic parameter term in the flower pollination algorithm, not a named law. held-out:bd686ff4fd74 is a noun use here, so it should have been kept."
+ },
+ "U1974": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feedback\" is used as a noun (students' and alumni's feedback), not in a name; span covers the word exactly."
+ },
+ "U1975": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Title of a cited book (Structural Complexity I), so it is a name; leaving it out was correct."
+ },
+ "U1977": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bafa5557897f\" is a plural noun, an ordinary use of held-out:bafa5557897f, not in a name; the marks cover the word exactly."
+ },
+ "U1976": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use: 'held-out:1c5d119c45e3' as the role of the one following instructions; not a name, span is exact."
+ },
+ "U1979": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'Deep Neural Networks' (capitalised, with acronym DNNs) is a plain noun use, not a name; the marks cover the words exactly."
+ },
+ "U1981": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Political platform (a noun) used generically, not a name; the marks cover exactly the word."
+ },
+ "U1980": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"minds\" is a plural noun in \"human minds\", a plain use of mind. It is not inside a name, and the marks cover the whole word."
+ },
+ "U1971": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"zone_alignment\" is a technique name written with an underscore. It is a generic technique, not a code identifier. \"alignment\" is a noun use, like a part of a hyphenated word, and the marks cover just that part."
+ },
+ "U1978": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bafa5557897f*\" in a search query is the noun held-out:bafa5557897f with a truncation wildcard. The marks cover just the word, and it isn't a name or code identifier."
+ },
+ "U1982": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Platforms\" is the start of the title of a cited book (Platforms and Cultural Production), so it is a name, not a use."
+ },
+ "U1985": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"served as control\" is a noun use (control group/animals), not a name."
+ },
+ "U1983": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce\" is the plural noun in the generic term \"Model Existence held-out:ee104561c1ce\", a class of results rather than one named law, so it is a use."
+ },
+ "U1986": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Economic Simulations\" is a generic term for a kind of simulation, not an organisation name; it is a noun use and should have been kept."
+ },
+ "U1984": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"affordance++\" is the name of the authors' specific system (Affordance++), so it is a name and the program was right to leave it out. The later \"natural affordance\" is a real use, but it is not the marked place."
+ },
+ "U1990": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"communication medium\" is the noun (channel), a valid use; the marks cover exactly the word."
+ },
+ "U1989": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embedding held-out:ee104561c1ce\": embedding is a noun modifier (mathematical embedding), generic term, not a name; span is exact."
+ },
+ "U1987": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signed\" is a verb participle used as an adjective (sign language gestures), not a noun use, so leaving it out is correct."
+ },
+ "U1988": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control\" labels the baseline pressure (0.1 MPa) condition. It is a noun use, not part of a name, and the marks cover exactly the word."
+ },
+ "U1991": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bd686ff4fd74\" is a plural noun in \"posterior held-out:bd686ff4fd74\", a generic term; the marks cover the word exactly."
+ },
+ "U1992": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"aggressive behavior\" is an ordinary noun use, not in a name. The marks cover exactly the word, so the program should have kept it."
+ },
+ "U1993": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"simulation\" is used as a noun, not in a name, and the marks cover exactly the word."
+ },
+ "U1994": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"scientific held-out:f66e6d2190f6\" is a noun use (a general field/technique, not a name); marks cover exactly the word."
+ },
+ "U1997": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:96da49af8e67' is a plural noun (user held-out:96da49af8e67 in HCI), generic use, not a name; marks cover the word exactly."
+ },
+ "U1995": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexity\" is used as a plain noun (complexity of the model), not in a name."
+ },
+ "U1998": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Having received\" is a perfect participle with having as auxiliary, a studied part of speech, and not inside a name."
+ },
+ "U1999": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:164ebb5df0ea' (participants who left a study), ordinary use, span covers the word."
+ },
+ "U1996": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:f6604b2573e2 tracing\" uses held-out:f6604b2573e2 as an adjective (held-out:f6604b2573e2 vector tracing). The NOUN tag is a mistake, so this use should have been kept."
+ }
+}

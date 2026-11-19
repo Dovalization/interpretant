@@ -1,0 +1,252 @@
+{
+ "U0200": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plural common noun, a normal use of the target word; the marks cover the whole word."
+ },
+ "U0201": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"prompt templates\": prompt as a noun modifier, outside the quoted name; marks cover the word exactly."
+ },
+ "U0203": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:34711782a046' is used as a noun in 'intersection of held-out:34711782a046, race', not in a name; the marks cover exactly the word."
+ },
+ "U0202": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:11f8f1ec4ec9 case\" is a noun modifier before a noun, which counts as a noun use. The ADJ tag was a mistake, so it should have been kept."
+ },
+ "U0204": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'artificial intelligence' as a field; marks cover the full term, not a name."
+ },
+ "U0205": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Association of American held-out:b3ea1fd57831\" is a named organisation, so leaving it out as a name was correct."
+ },
+ "U0207": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"networks\" in \"cascade competitive neural networks\" is a generic noun use, not a name; the marks cover the word exactly."
+ },
+ "U0206": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiment\" is a noun modifier in \"circuit embodiment technologies\" (the physical realization of circuits); it's a real use of the word, not in a name, and the marks cover the word exactly."
+ },
+ "U0210": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"court held-out:b3ea1fd57831\" is a plain noun use of held-out:b3ea1fd57831 (plural), not in a name; marks cover the word exactly."
+ },
+ "U0208": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"diapause held-out:5350e5a87b0b\" is a generic noun term for a held-out:5350e5a87b0b, not a name; marks cover exactly the word."
+ },
+ "U0209": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plain noun (levels of held-out:912b00c7764c), not in a name; span covers exactly the word."
+ },
+ "U0212": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Mind\" is part of the title of another work (The American Colonial Mind and the Classical Tradition), so it is a name and was correctly left out."
+ },
+ "U0211": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Vehicular Edge Cloud\" is a generic architecture/concept, not a specific named product, so \"cloud\" is a real use (noun) and should have been kept."
+ },
+ "U0214": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is an adjective modifying \"interpretation\"; ordinary use, not in a name, span is exact."
+ },
+ "U0213": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:779d6b6eedf0 Comic Indonesia\" is the name of a specific Facebook group, so \"held-out:779d6b6eedf0\" sits inside a name and leaving it out was correct."
+ },
+ "U0215": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use. \"Fisher's Information\" is a generic statistical concept, not a named work, and \"information\" is a noun here."
+ },
+ "U0217": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"affordances\" is a plural noun used as a generic concept (literary affordances), not a name; the marks cover the word exactly."
+ },
+ "U0216": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "JINS held-out:779d6b6eedf0 is a specific commercial product (smart glasses), so it is a name and leaving it out was correct."
+ },
+ "U0220": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'learning' here is a noun (the learning of material), a studied part of speech, not in a name; span covers the word exactly."
+ },
+ "U0218": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic plural noun 'agencies' (federal government bodies), not part of a name; the marks cover the word exactly."
+ },
+ "U0219": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"embedding features\" uses embedding as a noun modifier (word embeddings), which counts as a noun use. The ADJ tag is a mistake, so it should have been kept."
+ },
+ "U0221": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is a noun object of \"directing\", a plain use, not in a name."
+ },
+ "U0222": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Graphical User Interfaces\" is a generic term, not a name. The marks cover exactly \"User Interfaces\" (plural noun), so it should have been kept."
+ },
+ "U0225": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:9384bbe72d46\" is a plural common noun meaning rural farmers, not part of a name; the marks cover the word exactly."
+ },
+ "U0223": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is a noun in the generic term luteinizing held-out:5350e5a87b0b-releasing held-out:5350e5a87b0b; it is not a name, and the marks cover just the word."
+ },
+ "U0226": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:86a125382979' used generically (philosophical analysis of what there is); not a name, span is exact."
+ },
+ "U0227": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Distributed Group Support Systems\" is a generic term, not a specific named system. \"Systems\" is a plural noun, so it should have been kept."
+ },
+ "U0224": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This is a generic descriptive phrase for a system, not a coined product name. Capitalisation doesn't make it a name. \"Fusion\" is a noun use in \"fusion-based\", so it should have been kept."
+ },
+ "U0229": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is used as an ordinary noun (length of the held-out:e7866e6303be in Japanese); not in a name, and the marks cover exactly the word."
+ },
+ "U0230": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intelligence' (mental ability), not in a name; span covers exactly the word."
+ },
+ "U0228": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:15a9a9ab2b92\" is a plain noun here (\"in held-out:15a9a9ab2b92\"). The marks cover just the word. The stray \".l\" after it is a typo and sits outside the marks. It is a valid use that was missed."
+ },
+ "U0231": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'world held-out:baa86b4dabfd' is a plain noun use, not part of a name; marks cover the word exactly."
+ },
+ "U0232": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"prompting\" modifies \"approach\" (a prompting and pacing approach), so it is an -ing form used as a noun modifier. That counts as a noun use."
+ },
+ "U0234": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7d0f24edc7fd stocks\": held-out:7d0f24edc7fd is a noun modifier (the industry), not part of a name; marks cover the word exactly."
+ },
+ "U0233": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"structural held-out:1b596f30c66f model\" is a generic technique, so it is a noun use. The marks cover exactly the word, even though \"(SEM)\" is attached to it."
+ },
+ "U0235": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' (psychological sense), a plain use, not in a name; marks cover the word exactly."
+ },
+ "U0236": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feature held-out:f66e6d2190f6\" is a plural noun use of held-out:f66e6d2190f6, a generic technique, not a name; the marks cover the word exactly."
+ },
+ "U0237": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'Neural Networks' (capitalised, with acronym NNs) used as a noun; not a name, so it should have been kept."
+ },
+ "U0238": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"end-user's\" is the noun user, part of a hyphenated word. The marks cover just \"user\". The \"?\" is only a damaged apostrophe."
+ },
+ "U0240": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:7b1df4aa54d0' (an illuminating held-out:7b1df4aa54d0), not in a name; span covers the word exactly."
+ },
+ "U0239": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Chapter heading in the abstract's own table of contents, so it counts as an ordinary noun use of consciousness."
+ },
+ "U0242": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"federal agencies\" is a generic plural noun use, not part of a name."
+ },
+ "U0243": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun, an ordinary use of held-out:50fa17396b00, not in a name, and the marks cover the word exactly."
+ },
+ "U0241": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Independent Components Analysis\" is a generic technique, not a name. \"Components\" is a noun (modifier), and the marks cover exactly the word."
+ },
+ "U0244": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"primary auditory held-out:11ee3fc840ad\" is a generic anatomical region noun, not a name; marks cover the word exactly."
+ },
+ "U0245": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is a finite verb (people who held-out:32a54748ce0a it), not the adjective, so leaving it out was correct."
+ },
+ "U0248": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plural noun meaning adherents of de Saussure; a genuine noun use, not part of a name."
+ },
+ "U0247": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'Graphical Symbols' (held-out:5ff5c82d203d) used as commands; not a name; marks cover exactly the word."
+ },
+ "U0249": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"regression held-out:1b596f30c66f\": a plain noun use of held-out:1b596f30c66f, not in a name. The marks cover exactly the word."
+ },
+ "U0246": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'user interfaces' in a descriptive term for an interface design approach, not a coined proper name. The marks cover the whole phrase."
+ }
+}

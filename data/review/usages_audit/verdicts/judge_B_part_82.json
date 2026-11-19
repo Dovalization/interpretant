@@ -1,0 +1,252 @@
+{
+ "U4100": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plural noun use of held-out:e7866e6303be, not in a name, and the marks cover the word exactly."
+ },
+ "U4102": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"camera control\" is a noun (control as noun modifier-head in a list of functions); a generic use, not a name."
+ },
+ "U4105": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"research held-out:d4bed87430ea\" is a common noun use of held-out:d4bed87430ea, not a name; marks cover the exact word."
+ },
+ "U4106": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'neural networks' used as a noun, not part of a name; marks cover the whole term."
+ },
+ "U4103": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having\" is the verb \"have\" as a participle (\"filter having unsymmetrical frequency response\"). It is not in a name, and the marks cover the word exactly."
+ },
+ "U4101": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun use (rely on users to identify problems); the [s] is just the inflection, so the program should have kept it."
+ },
+ "U4107": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Complexity is in the title of a cited paper (Simon's 'The Architecture of Complexity'), so it counts as a name and was correctly left out."
+ },
+ "U4108": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"2D held-out:f66e6d2190f6\" is a noun use (head noun, generic technique), not a name; the marks cover the whole word."
+ },
+ "U4104": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'held-out:861f9da96b43' in the item's own title (an editorial), so it is an ordinary use and not a name. The marks cover the whole word."
+ },
+ "U4111": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feedback\" is a noun here (auditory feedback), not part of a name, and the marks cover exactly the word."
+ },
+ "U4110": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so it is an ordinary use. Noun 'Intentionality', and the marks cover exactly the word."
+ },
+ "U4114": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "The sentence is in French; 'held-out:ee104561c1ce' is the French word, not English."
+ },
+ "U4112": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the name of a named questionnaire (Six-Dimensional Visual Hallucination Questionnaire, 6D-VHQ), so leaving it out as a name was correct."
+ },
+ "U4113": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here \"held-out:912b00c7764c\" is a verb (\"held-out:912b00c7764c him\", parallel to disturb, annoy, hurt). Nouns only are studied, so leaving it out was correct."
+ },
+ "U4115": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:c0dcb92b6a30 is part of the name of the PRISMA-P reporting guideline (Preferred Reporting Items for Systematic reviews and Meta-Analyses for held-out:c0dcb92b6a30), a named guideline/title, so not a use."
+ },
+ "U4109": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:50fa17396b00' is a plural noun in what looks like the abstract's own title with its author byline. An own title is an ordinary use, so it should have been kept."
+ },
+ "U4116": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Think-Aloud held-out:c0dcb92b6a30 is a generic research technique, not a named test. The word is used as a noun, and the marks cover exactly that word."
+ },
+ "U4117": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic plural noun 'social networks' (online sites), not a name; span covers the full term."
+ },
+ "U4118": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs\" is a plural noun (individual signs of a sign language), not in a name, and the marks cover the word exactly."
+ },
+ "U4119": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic plural noun 'held-out:861f9da96b43', not a name; marks cover the word exactly."
+ },
+ "U4120": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is a generic noun term, used as a modifier in the hyphenated compound \"artificial intelligence-enabled\"; it is not a name, and the marks cover exactly the phrase."
+ },
+ "U4122": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"gradient computation\" is a noun use (noun modifier context), not in a name; span covers the word exactly."
+ },
+ "U4121": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Minds\" is in the title of a cited work (\"Gambling on Other Minds-Human and Divine\"), so it is a name, not a use."
+ },
+ "U4123": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embedding\" is a nominal gerund (embedding into applications), a use of embed in a studied part of speech; not in a name, and the span covers the word."
+ },
+ "U4124": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Critical flicker fusion frequency\" is a generic psychophysics term. \"Fusion\" is a noun here, inside a compound, and it is not a name."
+ },
+ "U4126": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"information processing tasks\", a generic term, not a name; the marks cover the full phrase."
+ },
+ "U4125": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Memories\" is the plural noun, mentioned as a word, which counts as a use. The marks cover the whole word."
+ },
+ "U4127": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Knowledge Query Interface held-out:da17f59c700d (KQIS)\" is the coined name of one specific proposed system, so leaving it out was correct."
+ },
+ "U4130": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is in the title of a cited work (The Effects of Arts, Trades and Professions, and of civic states and held-out:50fa17396b00 of living...), so it is a name and leaving it out was correct."
+ },
+ "U4129": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'meaning(s)', the meanings of linguistic entities. It is not in a name, and the marks cover the stem. The '(s)' plural marker is only a tokenization issue, so the program should have kept it."
+ },
+ "U4133": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is a generic noun used as a modifier in \"artificial intelligence–driven\" models; it is not a name, and the marked span covers exactly the phrase."
+ },
+ "U4128": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the coined name of the authors' specific framework, 'Nested Social held-out:e39a19f9b2b4 Classification (NeSS-Class)', so it is not a use."
+ },
+ "U4131": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce 2.\" is an ordinary numbered label for a held-out:ee104561c1ce in the text, a noun use of the word. It is not a name, so it should have been kept."
+ },
+ "U4134": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" used as a noun modifier in a generic sense (an AI approach); not a name, and the marks cover the full term."
+ },
+ "U4136": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\" is a plural noun used as a noun modifier in \"strengths-based\" (hyphenated part); not a name, and the marks cover the word exactly."
+ },
+ "U4132": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Feature Fusion Module\" is a descriptive, generic technique term spelled out from an acronym. It is a noun use of fusion, not a product name, so it should have been kept."
+ },
+ "U4135": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"medium-density\" uses medium as an adjective (moderate), not the noun."
+ },
+ "U4137": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a noun in a table-of-contents heading (an ordinary use). The trailing \".a\" is a separate outline marker, and the marks cover exactly the word."
+ },
+ "U4141": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'affordances' in 'technological affordances'; a genuine use, not in a name, and the marks cover the whole word."
+ },
+ "U4138": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Computer-Aided Design of User Interfaces\" is the title of a cited book (the sentence describes it), so the word sits inside a title and is not a use."
+ },
+ "U4142": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretations\" is a plural noun, an ordinary use of the target word, not in a name; the marks cover the word exactly."
+ },
+ "U4140": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"operational control\" is the noun control, not in a name, and the marks cover exactly the word. The stray apostrophe is only OCR noise next to it."
+ },
+ "U4139": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a chapter title listed with its author (by Daniel E. Moerman), so it is a title and counts as a name; leaving it out was correct."
+ },
+ "U4144": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'High Performance Sports System' is a named UK organisation/program, so leaving 'System' out as part of a name was correct."
+ },
+ "U4143": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"affordances\" is a plural noun use in a list (strategies, affordances, and risks of digital platforms); not in a name; span covers the word."
+ },
+ "U4145": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:07afa72fe9fc\" is a plain noun use, outside any name, and the marks cover exactly the word."
+ },
+ "U4146": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of \"user interface\" in \"the design and implementation of the user interface\"; not a name."
+ },
+ "U4147": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"hallucination\" is a noun here (auditory hallucination subtype), a plain use, not in a name, span is exact."
+ },
+ "U4148": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Access Control\" is a generic technique (role-based access control), not a name. \"Control\" is a noun here and the marks cover just the word."
+ },
+ "U4149": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This is a table-of-contents chapter heading, which the codebook counts as an ordinary use. It is not a person's name, so \"held-out:34711782a046\" should have been kept as a noun."
+ }
+}

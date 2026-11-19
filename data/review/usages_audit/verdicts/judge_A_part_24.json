@@ -1,0 +1,252 @@
+{
+ "U1200": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is a noun here, the iconic (visual sensory) memory trace in a cognitive psychology search study. It is not a name, and the marks cover the whole word."
+ },
+ "U1203": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:7b1df4aa54d0' (this held-out:7b1df4aa54d0), not in a name; span covers the word exactly."
+ },
+ "U1205": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:ee104561c1ce' used generically, not in a name; span covers the word exactly."
+ },
+ "U1204": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having failed\" is a perfect participle, with \"having\" as an auxiliary. AUX is a studied part of speech, so the program should have kept it."
+ },
+ "U1202": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Behavior\" is part of the name of a specific event, the Second International Workshop on Behavior Change Support Systems (BCSS 2014), so it is not a use."
+ },
+ "U1201": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "The marked word is in a French chapter title (\"La France et l'émergence des sciences modernes au Canada français\"), so it is French and not an English use."
+ },
+ "U1206": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Convolutional Neural Networks\" is a generic technique, not a named system. The marks cover exactly \"Neural Networks\", a noun use."
+ },
+ "U1209": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the organisation name International Federation for Information Processing (IFIP), so leaving it out is correct."
+ },
+ "U1210": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"past experience\" is a noun use, not in a name, and the marks cover exactly the word."
+ },
+ "U1208": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is a plural noun, not in a name, and the marks cover just the word. Other words in the sentence have lost their spaces, but this one is intact."
+ },
+ "U1212": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intelligence\" is used as an ordinary noun (intelligence or talent), not in a name; span is exact."
+ },
+ "U1207": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Platforms\" is in the title of a named project/policy brief (Public Service Media in an Age of Platforms, PSM AP), so it is a name, not a use."
+ },
+ "U1211": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This is the title of a cited work, listed with its author (A. Ganz). A word in a cited title is part of a name, so it is not a use."
+ },
+ "U1213": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is used as a noun (generic cognitive function), not a name; marks cover the full term."
+ },
+ "U1215": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is a common noun here (deteriorate toward held-out:10c5166f4af0), not in a name; the marks cover exactly the word."
+ },
+ "U1214": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:2c676bb34422 strategies' is a noun modifier (media held-out:2c676bb34422), not a name, and the span covers the word exactly."
+ },
+ "U1217": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (Curley's Spinoza's Metaphysics: An Essay in Interpretation), so it is a name and was correctly left out."
+ },
+ "U1218": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Canadian Council on Learning\" is an organisation name, so leaving it out was correct."
+ },
+ "U1219": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:861f9da96b43\" is a noun modifier in \"held-out:861f9da96b43 advertisements\", a generic use, not part of a name."
+ },
+ "U1220": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'held-out:d7b1fc674098' (a theoretical framework), not a name; marks cover exactly the word."
+ },
+ "U1221": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Our Social held-out:67415e178146\" is the title of a cited book, so it is a name. Leaving it out was correct."
+ },
+ "U1216": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"affordance\" is a noun, used as a coined term (affordance++) for a concept. It is not a specific named system, and the marks cover just the word."
+ },
+ "U1222": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'agencies' is a plural noun meaning organized groups/bodies; generic use, not a name, marks cover the word exactly."
+ },
+ "U1223": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:bd686ff4fd74' used as an ordinary noun, not in a name or title."
+ },
+ "U1224": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"light held-out:7b5614820786\" is a noun use of held-out:7b5614820786; the marks cover exactly the word."
+ },
+ "U1225": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representations\" is a plural noun use of the target phrase, not in a name, and the marks cover it exactly."
+ },
+ "U1226": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bd686ff4fd74\" is used as an ordinary noun (held-out:bd686ff4fd74 of direct key establishment); not a name, span is exact."
+ },
+ "U1228": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:ab139acf9360' used in a quoted phrase about Newton; a genuine use, not a name. Quote marks are outside the marked span."
+ },
+ "U1229": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Theory of mind\" is a generic concept, not a name. \"Mind\" is a noun here and the marks cover exactly that word."
+ },
+ "U1227": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is a noun here (getting bankers' attention), not in a name, and the marks cover exactly the word. The program probably missed it because the apostrophe is stuck to it with no space."
+ },
+ "U1231": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"movie held-out:da17f59c700d\" is a noun use of held-out:da17f59c700d (noun modifier of movie... actually head noun); \"The Flash\" is the movie's name, but held-out:da17f59c700d itself is outside it."
+ },
+ "U1230": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Clouds\" is in the title of a cited paper by Adkins (Clouds, Mysteries, Socrates and Plato), so it's a name, not a use."
+ },
+ "U1232": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interface\" is a noun modifier before \"interactions\", a generic term, not a name; marks cover the exact phrase."
+ },
+ "U1233": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Colonial held-out:b3ea1fd57831\" is the title of a cited article (with date and page numbers), so it is a name and leaving it out was correct."
+ },
+ "U1235": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interface\" is a generic noun use, and the marks cover exactly the word."
+ },
+ "U1236": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:912b00c7764c' is a noun here (weakness or held-out:912b00c7764c), a genuine use, not in a name; marks cover exactly the word."
+ },
+ "U1234": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Moral Signal Feedback Loop\" is the coined name of one specific model the paper introduces, so the word is inside a name and leaving it out was correct."
+ },
+ "U1237": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Social Networks\" is a generic noun modifier in \"Problematic Social Networks Use\", not a named entity. The marks cover exactly the term."
+ },
+ "U1238": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'system' (a testing system), not a name; marks cover exactly the word."
+ },
+ "U1239": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plural common noun in \"moral held-out:ab139acf9360\", a genuine use; the marks cover exactly the word."
+ },
+ "U1240": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of \"neural network\" (a model in the Hamiltonian analogy), not a name; span covers the full term."
+ },
+ "U1243": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:d573b31a4663\" is part of the place name Cedar held-out:d573b31a4663, Iowa, a noun use inside a name, not the adjective."
+ },
+ "U1242": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"single and multiple held-out:67415e178146\" is a generic OOP noun use, not a name; marks cover the word exactly."
+ },
+ "U1245": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"visual held-out:11ee3fc840ad\" is a generic anatomical noun, not a name; marks cover exactly the word."
+ },
+ "U1248": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is a plain noun use of held-out:ff37e32092ff, and the marks cover exactly the word."
+ },
+ "U1246": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun modifier: the middle ear acts as an (impedance) transformer. This is the generic sense, not a name, and the marks cover exactly the word."
+ },
+ "U1249": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of the field term 'artificial intelligence'; not a name, and the marks cover exactly the phrase."
+ },
+ "U1247": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:11f8f1ec4ec9\" here modifies the noun \"Spell-Out conditions\", like \"held-out:11f8f1ec4ec9 settings\". The codebook counts a noun before a noun as a noun use even when tagged ADJ, so it should have been kept."
+ },
+ "U1244": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(en)held-out:2c676bb34422\" is Heidegger's Gestell. The optional prefix is in parentheses, so \"held-out:2c676bb34422\" is a noun use. It is a concept, not a name, and the marks cover just \"held-out:2c676bb34422\"."
+ },
+ "U1241": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce\" is the common noun heading the authors' own descriptive result (Decision Invariance held-out:ee104561c1ce). It is not a coined proper name like a person-named law, so it should have been kept."
+ }
+}

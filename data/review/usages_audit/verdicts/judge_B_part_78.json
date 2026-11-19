@@ -1,0 +1,252 @@
+{
+ "U3904": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computations\" is a plural noun, a generic use of the target word, not inside a name, and the marks cover the whole word."
+ },
+ "U3905": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:bafa5557897f' is a common noun here, not in a name, and the marks cover exactly the word."
+ },
+ "U3900": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"qutrit_embeddings\" is a snake_case code-style identifier or stray tag, not a prose use. The codebook excludes identifiers."
+ },
+ "U3903": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f151e0c23aaf\" is part of the coined name of one specific system (TATUM, Tactile ASL held-out:f151e0c23aaf User Mechanism), so leaving it out as a name was correct."
+ },
+ "U3902": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Extreme learning machine\" is a generic technique, not a named system. \"Learning\" works as a noun modifier, and the marks cover exactly the word."
+ },
+ "U3906": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of Lukács's work (History and Class Consciousness, here garbled). A cited title counts as a name, so leaving it out was correct."
+ },
+ "U3901": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Data Fusion\" is a noun use of fusion, a generic technique. The marks cover exactly the word. The expanded acronym describes a proposed structure and is not a fixed name."
+ },
+ "U3907": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce 6, 7, and 8\" refers to the paper's own numbered held-out:ee104561c1ce. It is a plural noun use, not a title or name, and the marks cover the word exactly."
+ },
+ "U3910": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"lack of meaning\" is a noun use, correctly marked and outside any name."
+ },
+ "U3909": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"machine learning\" is a generic technique term. Here \"learning\" is a noun modifier before \"classifier\", so it is a noun use and not a name."
+ },
+ "U3913": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Data held-out:7d0f24edc7fd\" is a generic technique term; held-out:7d0f24edc7fd works as a noun modifier/noun here, not a name."
+ },
+ "U3912": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"information processing\" modifies \"systems\", so it is a noun modifier and a noun use, not a verb. It should have been kept."
+ },
+ "U3911": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective modifying \"languages\", outside any name, and the marks cover the whole word. The sentence is English despite OCR noise and cited foreign forms."
+ },
+ "U3908": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Graphics User Interface\" is a generic term for a GUI, and \"A ... AutoGeneration\" reads as a generic technique, not a coined product name. \"Interface\" is a noun use and should have been kept."
+ },
+ "U3915": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Questionnaire for User Interface Satisfaction (QUIS)\" is a named scale, so leaving it out as a name was correct."
+ },
+ "U3914": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Intelligence' in a table-of-contents chapter heading; headings count as ordinary uses, and the marks cover the whole word."
+ },
+ "U3916": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun, generic concept, not in a name; span covers the full term."
+ },
+ "U3917": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:6b293b43d2b1\" modifies \"address terms\" as a noun modifier, which counts as a noun use. It is not a name, so it should have been kept."
+ },
+ "U3919": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'information' used normally, not in a name; marks cover exactly the word."
+ },
+ "U3918": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"component parts\" is a noun modifier before a noun, which counts as a noun use. It is not a name, so it should have been kept."
+ },
+ "U3920": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cognitions\" is a plural noun use of cognition in a list of constructs, not part of a name. The program should have kept it."
+ },
+ "U3921": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perception\" is used as an ordinary noun (acute perception of pitch changes); not in a name, span is exact."
+ },
+ "U3923": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"image\" is a noun here (likeness of God, Gregory of Nyssa theme), not in a name, and the span covers exactly the word."
+ },
+ "U3924": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"medium category\" uses medium as an adjective (middle level), not the noun sense."
+ },
+ "U3922": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"schémas\" is in the French title of a cited article, so it is a name and not a use. Leaving it out was correct."
+ },
+ "U3925": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'artificial intelligence' (the field), not a name; span covers exactly the term."
+ },
+ "U3926": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'models' is a plain noun here (Fourier parameter models), a generic term, not a specific named system."
+ },
+ "U3929": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f6604b2573e2\" modifies \"breakouts\" as an adjective (spreading rapidly); ordinary use, not a name."
+ },
+ "U3927": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"IEEE Virtual Reality and 3D User Interfaces\" is the name of a conference, so \"User Interfaces\" sits inside a name and is not a use."
+ },
+ "U3928": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. 'Type held-out:86a125382979' is a generic noun use, and the marks cover exactly the word."
+ },
+ "U3930": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"systems\" is a plural noun (noun modifier-headed compound \"haptic augmentation systems\"), generic term, not a name; span covers the word."
+ },
+ "U3932": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:34711782a046 Role Conflict Scale\" is a named scale, so the word is inside a name and does not count."
+ },
+ "U3931": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Victor Verster held-out:bafa5557897f\" is the name of a specific facility, so leaving it out as a name was correct."
+ },
+ "U3934": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is a plain noun use, not part of a name or title; the marks cover the word."
+ },
+ "U3935": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Network embedding\" is a generic technique, used here as a noun; the marks cover the whole word."
+ },
+ "U3933": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signed\" is the past participle of the verb sign, used as an adjective in \"signed languages\". It is not a noun use, so leaving it out was correct."
+ },
+ "U3938": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiment\" is used as a noun (\"a kind of value embodiment of market economy\"), not in a name, and the marks cover exactly the word."
+ },
+ "U3936": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Electrical power transformer, used as a noun modifier in a generic term. The word's senses all count, and this is not a name."
+ },
+ "U3939": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'perceptions' is a plural noun use of perception, not in a name; the marks cover the whole word."
+ },
+ "U3941": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the organisation name 'NASA Goddard held-out:f66e6d2190f6 & Analysis Laboratory', so leaving it out as a name was correct."
+ },
+ "U3937": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Text-to-Text Transfer Transformer\" is the spelled-out name of one specific model (T5), so it is a name and not a use."
+ },
+ "U3940": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(non)presence\" is the noun presence with a \"non\" prefix. It is not in a name, and the marks cover just \"presence\"."
+ },
+ "U3942": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the cited title of another work (Brooks's article in a footnote), so it counts as a name and leaving it out was correct."
+ },
+ "U3944": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Electrical transformers (intermediate frequency transformers) in radios; a noun use of the target word, not a name, and the marks cover the whole word."
+ },
+ "U3943": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" is a plural noun, a generic use outside any name. The marks cover just the word, and the following hyphen/dash is not part of the span."
+ },
+ "U3946": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun (possessive plural) in \"users′ learning styles\". It is not in a name, and the marks cover the word."
+ },
+ "U3947": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'embodiment' (an embodiment of the principle), not in a name; marks cover the word exactly."
+ },
+ "U3945": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:15a9a9ab2b92' is a noun, mentioned as the framework's term. It is not part of a name, and the marks cover exactly the word, so the program should have kept it."
+ },
+ "U3949": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Social Presence\" is a generic theoretical construct, not a named product or scale; it is a noun use and should have been kept."
+ },
+ "U3948": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Field Emission Scanning Electron held-out:7b5614820786\" is a generic instrument type, not a named product. The model (Leo 982) is given separately. This is a noun use that should have been kept."
+ }
+}

@@ -1,0 +1,252 @@
+{
+ "U2550": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" used as a noun phrase (students' information processing); generic term, not a name, span covers it exactly."
+ },
+ "U2552": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Social network service\" is a generic noun modifier (social network service), not a name; the marked span covers the term exactly."
+ },
+ "U2553": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Medical Education and the Embodied held-out:b3ea1fd57831\" is the title of a cited work, so the word is part of a name and leaving it out was correct."
+ },
+ "U2551": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is the noun (plural) in the hyphenated \"held-out:5350e5a87b0b-binding\". It is not in a name, and the marks cover exactly the word."
+ },
+ "U2554": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a cited article title (\"Computations with Sparse Matrices\", listed with author and journal), so it counts as a name and not a use."
+ },
+ "U2556": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plural noun in \"natural images\", a genuine use of image; the URL is separate and the marks cover just the word."
+ },
+ "U2555": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having\" is a main verb (having discussions), coordinated with \"using\"; verb use, not a name, span is correct."
+ },
+ "U2557": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:c0dcb92b6a30\" is a plural noun meaning generic multi-hop routing held-out:c0dcb92b6a30, not a name; the marks cover exactly the word."
+ },
+ "U2558": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"frontal held-out:11ee3fc840ad\" is an ordinary noun use of held-out:11ee3fc840ad, not in a name; marks cover the word exactly."
+ },
+ "U2561": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:86a125382979' is used as an ordinary noun (the philosophical study of being), not in a name, and the marks cover exactly the word."
+ },
+ "U2560": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" in \"Cardinal held-out:ff37e32092ff\" is a plural noun use. It names a phonetic reference method, which is a generic technique and not a coined name, so it should be kept."
+ },
+ "U2562": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'simulation' (a simulation of the 'enchanted loom'); not part of a name."
+ },
+ "U2559": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(mis)alignment\" means \"alignment\" or \"misalignment\". The marked \"alignment\" is a noun use in the sense of political alignment, and it is not in a name."
+ },
+ "U2564": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:da17f59c700d\" is a plural noun for the generic knowledge-structure concept. It is capitalised but not a name, so it should have been kept."
+ },
+ "U2565": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Mentions the term \"held-out:15a9a9ab2b92\" as a word, which counts as a noun use; marks cover exactly the word and it is not in a name."
+ },
+ "U2563": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Systems\" is a plural noun modifier in \"Systems Architecture Reference\", a generic document-type label and not a name. The marks cover exactly the word."
+ },
+ "U2566": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"User Interface Management Systems\" is a generic term (keyword), not a product name; \"user\" is a noun modifier use and should have been kept."
+ },
+ "U2567": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'symbol' (character represented by a key), not in a name; span is exactly the word."
+ },
+ "U2568": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'intentionality' in a description of the book's parts; not a name or title."
+ },
+ "U2570": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"active held-out:19d5e41de2db\" is a noun use of held-out:19d5e41de2db, not part of a name; marks cover exactly the word."
+ },
+ "U2569": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Generic Transformer architecture used as a noun modifier (Transformer generator), not a specific named product; should have been kept."
+ },
+ "U2572": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a plural noun in \"rights and held-out:19d5e41de2db of citizenship\"; not in a name, and the marks cover the word exactly."
+ },
+ "U2573": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:9384bbe72d46\" in \"held-out:9384bbe72d46 migration\" is a noun modifier, which counts as a noun use. The ADJ tag was a mistake, so it should have been kept."
+ },
+ "U2571": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:e7866e6303be', a generic use (capitalised only for emphasis), not a name; the program should have kept it."
+ },
+ "U2576": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00 of thought\" is a plain noun use of held-out:50fa17396b00, not in a name; the marks cover the word exactly."
+ },
+ "U2577": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective modifying \"change\"; not in a name, span exact."
+ },
+ "U2574": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memory\" is a noun in the generic term \"recurrent fuzzy associative memory\", which is a model type and not a coined name. The marks cover just the word, so it should have been kept."
+ },
+ "U2575": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Information\" is part of the organisation name Information Retrieval Group of the Museums Association (IRGMA), so it is not a use."
+ },
+ "U2578": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Mental models theories\": 'models' is a noun modifier, a generic theory term (mental model theory), not a name."
+ },
+ "U2579": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a by\" is the verb held-out:32a54748ce0a (past participle), not the adjective, so leaving it out was correct."
+ },
+ "U2580": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"Non held-out:bd686ff4fd74\" modifies \"sampling\"; held-out:bd686ff4fd74 works as a noun modifier (held-out:bd686ff4fd74 sampling), which counts as a noun use, so it should have been kept."
+ },
+ "U2581": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Sustained Attention to Response Task\" (SART) is a specific named test, so leaving it out as a name was correct."
+ },
+ "U2582": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"electron held-out:7b5614820786\" is a generic instrument, a noun use of held-out:7b5614820786; marks cover exactly the word."
+ },
+ "U2583": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"machine learning\" is a generic noun use of learning; the marks cover exactly the word, and it is not a name."
+ },
+ "U2585": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cerebral held-out:11ee3fc840ad\" in a table-of-contents heading is an ordinary noun use, not a name, so it should have been kept."
+ },
+ "U2584": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "It's a concept the authors propose, a generic term and not a named product. 'Feedback loop' is a noun use and should have been kept."
+ },
+ "U2587": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Graphical User Interface DEsign System (GUIDES)\" is the name of one specific tool, so leaving \"Interface\" out as part of a name was correct."
+ },
+ "U2586": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Sufficiently held-out:3cff64e5f947 the origin...\" is a verbal gerund: an adverb modifies it and it takes a direct object. It is verb use, not a noun, so leaving it out was correct."
+ },
+ "U2588": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is a plural noun in the abstract's own title (\"Names as Verbal held-out:5ff5c82d203d\"), so it is an ordinary use and the program should have kept it."
+ },
+ "U2589": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited essay (Merleau-Ponty), so it is a name and was correctly left out."
+ },
+ "U2591": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'interpretation' (of the magnum opus), not inside a name or title."
+ },
+ "U2592": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:861f9da96b43\" is a plain noun use (mainstream held-out:861f9da96b43); the names Berita Harian and The Star are separate, and the marks cover just the word."
+ },
+ "U2590": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:11f8f1ec4ec9' in held-out:11f8f1ec4ec9 logic (non-normal held-out:11f8f1ec4ec9); not a name, span covers the word."
+ },
+ "U2593": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" as a noun (target held-out:e7866e6303be), a plain use; marks cover exactly the word."
+ },
+ "U2594": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is a generic term, a noun use, not a name; marks cover exactly the word."
+ },
+ "U2595": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098 held-out:ee104561c1ce\" is a generic GA concept, used as a noun; not a named-entity title, so it counts as a use."
+ },
+ "U2598": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feedback loop\": noun used as a modifier, generic term, not a name."
+ },
+ "U2599": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:5350e5a87b0b' (corticotropin), ordinary use, not in a name; span covers the word exactly."
+ },
+ "U2597": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'neural network' (biological circuit in Aplysia), not a name; marks cover the full term."
+ },
+ "U2596": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Computer-assisted Translation Teaching Platform (CATTP)\" is the coined name of the authors' one specific system, so \"Platform\" sits inside a name and the program was right to skip it."
+ }
+}

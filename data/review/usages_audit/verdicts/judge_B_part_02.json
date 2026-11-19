@@ -1,0 +1,252 @@
+{
+ "U0101": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"District Rural Development Agency\" is a specific named organisation (DRDA), so leaving it out as a name was correct."
+ },
+ "U0100": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"client/server held-out:c0dcb92b6a30\" is a generic noun use, and it sits outside the name \"Hypertext Transfer held-out:c0dcb92b6a30\". The marks cover just the word."
+ },
+ "U0104": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"network transposition\": network as a noun modifier, a generic technique, not a name."
+ },
+ "U0103": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Quoted mention of the noun \"information\" as a word; counts as a use, not in a name, and the marks cover exactly the word."
+ },
+ "U0105": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'representation' is an ordinary noun (a stepwise representation of the method); it was missed by the program but should be kept."
+ },
+ "U0102": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Word is inside the title of a cited book (Trial and Error: U.S. held-out:861f9da96b43' Digital Struggles...), so it counts as a name, not a use."
+ },
+ "U0106": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun (generic term) and the marks cover the whole phrase; not a name."
+ },
+ "U0107": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"sensor data fusion\" is a generic noun use, not a name; marks cover exactly the word."
+ },
+ "U0108": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" here is a noun (culture medium for cells), not in a name; span covers exactly the word."
+ },
+ "U0109": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is a plural noun, a generic term (constructional held-out:d7b1fc674098), not a name; marks cover the word exactly."
+ },
+ "U0113": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"pay attention\" uses attention as a noun, not in a name, and the marks cover exactly the word."
+ },
+ "U0111": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having\" is a main verb meaning 'possessing' (identified as having densities), in a studied POS (VERB), not in a name; span covers the word exactly."
+ },
+ "U0110": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Generic noun 'User Interface' (UI concept), not a named product; should have been kept."
+ },
+ "U0112": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" is a verb gerund here. It takes a direct object (\"revenge porn\") and an \"as\" complement, meaning \"to frame X as Y\". It is not a noun use, so leaving it out was correct."
+ },
+ "U0114": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cloud chamber\" is a generic device term; cloud works as a noun modifier, not a name."
+ },
+ "U0115": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'hallucinations' is a plural noun used as a term (mentioned as a word), which counts as a use. The marks cover the word exactly."
+ },
+ "U0117": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information\" is a plain noun use (free recall of information), not in a name; marks cover exactly the word."
+ },
+ "U0116": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is in the title of a cited paper in quotation marks, which counts as a name. Leaving it out was correct."
+ },
+ "U0119": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is the plural noun, used as a noun modifier/head in \"assumption held-out:d7b1fc674098\" (logic sense); a generic term, not a name."
+ },
+ "U0118": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use of the noun 'held-out:86a125382979'. The marks cover the word exactly."
+ },
+ "U0120": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behavior\" is a plain noun (their behavior), not in a name, and the marks cover exactly the word."
+ },
+ "U0121": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is an ordinary noun use, not in a name; the marks cover exactly the word."
+ },
+ "U0124": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bafa5557897f\" is a plural common noun, a generic use and not part of a name; the marks cover exactly the word."
+ },
+ "U0123": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'neural networks' (biological neural circuits), not in a name; marks cover the full term."
+ },
+ "U0122": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Memory\" is part of the journal name Memory & Cognition in a citation, so it is a name and leaving it out was correct."
+ },
+ "U0125": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"observation model\" - noun use of model (noun modifier/head), not a name; span covers exactly the word."
+ },
+ "U0126": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiment\" is used as a noun (user embodiment), not in a name, and the marks cover exactly the word."
+ },
+ "U0127": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:b3ea1fd57831' (John Locke as friend and held-out:b3ea1fd57831 of Shaftesbury); an ordinary use, not in a name."
+ },
+ "U0128": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"clouding our vision\" is a verb (participle with an object), not a noun use, so leaving it out was correct."
+ },
+ "U0129": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in a table-of-contents heading, which counts as an ordinary use; the program should have kept it."
+ },
+ "U0131": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" in the hyphenated compound \"held-out:e39a19f9b2b4-favorable\" is a noun use, not in a name; the marks cover exactly the word part."
+ },
+ "U0130": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is used as a generic noun term, as part of the hyphenated modifier \"artificial intelligence-based\". It is not a name, and the marks cover the phrase exactly."
+ },
+ "U0132": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cathode held-out:1c5d119c45e3\" is a generic electronics circuit term, with \"held-out:1c5d119c45e3\" as a noun. It is not a name, and the marks cover exactly the word."
+ },
+ "U0133": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Bare word 'held-out:da17f59c700d' in a list-like fragment; reads as the noun, no sign of a name or title."
+ },
+ "U0136": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947\" is a noun here (theoretical and methodological held-out:3cff64e5f947), not in a name, and the marks cover exactly the word."
+ },
+ "U0137": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun (food held-out:50fa17396b00 = feeding behavior); the span covers the whole word and it's not in a name."
+ },
+ "U0134": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"end-user interface language\" uses \"user interface\" as a noun modifier, outside any name. The marks cover exactly \"user interface\", so it should have been kept."
+ },
+ "U0135": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plural noun in a table-of-contents heading of the volume, which counts as an ordinary use. It is not a cited work's title, so it should have been kept."
+ },
+ "U0139": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"components\" is a plain noun use, not in a name; the marks cover the word exactly."
+ },
+ "U0138": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:6b293b43d2b1 terms\" is a noun modifier, which counts as a noun use. The ADJ tag is a mistake, so it should have been kept."
+ },
+ "U0140": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"clouded\" is a verb here (obscured the issue); cloud is studied only as noun/proper noun/adjective, so leaving it out was correct."
+ },
+ "U0141": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:d573b31a4663\" is part of the place name Grand held-out:d573b31a4663, Michigan (a noun, not the adjective)."
+ },
+ "U0142": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"in held-out:11f8f1ec4ec9\" is a noun use (bonds in held-out:11f8f1ec4ec9); not a name, span is exact."
+ },
+ "U0147": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is used as an ordinary noun (an image/held-out:5ff5c82d203d representing process, controls, safety); not a name, and the span covers exactly the word."
+ },
+ "U0148": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is an adjective modifying \"history\"; ordinary use, not a name, and the marks cover exactly the word."
+ },
+ "U0146": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" modifies \"life cycle\", so it is a noun modifier. That counts as a noun use and should have been kept, not tagged as a verb."
+ },
+ "U0149": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"less held-out:32a54748ce0a\" is the adjective held-out:32a54748ce0a, used predicatively; the marks cover exactly the word."
+ },
+ "U0143": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:f6604b2573e2\" is part of the official gene name \"v-erb-a erythroblastic leukemia held-out:f6604b2573e2 oncogene homolog 4\" (ErbB4), a specific named entity, not a descriptive use."
+ },
+ "U0145": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"multiprocessor platform\" is a generic noun use. The underscore only joins it to the chip name TMS320C80, and the marks cover just \"platform\"."
+ },
+ "U0144": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Embedding\" is the last word of the coined name of one specific method, Attributed Disturbance for Attribute Multiplex Heterogeneous Network Embedding (ADAMHE). A name does not count as a use, so leaving it out was correct."
+ }
+}
