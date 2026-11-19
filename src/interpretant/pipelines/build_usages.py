@@ -82,9 +82,10 @@ class UsagesSettings(ParamsSettings):
 _SENTENCES_PER_FLUSH = 2048
 _ENTITY_BATCH_SIZE = 256
 # A transformer batch holds at most this many documents and tokens: its GPU memory grows with its
-# tokens (about 0.35 MB each), so long sentences go in small batches (`docs/performance.md`).
+# tokens (about 0.35 MB each), so long sentences go in small batches; a smaller cap lets more
+# processes share the GPU (`docs/performance.md`).
 _TRANSFORMER_BATCH_SIZE = 64
-_TOKENS_PER_BATCH = 4000
+_TOKENS_PER_BATCH = 2000
 # A sentence longer than this is read as a window of half that either side of each target.
 _LONG_SENTENCE_TOKENS = 512
 # The share of the GPU's memory left for other programs; the rest is split between the processes.
