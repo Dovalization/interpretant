@@ -110,8 +110,9 @@ build_usages:
   # The seed of the draw keys: one usage per work and word is the eligible one with the smallest
   # key (agenda 4.2).
   seed: 20261301
-  # The model annotating the usages; the transformer only if the model comparison decides (4.9).
-  model: en_core_web_sm
+  # The model annotating the usages: the transformer, as the model comparison decided (4.9;
+  # data/review/model_comparison/decision.json).
+  model: en_core_web_trf
   # The entity labels whose mentions are names, not uses of the word (4.1; all 11 name types,
   # the author, 2026-11-18). Dates, numbers, quantities and the like are not names.
   name_labels: [PERSON, NORP, FAC, ORG, GPE, LOC, PRODUCT, EVENT, WORK_OF_ART, LAW, LANGUAGE]
