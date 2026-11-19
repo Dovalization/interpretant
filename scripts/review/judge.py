@@ -15,7 +15,7 @@ the chunk's worst case (every input token written to the cache, every request us
 the cap. **The usage report** (input, cache-write, cache-read and output tokens, and their cost at
 batch prices) is printed at the end, written to `OUT.manifest.json` with the batch ids, the model,
 the effort and the codebook's sha256, and added to the run record. Raw responses are not kept.
-Credentials come from the environment (`ANTHROPIC_API_KEY` or an `ant auth login` profile).
+The API key comes from the checkout's `.env` (`ANTHROPIC_API_KEY`), never from the shell.
 """
 
 from __future__ import annotations
@@ -32,6 +32,7 @@ from pathlib import Path
 from typing import Any
 
 import anthropic
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from rich.console import Console
 
 from interpretant.catalog.config import read_catalog
@@ -77,6 +78,17 @@ USAGE_FIELDS = (
     "cache_read_input_tokens",
     "output_tokens",
 )
+
+
+class ApiKeySettings(BaseSettings):
+    """The Anthropic API key, from ``.env`` only.
+
+    Exported in the shell, it would also switch Claude Code itself from the subscription to the API.
+    """
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
+    anthropic_api_key: str
 
 
 @dataclass
@@ -284,10 +296,11 @@ def main() -> None:
     parser.add_argument("--max-tokens", type=int, default=4096)
     options = parser.parse_args()
     items = load_items(options.items)
+    client = anthropic.Anthropic(api_key=ApiKeySettings().anthropic_api_key)
     verdicts = json.loads(options.out.read_text()) if options.out.exists() else {}
     with LiveProgress(Console()) as live:
         timer = StageTimer(live)
-        manifest = judge(items, options, anthropic.Anthropic(), verdicts, progress=timer)
+        manifest = judge(items, options, client, verdicts, progress=timer)
     manifest_path = options.out.with_suffix(".manifest.json")
     manifest_path.write_text(json.dumps(manifest, indent=1) + "\n")
     sys.stdout.write(report(manifest))
