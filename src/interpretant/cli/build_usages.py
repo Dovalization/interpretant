@@ -12,7 +12,12 @@ from rich.table import Table
 from interpretant.catalog.config import CATALOG_FILE, read_catalog
 from interpretant.cli.options import default_process_count, process_count_option
 from interpretant.cli.progress import LiveProgress
-from interpretant.pipelines.build_usages import UsagesResult, UsagesSettings, build_usages
+from interpretant.pipelines.build_usages import (
+    BATCH_TOKENS,
+    UsagesResult,
+    UsagesSettings,
+    build_usages,
+)
 from interpretant.pipelines.params import CorpusSelection
 from interpretant.pipelines.progress import StageTimer
 from interpretant.pipelines.runs import record_run
@@ -59,6 +64,13 @@ COUNT_LABELS = {
     help="Processes sharing the GPU when the transformer annotates the usages.",
 )
 @click.option(
+    "--batch-tokens",
+    type=click.IntRange(min=100),
+    default=BATCH_TOKENS,
+    show_default=True,
+    help="Most tokens in one transformer batch: smaller batches let more processes share the GPU.",
+)
+@click.option(
     "--resume",
     is_flag=True,
     help="Keep the parts the transformer already wrote with the current columns, and skip them.",
@@ -69,6 +81,7 @@ def build_usages_command(
     fields: tuple[str, ...],
     decades: tuple[int, ...],
     gpu_process_count: int,
+    batch_tokens: int,
     process_count: int | None,
     *,
     resume: bool,
@@ -97,6 +110,7 @@ def build_usages_command(
             UsagesSettings(),
             process_count=process_count or default_process_count(),
             gpu_process_count=gpu_process_count,
+            batch_tokens=batch_tokens,
             resume=resume,
             progress=timer,
         )

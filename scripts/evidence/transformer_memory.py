@@ -6,8 +6,8 @@ target sentences the way the stage does (one process, sentences sorted by length
 by documents and tokens, the stage's model settings) and records after every batch: the documents,
 their tokens, the longest one, and PyTorch's allocated memory (live tensors), reserved memory (held
 by its cache) and the batch's peak. Run from the repository root on the GPU machine, with no other
-GPU work:
-`python scripts/evidence/transformer_memory.py PART [PART...] OUT.jsonl`.
+GPU work, TOKENS being the batch cap:
+`python scripts/evidence/transformer_memory.py TOKENS PART [PART...] OUT.jsonl`.
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ def target_sentences(part: str, job: _PartJob) -> list[tuple[list[str], list[boo
 
 def main() -> None:
     """Annotate each part's sentences in the stage's order and log memory after every batch."""
-    *parts, out = sys.argv[1:]
+    tokens_cap, *parts, out = sys.argv[1:]
     catalog = read_catalog()
     job = _PartJob(
         catalog,
@@ -66,7 +66,9 @@ def main() -> None:
         for part in parts:
             sentences = sorted(target_sentences(part, job), key=lambda sentence: len(sentence[0]))
             sys.stdout.write(f"{part}: {len(sentences)} sentences\n")
-            for number, positions in enumerate(_batches([len(words) for words, _ in sentences])):
+            for number, positions in enumerate(
+                _batches([len(words) for words, _ in sentences], int(tokens_cap))
+            ):
                 batch = [sentences[i] for i in positions]
                 docs = [Doc(transformer.vocab, words=w, spaces=s) for w, s in batch]
                 torch.cuda.reset_peak_memory_stats()

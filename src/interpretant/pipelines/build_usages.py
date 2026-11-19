@@ -89,11 +89,11 @@ class UsagesSettings(ParamsSettings):
 # Sentences queued before their entities are recognised, and sentences per recognizer batch.
 _SENTENCES_PER_FLUSH = 2048
 _ENTITY_BATCH_SIZE = 256
-# A transformer batch holds at most this many documents and tokens: its GPU memory grows with its
-# tokens (about 0.35 MB each), so long sentences go in small batches; a smaller cap lets more
-# processes share the GPU (`docs/performance.md`).
+# A transformer batch holds at most this many documents, and by default this many tokens: its GPU
+# memory grows with its tokens (about 0.35 MB each), so long sentences go in small batches; a
+# smaller cap lets more processes share the GPU (`docs/performance.md`).
 _TRANSFORMER_BATCH_SIZE = 64
-_TOKENS_PER_BATCH = 2000
+BATCH_TOKENS = 2000
 # A sentence longer than this is read as a window of half that either side of each target.
 _LONG_SENTENCE_TOKENS = 512
 # GPU memory left for other programs (the desktop held 1.5 GB), and each process's CUDA context,
@@ -134,6 +134,7 @@ class _PartJob:
     exceptions: tuple[LemmaException, ...]
     staging: str = ""
     gpu_process_count: int = 1
+    batch_tokens: int = BATCH_TOKENS
 
 
 class _Sentence(NamedTuple):
@@ -167,6 +168,7 @@ def build_usages(
     *,
     process_count: int = 1,
     gpu_process_count: int = 4,
+    batch_tokens: int = BATCH_TOKENS,
     resume: bool = False,
     progress: Progress = SILENT,
 ) -> UsagesResult:
@@ -221,6 +223,7 @@ def build_usages(
             job.exceptions,
             staging,
             gpu_process_count,
+            batch_tokens,
         )
         progress.stage("finding the mentions", total=sum(sizes.values()))
         found = map_parts(
@@ -403,11 +406,11 @@ def _transformer(process_count: int) -> Language:
     return load_transformer()
 
 
-def _batches(lengths: Sequence[int]) -> list[range]:
+def _batches(lengths: Sequence[int], tokens_cap: int = BATCH_TOKENS) -> list[range]:
     """Consecutive batches of documents within the document and token caps."""
     batches, start, tokens = [], 0, 0
     for index, length in enumerate(lengths):
-        full = index - start >= _TRANSFORMER_BATCH_SIZE or tokens + length > _TOKENS_PER_BATCH
+        full = index - start >= _TRANSFORMER_BATCH_SIZE or tokens + length > tokens_cap
         if index > start and full:
             batches.append(range(start, index))
             start, tokens = index, 0
@@ -480,7 +483,8 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     if missing:
         transformer = _transformer(job.gpu_process_count)
         exceptions = lemma_exception_ruler(transformer.vocab, job.exceptions)
-        for batch in _batches([len(texts_of[position][0]) for position in missing]):
+        lengths = [len(texts_of[position][0]) for position in missing]
+        for batch in _batches(lengths, job.batch_tokens):
             positions = [missing[i] for i in batch]
             docs = [
                 Doc(transformer.vocab, words=texts_of[i][0], spaces=texts_of[i][1])
