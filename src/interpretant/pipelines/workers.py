@@ -152,7 +152,15 @@ def map_parts_reporting(
                     pool.submit(function, part, inputs[part], _QueueReport(reports)): part
                     for part in order
                 }
-                finished = {futures[future]: future.result() for future in as_completed(futures)}
+                try:
+                    finished = {
+                        futures[future]: future.result() for future in as_completed(futures)
+                    }
+                except BaseException:
+                    # As in ``map_parts``: a failed part cancels the parts not yet started.
+                    for future in futures:
+                        future.cancel()
+                    raise
         finally:
             stop.set()
             relay.join()
