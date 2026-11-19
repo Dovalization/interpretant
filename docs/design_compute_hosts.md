@@ -84,11 +84,12 @@ on whichever machine holds the review files, shows up like any run, and needs no
   once; what still fails goes to the adjudicator.
 - **Cost of one matching audit** (about 4,500 items, two judges, an adjudicator on about a tenth):
   roughly $10–20 at batch prices, mostly output tokens.
-- **A spending cap** (the author's requirement). Before submitting, the script counts every
-  request's input tokens (the token-counting endpoint, which is free) and prices them with a
-  ceiling on output per item; it refuses to submit if the estimate passes `--max-dollars`. While a
-  batch runs it is checked again with the usage reported so far, and cancelled if the actual cost
-  passes the cap. Prices are kept in one table in the script, with the date they were read.
+- **A spending cap** (the author's requirement). The Batches API reports usage only when a batch
+  ends, so requests go out in chunks (500 by default). A chunk is submitted only if the dollars
+  spent so far plus the chunk's worst case (every input token written to the cache, every request
+  using its full output allowance, at batch prices) stay within `--max-dollars`, so a run never
+  spends more than its cap; what the cap leaves is listed, and a later run resumes from it. Prices
+  are kept in one table in the script, with the date they were read.
 - **A usage report** (the author's requirement). Every run writes, and prints at the end, the
   input, cache-write, cache-read and output tokens per model and per judge, and their cost at batch
   prices, into its manifest; the totals also go into the run record (`metrics/runs.jsonl`).
