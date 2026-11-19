@@ -34,6 +34,7 @@ from pydantic import BaseModel, ConfigDict, Field
 REPOSITORY = Path(__file__).resolve().parents[1]
 CONFIG = REPOSITORY / "hosts.local.yaml"
 POLL_SECONDS = 15
+START_SECONDS = 10
 Where = Literal["auto", "local", "remote"]
 
 
@@ -166,6 +167,39 @@ def _on(remote: RemoteRunner | None, script: str) -> subprocess.CompletedProcess
     return subprocess.run(["ssh", remote.ssh, remote_script], capture_output=True, text=True)
 
 
+def start(remote: RemoteRunner | None, script: str, root: Path = REPOSITORY) -> None:
+    """Start the run script detached, in its own session, on the chosen machine.
+
+    Locally Python starts the new session, as macOS has no ``setsid``; the remote runner is Linux.
+
+    Raises:
+        LaunchError: if ssh cannot start it on the remote runner.
+    """
+    if remote is None:
+        subprocess.Popen(
+            ["bash", "-c", script],
+            cwd=root,
+            start_new_session=True,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        return
+    detached = f"setsid nohup bash -c {shlex.quote(script)} > /dev/null 2>&1 < /dev/null &"
+    started = _on(remote, detached)
+    if started.returncode != 0:
+        raise LaunchError(f"could not start the run: {started.stderr.strip()}")
+
+
+def _log_appears(remote: RemoteRunner | None, log: str) -> bool:
+    """Whether the run's log appears within a few seconds of the start."""
+    for _ in range(START_SECONDS):
+        if _on(remote, f"test -e {shlex.quote(log)}").returncode == 0:
+            return True
+        time.sleep(1)
+    return False
+
+
 def launch(arguments: argparse.Namespace) -> int:
     """Choose the machine, start the command there, follow it and bring its record back."""
     remote = choose(arguments.where, load_hosts(), gpu=arguments.gpu, allow_cpu=arguments.allow_cpu)
@@ -179,11 +213,9 @@ def launch(arguments: argparse.Namespace) -> int:
     script = run_script(
         arguments.command, log, pull=arguments.pull, push_outputs=arguments.push_outputs
     )
-    started = _on(
-        remote, f"setsid nohup bash -c {shlex.quote(script)} > /dev/null 2>&1 < /dev/null &"
-    )
-    if started.returncode != 0:
-        raise LaunchError(f"could not start the run: {started.stderr.strip()}")
+    start(remote, script)
+    if not _log_appears(remote, log):
+        raise LaunchError(f"the run did not start: no {log} after {START_SECONDS} s")
     sys.stdout.write(f"running on {'the remote runner' if remote else 'this machine'}: {log}\n")
     shown = 0
     while True:

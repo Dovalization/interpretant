@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import subprocess
 import sys
+import time
 from pathlib import Path
 from types import ModuleType
 
@@ -116,3 +117,15 @@ def test_a_failed_run_records_nothing(checkout: Path) -> None:
     subprocess.run(["bash", "-c", script], cwd=checkout, check=False)
     assert (checkout / "logs" / "t-bad.log.exit").read_text().strip() == "3"
     assert git(checkout, "log", "--format=%s", "-1").strip() == "start"
+
+
+def test_start_detaches_a_local_run_that_finishes_and_records_itself(checkout: Path) -> None:
+    script = run.run_script(record_and_exit(0), "logs/t-start.log", pull=[], push_outputs=False)
+    run.start(None, script, root=checkout)
+    exit_file = checkout / "logs" / "t-start.log.exit"
+    for _ in range(100):
+        if exit_file.exists() and exit_file.read_text().strip():
+            break
+        time.sleep(0.1)
+    assert exit_file.read_text().strip() == "0"
+    assert "chore(metrics): record t-start" in git(checkout, "log", "--format=%s", "-1")
