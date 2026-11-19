@@ -92,6 +92,9 @@ def test_parts_are_batch_files_or_slices_of_one_file(tmp_path: Path) -> None:
     single.write_text("".join(json.dumps(item(f"i{n}")) + "\n" for n in range(120)))
     slices = judge_cli.parts_of(single)
     assert [len(items) for items in slices.values()] == [50, 50, 20]
+    long_batch = "".join(json.dumps(item(f"j{n}")) + "\n" for n in range(25))
+    (folder / "batch_02.jsonl").write_text(long_batch)
+    assert sorted(judge_cli.parts_of(folder, 10)) == ["00", "01", "02_00", "02_01", "02_02"]
 
 
 def test_every_call_is_isolated_and_constrained_to_the_schema(tmp_path: Path) -> None:

@@ -1,10 +1,10 @@
 """Judge review items with Claude Code's command line, on the subscription (`docs/usages_audit.md`).
 
 `python scripts/review/judge_cli.py ITEMS VERDICTS_DIR --name NAME --codebook PROMPT.md
---answers usages|comparison --model MODEL --effort LEVEL [--parallel N] [--claude PATH]`
+--answers usages|comparison --model MODEL --effort LEVEL [--slice N] [--parallel N] [--claude PATH]`
 
-ITEMS is a folder of `batch_*.jsonl` files, each judged by one call, or one `.jsonl` file (an
-adjudication list), judged in slices of 50. One call of `claude -p` writes
+ITEMS is a folder of `batch_*.jsonl` files or one `.jsonl` file (an adjudication list), judged in
+parts of at most `--slice` items (50). One call of `claude -p` per part writes
 `VERDICTS_DIR/NAME_part_NN.json`, item id to answer, the layout the scorers read; a part whose
 file exists is skipped, so a stopped run resumes. Each call sees only the codebook, as the whole
 system prompt, and its items: no tools, no settings, MCP servers or CLAUDE.md (it runs in an empty
@@ -58,17 +58,26 @@ def load_lines(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
 
-def parts_of(source: Path) -> dict[str, list[dict[str, Any]]]:
-    """The items to judge in parts: each batch file of a folder, or one file in slices."""
-    if source.is_dir():
-        return {
-            path.stem.removeprefix("batch_"): load_lines(path)
-            for path in sorted(source.glob("batch_*.jsonl"))
-        }
-    items = load_lines(source)
+def parts_of(source: Path, size: int = SLICE) -> dict[str, list[dict[str, Any]]]:
+    """The items to judge in parts of at most ``size``: each batch file's slices, or one file's.
+
+    A batch file that fits in one part keeps its number (``07``); a longer one is numbered by
+    slice (``07_00``, ``07_01``). Changing ``size`` renames the parts, so a run resumes only
+    with the size it started with.
+    """
+    if not source.is_dir():
+        return _slices(load_lines(source), size, prefix="")
+    parts: dict[str, list[dict[str, Any]]] = {}
+    for path in sorted(source.glob("batch_*.jsonl")):
+        number, items = path.stem.removeprefix("batch_"), load_lines(path)
+        parts |= {number: items} if len(items) <= size else _slices(items, size, f"{number}_")
+    return parts
+
+
+def _slices(items: list[dict[str, Any]], size: int, prefix: str) -> dict[str, list[dict[str, Any]]]:
     return {
-        f"{start // SLICE:02d}": items[start : start + SLICE]
-        for start in range(0, len(items), SLICE)
+        f"{prefix}{start // size:02d}": items[start : start + size]
+        for start in range(0, len(items), size)
     }
 
 
@@ -230,6 +239,7 @@ def main() -> None:
     parser.add_argument(
         "--effort", choices=["low", "medium", "high", "xhigh", "max"], required=True
     )
+    parser.add_argument("--slice", type=int, default=SLICE, help="most items in one call")
     parser.add_argument("--parallel", type=int, default=4)
     parser.add_argument("--claude", default="claude", help="the command line's executable")
     options = parser.parse_args()
@@ -238,7 +248,7 @@ def main() -> None:
     ).stdout.strip()
     with LiveProgress(Console()) as live:
         timer = StageTimer(live)
-        run = judge_all(parts_of(options.items), options, run_claude, progress=timer)
+        run = judge_all(parts_of(options.items, options.slice), options, run_claude, progress=timer)
     manifest_path = options.verdicts / f"{options.name}.manifest.json"
     earlier = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     manifest = merged_manifest(
