@@ -10,7 +10,7 @@ import pytest
 
 from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.usages import USAGES_COLUMNS, load_usages, save_usages
-from interpretant.usages.checks import check_usages_against_text
+from interpretant.usages.checks import validate_usages_against_text
 from interpretant.usages.identifiers import build_content_key, build_draw_key
 
 TEXT = "Intro text. Attention is limited. More text."
@@ -84,10 +84,31 @@ def test_save_usages_refuses_a_repeated_usage_id(catalog: CatalogConfig) -> None
         save_usages(catalog, table([usage_row(), usage_row(drawn=False)]), part="ai_2010")
 
 
-def test_check_usages_against_text_finds_a_wrong_key_and_a_wrong_span() -> None:
-    good = usage_row()
-    assert check_usages_against_text(table([good]), {WORK: TEXT}) == []
-    bad_key = usage_row(content_key="0" * 20)
-    bad_span = usage_row(target_start=0, target_end=5)
-    problems = check_usages_against_text(table([bad_key, bad_span]), {WORK: TEXT})
-    assert len(problems) == 3
+def test_validate_usages_against_text_accepts_a_usage_that_points_at_its_target() -> None:
+    validate_usages_against_text(table([usage_row()]), {WORK: TEXT})
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"content_key": "0" * 20},
+        {"target_start": 13, "target_end": 21},
+        {"target_start": 12, "target_end": 20},
+        {"target_start": 25, "target_end": 32},
+    ],
+    ids=["key", "cut at the start", "cut at the end", "another word"],
+)
+def test_validate_usages_against_text_refuses_a_bad_key_or_span(changes: dict[str, Any]) -> None:
+    row = usage_row(**changes)
+    if "content_key" not in changes:
+        sentence = TEXT[row["sentence_start"] : row["sentence_end"]]
+        start = row["target_start"] - row["sentence_start"]
+        end = row["target_end"] - row["sentence_start"]
+        row["content_key"] = build_content_key(sentence, start, end)
+    with pytest.raises(pandera.errors.SchemaError):
+        validate_usages_against_text(table([row]), {WORK: TEXT})
+
+
+def test_validate_usages_against_text_refuses_a_usage_without_text() -> None:
+    with pytest.raises(pandera.errors.SchemaError):
+        validate_usages_against_text(table([usage_row()]), {})

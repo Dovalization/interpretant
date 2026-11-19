@@ -39,6 +39,7 @@ from interpretant.pipelines.corpus import corpus_cells, corpus_parts
 from interpretant.pipelines.params import CorpusSelection, ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts
+from interpretant.usages.checks import validate_usages_against_text
 from interpretant.usages.entities import (
     entity_label,
     load_entity_recognizer,
@@ -123,7 +124,8 @@ def build_usages(
         ValueError: if no raw cell matches the selection, or a curated file is malformed.
         TextMismatchError: if a cached document's text is not its work's text.
         FileNotFoundError: if a part's cache, abstracts, sentence view or static view is missing.
-        pandera.errors.SchemaError: if a part's rows break the usages table's schema.
+        pandera.errors.SchemaError: if a part's rows break the usages table's schema, or a
+            usage's content key or offsets do not match its text.
     """
     parts = corpus_parts(corpus_cells(catalog, selection))
     job = _PartJob(
@@ -177,6 +179,7 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
         counts["mentions"] += len(mentions)
         rows.extend(_usage_rows(work, mentions, recognizer, words, job.settings, counts))
     table = mark_drawn(pl.DataFrame(rows, schema=USAGES_COLUMNS, orient="row"))
+    validate_usages_against_text(table, texts)
     save_usages(job.catalog, table, part=part)
     counts["usages"] += table.height
     counts["in_scope"] += int(table["in_scope"].sum())

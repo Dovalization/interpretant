@@ -21,7 +21,7 @@ from interpretant.pipelines.build_usages import (
     UsagesSettings,
     build_usages,
 )
-from interpretant.usages.checks import check_usages_against_text
+from interpretant.usages.checks import validate_usages_against_text
 from interpretant.usages.usage_selection import NAME_LABELS
 from tests.corpus_catalog import SELECTION, prepare_annotated_corpus
 
@@ -51,7 +51,7 @@ def test_build_usages_finds_the_targets_and_checks_against_the_text(
     texts = dict(load_abstracts(prepared_catalog).select("work_id", "text").collect().iter_rows())
     assert result.parts == ["ai_2010", "compsci_2010"]
     assert {"attention", "model"} <= set(usages["word"])
-    assert check_usages_against_text(usages, texts) == []
+    validate_usages_against_text(usages, texts)
     left_out = sum(
         result.counts.get(key, 0)
         for key in ("inside_removed_ranges", "outside_sentences", "in_removed_sentences")
