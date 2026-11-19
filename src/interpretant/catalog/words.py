@@ -15,6 +15,7 @@ import csv
 import hashlib
 import itertools
 import re
+from collections.abc import Iterable
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -100,3 +101,31 @@ def _word(row: dict[str, str]) -> Word:
             "held_out": held_out,
         }
     )
+
+
+def seal_held_out(text: str, words: Iterable[Word]) -> str:
+    """The text with each held-out word shown by its reported name, in any of its common forms.
+
+    The forms are the lemma with -s, -es, -ed, -d, -ing or 's, and for a lemma ending in -e or -y
+    those that drop it (-ing; -ies, -ied); case is ignored. Free text a development output keeps,
+    such as a judge's note, is sealed this way before it is committed (`docs/held_out.md`).
+    """
+    names: dict[str, str] = {}
+    for word in words:
+        if word.held_out:
+            for form in _common_forms(word.lemma):
+                names[form] = word.reported_name
+    if not names:
+        return text
+    alternatives = "|".join(re.escape(form) for form in sorted(names, key=len, reverse=True))
+    pattern = re.compile(rf"\b(?:{alternatives})\b", re.IGNORECASE)
+    return pattern.sub(lambda match: names[match.group(0).lower()], text)
+
+
+def _common_forms(lemma: str) -> set[str]:
+    forms = {lemma + ending for ending in ("", "s", "es", "ed", "d", "ing", "'s")}
+    if lemma.endswith("e"):
+        forms.add(lemma[:-1] + "ing")
+    if lemma.endswith("y"):
+        forms |= {lemma[:-1] + "ies", lemma[:-1] + "ied"}
+    return {form.lower() for form in forms}

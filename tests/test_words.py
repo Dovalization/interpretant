@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 import hashlib
+import json
+import subprocess
+from pathlib import Path
 
 import pydantic
 import pytest
 
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.lemma_exceptions import load_lemma_exceptions
-from interpretant.catalog.words import Word, load_words
+from interpretant.catalog.words import Word, load_words, seal_held_out
 from tests.sealed import fail_sealed
 
 HEADER = "# A comment line.\nlemma\tpos\tmatch\theld_out\n"
@@ -76,3 +79,39 @@ def test_reported_name_hides_a_held_out_word_behind_a_stable_hash() -> None:
     assert sealed.reported_name.startswith("held-out:")
     assert "attention" not in sealed.reported_name
     assert sealed.reported_name == sealed.model_copy().reported_name
+
+
+def test_seal_held_out_names_a_held_out_word_in_its_common_forms_by_its_hash() -> None:
+    sealed = Word(lemma="encode", pos=("VERB",), match="lemma", held_out=True)
+    query = Word(lemma="query", pos=("NOUN",), match="lemma", held_out=True)
+    shown = Word(lemma="attention", pos=("NOUN",), match="lemma", held_out=False)
+    text = "Encoding, encodes and encoded; two queries; attention stays; encoder stays."
+    name, other = sealed.reported_name, query.reported_name
+    assert seal_held_out(text, [sealed, query, shown]) == (
+        f"{name}, {name} and {name}; two {other}; attention stays; encoder stays."
+    )
+    assert seal_held_out(text, [shown]) == text
+
+
+def test_committed_review_notes_name_no_held_out_word() -> None:
+    """Every judge's note in a committed review file is sealed (`scripts/review/seal_notes.py`)."""
+    words = load_words(read_catalog())
+    held_out = [word for word in words if word.held_out]
+    listing = subprocess.run(
+        ["git", "ls-files", "data/review"], capture_output=True, text=True, check=True
+    )
+    named: set[str] = set()
+    for name in listing.stdout.split():
+        if name.endswith(".json"):
+            for note in _notes(json.loads(Path(name).read_text(encoding="utf-8"))):
+                named |= {w.lemma for w in held_out if seal_held_out(note, [w]) != note}
+    fail_sealed(sorted(named), "named in committed review notes")
+
+
+def _notes(value: object) -> list[str]:
+    if isinstance(value, dict):
+        own = [value["note"]] if isinstance(value.get("note"), str) else []
+        return own + [note for inner in value.values() for note in _notes(inner)]
+    if isinstance(value, list):
+        return [note for inner in value for note in _notes(inner)]
+    return []
