@@ -123,3 +123,8 @@ data/review/sentence_view/round4/*.jsonl
 data/review/sentence_view/round5/*.jsonl
 data/review/sentence_view/round6/*.jsonl
 data/review/sentence_view/adjudicate*.jsonl
+# The model comparison's and the matching audit's items quote corpus sentences; only keys, counts and
+# verdicts are committed.
+data/review/model_comparison/items.jsonl
+data/review/usages_audit/batch_*.jsonl
+data/review/usages_audit/adjudicate*.jsonl
