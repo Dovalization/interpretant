@@ -37,16 +37,29 @@ def test_recognise_sentence_entities_finds_names_on_the_sentence_alone(
     )
     doc.set_ents([], default="outside")
     second = doc[7:]
-    sentence = recognise_sentence_entities(second, recognizer)
+    [sentence] = recognise_sentence_entities([second], recognizer, batch_size=8)
     labels = {entity.text: entity.label_ for entity in sentence.ents}
     assert labels.get("John Smith") == "PERSON"
     network = sentence.text.index("network")
     assert entity_label(sentence, network, network + len("network")) is None
 
 
+def test_recognise_sentence_entities_gives_each_sentence_its_own_result_in_order(
+    recognizer: Language,
+) -> None:
+    texts = ["John Smith built it.", "The network grew.", "They moved to Atlanta."]
+    spans = [recognizer.make_doc(text)[:] for text in texts]
+    alone = [next(recognise_sentence_entities([span], recognizer, batch_size=1)) for span in spans]
+    batched = list(recognise_sentence_entities(spans, recognizer, batch_size=2))
+    assert [doc.text for doc in batched] == texts
+    assert [[(e.text, e.label_) for e in doc.ents] for doc in batched] == [
+        [(e.text, e.label_) for e in doc.ents] for doc in alone
+    ]
+
+
 def test_entity_label_reads_the_entity_overlapping_the_target(recognizer: Language) -> None:
     doc = recognizer.make_doc("They visited the Cable News Network in Atlanta.")
-    sentence = recognise_sentence_entities(doc[:], recognizer)
+    [sentence] = recognise_sentence_entities([doc[:]], recognizer, batch_size=8)
     network = sentence.text.index("Network")
     assert entity_label(sentence, network, network + len("Network")) == "ORG"
 

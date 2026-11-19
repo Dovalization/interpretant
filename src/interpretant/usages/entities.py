@@ -15,12 +15,12 @@ the lemma exceptions applied after it, for the comparison of agenda 4.9 and, if 
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Iterable, Iterator
 from typing import Any
 
 import spacy
 from spacy.language import Language
-from spacy.pipeline import AttributeRuler
+from spacy.pipeline import AttributeRuler, EntityRecognizer
 from spacy.tokens import Doc, Span
 
 from interpretant.corpus.attribute_rules import LOOKUP_ATTRIBUTE_RULER, LookupAttributeRuler
@@ -98,16 +98,28 @@ def require_entity_annotation(doc: Doc) -> None:
         raise MissingEntityAnnotationError("the document holds no entity annotation")
 
 
-def recognise_sentence_entities(sentence: Span, recognizer: Language) -> Doc:
-    """The sentence as its own document, with entities recognised on it alone.
+def recognise_sentence_entities(
+    sentences: Iterable[Span], recognizer: Language, *, batch_size: int
+) -> Iterator[Doc]:
+    """Each sentence as its own document, with entities recognised on it alone, in batches.
 
     Raises:
-        MissingEntityAnnotationError: if recognition left no annotation.
+        TypeError: if the recognizer's ``ner`` is not spaCy's entity recognizer.
+        MissingEntityAnnotationError: if recognition left a sentence without annotation.
     """
+    ner = recognizer.get_pipe("ner")
+    if not isinstance(ner, EntityRecognizer):
+        raise TypeError(f"expected spaCy's entity recognizer, got {type(ner).__name__}")
+    docs = (_without_entities(sentence) for sentence in sentences)
+    for doc in ner.pipe(docs, batch_size=batch_size):
+        require_entity_annotation(doc)
+        yield doc
+
+
+def _without_entities(sentence: Span) -> Doc:
+    """The sentence as its own document, its entity labels set to missing for recognition."""
     doc = sentence.as_doc()
     doc.set_ents([], default="missing")
-    doc = recognizer.get_pipe("ner")(doc)
-    require_entity_annotation(doc)
     return doc
 
 

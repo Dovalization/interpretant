@@ -17,7 +17,7 @@ exactly the static view's normalisation.
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from itertools import pairwise
 from typing import Literal
 
@@ -52,6 +52,10 @@ class TargetMatcher:
     by_lemma: frozenset[str]
     phrases: Mapping[tuple[str, str], str]
     spellings: Mapping[str, str]
+    # Each text's folded and spelled forms, filled as tokens are read: a profile of one part spent
+    # a third of the stage's time folding the same texts again (`docs/performance.md`).
+    folded: dict[str, str] = field(default_factory=dict, compare=False)
+    spelled: dict[str, str] = field(default_factory=dict, compare=False)
 
 
 def build_target_matcher(words: Iterable[Word], spellings: Mapping[str, str]) -> TargetMatcher:
@@ -82,14 +86,24 @@ def match_targets(doc: Doc, matcher: TargetMatcher) -> list[TargetMention]:
             mentions.append(
                 TargetMention(word, token.i, token.idx, token.idx + len(token.text), None, None)
             )
-        elif "-" in fold(token.text):
+        elif "-" in _folded(token.text, matcher):
             mentions.extend(_hyphen_parts(token, matcher))
     mentions.extend(_phrases(doc, matcher))
     return mentions
 
 
+def _folded(text: str, matcher: TargetMatcher) -> str:
+    folded = matcher.folded.get(text)
+    if folded is None:
+        folded = matcher.folded[text] = fold(text)
+    return folded
+
+
 def _spelled(text: str, matcher: TargetMatcher) -> str:
-    return spell(fold(text), matcher.spellings)
+    spelled = matcher.spelled.get(text)
+    if spelled is None:
+        spelled = matcher.spelled[text] = spell(_folded(text, matcher), matcher.spellings)
+    return spelled
 
 
 def _single_word(token: Token, matcher: TargetMatcher) -> str | None:
@@ -117,7 +131,7 @@ def _singular(part: str, matcher: TargetMatcher) -> str | None:
 
 def _hyphen_parts(token: Token, matcher: TargetMatcher) -> list[TargetMention]:
     """The targets among a hyphenated token's parts, each with its own offsets."""
-    parts = fold(token.text).split("-")
+    parts = _folded(token.text, matcher).split("-")
     mentions = []
     offset = 0
     for index, part in enumerate(parts):
@@ -159,7 +173,7 @@ def _phrases(doc: Doc, matcher: TargetMatcher) -> list[TargetMention]:
 
 def _hyphenated_phrases(token: Token, matcher: TargetMatcher) -> list[TargetMention]:
     """Phrase targets written as consecutive parts of one hyphenated token (*neural-network*)."""
-    parts = fold(token.text).split("-")
+    parts = _folded(token.text, matcher).split("-")
     starts = [sum(len(part) + 1 for part in parts[:index]) for index in range(len(parts))]
     mentions = []
     for index in range(len(parts) - 1):

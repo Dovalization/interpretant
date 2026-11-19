@@ -22,7 +22,7 @@ import polars as pl
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 from spacy.language import Language
-from spacy.tokens import Doc
+from spacy.tokens import Doc, Span
 
 from interpretant.catalog.abstracts import load_abstracts_part
 from interpretant.catalog.annotations import WORK_ID, load_annotations
@@ -61,6 +61,15 @@ class UsagesSettings(ParamsSettings):
     seed: int
     model: Literal["en_core_web_sm"]
     name_labels: tuple[str, ...] = Field(min_length=1)
+
+
+# Sentences queued before their entities are recognised, and sentences per recognizer batch.
+_SENTENCES_PER_FLUSH = 2048
+_ENTITY_BATCH_SIZE = 256
+_COLUMN_NAMES = USAGES_COLUMNS.names()
+_POS = _COLUMN_NAMES.index("pos")
+_ENTITY = _COLUMN_NAMES.index("entity")
+_IN_SCOPE = _COLUMN_NAMES.index("in_scope")
 
 
 class TextMismatchError(ValueError):
@@ -161,6 +170,7 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
     }
     rows: list[tuple[Any, ...]] = []
     counts: Counter[str] = Counter()
+    batch = _EntityBatch(recognizer, job.settings.name_labels)
     for doc in load_annotations(job.catalog, part, recognizer.vocab):
         work_id = doc.user_data[WORK_ID]
         if work_id not in texts:
@@ -177,7 +187,10 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
         )
         mentions = match_targets(ruler(doc), matcher)
         counts["mentions"] += len(mentions)
-        rows.extend(_usage_rows(work, mentions, recognizer, words, job.settings, counts))
+        _add_usages(work, mentions, words, job.settings, counts, batch)
+        if batch.is_full:
+            rows.extend(batch.flush())
+    rows.extend(batch.flush())
     table = mark_drawn(pl.DataFrame(rows, schema=USAGES_COLUMNS, orient="row"))
     validate_usages_against_text(table, texts)
     save_usages(job.catalog, table, part=part)
@@ -187,19 +200,94 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
     return counts
 
 
-def _usage_rows(
+@dataclass(frozen=True)
+class _Waiting:
+    """A usage's row waiting for its entity and scope, and where its target is in its sentence."""
+
+    row: list[Any]
+    sentence: tuple[str, int]
+    start: int
+    end: int
+    word: Word
+    hyphen_part: bool
+
+
+class _EntityBatch:
+    """Usages waiting for their sentences' entities, recognised a batch of sentences at a time.
+
+    The recognizer's ``pipe`` predicts many sentences per call, which the profile of one call per
+    sentence showed spending a third of its time on the call itself (`docs/performance.md`).
+    """
+
+    def __init__(self, recognizer: Language, name_labels: tuple[str, ...]) -> None:
+        self.recognizer = recognizer
+        self.name_labels = name_labels
+        self.spans: dict[tuple[str, int], Span] = {}
+        self.waiting: list[_Waiting] = []
+
+    @property
+    def is_full(self) -> bool:
+        """Whether enough sentences wait to recognise them."""
+        return len(self.spans) >= _SENTENCES_PER_FLUSH
+
+    def add(
+        self, work: _Work, sentence: _Sentence, mention: TargetMention, row: list[Any], word: Word
+    ) -> None:
+        """Queue a usage's row, and its sentence if no usage queued it yet.
+
+        Raises:
+            ValueError: if the sentence covers no token.
+        """
+        key = (work.work_id, sentence.number)
+        span = self.spans.get(key)
+        if span is None:
+            span = work.doc.char_span(sentence.start, sentence.end, alignment_mode="expand")
+            if span is None:
+                raise ValueError(f"{work.work_id}: sentence {sentence.number} has no tokens")
+            self.spans[key] = span
+        self.waiting.append(
+            _Waiting(
+                row,
+                key,
+                mention.start_char - span.start_char,
+                mention.end_char - span.start_char,
+                word,
+                mention.position is not None,
+            )
+        )
+
+    def flush(self) -> list[tuple[Any, ...]]:
+        """Recognise the queued sentences' entities and return their usages' finished rows."""
+        keys = list(self.spans)
+        recognised = recognise_sentence_entities(
+            (self.spans[key] for key in keys), self.recognizer, batch_size=_ENTITY_BATCH_SIZE
+        )
+        entity_docs = dict(zip(keys, recognised, strict=True))
+        rows = []
+        for waiting in self.waiting:
+            entity = entity_label(entity_docs[waiting.sentence], waiting.start, waiting.end)
+            row = waiting.row
+            row[_ENTITY] = entity
+            row[_IN_SCOPE] = is_in_scope(
+                row[_POS], waiting.word, entity, self.name_labels, hyphen_part=waiting.hyphen_part
+            )
+            rows.append(tuple(row))
+        self.spans.clear()
+        self.waiting.clear()
+        return rows
+
+
+def _add_usages(
     work: _Work,
     mentions: Sequence[TargetMention],
-    recognizer: Language,
     words: Mapping[str, Word],
     settings: UsagesSettings,
     counts: Counter[str],
-) -> list[tuple[Any, ...]]:
-    """The rows of one work's mentions, in the table's column order; entities once a sentence."""
+    batch: _EntityBatch,
+) -> None:
+    """Queue one work's usages, in the table's column order, for their entities and scope."""
     sentence_starts = [sentence.start for sentence in work.sentences]
     removed_starts = [start for start, _ in work.removed]
-    entities: dict[int, tuple[Doc, int]] = {}
-    rows = []
     for mention in mentions:
         inside = bisect_right(removed_starts, mention.start_char) - 1
         if inside >= 0 and mention.start_char < work.removed[inside][1]:
@@ -213,57 +301,39 @@ def _usage_rows(
         if sentence.exclusion == REMOVED:
             counts["in_removed_sentences"] += 1
             continue
-        if sentence.number not in entities:
-            span = work.doc.char_span(sentence.start, sentence.end, alignment_mode="expand")
-            if span is None:
-                raise ValueError(f"{work.work_id}: sentence {sentence.number} has no tokens")
-            entities[sentence.number] = (
-                recognise_sentence_entities(span, recognizer),
-                span.start_char,
-            )
-        entity_doc, base = entities[sentence.number]
-        entity = entity_label(entity_doc, mention.start_char - base, mention.end_char - base)
         head = work.doc[mention.token_index]
         content_key = build_content_key(
             work.text[sentence.start : sentence.end],
             mention.start_char - sentence.start,
             mention.end_char - sentence.start,
         )
-        rows.append(
-            (
-                work.work_id,
-                mention.word,
-                content_key,
-                build_draw_key(settings.seed, work.work_id, mention.word, content_key),
-                sentence.number,
-                sentence.start,
-                sentence.end,
-                mention.start_char,
-                mention.end_char,
-                mention.compound,
-                mention.position,
-                head.pos_,
-                head.tag_,
-                str(head.morph),
-                head.lemma_,
-                entity,
-                work.static.get(head.idx),
-                sentence.word_count,
-                sentence.language,
-                sentence.confidence,
-                sentence.exclusion,
-                is_in_scope(
-                    head.pos_,
-                    words[mention.word],
-                    entity,
-                    settings.name_labels,
-                    hyphen_part=mention.position is not None,
-                ),
-                False,
-                settings.model,
-            )
-        )
-    return rows
+        row = [
+            work.work_id,
+            mention.word,
+            content_key,
+            build_draw_key(settings.seed, work.work_id, mention.word, content_key),
+            sentence.number,
+            sentence.start,
+            sentence.end,
+            mention.start_char,
+            mention.end_char,
+            mention.compound,
+            mention.position,
+            head.pos_,
+            head.tag_,
+            str(head.morph),
+            head.lemma_,
+            None,  # the entity, set by the flush
+            work.static.get(head.idx),
+            sentence.word_count,
+            sentence.language,
+            sentence.confidence,
+            sentence.exclusion,
+            None,  # in scope, set by the flush
+            False,
+            settings.model,
+        ]
+        batch.add(work, sentence, mention, row, words[mention.word])
 
 
 def _kept_works(
