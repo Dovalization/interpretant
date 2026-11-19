@@ -1,0 +1,765 @@
+{
+ "usages": 29700,
+ "words": 99,
+ "held_out_words": 46,
+ "flip_share": 0.0533,
+ "match_flips": 85,
+ "scope_flips": 1498,
+ "into_scope": 1049,
+ "out_of_scope": 449,
+ "raw_lemma_differences": 1079,
+ "abstract_entity_agreement": 0.99828,
+ "by_word": [
+  {
+   "word": "held-out:11f8f1ec4ec9",
+   "usages": 300,
+   "flip": 0.5333,
+   "match_flip": 0.0,
+   "scope_flip": 0.5333
+  },
+  {
+   "word": "held-out:ff37e32092ff",
+   "usages": 300,
+   "flip": 0.27,
+   "match_flip": 0.0,
+   "scope_flip": 0.27
+  },
+  {
+   "word": "information processing",
+   "usages": 300,
+   "flip": 0.2133,
+   "match_flip": 0.0,
+   "scope_flip": 0.2133
+  },
+  {
+   "word": "held-out:ee104561c1ce",
+   "usages": 300,
+   "flip": 0.2,
+   "match_flip": 0.0,
+   "scope_flip": 0.2
+  },
+  {
+   "word": "held-out:779d6b6eedf0",
+   "usages": 300,
+   "flip": 0.19,
+   "match_flip": 0.02,
+   "scope_flip": 0.17
+  },
+  {
+   "word": "held-out:2c676bb34422",
+   "usages": 300,
+   "flip": 0.18,
+   "match_flip": 0.0,
+   "scope_flip": 0.18
+  },
+  {
+   "word": "artificial intelligence",
+   "usages": 300,
+   "flip": 0.1533,
+   "match_flip": 0.0,
+   "scope_flip": 0.1533
+  },
+  {
+   "word": "held-out:3cff64e5f947",
+   "usages": 300,
+   "flip": 0.1433,
+   "match_flip": 0.0,
+   "scope_flip": 0.1433
+  },
+  {
+   "word": "held-out:15a9a9ab2b92",
+   "usages": 300,
+   "flip": 0.1433,
+   "match_flip": 0.0,
+   "scope_flip": 0.1433
+  },
+  {
+   "word": "cloud",
+   "usages": 300,
+   "flip": 0.11,
+   "match_flip": 0.0067,
+   "scope_flip": 0.1033
+  },
+  {
+   "word": "social network",
+   "usages": 300,
+   "flip": 0.1067,
+   "match_flip": 0.0867,
+   "scope_flip": 0.02
+  },
+  {
+   "word": "user interface",
+   "usages": 300,
+   "flip": 0.0933,
+   "match_flip": 0.0,
+   "scope_flip": 0.0933
+  },
+  {
+   "word": "intelligence",
+   "usages": 300,
+   "flip": 0.0933,
+   "match_flip": 0.0033,
+   "scope_flip": 0.09
+  },
+  {
+   "word": "medium",
+   "usages": 300,
+   "flip": 0.09,
+   "match_flip": 0.0,
+   "scope_flip": 0.09
+  },
+  {
+   "word": "held-out:96da49af8e67",
+   "usages": 300,
+   "flip": 0.0867,
+   "match_flip": 0.0067,
+   "scope_flip": 0.08
+  },
+  {
+   "word": "prompt",
+   "usages": 300,
+   "flip": 0.0867,
+   "match_flip": 0.05,
+   "scope_flip": 0.0367
+  },
+  {
+   "word": "held-out:e7866e6303be",
+   "usages": 300,
+   "flip": 0.0833,
+   "match_flip": 0.0,
+   "scope_flip": 0.0833
+  },
+  {
+   "word": "held-out:164ebb5df0ea",
+   "usages": 300,
+   "flip": 0.0767,
+   "match_flip": 0.0,
+   "scope_flip": 0.0767
+  },
+  {
+   "word": "control",
+   "usages": 300,
+   "flip": 0.0767,
+   "match_flip": 0.0233,
+   "scope_flip": 0.0533
+  },
+  {
+   "word": "held-out:07afa72fe9fc",
+   "usages": 300,
+   "flip": 0.0767,
+   "match_flip": 0.0,
+   "scope_flip": 0.0767
+  },
+  {
+   "word": "transformer",
+   "usages": 300,
+   "flip": 0.0733,
+   "match_flip": 0.0033,
+   "scope_flip": 0.07
+  },
+  {
+   "word": "held-out:10c5166f4af0",
+   "usages": 300,
+   "flip": 0.0667,
+   "match_flip": 0.0,
+   "scope_flip": 0.0667
+  },
+  {
+   "word": "sign",
+   "usages": 300,
+   "flip": 0.0633,
+   "match_flip": 0.0133,
+   "scope_flip": 0.05
+  },
+  {
+   "word": "held-out:d7b1fc674098",
+   "usages": 300,
+   "flip": 0.0567,
+   "match_flip": 0.0,
+   "scope_flip": 0.0567
+  },
+  {
+   "word": "held-out:d4bed87430ea",
+   "usages": 300,
+   "flip": 0.0533,
+   "match_flip": 0.0267,
+   "scope_flip": 0.0267
+  },
+  {
+   "word": "held-out:f66e6d2190f6",
+   "usages": 300,
+   "flip": 0.0533,
+   "match_flip": 0.0,
+   "scope_flip": 0.0533
+  },
+  {
+   "word": "held-out:c0dcb92b6a30",
+   "usages": 300,
+   "flip": 0.0533,
+   "match_flip": 0.0,
+   "scope_flip": 0.0533
+  },
+  {
+   "word": "intentionality",
+   "usages": 300,
+   "flip": 0.0533,
+   "match_flip": 0.0,
+   "scope_flip": 0.0533
+  },
+  {
+   "word": "computation",
+   "usages": 300,
+   "flip": 0.0533,
+   "match_flip": 0.0,
+   "scope_flip": 0.0533
+  },
+  {
+   "word": "held-out:02b12c17f936",
+   "usages": 300,
+   "flip": 0.0533,
+   "match_flip": 0.0,
+   "scope_flip": 0.0533
+  },
+  {
+   "word": "held-out:7dc7c59f90ed",
+   "usages": 300,
+   "flip": 0.05,
+   "match_flip": 0.0033,
+   "scope_flip": 0.0467
+  },
+  {
+   "word": "mind",
+   "usages": 300,
+   "flip": 0.05,
+   "match_flip": 0.0,
+   "scope_flip": 0.05
+  },
+  {
+   "word": "held-out:912b00c7764c",
+   "usages": 300,
+   "flip": 0.0467,
+   "match_flip": 0.0,
+   "scope_flip": 0.0467
+  },
+  {
+   "word": "held-out:6b293b43d2b1",
+   "usages": 300,
+   "flip": 0.0467,
+   "match_flip": 0.0,
+   "scope_flip": 0.0467
+  },
+  {
+   "word": "neural network",
+   "usages": 300,
+   "flip": 0.0467,
+   "match_flip": 0.0,
+   "scope_flip": 0.0467
+  },
+  {
+   "word": "held-out:7d0f24edc7fd",
+   "usages": 300,
+   "flip": 0.0467,
+   "match_flip": 0.0,
+   "scope_flip": 0.0467
+  },
+  {
+   "word": "cognition",
+   "usages": 300,
+   "flip": 0.0433,
+   "match_flip": 0.0,
+   "scope_flip": 0.0433
+  },
+  {
+   "word": "embedding",
+   "usages": 300,
+   "flip": 0.0433,
+   "match_flip": 0.0,
+   "scope_flip": 0.0433
+  },
+  {
+   "word": "learning",
+   "usages": 300,
+   "flip": 0.0433,
+   "match_flip": 0.0,
+   "scope_flip": 0.0433
+  },
+  {
+   "word": "fusion",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0,
+   "scope_flip": 0.04
+  },
+  {
+   "word": "network",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0133,
+   "scope_flip": 0.0267
+  },
+  {
+   "word": "held-out:7b5614820786",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0,
+   "scope_flip": 0.04
+  },
+  {
+   "word": "meaning",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0,
+   "scope_flip": 0.04
+  },
+  {
+   "word": "symbol",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0,
+   "scope_flip": 0.04
+  },
+  {
+   "word": "held-out:9384bbe72d46",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0,
+   "scope_flip": 0.04
+  },
+  {
+   "word": "held-out:d573b31a4663",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0033,
+   "scope_flip": 0.0367
+  },
+  {
+   "word": "agency",
+   "usages": 300,
+   "flip": 0.04,
+   "match_flip": 0.0033,
+   "scope_flip": 0.0367
+  },
+  {
+   "word": "held-out:34711782a046",
+   "usages": 300,
+   "flip": 0.0367,
+   "match_flip": 0.0,
+   "scope_flip": 0.0367
+  },
+  {
+   "word": "held-out:bafa5557897f",
+   "usages": 300,
+   "flip": 0.0367,
+   "match_flip": 0.0,
+   "scope_flip": 0.0367
+  },
+  {
+   "word": "held-out:5ff5c82d203d",
+   "usages": 300,
+   "flip": 0.0333,
+   "match_flip": 0.0033,
+   "scope_flip": 0.03
+  },
+  {
+   "word": "held-out:e39a19f9b2b4",
+   "usages": 300,
+   "flip": 0.0333,
+   "match_flip": 0.0,
+   "scope_flip": 0.0333
+  },
+  {
+   "word": "held-out:1b596f30c66f",
+   "usages": 300,
+   "flip": 0.03,
+   "match_flip": 0.0,
+   "scope_flip": 0.03
+  },
+  {
+   "word": "interface",
+   "usages": 300,
+   "flip": 0.03,
+   "match_flip": 0.0,
+   "scope_flip": 0.03
+  },
+  {
+   "word": "held-out:86a125382979",
+   "usages": 300,
+   "flip": 0.03,
+   "match_flip": 0.0,
+   "scope_flip": 0.03
+  },
+  {
+   "word": "interpretation",
+   "usages": 300,
+   "flip": 0.0267,
+   "match_flip": 0.0,
+   "scope_flip": 0.0267
+  },
+  {
+   "word": "held-out:7b1df4aa54d0",
+   "usages": 300,
+   "flip": 0.0267,
+   "match_flip": 0.0,
+   "scope_flip": 0.0267
+  },
+  {
+   "word": "held-out:da17f59c700d",
+   "usages": 300,
+   "flip": 0.0267,
+   "match_flip": 0.0,
+   "scope_flip": 0.0267
+  },
+  {
+   "word": "system",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "perception",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "alignment",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "held-out:ab139acf9360",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "held-out:baa86b4dabfd",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "held-out:f6604b2573e2",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "information",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "held-out:b3ea1fd57831",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0033,
+   "scope_flip": 0.02
+  },
+  {
+   "word": "embodiment",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "agent",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0033,
+   "scope_flip": 0.02
+  },
+  {
+   "word": "component",
+   "usages": 300,
+   "flip": 0.0233,
+   "match_flip": 0.0,
+   "scope_flip": 0.0233
+  },
+  {
+   "word": "held-out:50fa17396b00",
+   "usages": 300,
+   "flip": 0.02,
+   "match_flip": 0.0,
+   "scope_flip": 0.02
+  },
+  {
+   "word": "complexity",
+   "usages": 300,
+   "flip": 0.02,
+   "match_flip": 0.0,
+   "scope_flip": 0.02
+  },
+  {
+   "word": "held-out:19d5e41de2db",
+   "usages": 300,
+   "flip": 0.02,
+   "match_flip": 0.0,
+   "scope_flip": 0.02
+  },
+  {
+   "word": "affordance",
+   "usages": 300,
+   "flip": 0.02,
+   "match_flip": 0.0033,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "strength",
+   "usages": 300,
+   "flip": 0.02,
+   "match_flip": 0.0,
+   "scope_flip": 0.02
+  },
+  {
+   "word": "simulation",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "behavior",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "memory",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0033,
+   "scope_flip": 0.0133
+  },
+  {
+   "word": "image",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "held-out:bd686ff4fd74",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "consciousness",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "held-out:1c5d119c45e3",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0033,
+   "scope_flip": 0.0133
+  },
+  {
+   "word": "held-out:f151e0c23aaf",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "model",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "representation",
+   "usages": 300,
+   "flip": 0.0167,
+   "match_flip": 0.0,
+   "scope_flip": 0.0167
+  },
+  {
+   "word": "held-out:67415e178146",
+   "usages": 300,
+   "flip": 0.0133,
+   "match_flip": 0.0,
+   "scope_flip": 0.0133
+  },
+  {
+   "word": "user",
+   "usages": 300,
+   "flip": 0.0133,
+   "match_flip": 0.0,
+   "scope_flip": 0.0133
+  },
+  {
+   "word": "hallucination",
+   "usages": 300,
+   "flip": 0.0133,
+   "match_flip": 0.0,
+   "scope_flip": 0.0133
+  },
+  {
+   "word": "held-out:861f9da96b43",
+   "usages": 300,
+   "flip": 0.0133,
+   "match_flip": 0.0,
+   "scope_flip": 0.0133
+  },
+  {
+   "word": "held-out:5350e5a87b0b",
+   "usages": 300,
+   "flip": 0.01,
+   "match_flip": 0.0,
+   "scope_flip": 0.01
+  },
+  {
+   "word": "emergence",
+   "usages": 300,
+   "flip": 0.01,
+   "match_flip": 0.0,
+   "scope_flip": 0.01
+  },
+  {
+   "word": "feedback",
+   "usages": 300,
+   "flip": 0.01,
+   "match_flip": 0.0,
+   "scope_flip": 0.01
+  },
+  {
+   "word": "presence",
+   "usages": 300,
+   "flip": 0.0067,
+   "match_flip": 0.0,
+   "scope_flip": 0.0067
+  },
+  {
+   "word": "experience",
+   "usages": 300,
+   "flip": 0.0067,
+   "match_flip": 0.0,
+   "scope_flip": 0.0067
+  },
+  {
+   "word": "having",
+   "usages": 300,
+   "flip": 0.0067,
+   "match_flip": 0.0,
+   "scope_flip": 0.0067
+  },
+  {
+   "word": "mental representation",
+   "usages": 300,
+   "flip": 0.0067,
+   "match_flip": 0.0,
+   "scope_flip": 0.0067
+  },
+  {
+   "word": "held-out:11ee3fc840ad",
+   "usages": 300,
+   "flip": 0.0033,
+   "match_flip": 0.0,
+   "scope_flip": 0.0033
+  },
+  {
+   "word": "attention",
+   "usages": 300,
+   "flip": 0.0033,
+   "match_flip": 0.0,
+   "scope_flip": 0.0033
+  },
+  {
+   "word": "feedback loop",
+   "usages": 300,
+   "flip": 0.0033,
+   "match_flip": 0.0,
+   "scope_flip": 0.0033
+  },
+  {
+   "word": "held-out:32a54748ce0a",
+   "usages": 300,
+   "flip": 0.0,
+   "match_flip": 0.0,
+   "scope_flip": 0.0
+  },
+  {
+   "word": "platform",
+   "usages": 300,
+   "flip": 0.0,
+   "match_flip": 0.0,
+   "scope_flip": 0.0
+  }
+ ],
+ "by_decade": [
+  {
+   "decade": 1950,
+   "usages": 2937,
+   "flip": 0.0327,
+   "match_flip": 0.0014,
+   "scope_flip": 0.0313
+  },
+  {
+   "decade": 1960,
+   "usages": 3297,
+   "flip": 0.0452,
+   "match_flip": 0.0015,
+   "scope_flip": 0.0437
+  },
+  {
+   "decade": 1970,
+   "usages": 3586,
+   "flip": 0.0516,
+   "match_flip": 0.0025,
+   "scope_flip": 0.0491
+  },
+  {
+   "decade": 1980,
+   "usages": 3815,
+   "flip": 0.0582,
+   "match_flip": 0.0029,
+   "scope_flip": 0.0553
+  },
+  {
+   "decade": 1990,
+   "usages": 3918,
+   "flip": 0.0516,
+   "match_flip": 0.0015,
+   "scope_flip": 0.05
+  },
+  {
+   "decade": 2000,
+   "usages": 4016,
+   "flip": 0.06,
+   "match_flip": 0.0052,
+   "scope_flip": 0.0548
+  },
+  {
+   "decade": 2010,
+   "usages": 4035,
+   "flip": 0.0545,
+   "match_flip": 0.0032,
+   "scope_flip": 0.0513
+  },
+  {
+   "decade": 2020,
+   "usages": 4096,
+   "flip": 0.0654,
+   "match_flip": 0.0039,
+   "scope_flip": 0.0615
+  }
+ ]
+}

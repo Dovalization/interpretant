@@ -1,0 +1,352 @@
+{
+ "m01": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2145110606",
+  "word": "held-out:11f8f1ec4ec9",
+  "content_key": "d68e9fc3cdf2de69be4d",
+  "kind": "scope"
+ },
+ "m02": {
+  "A": "small",
+  "work_id": "https://openalex.org/W1837915667",
+  "word": "social network",
+  "content_key": "02dec7e2f881db57ba91",
+  "kind": "match"
+ },
+ "m03": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W1481060387",
+  "word": "held-out:164ebb5df0ea",
+  "content_key": "743c7d5db7acd637e389",
+  "kind": "scope"
+ },
+ "m04": {
+  "A": "small",
+  "work_id": "https://openalex.org/W4310473814",
+  "word": "held-out:c0dcb92b6a30",
+  "content_key": "1ac5031d8fc4b68a7f54",
+  "kind": "scope"
+ },
+ "m05": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2120770694",
+  "word": "control",
+  "content_key": "52f9d1c307340a8769e5",
+  "kind": "match"
+ },
+ "m06": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2005506464",
+  "word": "held-out:7d0f24edc7fd",
+  "content_key": "e6361c33cee0f2bba96d",
+  "kind": "scope"
+ },
+ "m07": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2378994783",
+  "word": "interpretation",
+  "content_key": "9872c195ed529184dd5a",
+  "kind": "scope"
+ },
+ "m08": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2037535693",
+  "word": "held-out:164ebb5df0ea",
+  "content_key": "f6b5b1bfa83e63b63fb5",
+  "kind": "scope"
+ },
+ "m09": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2125773484",
+  "word": "cognition",
+  "content_key": "71fb39cda7927be22bfc",
+  "kind": "scope"
+ },
+ "m10": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W4400037050",
+  "word": "held-out:96da49af8e67",
+  "content_key": "d69a3a2c277c810a00a2",
+  "kind": "scope"
+ },
+ "m11": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2146412685",
+  "word": "intelligence",
+  "content_key": "57c35b467ebec530be59",
+  "kind": "scope"
+ },
+ "m12": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2000985912",
+  "word": "held-out:3cff64e5f947",
+  "content_key": "4ba2fc7009469e8ab174",
+  "kind": "scope"
+ },
+ "m13": {
+  "A": "small",
+  "work_id": "https://openalex.org/W1590176042",
+  "word": "information processing",
+  "content_key": "e6b1f5c8f34ab7a7cfda",
+  "kind": "scope"
+ },
+ "m14": {
+  "A": "small",
+  "work_id": "https://openalex.org/W4400515246",
+  "word": "held-out:ff37e32092ff",
+  "content_key": "84d866ddb6259988a99d",
+  "kind": "scope"
+ },
+ "m15": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W7124865846",
+  "word": "having",
+  "content_key": "9e3e0561bca84bd59948",
+  "kind": "scope"
+ },
+ "m16": {
+  "A": "small",
+  "work_id": "https://openalex.org/W4412969012",
+  "word": "held-out:67415e178146",
+  "content_key": "fbe49a69efe4a0c82b07",
+  "kind": "scope"
+ },
+ "m17": {
+  "A": "small",
+  "work_id": "https://openalex.org/W4402513983",
+  "word": "cloud",
+  "content_key": "978ac4b5af0b9376842b",
+  "kind": "scope"
+ },
+ "m18": {
+  "A": "small",
+  "work_id": "https://openalex.org/W1915875792",
+  "word": "held-out:2c676bb34422",
+  "content_key": "32e70e015d401be0e81d",
+  "kind": "scope"
+ },
+ "m19": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2040492425",
+  "word": "held-out:ff37e32092ff",
+  "content_key": "8f45838c320c22faaeea",
+  "kind": "scope"
+ },
+ "m20": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W7213448109",
+  "word": "held-out:d7b1fc674098",
+  "content_key": "a7fa80ca5088ccd64f95",
+  "kind": "scope"
+ },
+ "m21": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W204015246",
+  "word": "held-out:779d6b6eedf0",
+  "content_key": "ac16270304f5b69ff27b",
+  "kind": "scope"
+ },
+ "m22": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2126885073",
+  "word": "control",
+  "content_key": "83d9a8b403a27a3792df",
+  "kind": "match"
+ },
+ "m23": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W3121336802",
+  "word": "affordance",
+  "content_key": "9078f0aa8ff1876ea655",
+  "kind": "match"
+ },
+ "m24": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2055674303",
+  "word": "held-out:ee104561c1ce",
+  "content_key": "4cb7ff38228ccb51143c",
+  "kind": "scope"
+ },
+ "m25": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2242826868",
+  "word": "strength",
+  "content_key": "92577cd006eead2c7567",
+  "kind": "scope"
+ },
+ "m26": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2060791618",
+  "word": "held-out:ee104561c1ce",
+  "content_key": "2972f4d3519192dab321",
+  "kind": "scope"
+ },
+ "m27": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2603091443",
+  "word": "neural network",
+  "content_key": "dd916c2cb7c91541b301",
+  "kind": "scope"
+ },
+ "m28": {
+  "A": "small",
+  "work_id": "https://openalex.org/W1986838206",
+  "word": "held-out:07afa72fe9fc",
+  "content_key": "ffb8aa02c2c6adfd01ed",
+  "kind": "scope"
+ },
+ "m29": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2072348013",
+  "word": "held-out:3cff64e5f947",
+  "content_key": "15df75f38a240ebd8df8",
+  "kind": "scope"
+ },
+ "m30": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2316373233",
+  "word": "held-out:11f8f1ec4ec9",
+  "content_key": "c6a958eefc437150f285",
+  "kind": "scope"
+ },
+ "m31": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2092170886",
+  "word": "held-out:ff37e32092ff",
+  "content_key": "3a19aa8f631666c0ec88",
+  "kind": "scope"
+ },
+ "m32": {
+  "A": "small",
+  "work_id": "https://openalex.org/W121796560",
+  "word": "user interface",
+  "content_key": "330fa8a50b6276cf3a89",
+  "kind": "scope"
+ },
+ "m33": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2018292019",
+  "word": "held-out:7b1df4aa54d0",
+  "content_key": "7defd0df631c84f03885",
+  "kind": "scope"
+ },
+ "m34": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2981809541",
+  "word": "embedding",
+  "content_key": "da73cd95b9abe3313903",
+  "kind": "scope"
+ },
+ "m35": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W4384923708",
+  "word": "held-out:11f8f1ec4ec9",
+  "content_key": "099b51bbdf95ff99f9df",
+  "kind": "scope"
+ },
+ "m36": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W1502486173",
+  "word": "held-out:ee104561c1ce",
+  "content_key": "d7ac3ccb1f450387f019",
+  "kind": "scope"
+ },
+ "m37": {
+  "A": "small",
+  "work_id": "https://openalex.org/W7110821365",
+  "word": "held-out:ff37e32092ff",
+  "content_key": "8d94bf3b5f364d0ed649",
+  "kind": "scope"
+ },
+ "m38": {
+  "A": "small",
+  "work_id": "https://openalex.org/W1592297826",
+  "word": "meaning",
+  "content_key": "59e5bc2b49bea7007c17",
+  "kind": "scope"
+ },
+ "m39": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2034092200",
+  "word": "prompt",
+  "content_key": "5f6b2e95d35e2a13473d",
+  "kind": "match"
+ },
+ "m40": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2077476505",
+  "word": "behavior",
+  "content_key": "a0879a76e582babfdd86",
+  "kind": "scope"
+ },
+ "m41": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2085668402",
+  "word": "held-out:11f8f1ec4ec9",
+  "content_key": "7ccc258e8ae712e0972d",
+  "kind": "scope"
+ },
+ "m42": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2018917471",
+  "word": "held-out:15a9a9ab2b92",
+  "content_key": "0858e81f905837afbc5f",
+  "kind": "scope"
+ },
+ "m43": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2078340353",
+  "word": "held-out:164ebb5df0ea",
+  "content_key": "a5511087620890b9c70f",
+  "kind": "scope"
+ },
+ "m44": {
+  "A": "small",
+  "work_id": "https://openalex.org/W1993071894",
+  "word": "held-out:f66e6d2190f6",
+  "content_key": "9142e5d53b046529d268",
+  "kind": "scope"
+ },
+ "m45": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2053071806",
+  "word": "held-out:912b00c7764c",
+  "content_key": "40a9234f12af88b3d6e5",
+  "kind": "scope"
+ },
+ "m46": {
+  "A": "small",
+  "work_id": "https://openalex.org/W4220924764",
+  "word": "held-out:ab139acf9360",
+  "content_key": "7731dcbfb25f366701d0",
+  "kind": "scope"
+ },
+ "m47": {
+  "A": "small",
+  "work_id": "https://openalex.org/W3151985858",
+  "word": "user interface",
+  "content_key": "683f45f1a2d927c86aff",
+  "kind": "scope"
+ },
+ "m48": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2317206055",
+  "word": "symbol",
+  "content_key": "3b36c9a436733699e71a",
+  "kind": "scope"
+ },
+ "m49": {
+  "A": "small",
+  "work_id": "https://openalex.org/W2083128915",
+  "word": "information processing",
+  "content_key": "2daac8d9105de7b0735d",
+  "kind": "scope"
+ },
+ "m50": {
+  "A": "transformer",
+  "work_id": "https://openalex.org/W2317652819",
+  "word": "held-out:96da49af8e67",
+  "content_key": "8e2b7ef921f2e45d8ff7",
+  "kind": "scope"
+ }
+}
