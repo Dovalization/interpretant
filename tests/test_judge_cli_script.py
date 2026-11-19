@@ -172,3 +172,15 @@ def test_a_part_with_a_failed_call_is_not_written(tmp_path: Path) -> None:
     run = judge_cli.judge_all({"00": [item("a"), item("b")]}, one_each, call)
     assert "00" in run["failed"]
     assert not (tmp_path / "verdicts" / "judge_A_part_00.json").exists()
+
+
+def test_an_adjudication_item_is_sent_with_both_answers_and_the_instruction() -> None:
+    disputed = item("a") | {
+        "judge_1": {"verdict": "right", "reason": "none", "note": "a use"},
+        "judge_2": {"verdict": "wrong", "reason": "name", "note": "a name"},
+    }
+    text = judge_cli.message([disputed], "usages")
+    assert text.startswith(judge_cli.ADJUDICATION)
+    assert "Judge 1 answered:" in text
+    assert "Judge 2 answered:" in text
+    assert not judge_cli.message([item("b")], "usages").startswith(judge_cli.ADJUDICATION)

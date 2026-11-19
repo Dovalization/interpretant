@@ -90,11 +90,22 @@ def batch_schema(answers: str) -> dict[str, Any]:
     }
 
 
+ADJUDICATION = (
+    "Two independent judges answered each item below differently; their answers follow the item, "
+    "as judge 1 and judge 2. Settle each item yourself by the codebook: you may agree with either "
+    "judge, and you owe neither of them anything. "
+)
+
+
 def message(items: list[dict[str, Any]], answers: str) -> str:
-    """The items as one message, each rendered as the API judge renders it."""
+    """The items as one message, each rendered as the API judge renders it.
+
+    Items that carry two judges' answers (an adjudication list) get the adjudicator's instruction.
+    """
     rendered = "\n\n---\n\n".join(render(item, answers) for item in items)
+    settling = ADJUDICATION if any("judge_1" in item for item in items) else ""
     return (
-        f"Judge each of the {len(items)} items below by the codebook, each on its own. "
+        f"{settling}Judge each of the {len(items)} items below by the codebook, each on its own. "
         f"Give one answer per item, with its item id.\n\n{rendered}"
     )
 
