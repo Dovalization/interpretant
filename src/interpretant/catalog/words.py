@@ -12,6 +12,7 @@ data shows to be tagger errors (the author, 2026-11-17). Tab-separated, after `#
 from __future__ import annotations
 
 import csv
+import hashlib
 import itertools
 import re
 from typing import Literal
@@ -50,6 +51,17 @@ class Word(BaseModel):
     def is_phrase(self) -> bool:
         """Whether the word is a phrase target (several words)."""
         return " " in self.lemma
+
+    @property
+    def reported_name(self) -> str:
+        """The name a committed output may show: the lemma, or a hash for a held-out word.
+
+        Held-out words are sealed until the confirmation plan (agenda 6.2): never printed, only
+        hashed, so outputs can still be joined back to the table.
+        """
+        if not self.held_out:
+            return self.lemma
+        return "held-out:" + hashlib.sha256(self.lemma.encode()).hexdigest()[:12]
 
 
 def load_words(catalog: CatalogConfig) -> list[Word]:

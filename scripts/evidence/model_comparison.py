@@ -7,7 +7,7 @@ transformer then re-annotates every sampled sentence on the GPU
 (`usages/entities.load_transformer`, sentences sorted by length), followed by the lemma
 exceptions, and each usage is matched and scoped again under the same rules. A usage flips if the
 transformer's lemma stops matching it (whole tokens only) or its scope changes. Writes
-`summary.json` (counts only, no sentence; held-out words counted, never named), the 50
+`summary.json` (counts only, no sentence; held-out words named by a hash), the 50
 disagreements to judge (seed 20261303, readings shown as A and B in an order set by the key) and
 their key. Run from the repository root on the GPU machine:
 `python scripts/evidence/model_comparison.py OUT_DIR [PROCESSES]`.
@@ -205,12 +205,12 @@ def reannotate(
         live.advance()
 
 
-def summarise(records: list[dict[str, Any]], held_out: set[str]) -> dict[str, Any]:
-    """The flip shares pooled, per word (held-out words counted only) and per decade."""
+def summarise(records: list[dict[str, Any]], words: dict[str, Word]) -> dict[str, Any]:
+    """The flip shares pooled, per word (held-out words by their hash) and per decade."""
     frame = pl.DataFrame(
         [
             {
-                "word": r["word"],
+                "word": words[r["word"]].reported_name,
                 "decade": r["decade"],
                 "match_flip": not r["trf_matched"],
                 "scope_flip": r["trf_matched"] and r["trf_in_scope"] != r["in_scope"],
@@ -224,8 +224,7 @@ def summarise(records: list[dict[str, Any]], held_out: set[str]) -> dict[str, An
     ).with_columns((pl.col("match_flip") | pl.col("scope_flip")).alias("flip"))
     shares = [pl.col(name).mean().round(4) for name in ("flip", "match_flip", "scope_flip")]
     by_word = (
-        frame.filter(~pl.col("word").is_in(held_out))
-        .group_by("word")
+        frame.group_by("word")
         .agg(pl.len().alias("usages"), *shares)
         .sort("flip", descending=True)
     )
@@ -233,7 +232,7 @@ def summarise(records: list[dict[str, Any]], held_out: set[str]) -> dict[str, An
     return {
         "usages": frame.height,
         "words": frame["word"].n_unique(),
-        "held_out_words": len(held_out & set(frame["word"])),
+        "held_out_words": sum(name.startswith("held-out:") for name in set(frame["word"])),
         "flip_share": round(frame.select(pl.col("flip").mean()).item(), 4),
         "match_flips": int(frame["match_flip"].sum()),
         "scope_flips": int(frame["scope_flip"].sum()),
@@ -256,14 +255,13 @@ def marked(record: dict[str, Any]) -> str:
 
 
 def disagreements(
-    records: list[dict[str, Any]], words: dict[str, Word], held_out: set[str]
+    records: list[dict[str, Any]], words: dict[str, Word]
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """The 50 judged disagreements, A and B in an order set by each one's key, and the key."""
     flipped = [
         r
         for r in records
-        if (not r["trf_matched"] or r["trf_in_scope"] != r["in_scope"])
-        and r["word"] not in held_out
+        if not r["trf_matched"] or r["trf_in_scope"] != r["in_scope"]
     ]
     keyed = sorted(
         flipped,
@@ -296,7 +294,7 @@ def disagreements(
         key[item_id] = {
             "A": "transformer" if transformer_first else "small",
             "work_id": record["work_id"],
-            "word": record["word"],
+            "word": words[record["word"]].reported_name,
             "content_key": record["content_key"],
             "kind": "match" if not record["trf_matched"] else "scope",
         }
@@ -310,7 +308,6 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     catalog = read_catalog()
     words = {word.lemma: word for word in load_words(catalog)}
-    held_out = {lemma for lemma, word in words.items() if word.held_out}
     sample = draw_sample(catalog)
     jobs = {
         part: PartJob(catalog, tuple(rows.drop("part").to_dicts()))
@@ -321,8 +318,8 @@ def main() -> None:
         results = map_parts(read_part, jobs, process_count=processes, progress=live)
         records = [record for part in sorted(results) for record in results[part]]
         reannotate(records, words, catalog, live)
-    summary = summarise(records, held_out)
-    items, key = disagreements(records, words, held_out)
+    summary = summarise(records, words)
+    items, key = disagreements(records, words)
     (out / "summary.json").write_text(json.dumps(summary, indent=1) + "\n")
     (out / "key.json").write_text(json.dumps(key, indent=1) + "\n")
     with (out / "items.jsonl").open("w") as handle:

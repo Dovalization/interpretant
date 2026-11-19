@@ -7,7 +7,7 @@ import pytest
 
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.lemma_exceptions import load_lemma_exceptions
-from interpretant.catalog.words import load_words
+from interpretant.catalog.words import Word, load_words
 from tests.sealed import fail_sealed
 
 HEADER = "# A comment line.\nlemma\tpos\tmatch\theld_out\n"
@@ -58,3 +58,12 @@ def test_no_lemma_exception_maps_a_word_of_the_table_away() -> None:
         if exception.form in words and exception.lemma != exception.form
     ]
     fail_sealed(mapped_away, "mapped away by a lemma exception")
+
+
+def test_reported_name_hides_a_held_out_word_behind_a_stable_hash() -> None:
+    shown = Word(lemma="attention", pos=("NOUN",), match="lemma", held_out=False)
+    sealed = Word(lemma="attention", pos=("NOUN",), match="lemma", held_out=True)
+    assert shown.reported_name == "attention"
+    assert sealed.reported_name.startswith("held-out:")
+    assert "attention" not in sealed.reported_name
+    assert sealed.reported_name == sealed.model_copy().reported_name

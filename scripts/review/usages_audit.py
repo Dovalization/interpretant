@@ -8,8 +8,8 @@ with a space or a hyphen between their words). A hit no mention of the word over
 candidate miss; 20 per word are drawn. Writes the items in shuffled batches (they quote corpus
 sentences and stay out of git), the key, the calibration set (seed 20261305: 30 kept, 15 left out,
 15 missed) and `counts.json`, each word's in-scope usages and candidate misses for the missed-share
-estimate. Held-out words are left out of the items and counted, never named. Run from the
-repository root: `python scripts/review/usages_audit.py OUT [PROCESSES]`.
+estimate. Held-out words are judged like the others; the key and counts name them by a hash. Run
+from the repository root: `python scripts/review/usages_audit.py OUT [PROCESSES]`.
 """
 
 from __future__ import annotations
@@ -246,16 +246,11 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     catalog = read_catalog()
     words = {word.lemma: word for word in load_words(catalog)}
-    held_out = {lemma for lemma, word in words.items() if word.held_out}
     spellings = {spelling.form: spelling.standard for spelling in load_spellings(catalog)}
-    usages = load_usages_with_decades(catalog).filter(~pl.col("word").is_in(held_out))
+    usages = load_usages_with_decades(catalog)
     kept = draw_kept(usages)
     left_out = draw_left_out(usages)
-    patterns = {
-        lemma: search_pattern(word, spellings)
-        for lemma, word in words.items()
-        if lemma not in held_out
-    }
+    patterns = {lemma: search_pattern(word, spellings) for lemma, word in words.items()}
     parts = sorted(usages["part"].unique())
     with LiveProgress(Console()) as live:
         live.stage("searching for missed mentions", total=len(parts))
@@ -309,7 +304,7 @@ def main() -> None:
         key_map[item_id] = {
             "kind": kind,
             "work_id": row["work_id"],
-            "word": row["word"],
+            "word": word.reported_name,
             "target_start": row["target_start"],
             "target_end": row["target_end"],
             "part": row["part"],
@@ -325,12 +320,14 @@ def main() -> None:
         of_kind = sorted(item_id for item_id, entry in key_map.items() if entry["kind"] == kind)
         calibration += calibration_rng.sample(of_kind, min(size, len(of_kind)))
     (out / "calibration.json").write_text(json.dumps(sorted(calibration), indent=1) + "\n")
-    in_scope = dict(usages.filter("in_scope").group_by("word").len().sort("word").iter_rows())
+    in_scope = usages.filter("in_scope").group_by("word").len().iter_rows()
     counts = {
-        "in_scope_usages": in_scope,
-        "candidate_misses": dict(sorted(candidates.items())),
+        "in_scope_usages": {words[word].reported_name: n for word, n in sorted(in_scope)},
+        "candidate_misses": {
+            words[word].reported_name: n for word, n in sorted(candidates.items())
+        },
         "items": dict(Counter(entry["kind"] for entry in key_map.values())),
-        "held_out_words": len(held_out),
+        "held_out_words": sum(word.held_out for word in words.values()),
     }
     (out / "counts.json").write_text(json.dumps(counts, indent=1) + "\n")
     sys.stdout.write(
