@@ -11,10 +11,9 @@ first, so the tree must have no uncommitted changes to tracked files.
 
 On the chosen machine the command starts detached from the repository directory, its output going
 to `logs/<time>-<name>.log` (where a run collector can follow it), after `dvc pull` of any `--pull`
-paths, with the checkout's `.env` (gitignored) in its environment. When it succeeds, the same
-machine commits `metrics/runs.jsonl` if the run added to it and, with `--push-outputs`, runs
-`dvc push`; so a dropped connection loses nothing. Meanwhile this script prints the log's new
-lines, and at the end pulls a remote run's commit back.
+paths. When it succeeds, the same machine commits `metrics/runs.jsonl` if the run added to it and,
+with `--push-outputs`, runs `dvc push`; so a dropped connection loses nothing. Meanwhile this
+script prints the log's new lines, and at the end pulls a remote run's commit back.
 """
 
 from __future__ import annotations
@@ -133,12 +132,7 @@ def _reachable(
 def run_script(command: list[str], log: str, *, pull: list[str], push_outputs: bool) -> str:
     """The shell script that runs the command on the chosen machine and records it there."""
     name = Path(log).stem
-    # The checkout's .env (gitignored) holds that machine's secrets, such as ANTHROPIC_API_KEY.
-    steps = [
-        'export PATH="$PWD/.venv/bin:$PATH"',
-        "if [ -f .env ]; then set -a; . ./.env; set +a; fi",
-        "mkdir -p logs",
-    ]
+    steps = ['export PATH="$PWD/.venv/bin:$PATH"', "mkdir -p logs"]
     if pull:
         steps.append(f"dvc pull {shlex.join(pull)} >> {shlex.quote(log)} 2>&1")
     steps.append(f"{shlex.join(command)} > {shlex.quote(log)} 2>&1")

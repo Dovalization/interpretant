@@ -116,13 +116,3 @@ def test_a_failed_run_records_nothing(checkout: Path) -> None:
     subprocess.run(["bash", "-c", script], cwd=checkout, check=False)
     assert (checkout / "logs" / "t-bad.log.exit").read_text().strip() == "3"
     assert git(checkout, "log", "--format=%s", "-1").strip() == "start"
-
-
-def test_a_run_sees_the_checkouts_env_file(checkout: Path) -> None:
-    (checkout / ".env").write_text("RUN_SCRIPT_SECRET=from-env-file\n")
-    program = "import os; open('seen.txt', 'w').write(os.environ.get('RUN_SCRIPT_SECRET', ''))"
-    script = run.run_script(
-        [sys.executable, "-c", program], "logs/t-env.log", pull=[], push_outputs=False
-    )
-    subprocess.run(["bash", "-c", script], cwd=checkout, check=False)
-    assert (checkout / "seen.txt").read_text() == "from-env-file"
