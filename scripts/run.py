@@ -228,7 +228,7 @@ def launch(arguments: argparse.Namespace) -> int:
         if status:
             break
     if remote is not None and status == "0":
-        _git("pull", "-q", "--rebase", remote.git_remote, branch)
+        _git("pull", "-q", "--rebase", "--autostash", remote.git_remote, branch)
     sys.stdout.write(f"finished with exit status {status}\n")
     return int(status)
 
