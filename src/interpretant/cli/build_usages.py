@@ -76,6 +76,11 @@ COUNT_LABELS = {
     is_flag=True,
     help="Keep the parts the transformer already wrote with the current columns, and skip them.",
 )
+@click.option(
+    "--reuse-cache",
+    is_flag=True,
+    help="Read sentences already annotated from the annotation cache instead of annotating them.",
+)
 @process_count_option
 def build_usages_command(
     catalog_file: Path,
@@ -86,6 +91,7 @@ def build_usages_command(
     process_count: int | None,
     *,
     resume: bool,
+    reuse_cache: bool,
 ) -> None:
     """Write one row per target mention in a kept work, and draw one usage per work and word.
 
@@ -113,6 +119,7 @@ def build_usages_command(
             gpu_process_count=gpu_process_count,
             batch_tokens=batch_tokens,
             resume=resume,
+            reuse_cache=reuse_cache,
             progress=timer,
         )
     record_run(catalog, command="build-usages", stages=timer.finish(), counts=result.counts)

@@ -198,19 +198,26 @@ def test_staging_reads_a_window_around_the_target_of_a_long_sentence() -> None:
 
 
 @pytest.mark.usefixtures("stand_in_transformer")
-def test_build_usages_reuses_the_annotation_cache_for_the_same_table(
+def test_build_usages_reads_the_annotation_cache_only_when_asked(
     prepared_catalog: CatalogConfig,
 ) -> None:
     transformer = SETTINGS.model_copy(update={"model": "en_core_web_trf"})
     cold = build_usages(prepared_catalog, SELECTION, transformer, gpu_process_count=1)
     first = load_usages(prepared_catalog).collect().sort("work_id", "word", "content_key")
-    warm = build_usages(prepared_catalog, SELECTION, transformer, gpu_process_count=1)
+    warm = build_usages(
+        prepared_catalog, SELECTION, transformer, gpu_process_count=1, reuse_cache=True
+    )
     second = load_usages(prepared_catalog).collect().sort("work_id", "word", "content_key")
     assert cold.counts["cache_misses"] == cold.counts["staged_sentences"]
     assert cold.counts.get("cache_hits", 0) == 0
     assert warm.counts["cache_hits"] == warm.counts["staged_sentences"]
     assert warm.counts.get("cache_misses", 0) == 0
     assert second.equals(first)
+    fresh = build_usages(prepared_catalog, SELECTION, transformer, gpu_process_count=1)
+    assert fresh.counts.get("cache_hits", 0) == 0
+    assert fresh.counts["cache_misses"] == fresh.counts["staged_sentences"]
+    third = load_usages(prepared_catalog).collect().sort("work_id", "word", "content_key")
+    assert third.equals(first)
 
 
 def test_the_annotation_key_changes_with_the_lemma_exceptions() -> None:

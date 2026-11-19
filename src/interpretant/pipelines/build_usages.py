@@ -138,6 +138,7 @@ class _PartJob:
     staging: str = ""
     gpu_process_count: int = 1
     batch_tokens: int = BATCH_TOKENS
+    reuse_cache: bool = False
 
 
 class _Sentence(NamedTuple):
@@ -173,13 +174,16 @@ def build_usages(
     gpu_process_count: int = 7,
     batch_tokens: int = BATCH_TOKENS,
     resume: bool = False,
+    reuse_cache: bool = False,
     progress: Progress = SILENT,
 ) -> UsagesResult:
     """Write the usages table of every part of the selection.
 
     With the transformer, ``gpu_process_count`` processes share the GPU, each within an equal share
     of its memory (`docs/performance.md`); with ``resume``, parts the transformer already wrote with
-    the current table's columns are kept and skipped.
+    the current table's columns are kept and skipped. Every sentence is annotated afresh and the
+    annotation cache replaced, as the run of record needs; with ``reuse_cache``, sentences found in
+    the cache are not annotated again.
 
     Raises:
         ValueError: if no raw cell matches the selection, or a curated file is malformed.
@@ -227,6 +231,7 @@ def build_usages(
             staging,
             gpu_process_count,
             batch_tokens,
+            reuse_cache,
         )
         progress.stage("finding the mentions", total=sum(sizes.values()))
         found = map_parts(
@@ -450,9 +455,12 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     settings_hash = _annotation_settings(job.exceptions)
     folder_name = settings_hash[:16]
     cache_keys = [_annotation_key(settings_hash, words_, spaces) for words_, spaces in texts_of]
-    cached = {
-        row[0]: row[1:] for row in load_annotation_cache(job.catalog, folder_name, part).iter_rows()
-    }
+    earlier = (
+        load_annotation_cache(job.catalog, folder_name, part)
+        if job.reuse_cache
+        else pl.DataFrame(schema=ANNOTATION_CACHE_COLUMNS)
+    )
+    cached = {row[0]: row[1:] for row in earlier.iter_rows()}
     added: list[tuple[Any, ...]] = []
     done = 0
 
@@ -509,7 +517,6 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     report(done % _REPORT_EVERY)
     if added:
         new = pl.DataFrame(added, schema=ANNOTATION_CACHE_COLUMNS, orient="row")
-        earlier = load_annotation_cache(job.catalog, folder_name, part)
         save_annotation_cache(job.catalog, pl.concat([earlier, new]), folder_name, part)
     table = rows.with_columns(
         *(

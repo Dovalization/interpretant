@@ -381,7 +381,10 @@ Prometheus (15 s samples); the remote runner's card has 11.65 GB, the desktop ho
   annotates only sentences it has not seen (identical sentences once: 1,566 repeats). Cold, the
   stage takes about 16 minutes and writes 290 MB; warm, the annotation takes 39 s instead of
   14 min 20 s, without the GPU, and the table is identical to the cold run's in every row. A rerun
-  after a rule change now takes about 2 minutes 15 seconds, most of it finding the mentions.
+  after a rule change now takes about 2 minutes 15 seconds, most of it finding the mentions. The
+  version is bumped by hand when the annotating code changes; as a guard, the stage reads the cache
+  only when asked (`--reuse-cache`), so `dvc repro` and the run of record annotate every sentence
+  afresh.
 
 ## Planned: reusing unchanged documents
 
