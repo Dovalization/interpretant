@@ -1,0 +1,9 @@
+# The remote runner for scripts/run.py (docs/design_compute_hosts.md). Copy this file to
+# hosts.local.yaml (gitignored) and fill it in; leave `remote` out to run everything locally.
+remote:
+  ssh: gpu-box              # an ssh host alias from ~/.ssh/config
+  path: ~/Developer/interpretant
+  git_remote: gpu-box       # the git remote that pushes to that checkout
+  wake: null                # optional command that powers the runner on, such as a wake-on-LAN request
+  wake_timeout: 180         # seconds to wait for ssh after waking
+  gpu: true

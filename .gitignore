@@ -131,3 +131,5 @@ data/review/usages_audit/adjudicate*.jsonl
 data/review/model_comparison/adjudicate.jsonl
 data/review/usages_audit_pilot/batch_*.jsonl
 data/review/usages_audit_pilot/adjudicate*.jsonl
+# The run launcher's machine-specific settings (scripts/run.py; see hosts.example.yaml).
+hosts.local.yaml
