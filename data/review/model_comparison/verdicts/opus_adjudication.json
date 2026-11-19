@@ -1,0 +1,7 @@
+{
+  "m15": {"answer": "A", "note": "Garbled translation, but 'having' takes the direct object 'physico-chemical forces' (with 'at his base' as an adverbial), so it is a participle (VERB, lemma have), not a nominalised noun."},
+  "m21": {"answer": "A", "note": "The token is French 'même' in 'en même temps' inside a quoted French passage, a foreign word (X) and not the English noun 'held-out:779d6b6eedf0', so only A's reading correctly keeps it from counting."},
+  "m30": {"answer": "B", "note": "'held-out:11f8f1ec4ec9' in 'held-out:11f8f1ec4ec9 lock screen' is an attributive noun ('the lock screen that is the held-out:11f8f1ec4ec9'): it is not gradable or normally predicative, so NOUN (noun adjunct) is right, not ADJ."},
+  "m35": {"answer": "B", "note": "In 'held-out:11f8f1ec4ec9 mode network' the word is a noun adjunct ('held-out:11f8f1ec4ec9 mode' = the held-out:11f8f1ec4ec9 state), not a gradable adjective, and the term is a field term, not a name, so NOUN is right."},
+  "m41": {"answer": "A", "note": "'held-out:11f8f1ec4ec9 conventions' uses 'held-out:11f8f1ec4ec9' as an attributive noun (conventions that apply by held-out:11f8f1ec4ec9), not a gradable or predicative adjective, so A's NOUN reading is right."}
+}

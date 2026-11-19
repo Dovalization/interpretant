@@ -1,0 +1,14 @@
+{
+ "flip_share": 0.0533,
+ "flips_over_bar": true,
+ "judged": 50,
+ "judges_agreed": 45,
+ "right": {
+  "small": 14,
+  "transformer": 34,
+  "both": 2
+ },
+ "transformer_share_where_one_is_right": 0.708,
+ "transformer_right_more_often": true,
+ "model": "en_core_web_trf"
+}
