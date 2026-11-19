@@ -170,7 +170,7 @@ def test_build_usages_resumes_from_the_parts_the_transformer_already_wrote(
 
 def test_batches_keep_within_the_document_and_token_caps() -> None:
     lengths = [10] * 100 + [900, 1500, 3000, 5000]
-    batches = build_usages_module._batches(lengths)
+    batches = build_usages_module._batches(lengths, tokens_cap=2000)
     assert [len(batch) for batch in batches] == [64, 37, 1, 1, 1]
     assert sum(len(batch) for batch in batches) == len(lengths)
     for batch in batches:

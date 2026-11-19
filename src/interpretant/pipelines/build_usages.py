@@ -93,7 +93,7 @@ _ENTITY_BATCH_SIZE = 256
 # memory grows with its tokens (about 0.35 MB each), so long sentences go in small batches; a
 # smaller cap lets more processes share the GPU (`docs/performance.md`).
 _TRANSFORMER_BATCH_SIZE = 64
-BATCH_TOKENS = 2000
+BATCH_TOKENS = 1000
 # A sentence longer than this is read as a window of half that either side of each target.
 _LONG_SENTENCE_TOKENS = 512
 # GPU memory left for other programs (the desktop held 1.5 GB), and each process's CUDA context,
@@ -167,7 +167,7 @@ def build_usages(
     settings: UsagesSettings,
     *,
     process_count: int = 1,
-    gpu_process_count: int = 4,
+    gpu_process_count: int = 7,
     batch_tokens: int = BATCH_TOKENS,
     resume: bool = False,
     progress: Progress = SILENT,

@@ -60,7 +60,7 @@ COUNT_LABELS = {
 @click.option(
     "--gpu-process-count",
     type=click.IntRange(min=1),
-    default=4,
+    default=7,
     show_default=True,
     help="Processes sharing the GPU when the transformer annotates the usages.",
 )
