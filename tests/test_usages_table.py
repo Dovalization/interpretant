@@ -112,3 +112,11 @@ def test_validate_usages_against_text_refuses_a_bad_key_or_span(changes: dict[st
 def test_validate_usages_against_text_refuses_a_usage_without_text() -> None:
     with pytest.raises(pandera.errors.SchemaError):
         validate_usages_against_text(table([usage_row()]), {})
+
+
+def test_validate_usages_against_text_accepts_combining_marks_inside_the_target() -> None:
+    marked = "Intro text. \u0314Attention\u0315 is limited. More text."
+    sentence = marked[12:35]
+    row = usage_row(sentence_end=35, target_start=12, target_end=23)
+    row["content_key"] = build_content_key(sentence, 0, 11)
+    validate_usages_against_text(table([row]), {WORK: marked})

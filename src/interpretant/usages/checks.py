@@ -3,13 +3,14 @@
 A usage points into the abstracts table instead of copying text, so agenda 4.5 asks for two checks
 the table's own schema cannot make: the content key is recomputable from the sentence and the
 target's offsets in it, and the offsets point at the target. Here the second means the span is a
-whole word or hyphen part (letters, hyphens, apostrophes and spaces only, no letter or digit just
-outside it) whose first letter is the word's. The stage validates every part against this schema,
-joined with its works' texts, before writing it.
+whole word or hyphen part (letters and their combining marks, hyphens, apostrophes and spaces only,
+no letter or digit just outside it) whose first letter is the word's. The stage validates every part
+against this schema, joined with its works' texts, before writing it.
 """
 
 from __future__ import annotations
 
+import unicodedata
 from collections.abc import Mapping
 from typing import Any
 
@@ -38,10 +39,19 @@ def _span_is_the_target(row: dict[str, Any]) -> bool:
     after = text[end] if end < len(text) else " "
     return (
         bool(span.strip())
-        and all(character.isalpha() or character in _SPAN_CHARACTERS for character in span)
+        and all(_is_word_character(character) for character in span)
         and not before.isalnum()
         and not after.isalnum()
         and fold(span)[:1] == row["word"][:1]
+    )
+
+
+def _is_word_character(character: str) -> bool:
+    """A letter, a combining mark (folded away, as accents are), a hyphen, apostrophe or space."""
+    return (
+        character.isalpha()
+        or unicodedata.category(character).startswith("M")
+        or character in _SPAN_CHARACTERS
     )
 
 
