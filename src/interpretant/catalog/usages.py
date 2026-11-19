@@ -5,8 +5,9 @@ key) and draw key; the sentence-view sentence it sits in (number, span, word cou
 confidence, exclusion); the target's span in the repaired text, its compound and position (head or
 modifier) when it is part of a hyphenated word; the head token's part of speech, tag, morphology
 and lemma, the entity it sits in, and the static view's entry for it; whether it is in scope;
-whether it is the one usage drawn for its work and word; and the model that annotated it. Text is
-not copied: the abstracts table holds it. A part is written whole or not at all.
+whether it is the one usage drawn for its work and word; the model that annotated it; and whether
+the model read only a window around the target (a sentence over 512 tokens). Text is not copied:
+the abstracts table holds it. A part is written whole or not at all.
 """
 
 from __future__ import annotations
@@ -47,6 +48,7 @@ USAGES_COLUMNS = pl.Schema(
         "in_scope": pl.Boolean(),
         "drawn": pl.Boolean(),
         "model": pl.String(),
+        "windowed": pl.Boolean(),
     }
 )
 _SUFFIX = ".parquet"
@@ -106,6 +108,7 @@ USAGES_SCHEMA = pa.DataFrameSchema(
         "in_scope": pa.Column(USAGES_COLUMNS["in_scope"]),
         "drawn": pa.Column(USAGES_COLUMNS["drawn"]),
         "model": pa.Column(USAGES_COLUMNS["model"], checks=pa.Check.isin(MODELS)),
+        "windowed": pa.Column(USAGES_COLUMNS["windowed"]),
     },
     checks=[
         pa.Check(_offsets_are_ordered, name="the target lies inside its sentence"),

@@ -47,6 +47,7 @@ def usage_row(**changes: Any) -> dict[str, Any]:
         "in_scope": True,
         "drawn": True,
         "model": "en_core_web_sm",
+        "windowed": False,
     }
     row.update(changes)
     return row

@@ -18,6 +18,7 @@ its scope, one in-scope usage per work and word in a sentence no exclusion keeps
 
 from __future__ import annotations
 
+import os
 import tempfile
 from bisect import bisect_right
 from collections import Counter, defaultdict
@@ -29,6 +30,7 @@ from typing import Any, Literal, NamedTuple
 
 import polars as pl
 import spacy
+import torch
 from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 from spacy.language import Language
@@ -79,13 +81,20 @@ class UsagesSettings(ParamsSettings):
 # Sentences queued before their entities are recognised, and sentences per recognizer batch.
 _SENTENCES_PER_FLUSH = 2048
 _ENTITY_BATCH_SIZE = 256
-# Documents per transformer batch, and sentences annotated between two progress reports.
+# A transformer batch holds at most this many documents and tokens: its GPU memory grows with its
+# tokens (about 0.35 MB each), so long sentences go in small batches (`docs/performance.md`).
 _TRANSFORMER_BATCH_SIZE = 64
+_TOKENS_PER_BATCH = 4000
+# A sentence longer than this is read as a window of half that either side of each target.
+_LONG_SENTENCE_TOKENS = 512
+# The share of the GPU's memory left for other programs; the rest is split between the processes.
+_GPU_MEMORY_RESERVE = 0.15
 _REPORT_EVERY = 1000
 _COLUMN_NAMES = USAGES_COLUMNS.names()
 _POS = _COLUMN_NAMES.index("pos")
 _ENTITY = _COLUMN_NAMES.index("entity")
 _IN_SCOPE = _COLUMN_NAMES.index("in_scope")
+_WINDOWED = _COLUMN_NAMES.index("windowed")
 
 
 class TextMismatchError(ValueError):
@@ -110,6 +119,7 @@ class _PartJob:
     spellings: dict[str, str]
     exceptions: tuple[LemmaException, ...]
     staging: str = ""
+    gpu_process_count: int = 1
 
 
 class _Sentence(NamedTuple):
@@ -143,12 +153,14 @@ def build_usages(
     *,
     process_count: int = 1,
     gpu_process_count: int = 4,
+    resume: bool = False,
     progress: Progress = SILENT,
 ) -> UsagesResult:
     """Write the usages table of every part of the selection.
 
-    With the transformer, ``gpu_process_count`` processes share the GPU (four measured fastest
-    within its memory, `docs/performance.md`).
+    With the transformer, ``gpu_process_count`` processes share the GPU, each within an equal share
+    of its memory (`docs/performance.md`); with ``resume``, parts the transformer already wrote with
+    the current table's columns are kept and skipped.
 
     Raises:
         ValueError: if no raw cell matches the selection, or a curated file is malformed.
@@ -180,10 +192,21 @@ def build_usages(
         for result in results.values():
             counts.update(result)
         return UsagesResult(parts=parts, counts=dict(counts))
+    if resume:
+        done = [part for part in parts if _annotated_by_transformer(catalog, part)]
+        counts["skipped_parts"] = len(done)
+        parts = [part for part in parts if part not in done]
+        sizes = {part: sizes[part] for part in parts}
     catalog.usages.path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=catalog.usages.path.parent, prefix="staging_") as staging:
         staged_job = _PartJob(
-            job.catalog, settings, job.words, job.spellings, job.exceptions, staging
+            job.catalog,
+            settings,
+            job.words,
+            job.spellings,
+            job.exceptions,
+            staging,
+            gpu_process_count,
         )
         progress.stage("finding the mentions", total=sum(sizes.values()))
         found = map_parts(
@@ -273,12 +296,18 @@ def _finish_part(
 # A staged usage: its row with the cached annotation, and where its target is in its sentence.
 _STAGED_COLUMNS = pl.Schema(
     dict(USAGES_COLUMNS)
-    | {"head_offset": pl.Int64(), "span_start": pl.Int64(), "hyphen_part": pl.Boolean()}
+    | {
+        "head_offset": pl.Int64(),
+        "span_start": pl.Int64(),
+        "hyphen_part": pl.Boolean(),
+        "window_start": pl.Int64(),
+    }
 )
 _STAGED_SENTENCES = pl.Schema(
     {
         "work_id": pl.String(),
         "sentence_number": pl.Int64(),
+        "window_start": pl.Int64(),
         "words": pl.List(pl.String()),
         "spaces": pl.List(pl.Boolean()),
     }
@@ -292,7 +321,7 @@ class _StagedUsages:
 
     def __init__(self) -> None:
         self.rows: list[tuple[Any, ...]] = []
-        self.sentences: dict[tuple[str, int], tuple[list[str], list[bool]]] = {}
+        self.sentences: dict[tuple[str, int, int], tuple[list[str], list[bool]]] = {}
 
     def add(
         self, work: _Work, sentence: _Sentence, mention: TargetMention, row: list[Any], word: Word
@@ -306,14 +335,21 @@ class _StagedUsages:
         span = work.doc.char_span(sentence.start, sentence.end, alignment_mode="expand")
         if span is None:
             raise ValueError(f"{work.work_id}: sentence {sentence.number} has no tokens")
-        key = (work.work_id, sentence.number)
+        head = mention.token_index - span.start
+        window_start = 0
+        if len(span) > _LONG_SENTENCE_TOKENS:
+            half = _LONG_SENTENCE_TOKENS // 2
+            window_start = max(0, head - half)
+            span = span[window_start : min(len(span), head + half + 1)]
+            row[_WINDOWED] = True
+        key = (work.work_id, sentence.number, window_start)
         if key not in self.sentences:
             self.sentences[key] = (
                 [token.text for token in span],
                 [bool(token.whitespace_) for token in span],
             )
         hyphen_part = mention.position is not None
-        self.rows.append((*row, mention.token_index - span.start, span.start_char, hyphen_part))
+        self.rows.append((*row, head - window_start, span.start_char, hyphen_part, window_start))
 
     def flush(self) -> None:
         """Nothing waits to be flushed: the staged rows are written once the part is matched."""
@@ -328,7 +364,7 @@ def _stage_part(part: str, job: _PartJob) -> Counter[str]:
         folder / f"{part}.rows.parquet"
     )
     pl.DataFrame(
-        [(w, n, words, spaces) for (w, n), (words, spaces) in sink.sentences.items()],
+        [(w, n, s, words, spaces) for (w, n, s), (words, spaces) in sink.sentences.items()],
         schema=_STAGED_SENTENCES,
         orient="row",
     ).write_parquet(folder / f"{part}.sentences.parquet")
@@ -337,16 +373,37 @@ def _stage_part(part: str, job: _PartJob) -> Counter[str]:
 
 
 @cache
-def _transformer() -> Language:
-    """The transformer on the GPU, loaded once per process."""
+def _transformer(process_count: int) -> Language:
+    """The transformer on the GPU, loaded once per process, within its share of the memory.
+
+    PyTorch keeps the memory of a process's largest batch reserved, so processes sharing the GPU
+    would otherwise each hold their peak and run it out (`docs/performance.md`); expandable
+    segments make that reserve fit the memory in use more closely.
+    """
+    os.environ.setdefault("PYTORCH_ALLOC_CONF", "expandable_segments:True")
     set_gpu_allocator("pytorch")
     require_gpu(0)
+    torch.cuda.set_per_process_memory_fraction((1 - _GPU_MEMORY_RESERVE) / process_count)
     return load_transformer()
+
+
+def _batches(lengths: Sequence[int]) -> list[range]:
+    """Consecutive batches of documents within the document and token caps."""
+    batches, start, tokens = [], 0, 0
+    for index, length in enumerate(lengths):
+        full = index - start >= _TRANSFORMER_BATCH_SIZE or tokens + length > _TOKENS_PER_BATCH
+        if index > start and full:
+            batches.append(range(start, index))
+            start, tokens = index, 0
+        tokens += length
+    if start < len(lengths):
+        batches.append(range(start, len(lengths)))
+    return batches
 
 
 def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     """Annotate one part's target sentences with the transformer, then finish and write it."""
-    transformer = _transformer()
+    transformer = _transformer(job.gpu_process_count)
     exceptions = lemma_exception_ruler(transformer.vocab, job.exceptions)
     words = {word.lemma: word for word in job.words}
     folder = Path(job.staging)
@@ -354,47 +411,45 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     sentences = pl.read_parquet(folder / f"{part}.sentences.parquet").sort(
         pl.col("words").list.len()
     )
-    waiting: dict[tuple[str, int], list[int]] = defaultdict(list)
-    for index, key in enumerate(rows.select("work_id", "sentence_number").iter_rows()):
+    waiting: dict[tuple[str, int, int], list[int]] = defaultdict(list)
+    key_columns = ["work_id", "sentence_number", "window_start"]
+    for index, key in enumerate(rows.select(key_columns).iter_rows()):
         waiting[key].append(index)
     staged = rows.select(
         "word", "target_start", "target_end", "head_offset", "span_start", "hyphen_part"
     ).rows()
     annotation: dict[str, list[Any]] = {name: [None] * rows.height for name in _ANNOTATED}
-    docs = (
-        Doc(transformer.vocab, words=words_, spaces=spaces)
-        for words_, spaces in sentences.select("words", "spaces").iter_rows()
-    )
-    keys = sentences.select("work_id", "sentence_number").iter_rows()
+    texts_of = sentences.select("words", "spaces").rows()
+    keys = sentences.select(key_columns).rows()
     done = 0
-    for key, doc in zip(
-        keys, transformer.pipe(docs, batch_size=_TRANSFORMER_BATCH_SIZE), strict=True
-    ):
-        doc = exceptions(doc)
-        require_entity_annotation(doc)
-        for index in waiting[key]:
-            word, start, end, head_offset, span_start, hyphen_part = staged[index]
-            head = doc[head_offset]
-            entity = entity_label(doc, start - span_start, end - span_start)
-            values = {
-                "pos": head.pos_,
-                "tag": head.tag_,
-                "morph": str(head.morph),
-                "lemma": head.lemma_,
-                "entity": entity,
-                "in_scope": is_in_scope(
-                    head.pos_,
-                    words[word],
-                    entity,
-                    job.settings.name_labels,
-                    hyphen_part=hyphen_part,
-                ),
-            }
-            for name, value in values.items():
-                annotation[name][index] = value
-        done += 1
-        if done % _REPORT_EVERY == 0:
-            report(_REPORT_EVERY)
+    for batch in _batches([len(words_) for words_, _ in texts_of]):
+        docs = [Doc(transformer.vocab, words=texts_of[i][0], spaces=texts_of[i][1]) for i in batch]
+        for position, doc in zip(batch, transformer.pipe(docs, batch_size=len(docs)), strict=True):
+            doc = exceptions(doc)
+            require_entity_annotation(doc)
+            for index in waiting[keys[position]]:
+                word, start, end, head_offset, span_start, hyphen_part = staged[index]
+                head = doc[head_offset]
+                entity = entity_label(doc, start - span_start, end - span_start)
+                values = {
+                    "pos": head.pos_,
+                    "tag": head.tag_,
+                    "morph": str(head.morph),
+                    "lemma": head.lemma_,
+                    "entity": entity,
+                    "in_scope": is_in_scope(
+                        head.pos_,
+                        words[word],
+                        entity,
+                        job.settings.name_labels,
+                        hyphen_part=hyphen_part,
+                    ),
+                }
+                for name, value in values.items():
+                    annotation[name][index] = value
+            done += 1
+            if done % _REPORT_EVERY == 0:
+                report(_REPORT_EVERY)
     report(done % _REPORT_EVERY)
     table = rows.with_columns(
         *(
@@ -404,7 +459,23 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
         pl.lit(TRANSFORMER_MODEL).alias("model"),
     ).select(USAGES_COLUMNS.names())
     texts, _ = _kept_works(job.catalog, part)
+    # A part's longest sentences come last; give their memory back to the other processes.
+    torch.cuda.empty_cache()
     return _finish_part(part, job, table, texts)
+
+
+def _annotated_by_transformer(catalog: CatalogConfig, part: str) -> bool:
+    """Whether a part's saved usages were written by the transformer with the current columns.
+
+    A part without usages counts as done: there is nothing to annotate in it.
+    """
+    path = catalog.usages.path / f"{part}.parquet"
+    if not path.exists():
+        return False
+    if list(pl.read_parquet_schema(path)) != USAGES_COLUMNS.names():
+        return False
+    models = pl.read_parquet(path, columns=["model"])["model"]
+    return models.len() == 0 or set(models) == {TRANSFORMER_MODEL}
 
 
 # The columns the transformer's reading sets.
@@ -542,6 +613,7 @@ def _add_usages(
             None,  # in scope, set by the flush
             False,
             settings.model,
+            False,  # windowed, set by the staging for a long sentence
         ]
         sink.add(work, sentence, mention, row, words[mention.word])
 

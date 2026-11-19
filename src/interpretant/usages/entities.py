@@ -67,6 +67,9 @@ def load_transformer() -> Language:
         },
     )
     _use_lookup_attribute_ruler(nlp)
+    # The transformer's output stays on each document, about 0.35 MB of GPU memory a token; it is
+    # dropped once the tagger and the recognizer have read it (spaCy's "doc_cleaner").
+    nlp.add_pipe("doc_cleaner", config={"attrs": {"tensor": None, "_.trf_data": None}})
     return nlp
 
 

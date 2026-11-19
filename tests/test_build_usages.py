@@ -13,7 +13,7 @@ from interpretant.__main__ import cli
 from interpretant.catalog.abstracts import load_abstracts, load_abstracts_part
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.parts import part_path
-from interpretant.catalog.usages import load_usages
+from interpretant.catalog.usages import USAGES_COLUMNS, load_usages
 from interpretant.pipelines import build_usages as build_usages_module
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.build_sentence_view import build_sentence_view
@@ -24,6 +24,7 @@ from interpretant.pipelines.build_usages import (
     build_usages,
 )
 from interpretant.usages.checks import validate_usages_against_text
+from interpretant.usages.target_matching import TargetMention
 from interpretant.usages.usage_selection import NAME_LABELS
 from tests.corpus_catalog import SELECTION, prepare_annotated_corpus
 
@@ -49,7 +50,7 @@ def prepared_catalog(corpus_catalog_file: Path) -> CatalogConfig:
 def stand_in_transformer(monkeypatch: pytest.MonkeyPatch) -> None:
     """The small model's full pipeline in place of the transformer, which needs a GPU."""
     nlp = spacy.load("en_core_web_sm")
-    monkeypatch.setattr(build_usages_module, "_transformer", lambda: nlp)
+    monkeypatch.setattr(build_usages_module, "_transformer", lambda _process_count: nlp)
 
 
 def test_build_usages_finds_the_targets_and_checks_against_the_text(
@@ -148,3 +149,43 @@ def test_build_usages_with_the_transformer_annotates_every_usage_of_the_same_row
         result.counts["staged_sentences"] == table.select("work_id", "sentence_number").n_unique()
     )
     assert list(prepared_catalog.usages.path.parent.glob("staging_*")) == []
+
+
+@pytest.mark.usefixtures("stand_in_transformer")
+def test_build_usages_resumes_from_the_parts_the_transformer_already_wrote(
+    prepared_catalog: CatalogConfig,
+) -> None:
+    transformer = SETTINGS.model_copy(update={"model": "en_core_web_trf"})
+    first = build_usages(prepared_catalog, SELECTION, transformer, gpu_process_count=1)
+    again = build_usages(prepared_catalog, SELECTION, transformer, gpu_process_count=1, resume=True)
+    assert again.counts["skipped_parts"] == len(first.parts)
+    assert "staged_sentences" not in again.counts
+
+
+def test_batches_keep_within_the_document_and_token_caps() -> None:
+    lengths = [10] * 100 + [900, 1500, 3000, 5000]
+    batches = build_usages_module._batches(lengths)
+    assert [len(batch) for batch in batches] == [64, 38, 1, 1]
+    assert sum(len(batch) for batch in batches) == len(lengths)
+    for batch in batches:
+        tokens = sum(lengths[i] for i in batch)
+        assert len(batch) <= 64
+        assert tokens <= 4000 or len(batch) == 1
+
+
+def test_staging_reads_a_window_around_the_target_of_a_long_sentence() -> None:
+    nlp = spacy.blank("en")
+    doc = nlp.make_doc(" ".join(["word"] * 899 + ["attention"] + ["word"] * 300))
+    sentence = build_usages_module._Sentence(0, 0, len(doc.text), 1200, "en", 0.99, None)
+    work = build_usages_module._Work("https://openalex.org/W1", doc, doc.text, [], [sentence], {})
+    target = doc[899]
+    mention = TargetMention("attention", 899, target.idx, target.idx + len(target.text), None, None)
+    row: list[object] = [None] * len(USAGES_COLUMNS)
+    row[build_usages_module._WINDOWED] = False
+    sink = build_usages_module._StagedUsages()
+    sink.add(work, sentence, mention, row, None)  # type: ignore[arg-type]
+    [(key, (words, _))] = sink.sentences.items()
+    assert key == ("https://openalex.org/W1", 0, 899 - 256)
+    assert len(words) == 513 and words[256] == "attention"
+    assert sink.rows[0][-4:-1][0] == 256
+    assert row[build_usages_module._WINDOWED] is True

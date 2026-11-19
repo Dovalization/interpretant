@@ -2,10 +2,11 @@
 
 The full transformer run of the usages stage ran out of GPU memory with four processes sharing the
 card: memory filled within two minutes and stayed at the card's limit. This script runs one part's
-target sentences the way the stage does (one process, sentences sorted by length, batches of 64
-documents, the stage's model settings) and records after every batch: the documents, their tokens,
-the longest one, and PyTorch's allocated memory (live tensors), reserved memory (held by its cache)
-and the batch's peak. Run from the repository root on the GPU machine, with no other GPU work:
+target sentences the way the stage does (one process, sentences sorted by length, batches capped
+by documents and tokens, the stage's model settings) and records after every batch: the documents,
+their tokens, the longest one, and PyTorch's allocated memory (live tensors), reserved memory (held
+by its cache) and the batch's peak. Run from the repository root on the GPU machine, with no other
+GPU work:
 `python scripts/evidence/transformer_memory.py PART [PART...] OUT.jsonl`.
 """
 
@@ -26,8 +27,8 @@ from interpretant.catalog.lemma_exceptions import load_lemma_exceptions
 from interpretant.catalog.spellings import load_spellings
 from interpretant.catalog.words import load_words
 from interpretant.pipelines.build_usages import (
-    _TRANSFORMER_BATCH_SIZE,
     UsagesSettings,
+    _batches,
     _match_part,
     _PartJob,
     _StagedUsages,
@@ -65,8 +66,8 @@ def main() -> None:
         for part in parts:
             sentences = sorted(target_sentences(part, job), key=lambda sentence: len(sentence[0]))
             sys.stdout.write(f"{part}: {len(sentences)} sentences\n")
-            for start in range(0, len(sentences), _TRANSFORMER_BATCH_SIZE):
-                batch = sentences[start : start + _TRANSFORMER_BATCH_SIZE]
+            for number, positions in enumerate(_batches([len(words) for words, _ in sentences])):
+                batch = [sentences[i] for i in positions]
                 docs = [Doc(transformer.vocab, words=w, spaces=s) for w, s in batch]
                 torch.cuda.reset_peak_memory_stats()
                 began = time.perf_counter()
@@ -74,7 +75,7 @@ def main() -> None:
                 torch.cuda.synchronize()
                 record = {
                     "part": part,
-                    "batch": start // _TRANSFORMER_BATCH_SIZE,
+                    "batch": number,
                     "documents": len(docs),
                     "tokens": sum(len(words) for words, _ in batch),
                     "longest": max(len(words) for words, _ in batch),

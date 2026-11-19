@@ -20,6 +20,7 @@ from interpretant.pipelines.runs import record_run
 COUNT_LABELS = {
     "mentions": "Mentions",
     "staged_sentences": "Target sentences annotated",
+    "skipped_parts": "Parts kept from an earlier run",
     "inside_removed_ranges": "In removed ranges",
     "outside_sentences": "Outside sentences",
     "in_removed_sentences": "In removed sentences",
@@ -55,6 +56,11 @@ COUNT_LABELS = {
     show_default=True,
     help="Processes sharing the GPU when the transformer annotates the usages.",
 )
+@click.option(
+    "--resume",
+    is_flag=True,
+    help="Keep the parts the transformer already wrote with the current columns, and skip them.",
+)
 @process_count_option
 def build_usages_command(
     catalog_file: Path,
@@ -62,6 +68,8 @@ def build_usages_command(
     decades: tuple[int, ...],
     gpu_process_count: int,
     process_count: int | None,
+    *,
+    resume: bool,
 ) -> None:
     """Write one row per target mention in a kept work, and draw one usage per work and word.
 
@@ -87,6 +95,7 @@ def build_usages_command(
             UsagesSettings(),
             process_count=process_count or default_process_count(),
             gpu_process_count=gpu_process_count,
+            resume=resume,
             progress=timer,
         )
     record_run(catalog, command="build-usages", stages=timer.finish(), counts=result.counts)
