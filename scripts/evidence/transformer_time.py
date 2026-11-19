@@ -65,7 +65,10 @@ def main() -> None:
         for name, step in transformer.pipeline:
             torch.cuda.synchronize()
             clock = time.perf_counter()
-            docs = list(step.pipe(docs, batch_size=len(docs)))  # type: ignore[attr-defined]
+            if hasattr(step, "pipe"):
+                docs = list(step.pipe(docs, batch_size=len(docs)))
+            else:
+                docs = [step(doc) for doc in docs]
             torch.cuda.synchronize()
             seconds[name] += time.perf_counter() - clock
         clock = time.perf_counter()
