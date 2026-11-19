@@ -424,8 +424,9 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     """Annotate one part's target sentences, from the cache or with the transformer; write it.
 
     A sentence whose key is in the part's annotation cache is rebuilt from it without the GPU; the
-    others go through the transformer, in batches capped by documents and tokens, and are added to
-    the cache. The model loads only if some sentence is missing from the cache.
+    others go through the transformer, once for each distinct sentence, in batches capped by
+    documents and tokens, and are added to the cache. The model loads only if some sentence is
+    missing from the cache.
     """
     words = {word.lemma: word for word in job.words}
     folder = Path(job.staging)
@@ -475,11 +476,11 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
         if done % _REPORT_EVERY == 0:
             report(_REPORT_EVERY)
 
-    missing = [position for position, cache_key in enumerate(cache_keys) if cache_key not in cached]
-    for position, cache_key in enumerate(cache_keys):
-        if cache_key in cached:
-            words_, spaces = texts_of[position]
-            read(position, _cached_doc(words_, spaces, cached[cache_key]))
+    hits, sharing = _split_by_cache(cache_keys, cached)
+    for position in hits:
+        words_, spaces = texts_of[position]
+        read(position, _cached_doc(words_, spaces, cached[cache_keys[position]]))
+    missing = [positions[0] for positions in sharing.values()]
     if missing:
         transformer = _transformer(job.gpu_process_count)
         exceptions = lemma_exception_ruler(transformer.vocab, job.exceptions)
@@ -495,7 +496,8 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
                 doc = exceptions(doc)
                 require_entity_annotation(doc)
                 added.append((cache_keys[position], *_cache_row(doc)))
-                read(position, doc)
+                for same in sharing[cache_keys[position]]:
+                    read(same, doc)
         # A part's longest sentences come last; give their memory back to the other processes.
         torch.cuda.empty_cache()
     report(done % _REPORT_EVERY)
@@ -513,9 +515,29 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     ).select(USAGES_COLUMNS.names())
     texts, _ = _kept_works(job.catalog, part)
     counts = _finish_part(part, job, table, texts)
-    counts["cache_hits"] += len(cache_keys) - len(missing)
+    waiting_for_transformer = sum(len(positions) for positions in sharing.values())
+    counts["cache_hits"] += len(cache_keys) - waiting_for_transformer
     counts["cache_misses"] += len(missing)
+    counts["shared_sentences"] += waiting_for_transformer - len(missing)
     return counts
+
+
+def _split_by_cache(
+    cache_keys: Sequence[str], cached: Mapping[str, Any]
+) -> tuple[list[int], dict[str, list[int]]]:
+    """The sentences found in the cache, and the others grouped by key in order of appearance.
+
+    Identical sentences (boilerplate, near-duplicate abstracts) share a key, so the transformer
+    annotates the first of each group once for all of them.
+    """
+    hits: list[int] = []
+    sharing: dict[str, list[int]] = defaultdict(list)
+    for position, cache_key in enumerate(cache_keys):
+        if cache_key in cached:
+            hits.append(position)
+        else:
+            sharing[cache_key].append(position)
+    return hits, dict(sharing)
 
 
 def _annotation_prefix(exceptions: Sequence[LemmaException]) -> str:

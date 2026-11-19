@@ -232,3 +232,10 @@ def test_the_annotation_cache_refuses_a_repeated_key(prepared_catalog: CatalogCo
     cache = pl.DataFrame([row, row], schema=ANNOTATION_CACHE_COLUMNS, orient="row")
     with pytest.raises(ValueError, match="repeats a key"):
         save_annotation_cache(prepared_catalog, cache, "ai_2010")
+
+
+def test_split_by_cache_groups_repeated_sentences_under_their_first_appearance() -> None:
+    hits, sharing = build_usages_module._split_by_cache(["a", "b", "c", "b", "d", "b"], {"c": ()})
+    assert hits == [2]
+    assert sharing == {"a": [0], "b": [1, 3, 5], "d": [4]}
+    assert [positions[0] for positions in sharing.values()] == [0, 1, 4]

@@ -28,6 +28,7 @@ COUNT_LABELS = {
     "skipped_parts": "Parts kept from an earlier run",
     "cache_hits": "Sentences read from the annotation cache",
     "cache_misses": "Sentences annotated by the transformer",
+    "shared_sentences": "Repeated sentences given one annotation",
     "inside_removed_ranges": "In removed ranges",
     "outside_sentences": "Outside sentences",
     "in_removed_sentences": "In removed sentences",
