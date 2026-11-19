@@ -144,9 +144,15 @@ def build_usages(
         {spelling.form: spelling.standard for spelling in load_spellings(catalog)},
         tuple(load_lemma_exceptions(catalog)),
     )
-    progress.stage("building the usages", total=len(parts))
+    # Largest parts start first, so a long part does not finish alone (`docs/performance.md`).
+    sizes = {part: _kept_work_count(catalog, part) for part in parts}
+    progress.stage("building the usages", total=sum(sizes.values()))
     results = map_parts(
-        _build_part, dict.fromkeys(parts, job), process_count=process_count, progress=progress
+        _build_part,
+        dict.fromkeys(parts, job),
+        process_count=process_count,
+        progress=progress,
+        sizes=sizes,
     )
     counts: Counter[str] = Counter()
     for result in results.values():
@@ -334,6 +340,11 @@ def _add_usages(
             settings.model,
         ]
         batch.add(work, sentence, mention, row, words[mention.word])
+
+
+def _kept_work_count(catalog: CatalogConfig, part: str) -> int:
+    """How many works of an abstracts part are kept."""
+    return load_abstracts_part(catalog, part, ["dropped_reason"])["dropped_reason"].null_count()
 
 
 def _kept_works(
