@@ -168,12 +168,10 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
     words = {word.lemma: word for word in job.words}
     texts, removals = _kept_works(job.catalog, part)
     sentences = _sentences(job.catalog, part)
-    static = {
-        work_id: dict(zip(starts, tokens, strict=True))
-        for work_id, tokens, starts in load_static_view(
-            job.catalog, part, columns=["work_id", "tokens", "starts"]
-        ).iter_rows()
-    }
+    # Each work's static entries are read from the frame when its document comes up: a dict for
+    # every work at once took 270 MB a worker (`docs/performance.md`).
+    static_view = load_static_view(job.catalog, part, columns=["work_id", "tokens", "starts"])
+    static_rows = {work_id: index for index, work_id in enumerate(static_view["work_id"])}
     rows: list[tuple[Any, ...]] = []
     counts: Counter[str] = Counter()
     batch = _EntityBatch(recognizer, job.settings.name_labels)
@@ -189,7 +187,7 @@ def _build_part(part: str, job: _PartJob) -> Counter[str]:
             texts[work_id],
             removals[work_id],
             sentences.get(work_id, []),
-            static.get(work_id, {}),
+            _static_entries(static_view, static_rows.get(work_id)),
         )
         mentions = match_targets(ruler(doc), matcher)
         counts["mentions"] += len(mentions)
@@ -340,6 +338,14 @@ def _add_usages(
             settings.model,
         ]
         batch.add(work, sentence, mention, row, words[mention.word])
+
+
+def _static_entries(view: pl.DataFrame, row: int | None) -> dict[int, str]:
+    """One work's static-view entries by character offset; none if the view has no row for it."""
+    if row is None:
+        return {}
+    _, tokens, starts = view.row(row)
+    return dict(zip(starts, tokens, strict=True))
 
 
 def _kept_work_count(catalog: CatalogConfig, part: str) -> int:
