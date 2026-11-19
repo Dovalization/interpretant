@@ -101,6 +101,7 @@ def options(tmp_path: Path, max_dollars: float = 5.0) -> argparse.Namespace:
         max_dollars=max_dollars,
         chunk=500,
         max_tokens=4096,
+        thinking="adaptive",
         out=tmp_path / "verdicts.json",
     )
 
@@ -166,3 +167,12 @@ def test_judge_skips_items_already_judged_and_sends_the_cached_codebook(tmp_path
     assert params["system"][0]["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
     assert params["output_config"]["format"]["type"] == "json_schema"
     assert "Target word: network" in params["messages"][0]["content"]
+
+
+def test_thinking_off_asks_for_an_answer_without_reasoning(tmp_path: Path) -> None:
+    settings = options(tmp_path)
+    system = [{"type": "text", "text": "codebook"}]
+    assert "thinking" not in judge.request(item("U1"), settings, system)["params"]
+    settings.thinking = "off"
+    params = judge.request(item("U1"), settings, system)["params"]
+    assert params["thinking"] == {"type": "between_tools"}

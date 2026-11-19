@@ -162,20 +162,20 @@ def load_items(source: Path) -> list[dict[str, Any]]:
 def request(
     item: dict[str, Any], options: argparse.Namespace, system: list[dict[str, Any]]
 ) -> dict[str, Any]:
-    """One batch request for an item."""
-    return {
-        "custom_id": item["id"],
-        "params": {
-            "model": options.model,
-            "max_tokens": options.max_tokens,
-            "system": system,
-            "output_config": {
-                "effort": options.effort,
-                "format": {"type": "json_schema", "schema": SCHEMAS[options.answers]},
-            },
-            "messages": [{"role": "user", "content": render(item, options.answers)}],
+    """One batch request for an item; with thinking off, the model answers without reasoning."""
+    params: dict[str, Any] = {
+        "model": options.model,
+        "max_tokens": options.max_tokens,
+        "system": system,
+        "output_config": {
+            "effort": options.effort,
+            "format": {"type": "json_schema", "schema": SCHEMAS[options.answers]},
         },
+        "messages": [{"role": "user", "content": render(item, options.answers)}],
     }
+    if options.thinking == "off":
+        params["thinking"] = {"type": "between_tools"}
+    return {"custom_id": item["id"], "params": params}
 
 
 def answer(result: Any, answers: str) -> dict[str, Any] | None:  # noqa: ANN401 (an SDK batch result)
@@ -254,6 +254,7 @@ def judge(
     return {
         "model": options.model,
         "effort": options.effort,
+        "thinking": options.thinking,
         "codebook_sha256": hashlib.sha256(codebook.encode()).hexdigest(),
         "prices_read": PRICES_READ,
         "max_dollars": options.max_dollars,
@@ -270,7 +271,8 @@ def report(manifest: dict[str, Any]) -> str:
     """The usage report: tokens by kind and the cost."""
     tokens = manifest["tokens"]
     return (
-        f"{manifest['model']} ({manifest['effort']}): {manifest['judged']} judged, "
+        f"{manifest['model']} ({manifest['effort']}, thinking {manifest['thinking']}): "
+        f"{manifest['judged']} judged, "
         f"{len(manifest['failed'])} failed, {len(manifest['left_by_cap'])} left by the cap\n"
         f"tokens: input {tokens.get('input_tokens', 0):,}, cache write "
         f"{tokens.get('cache_creation_input_tokens', 0):,}, cache read "
@@ -294,6 +296,7 @@ def main() -> None:
     parser.add_argument("--max-dollars", type=float, required=True)
     parser.add_argument("--chunk", type=int, default=500)
     parser.add_argument("--max-tokens", type=int, default=4096)
+    parser.add_argument("--thinking", choices=["adaptive", "off"], default="adaptive")
     options = parser.parse_args()
     items = load_items(options.items)
     client = anthropic.Anthropic(api_key=ApiKeySettings().anthropic_api_key)
