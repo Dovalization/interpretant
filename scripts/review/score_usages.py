@@ -37,13 +37,14 @@ CALIBRATION_AGREEMENT = 54
 
 
 def load_judge(folder: Path, judge: str) -> dict[str, dict[str, Any]]:
-    """One judge's verdicts, merged over its part files.
+    """One judge's verdicts, merged over its part files (not the judge script's manifests).
 
     Raises:
         SystemExit: if an item is judged twice.
     """
     verdicts: dict[str, dict[str, Any]] = {}
-    for path in sorted(folder.glob(f"judge_{judge}_part_*.json")):
+    paths = folder.glob(f"judge_{judge}_part_*.json")
+    for path in sorted(path for path in paths if not path.name.endswith(".manifest.json")):
         for item_id, verdict in json.loads(path.read_text()).items():
             if item_id in verdicts:
                 raise SystemExit(f"judge {judge} judged {item_id} twice")
