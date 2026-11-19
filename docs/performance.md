@@ -280,6 +280,53 @@ RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_s
 - **The settings kept:** float16, the lookup attribute ruler, sentences sorted by length, 4
   processes. Together about 3.6 times the shipped config.
 
+## The usages stage (2026-11-19)
+
+`interpretant build-usages` over the 88 parts (632,843 kept works, 1.67 million usages), on bazzite
+(i5-12400F: 6 cores, 12 threads; 31 GB; NVMe):
+
+- **Profile of the largest part** (neuroscience 2020, 9,838 works, 40,784 usages; cProfile, which
+  about doubles the time): entity recognition 56%, one `ner` call per target sentence (28,694 calls,
+  a third of each spent on the call itself); matching 33%, of which `fold` 13.1 million times as the
+  phrase matcher folded and spelled every token pair; reading the cache 4%.
+- **Two fixes, each checked identical on that part:** sentences go to the recognizer's `pipe` 2,048
+  at a time, in batches of 256 (`pipelines/build_usages._EntityBatch`), and the matcher caches each
+  text's folded and spelled forms. The part fell from 87 s to 57 s. What remains is the
+  recognizer's own decoding (about 60%), real work.
+- **Memory.** `import spacy` imports torch and transformers through thinc whenever they are
+  installed: 640 MB resident, 340 MB of it private, in every worker. A dict of static entries for
+  every work of a part took 270 MB more; reading each work's row when its document comes up cut the
+  peak from 1.80 to 1.55 GB a worker, with the same time and table.
+- **Scaling** on the 11 parts of the 2000s:
+
+  | Processes | Seconds | Speed-up | CPU idle |
+  |---|---|---|---|
+  | 1 | 386 | 1.0 | 85% |
+  | 3 | 154 | 2.5 | 73% |
+  | 6 | 89 | 4.3 | 58% |
+  | 12 | 77.5 | 5.0 | 33% |
+
+  The six cores scale; hyperthreads add about 15%. With 11 parts on 12 processes the run ended on
+  its largest part alone, so the stage now starts the largest parts first (`map_parts` with each
+  part's kept works as its size).
+- **The whole stage:** 10 min 19 s before (10 processes), 5 min 58 s after (12 processes, CPU 86%
+  busy). At 12 processes free memory touched zero and about 290 MB went to swap, with almost
+  nothing read back: 12 is the ceiling.
+
+### Using bazzite
+
+- **CPU stages run one at a time,** each on 12 processes with the largest parts first: one stage
+  fills the CPU, so two at once only split it. Memory caps it at 12 (1.55 GB a worker plus the
+  system and page cache).
+- **GPU work** runs the transformer in 4 processes sharing the card (about 990 sentences a
+  second), which is CPU-bound: a full transformer run gives 4 threads to the GPU processes and
+  up to 8 to workers reading and preparing sentences, and keeps other CPU stages off the machine.
+- **Runs are chained** in one background script that samples `vmstat` and `nvidia-smi`, so nothing
+  waits between steps and each run's resources are on record; `metrics/runs.jsonl` is committed
+  after each.
+- **Before GPU work,** `nvidia-smi` is checked for other users of the card (bazzite is also a games
+  machine).
+
 ## Planned: reusing unchanged documents
 
 Planned 2026-11-15 (the author), measured first. A full run reannotates every text, while run
