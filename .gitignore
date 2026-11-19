@@ -128,3 +128,4 @@ data/review/sentence_view/adjudicate*.jsonl
 data/review/model_comparison/items.jsonl
 data/review/usages_audit/batch_*.jsonl
 data/review/usages_audit/adjudicate*.jsonl
+data/review/model_comparison/adjudicate.jsonl
