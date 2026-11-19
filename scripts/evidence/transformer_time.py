@@ -81,6 +81,7 @@ def main() -> None:
         "sentences_per_second": round(len(sentences) / total),
         "steps": {name: round(value, 2) for name, value in ranked},
         "shares": {name: round(value / total, 3) for name, value in ranked},
+        "max_reserved_gb": round(torch.cuda.max_memory_reserved() / 2**30, 3),
     }
     out.write_text(json.dumps(report, indent=1) + "\n")
     sys.stdout.write(json.dumps(report, indent=1) + "\n")
