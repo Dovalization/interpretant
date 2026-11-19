@@ -19,6 +19,7 @@ its scope, one in-scope usage per work and word in a sentence no exclusion keeps
 from __future__ import annotations
 
 import hashlib
+import importlib.metadata
 import json
 import os
 import tempfile
@@ -104,6 +105,8 @@ _CUDA_CONTEXT_GB = 0.3
 _REPORT_EVERY = 1000
 # Bumped whenever the code that annotates a sentence changes, so the cache is rebuilt.
 _ANNOTATION_VERSION = 1
+# The packages whose versions shape the annotation; an upgrade starts a new cache.
+_ANNOTATION_PACKAGES = ("spacy", "spacy-curated-transformers", TRANSFORMER_MODEL)
 _COLUMN_NAMES = USAGES_COLUMNS.names()
 _POS = _COLUMN_NAMES.index("pos")
 _ENTITY = _COLUMN_NAMES.index("entity")
@@ -444,9 +447,12 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     annotation: dict[str, list[Any]] = {name: [None] * rows.height for name in _ANNOTATED}
     texts_of = sentences.select("words", "spaces").rows()
     keys = sentences.select(key_columns).rows()
-    prefix = _annotation_prefix(job.exceptions)
-    cache_keys = [_annotation_key(prefix, words_, spaces) for words_, spaces in texts_of]
-    cached = {row[0]: row[1:] for row in load_annotation_cache(job.catalog, part).iter_rows()}
+    settings_hash = _annotation_settings(job.exceptions)
+    folder_name = settings_hash[:16]
+    cache_keys = [_annotation_key(settings_hash, words_, spaces) for words_, spaces in texts_of]
+    cached = {
+        row[0]: row[1:] for row in load_annotation_cache(job.catalog, folder_name, part).iter_rows()
+    }
     added: list[tuple[Any, ...]] = []
     done = 0
 
@@ -503,9 +509,8 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
     report(done % _REPORT_EVERY)
     if added:
         new = pl.DataFrame(added, schema=ANNOTATION_CACHE_COLUMNS, orient="row")
-        save_annotation_cache(
-            job.catalog, pl.concat([load_annotation_cache(job.catalog, part), new]), part
-        )
+        earlier = load_annotation_cache(job.catalog, folder_name, part)
+        save_annotation_cache(job.catalog, pl.concat([earlier, new]), folder_name, part)
     table = rows.with_columns(
         *(
             pl.Series(name, values, dtype=USAGES_COLUMNS[name])
@@ -540,10 +545,11 @@ def _split_by_cache(
     return hits, dict(sharing)
 
 
-def _annotation_prefix(exceptions: Sequence[LemmaException]) -> str:
+def _annotation_settings(exceptions: Sequence[LemmaException]) -> str:
     """The hash of everything besides the tokens that shapes a sentence's annotation."""
     settings = {
         "model": TRANSFORMER_MODEL,
+        "packages": {package: _installed_version(package) for package in _ANNOTATION_PACKAGES},
         "spans_per_forward": SPANS_PER_FORWARD,
         "float16": True,
         "version": _ANNOTATION_VERSION,
@@ -552,10 +558,17 @@ def _annotation_prefix(exceptions: Sequence[LemmaException]) -> str:
     return hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()
 
 
-def _annotation_key(prefix: str, words: Sequence[str], spaces: Sequence[bool]) -> str:
+def _installed_version(package: str) -> str:
+    try:
+        return importlib.metadata.version(package)
+    except importlib.metadata.PackageNotFoundError:
+        return "not installed"
+
+
+def _annotation_key(settings_hash: str, words: Sequence[str], spaces: Sequence[bool]) -> str:
     """A sentence's key in the annotation cache: its tokens hashed with the settings' hash."""
     tokens = "\x1f".join(words) + "\x1e" + "".join("1" if space else "0" for space in spaces)
-    return hashlib.sha256(f"{prefix}\x1d{tokens}".encode()).hexdigest()[:32]
+    return hashlib.sha256(f"{settings_hash}\x1d{tokens}".encode()).hexdigest()[:32]
 
 
 def _cache_row(doc: Doc) -> tuple[list[str], ...]:

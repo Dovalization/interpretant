@@ -216,8 +216,8 @@ def test_build_usages_reuses_the_annotation_cache_for_the_same_table(
 def test_the_annotation_key_changes_with_the_lemma_exceptions() -> None:
     exception = LemmaException(form="data", lemma="data", tag="NNS", source="author")
     words, spaces = ["The", "data"], [True, False]
-    plain = build_usages_module._annotation_prefix(())
-    with_exception = build_usages_module._annotation_prefix((exception,))
+    plain = build_usages_module._annotation_settings(())
+    with_exception = build_usages_module._annotation_settings((exception,))
     assert build_usages_module._annotation_key(plain, words, spaces) != (
         build_usages_module._annotation_key(with_exception, words, spaces)
     )
@@ -227,11 +227,11 @@ def test_the_annotation_key_changes_with_the_lemma_exceptions() -> None:
 
 
 def test_the_annotation_cache_refuses_a_repeated_key(prepared_catalog: CatalogConfig) -> None:
-    assert load_annotation_cache(prepared_catalog, "ai_2010").height == 0
+    assert load_annotation_cache(prepared_catalog, "settings1", "ai_2010").height == 0
     row = ("k1", ["NN"], ["NOUN"], [""], ["data"], ["O"])
     cache = pl.DataFrame([row, row], schema=ANNOTATION_CACHE_COLUMNS, orient="row")
     with pytest.raises(ValueError, match="repeats a key"):
-        save_annotation_cache(prepared_catalog, cache, "ai_2010")
+        save_annotation_cache(prepared_catalog, cache, "settings1", "ai_2010")
 
 
 def test_split_by_cache_groups_repeated_sentences_under_their_first_appearance() -> None:
@@ -239,3 +239,23 @@ def test_split_by_cache_groups_repeated_sentences_under_their_first_appearance()
     assert hits == [2]
     assert sharing == {"a": [0], "b": [1, 3, 5], "d": [4]}
     assert [positions[0] for positions in sharing.values()] == [0, 1, 4]
+
+
+def test_the_annotation_settings_change_with_a_package_version(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    installed = build_usages_module._annotation_settings(())
+    monkeypatch.setattr(build_usages_module, "_installed_version", lambda _: "99.0")
+    assert build_usages_module._annotation_settings(()) != installed
+
+
+def test_the_annotation_cache_keeps_each_set_of_settings_apart(
+    prepared_catalog: CatalogConfig,
+) -> None:
+    row = ("k1", ["NN"], ["NOUN"], [""], ["data"], ["O"])
+    cache = pl.DataFrame([row], schema=ANNOTATION_CACHE_COLUMNS, orient="row")
+    save_annotation_cache(prepared_catalog, cache, "settings1", "ai_2010")
+    assert load_annotation_cache(prepared_catalog, "settings1", "ai_2010").height == 1
+    assert load_annotation_cache(prepared_catalog, "settings2", "ai_2010").height == 0
+    with pytest.raises(ValueError, match="plain folder name"):
+        load_annotation_cache(prepared_catalog, "../elsewhere", "ai_2010")

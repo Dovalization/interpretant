@@ -375,7 +375,9 @@ Prometheus (15 s samples); the remote runner's card has 11.65 GB, the desktop ho
   slightly: between the two settings the in-scope count differed by one (1,890,646 against
   1,890,645 of 1,976,843 usages); the first table was overwritten before a row-by-row comparison.
 - **The annotation cache** (`catalog/annotation_cache.py`): each target sentence's annotation is kept
-  under a hash of its tokens, the model's settings, the lemma exceptions and a version. A rerun
+  under a hash of its tokens, the model's settings, the spaCy and model package versions, the lemma
+  exceptions and a version; each set of settings has its own folder, so a stale one is deleted
+  whole. A rerun
   annotates only sentences it has not seen (identical sentences once: 1,566 repeats). Cold, the
   stage takes about 16 minutes and writes 290 MB; warm, the annotation takes 39 s instead of
   14 min 20 s, without the GPU, and the table is identical to the cold run's in every row. A rerun
