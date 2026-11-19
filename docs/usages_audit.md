@@ -122,6 +122,17 @@ what the prompt shows.
 the judged items with seed 20261305. The agents' verdicts stand if they agree with the author on
 at least 54 of 60. Agents agreeing 90% of the time reach 54 in 61% of draws, at 95% in 97%.
 
+**The pilot round and the amended codebook (2026-11-19).** The first draw was taken from the
+small model's table and fully judged by one pair of judges (wave 1) before the model comparison was
+decided; the comparison then chose the transformer, so that draw does not audit the table of
+record. It is kept as a pilot (`data/review/usages_audit_pilot/`), and its reports showed the
+judges reading three cases differently. Before any item of the table of record was judged, the
+codebook was amended: words in titles of cited works are names, while the abstract's own title and
+headings are uses (the author); an -ing form counts for a noun target only where it works as a noun
+or noun modifier (the author); and noun modifiers, coined names and identifiers are settled as the
+judges had mostly read them. The audit of record is drawn from the transformer's table with the
+same seeds and judged fresh under the amended codebook; no pilot verdict is reused.
+
 **If a bar fails.** The rule is fixed and the failed part of the audit is drawn again, seed
 20261306, after a note here records the fix before the redraw. Any change to `words.tsv` needs
 the author. If the calibration fails, the prompt is amended on the disagreements and 60 fresh

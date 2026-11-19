@@ -8,6 +8,23 @@ word (*self-attention*, *attention-based*). A use inside a name does not count (
 News Network*, *attention* in the title of a named test or scale). Mentioning the word as a word
 (*the term "attention"*) counts as a use.
 
+These rules settle the common hard cases:
+
+- **Titles.** The title of another work (a paper, book or chapter cited, listed with its authors,
+  or named in a reference list) is a name, so a word in it is not a use. The abstract's own
+  title, its section headings and table-of-contents headings are ordinary uses: the authors are
+  using the word.
+- **-ing forms.** For a word studied as a noun, an -ing form built on it counts only where it works
+  as a noun or noun modifier (*social networking sites*, *data mining*), not where it is a verb
+  (*they were networking*).
+- **Noun modifiers.** A noun before another noun is still a noun use (*network analysis*,
+  *component failure*), even if tagged as an adjective.
+- **Coined names.** The name of one specific system, model, scale, inventory, organisation, law or
+  product is a name (*BERT*, a named test or scale). A generic term or technique is not, even when
+  capitalised or spelled out from an acronym (*Artificial Intelligence*, *Generative Adversarial
+  Network*).
+- **Identifiers.** File names, code identifiers and URLs are not uses (`other_word`).
+
 Each item shows the target word, its parts of speech, the sentence, and the marked place between
 ⟨t⟩ and ⟨/t⟩. There are three kinds of item.
 
