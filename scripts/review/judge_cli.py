@@ -9,8 +9,8 @@ item judged on its own; calls holding many items gave verdicts their own notes c
 the part's answers go to `VERDICTS_DIR/NAME_part_NN.json`, item id to answer, the layout the
 scorers read, once all its calls have answered; a part whose file exists is skipped, so a stopped
 run resumes. Each call sees only the codebook, as the whole
-system prompt, and its items: no tools, no settings, MCP servers or CLAUDE.md (it runs in an empty
-temporary folder), no saved session; the answer is constrained to the codebook's schema. A call
+system prompt, and its items: no tools, no settings, MCP servers or CLAUDE.md (it runs in one
+empty folder), no saved session; the answer is constrained to the codebook's schema. A call
 that fails, or answers another set of ids, is tried once more, then reported. The tokens of every
 call, the models the command line reports, its version and the codebook's sha256 accumulate in
 `VERDICTS_DIR/NAME.manifest.json`, and each run adds its usage to the run record. The judging
@@ -45,6 +45,7 @@ from interpretant.pipelines.runs import record_run
 PART_SIZE = 50
 ATTEMPTS = 2
 TIMEOUT_SECONDS = 1200
+EMPTY_FOLDER = Path(tempfile.gettempdir()) / "interpretant-judge-cli"
 USAGE_FIELDS = (
     "input_tokens",
     "cache_creation_input_tokens",
@@ -123,17 +124,26 @@ def command(options: argparse.Namespace) -> list[str]:
 
 
 def run_claude(arguments: list[str], text: str) -> dict[str, Any]:
-    """Run the command line from an empty folder, so no project instructions reach it."""
-    with tempfile.TemporaryDirectory() as empty:
-        done = subprocess.run(
-            arguments,
-            input=text,
-            capture_output=True,
-            text=True,
-            cwd=empty,
-            timeout=TIMEOUT_SECONDS,
-            check=False,
-        )
+    """Run the command line from the empty folder, so no project instructions reach it.
+
+    Every call shares the one folder, as Claude Code scopes its prompt cache to a machine and a
+    folder.
+
+    Raises:
+        RuntimeError: if the folder is not empty.
+    """
+    EMPTY_FOLDER.mkdir(exist_ok=True)
+    if any(EMPTY_FOLDER.iterdir()):
+        raise RuntimeError(f"{EMPTY_FOLDER} must stay empty: files there could reach the judge")
+    done = subprocess.run(
+        arguments,
+        input=text,
+        capture_output=True,
+        text=True,
+        cwd=EMPTY_FOLDER,
+        timeout=TIMEOUT_SECONDS,
+        check=False,
+    )
     try:
         result: dict[str, Any] = json.loads(done.stdout)
     except json.JSONDecodeError:
