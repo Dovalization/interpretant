@@ -1,0 +1,21 @@
+{
+ "model": "claude-sonnet-5-5",
+ "effort": "low",
+ "thinking": "adaptive",
+ "codebook_sha256": "9be0db1ee6fb0e9ed45a292984651d47775046542d6a6703959bca5decb2db0a",
+ "prices_read": "2026-11-03",
+ "max_dollars": 2.0,
+ "spent_dollars": 0.0608,
+ "tokens": {
+  "input_tokens": 15001,
+  "cache_creation_input_tokens": 1598,
+  "cache_read_input_tokens": 158202,
+  "output_tokens": 6938
+ },
+ "batches": [
+  "msgbatch_01VXSjxxwkyktMFCrzKUUtcr"
+ ],
+ "judged": 100,
+ "failed": {},
+ "left_by_cap": []
+}
