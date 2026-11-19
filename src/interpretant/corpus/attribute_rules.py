@@ -3,8 +3,8 @@
 The model's attribute ruler maps each token's fine-grained tag (and, for some words, its
 lower-case form) to its part of speech, morphology and lemma. spaCy's matcher tries every rule at
 every token, about 80 ns a rule: 12.8 µs per token for the 166 rules the pass keeps, a quarter of
-the spaCy workers' time (timed on bazzite). Most rules are one token tested on its tag, its
-lower-case form or both, so they are looked up by those values instead; the others (two tokens,
+the spaCy workers' time (timed on the remote runner). Most rules are one token tested on its tag,
+its lower-case form or both, so they are looked up by those values instead; the others (two tokens,
 regular expressions, spaces) stay with a matcher of their own. The matches are the tuples spaCy's
 ``AttributeRuler.match`` gives, sorted the same way, and spaCy's ``set_annotations`` applies
 them: 2.6 µs per token, every tag, part of speech, morphology and lemma the same on 3,000

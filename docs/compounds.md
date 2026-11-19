@@ -25,7 +25,7 @@ counts and vectors are split between its forms (Nenadic et al. 2004). The author
 ## The proposal (`scripts/evidence/compound_table.py`, code `0f9bd349`)
 
 - **Counting.** Over kept works, with the lemma exceptions and the spelling map applied as in the
-  static view, the builder counted every two-letter-part compound's forms (2 min 14 s on bazzite).
+  static view, the builder counted every two-letter-part compound's forms (2 min 14 s on the remote runner).
   Removed ranges are skipped; a merged pair cut by a removal ("straddle") was never found.
 - **Families left out, with their reasons:**
   - letter codes: 56 (fewer than 4 letters: *a-b*, *i-e*);

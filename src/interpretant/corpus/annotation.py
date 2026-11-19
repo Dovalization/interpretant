@@ -114,7 +114,8 @@ def build_pipeline(
 
     The model's named entity recognition (``ner``) is left out unless
     ``named_entity_recognition`` is set: nothing in cleaning reads named entities, and it takes
-    about 44% of a worker's time (timed on bazzite: 30 s instead of 44 s per 10,000 abstracts).
+    about 44% of a worker's time (timed on the remote runner: 30 s instead of 44 s per 10,000
+    abstracts).
     Matching recognises them on target sentences instead (decision agenda 4.1); there they agree
     with entities found on whole abstracts for 99.87% of 15,018 target mentions.
 

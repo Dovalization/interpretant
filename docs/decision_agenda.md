@@ -1003,7 +1003,7 @@ score, so sentence quality rests on the comparison below). On lemmas the two mod
 where the small tagger errs
 (*medium*, *learning*, 4.1): if more than a couple of percent of usages change their in-scope
 flag or lemma between the models, target
-sentences use the transformer, on bazzite's GPU after its repository is synced.
+sentences use the transformer, on the remote runner's GPU after its repository is synced.
 
 ## Step 4b: corpus quality
 
@@ -1855,7 +1855,7 @@ touched):
 ## Step 9: reproducible runs
 
 *In place 2026-11-13 for stages 1 to 3:* the downloads are registered with `dvc add`
-(`data/raw/*.dvc`) and stored on bazzite's data disk through the SSH remote `storage`;
+(`data/raw/*.dvc`) and stored on the remote runner's data disk through the SSH remote `storage`;
 `dvc.yaml` runs `annotate_corpus`, `build_corpus` and `report_corpus`, each listing exactly the
 modules it imports (`tests/test_dvc_stages.py`); `report-corpus` writes `metrics/corpus.json`,
 which `dvc metrics diff` compares between commits; and every corpus command appends a record to
@@ -1911,9 +1911,9 @@ reports cover) and a manifest of the project's own (a re-implementation).
   code; reports cite the commit and the lock entry they came from; it records the word tables'
   version, since they are dependencies of the stages that read them.
 - Large data: the cache links outputs with reflinks (copy-on-write; APFS on the Mac and btrfs on
-  bazzite), so it does not double disk use; huge regenerable outputs may be `cache: false`, which
+  the remote runner), so it does not double disk use; huge regenerable outputs may be `cache: false`, which
   also turns off DVC's run cache for that stage.
-- No remote at first; an SSH remote (`dvc-ssh`) to move data between the Mac and bazzite is added
+- No remote at first; an SSH remote (`dvc-ssh`) to move data between the Mac and the remote runner is added
   when the rebuild needs the GPU.
 - Caveats: stewardship moved from Iterative to lakeFS (November 2025), and the last release was
   March 2026 while commits continue; if DVC were abandoned, the pipelines still run as CLI
@@ -2086,7 +2086,7 @@ The sized tasks come to about 4 hours; three are not yet sized.
   2026-11-17 when the run checkout moved to `~/Developer/interpretant`): kept or deleted, the
   author decides.
 - [ ] Devlog 07: waiting for the author's review.
-- [ ] bazzite's copy of the repository: behind the Mac; sync before any GPU run.
+- [ ] the remote runner's copy of the repository: behind the Mac; sync before any GPU run.
 - [ ] Progress lines show "0/s" for stages that finish fewer than one item a second (the
   language and cleaning stages count parts): show decimals, or items a minute, there.
 - [ ] Docs pass: go through the 23 documents in `docs/`, merge what overlaps, retire what is no

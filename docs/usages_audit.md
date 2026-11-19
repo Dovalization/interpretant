@@ -24,7 +24,7 @@ is drawn per work and word: the eligible one (in scope, in a sentence that is no
 smallest draw key, seed 20261301 (`params.yaml`).
 
 **The working table.** The comparison and the audit sample a table built with the small model over
-all 88 parts (10 min on bazzite, code `5881332`), not the 8 development parts the phase plan named:
+all 88 parts (10 min on the remote runner, code `5881332`), not the 8 development parts the phase plan named:
 the whole table costs little, and a corpus-wide sample measures the whole corpus. It is not the
 record. The locked `dvc repro build_usages` comes after step 7's pre-registration, as the plan
 says, and no count per word and decade is read for drift.

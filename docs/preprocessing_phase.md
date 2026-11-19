@@ -18,7 +18,7 @@ from. Later changes stay possible, but each one is deliberate:
 found them below the static measurement's noise. They come back if later evidence, for example
 from the junk gate or the contextual measures, shows they matter.
 
-Three read-only scouts (code, data on bazzite, old path) and a design pass informed this plan. So
+Three read-only scouts (code, data on the remote runner, old path) and a design pass informed this plan. So
 did a check of the libraries' docs and source (spaCy 3.8.18, Polars 2.1.0, pandera 0.36.0) and of
 the literature on preprocessing and usage extraction for semantic change; sources are cited in
 the steps that use them.
@@ -41,8 +41,8 @@ starts from. Step 3 had its own pass on 2026-11-18, recorded under step 3.
   `corpus/repair.py`; they are the cache's fingerprint. The transformer annotator must not call
   `build_pipeline`.
 - **Runs.**
-  - Measured runs happen on bazzite only, since the Mac's tables are stale. Sync with
-    `git push bazzite main`, then run DVC with `source .venv/bin/activate`.
+  - Measured runs happen on the remote runner only, since the Mac's tables are stale. Sync with a
+    `git push` to the runner's checkout, then run DVC with `source .venv/bin/activate`.
   - After a `catalog/config.py` change, run `dvc commit -f` on the stages that change cannot
     affect.
   - Live progress, with an update every 2 minutes.
@@ -74,16 +74,16 @@ starts from. Step 3 had its own pass on 2026-11-18, recorded under step 3.
   L1).
 - **Author's decisions:**
   - the push of 40+ commits;
-  - `~/interpretant-old` on bazzite;
+  - `~/interpretant-old` on the remote runner;
   - devlog 07;
   - where the loose label files go (`data/sense_lists/round_a_prime_v2_draft.toml`, rounds E and
     Q).
-- **Before step 1 on bazzite:** check `dvc status` is clean (R_B `daadb4ed`), and copy R_B aside
+- **Before step 1 on the remote runner:** check `dvc status` is clean (R_B `daadb4ed`), and copy R_B aside
   as `data/interim/static_view_r_b` for step 4's alignment check.
 
 ## Step 1: the word table (`curated/words.tsv`, 4.7)
 
-1. **`feat(scripts)`:** `scripts/evidence/word_table_draft.py` runs on bazzite in about 5 min. Per
+1. **`feat(scripts)`:** `scripts/evidence/word_table_draft.py` runs on the remote runner in about 5 min. Per
    candidate word it reports:
    - part-of-speech shares (coarse and fine) over kept works, with the exceptions applied;
    - counts and part-of-speech shares per decade, since a change in a word's syntactic role gets
@@ -133,7 +133,7 @@ before any target result is read.
 **Commits:**
 1. `corpus/spelling.py` with `spell`, `build_spelling_candidates` and `find_mapped_words`, plus
    tests.
-2. `scripts/evidence/spelling_table.py` on bazzite, in 3–5 min.
+2. `scripts/evidence/spelling_table.py` on the remote runner, in 3–5 min.
 3. `docs/spellings.md`, the pre-registered bar.
 4. `catalog/spellings.py` with `Spelling(form, standard, source)` and validators (no chains, the
    standard has a letter), plus the catalog entry.
@@ -189,7 +189,7 @@ spelling-normalised (*organisations* → *organisation*).
 ## Step 3: compound variants (3.4), and no phrase list (3.5)
 
 *Planned in its own pass and decided by the author on 2026-11-18. Three scouts (code, data on
-bazzite, literature and library docs) and a design pass informed it. The audit's pre-registration
+the remote runner, literature and library docs) and a design pass informed it. The audit's pre-registration
 and results go in `docs/compounds.md`.*
 
 **Decisions:**
@@ -249,7 +249,7 @@ and results go in `docs/compounds.md`.*
   - the same letters on both sides;
   - no chains, and one standard per family.
 - **The builder** `scripts/evidence/compound_table.py` counts each family's forms over kept works
-  per decade (2–4 min on bazzite). Its filters are recorded with their reasons:
+  per decade (2–4 min on the remote runner). Its filters are recorded with their reasons:
   - letter codes (fewer than 4 letters, Roman-numeral or vowelless segments);
   - three-part tokens, reported but not paired;
   - spaced forms whose share passing the gate is under 0.5;
@@ -305,7 +305,7 @@ families.
     `data/review/static_view/`.
 
 **Results (2026-11-18).**
-- **The run.** The view was rebuilt on bazzite at code `e937c9f0` in 132 s: 705,283 documents and
+- **The run.** The view was rebuilt on the remote runner at code `e937c9f0` in 132 s: 705,283 documents and
   104,176,115 entries, the same as R_B. The lock is `8fad6e8f`, the run record `43e4897f`. The
   other stages were re-committed unchanged first, since `catalog/config.py` only gained the map
   paths. The check (`scripts/evidence/static_view_check.py`, code `e62fb8f4`; summary in
@@ -353,7 +353,7 @@ families.
    (null|removed|cut_off)`. Plus `is_inside_removal(start, end, removals)` and tests.
 3. `catalog/sentence_view.py`, with a pandera check (unique `(work_id, sentence_number)`) and the
    entry `data/processed/sentence_view`.
-4. `pipelines/` and `cli/build_sentence_view.py` and the DVC stage. Run on bazzite (1–2 min), then
+4. `pipelines/` and `cli/build_sentence_view.py` and the DVC stage. Run on the remote runner (1–2 min), then
    the lock commit.
 5. `scripts/review/sentence_audit.py`, then the results.
 
@@ -585,7 +585,7 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
 - Step 6's code can be written while step 3's audit runs. Its full run needs step 4 (each usage
   records the static token).
 
-**Runtimes on bazzite (estimates):**
+**Runtimes on the remote runner (estimates):**
 
 | Run | Time |
 |---|---|
@@ -615,7 +615,7 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
 - **Each step:** the gates on every commit; new unit tests per module (named above); end-to-end
   pipeline tests on the synthetic corpus (`tests/corpus_catalog.py`); `tests/test_dvc_stages.py`
   for every new stage's dependencies.
-- **Data:** each step's pre-registered bar, run on bazzite, with its results appended to the
+- **Data:** each step's pre-registered bar, run on the remote runner, with its results appended to the
   step's doc. `dvc status` clean after each lock commit, and `git diff --stat` empty on the three
   fingerprint modules before each run.
 - **Invariants carried through:**

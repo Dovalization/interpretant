@@ -247,7 +247,7 @@ background thread followed for later stores.
 
 ## The transformer on target sentences (2026-11-18)
 
-Step 6 may annotate every target sentence with `en_core_web_trf` (agenda 4.9). Measured on bazzite's
+Step 6 may annotate every target sentence with `en_core_web_trf` (agenda 4.9). Measured on the remote runner's
 RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_speed.py`,
 `transformer_parallel.py`), the pipeline without its parser:
 
@@ -282,7 +282,7 @@ RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_s
 
 ## The usages stage (2026-11-19)
 
-`interpretant build-usages` over the 88 parts (632,843 kept works, 1.67 million usages), on bazzite
+`interpretant build-usages` over the 88 parts (632,843 kept works, 1.67 million usages), on the remote runner
 (i5-12400F: 6 cores, 12 threads; 31 GB; NVMe):
 
 - **Profile of the largest part** (neuroscience 2020, 9,838 works, 40,784 usages; cProfile, which
@@ -313,7 +313,7 @@ RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_s
   busy). At 12 processes free memory touched zero and about 290 MB went to swap, with almost
   nothing read back: 12 is the ceiling.
 
-### Using bazzite
+### Using the remote runner
 
 - **CPU stages run one at a time,** each on 12 processes with the largest parts first: one stage
   fills the CPU, so two at once only split it. Memory caps it at 12 (1.55 GB a worker plus the
@@ -324,8 +324,8 @@ RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_s
 - **Runs are chained** in one background script that samples `vmstat` and `nvidia-smi`, so nothing
   waits between steps and each run's resources are on record; `metrics/runs.jsonl` is committed
   after each.
-- **Before GPU work,** `nvidia-smi` is checked for other users of the card (bazzite is also a games
-  machine).
+- **Before GPU work,** `nvidia-smi` is checked for other users of the card (the remote runner is also used
+  for other work).
 
 ## Planned: reusing unchanged documents
 
