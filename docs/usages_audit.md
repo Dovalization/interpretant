@@ -1,6 +1,7 @@
 # The usages table: model comparison and matching audit (agenda 4.1–4.6, 4.9; phase step 6)
 
-Pre-registered 2026-11-18, before any sample was drawn or any item judged.
+Pre-registered 2026-11-18, before any sample was drawn or any item judged; amended 2026-11-19 for the
+held-out words, still before any draw.
 
 ## What the table is
 
@@ -53,10 +54,10 @@ says, and no count per word and decade is read for drift.
     Montariol et al. (2021) suggest entity filtering when the change studied is in concepts, not
     names. The table keeps the filter, and the measures check with and without it (phase plan).
 - **The held-out set is drafted now,** before the comparison and the audit, so both cover it
-  (agenda 6.2). The author reviews the draft once. Its words then join `words.tsv`, marked held
-  out, and the working table is rebuilt. Their usages are compared and judged like the others,
-  but no committed file names them: keys and per-word results carry a hash, and summaries count
-  them together.
+  (agenda 6.2). Fixed 2026-11-19 (`docs/held_out.md`): 24 documented changes and 22 stable words
+  joined `words.tsv`, marked held out, so the table has 99 words, and the working table is
+  rebuilt. Their usages are compared and judged like the others, but no committed file names
+  them: keys and per-word results carry `Word.reported_name`, a hash.
 
 ## The model comparison (agenda 4.9), set before reading
 
@@ -94,10 +95,11 @@ target word in one of its parts of speech, outside a name, with the marks on the
 of the word counts; a mention of the word as a word counts. Three kinds of item:
 
 - **Precision (kept).** 20 drawn in-scope usages per word, seed 20261304, spread over decades as
-  in the comparison: 1,060 items for 53 words (fewer if a word has fewer usages).
-  - **The pooled bar:** at most 29 errors in 1,060. That passes 96% of the time at a true error
-    rate of 2% and 1.7% of the time at 4% (the plan's bar of 23 was set for about 800 items; the
-    rule is unchanged: the smallest number that passes 96% of the time at 2%).
+  in the comparison: 1,980 items for 99 words (fewer if a word has fewer usages).
+  - **The pooled bar:** at most 51 errors in 1,980. That passes 96.8% of the time at a true error
+    rate of 2% and 0.04% of the time at 4% (the plan's bar of 23 was set for about 800 items; the
+    rule is unchanged: the smallest number that passes at least 96% of the time at 2%; if fewer
+    items are drawn, the bar is recomputed by the same rule before judging).
   - **Per word, as screening:** at most 2 errors in 20 (a word with a true rate of 5% passes 92%
     of the time, at 10% 68%). A word that fails is reviewed: its errors are read and the rule or
     its parts of speech fixed.

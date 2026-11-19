@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+
 import pydantic
 import pytest
 
@@ -21,13 +23,20 @@ def write_words(catalog: CatalogConfig, rows: str, header: str = HEADER) -> Cata
     return catalog
 
 
+HELD_OUT_SHA256 = "18dfd3a5fcf3c08289d11e62e5252e9e47af5827de3cb78312ce3601b23aa1b6"
+
+
 def test_load_words_reads_the_repository_table() -> None:
     words = {word.lemma: word for word in load_words(read_catalog())}
-    assert len(words) == 53
+    assert len(words) == 99
     assert words["learning"].pos == ("NOUN", "PROPN", "VERB")
     assert words["having"].match == "form"
     assert words["neural network"].is_phrase
-    assert not any(word.held_out for word in words.values())
+    held_out = sorted(lemma for lemma, word in words.items() if word.held_out)
+    assert len(held_out) == 46
+    # The sealed set's hash (docs/held_out.md): a change to it fails here without naming a word.
+    listing = "".join(f"{lemma}\n" for lemma in held_out)
+    assert hashlib.sha256(listing.encode()).hexdigest() == HELD_OUT_SHA256
 
 
 @pytest.mark.parametrize(
