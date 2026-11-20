@@ -45,6 +45,10 @@ def test_is_in_scope_keeps_a_hyphen_part_whatever_its_words_tag_but_not_in_a_nam
     assert not is_in_scope("ADJ", MEDIUM, inside_name=True, hyphen_part=True)
 
 
+def test_is_in_scope_leaves_out_a_hyphen_part_read_as_a_foreign_word() -> None:
+    assert not is_in_scope("X", MEDIUM, inside_name=False, hyphen_part=True)
+
+
 def test_mark_drawn_draws_one_eligible_usage_per_work_and_word() -> None:
     rows = [
         usage(1, "network", "a" * 20),

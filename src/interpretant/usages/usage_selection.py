@@ -34,9 +34,12 @@ def is_in_scope(pos: str, word: Word, *, inside_name: bool, hyphen_part: bool) -
     Whether an entity puts the target inside a name is decided from the entity itself
     (`entities.entity_over_target`). A target that is one part of a hyphenated word is in scope
     whatever that word's tag (agenda 4.2: compounds are in scope by default): the tagger tags the
-    whole word, so *attention* in *attention-based* would read as an adjective.
+    whole word, so *attention* in *attention-based* would read as an adjective. The exception is a
+    word the tagger reads as foreign (X): the usages audit's hyphen parts tagged X were all French
+    (*lui-même*; `docs/usages_audit.md`).
     """
-    return (hyphen_part or pos in word.pos) and not inside_name
+    allowed = pos in word.pos or (hyphen_part and pos != "X")
+    return allowed and not inside_name
 
 
 def mark_drawn(usages: pl.DataFrame) -> pl.DataFrame:
