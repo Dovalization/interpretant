@@ -15,7 +15,7 @@ the lemma exceptions applied after it, for the comparison of agenda 4.9 and, if 
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Collection, Iterable, Iterator
 from typing import Any
 
 import spacy
@@ -146,7 +146,34 @@ def annotate_with_transformer(
 
 def entity_label(doc: Doc, start_char: int, end_char: int) -> str | None:
     """The label of the entity overlapping the span ``[start_char, end_char)``, if any."""
-    for entity in doc.ents:
-        if entity.start_char < end_char and start_char < entity.end_char:
-            return str(entity.label_)
-    return None
+    entity = _entity_over(doc, start_char, end_char)
+    return None if entity is None else str(entity.label_)
+
+
+def entity_over_target(
+    doc: Doc, start_char: int, end_char: int, name_labels: Collection[str]
+) -> tuple[str | None, bool]:
+    """The label of the entity over the target, and whether it puts the target inside a name.
+
+    An entity with a name label puts the target inside a name, except in the two cases the usages
+    audit found to be mostly generic terms (`docs/usages_audit.md`; the author, 2026-11-20): an
+    entity that is the target alone, its other tokens punctuation or stop words (*Artificial
+    Intelligence* labelled an organisation), and a product whose last token is the target (*User
+    Interface*).
+    """
+    entity = _entity_over(doc, start_char, end_char)
+    if entity is None:
+        return None, False
+    label = str(entity.label_)
+    return label, label in name_labels and not _is_generic(entity, start_char, end_char)
+
+
+def _entity_over(doc: Doc, start_char: int, end_char: int) -> Span | None:
+    return next((e for e in doc.ents if e.start_char < end_char and start_char < e.end_char), None)
+
+
+def _is_generic(entity: Span, start_char: int, end_char: int) -> bool:
+    target = [t.i for t in entity if t.idx < end_char and start_char < t.idx + len(t.text)]
+    alone = all(t.i in target or not t.is_alpha or t.is_stop for t in entity)
+    ends_in_target = bool(target) and target[-1] == entity.end - 1
+    return alone or (entity.label_ == "PRODUCT" and ends_in_target)

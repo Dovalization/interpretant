@@ -2,7 +2,9 @@
 
 A usage is in scope when its part of speech is one its word table gives and it does not sit inside a
 name (*medium* is a noun, not the adjective of *medium effect size*; *network* in *Cable News
-Network* is a name). The usages table keeps every match; measures read in-scope usages by default.
+Network* is a name, while a generic term the recognizer labels a name is not, as
+`entities.entity_over_target` decides). The usages table keeps every match; measures read in-scope
+usages by default.
 
 One usage is drawn per abstract and word, among its in-scope usages in sentences no exclusion
 keeps out (not removed, not cut off): the one with the smallest draw key, a cryptographic hash of
@@ -11,8 +13,6 @@ independent observations, and a draw never depends on other abstracts, other wor
 """
 
 from __future__ import annotations
-
-from collections.abc import Collection
 
 import polars as pl
 
@@ -28,16 +28,15 @@ NAME_LABELS = frozenset(
 )  # fmt: skip
 
 
-def is_in_scope(
-    pos: str, word: Word, entity: str | None, name_labels: Collection[str], *, hyphen_part: bool
-) -> bool:
+def is_in_scope(pos: str, word: Word, *, inside_name: bool, hyphen_part: bool) -> bool:
     """Whether a usage has a part of speech its word allows and sits inside no name.
 
-    A target that is one part of a hyphenated word is in scope whatever that word's tag (agenda
-    4.2: compounds are in scope by default): the tagger tags the whole word, so *attention* in
-    *attention-based* would read as an adjective.
+    Whether an entity puts the target inside a name is decided from the entity itself
+    (`entities.entity_over_target`). A target that is one part of a hyphenated word is in scope
+    whatever that word's tag (agenda 4.2: compounds are in scope by default): the tagger tags the
+    whole word, so *attention* in *attention-based* would read as an adjective.
     """
-    return (hyphen_part or pos in word.pos) and entity not in name_labels
+    return (hyphen_part or pos in word.pos) and not inside_name
 
 
 def mark_drawn(usages: pl.DataFrame) -> pl.DataFrame:

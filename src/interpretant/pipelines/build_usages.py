@@ -66,7 +66,7 @@ from interpretant.usages.entities import (
     SMALL_MODEL,
     SPANS_PER_FORWARD,
     TRANSFORMER_MODEL,
-    entity_label,
+    entity_over_target,
     load_entity_recognizer,
     load_transformer,
     recognise_sentence_entities,
@@ -469,7 +469,9 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
         for index in waiting[keys[position]]:
             word, start, end, head_offset, span_start, hyphen_part = staged[index]
             head = doc[head_offset]
-            entity = entity_label(doc, start - span_start, end - span_start)
+            entity, inside_name = entity_over_target(
+                doc, start - span_start, end - span_start, job.settings.name_labels
+            )
             values = {
                 "pos": head.pos_,
                 "tag": head.tag_,
@@ -477,11 +479,7 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
                 "lemma": head.lemma_,
                 "entity": entity,
                 "in_scope": is_in_scope(
-                    head.pos_,
-                    words[word],
-                    entity,
-                    job.settings.name_labels,
-                    hyphen_part=hyphen_part,
+                    head.pos_, words[word], inside_name=inside_name, hyphen_part=hyphen_part
                 ),
             }
             for name, value in values.items():
@@ -694,11 +692,13 @@ class _EntityBatch:
         )
         entity_docs = dict(zip(keys, recognised, strict=True))
         for waiting in self.waiting:
-            entity = entity_label(entity_docs[waiting.sentence], waiting.start, waiting.end)
+            entity, inside_name = entity_over_target(
+                entity_docs[waiting.sentence], waiting.start, waiting.end, self.name_labels
+            )
             row = waiting.row
             row[_ENTITY] = entity
             row[_IN_SCOPE] = is_in_scope(
-                row[_POS], waiting.word, entity, self.name_labels, hyphen_part=waiting.hyphen_part
+                row[_POS], waiting.word, inside_name=inside_name, hyphen_part=waiting.hyphen_part
             )
             self.rows.append(tuple(row))
         self.spans.clear()

@@ -199,7 +199,10 @@ def reannotate(
             "trf_matched": matched,
             "trf_in_scope": matched
             and is_in_scope(
-                head.pos_, words[record["word"]], entity, name_labels, hyphen_part=hyphen_part
+                head.pos_,
+                words[record["word"]],
+                inside_name=entity in name_labels,
+                hyphen_part=hyphen_part,
             ),
         }
         live.advance()
@@ -224,9 +227,7 @@ def summarise(records: list[dict[str, Any]], words: dict[str, Word]) -> dict[str
     ).with_columns((pl.col("match_flip") | pl.col("scope_flip")).alias("flip"))
     shares = [pl.col(name).mean().round(4) for name in ("flip", "match_flip", "scope_flip")]
     by_word = (
-        frame.group_by("word")
-        .agg(pl.len().alias("usages"), *shares)
-        .sort("flip", descending=True)
+        frame.group_by("word").agg(pl.len().alias("usages"), *shares).sort("flip", descending=True)
     )
     by_decade = frame.group_by("decade").agg(pl.len().alias("usages"), *shares).sort("decade")
     return {
@@ -258,11 +259,7 @@ def disagreements(
     records: list[dict[str, Any]], words: dict[str, Word]
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """The 50 judged disagreements, A and B in an order set by each one's key, and the key."""
-    flipped = [
-        r
-        for r in records
-        if not r["trf_matched"] or r["trf_in_scope"] != r["in_scope"]
-    ]
+    flipped = [r for r in records if not r["trf_matched"] or r["trf_in_scope"] != r["in_scope"]]
     keyed = sorted(
         flipped,
         key=lambda r: build_draw_key(DISAGREEMENT_SEED, r["work_id"], r["word"], r["content_key"]),

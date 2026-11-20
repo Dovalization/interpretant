@@ -11,10 +11,14 @@ from interpretant.usages.entities import (
     MissingEntityAnnotationError,
     annotate_with_transformer,
     entity_label,
+    entity_over_target,
     load_entity_recognizer,
     recognise_sentence_entities,
     require_entity_annotation,
 )
+from interpretant.usages.usage_selection import NAME_LABELS
+
+VOCAB = spacy.blank("en").vocab
 
 
 @pytest.fixture(scope="module")
@@ -62,6 +66,42 @@ def test_entity_label_reads_the_entity_overlapping_the_target(recognizer: Langua
     [sentence] = recognise_sentence_entities([doc[:]], recognizer, batch_size=8)
     network = sentence.text.index("Network")
     assert entity_label(sentence, network, network + len("Network")) == "ORG"
+
+
+def over(words: list[str], ents: list[str], target: str) -> tuple[str | None, bool]:
+    """The entity over the target in a sentence with these entity tags (IOB)."""
+    doc = Doc(VOCAB, words=words, ents=ents)
+    start = doc.text.index(target)
+    return entity_over_target(doc, start, start + len(target), NAME_LABELS)
+
+
+def test_an_entity_with_other_words_puts_the_target_inside_a_name() -> None:
+    words = ["the", "Cable", "News", "Network", "grew"]
+    ents = ["O", "B-ORG", "I-ORG", "I-ORG", "O"]
+    assert over(words, ents, "Network") == ("ORG", True)
+
+
+def test_an_entity_that_is_the_target_alone_is_a_generic_term_not_a_name() -> None:
+    words = ["work", "in", "the", "Artificial", "Intelligence", "field"]
+    ents = ["O", "O", "B-ORG", "I-ORG", "I-ORG", "O"]
+    assert over(words, ents, "Artificial Intelligence") == ("ORG", False)
+    assert over(["Cortex", "was", "thin"], ["B-PRODUCT", "O", "O"], "Cortex") == ("PRODUCT", False)
+
+
+def test_a_product_ending_in_the_target_is_generic_but_one_holding_it_inside_is_a_name() -> None:
+    words = ["a", "User", "Interface", "Management", "System"]
+    ents = ["O", "B-PRODUCT", "I-PRODUCT", "I-PRODUCT", "I-PRODUCT"]
+    assert over(words, ents, "Interface") == ("PRODUCT", True)
+    assert over(words, ents, "System") == ("PRODUCT", False)
+    organisation = ["O", "B-ORG", "I-ORG", "I-ORG", "I-ORG"]
+    assert over(words, organisation, "System") == ("ORG", True)
+
+
+def test_no_entity_or_one_without_a_name_label_is_no_name() -> None:
+    assert over(["the", "network", "grew"], ["O", "O", "O"], "network") == (None, False)
+    words = ["the", "1990s", "network"]
+    assert over(words, ["B-DATE", "I-DATE", "O"], "network") == (None, False)
+    assert over(["network", "1990s"], ["B-DATE", "I-DATE"], "network") == ("DATE", False)
 
 
 def test_annotate_with_transformer_rebuilds_the_tokens_and_applies_the_exceptions() -> None:
