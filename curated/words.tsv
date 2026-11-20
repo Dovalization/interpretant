@@ -2,7 +2,9 @@
 # lemma<TAB>pos<TAB>match<TAB>held_out. pos: the Universal POS tags whose uses are in scope, joined by |;
 # each noun accepts PROPN (names are left to entity recognition), and learning, embedding (VERB) and
 # embodiment, transformer, cloud (ADJ) accept the tags the small tagger gives their noun uses
-# (scripts/evidence/word_table_draft.py). match: lemma (the lemma or the form), or form only (having).
+# (scripts/evidence/word_table_draft.py); component, feedback and five held-out words (ADJ) accept the
+# adjective tag the transformer gives their noun modifiers (the usages audit, docs/usages_audit.md,
+# approved by the author 2026-11-20). match: lemma (the lemma or the form), or form only (having).
 # held_out: the confirming run's words (6.2), drafted before step 6; none yet.
 # Held-out words (agenda 6.2; docs/held_out.md), approved by the author 2026-11-19, are marked yes in
 # held_out: sealed until the confirmation plan, never printed by development outputs, only hashed.
@@ -17,7 +19,7 @@ behavior	NOUN|PROPN	lemma	no
 cloud	NOUN|PROPN|ADJ	lemma	no
 cognition	NOUN|PROPN	lemma	no
 complexity	NOUN|PROPN	lemma	no
-component	NOUN|PROPN	lemma	no
+component	NOUN|PROPN|ADJ	lemma	no
 computation	NOUN|PROPN	lemma	no
 consciousness	NOUN|PROPN	lemma	no
 control	NOUN|PROPN	lemma	no
@@ -25,7 +27,7 @@ embedding	NOUN|PROPN|VERB	lemma	no
 embodiment	NOUN|PROPN|ADJ	lemma	no
 emergence	NOUN|PROPN	lemma	no
 experience	NOUN|PROPN	lemma	no
-feedback	NOUN|PROPN	lemma	no
+feedback	NOUN|PROPN|ADJ	lemma	no
 feedback loop	NOUN|PROPN	lemma	no
 fusion	NOUN|PROPN	lemma	no
 hallucination	NOUN|PROPN	lemma	no
