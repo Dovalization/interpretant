@@ -1,0 +1,475 @@
+{
+ "status_quo": {
+  "usages_brought_in": 0,
+  "judged_items_brought_in": 0,
+  "of_them_real_uses": 0,
+  "estimated_real_uses_recovered": 0,
+  "estimated_errors_added_to_kept": 0,
+  "share_of_kept_usages_added": 0.0,
+  "forecast_words_sent_back": 51.3,
+  "forecast_errors_added_to_precision_draw": 0.0,
+  "precision_room": 9
+ },
+ "candidates": {
+  "nouns take ADJ": {
+   "usages_brought_in": 6080,
+   "judged_items_brought_in": 60,
+   "of_them_real_uses": 48,
+   "estimated_real_uses_recovered": 4864,
+   "estimated_errors_added_to_kept": 1216,
+   "share_of_kept_usages_added": 0.0032,
+   "forecast_words_sent_back": 46.4,
+   "forecast_errors_added_to_precision_draw": 4.1,
+   "precision_room": 9
+  },
+  "PRODUCT is not a name": {
+   "usages_brought_in": 8154,
+   "judged_items_brought_in": 169,
+   "of_them_real_uses": 77,
+   "estimated_real_uses_recovered": 3729,
+   "estimated_errors_added_to_kept": 4425,
+   "share_of_kept_usages_added": 0.0043,
+   "forecast_words_sent_back": 41.0,
+   "forecast_errors_added_to_precision_draw": 6.2,
+   "precision_room": 9
+  },
+  "LAW is not a name": {
+   "usages_brought_in": 904,
+   "judged_items_brought_in": 34,
+   "of_them_real_uses": 12,
+   "estimated_real_uses_recovered": 284,
+   "estimated_errors_added_to_kept": 620,
+   "share_of_kept_usages_added": 0.0005,
+   "forecast_words_sent_back": 51.0,
+   "forecast_errors_added_to_precision_draw": 0.9,
+   "precision_room": 9
+  },
+  "ORG is not a name": {
+   "usages_brought_in": 9296,
+   "judged_items_brought_in": 178,
+   "of_them_real_uses": 42,
+   "estimated_real_uses_recovered": 2067,
+   "estimated_errors_added_to_kept": 7229,
+   "share_of_kept_usages_added": 0.0049,
+   "forecast_words_sent_back": 53.2,
+   "forecast_errors_added_to_precision_draw": 7.6,
+   "precision_room": 9
+  },
+  "WORK_OF_ART is not a name": {
+   "usages_brought_in": 6395,
+   "judged_items_brought_in": 249,
+   "of_them_real_uses": 45,
+   "estimated_real_uses_recovered": 1151,
+   "estimated_errors_added_to_kept": 5244,
+   "share_of_kept_usages_added": 0.0034,
+   "forecast_words_sent_back": 57.8,
+   "forecast_errors_added_to_precision_draw": 9.3,
+   "precision_room": 9
+  },
+  "a lower-case target is not in a name": {
+   "usages_brought_in": 706,
+   "judged_items_brought_in": 27,
+   "of_them_real_uses": 12,
+   "estimated_real_uses_recovered": 225,
+   "estimated_errors_added_to_kept": 481,
+   "share_of_kept_usages_added": 0.0004,
+   "forecast_words_sent_back": 50.8,
+   "forecast_errors_added_to_precision_draw": 0.7,
+   "precision_room": 9
+  },
+  "a sentence-opening target is not in a name": {
+   "usages_brought_in": 220,
+   "judged_items_brought_in": 16,
+   "of_them_real_uses": 7,
+   "estimated_real_uses_recovered": 106,
+   "estimated_errors_added_to_kept": 114,
+   "share_of_kept_usages_added": 0.0001,
+   "forecast_words_sent_back": 50.7,
+   "forecast_errors_added_to_precision_draw": 0.3,
+   "precision_room": 9
+  },
+  "nouns take ADJ + lower case": {
+   "usages_brought_in": 6786,
+   "judged_items_brought_in": 87,
+   "of_them_real_uses": 60,
+   "estimated_real_uses_recovered": 5089,
+   "estimated_errors_added_to_kept": 1697,
+   "share_of_kept_usages_added": 0.0036,
+   "forecast_words_sent_back": 45.8,
+   "forecast_errors_added_to_precision_draw": 4.8,
+   "precision_room": 9
+  },
+  "nouns take ADJ + lower case + PRODUCT": {
+   "usages_brought_in": 14755,
+   "judged_items_brought_in": 254,
+   "of_them_real_uses": 136,
+   "estimated_real_uses_recovered": 8733,
+   "estimated_errors_added_to_kept": 6022,
+   "share_of_kept_usages_added": 0.0078,
+   "forecast_words_sent_back": 34.1,
+   "forecast_errors_added_to_precision_draw": 10.9,
+   "precision_room": 9
+  },
+  "nouns take ADJ + lower case + sentence opening": {
+   "usages_brought_in": 7006,
+   "judged_items_brought_in": 103,
+   "of_them_real_uses": 67,
+   "estimated_real_uses_recovered": 5194,
+   "estimated_errors_added_to_kept": 1812,
+   "share_of_kept_usages_added": 0.0037,
+   "forecast_words_sent_back": 45.0,
+   "forecast_errors_added_to_precision_draw": 5.1,
+   "precision_room": 9
+  }
+ },
+ "strata": [
+  {
+   "stratum": "pos:VERB (noun word)",
+   "left_out_usages": 52703,
+   "judged": 135,
+   "real_uses": 15,
+   "rate_used": 0.111
+  },
+  {
+   "stratum": "name:ORG|capital",
+   "left_out_usages": 9027,
+   "judged": 168,
+   "real_uses": 37,
+   "rate_used": 0.22
+  },
+  {
+   "stratum": "name:PRODUCT|capital",
+   "left_out_usages": 7949,
+   "judged": 164,
+   "real_uses": 75,
+   "rate_used": 0.457
+  },
+  {
+   "stratum": "name:WORK_OF_ART|capital",
+   "left_out_usages": 6091,
+   "judged": 229,
+   "real_uses": 41,
+   "rate_used": 0.179
+  },
+  {
+   "stratum": "pos:ADJ (noun word)",
+   "left_out_usages": 6080,
+   "judged": 60,
+   "real_uses": 48,
+   "rate_used": 0.8
+  },
+  {
+   "stratum": "name:LAW|capital",
+   "left_out_usages": 869,
+   "judged": 32,
+   "real_uses": 10,
+   "rate_used": 0.312
+  },
+  {
+   "stratum": "pos:PROPN (other word)",
+   "left_out_usages": 755,
+   "judged": 32,
+   "real_uses": 18,
+   "rate_used": 0.562
+  },
+  {
+   "stratum": "name:EVENT|capital",
+   "left_out_usages": 520,
+   "judged": 20,
+   "real_uses": 2,
+   "rate_used": 0.1
+  },
+  {
+   "stratum": "pos:NOUN (other word)",
+   "left_out_usages": 335,
+   "judged": 12,
+   "real_uses": 2,
+   "rate_used": 0.167
+  },
+  {
+   "stratum": "name:WORK_OF_ART|lower",
+   "left_out_usages": 229,
+   "judged": 15,
+   "real_uses": 1,
+   "rate_used": 0.067
+  },
+  {
+   "stratum": "name:NORP|capital",
+   "left_out_usages": 228,
+   "judged": 3,
+   "real_uses": 3,
+   "rate_used": 1.0
+  },
+  {
+   "stratum": "pos:X (noun word)",
+   "left_out_usages": 200,
+   "judged": 26,
+   "real_uses": 11,
+   "rate_used": 0.423
+  },
+  {
+   "stratum": "name:FAC|capital",
+   "left_out_usages": 192,
+   "judged": 6,
+   "real_uses": 0,
+   "rate_used": 0.0
+  },
+  {
+   "stratum": "name:PRODUCT|lower",
+   "left_out_usages": 185,
+   "judged": 2,
+   "real_uses": 1,
+   "rate_used": 0.456
+  },
+  {
+   "stratum": "name:ORG|lower",
+   "left_out_usages": 158,
+   "judged": 2,
+   "real_uses": 2,
+   "rate_used": 0.236
+  },
+  {
+   "stratum": "name:PERSON|capital",
+   "left_out_usages": 137,
+   "judged": 8,
+   "real_uses": 7,
+   "rate_used": 0.875
+  },
+  {
+   "stratum": "name:ORG|initial",
+   "left_out_usages": 111,
+   "judged": 8,
+   "real_uses": 3,
+   "rate_used": 0.375
+  },
+  {
+   "stratum": "name:WORK_OF_ART|initial",
+   "left_out_usages": 75,
+   "judged": 5,
+   "real_uses": 3,
+   "rate_used": 0.6
+  },
+  {
+   "stratum": "pos:VERB (other word)",
+   "left_out_usages": 63,
+   "judged": 9,
+   "real_uses": 0,
+   "rate_used": 0.0
+  },
+  {
+   "stratum": "name:LOC|capital",
+   "left_out_usages": 60,
+   "judged": 1,
+   "real_uses": 1,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:NORP|lower",
+   "left_out_usages": 58,
+   "judged": 4,
+   "real_uses": 4,
+   "rate_used": 1.0
+  },
+  {
+   "stratum": "name:LAW|lower",
+   "left_out_usages": 33,
+   "judged": 2,
+   "real_uses": 2,
+   "rate_used": 0.353
+  },
+  {
+   "stratum": "pos:ADV (other word)",
+   "left_out_usages": 26,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:PRODUCT|initial",
+   "left_out_usages": 20,
+   "judged": 3,
+   "real_uses": 1,
+   "rate_used": 0.456
+  },
+  {
+   "stratum": "name:PERSON|lower",
+   "left_out_usages": 16,
+   "judged": 1,
+   "real_uses": 1,
+   "rate_used": 0.889
+  },
+  {
+   "stratum": "name:EVENT|lower",
+   "left_out_usages": 16,
+   "judged": 1,
+   "real_uses": 1,
+   "rate_used": 0.143
+  },
+  {
+   "stratum": "pos:ADV (noun word)",
+   "left_out_usages": 11,
+   "judged": 1,
+   "real_uses": 1,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:PERSON|initial",
+   "left_out_usages": 9,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.889
+  },
+  {
+   "stratum": "name:GPE|capital",
+   "left_out_usages": 8,
+   "judged": 1,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:FAC|lower",
+   "left_out_usages": 6,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.0
+  },
+  {
+   "stratum": "name:LANGUAGE|capital",
+   "left_out_usages": 6,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "pos:INTJ (noun word)",
+   "left_out_usages": 5,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "pos:ADP (noun word)",
+   "left_out_usages": 4,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:LOC|lower",
+   "left_out_usages": 3,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:LAW|initial",
+   "left_out_usages": 2,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.353
+  },
+  {
+   "stratum": "pos:X (other word)",
+   "left_out_usages": 2,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:GPE|lower",
+   "left_out_usages": 2,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "pos:PUNCT (noun word)",
+   "left_out_usages": 1,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:NORP|initial",
+   "left_out_usages": 1,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 1.0
+  },
+  {
+   "stratum": "name:LOC|initial",
+   "left_out_usages": 1,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.305
+  },
+  {
+   "stratum": "name:FAC|initial",
+   "left_out_usages": 1,
+   "judged": 0,
+   "real_uses": 0,
+   "rate_used": 0.0
+  }
+ ],
+ "screens": {
+  "precision": {
+   "held-out:96da49af8e67": {
+    "other_word": 4,
+    "name": 1,
+    "not_english": 1
+   },
+   "held-out:779d6b6eedf0": {
+    "not_english": 7,
+    "other_word": 1
+   },
+   "held-out:5ff5c82d203d": {
+    "other_word": 2,
+    "name": 1
+   }
+  },
+  "recall": {
+   "held-out:96da49af8e67": {
+    "candidates": 89,
+    "judged": 20,
+    "right": 20,
+    "estimated_misses": 89.0,
+    "missed_share": 0.0754
+   },
+   "held-out:b3ea1fd57831": {
+    "candidates": 586,
+    "judged": 20,
+    "right": 10,
+    "estimated_misses": 293.0,
+    "missed_share": 0.0373
+   },
+   "held-out:d7b1fc674098": {
+    "candidates": 679,
+    "judged": 20,
+    "right": 19,
+    "estimated_misses": 645.0,
+    "missed_share": 0.1712
+   },
+   "intentionality": {
+    "candidates": 26,
+    "judged": 20,
+    "right": 20,
+    "estimated_misses": 26.0,
+    "missed_share": 0.0237
+   },
+   "neural network": {
+    "candidates": 1109,
+    "judged": 20,
+    "right": 18,
+    "estimated_misses": 998.1,
+    "missed_share": 0.0682
+   },
+   "user interface": {
+    "candidates": 335,
+    "judged": 20,
+    "right": 13,
+    "estimated_misses": 217.8,
+    "missed_share": 0.0218
+   }
+  }
+ }
+}
