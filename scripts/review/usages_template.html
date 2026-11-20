@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
 <style>
-  /* Layout: a sticky progress bar over one column of items, each a question, a sentence and two answers. */
+  /* Layout: a sticky progress bar over the task, the rules, then one column of items: a sentence and a yes or no. */
   :root {
     --bg: #f6f8fa; --surface: #ffffff; --ink: #18212b; --muted: #5a6876; --rule: #d9e0e7;
     --accent: #1f6f78; --accent-soft: #e2f0f1; --wrong: #9a4b2f; --wrong-soft: #f6e9e3; --mark: #fbe7a1;
@@ -30,22 +30,25 @@
   button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .save { background: var(--accent); color: var(--surface); border: 0; padding: 8px 16px; }
   .status { flex-basis: 100%; font-size: 0.85rem; color: var(--muted); min-height: 1.2em; }
-  .intro, details.guide { color: var(--muted); max-width: 65ch; }
-  .intro { margin: 20px 0 8px; }
-  details.guide { margin-bottom: 8px; font-size: 0.92rem; }
-  details.guide dt { font-weight: 600; color: var(--ink); margin-top: 8px; }
-  details.guide dd { margin: 2px 0 0 0; }
+  .task { max-width: 65ch; margin: 20px 0 4px; }
+  .task ol { margin: 6px 0 0; padding-left: 1.4em; display: grid; gap: 4px; }
+  .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 16px 0 20px; }
+  .rules section { min-width: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; font-size: 0.9rem; }
+  .rules h2 { font: 600 0.95rem/1.3 var(--body); margin: 0 0 4px; }
+  .rules ul { margin: 0; padding-left: 1.2em; display: grid; gap: 3px; color: var(--muted); }
+  .rules em { color: var(--ink); }
   .item { display: grid; gap: 8px; padding: 18px 0; border-top: 1px solid var(--rule); }
   .item header { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
   .word { font: 600 1.2rem/1.2 var(--display); }
   .meta { font: 0.8rem var(--mono); color: var(--muted); }
-  .question { font-size: 0.92rem; }
+  .context { font-size: 0.85rem; color: var(--muted); }
+  .question { font-weight: 500; }
   .sentence { font-size: 1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; overflow-wrap: anywhere; }
   .sentence mark { background: var(--mark); color: var(--ink); padding: 0 2px; border-radius: 2px; font-weight: 600; }
   .answers { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .answers button { border: 1px solid var(--rule); background: var(--surface); color: var(--muted); padding: 6px 16px; }
-  .answers button[aria-pressed="true"].right { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
-  .answers button[aria-pressed="true"].wrong { background: var(--wrong-soft); color: var(--wrong); border-color: var(--wrong); }
+  .answers button[aria-pressed="true"].yes { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .answers button[aria-pressed="true"].no { background: var(--wrong-soft); color: var(--wrong); border-color: var(--wrong); }
   .answers input { flex: 1 1 200px; min-width: 0; font: 0.85rem var(--body); padding: 6px 8px; border: 1px solid var(--rule); border-radius: 5px; background: var(--surface); color: var(--ink); }
   textarea { width: 100%; box-sizing: border-box; font: 12px/1.4 var(--mono); background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 5px; }
 </style>
@@ -60,23 +63,50 @@
 </header>
 
 <main class="wrap">
-  <p class="intro">Sixty items from the matching audit, drawn at random. Judge each one on its own; the agents judge the
-    same items without seeing your answers, and their verdicts stand if they agree with yours on at least 54.</p>
-  <details class="guide"><summary>How to judge</summary>
-    <dl>
-      <dt>A use</dt>
-      <dd>The marked place is the target word in one of its parts of speech (any part of speech when it is part of a
-        hyphenated word), in any sense, inflection or spelling, and not inside a name (a person, organisation, place,
-        product, event, law, named test or scale, or a title). Mentioning the word as a word counts.</dd>
-      <dt>Kept</dt><dd>Right if the marked place is a use and the mark covers exactly the word or part.</dd>
-      <dt>Left out</dt><dd>Right if leaving it out was correct: wrong part of speech, or inside a name.</dd>
-      <dt>Missed</dt><dd>Right if it is a use the program should have kept; wrong if it is another word, a part of
-        speech or name that would be left out, or OCR damage.</dd>
-    </dl>
-  </details>
+  <div class="task">
+    <strong>One question per item: is the highlighted word a use of the target word?</strong>
+    <ol>
+      <li>Read the sentence and answer <em>Yes, a use</em> or <em>No</em> by the rules below. Add a note
+        only if you want to explain.</li>
+      <li>Each item also says what the program did with the word. That is for context: judge the word,
+        not the program.</li>
+      <li>When all 60 are answered, click <em>Save answers</em> and tell Claude. You can save partway
+        and come back later.</li>
+    </ol>
+    <p>The two AI judges answered the same 60 items without seeing your answers. Their verdicts on the
+      whole audit stand if they agree with you on at least 54.</p>
+  </div>
+  <div class="rules">
+    <section>
+      <h2>Yes, a use</h2>
+      <ul>
+        <li>The target word in a part of speech the item lists, in any sense, inflection or spelling
+          (<em>networks</em>; <em>behaviour</em> for <em>behavior</em>).</li>
+        <li>Part of a hyphenated word, in any part of speech (<em>self-attention</em>,
+          <em>attention-based</em>).</li>
+        <li>A noun before another noun is still a noun (<em>network analysis</em>).</li>
+        <li>A generic term, even capitalised (<em>Artificial Intelligence</em>).</li>
+        <li>The abstract's own title and headings, and the word mentioned as a word
+          (<em>the term "attention"</em>).</li>
+      </ul>
+    </section>
+    <section>
+      <h2>No</h2>
+      <ul>
+        <li>Inside a name: a person, organisation, place, product, event, law, named test or scale, one
+          specific named system or model, or the title of another work that is cited
+          (<em>Cable News Network</em>).</li>
+        <li>A part of speech the item does not list, such as a verb where only the noun counts
+          (<em>they were networking</em>).</li>
+        <li>Another word: an abbreviation, the letters inside a longer word (<em>attentional</em> for
+          <em>attention</em>), code or a file name, or OCR damage; or the highlight cuts the word.</li>
+        <li>The sentence is not English.</li>
+      </ul>
+    </section>
+  </div>
   <div id="items"></div>
   <section id="fallback" hidden>
-    <p class="intro">This view cannot save to Claude. Copy the answers and paste them into the chat.</p>
+    <p class="task">This view cannot save to Claude. Copy the answers and paste them into the chat.</p>
     <p><button class="save" id="copy" type="button">Copy answers</button></p>
     <textarea id="answers" readonly rows="5"></textarea>
   </section>
@@ -85,12 +115,15 @@
 <script>
 const ITEMS = __ITEMS__;
 const DOC = "review/usages_calibration_record";
-const QUESTIONS = {
-  kept: "The program kept this place as a use. Was that right?",
-  left_out: "The program left this place out. Was that right?",
-  missed: "A text search found the word here and the program did not. Is it a use the program should have kept?",
-};
-const answers = {};
+// The program was right when the word is a use for kept and missed items, and when it is not for left-out ones.
+const RIGHT_WHEN_USE = { kept: true, left_out: false, missed: true };
+const PARTS = { NOUN: "noun", PROPN: "proper noun", ADJ: "adjective", VERB: "verb", AUX: "auxiliary verb",
+  ADV: "adverb", ADP: "preposition", NUM: "number" };
+const NAMES = { PRODUCT: "a product name", ORG: "an organisation's name", WORK_OF_ART: "the title of a work",
+  LAW: "the name of a law", PERSON: "a person's name", GPE: "a place name", LOC: "a place name",
+  FAC: "the name of a building", EVENT: "the name of an event", NORP: "the name of a nationality or group",
+  LANGUAGE: "a language's name" };
+const uses = {};
 const notes = {};
 let db = null;
 
@@ -102,17 +135,49 @@ function sentence(text) {
   return esc(text).replace("⟨t⟩", "<mark>").replace("⟨/t⟩", "</mark>");
 }
 
+function part(tag) {
+  return PARTS[tag] || tag;
+}
+
+function withArticle(words) {
+  return (/^[aeiou]/.test(words) ? "an " : "a ") + words;
+}
+
+function why(reason) {
+  const name = /inside a name \((\w+)\)/.exec(reason || "");
+  if (name) return `it took the word to be inside ${NAMES[name[1]] || "a name"}`;
+  const tag = /part of speech (\w+)/.exec(reason || "");
+  if (tag) return `it tagged the word as ${withArticle(part(tag[1]))}`;
+  return reason;
+}
+
+function context(item) {
+  if (item.kind === "kept") return "The program counted this as a use.";
+  if (item.kind === "left_out") return `The program left this out: ${esc(why(item.reason))}.`;
+  return "The program did not count this; a plain text search found the word here.";
+}
+
+function verdicts() {
+  const out = {};
+  for (const item of ITEMS) {
+    if (!uses[item.id]) continue;
+    out[item.id] = (uses[item.id] === "yes") === RIGHT_WHEN_USE[item.kind] ? "right" : "wrong";
+  }
+  return out;
+}
+
 function card(item, index) {
-  const answer = answers[item.id];
-  const reason = item.reason ? ` · left out for: ${esc(item.reason)}` : "";
+  const answer = uses[item.id];
+  const word = esc(item.word);
   return `<article class="item" id="i-${esc(item.id)}">
-    <header><span class="word">${esc(item.word)}</span>
-      <span class="meta">${index + 1} · ${esc(item.kind.replace("_", " "))} · studied as ${esc(item.parts_of_speech.join(", "))}${reason}</span></header>
-    <div class="question">${QUESTIONS[item.kind]}</div>
+    <header><span class="word">${word}</span>
+      <span class="meta">item ${index + 1} of ${ITEMS.length} · counts as: ${esc(item.parts_of_speech.map(part).join(", "))}</span></header>
+    <div class="context">${context(item)}</div>
     <div class="sentence">${sentence(item.sentence)}</div>
+    <div class="question">Is the highlighted word a use of “${word}”?</div>
     <div class="answers" role="group" aria-label="Answer for item ${index + 1}">
-      <button type="button" class="right" data-id="${esc(item.id)}" data-answer="right" aria-pressed="${answer === "right"}">right</button>
-      <button type="button" class="wrong" data-id="${esc(item.id)}" data-answer="wrong" aria-pressed="${answer === "wrong"}">wrong</button>
+      <button type="button" class="yes" data-id="${esc(item.id)}" data-answer="yes" aria-pressed="${answer === "yes"}">Yes, a use</button>
+      <button type="button" class="no" data-id="${esc(item.id)}" data-answer="no" aria-pressed="${answer === "no"}">No</button>
       <input id="note-${esc(item.id)}" data-id="${esc(item.id)}" type="text" placeholder="Note (optional)" value="${esc(notes[item.id])}" aria-label="Note on item ${index + 1}">
     </div>
   </article>`;
@@ -125,8 +190,8 @@ function render() {
 }
 
 function tally() {
-  document.getElementById("done").textContent = ITEMS.filter(i => answers[i.id]).length;
-  document.getElementById("answers").value = JSON.stringify(answers);
+  document.getElementById("done").textContent = ITEMS.filter(i => uses[i.id]).length;
+  document.getElementById("answers").value = JSON.stringify(verdicts());
 }
 
 function setStatus(text) { document.getElementById("status").textContent = text; }
@@ -134,7 +199,7 @@ function setStatus(text) { document.getElementById("status").textContent = text;
 document.addEventListener("click", event => {
   const button = event.target.closest("button[data-answer]");
   if (!button) return;
-  answers[button.dataset.id] = button.dataset.answer;
+  uses[button.dataset.id] = button.dataset.answer;
   for (const other of document.querySelectorAll(`button[data-id="${button.dataset.id}"]`)) {
     other.setAttribute("aria-pressed", String(other.dataset.answer === button.dataset.answer));
   }
@@ -150,7 +215,7 @@ document.addEventListener("input", event => {
 });
 
 document.getElementById("save").addEventListener("click", async () => {
-  const missing = ITEMS.filter(i => !answers[i.id]).length;
+  const missing = ITEMS.filter(i => !uses[i.id]).length;
   if (!db) {
     document.getElementById("fallback").hidden = false;
     document.getElementById("fallback").scrollIntoView();
@@ -159,7 +224,7 @@ document.getElementById("save").addEventListener("click", async () => {
   }
   setStatus("Saving…");
   try {
-    await db.doc(DOC).set({ answers, notes, saved_at: new Date().toISOString() });
+    await db.doc(DOC).set({ answers: verdicts(), uses, notes, saved_at: new Date().toISOString() });
     setStatus(missing ? `Saved; ${missing} items still unanswered.` : "Saved. Tell Claude you're done.");
   } catch (error) {
     setStatus(`Not saved (${error && error.code ? error.code : "error"}). Try again, or copy your answers below.`);
@@ -183,8 +248,8 @@ render();
   try {
     const saved = await db.doc(DOC).get();
     const data = saved && (saved.data ? (typeof saved.data === "function" ? saved.data() : saved.data) : saved);
-    if (data && data.answers) {
-      Object.assign(answers, data.answers);
+    if (data && data.uses) {
+      Object.assign(uses, data.uses);
       Object.assign(notes, data.notes || {});
       render();
       setStatus(`Loaded your answers saved ${data.saved_at ? new Date(data.saved_at).toLocaleString() : "earlier"}.`);
