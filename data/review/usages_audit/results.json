@@ -775,5 +775,15 @@
     "missed_share": 0.0059
    }
   }
+ },
+ "calibration": {
+  "items": 60,
+  "agree": 57,
+  "passes": true,
+  "disagreements": [
+   "U0732",
+   "U0740",
+   "U1706"
+  ]
  }
 }
