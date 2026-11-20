@@ -9,9 +9,11 @@ from *medium*). A hyphenated token that is not itself a target is searched part 
 part that is a target, or the last part as a target's plural, is a mention recording the compound
 and the part's position (head or modifier), its offsets the part's alone, so an encoder can mark
 only it (*self-⟨t⟩attention⟨/t⟩*). A phrase target is its modifier's form followed, after a space,
-by its head's form or lemma (*neural networks*), or the two as consecutive parts of one hyphenated
-token. The matching is a plain pass over the tokens rather than spaCy's ``Matcher``, since it needs
-exactly the static view's normalisation.
+by its head's form, lemma or plural (*Neural Networks*), or the two as consecutive parts of one
+hyphenated token; across a space, the modifier may be a hyphenated token's last part (*multi-user
+interfaces*) and the head a hyphenated token's first part (*neural network-based*), recording that
+token as the compound. The matching is a plain pass over the tokens rather than spaCy's
+``Matcher``, since it needs exactly the static view's normalisation.
 """
 
 from __future__ import annotations
@@ -28,8 +30,10 @@ from interpretant.corpus.spelling import spell
 from interpretant.corpus.static_view import fold
 
 Position = Literal["head", "modifier"]
-# Plural tags whose lemma can stay the form (a capitalised plural read as a proper noun).
-_PLURAL_TAGS = frozenset({"NNS", "NNPS"})
+# Tags whose lemma can stay a plural's form: a capitalised plural read as a proper noun (NNPS), and
+# an unfamiliar plural the small tagger reads as a singular proper noun (*schemas*, NNP), which the
+# usages audit found missed (`docs/usages_audit.md`).
+_PLURAL_TAGS = frozenset({"NNS", "NNPS", "NNP"})
 
 
 @dataclass(frozen=True)
@@ -156,19 +160,46 @@ def _phrases(doc: Doc, matcher: TargetMatcher) -> list[TargetMention]:
         return []
     mentions = []
     for first, second in pairwise(doc):
-        if not first.whitespace_:
-            continue
-        modifier = _spelled(first.text, matcher)
-        for head in (_spelled(second.text, matcher), _spelled(second.lemma_, matcher)):
-            phrase = matcher.phrases.get((modifier, head))
-            if phrase is not None:
-                end = second.idx + len(second.text)
-                mentions.append(TargetMention(phrase, second.i, first.idx, end, None, None))
-                break
+        mention = _spaced_phrase(first, second, matcher) if first.whitespace_ else None
+        if mention is not None:
+            mentions.append(mention)
     for token in doc:
         if "-" in token.text:
             mentions.extend(_hyphenated_phrases(token, matcher))
     return mentions
+
+
+def _spaced_phrase(first: Token, second: Token, matcher: TargetMatcher) -> TargetMention | None:
+    """The phrase target two tokens after a space make, if any (the module's forms, in order)."""
+    first_folded = _folded(first.text, matcher)
+    second_folded = _folded(second.text, matcher)
+    # Each modifier and head: its spelled text, its offset or length in its token, its position.
+    modifiers: list[tuple[str, int, Position | None]] = [(_spelled(first.text, matcher), 0, None)]
+    if "-" in first_folded:
+        last = first_folded.rsplit("-", 1)[1]
+        modifiers.append((spell(last, matcher.spellings), len(first_folded) - len(last), "head"))
+    whole = len(second.text)
+    heads: list[tuple[str, int, Position | None, bool]] = [
+        (_spelled(second.text, matcher), whole, None, second.tag_ in _PLURAL_TAGS),
+        (_spelled(second.lemma_, matcher), whole, None, False),
+    ]
+    if "-" in second_folded:
+        part = second_folded.split("-", 1)[0]
+        heads.append((spell(part, matcher.spellings), len(part), "modifier", True))
+    for modifier, start, modifier_position in modifiers:
+        for head, length, head_position, maybe_plural in heads:
+            phrase = matcher.phrases.get((modifier, head))
+            if phrase is None and maybe_plural:
+                singular = _singular_head(head, modifier, matcher)
+                phrase = matcher.phrases.get((modifier, singular)) if singular else None
+            if phrase is None or not modifier or not head:
+                continue
+            compound = second.text if head_position else first.text if modifier_position else None
+            position = head_position or modifier_position
+            return TargetMention(
+                phrase, second.i, first.idx + start, second.idx + length, compound, position
+            )
+    return None
 
 
 def _hyphenated_phrases(token: Token, matcher: TargetMatcher) -> list[TargetMention]:

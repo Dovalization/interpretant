@@ -20,6 +20,7 @@ WORDS = [
     Word(lemma="medium", pos=("NOUN", "PROPN"), match="lemma", held_out=False),
     Word(lemma="network", pos=("NOUN", "PROPN"), match="lemma", held_out=False),
     Word(lemma="neural network", pos=("NOUN", "PROPN"), match="lemma", held_out=False),
+    Word(lemma="user interface", pos=("NOUN", "PROPN"), match="lemma", held_out=False),
 ]
 MATCHER = build_target_matcher(WORDS, {"behaviour": "behavior"})
 
@@ -60,7 +61,29 @@ def test_match_targets_matches_a_form_only_word_by_its_form() -> None:
 
 def test_match_targets_finds_a_capitalised_plural_read_as_a_name() -> None:
     doc = make_doc(["Neural", "Networks"], ["Neural", "Networks"], ["NNP", "NNPS"])
-    assert ("network", "Networks", None, None) in found(doc)
+    assert found(doc) == [
+        ("network", "Networks", None, None),
+        ("neural network", "Neural Networks", None, None),
+    ]
+
+
+def test_match_targets_finds_a_plural_read_as_a_singular_proper_noun() -> None:
+    doc = make_doc(["networks", "grow"], ["networks", "grow"], ["NNP", "VBP"])
+    assert found(doc) == [("network", "networks", None, None)]
+    doc = make_doc(["User", "Interfaces"], ["User", "Interfaces"], ["NNP", "NNP"])
+    assert found(doc) == [("user interface", "User Interfaces", None, None)]
+
+
+def test_match_targets_finds_a_phrase_reaching_into_a_hyphenated_token() -> None:
+    doc = make_doc(["multi-user", "interfaces"], ["multi-user", "interface"], ["JJ", "NNS"])
+    assert found(doc) == [("user interface", "user interfaces", "multi-user", "head")]
+    doc = make_doc(["neural", "network-based"], ["neural", "network-based"], ["JJ", "JJ"])
+    assert found(doc) == [
+        ("network", "network", "network-based", "modifier"),
+        ("neural network", "neural network", "network-based", "modifier"),
+    ]
+    doc = make_doc(["neural", "networks-based"], ["neural", "networks-based"], ["JJ", "JJ"])
+    assert found(doc) == [("neural network", "neural networks", "networks-based", "modifier")]
 
 
 def test_match_targets_finds_targets_as_parts_of_hyphenated_words() -> None:
