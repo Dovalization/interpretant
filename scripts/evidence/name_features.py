@@ -189,7 +189,15 @@ def judged(audit: Path, words: dict[str, Word]) -> pl.DataFrame:
 
 
 Rule = Callable[[dict[str, Any]], bool]
-RULES: dict[str, Rule] = {}
+RULES: dict[str, Rule] = {
+    "the entity is the target alone": lambda r: r["others"] == 0,
+    "a one-token entity": lambda r: r["tokens"] == 1,
+    "PRODUCT is not a name": lambda r: r["reason"] == "name:PRODUCT",
+    "the target alone, or a PRODUCT ending in it": lambda r: (
+        r["others"] == 0 or (r["reason"] == "name:PRODUCT" and bool(r["target_last"]))
+    ),
+    "the target alone, or a PRODUCT": lambda r: r["others"] == 0 or r["reason"] == "name:PRODUCT",
+}
 
 
 def rate(frame: pl.DataFrame, fallback: float) -> float:
@@ -248,6 +256,29 @@ def forecast(rule: Rule | None, left: pl.DataFrame, in_scope: dict[str, int]) ->
     }
 
 
+def lost_by_decade(left: pl.DataFrame, usages: pl.DataFrame) -> list[dict[str, Any]]:
+    """Each decade's estimated real uses left out, from each reason's judged rate."""
+    overall = rate(left, 0.0)
+    reason_rate = {reason: rate(group, overall) for (reason,), group in left.group_by("reason")}
+    decade = pl.col("part").str.extract(r"_(\d{4})$").cast(pl.Int64).alias("decade")
+    in_scope = dict(usages.filter("in_scope").group_by(decade).len().iter_rows())
+    lost: Counter[int] = Counter()
+    left_out: Counter[int] = Counter()
+    for year, reason, n in left.group_by(decade, "reason").len().iter_rows():
+        lost[year] += n * reason_rate[reason]
+        left_out[year] += n
+    return [
+        {
+            "decade": year,
+            "in_scope": in_scope.get(year, 0),
+            "left_out": left_out[year],
+            "estimated_real_uses_lost": round(lost[year]),
+            "lost_share": round(lost[year] / (in_scope.get(year, 0) + lost[year]), 4),
+        }
+        for year in sorted(left_out)
+    ]
+
+
 def feature_tables(names: pl.DataFrame) -> dict[str, list[dict[str, Any]]]:
     """For each feature value, overall and by label: judged items, real uses, usages."""
     tables = {}
@@ -293,10 +324,14 @@ def main() -> None:
     described = pl.read_parquet(features_path)
     items = judged(audit, words)
     left = left.join(items, on=JOIN, how="left").join(described, on=JOIN, how="left")
+    share = pl.col("capital_share")
     left = left.with_columns(
-        pl.col("capital_share")
-        .cut([0.3, 0.6], labels=["under 0.3", "0.3 to 0.6", "over 0.6"])
-        .cast(pl.String)
+        pl.when(share < 0.3)
+        .then(pl.lit("under 0.3"))
+        .when(share <= 0.6)
+        .then(pl.lit("0.3 to 0.6"))
+        .when(share.is_not_null())
+        .then(pl.lit("over 0.6"))
         .alias("capital_band")
     )
     names = left.filter(pl.col("reason").str.starts_with("name:"))
@@ -309,6 +344,7 @@ def main() -> None:
         ),
         "status_quo": forecast(None, left, in_scope),
         "rules": {name: forecast(rule, left, in_scope) for name, rule in RULES.items()},
+        "lost_by_decade": lost_by_decade(left, usages),
         "features": feature_tables(names),
     }
     out.write_text(json.dumps(report, indent=1) + "\n")
