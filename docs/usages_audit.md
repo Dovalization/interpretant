@@ -158,3 +158,79 @@ hyphen part counted).
 20261306, after a note here records the fix before the redraw. Any change to `words.tsv` needs
 the author. If the calibration fails, the prompt is amended on the disagreements and 60 fresh
 items are drawn with seed 20261306. A second failure goes to the author.
+
+## The audit of record's results (2026-11-20)
+
+The two judges agreed on 4,385 of 4,442 items and the adjudicator settled the other 57
+(`data/review/usages_audit/`). **The calibration passes:** the agents' verdicts agree with the
+author's on 57 of 60 (bar 54). The three disagreements: an adjective in a generic staining
+technique (*… Golgi method*) that the author read as a name; a noun in a list of chapter titles,
+which the codebook counts as a table-of-contents heading but the calibration page's summary of the
+rules left out; and a paper title followed by a description, which the judges themselves split on
+(the record's own title, or a bibliography entry).
+
+| Bar | Result |
+|---|---|
+| Precision, pooled | passes: 42 errors in 1,980 (bar 51): 21 names, 10 other words, 8 not English, 3 parts of speech |
+| Precision, per word | 3 words over 2 errors, all held out |
+| Scope | fails: 290 of 950 left-out items were real uses; 47 words had 3 or more |
+| Recall, pooled | passes: 0.42% missed (1,174 of the 1,512 judged candidates were real uses) |
+| Recall, per word | 6 words over 2%: *neural network* (6.8%), *intentionality* (2.4%), *user interface* (2.2%) and three held-out words (17.1%, 7.5%, 3.7%) |
+
+**Why scope failed** (`scripts/evidence/usages_rule_options.py`, `rule_options.json`). Of the
+86,198 left-out usages, the judged items give each reason's rate of real uses: a noun word tagged
+as a verb 11% (52,703 usages), ORG 22% (9,027), PRODUCT 46% (7,949), WORK_OF_ART 18% (6,091), a
+noun word tagged as an adjective 80% (6,080), LAW 31% (869). A model drawing each word's 10 items
+from its strata at these rates forecasts 51 words sent back against the 47 observed. The bar sends
+a word back once roughly 15% of its left-out usages are real uses, so no rule on a whole label or
+tag brings the forecast below about 30. About 1% of real uses are left out overall, and the share
+is not even over time: the judged left-out items were real uses 19–20% of the time in the 1950s to
+1970s and 29–37% from the 1980s.
+
+**The adjectives are word by word.** All judged adjective-tagged items of seven noun words were
+noun modifiers (*component failure*): *component* 8 of 8, *feedback* 2 of 2 and five held-out
+words (9 of 9, 10 of 10, 7 of 7, 3 of 3, 2 of 2; one of them has more adjective-tagged usages than
+in-scope ones), while none of *medium*'s 10 was.
+
+**No feature of the entity separates names from generic terms** (`scripts/evidence/name_features.py`:
+the 26,014 usages left out for a name re-annotated, 99.0% with the same label). An entity that is
+the target alone held real uses in 48 of 77 judged items (62%), a one-token entity in 36 of 53,
+and longer entities in 15–35%; a bracketed acronym after the entity, digits or capitals in it,
+and whether its other words are common lower-case words made little difference.
+
+**The precision words' errors are noise the rules cannot reach,** except one: six of one word's
+eight errors are French reflexives (*lui-même*), hyphen parts the transformer tags X in sentences
+the language filter labelled English. The others are OCR fragments of longer words and a Spanish
+sentence (one word), and an acronym, a name and a page's HTML (the other).
+
+**The missed uses are three matcher gaps and one tokenizer gap.** Unfamiliar plurals the small
+tagger reads as singular proper nouns (NNP) keep their form as lemma, and the plural fallback
+covered only NNS and NNPS; a capitalised plural phrase (*Neural Networks*) found no phrase, as its
+head's lemma is the plural; a phrase reaching into a hyphenated token (*multi-user interfaces*,
+*neural network-based*) was not searched. The tokenizer gap: words glued to punctuation in
+Springer tables of contents (*Intentionality.-*) and footnote marks (*attention,2*) are one token
+the matcher cannot read; most of *intentionality*'s 26 candidate misses are these.
+
+## The fixes, recorded before the redraw (2026-11-20)
+
+1. **Seven noun words accept ADJ** (`curated/words.tsv`, the author): *component*, *feedback* and
+   the five held-out words above.
+2. **A generic term labelled as a name stays in scope** (`usages/entities.py`, the author): an
+   entity that is the target alone (its other tokens punctuation or stop words), or a PRODUCT
+   whose last token is the target, no longer puts the target inside a name. On the judged items
+   these held 81 real uses in 137 (59%); the forecast was 34 words sent back on scope instead of
+   48 and 4.6 more errors in the precision draw.
+3. **A hyphen part tagged X is out of scope** (`usages/usage_selection.py`): 51 usages in the
+   table, the six judged all French.
+4. **The matcher** (`usages/target_matching.py`): NNP takes the plural fallback; a spaced phrase's
+   head may be a plural; a spaced phrase may start at a hyphenated token's last part or end at
+   one's first part.
+
+Left as they are: the tokenizer gap (fixing it means re-annotating the corpus), the noise behind
+the other precision errors, and the per-decade unevenness, which the drift measures must allow for.
+
+**The redraw.** The usages table is rebuilt with these rules, and all three parts are drawn again
+for every word with seed 20261306, since the fixes change every word's kept and left-out usages:
+20 kept, 10 left out and 20 candidate misses per word. The judges, the codebook and the bars are
+unchanged; the calibration stands, as the codebook has not changed. A second failure goes to the
+author.
