@@ -4,7 +4,9 @@ One row per target mention in a kept work, outside removed ranges: its usage id 
 key) and draw key; the sentence-view sentence it sits in (number, span, word count, language and
 confidence, exclusion); the target's span in the repaired text, its compound and position (head or
 modifier) when it is part of a hyphenated word; the head token's part of speech, tag, morphology
-and lemma, the entity it sits in, and the static view's entry for it; whether it is in scope;
+and lemma, the entity it sits in, and the static view's entry for it; whether it sits inside a
+name (an entity with a name label that is not a generic term, or a named instrument) and whether
+it is in scope;
 whether it is the one usage drawn for its work and word; the model that annotated it; and whether
 the model read only a window around the target (a sentence over 512 tokens). Text is not copied:
 the abstracts table holds it. A part is written whole or not at all.
@@ -45,6 +47,7 @@ USAGES_COLUMNS = pl.Schema(
         "sentence_language": pl.String(),
         "sentence_confidence": pl.Float64(),
         "sentence_exclusion": pl.String(),
+        "inside_name": pl.Boolean(),
         "in_scope": pl.Boolean(),
         "drawn": pl.Boolean(),
         "model": pl.String(),
@@ -105,6 +108,7 @@ USAGES_SCHEMA = pa.DataFrameSchema(
         "sentence_exclusion": pa.Column(
             USAGES_COLUMNS["sentence_exclusion"], nullable=True, checks=pa.Check.isin(["cut_off"])
         ),
+        "inside_name": pa.Column(USAGES_COLUMNS["inside_name"]),
         "in_scope": pa.Column(USAGES_COLUMNS["in_scope"]),
         "drawn": pa.Column(USAGES_COLUMNS["drawn"]),
         "model": pa.Column(USAGES_COLUMNS["model"], checks=pa.Check.isin(MODELS)),

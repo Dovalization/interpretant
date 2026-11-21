@@ -61,6 +61,7 @@ COLUMNS = [
     "position",
     "pos",
     "entity",
+    "inside_name",
     "in_scope",
     "drawn",
 ]
@@ -242,10 +243,10 @@ def marked(text: str, row: dict[str, Any]) -> str:
     return prefix + shown[begin : begin + WIDTH] + suffix
 
 
-def left_out_reason(row: dict[str, Any], word: Word) -> str:
-    """Why the table left a usage out: its name, or its part of speech."""
-    if row["entity"] is not None and (row["position"] is not None or row["pos"] in word.pos):
-        return f"inside a name ({row['entity']})"
+def left_out_reason(row: dict[str, Any]) -> str:
+    """Why the table left a usage out: the name it sits in, or its part of speech."""
+    if row["inside_name"]:
+        return f"inside a name ({row['entity'] or 'a named instrument'})"
     return f"part of speech {row['pos']}"
 
 
@@ -314,7 +315,7 @@ def main() -> None:
             "sentence": marked(texts[row["work_id"]], row),
         }
         if kind == "left_out":
-            item["reason"] = left_out_reason(row, word)
+            item["reason"] = left_out_reason(row)
         items.append(item)
         key_map[item_id] = {
             "kind": kind,

@@ -67,6 +67,7 @@ from interpretant.usages.entities import (
     SPANS_PER_FORWARD,
     TRANSFORMER_MODEL,
     entity_over_target,
+    in_named_instrument,
     load_entity_recognizer,
     load_transformer,
     recognise_sentence_entities,
@@ -110,6 +111,7 @@ _ANNOTATION_PACKAGES = ("spacy", "spacy-curated-transformers", TRANSFORMER_MODEL
 _COLUMN_NAMES = USAGES_COLUMNS.names()
 _POS = _COLUMN_NAMES.index("pos")
 _ENTITY = _COLUMN_NAMES.index("entity")
+_INSIDE_NAME = _COLUMN_NAMES.index("inside_name")
 _IN_SCOPE = _COLUMN_NAMES.index("in_scope")
 _WINDOWED = _COLUMN_NAMES.index("windowed")
 
@@ -469,8 +471,11 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
         for index in waiting[keys[position]]:
             word, start, end, head_offset, span_start, hyphen_part = staged[index]
             head = doc[head_offset]
-            entity, inside_name = entity_over_target(
+            entity, inside_entity = entity_over_target(
                 doc, start - span_start, end - span_start, job.settings.name_labels
+            )
+            inside_name = inside_entity or in_named_instrument(
+                doc, start - span_start, end - span_start
             )
             values = {
                 "pos": head.pos_,
@@ -478,6 +483,7 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
                 "morph": str(head.morph),
                 "lemma": head.lemma_,
                 "entity": entity,
+                "inside_name": inside_name,
                 "in_scope": is_in_scope(
                     head.pos_, words[word], inside_name=inside_name, hyphen_part=hyphen_part
                 ),
@@ -624,7 +630,7 @@ def _annotated_by_transformer(catalog: CatalogConfig, part: str) -> bool:
 
 
 # The columns the transformer's reading sets.
-_ANNOTATED = ("pos", "tag", "morph", "lemma", "entity", "in_scope")
+_ANNOTATED = ("pos", "tag", "morph", "lemma", "entity", "inside_name", "in_scope")
 
 
 @dataclass(frozen=True)
@@ -692,11 +698,14 @@ class _EntityBatch:
         )
         entity_docs = dict(zip(keys, recognised, strict=True))
         for waiting in self.waiting:
-            entity, inside_name = entity_over_target(
-                entity_docs[waiting.sentence], waiting.start, waiting.end, self.name_labels
+            doc = entity_docs[waiting.sentence]
+            entity, inside_entity = entity_over_target(
+                doc, waiting.start, waiting.end, self.name_labels
             )
+            inside_name = inside_entity or in_named_instrument(doc, waiting.start, waiting.end)
             row = waiting.row
             row[_ENTITY] = entity
+            row[_INSIDE_NAME] = inside_name
             row[_IN_SCOPE] = is_in_scope(
                 row[_POS], waiting.word, inside_name=inside_name, hyphen_part=waiting.hyphen_part
             )
@@ -757,6 +766,7 @@ def _add_usages(
             sentence.language,
             sentence.confidence,
             sentence.exclusion,
+            None,  # inside a name, set by the flush
             None,  # in scope, set by the flush
             False,
             settings.model,

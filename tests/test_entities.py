@@ -12,6 +12,7 @@ from interpretant.usages.entities import (
     annotate_with_transformer,
     entity_label,
     entity_over_target,
+    in_named_instrument,
     load_entity_recognizer,
     recognise_sentence_entities,
     require_entity_annotation,
@@ -102,6 +103,27 @@ def test_no_entity_or_one_without_a_name_label_is_no_name() -> None:
     words = ["the", "1990s", "network"]
     assert over(words, ["B-DATE", "I-DATE", "O"], "network") == (None, False)
     assert over(["network", "1990s"], ["B-DATE", "I-DATE"], "network") == ("DATE", False)
+
+
+def instrument(words: list[str], target: str) -> bool:
+    """Whether the target sits in a named instrument in a sentence of these tokens."""
+    doc = Doc(VOCAB, words=words)
+    start = doc.text.index(target)
+    return in_named_instrument(doc, start, start + len(target))
+
+
+def test_a_capitalised_run_ending_in_an_instrument_word_is_a_name() -> None:
+    assert instrument(["the", "Wechsler", "Memory", "Scale", "was", "used"], "Memory")
+    words = ["the", "Strengths", "and", "Difficulties", "Questionnaire", "(", "SDQ", ")"]
+    assert instrument(words, "Strengths")
+    assert instrument(["the", "State", "-", "Trait", "Anxiety", "Inventory"], "State")
+
+
+def test_a_target_outside_such_a_run_is_not_in_a_named_instrument() -> None:
+    assert not instrument(["a", "memory", "test", "was", "used"], "memory")
+    assert not instrument(["Memory", "improved", "on", "the", "Test"], "Memory")
+    assert not instrument(["the", "Memory", "Test"], "Test")
+    assert not instrument(["the", "Memory", "Model"], "Memory")
 
 
 def test_annotate_with_transformer_rebuilds_the_tokens_and_applies_the_exceptions() -> None:

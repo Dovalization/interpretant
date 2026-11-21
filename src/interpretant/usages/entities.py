@@ -168,6 +168,35 @@ def entity_over_target(
     return label, label in name_labels and not _is_generic(entity, start_char, end_char)
 
 
+# The words that end a named test, scale or questionnaire (`docs/usages_audit.md`, 2026-11-20).
+INSTRUMENT_WORDS = frozenset(
+    {
+        "Assessment", "Battery", "Checklist", "Index", "Interview", "Inventory", "Measure",
+        "Profile", "Questionnaire", "Scale", "Scales", "Schedule", "Survey", "Test", "Tests",
+    }
+)  # fmt: skip
+# The lower-case words and signs a name's run of capitalised words may hold.
+_NAME_LINKS = frozenset({"and", "of", "for", "the", "in", "on", "to", "&", "-"})
+
+
+def in_named_instrument(doc: Doc, start_char: int, end_char: int) -> bool:
+    """Whether the target, capitalised, sits in a capitalised run ending in an instrument word.
+
+    A named test or scale is a name (*Wechsler Intelligence Scale*, *State-Trait Anxiety
+    Inventory*), and the recognizer labels few of them: on the usages audit's judged items the
+    run matched 30, 27 of them names (`docs/usages_audit.md`).
+    """
+    target = [t for t in doc if t.idx < end_char and start_char < t.idx + len(t.text)]
+    if not target or not target[0].text[:1].isupper():
+        return False
+    for token in doc[target[-1].i + 1 :]:
+        if token.text in INSTRUMENT_WORDS:
+            return True
+        if not (token.text[:1].isupper() or token.lower_ in _NAME_LINKS):
+            return False
+    return False
+
+
 def _entity_over(doc: Doc, start_char: int, end_char: int) -> Span | None:
     return next((e for e in doc.ents if e.start_char < end_char and start_char < e.end_char), None)
 

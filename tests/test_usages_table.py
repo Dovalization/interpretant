@@ -44,6 +44,7 @@ def usage_row(**changes: Any) -> dict[str, Any]:
         "sentence_language": "en",
         "sentence_confidence": 0.99,
         "sentence_exclusion": None,
+        "inside_name": False,
         "in_scope": True,
         "drawn": True,
         "model": "en_core_web_sm",
