@@ -4,7 +4,9 @@
 # embodiment, transformer, cloud (ADJ) accept the tags the small tagger gives their noun uses
 # (scripts/evidence/word_table_draft.py); component, feedback and five held-out words (ADJ) accept the
 # adjective tag the transformer gives their noun modifiers (the usages audit, docs/usages_audit.md,
-# approved by the author 2026-11-20). match: lemma (the lemma or the form), or form only (having).
+# approved by the author 2026-11-20), and information processing (VERB) the verb tag it gives the
+# phrase's -ing head (the audit's redraw, approved by the author 2026-11-21). match: lemma (the lemma
+# or the form), or form only (having).
 # held_out: the confirming run's words (6.2), drafted before step 6; none yet.
 # Held-out words (agenda 6.2; docs/held_out.md), approved by the author 2026-11-19, are marked yes in
 # held_out: sealed until the confirmation plan, never printed by development outputs, only hashed.
@@ -34,7 +36,7 @@ hallucination	NOUN|PROPN	lemma	no
 having	VERB|AUX	form	no
 image	NOUN|PROPN	lemma	no
 information	NOUN|PROPN	lemma	no
-information processing	NOUN|PROPN	lemma	no
+information processing	NOUN|PROPN|VERB	lemma	no
 intelligence	NOUN|PROPN	lemma	no
 intentionality	NOUN|PROPN	lemma	no
 interface	NOUN|PROPN	lemma	no
