@@ -1,0 +1,252 @@
+{
+ "U0204": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is the title of a cited book (The Interpretation of Ritual), so the word is part of a name. Leaving it out was correct."
+ },
+ "U0201": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947\" here is a noun (a basis for the assumption), not inside a name, and the marks cover the whole word."
+ },
+ "U0205": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" is a verb here (participle: \"collectively held-out:2c676bb34422 the extraordinary as...\"), not a noun use, so leaving it out was correct."
+ },
+ "U0202": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use. \"Memory\" is a noun here, and the program should have kept it."
+ },
+ "U0203": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "It's in the title of another article in a journal listing, so it counts as a name and not a use."
+ },
+ "U0200": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Phenomenology and Mind\" is the name of a specific journal (the issue's title), so \"Mind\" sits inside a name. Leaving it out was correct."
+ },
+ "U0207": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun (things described), a genuine use outside any name; the marks cover the whole word."
+ },
+ "U0210": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed image\" uses held-out:7dc7c59f90ed as a noun modifier, which counts as a noun use. It isn't a name, and the marks cover exactly the word."
+ },
+ "U0209": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is in the title of a cited work (Burnham's article, listed with author and journal), so it is a name, not a use. Leaving it out was correct."
+ },
+ "U0206": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiment\" is used as a plain noun (instability caused by embodiment), not in a name; the marks cover exactly the word."
+ },
+ "U0216": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Perception is in the title of a cited article (\"Linguistic Philosophy and Perception\"), so it is a name. Leaving it out was correct."
+ },
+ "U0212": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perceptions\" is a plural noun meaning teachers' views; not in a name, and the marks cover the word exactly."
+ },
+ "U0213": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Simulation\" is in the title of the reviewed book (Kuipers, MIT Press, 1994), which is cited with author and publisher. A cited work's title is a name, so leaving it out was correct."
+ },
+ "U0208": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Physical Symbol System Hypothesis\" is the specific named Newell and Simon hypothesis, so \"Symbol\" sits inside a name. Leaving it out was correct."
+ },
+ "U0217": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is used as an ordinary noun (predicate complement: everything has become held-out:10c5166f4af0), not in a name; span is exact."
+ },
+ "U0215": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This looks like a table-of-contents heading (\"1.3\"). Headings count as ordinary uses. \"Consciousness\" is a noun here, so the program should have kept it."
+ },
+ "U0219": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:6b293b43d2b1' is used as an ordinary noun (spiritual held-out:6b293b43d2b1), not in a name, and the marks cover exactly the word."
+ },
+ "U0211": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (Advances in Information Processing in Organizations), so it is a name and leaving it out was correct. The VERB tag is wrong, but the outcome is right."
+ },
+ "U0223": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f151e0c23aaf expertise\" is a plain adjective use, not part of a name; the center name (CDDI) is not the marked span."
+ },
+ "U0222": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Structural held-out:1b596f30c66f Modeling\" is a generic technique, not a coined name. The product name is SmartPLS, which is separate. \"held-out:1b596f30c66f\" is a noun use and should have been kept."
+ },
+ "U0220": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"communication medium\" is the noun medium (transmission channel), a plain use, not part of a name."
+ },
+ "U0226": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"witness memory\" is an ordinary noun use of memory (noun modifier context), not in a name or title; marks cover exactly the word."
+ },
+ "U0224": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "'Memory' is part of the title of a cited monograph (Memory and Meaning), so it is a name, not a use."
+ },
+ "U0214": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Multidimensional Convolution Dual Channel Transformer Network\" is the coined name of the one specific model the paper proposes, so leaving it out as a name is correct. This is a borderline case, because the name is also descriptive."
+ },
+ "U0230": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:e39a19f9b2b4' meaning opinions/views; a genuine noun use, not in a name, span covers the word."
+ },
+ "U0218": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:11ee3fc840ad' in a table-of-contents chapter heading. Such headings count as ordinary uses, not titles of other works, so the program should have kept it."
+ },
+ "U0221": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbol\" is a plain noun (\"pharmaceutical symbol\"), not in a name, and the marks cover exactly the word. The program should have kept it."
+ },
+ "U0232": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plain noun (continuous-tone images) in a generic phrase, not part of a name; span covers the word exactly."
+ },
+ "U0225": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. \"Intelligence\" is a noun here and should have been kept."
+ },
+ "U0227": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" is a noun here (optical medium, e.g. glass) and is not part of a name. The marks cover exactly the word, so it should have been kept."
+ },
+ "U0229": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is a plain noun use (son of a held-out:b3ea1fd57831), not in a name, and the marks cover the word exactly; it should have been kept."
+ },
+ "U0228": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ee104561c1ce\" is a plural noun in a table-of-contents heading. Headings count as ordinary uses, and the marks cover the whole word."
+ },
+ "U0231": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Systems\" is part of the organisation name \"IEEE Computer Society Technical Committee on Operating Systems\", so leaving it out as a name is correct."
+ },
+ "U0233": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'representation' in a list (repetition, representation and the sign); not a name or title."
+ },
+ "U0234": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic plural noun 'held-out:861f9da96b43' (four Norwegian held-out:861f9da96b43), not a name; span covers the word."
+ },
+ "U0236": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of another cited work (an abstract of a paper), so it counts as a name; leaving it out was correct."
+ },
+ "U0239": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"in the presence of air\" uses presence as a noun, outside any name, and the marks cover exactly the word."
+ },
+ "U0237": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"component\" is used as a noun, in a generic sense, and isn't part of a name. The marks cover exactly the word."
+ },
+ "U0240": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interfaces\" is a plural noun in \"AR/VR interfaces\", a generic term, not a name."
+ },
+ "U0235": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memories\" is a plural noun in \"bidirectional associative memories (BAM)\", a generic model type and not a name. The program should have kept it, probably missing it because the bracket follows the word directly."
+ },
+ "U0238": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of \"neural network\" in \"neural network\"-like; quotes don't make it a name, and the span is exact. It should have been kept."
+ },
+ "U0244": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"models\" is a plain noun use (theoretical models of concept learning), not part of a name, and the marks cover exactly the word."
+ },
+ "U0243": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having failed\" is a perfect participle, with \"having\" as an auxiliary. AUX is a studied part of speech, so the program should have kept it."
+ },
+ "U0241": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"graphical user interfaces\" is a generic noun use of user interface (GUI spelled out), not a name. The span covers exactly the term, so it should have been kept."
+ },
+ "U0246": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behavior\" is part of the named instrument Child Behavior Checklist (CBCL), so leaving it out as a name was correct."
+ },
+ "U0248": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Platform for Privacy Preferences (P3P)\" is the name of a specific W3C held-out:c0dcb92b6a30, so leaving it out as a name was correct."
+ },
+ "U0245": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The World as an Image\" is a table-of-contents heading, which counts as an ordinary use. It is a noun and is not inside a cited title, so the program should have kept it."
+ },
+ "U0242": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This is a table-of-contents heading, so it is an ordinary use. \"Information Revolution\" is a generic term for a social change, not a named event. \"Information\" is a noun modifier, so it should have been kept."
+ },
+ "U0247": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited work (reference-style entry with author), so it is a name; leaving it out was correct."
+ },
+ "U0249": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a table-of-contents chapter heading, which counts as an ordinary use rather than a cited title. \"Visual feedback\" is a noun use of feedback, so the program should have kept it."
+ }
+}

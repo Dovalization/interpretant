@@ -1,0 +1,252 @@
+{
+ "U4101": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' used as an ordinary word, not in a name; marks cover the word exactly."
+ },
+ "U4100": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:6b293b43d2b1' is used as a common noun (close affinity), not in a name; marks cover the word exactly."
+ },
+ "U4102": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:86a125382979' in 'deterministic held-out:86a125382979'; a generic philosophical use, not a name, and the marks cover exactly the word."
+ },
+ "U4103": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic plural noun \"regional held-out:861f9da96b43\"; the names (Star Tribune, Des Moines Register) follow separately, so this is a valid use."
+ },
+ "U4104": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"visual hallucinations\" is a plain noun use, not in a name, and the marks cover the whole word."
+ },
+ "U4105": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun use of 'hallucinations' in a generic clinical term; not a name, span covers the word exactly."
+ },
+ "U4106": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360-kings\" is a generic noun use of held-out:ab139acf9360 as part of a hyphenated word; not a name, and the marks cover exactly the word."
+ },
+ "U4107": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"static held-out:5ff5c82d203d\" is a plain noun use of held-out:5ff5c82d203d (plural). The marks cover exactly the word, and it isn't in a name. The program should have kept it, even though the sentence is a bit garbled."
+ },
+ "U4108": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is used as a common noun (a diagram/scheme), not in a name; marks cover the exact word."
+ },
+ "U4109": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Experiences\" is a plural noun, a plain use of experience, not in a name."
+ },
+ "U4110": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"most held-out:32a54748ce0a\" is an adjective use of held-out:32a54748ce0a, not in a name; span covers exactly the word."
+ },
+ "U4113": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cognitive information processing\" is a generic noun use, not a name; marks cover the whole term."
+ },
+ "U4111": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning thereby just that...\" is a verb (participle of \"mean\"), not a noun, so leaving it out was correct."
+ },
+ "U4112": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'complexity' used normally, not in a name; marks cover exactly the word."
+ },
+ "U4114": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Electrical power transformer, a noun use of the word. Every sense counts, and it is not a name."
+ },
+ "U4116": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"User\" is a noun, an element of the WfRBAC model, used generically. It is capitalised only because it starts the sentence, and it is not a name."
+ },
+ "U4117": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"image processing\" - image as a noun modifier, a generic technique, not a name."
+ },
+ "U4118": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:6b293b43d2b1\" is used as a noun modifier in \"terminology of Nyoro held-out:6b293b43d2b1\", not as part of a name or title. The marks cover the whole word."
+ },
+ "U4120": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Memory\" is part of the journal name Memory & Cognition in a citation, so it is a name and not a use."
+ },
+ "U4122": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use. 'held-out:6b293b43d2b1' is a noun modifier in 'held-out:6b293b43d2b1 Engagement', and the marks cover exactly the word."
+ },
+ "U4121": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Law of Non-Coercive Alignment (LNCA)\" is one specific named law in a coined theory, so it is a name and leaving it out was correct."
+ },
+ "U4115": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Learning.\" is a standalone section-heading-like use of the noun, not part of a name or title, and the marks cover exactly the word."
+ },
+ "U4119": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'intelligence' as the authors' own defined term or heading. It is not inside the test name, which comes later. It should have been kept."
+ },
+ "U4123": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information-processing framework\": noun modifier use of the generic term, not a name; marks cover the whole compound."
+ },
+ "U4125": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" is used as a noun (Duncan's held-out:2c676bb34422 of the stare), not in a name, and the marks cover exactly the word."
+ },
+ "U4128": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a cited work's title (reference list entry with author), so it is a name; leaving it out was correct."
+ },
+ "U4130": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a plural noun (philosophical held-out:19d5e41de2db of art), a normal use outside any name; the marks cover the word."
+ },
+ "U4127": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'cognition' as a variable in a cross-lagged effect (cognition→symptoms); the marks cover exactly the word, and it is not in a name."
+ },
+ "U4126": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9\" in \"held-out:11f8f1ec4ec9 mode\" (network) is a modifier use. It is a generic neuroscience term, not a coined name, and the marks cover just the word."
+ },
+ "U4129": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading; counts as an ordinary use of the noun 'perception', not a name, and the marks cover the word exactly."
+ },
+ "U4132": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agent\" is used as a noun, mentioned as a technique/term; it is a generic term, not a name, and the marks cover the whole word."
+ },
+ "U4124": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun in a table-of-contents heading of the book being described. The codebook treats these as ordinary uses, not cited titles. The marks cover exactly the word."
+ },
+ "U4131": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Hyperbolic held-out:1b596f30c66f\" is a table-of-contents heading, which counts as an ordinary use. The noun \"held-out:1b596f30c66f\" is correctly marked."
+ },
+ "U4133": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is a noun modifier in \"held-out:10c5166f4af0 theory\", a generic term not a name, so it counts as a use."
+ },
+ "U4135": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning of work\" uses meaning as a noun, not inside a name, and the marks cover exactly the word."
+ },
+ "U4137": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiments\" is a plural noun, a general use of the target word, not in a name, and the marks cover the whole word."
+ },
+ "U4134": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"alignment\" is a noun in the generic technique \"interference alignment\"; it isn't a name, and the marks cover exactly the word."
+ },
+ "U4136": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:e7866e6303be' (with optional plural '(s)'), not in a name; it should have been kept."
+ },
+ "U4138": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:861f9da96b43\" is a plural common noun, a plain use of the target word, not part of a name. The marks cover exactly the word."
+ },
+ "U4140": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed\" is a verb here (the environment held-out:7dc7c59f90ed another), not studied; leaving it out was correct."
+ },
+ "U4139": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'consciousness' is used as a noun (the '?' is a garbled dash). It is a real use, not in a name, and the marks cover the whole word."
+ },
+ "U4143": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use: 'Lyell's held-out:67415e178146' meaning the property he inherited; not a name."
+ },
+ "U4142": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective describing the development process. The marks cover just the word, and it isn't in a name, so it should have been kept."
+ },
+ "U4144": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the name of a specific product, the IBM 7960 Special Image Processing System, so leaving it out was correct."
+ },
+ "U4146": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9\" is a verb here (patients dropped out of treatment); verb not studied, so leaving it out was correct."
+ },
+ "U4145": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is part of the place name Grand held-out:d573b31a4663 (a city), so leaving it out was correct."
+ },
+ "U4147": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be nuclei\": held-out:e7866e6303be is a noun modifier before the noun \"nuclei\"; a genuine use, not a name, and the marks cover exactly the word."
+ },
+ "U4141": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Feedback Calculator\" is capitalised and names the one custom-built app used in the study, so it is a product name and leaving it out was correct. This is a judgement call, since it could also be read as a descriptive noun modifier."
+ },
+ "U4148": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"hallucinations\" is a plural noun use of the target word, outside any name; the marks cover exactly the word."
+ },
+ "U4149": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"model\" is a noun in \"Minnaert correction model\", a generic technique label like the other correction models listed. It is not a coined name, and the marks cover the word exactly."
+ }
+}

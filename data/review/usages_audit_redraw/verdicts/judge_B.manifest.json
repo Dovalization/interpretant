@@ -1,0 +1,18 @@
+{
+ "model": "sonnet",
+ "effort": "high",
+ "claude_version": "2.1.329 (Claude Code)",
+ "codebook_sha256": "9be0db1ee6fb0e9ed45a292984651d47775046542d6a6703959bca5decb2db0a",
+ "judged": 1824,
+ "tokens": {
+  "input_tokens": 3648,
+  "cache_creation_input_tokens": 1448034,
+  "cache_read_input_tokens": 3441320,
+  "output_tokens": 309987,
+  "notional_micro_usd": 9242525
+ },
+ "models": [
+  "claude-sonnet-5-5"
+ ],
+ "failed": {}
+}

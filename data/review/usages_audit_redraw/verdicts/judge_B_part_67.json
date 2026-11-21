@@ -1,0 +1,252 @@
+{
+ "U3351": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:34711782a046' is used as an ordinary noun (moderator variable), not in a name; span covers exactly the word."
+ },
+ "U3353": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"less held-out:32a54748ce0a\" is the adjective 'held-out:32a54748ce0a', used in predicate position; the marks cover exactly the word."
+ },
+ "U3354": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"User Experience Questionnaire (UEQ)\" is a specific named instrument, so leaving it out as a name was correct."
+ },
+ "U3352": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'user' (possessive, apostrophe garbled to '?'); marks cover exactly the word, not in a name."
+ },
+ "U3350": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The sentence is French, not English, so it isn't a use of English 'agent'. Leaving it out was correct."
+ },
+ "U3356": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"components\" is a plural noun use of component (resilience components), not in a name; marks cover the word exactly."
+ },
+ "U3355": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cloud\" modifies \"Community portals\" as a generic noun modifier (cloud community portals), not a name; it should have been kept."
+ },
+ "U3358": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun (visitor experiences), a regular use; the marks cover the word exactly and it isn't in a name."
+ },
+ "U3359": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:f6604b2573e2 tracing\" uses held-out:f6604b2573e2 as an adjective (virus-based tracing), a studied part of speech. It is not a name, so it should have been kept."
+ },
+ "U3357": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embeddings\" is a plural noun, a generic term (psychological embeddings) and not a name. The dash introduces an appositive, and the marks cover exactly the word."
+ },
+ "U3360": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Language and held-out:15a9a9ab2b92\" is a table-of-contents heading, which counts as an ordinary use. \"held-out:15a9a9ab2b92\" is a noun here."
+ },
+ "U3363": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:861f9da96b43 Advertising and Promotion\" is the title of a cited book, so the word is inside a name and leaving it out was correct (the ORG label is wrong, but the result is right)."
+ },
+ "U3361": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:5350e5a87b0b Quest\" looks like the name of a specific game or product, with a capitalised \"Quest\". Leaving it out as a name was correct."
+ },
+ "U3365": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited essay by Geach, which counts as a name, so leaving it out was correct."
+ },
+ "U3364": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"principal components\" is the generic technique (PCA), a noun use of component. It is part of a hyphenated word and the marks cover exactly \"components\"."
+ },
+ "U3362": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents chapter heading (no authors or citation), so an ordinary noun use of 'held-out:15a9a9ab2b92'; the codebook counts TOC headings."
+ },
+ "U3366": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"a medium of representation\" is a noun use of medium, not in a name; span covers exactly the word."
+ },
+ "U3367": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Histology sense of embedding (tissue embedding in araldite) is a noun use of the target word. It is not a name, and the marks cover the whole word."
+ },
+ "U3369": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Graphics held-out:f66e6d2190f6 and Usability Center\" is the name of a specific organisation (Georgia Tech GVU Center), so leaving it out as a name was correct."
+ },
+ "U3370": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is a plain noun use (dynamical held-out:10c5166f4af0), not in a name; span covers the word exactly."
+ },
+ "U3368": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"platform\" is a noun here, the hidden platform in a water maze. It is not part of a name, and the marks cover exactly the word, so it should have been kept."
+ },
+ "U3371": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strength of partial correlations\" is an ordinary noun use; FLCAS is the name, not strength."
+ },
+ "U3373": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Igroup Presence Questionnaire (IPQ)\" is a named, specific instrument, so \"Presence\" is inside a name and correctly left out."
+ },
+ "U3374": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Feature Fusion Neck\" is a generic, newly designed component (feature fusion is a technique), not a named product. Here \"fusion\" is a noun use and should have been kept."
+ },
+ "U3375": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"self-consciousness\" is a noun with consciousness as a hyphenated part; marks cover exactly the word part, not a name."
+ },
+ "U3377": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"methods of learning\" - gerund used as a noun; not part of a name; span covers the whole word."
+ },
+ "U3378": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f6604b2573e2\" is an adjective modifying \"agents\"; ordinary use, not in a name."
+ },
+ "U3379": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "The sentence is French (\"a cause de l'attention considerable dans le media\"), so it is not an English use."
+ },
+ "U3372": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"User Interface Team\" is a descriptive team label, not a coined organisation name. \"User\" is a noun modifier in \"user interface\", so it should have been kept."
+ },
+ "U3380": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'Minds' is in the title of Lucas's cited paper, 'Minds, Machines and Gödel'. A cited title counts as a name, so leaving it out was correct."
+ },
+ "U3376": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"sign\" in \"sign language\" is a noun modifier. It names a kind of language, not a person, organisation, product or titled work, so it counts as a use."
+ },
+ "U3382": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'user interfaces' (plural), not a name; marks cover the whole term."
+ },
+ "U3383": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'cultural held-out:67415e178146' (heritage); not a name, span is exact."
+ },
+ "U3381": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"agent\" (written \"agent(s)\", meaning the agents who act); the marks cover the word, and it is not in a name."
+ },
+ "U3384": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"a platform for\" is a common noun (a forum/outlet), not part of a name; span covers just the word."
+ },
+ "U3386": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feedback\" is a noun here (each kind of feedback), not in a name, and the marks cover the whole word."
+ },
+ "U3385": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Nonsense held-out:e7866e6303be Test\" is a specific named speech-perception test, so held-out:e7866e6303be is inside a name and leaving it out was correct."
+ },
+ "U3387": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'national held-out:861f9da96b43', not part of a name; marks cover the word."
+ },
+ "U3389": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"social information processing\" is a generic noun/noun-modifier use of the term, not a name; marks cover exactly the phrase."
+ },
+ "U3390": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:10c5166f4af0 is the name of a specific project (Community Health Analytics Open Source Software), an acronym, not the word held-out:10c5166f4af0."
+ },
+ "U3388": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use: \"international news agencies\" (wire services). Not part of a name, so it should have been kept."
+ },
+ "U3391": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'neural network' (diluted neural network model); not a name, marks cover the term exactly."
+ },
+ "U3392": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user\" is a noun modifier in \"user interface\"; TAE is a system, but \"user interface\" is a generic term, not part of a name."
+ },
+ "U3394": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'complexity', not in a name; marks cover exactly the word."
+ },
+ "U3393": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'forced alignment' is a generic technique; 'alignment' is a noun here and the marks cover the whole word."
+ },
+ "U3395": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"drawing attention to\" uses attention as a noun, not inside a name; the marks cover exactly the word."
+ },
+ "U3396": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Grammatical held-out:34711782a046, used as a noun; a genuine use, not in a name, and the marks cover the word exactly."
+ },
+ "U3398": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretation\" here means translating/interpreting (Korean interpretation/translation), a noun use, not in a name; the mark covers exactly the word."
+ },
+ "U3399": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'held-out:96da49af8e67' (design user held-out:96da49af8e67), plural of held-out:96da49af8e67; not a name; span covers the word."
+ },
+ "U3397": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents style heading (\"...Scientific held-out:86a125382979.- 5.\"); headings count as ordinary uses, and \"held-out:86a125382979\" is the noun."
+ }
+}

@@ -1,0 +1,252 @@
+{
+ "U3500": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"to prompt a reappraisal\" is an infinitive verb, not a noun or proper noun, so leaving it out was correct."
+ },
+ "U3501": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"National held-out:7dc7c59f90ed\" is a named held-out:861f9da96b43 (organisation/product), so \"held-out:7dc7c59f90ed\" is inside a name; leaving it out was correct."
+ },
+ "U3502": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbols\" is a plural noun, a generic use outside any name, and the marks cover the whole word."
+ },
+ "U3505": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic field name 'artificial intelligence' in a list of disciplines; noun use, not a name, marks cover exactly the term."
+ },
+ "U3504": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Visualisation\" is a noun (British spelling), a heading/topic of a teaching programme, not a name; span covers the whole word."
+ },
+ "U3503": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Hidden Markov Models\" is a generic technique, not a name. \"Models\" is a noun and the marks cover exactly the word, so the program should have kept it."
+ },
+ "U3506": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun, used as a noun modifier-like item in \"Language held-out:50fa17396b00/attitudes\"; a genuine use of held-out:50fa17396b00, not a name."
+ },
+ "U3507": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"UN Trafficking held-out:c0dcb92b6a30\" names one specific treaty (a law), so the word is part of a name and leaving it out was correct."
+ },
+ "U3509": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"imaged\" is a past participle verb here (samples were imaged), not a noun use, so leaving it out was correct."
+ },
+ "U3508": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading; \"Crisis of Learning\" uses learning as a noun. Headings count as ordinary uses, so it should have been kept."
+ },
+ "U3512": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meanings\" is a plural noun, a plain use of the target word, not in a name; marks cover the word exactly."
+ },
+ "U3513": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is used as an ordinary noun (the emergence of new media), not in a name; the marks cover exactly the word."
+ },
+ "U3510": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(meta-)cognitions\" is a plural noun use of cognition. It is not in a name, and the marks cover exactly the word."
+ },
+ "U3514": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is a noun here (concentrated their attention), not in a name; span covers the word exactly."
+ },
+ "U3511": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"model\" is a noun here (outer product model); the (1,2) is a citation marker, and the span covers exactly the word."
+ },
+ "U3517": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'interpretations' in a table-of-contents heading, which counts as an ordinary use. The marks cover the word exactly."
+ },
+ "U3518": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is part of the place name Grand held-out:d573b31a4663, Mich. (also in a citation), so leaving it out as a name was correct."
+ },
+ "U3516": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"held-out:7b5614820786\" in \"held-out:7b5614820786(s)\" (the instruments Vallisneri used). Not in a name, and the marks cover the word, so it should have been kept."
+ },
+ "U3521": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'re-emergence' is a noun use of emergence as part of a hyphenated word; marked span covers just 'emergence'."
+ },
+ "U3519": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computation\" is a noun modifier in \"computation graph\", a generic term, not a name. The marks cover exactly the word."
+ },
+ "U3522": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"one held-out:e7866e6303be\" is a plain noun use, outside any name, and the marks cover exactly the word. The program should have kept it."
+ },
+ "U3515": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"[=symbol with an n above]\" is a text-extraction placeholder standing in for a missing math glyph (e.g. a product or union sign). It is not the authors' use of the word symbol."
+ },
+ "U3520": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the proper name \"Safeguards Information Management System\", a specific named DOE initiative, so it is not a generic use."
+ },
+ "U3523": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'organizational simulation' (a simulated exercise), not a named system; marks cover the word exactly."
+ },
+ "U3524": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'neural networks'; marks cover the full term."
+ },
+ "U3525": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ab139acf9360\" is a plain noun use (Greek held-out:ab139acf9360), not in a name; marks cover the word."
+ },
+ "U3527": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"medium\" here is an adjective (level of load: low, medium, high), not the noun."
+ },
+ "U3528": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Istanbul held-out:c0dcb92b6a30\" is the specific named UN manual/instrument, so it is a name and leaving it out was correct."
+ },
+ "U3530": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Word is in the title of a cited book (Computation: Finite and Infinite Machines), so it is a name, not a use."
+ },
+ "U3531": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "The sentence is French (\"structure d'agents autonomes\"), so it is not English."
+ },
+ "U3532": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a cited article in a reference list, so it counts as a name; leaving it out was correct."
+ },
+ "U3526": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "This is the French word \"même\" (written without the accent) in the proverb \"plus ça reste le même\". It is not the English noun held-out:779d6b6eedf0."
+ },
+ "U3533": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention span\": noun modifier use of attention, not a name; marks cover exactly the word."
+ },
+ "U3529": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signed\" is a participial adjective from the verb sign (signed languages), not the noun, so leaving it out was correct."
+ },
+ "U3535": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0 of the Senses\" is the title of a novel, a cited work, so it is a name and leaving it out was correct."
+ },
+ "U3538": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The American College of held-out:b3ea1fd57831\" is a named organisation, so leaving the word out as a name was correct."
+ },
+ "U3540": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' (psychiatric sense), ordinary use, not in a name; span covers the word."
+ },
+ "U3536": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:da17f59c700d\" here is a common noun for a writing system (Devanagari held-out:da17f59c700d), not part of a name, so it should have been kept."
+ },
+ "U3537": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Instructions held-out:1c5d119c45e3\" is a generic role noun in the Map Task, not a product name; it should have been kept."
+ },
+ "U3534": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:c0dcb92b6a30' in a generic descriptive phrase (multicast routing held-out:c0dcb92b6a30). The marks cover exactly the word. The missing space before the parenthesis probably caused the miss."
+ },
+ "U3541": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is a noun in \"antidiuretic held-out:5350e5a87b0b\", a generic term and not a name; the marks cover exactly the word."
+ },
+ "U3539": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"e-Learning Support System\" reads as a generic descriptive term for a kind of system, not a coined proper name. Capitalisation alone does not make it a name, so this is a noun use that should have been kept."
+ },
+ "U3542": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here 'interfaces' is a verb (the handler interfaces with its resources), so leaving it out as VERB was correct."
+ },
+ "U3543": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a noun here (stimulus type), marks cover exactly the word, not in a name; missed by program but a valid use."
+ },
+ "U3545": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\" is a plural noun meaning positive aspects, not part of a name; span covers the word exactly."
+ },
+ "U3544": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Brush Sound held-out:7dc7c59f90ed\" is a brand name of a tape recorder, so \"held-out:7dc7c59f90ed\" is part of a product name, not a use of the word."
+ },
+ "U3546": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Affordance++\" is the name of one specific existing EMS system, so it is a name and not a use of the word."
+ },
+ "U3548": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexities\" is a plural noun, part of the hyphenated \"complexities-based\"; not in a name, and the marks cover the word exactly."
+ },
+ "U3549": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perceptions\" is a plain noun use, the marks cover exactly the word, and it is not in a name. It should have been kept."
+ },
+ "U3547": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use, 'his held-out:1c5d119c45e3' with the final s garbled by OCR as '•'. The word is clearly held-out:1c5d119c45e3, and the marks cover it correctly."
+ }
+}

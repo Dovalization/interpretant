@@ -1,0 +1,18 @@
+{
+ "model": "opus",
+ "effort": "high",
+ "claude_version": "2.1.329 (Claude Code)",
+ "codebook_sha256": "9be0db1ee6fb0e9ed45a292984651d47775046542d6a6703959bca5decb2db0a",
+ "judged": 53,
+ "tokens": {
+  "input_tokens": 106,
+  "cache_creation_input_tokens": 64849,
+  "cache_read_input_tokens": 92855,
+  "output_tokens": 28003,
+  "notional_micro_usd": 1097833
+ },
+ "models": [
+  "claude-opus-5-5"
+ ],
+ "failed": {}
+}

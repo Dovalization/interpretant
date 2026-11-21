@@ -1,0 +1,252 @@
+{
+ "U2750": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"networks\" is a plain noun (neural networks) in a generic sense, not a name; the marks cover the whole word. All-caps text is only formatting."
+ },
+ "U2752": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The Daily held-out:7dc7c59f90ed\" is the name of a specific held-out:861f9da96b43, so leaving it out as a name was correct."
+ },
+ "U2751": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "held-out:d7b1fc674098 Therapy is a generic therapy approach or technique, not a coined product name. Here 'held-out:d7b1fc674098' is a noun modifier, so it is a use and should have been kept."
+ },
+ "U2754": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is used as a noun modifier in \"from information processing perspective\". It is a generic term, not a name, and the marks cover exactly the phrase."
+ },
+ "U2758": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is a plural common noun, an ordinary use. The marks cover the whole word."
+ },
+ "U2755": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:07afa72fe9fc\" is a plain noun naming a symptom factor in a list; it is not a scale name, so it should have been kept."
+ },
+ "U2753": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:15a9a9ab2b92\" is a real noun use, coordinated with \"speech\" as a noun modifier. It is not in a name and the marks cover the word exactly."
+ },
+ "U2757": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"perceptions\" is a plain noun use (plural), outside any name, and the marks cover exactly the word. It should have been kept."
+ },
+ "U2760": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plural noun use of held-out:e7866e6303be, correctly marked, not in a name."
+ },
+ "U2763": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'emergence' (emergence of a single standard); not in a name, span exact."
+ },
+ "U2762": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"moral held-out:19d5e41de2db\" is an ordinary noun use, not in a name; the marks cover exactly the word."
+ },
+ "U2756": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of the coined name of the authors' specific scheme, Overlapping Rectangle Multi-valued Image Representation (ORMIR), so it is a name, not a use."
+ },
+ "U2764": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Experience' in a list heading (International Travel Experience) describing survey content; an ordinary use, not a named scale or title."
+ },
+ "U2759": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Intelligent User Interface Subsystem\" is a descriptive phrase for a held-out:d4bed87430ea, capitalised and abbreviated but not a coined product name. \"User interface\" is a noun use, so it should have been kept."
+ },
+ "U2761": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Word is in a chapter title in a volume's contents list (title of another work), so it is a name, not a use."
+ },
+ "U2765": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computer simulation\" is a plain noun use; the missing space after the period (\"simulation.concept\") probably made the program miss it, and the marks cover exactly the word."
+ },
+ "U2766": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Looks like a table-of-contents chapter heading (trailing \"6.\"), which counts as an ordinary use. \"Neural networks\" is a generic term, so it is a noun use and the marks cover it exactly."
+ },
+ "U2768": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\" is a plural noun in \"magnetic field strengths\"; a real use, not in a name, marks cover the word exactly."
+ },
+ "U2770": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Laurentian held-out:5350e5a87b0b Conference is a specific named event, so leaving it out as a name was correct."
+ },
+ "U2772": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"party platforms\" is a political platform, a noun use of platform. It's generic, not a name, and the marks cover the whole word."
+ },
+ "U2773": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Part of a file path/directory name (table_scripts/get_table.py), a code identifier, not a use of the word."
+ },
+ "U2771": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "held-out:1b596f30c66f is a placeholder token for removed math markup, not the authors' use of the word."
+ },
+ "U2767": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:c0dcb92b6a30\" is a noun, the head of \"WEP held-out:c0dcb92b6a30\". It is a generic noun and not part of a name. The program missed it only because there was no space after \"(WEP)\". The marks cover exactly the word."
+ },
+ "U2774": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'system' (a linear system in control theory), not part of a name; span is exactly the word."
+ },
+ "U2775": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'representations' of force and grasp in held-out:11ee3fc840ad; ordinary noun use, not in a name, span exact."
+ },
+ "U2776": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Consciousness\" is part of the title of Lukács's book History and Class Consciousness, a cited work, so it is a name and not a use."
+ },
+ "U2778": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Word begins the title of a cited paper in a reference list (Linear and Multilinear Algebra), so it is part of a title and not a use."
+ },
+ "U2777": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"dim mind\" is a plain noun use of mind. The footnote marks stuck to it don't change that, so it should have been kept."
+ },
+ "U2780": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memories\" is a plural noun for computer storage, a use of memory, not part of a name."
+ },
+ "U2769": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:96da49af8e67 deixis\" uses the word held-out:96da49af8e67 itself, as a noun modifier, in the grammatical-person sense. The codebook counts noun modifiers as noun uses, so the program should have kept it."
+ },
+ "U2779": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the cited serial title \"Recent Progress in held-out:5350e5a87b0b Research\" in a reference, so it is a name and leaving it out was correct."
+ },
+ "U2782": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plain noun (disciples of Leibniz and Newton), not part of a name; span covers the word."
+ },
+ "U2781": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(dis)alignment\" means alignment or disalignment. It is a noun use of alignment, and the marks cover exactly \"alignment\"."
+ },
+ "U2783": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'social networks' (plural), not a name; marks cover the full term."
+ },
+ "U2785": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"satellite held-out:164ebb5df0ea\" is a noun modifier use of the noun held-out:164ebb5df0ea (signal loss); not a name, span is exact."
+ },
+ "U2787": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"focused their attention on\" is a genuine noun use; the OCR garble is in the preceding title text, not the marked word."
+ },
+ "U2784": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of another cited work (Hirsch's letter), so it counts as a name and is correctly left out."
+ },
+ "U2788": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic technique term \"Artificial Neural Networks\", not a name. It is a noun use and the marks cover \"Neural Networks\" exactly, so the program should have kept it."
+ },
+ "U2789": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"liberal held-out:e39a19f9b2b4\" is a real noun use. The marks cover the word exactly, and the trailing \"@\" is OCR noise outside the marks."
+ },
+ "U2786": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This is a table-of-contents heading, which counts as an ordinary use. \"held-out:19d5e41de2db\" is a plain noun and not part of a person's name, so the program should have kept it."
+ },
+ "U2790": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Illness and Image\" is the title of a reviewed book, so it is a name and leaving it out was correct."
+ },
+ "U2791": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:7b1df4aa54d0, Unchained\" is the title of a cited essay, so the word is part of a name. Leaving it out was correct."
+ },
+ "U2792": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b levels\": held-out:5350e5a87b0b is a noun modifier, a plain use, not in a name; marks cover the word exactly."
+ },
+ "U2795": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"model\" is a noun here (xenograft model), a generic experimental model, not a name."
+ },
+ "U2796": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun, as a generic term, and the marks cover the full phrase."
+ },
+ "U2793": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Hashtag keyword 'Applied systems analysis': 'systems' is a noun modifier, so it is a real use. It is not a name or code identifier, and the marks cover exactly the word."
+ },
+ "U2799": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of a cited work's title in a reference list (authors listed), so it is a name; leaving it out was correct."
+ },
+ "U2798": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Adjective 'held-out:f151e0c23aaf' modifying 'prospect' (held-out:f151e0c23aaf prospect); not in a name, span exact."
+ },
+ "U2797": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"mental representation\" is used as a noun for a generic concept, not inside a name. The marks cover exactly the term."
+ },
+ "U2794": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning\" is a noun modifier in \"multicriteria learning algorithm\", a generic technique. The marks cover exactly the word. The missing space before \"(MCL)\" likely caused the miss."
+ }
+}

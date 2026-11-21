@@ -1,0 +1,252 @@
+{
+ "U4051": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is a plural common noun, a genuine use, not in a name; span covers the word exactly."
+ },
+ "U4050": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a plural noun meaning responsibilities; ordinary use, not in a name, span covers the word."
+ },
+ "U4052": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:6b293b43d2b1 is in the title of a cited book (held-out:6b293b43d2b1 and Neighborhood in a Southern Community), so it is a name and leaving it out was correct."
+ },
+ "U4053": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is a noun modifier in \"held-out:10c5166f4af0 theory\", a generic scientific theory rather than a name. The marks cover exactly the word."
+ },
+ "U4054": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:164ebb5df0ea is the generic neural-network technique (noun), not a name; the marks cover exactly the word."
+ },
+ "U4055": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is used as an ordinary noun (a cultural or economic symbol). It is not part of a name, and the marks cover exactly the word."
+ },
+ "U4056": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'held-out:861f9da96b43' describing a weekly publication; it is a description, not a name."
+ },
+ "U4058": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plain noun meaning adherents of Foucault; not a name, and the marks cover the word exactly."
+ },
+ "U4059": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'feedback loops' in systems theory; marks cover the full term; not a name."
+ },
+ "U4060": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary noun use of 'held-out:15a9a9ab2b92', not a title of another work."
+ },
+ "U4057": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Here 'held-out:861f9da96b43' is a common noun for the papers Daily Nation and the Standard, not part of an organisation name. It should have been kept."
+ },
+ "U4062": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'artificial intelligence' as a research field; marks cover the full term; not a name."
+ },
+ "U4064": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths-based approach\": plural noun 'strengths' as part of a hyphenated word, a genuine use of strength; the program should have kept it."
+ },
+ "U4063": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"space system planning\": system is a noun modifier in a generic phrase, not a name; marks cover exactly the word."
+ },
+ "U4065": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cerebral held-out:11ee3fc840ad\" is a plain noun use of held-out:11ee3fc840ad, not in a name; marks cover exactly the word."
+ },
+ "U4066": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'network' (intransitive species network), not a name; marks cover the word exactly."
+ },
+ "U4061": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:779d6b6eedf0' (memetic translation theory: target language as main held-out:779d6b6eedf0); not a name."
+ },
+ "U4067": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" is a plural noun, a generic use of the target word, not part of a name."
+ },
+ "U4068": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:67415e178146' as an object-oriented programming concept; not in a name."
+ },
+ "U4069": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is mentioned as a word (noun) in quotes; mentions count as uses, so it should have been kept."
+ },
+ "U4072": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:9384bbe72d46\" is a plural noun use of held-out:9384bbe72d46, not in a name; the span covers the whole word."
+ },
+ "U4074": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"The New England Mind\" is the title of Perry Miller's book, so the word is part of a cited title and doesn't count as a use."
+ },
+ "U4073": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the journal name (IEEE Transactions on held-out:f66e6d2190f6 and Computer Graphics) in a reference entry, so it is a name and leaving it out was correct."
+ },
+ "U4071": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'image' (the reconstructed image). The spaces are missing, but the marks cover exactly the word."
+ },
+ "U4076": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"a theoretical held-out:3cff64e5f947 of ethical held-out:15a9a9ab2b92\" is a noun use (foundation), not in a name, and the marks cover the whole word."
+ },
+ "U4075": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behavior\" is in the title of a cited book (Suicidal Behavior in Women), so it counts as a name and leaving it out was correct."
+ },
+ "U4077": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is used as a noun in \"barriers of held-out:34711782a046\"; it is a plain use, not in a name, and the marks cover exactly the word."
+ },
+ "U4070": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Agent\" is in the quoted title of a named event (Dagstuhl Seminar 10021), so it counts as part of a name and not a use."
+ },
+ "U4079": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1b596f30c66f\" is a noun modifier in \"differential held-out:1b596f30c66f solving\"; a generic technique, not a name, and the marks cover exactly the word."
+ },
+ "U4078": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is a noun modifier in the generic clinical term \"attention deficit hyperactivity disorder\". That is a condition, not a named test, scale or title, so it counts as a use."
+ },
+ "U4081": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"One sign\" is a noun meaning an indication; ordinary use, not in a name."
+ },
+ "U4082": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9\" is a plural noun (held-out:11f8f1ec4ec9 rules in nonmonotonic reasoning), a generic term, not a name; span covers the word."
+ },
+ "U4080": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use in \"convolutional neural network\", a technique and not a named system. The marks cover exactly \"neural network\". The program probably missed it because there is no space before \"(CNN)\"."
+ },
+ "U4085": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:7b5614820786' (figurative, 'under a skeptical held-out:7b5614820786'); not in a name, span is exact."
+ },
+ "U4084": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiencing\" is a verb here (after experiencing suicides), not a noun use, so leaving it out was correct."
+ },
+ "U4083": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is a plain noun use (regardless of the held-out:34711782a046), marks cover exactly the word; the following \"(p\" is just a p-value, so it should have been kept."
+ },
+ "U4086": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'user' is a plain noun here, not in a name, and the marks cover exactly the word."
+ },
+ "U4088": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"evolutionary computation\" is a generic technique term, a noun use of computation, not a name; marks cover exactly the word."
+ },
+ "U4087": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is a plural noun use of held-out:ff37e32092ff; marks cover the whole word, not in a name."
+ },
+ "U4089": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plural noun, part of the hyphenated \"images-definitions\"; the marks cover just the word, so it should have been kept."
+ },
+ "U4090": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here 'experience' is a verb (subjects experience lapses), not studied as a verb, so leaving it out was correct."
+ },
+ "U4092": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Sense of embodiment\" is a generic concept, not a named scale. The word is a noun and the marks cover it exactly."
+ },
+ "U4091": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behavior\" is part of a journal's name, \"Journal of Organizational Behavior Management\", in a reference. It is a name, so leaving it out was correct."
+ },
+ "U4094": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cellular neural network\" is a generic technique/term, used as a noun; marks cover the full term."
+ },
+ "U4097": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed\" in hyphenated \"held-out:7dc7c59f90ed-image\" is a noun use (noun modifier); not a name; span covers the word exactly."
+ },
+ "U4093": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a title of a paper listed with its author (Szwedek) in a volume's contents list. That is another work's title, so it is a name and not a use."
+ },
+ "U4096": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "\"held-out:3cff64e5f947 relations\" is a noun modifier (metaphysical held-out:3cff64e5f947), not a verb, so it should have been kept."
+ },
+ "U4095": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading of the work itself, so an ordinary use of the noun 'consciousness'. The marks cover exactly the word."
+ },
+ "U4099": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Part of a chapter title in a contents list of other works; titles are names, so not a use."
+ },
+ "U4098": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"how held-out:32a54748ce0a they experience\" uses the word in place of \"frequently\". It modifies the verb, so it is an adverb, which is not a studied part of speech. Leaving it out was correct."
+ }
+}

@@ -1,0 +1,1677 @@
+{
+ "items": 4224,
+ "judges_agreed": 4171,
+ "precision": {
+  "judged": 1980,
+  "errors": 55,
+  "bar": 51,
+  "passes": false,
+  "error_reasons": {
+   "name": 40,
+   "not_english": 4,
+   "other_word": 5,
+   "part_of_speech": 4,
+   "none": 2
+  },
+  "words_over_two_errors": [
+   "held-out:96da49af8e67",
+   "held-out:779d6b6eedf0",
+   "held-out:ee104561c1ce",
+   "medium"
+  ]
+ },
+ "scope": {
+  "words_screened": [
+   "agency",
+   "agent",
+   "cloud",
+   "component",
+   "emergence",
+   "having",
+   "held-out:7b1df4aa54d0",
+   "held-out:164ebb5df0ea",
+   "held-out:da17f59c700d",
+   "held-out:02b12c17f936",
+   "held-out:f151e0c23aaf",
+   "held-out:ff37e32092ff",
+   "held-out:f6604b2573e2",
+   "held-out:15a9a9ab2b92",
+   "held-out:86a125382979",
+   "held-out:ee104561c1ce",
+   "held-out:d7b1fc674098",
+   "held-out:1b596f30c66f",
+   "held-out:861f9da96b43",
+   "information",
+   "information processing",
+   "intentionality",
+   "learning",
+   "neural network",
+   "simulation",
+   "social network",
+   "transformer",
+   "user",
+   "user interface"
+  ],
+  "pooled_lost_share": 0.0032,
+  "passes_pooled": true,
+  "words_over_two_percent": [
+   "agency",
+   "held-out:02b12c17f936",
+   "held-out:f151e0c23aaf",
+   "held-out:3cff64e5f947",
+   "information processing",
+   "prompt"
+  ],
+  "by_word": {
+   "affordance": {
+    "pool": 5,
+    "judged": 5,
+    "real": 1,
+    "estimated": 1.0,
+    "share": 0.0007
+   },
+   "agency": {
+    "pool": 890,
+    "judged": 10,
+    "real": 3,
+    "estimated": 267.0,
+    "share": 0.0273
+   },
+   "agent": {
+    "pool": 141,
+    "judged": 10,
+    "real": 4,
+    "estimated": 56.4,
+    "share": 0.0027
+   },
+   "alignment": {
+    "pool": 18,
+    "judged": 10,
+    "real": 1,
+    "estimated": 1.8,
+    "share": 0.0005
+   },
+   "held-out:02b12c17f936": {
+    "pool": 922,
+    "judged": 10,
+    "real": 5,
+    "estimated": 461.0,
+    "share": 0.0643
+   },
+   "held-out:07afa72fe9fc": {
+    "pool": 1915,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "artificial intelligence": {
+    "pool": 199,
+    "judged": 10,
+    "real": 2,
+    "estimated": 39.8,
+    "share": 0.0057
+   },
+   "attention": {
+    "pool": 164,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "behavior": {
+    "pool": 965,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:10c5166f4af0": {
+    "pool": 29,
+    "judged": 10,
+    "real": 2,
+    "estimated": 5.8,
+    "share": 0.0055
+   },
+   "cloud": {
+    "pool": 255,
+    "judged": 10,
+    "real": 3,
+    "estimated": 76.5,
+    "share": 0.0174
+   },
+   "cognition": {
+    "pool": 182,
+    "judged": 10,
+    "real": 1,
+    "estimated": 18.2,
+    "share": 0.0019
+   },
+   "complexity": {
+    "pool": 42,
+    "judged": 10,
+    "real": 2,
+    "estimated": 8.4,
+    "share": 0.0005
+   },
+   "component": {
+    "pool": 54,
+    "judged": 10,
+    "real": 6,
+    "estimated": 32.4,
+    "share": 0.001
+   },
+   "computation": {
+    "pool": 134,
+    "judged": 10,
+    "real": 1,
+    "estimated": 13.4,
+    "share": 0.0017
+   },
+   "consciousness": {
+    "pool": 260,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "control": {
+    "pool": 22148,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:11ee3fc840ad": {
+    "pool": 16,
+    "judged": 10,
+    "real": 2,
+    "estimated": 3.2,
+    "share": 0.0002
+   },
+   "held-out:11f8f1ec4ec9": {
+    "pool": 38,
+    "judged": 10,
+    "real": 2,
+    "estimated": 7.6,
+    "share": 0.0043
+   },
+   "held-out:15a9a9ab2b92": {
+    "pool": 510,
+    "judged": 10,
+    "real": 5,
+    "estimated": 255.0,
+    "share": 0.0124
+   },
+   "held-out:164ebb5df0ea": {
+    "pool": 7,
+    "judged": 7,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.0051
+   },
+   "held-out:19d5e41de2db": {
+    "pool": 39,
+    "judged": 10,
+    "real": 2,
+    "estimated": 7.8,
+    "share": 0.002
+   },
+   "embedding": {
+    "pool": 6,
+    "judged": 6,
+    "real": 2,
+    "estimated": 2.0,
+    "share": 0.0007
+   },
+   "embodiment": {
+    "pool": 15,
+    "judged": 10,
+    "real": 2,
+    "estimated": 3.0,
+    "share": 0.0018
+   },
+   "emergence": {
+    "pool": 57,
+    "judged": 10,
+    "real": 4,
+    "estimated": 22.8,
+    "share": 0.0035
+   },
+   "held-out:1b596f30c66f": {
+    "pool": 72,
+    "judged": 10,
+    "real": 3,
+    "estimated": 21.6,
+    "share": 0.0022
+   },
+   "experience": {
+    "pool": 18135,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "feedback": {
+    "pool": 47,
+    "judged": 10,
+    "real": 2,
+    "estimated": 9.4,
+    "share": 0.0006
+   },
+   "feedback loop": {
+    "pool": 0,
+    "judged": 0,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:1c5d119c45e3": {
+    "pool": 4,
+    "judged": 4,
+    "real": 1,
+    "estimated": 1.0,
+    "share": 0.0006
+   },
+   "held-out:2c676bb34422": {
+    "pool": 657,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:32a54748ce0a": {
+    "pool": 82,
+    "judged": 10,
+    "real": 1,
+    "estimated": 8.2,
+    "share": 0.0015
+   },
+   "fusion": {
+    "pool": 72,
+    "judged": 10,
+    "real": 2,
+    "estimated": 14.4,
+    "share": 0.0032
+   },
+   "held-out:34711782a046": {
+    "pool": 123,
+    "judged": 10,
+    "real": 2,
+    "estimated": 24.6,
+    "share": 0.0015
+   },
+   "held-out:3cff64e5f947": {
+    "pool": 360,
+    "judged": 10,
+    "real": 1,
+    "estimated": 36.0,
+    "share": 0.0375
+   },
+   "held-out:50fa17396b00": {
+    "pool": 99,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "hallucination": {
+    "pool": 4,
+    "judged": 4,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "having": {
+    "pool": 28,
+    "judged": 10,
+    "real": 3,
+    "estimated": 8.4,
+    "share": 0.0005
+   },
+   "held-out:5350e5a87b0b": {
+    "pool": 17,
+    "judged": 10,
+    "real": 2,
+    "estimated": 3.4,
+    "share": 0.0007
+   },
+   "held-out:5ff5c82d203d": {
+    "pool": 24,
+    "judged": 10,
+    "real": 2,
+    "estimated": 4.8,
+    "share": 0.0027
+   },
+   "image": {
+    "pool": 800,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "information": {
+    "pool": 2004,
+    "judged": 10,
+    "real": 5,
+    "estimated": 1002.0,
+    "share": 0.009
+   },
+   "information processing": {
+    "pool": 276,
+    "judged": 10,
+    "real": 6,
+    "estimated": 165.6,
+    "share": 0.0528
+   },
+   "held-out:67415e178146": {
+    "pool": 15,
+    "judged": 10,
+    "real": 2,
+    "estimated": 3.0,
+    "share": 0.0018
+   },
+   "intelligence": {
+    "pool": 1370,
+    "judged": 10,
+    "real": 1,
+    "estimated": 137.0,
+    "share": 0.0066
+   },
+   "intentionality": {
+    "pool": 16,
+    "judged": 10,
+    "real": 3,
+    "estimated": 4.8,
+    "share": 0.0044
+   },
+   "interface": {
+    "pool": 862,
+    "judged": 10,
+    "real": 2,
+    "estimated": 172.4,
+    "share": 0.0052
+   },
+   "interpretation": {
+    "pool": 254,
+    "judged": 10,
+    "real": 2,
+    "estimated": 50.8,
+    "share": 0.0021
+   },
+   "held-out:6b293b43d2b1": {
+    "pool": 14,
+    "judged": 10,
+    "real": 1,
+    "estimated": 1.4,
+    "share": 0.0014
+   },
+   "learning": {
+    "pool": 1556,
+    "judged": 10,
+    "real": 3,
+    "estimated": 466.8,
+    "share": 0.0044
+   },
+   "meaning": {
+    "pool": 1535,
+    "judged": 10,
+    "real": 2,
+    "estimated": 307.0,
+    "share": 0.009
+   },
+   "medium": {
+    "pool": 1494,
+    "judged": 10,
+    "real": 1,
+    "estimated": 149.4,
+    "share": 0.018
+   },
+   "held-out:779d6b6eedf0": {
+    "pool": 87,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "memory": {
+    "pool": 497,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "mental representation": {
+    "pool": 4,
+    "judged": 4,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:7b1df4aa54d0": {
+    "pool": 78,
+    "judged": 10,
+    "real": 3,
+    "estimated": 23.4,
+    "share": 0.0041
+   },
+   "held-out:7b5614820786": {
+    "pool": 21,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "mind": {
+    "pool": 907,
+    "judged": 10,
+    "real": 1,
+    "estimated": 90.7,
+    "share": 0.0045
+   },
+   "held-out:7d0f24edc7fd": {
+    "pool": 380,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:7dc7c59f90ed": {
+    "pool": 1143,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "model": {
+    "pool": 8232,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "network": {
+    "pool": 1469,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "neural network": {
+    "pool": 115,
+    "judged": 10,
+    "real": 8,
+    "estimated": 92.0,
+    "share": 0.0062
+   },
+   "held-out:861f9da96b43": {
+    "pool": 249,
+    "judged": 10,
+    "real": 3,
+    "estimated": 74.7,
+    "share": 0.0061
+   },
+   "held-out:86a125382979": {
+    "pool": 104,
+    "judged": 10,
+    "real": 4,
+    "estimated": 41.6,
+    "share": 0.0055
+   },
+   "held-out:912b00c7764c": {
+    "pool": 161,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:9384bbe72d46": {
+    "pool": 40,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "perception": {
+    "pool": 377,
+    "judged": 10,
+    "real": 1,
+    "estimated": 37.7,
+    "share": 0.0011
+   },
+   "held-out:96da49af8e67": {
+    "pool": 31,
+    "judged": 10,
+    "real": 2,
+    "estimated": 6.2,
+    "share": 0.0052
+   },
+   "held-out:ab139acf9360": {
+    "pool": 232,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:b3ea1fd57831": {
+    "pool": 543,
+    "judged": 10,
+    "real": 1,
+    "estimated": 54.3,
+    "share": 0.007
+   },
+   "platform": {
+    "pool": 84,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:baa86b4dabfd": {
+    "pool": 134,
+    "judged": 10,
+    "real": 1,
+    "estimated": 13.4,
+    "share": 0.0026
+   },
+   "presence": {
+    "pool": 106,
+    "judged": 10,
+    "real": 1,
+    "estimated": 10.6,
+    "share": 0.0005
+   },
+   "held-out:bafa5557897f": {
+    "pool": 221,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:bd686ff4fd74": {
+    "pool": 88,
+    "judged": 10,
+    "real": 2,
+    "estimated": 17.6,
+    "share": 0.0014
+   },
+   "prompt": {
+    "pool": 2799,
+    "judged": 10,
+    "real": 1,
+    "estimated": 279.9,
+    "share": 0.141
+   },
+   "held-out:c0dcb92b6a30": {
+    "pool": 209,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:d4bed87430ea": {
+    "pool": 443,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:d573b31a4663": {
+    "pool": 313,
+    "judged": 10,
+    "real": 2,
+    "estimated": 62.6,
+    "share": 0.0065
+   },
+   "representation": {
+    "pool": 159,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:d7b1fc674098": {
+    "pool": 47,
+    "judged": 10,
+    "real": 4,
+    "estimated": 18.8,
+    "share": 0.005
+   },
+   "held-out:da17f59c700d": {
+    "pool": 82,
+    "judged": 10,
+    "real": 4,
+    "estimated": 32.8,
+    "share": 0.0127
+   },
+   "held-out:e39a19f9b2b4": {
+    "pool": 72,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "sign": {
+    "pool": 1692,
+    "judged": 10,
+    "real": 1,
+    "estimated": 169.2,
+    "share": 0.0119
+   },
+   "simulation": {
+    "pool": 103,
+    "judged": 10,
+    "real": 3,
+    "estimated": 30.9,
+    "share": 0.0019
+   },
+   "social network": {
+    "pool": 35,
+    "judged": 10,
+    "real": 6,
+    "estimated": 21.0,
+    "share": 0.007
+   },
+   "strength": {
+    "pool": 117,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:e7866e6303be": {
+    "pool": 13,
+    "judged": 10,
+    "real": 1,
+    "estimated": 1.3,
+    "share": 0.0002
+   },
+   "symbol": {
+    "pool": 118,
+    "judged": 10,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "system": {
+    "pool": 3442,
+    "judged": 10,
+    "real": 2,
+    "estimated": 688.4,
+    "share": 0.0031
+   },
+   "held-out:ee104561c1ce": {
+    "pool": 65,
+    "judged": 10,
+    "real": 3,
+    "estimated": 19.5,
+    "share": 0.0037
+   },
+   "transformer": {
+    "pool": 48,
+    "judged": 10,
+    "real": 4,
+    "estimated": 19.2,
+    "share": 0.011
+   },
+   "held-out:f151e0c23aaf": {
+    "pool": 62,
+    "judged": 10,
+    "real": 3,
+    "estimated": 18.6,
+    "share": 0.0206
+   },
+   "user": {
+    "pool": 579,
+    "judged": 10,
+    "real": 4,
+    "estimated": 231.6,
+    "share": 0.0026
+   },
+   "user interface": {
+    "pool": 157,
+    "judged": 10,
+    "real": 4,
+    "estimated": 62.8,
+    "share": 0.0062
+   },
+   "held-out:f6604b2573e2": {
+    "pool": 9,
+    "judged": 9,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.0048
+   },
+   "held-out:f66e6d2190f6": {
+    "pool": 91,
+    "judged": 10,
+    "real": 1,
+    "estimated": 9.1,
+    "share": 0.0019
+   },
+   "held-out:ff37e32092ff": {
+    "pool": 86,
+    "judged": 10,
+    "real": 8,
+    "estimated": 68.8,
+    "share": 0.0042
+   }
+  },
+  "by_decade": {
+   "1950": {
+    "pool": 1894,
+    "judged": 39,
+    "real": 11,
+    "estimated": 534.2,
+    "share": 0.0141
+   },
+   "1960": {
+    "pool": 4394,
+    "judged": 56,
+    "real": 7,
+    "estimated": 549.2,
+    "share": 0.0065
+   },
+   "1970": {
+    "pool": 6838,
+    "judged": 85,
+    "real": 15,
+    "estimated": 1206.7,
+    "share": 0.0087
+   },
+   "1980": {
+    "pool": 9885,
+    "judged": 101,
+    "real": 24,
+    "estimated": 2348.9,
+    "share": 0.0107
+   },
+   "1990": {
+    "pool": 12911,
+    "judged": 130,
+    "real": 28,
+    "estimated": 2780.8,
+    "share": 0.0093
+   },
+   "2000": {
+    "pool": 13629,
+    "judged": 145,
+    "real": 21,
+    "estimated": 1973.9,
+    "share": 0.0062
+   },
+   "2010": {
+    "pool": 16133,
+    "judged": 169,
+    "real": 30,
+    "estimated": 2863.8,
+    "share": 0.0078
+   },
+   "2020": {
+    "pool": 19291,
+    "judged": 224,
+    "real": 45,
+    "estimated": 3875.4,
+    "share": 0.0087
+   }
+  },
+  "combined_loss_by_word": {
+   "affordance": 0.0029,
+   "agency": 0.0293,
+   "agent": 0.0054,
+   "alignment": 0.0026,
+   "held-out:02b12c17f936": 0.0649,
+   "held-out:07afa72fe9fc": 0.0014,
+   "artificial intelligence": 0.0075,
+   "attention": 0.0006,
+   "behavior": 0.0017,
+   "held-out:10c5166f4af0": 0.0084,
+   "cloud": 0.0183,
+   "cognition": 0.0042,
+   "complexity": 0.0014,
+   "component": 0.0027,
+   "computation": 0.0033,
+   "consciousness": 0.0049,
+   "control": 0.0025,
+   "held-out:11ee3fc840ad": 0.0016,
+   "held-out:11f8f1ec4ec9": 0.0054,
+   "held-out:15a9a9ab2b92": 0.0139,
+   "held-out:164ebb5df0ea": 0.0068,
+   "held-out:19d5e41de2db": 0.0057,
+   "embedding": 0.0017,
+   "embodiment": 0.0029,
+   "emergence": 0.0044,
+   "held-out:1b596f30c66f": 0.0054,
+   "experience": 0.0018,
+   "feedback": 0.0013,
+   "feedback loop": 0.0,
+   "held-out:1c5d119c45e3": 0.0083,
+   "held-out:2c676bb34422": 0.0027,
+   "held-out:32a54748ce0a": 0.0021,
+   "fusion": 0.0043,
+   "held-out:34711782a046": 0.0028,
+   "held-out:3cff64e5f947": 0.0375,
+   "held-out:50fa17396b00": 0.0011,
+   "hallucination": 0.0048,
+   "having": 0.0009,
+   "held-out:5350e5a87b0b": 0.004,
+   "held-out:5ff5c82d203d": 0.006,
+   "image": 0.0021,
+   "information": 0.01,
+   "information processing": 0.0543,
+   "held-out:67415e178146": 0.0042,
+   "intelligence": 0.0092,
+   "intentionality": 0.0279,
+   "interface": 0.0071,
+   "interpretation": 0.0039,
+   "held-out:6b293b43d2b1": 0.0044,
+   "learning": 0.0056,
+   "meaning": 0.0119,
+   "medium": 0.0192,
+   "held-out:779d6b6eedf0": 0.004,
+   "memory": 0.0017,
+   "mental representation": 0.0015,
+   "held-out:7b1df4aa54d0": 0.0059,
+   "held-out:7b5614820786": 0.0031,
+   "mind": 0.0074,
+   "held-out:7d0f24edc7fd": 0.0014,
+   "held-out:7dc7c59f90ed": 0.0024,
+   "model": 0.002,
+   "network": 0.0035,
+   "neural network": 0.0115,
+   "held-out:861f9da96b43": 0.0084,
+   "held-out:86a125382979": 0.0098,
+   "held-out:912b00c7764c": 0.0039,
+   "held-out:9384bbe72d46": 0.0079,
+   "perception": 0.0028,
+   "held-out:96da49af8e67": 0.0102,
+   "held-out:ab139acf9360": 0.0027,
+   "held-out:b3ea1fd57831": 0.0111,
+   "platform": 0.0011,
+   "held-out:baa86b4dabfd": 0.0037,
+   "presence": 0.0008,
+   "held-out:bafa5557897f": 0.0029,
+   "held-out:bd686ff4fd74": 0.0049,
+   "prompt": 0.1427,
+   "held-out:c0dcb92b6a30": 0.0019,
+   "held-out:d4bed87430ea": 0.0005,
+   "held-out:d573b31a4663": 0.0068,
+   "representation": 0.0021,
+   "held-out:d7b1fc674098": 0.0081,
+   "held-out:da17f59c700d": 0.014,
+   "held-out:e39a19f9b2b4": 0.0014,
+   "sign": 0.0137,
+   "simulation": 0.0026,
+   "social network": 0.008,
+   "strength": 0.0061,
+   "held-out:e7866e6303be": 0.0031,
+   "symbol": 0.0024,
+   "system": 0.0063,
+   "held-out:ee104561c1ce": 0.0078,
+   "transformer": 0.0133,
+   "held-out:f151e0c23aaf": 0.0206,
+   "user": 0.0047,
+   "user interface": 0.0085,
+   "held-out:f6604b2573e2": 0.0048,
+   "held-out:f66e6d2190f6": 0.0028,
+   "held-out:ff37e32092ff": 0.007
+  }
+ },
+ "recall": {
+  "pooled_missed_share": 0.0021,
+  "passes_pooled": true,
+  "words_over_two_percent": [
+   "intentionality"
+  ],
+  "by_word": {
+   "affordance": {
+    "pool": 5,
+    "judged": 5,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.0022
+   },
+   "agency": {
+    "pool": 27,
+    "judged": 20,
+    "real": 15,
+    "estimated": 20.2,
+    "share": 0.0021
+   },
+   "agent": {
+    "pool": 68,
+    "judged": 20,
+    "real": 17,
+    "estimated": 57.8,
+    "share": 0.0027
+   },
+   "alignment": {
+    "pool": 8,
+    "judged": 8,
+    "real": 7,
+    "estimated": 7.0,
+    "share": 0.0021
+   },
+   "held-out:02b12c17f936": {
+    "pool": 6,
+    "judged": 6,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0007
+   },
+   "held-out:07afa72fe9fc": {
+    "pool": 48,
+    "judged": 20,
+    "real": 19,
+    "estimated": 45.6,
+    "share": 0.0014
+   },
+   "artificial intelligence": {
+    "pool": 14,
+    "judged": 14,
+    "real": 13,
+    "estimated": 13.0,
+    "share": 0.0019
+   },
+   "attention": {
+    "pool": 30,
+    "judged": 20,
+    "real": 18,
+    "estimated": 27.0,
+    "share": 0.0006
+   },
+   "behavior": {
+    "pool": 128,
+    "judged": 20,
+    "real": 19,
+    "estimated": 121.6,
+    "share": 0.0017
+   },
+   "held-out:10c5166f4af0": {
+    "pool": 5,
+    "judged": 5,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.0029
+   },
+   "cloud": {
+    "pool": 6,
+    "judged": 6,
+    "real": 4,
+    "estimated": 4.0,
+    "share": 0.0009
+   },
+   "cognition": {
+    "pool": 23,
+    "judged": 20,
+    "real": 18,
+    "estimated": 20.7,
+    "share": 0.0022
+   },
+   "complexity": {
+    "pool": 17,
+    "judged": 17,
+    "real": 15,
+    "estimated": 15.0,
+    "share": 0.0009
+   },
+   "component": {
+    "pool": 59,
+    "judged": 20,
+    "real": 20,
+    "estimated": 59.0,
+    "share": 0.0018
+   },
+   "computation": {
+    "pool": 19,
+    "judged": 19,
+    "real": 12,
+    "estimated": 12.0,
+    "share": 0.0016
+   },
+   "consciousness": {
+    "pool": 58,
+    "judged": 20,
+    "real": 19,
+    "estimated": 55.1,
+    "share": 0.0049
+   },
+   "control": {
+    "pool": 194,
+    "judged": 20,
+    "real": 19,
+    "estimated": 184.3,
+    "share": 0.0025
+   },
+   "held-out:11ee3fc840ad": {
+    "pool": 19,
+    "judged": 19,
+    "real": 19,
+    "estimated": 19.0,
+    "share": 0.0014
+   },
+   "held-out:11f8f1ec4ec9": {
+    "pool": 2,
+    "judged": 2,
+    "real": 2,
+    "estimated": 2.0,
+    "share": 0.0011
+   },
+   "held-out:15a9a9ab2b92": {
+    "pool": 34,
+    "judged": 20,
+    "real": 19,
+    "estimated": 32.3,
+    "share": 0.0016
+   },
+   "held-out:164ebb5df0ea": {
+    "pool": 1,
+    "judged": 1,
+    "real": 1,
+    "estimated": 1.0,
+    "share": 0.0017
+   },
+   "held-out:19d5e41de2db": {
+    "pool": 15,
+    "judged": 15,
+    "real": 15,
+    "estimated": 15.0,
+    "share": 0.0037
+   },
+   "embedding": {
+    "pool": 8,
+    "judged": 8,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.001
+   },
+   "embodiment": {
+    "pool": 2,
+    "judged": 2,
+    "real": 2,
+    "estimated": 2.0,
+    "share": 0.0012
+   },
+   "emergence": {
+    "pool": 7,
+    "judged": 7,
+    "real": 6,
+    "estimated": 6.0,
+    "share": 0.0009
+   },
+   "held-out:1b596f30c66f": {
+    "pool": 36,
+    "judged": 20,
+    "real": 17,
+    "estimated": 30.6,
+    "share": 0.0032
+   },
+   "experience": {
+    "pool": 125,
+    "judged": 20,
+    "real": 20,
+    "estimated": 125.0,
+    "share": 0.0018
+   },
+   "feedback": {
+    "pool": 12,
+    "judged": 12,
+    "real": 12,
+    "estimated": 12.0,
+    "share": 0.0007
+   },
+   "feedback loop": {
+    "pool": 0,
+    "judged": 0,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:1c5d119c45e3": {
+    "pool": 12,
+    "judged": 12,
+    "real": 12,
+    "estimated": 12.0,
+    "share": 0.0077
+   },
+   "held-out:2c676bb34422": {
+    "pool": 8,
+    "judged": 8,
+    "real": 7,
+    "estimated": 7.0,
+    "share": 0.0027
+   },
+   "held-out:32a54748ce0a": {
+    "pool": 3,
+    "judged": 3,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.0006
+   },
+   "fusion": {
+    "pool": 6,
+    "judged": 6,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0011
+   },
+   "held-out:34711782a046": {
+    "pool": 21,
+    "judged": 20,
+    "real": 20,
+    "estimated": 21.0,
+    "share": 0.0013
+   },
+   "held-out:3cff64e5f947": {
+    "pool": 0,
+    "judged": 0,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:50fa17396b00": {
+    "pool": 5,
+    "judged": 5,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0011
+   },
+   "hallucination": {
+    "pool": 6,
+    "judged": 6,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0048
+   },
+   "having": {
+    "pool": 8,
+    "judged": 8,
+    "real": 8,
+    "estimated": 8.0,
+    "share": 0.0004
+   },
+   "held-out:5350e5a87b0b": {
+    "pool": 17,
+    "judged": 17,
+    "real": 17,
+    "estimated": 17.0,
+    "share": 0.0033
+   },
+   "held-out:5ff5c82d203d": {
+    "pool": 6,
+    "judged": 6,
+    "real": 6,
+    "estimated": 6.0,
+    "share": 0.0034
+   },
+   "image": {
+    "pool": 113,
+    "judged": 20,
+    "real": 20,
+    "estimated": 113.0,
+    "share": 0.0021
+   },
+   "information": {
+    "pool": 113,
+    "judged": 20,
+    "real": 18,
+    "estimated": 101.7,
+    "share": 0.0009
+   },
+   "information processing": {
+    "pool": 7,
+    "judged": 7,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0017
+   },
+   "held-out:67415e178146": {
+    "pool": 4,
+    "judged": 4,
+    "real": 4,
+    "estimated": 4.0,
+    "share": 0.0024
+   },
+   "intelligence": {
+    "pool": 57,
+    "judged": 20,
+    "real": 19,
+    "estimated": 54.1,
+    "share": 0.0026
+   },
+   "intentionality": {
+    "pool": 26,
+    "judged": 20,
+    "real": 20,
+    "estimated": 26.0,
+    "share": 0.0236
+   },
+   "interface": {
+    "pool": 73,
+    "judged": 20,
+    "real": 18,
+    "estimated": 65.7,
+    "share": 0.002
+   },
+   "interpretation": {
+    "pool": 64,
+    "judged": 20,
+    "real": 14,
+    "estimated": 44.8,
+    "share": 0.0018
+   },
+   "held-out:6b293b43d2b1": {
+    "pool": 3,
+    "judged": 3,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.003
+   },
+   "learning": {
+    "pool": 142,
+    "judged": 20,
+    "real": 18,
+    "estimated": 127.8,
+    "share": 0.0012
+   },
+   "meaning": {
+    "pool": 99,
+    "judged": 20,
+    "real": 20,
+    "estimated": 99.0,
+    "share": 0.0029
+   },
+   "medium": {
+    "pool": 14,
+    "judged": 14,
+    "real": 10,
+    "estimated": 10.0,
+    "share": 0.0012
+   },
+   "held-out:779d6b6eedf0": {
+    "pool": 4,
+    "judged": 4,
+    "real": 2,
+    "estimated": 2.0,
+    "share": 0.004
+   },
+   "memory": {
+    "pool": 83,
+    "judged": 20,
+    "real": 17,
+    "estimated": 70.5,
+    "share": 0.0017
+   },
+   "mental representation": {
+    "pool": 1,
+    "judged": 1,
+    "real": 1,
+    "estimated": 1.0,
+    "share": 0.0015
+   },
+   "held-out:7b1df4aa54d0": {
+    "pool": 12,
+    "judged": 12,
+    "real": 10,
+    "estimated": 10.0,
+    "share": 0.0018
+   },
+   "held-out:7b5614820786": {
+    "pool": 6,
+    "judged": 6,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0031
+   },
+   "mind": {
+    "pool": 72,
+    "judged": 20,
+    "real": 16,
+    "estimated": 57.6,
+    "share": 0.0029
+   },
+   "held-out:7d0f24edc7fd": {
+    "pool": 6,
+    "judged": 6,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0014
+   },
+   "held-out:7dc7c59f90ed": {
+    "pool": 6,
+    "judged": 6,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0024
+   },
+   "model": {
+    "pool": 332,
+    "judged": 20,
+    "real": 19,
+    "estimated": 315.4,
+    "share": 0.002
+   },
+   "network": {
+    "pool": 267,
+    "judged": 20,
+    "real": 18,
+    "estimated": 240.3,
+    "share": 0.0035
+   },
+   "neural network": {
+    "pool": 84,
+    "judged": 20,
+    "real": 19,
+    "estimated": 79.8,
+    "share": 0.0054
+   },
+   "held-out:861f9da96b43": {
+    "pool": 28,
+    "judged": 20,
+    "real": 20,
+    "estimated": 28.0,
+    "share": 0.0023
+   },
+   "held-out:86a125382979": {
+    "pool": 36,
+    "judged": 20,
+    "real": 18,
+    "estimated": 32.4,
+    "share": 0.0043
+   },
+   "held-out:912b00c7764c": {
+    "pool": 33,
+    "judged": 20,
+    "real": 20,
+    "estimated": 33.0,
+    "share": 0.0039
+   },
+   "held-out:9384bbe72d46": {
+    "pool": 6,
+    "judged": 6,
+    "real": 6,
+    "estimated": 6.0,
+    "share": 0.0079
+   },
+   "perception": {
+    "pool": 63,
+    "judged": 20,
+    "real": 19,
+    "estimated": 59.9,
+    "share": 0.0017
+   },
+   "held-out:96da49af8e67": {
+    "pool": 6,
+    "judged": 6,
+    "real": 6,
+    "estimated": 6.0,
+    "share": 0.005
+   },
+   "held-out:ab139acf9360": {
+    "pool": 48,
+    "judged": 20,
+    "real": 18,
+    "estimated": 43.2,
+    "share": 0.0027
+   },
+   "held-out:b3ea1fd57831": {
+    "pool": 36,
+    "judged": 20,
+    "real": 18,
+    "estimated": 32.4,
+    "share": 0.0042
+   },
+   "platform": {
+    "pool": 17,
+    "judged": 17,
+    "real": 15,
+    "estimated": 15.0,
+    "share": 0.0011
+   },
+   "held-out:baa86b4dabfd": {
+    "pool": 6,
+    "judged": 6,
+    "real": 6,
+    "estimated": 6.0,
+    "share": 0.0012
+   },
+   "presence": {
+    "pool": 6,
+    "judged": 6,
+    "real": 6,
+    "estimated": 6.0,
+    "share": 0.0003
+   },
+   "held-out:bafa5557897f": {
+    "pool": 9,
+    "judged": 9,
+    "real": 9,
+    "estimated": 9.0,
+    "share": 0.0029
+   },
+   "held-out:bd686ff4fd74": {
+    "pool": 46,
+    "judged": 20,
+    "real": 20,
+    "estimated": 46.0,
+    "share": 0.0036
+   },
+   "prompt": {
+    "pool": 7,
+    "judged": 7,
+    "real": 4,
+    "estimated": 4.0,
+    "share": 0.0023
+   },
+   "held-out:c0dcb92b6a30": {
+    "pool": 27,
+    "judged": 20,
+    "real": 14,
+    "estimated": 18.9,
+    "share": 0.0019
+   },
+   "held-out:d4bed87430ea": {
+    "pool": 5,
+    "judged": 5,
+    "real": 5,
+    "estimated": 5.0,
+    "share": 0.0005
+   },
+   "held-out:d573b31a4663": {
+    "pool": 3,
+    "judged": 3,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.0003
+   },
+   "representation": {
+    "pool": 74,
+    "judged": 20,
+    "real": 17,
+    "estimated": 62.9,
+    "share": 0.0021
+   },
+   "held-out:d7b1fc674098": {
+    "pool": 13,
+    "judged": 13,
+    "real": 12,
+    "estimated": 12.0,
+    "share": 0.0032
+   },
+   "held-out:da17f59c700d": {
+    "pool": 23,
+    "judged": 20,
+    "real": 3,
+    "estimated": 3.5,
+    "share": 0.0013
+   },
+   "held-out:e39a19f9b2b4": {
+    "pool": 6,
+    "judged": 6,
+    "real": 6,
+    "estimated": 6.0,
+    "share": 0.0014
+   },
+   "sign": {
+    "pool": 30,
+    "judged": 20,
+    "real": 17,
+    "estimated": 25.5,
+    "share": 0.0018
+   },
+   "simulation": {
+    "pool": 13,
+    "judged": 13,
+    "real": 12,
+    "estimated": 12.0,
+    "share": 0.0007
+   },
+   "social network": {
+    "pool": 3,
+    "judged": 3,
+    "real": 3,
+    "estimated": 3.0,
+    "share": 0.001
+   },
+   "strength": {
+    "pool": 63,
+    "judged": 20,
+    "real": 19,
+    "estimated": 59.9,
+    "share": 0.0061
+   },
+   "held-out:e7866e6303be": {
+    "pool": 25,
+    "judged": 20,
+    "real": 20,
+    "estimated": 25.0,
+    "share": 0.0029
+   },
+   "symbol": {
+    "pool": 34,
+    "judged": 20,
+    "real": 10,
+    "estimated": 17.0,
+    "share": 0.0024
+   },
+   "system": {
+    "pool": 892,
+    "judged": 20,
+    "real": 16,
+    "estimated": 713.6,
+    "share": 0.0032
+   },
+   "held-out:ee104561c1ce": {
+    "pool": 24,
+    "judged": 20,
+    "real": 18,
+    "estimated": 21.6,
+    "share": 0.0041
+   },
+   "transformer": {
+    "pool": 10,
+    "judged": 10,
+    "real": 4,
+    "estimated": 4.0,
+    "share": 0.0023
+   },
+   "held-out:f151e0c23aaf": {
+    "pool": 0,
+    "judged": 0,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "user": {
+    "pool": 193,
+    "judged": 20,
+    "real": 20,
+    "estimated": 193.0,
+    "share": 0.0021
+   },
+   "user interface": {
+    "pool": 27,
+    "judged": 20,
+    "real": 18,
+    "estimated": 24.3,
+    "share": 0.0024
+   },
+   "held-out:f6604b2573e2": {
+    "pool": 0,
+    "judged": 0,
+    "real": 0,
+    "estimated": 0.0,
+    "share": 0.0
+   },
+   "held-out:f66e6d2190f6": {
+    "pool": 5,
+    "judged": 5,
+    "real": 4,
+    "estimated": 4.0,
+    "share": 0.0009
+   },
+   "held-out:ff37e32092ff": {
+    "pool": 45,
+    "judged": 20,
+    "real": 20,
+    "estimated": 45.0,
+    "share": 0.0028
+   }
+  }
+ },
+ "calibration": {
+  "audit": "data/review/usages_audit",
+  "items": 60,
+  "agree": 57,
+  "passes": true,
+  "disagreements": [
+   "U0732",
+   "U0740",
+   "U1706"
+  ]
+ },
+ "corrected_for_judge_error": {
+  "kept": {
+   "observed": 0.0278,
+   "corrected": 0.0078,
+   "interval": [
+    0.0,
+    0.0922
+   ],
+   "calibration": {
+    "both": 1,
+    "author_only": 0,
+    "judges_only": 0,
+    "neither": 29
+   }
+  },
+  "left_out": {
+   "observed": 0.1907,
+   "corrected": 0.0176,
+   "interval": [
+    0.0,
+    0.2031
+   ],
+   "calibration": {
+    "both": 7,
+    "author_only": 0,
+    "judges_only": 1,
+    "neither": 7
+   }
+  },
+  "missed": {
+   "observed": 0.8819,
+   "corrected": 0.9322,
+   "interval": [
+    0.0,
+    1.0
+   ],
+   "calibration": {
+    "both": 13,
+    "author_only": 1,
+    "judges_only": 1,
+    "neither": 0
+   }
+  }
+ }
+}

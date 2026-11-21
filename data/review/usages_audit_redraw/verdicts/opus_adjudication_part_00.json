@@ -1,0 +1,252 @@
+{
+ "U0023": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun in a table-of-contents entry; the codebook treats table-of-contents headings as ordinary uses, so it should have been kept."
+ },
+ "U0035": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Golden held-out:ee104561c1ce\" is a capitalised, quoted name for one specific held-out:ee104561c1ce (Bernoulli's), like the name of a specific law. That makes it a coined name, so leaving it out was correct."
+ },
+ "U0351": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This chapter title is listed with its author (David Wiggins) in an edited volume of chapters by other authors. That makes it the title of another work, so it is a name and leaving it out was correct."
+ },
+ "U0255": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "In the placeholder \"[symbol omitted]\", \"symbol\" is the ordinary noun meaning a written character. It is not a name, code or OCR damage, and the marks cover exactly the word, so it should have been kept."
+ },
+ "U0423": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" is part of the hyphenated word \"medium-density\", and hyphenated parts count in any part of speech. It isn't in a name and the marks cover just the word, so the program should have kept it."
+ },
+ "U0410": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is part of the hyphenated word \"held-out:02b12c17f936-moderns\", so any part of speech counts. It describes the dispute and is not a name, and the marks cover exactly that part."
+ },
+ "U0638": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in the volume's own table of contents (titles with no authors or references). Table-of-contents headings count as ordinary uses, so the program should have kept it."
+ },
+ "U0686": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "The abstract is describing how its own work is laid out (\"Part Two is entitled ...\"), as dissertation abstracts often do. That makes this a section heading of the work itself, which counts as an ordinary use of the noun. It is not the title of a cited work, so the word should have been kept."
+ },
+ "U0772": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Dynamic Residual Attention Gate (DRAG)\" is the coined name of one specific module made in this paper, with its own acronym. That makes it a name, like BERT, so leaving \"Attention\" out was correct."
+ },
+ "U0477": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This is the title of the book the abstract describes, not a cited work, so it counts as the abstract's own title. 'held-out:15a9a9ab2b92' is an ordinary noun use and should have been kept. Borderline."
+ },
+ "U1079": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Their Careers as held-out:b3ea1fd57831-Historians\" is the title of a talk in the conference program, listed with its presenters (Fye, Roland). That makes it the title of another work, so it is a name. It is not one of the program's own headings."
+ },
+ "U1109": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a verbal gerund with a direct object (\"held-out:7d0f24edc7fd valid information\"), so it works as a verb, not as a noun or noun modifier. Leaving it out as VERB was correct."
+ },
+ "U1085": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Thyrotropin Releasing held-out:5350e5a87b0b is a generic name for a held-out:5350e5a87b0b, and the stimulation test is a standard clinical procedure, not a coined instrument name. 'held-out:5350e5a87b0b' is an ordinary noun use and should have been kept."
+ },
+ "U1123": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:d7b1fc674098 DDL\" (held-out:d7b1fc674098 Data Description Language) is the name of one specific language standard set by the CODASYL committees, given alongside the named DMCL. That makes it a coined name, so this is not a use."
+ },
+ "U1197": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Inside 'Fuzzy Logic Transformer Design Algorithm (FLTDA)', the coined name of one specific algorithm with its own acronym, not a generic technique term."
+ },
+ "U1339": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in the volume's own table-of-contents entry (no authors or reference list), which the codebook counts as an ordinary use; Kolmogorov complexity is a general concept, not a name."
+ },
+ "U1630": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Here \"Generative Pre-trained Transformer\" spells out GPT inside the product name GPT-4o-mini, one specific model. That makes it a coined name, like BERT, not a generic term, so leaving it out was correct."
+ },
+ "U1388": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(con)fusion\" is deliberate wordplay: the brackets make \"con\" optional, so \"cross-modal fusion\" is one intended reading. It is a noun use of fusion, and the marks cover just that word."
+ },
+ "U1684": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "A noun in a heading of the abstracted volume's own table of contents. The codebook counts these as ordinary uses, not cited titles, so the program should have kept it."
+ },
+ "U1852": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The quoted heading belongs to another cited work (a section of Kurath and McDavid's book). Like a chapter title, it counts as a name, so leaving it out was correct."
+ },
+ "U1837": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun in 'CLOS metaobject held-out:c0dcb92b6a30' (metaobject held-out:c0dcb92b6a30 is a general technique; only CLOS is a name), lowercase like 'HTTP held-out:c0dcb92b6a30'; span exact."
+ },
+ "U1960": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "A noun in \"distributed simulation\". The entry is a heading in the proceedings' own table of contents, with no authors or citation, so it is an ordinary use."
+ },
+ "U1925": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "This is a part title from the volume's table of contents, which the abstract appears to describe. The codebook counts table-of-contents headings as ordinary uses, so this noun use should have been kept."
+ },
+ "U2014": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "HWMP is the name of one specific held-out:c0dcb92b6a30 (IEEE 802.11s), not a generic term, so 'held-out:c0dcb92b6a30' sits inside a coined name even though it is lowercase."
+ },
+ "U2046": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "'schêma' is the transliterated spelling of the noun held-out:d7b1fc674098. It is used here as a term, glossed as 'stance', inside an English sentence. Under the codebook, spelling variants and every sense of a word count, and 'not English' applies only to whole sentences, so tagging it as a foreign word (X) was a mistake."
+ },
+ "U2060": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "A descriptive label for an experimental condition (environmental complexity plus training), not a coined name. Capitals and an abbreviation don't make it one, so this noun use should have been kept."
+ },
+ "U2178": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Image Transformer Model\" is capitalised and introduced as the name of the study's own model, so it is a coined system name and leaving it out was correct. Borderline, since the phrase can also be read as generic."
+ },
+ "U2200": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:baa86b4dabfd Elimination Labs\" is capitalised and listed beside the named \"Gaza Resilience Lab\" as one of the TD labs, so it reads as a specific lab or programme name. Leaving it out was correct."
+ },
+ "U2249": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"The Strengths-Based School Counseling (SBSC) framework\" is one specific framework (Galassi & Akos's model), named with capitals and its own acronym and introduced with \"the\". So \"Strengths\" sits inside a name. This is a close call, because strengths-based counseling in general would be a generic term."
+ },
+ "U2226": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Seifert-Van Kampen held-out:ee104561c1ce\" names one specific held-out:ee104561c1ce, like a named law or model, so \"held-out:ee104561c1ce\" here is inside a name."
+ },
+ "U2344": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a noun use of 'complexity' in the volume's own table of contents. The chapters are listed without authors and are not cited from outside, so the codebook counts these headings as ordinary uses."
+ },
+ "U2337": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Table-of-contents heading of the volume this abstract describes, which the codebook counts as an ordinary use. Noun 'emergence', should have been kept. The chapter belongs to this volume, so it is not another cited work."
+ },
+ "U2737": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun at the head of a descriptive possessive phrase 'Schrödinger's diffusion held-out:1b596f30c66f'. Not a fixed coined name, and the span is exact."
+ },
+ "U2468": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "The title is 'Ceremonies and Rituals' (Yili). 'held-out:02b12c17f936-held-out:da17f59c700d' is a descriptive modifier naming the version written in held-out:02b12c17f936 characters, so 'held-out:da17f59c700d' is an ordinary noun use inside a hyphenated word and should have been kept."
+ },
+ "U2769": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67 deixis\" is a slip for \"person deixis\" (grammatical person, likely from Indonesian \"deiksis held-out:96da49af8e67\"). Not a use of English held-out:96da49af8e67, so leaving it out was correct."
+ },
+ "U2977": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(en)held-out:2c676bb34422\" deliberately reads as both \"held-out:2c676bb34422\" and \"enframing\". With \"(en)\" in brackets, \"held-out:2c676bb34422\" is a whole noun, not a name, and the marks cover exactly that word."
+ },
+ "U3000": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a table-of-contents list of chapter titles, with no authors given and nothing cited. The codebook counts table-of-contents headings as ordinary uses, so plural noun \"models\" should have been kept."
+ },
+ "U2874": {
+  "verdict": "wrong",
+  "reason": "part_of_speech",
+  "note": "Latin noun held-out:96da49af8e67 in the quoted idea 'una held-out:96da49af8e67 Christi', in an English sentence about the word held-out:96da49af8e67. It works as a mention of the noun and is not a name, so the X tag is wrong and it should be kept."
+ },
+ "U3185": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "'Remak-Schmidt-Ore held-out:ee104561c1ce' names one specific result. The codebook treats the name of a specific law as a name, and a named held-out:ee104561c1ce is the same kind of thing, so the word inside it is not a use."
+ },
+ "U3292": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "This is a table-of-contents chapter heading of the book itself, which the codebook counts as an ordinary use. 'Perception' is a noun, so the program should have kept it."
+ },
+ "U3465": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The sidebar heading is the authors' own, but the marked SIGNS is part of the title of a specific video campaign, \"The Seven Signs of Terrorism\", that the heading names. That makes it a name, not a use."
+ },
+ "U3484": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The author wrote the noun \"transformer\" in the generic term \"wavelet transformer\", not in a name. The author probably meant \"transform\", but the codebook counts every sense of the word, so this is a use."
+ },
+ "U3612": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "LDSP is a feature-descriptor technique (like LBP) spelled out from an acronym, not a coined name of one system; \"Strength\" is a noun modifier and the marks are exact."
+ },
+ "U3515": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"symbol\" is the real noun meaning a written sign, in a bracketed note describing a math glyph. It is not an abbreviation, a piece of another word, OCR damage or a name, so it counts as a use."
+ },
+ "U3636": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"zone_alignment\" is the authors' coined label for their own technique (\"called zone_alignment\"), written like an identifier. The word sits inside that name, so it isn't a use."
+ },
+ "U3665": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Inside the coined name of one specific proposed module (CAFM), not a generic technique, so leaving it out as a name was correct."
+ },
+ "U3679": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'interfaces' in the abstract's own table-of-contents headings. The codebook counts these as ordinary uses, and this is not a cited title. The span is exact."
+ },
+ "U3795": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "Title on its own with no citation context, so it is most likely the abstract's own title. That makes it an ordinary noun use of 'held-out:11ee3fc840ad'; the ORG label is a mistake."
+ },
+ "U3949": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the hyphenated word 'medium-density', so any part of speech counts; the marks cover exactly 'medium'."
+ },
+ "U3850": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun in what reads as the abstract's own title header followed by its affiliation; no authors or citation details mark it as another work's title. The marks cover the whole word \"held-out:15a9a9ab2b92\"; \"(s)\" sits outside them."
+ }
+}

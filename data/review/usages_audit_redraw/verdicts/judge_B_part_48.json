@@ -1,0 +1,252 @@
+{
+ "U2403": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:6b293b43d2b1' in a list of community types; not part of a name."
+ },
+ "U2401": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:86a125382979\" as noun modifier in \"held-out:86a125382979 development\"; generic use, not a name, span correct."
+ },
+ "U2405": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs\" is a plural noun (\"signs of decreasing\" = indications); the marks cover the whole word, and it isn't in a name."
+ },
+ "U2407": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:3cff64e5f947 of first principles\" is a noun use (preceded by 'the', followed by 'of'), not in a name; span covers the whole word."
+ },
+ "U2404": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun 'held-out:861f9da96b43' (local held-out:861f9da96b43), not a name; span covers the word exactly."
+ },
+ "U2400": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:11f8f1ec4ec9 Logic\" is a generic non-monotonic reasoning formalism, not a coined product name. It is a noun-modifier use of held-out:11f8f1ec4ec9, so it should have been kept."
+ },
+ "U2402": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cognition\" is a noun in the generic phrase \"adversarial cognition\". It is a coined concept, not a name, and the marks cover exactly the word."
+ },
+ "U2406": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"anti_anxiety\" is a corrupted \"anti-held-out:07afa72fe9fc\" (underscore for hyphen). held-out:07afa72fe9fc is a noun used as part of a hyphenated word, and the marks cover exactly the word. It is not a code identifier."
+ },
+ "U2408": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun use of 'mental representation', generic term, not a name; marks cover the full phrase."
+ },
+ "U2411": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretation\" is a noun here (quantum field theory interpretation), a generic use, not a name."
+ },
+ "U2409": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:baa86b4dabfd\" is used as an ordinary noun, not inside a name; the marks cover exactly the word."
+ },
+ "U2413": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:67415e178146' (non-DNA forms of held-out:67415e178146); not in a name; span covers exactly the word."
+ },
+ "U2414": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" is used as an adjective modifying \"held-out:ab139acf9360\"; not part of a name; the span covers the word exactly."
+ },
+ "U2410": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Christ the held-out:b3ea1fd57831\" is a descriptive epithet (Christus medicus). \"held-out:b3ea1fd57831\" is a common noun used as a concept, not part of a personal name, so it should have been kept."
+ },
+ "U2412": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"symbol: see text\" is a placeholder for a missing IPA character (a conversion artifact). The authors did not use the word, so it is not a real use."
+ },
+ "U2415": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is a generic term, not a name; noun use of intelligence, marks cover the word exactly."
+ },
+ "U2417": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"advertising agencies\" is a generic plural noun use of agency; span covers the word correctly."
+ },
+ "U2416": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is an adjective modifying \"GSR\" (held-out:32a54748ce0a GSR responses); a genuine use, marks cover the word exactly."
+ },
+ "U2418": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d7b1fc674098\" is a plural noun, a generic cognitive term for general event knowledge. It is not a name, and the marks cover the whole word."
+ },
+ "U2419": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"error held-out:bd686ff4fd74\" is a noun use of held-out:bd686ff4fd74 (noun modifier-head), not a name; span covers exactly the word."
+ },
+ "U2420": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"non-held-out:f151e0c23aaf\" is a use of the adjective held-out:f151e0c23aaf as part of a hyphenated word; the marks cover the word exactly."
+ },
+ "U2422": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"person perception\" is a noun use of perception, outside any name; the marks cover exactly the word."
+ },
+ "U2421": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"fault simulation\" is a noun use (noun modifier/compound); marks cover exactly the word. The \"Thls\" typo is elsewhere and doesn't affect it."
+ },
+ "U2423": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning\" is used as a noun (expression of affective meaning), not in a name; the marks cover exactly the word."
+ },
+ "U2424": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'affordances' in a generic sense, not in a name; the marks cover the whole word."
+ },
+ "U2425": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Title of a cited book (The Binocular held-out:7b5614820786: its Development...), so a name; leaving it out was correct."
+ },
+ "U2426": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"networks\" is a plural common noun (communication networks), not in a name; marks cover the word exactly."
+ },
+ "U2427": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'mental representation' as a concept; marks cover the whole phrase; not a name."
+ },
+ "U2428": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b Laboratory\" is an institution name in an affiliation list, so leaving it out as a name was correct."
+ },
+ "U2431": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memory loss\": memory as a noun modifier, a plain use, not in a name; marks cover the word exactly."
+ },
+ "U2430": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' in ordinary use (mental phenomenon), not in a name; span covers the word."
+ },
+ "U2429": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information gain\" is a generic feature-selection technique, not a name. Here \"information\" is a noun modifier, and the marks cover exactly the word."
+ },
+ "U2432": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"representation\" is used as an ordinary noun (news media's representation of young people), not in a name; span covers exactly the word."
+ },
+ "U2433": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"ways of living and learning\": learning is a gerund acting as a noun, so it is a use in a studied part of speech. It is not in a name. The program should have kept it."
+ },
+ "U2437": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is in the title of another work (Wilkins' book, in quotes), so it is a name and leaving it out was correct."
+ },
+ "U2436": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun 'Intelligence' in a table-of-contents chapter heading; such headings count as ordinary uses, not titles of other works."
+ },
+ "U2439": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1c5d119c45e3\" is a plain noun use (Zeus's held-out:1c5d119c45e3), not in a name; the marks cover the word exactly."
+ },
+ "U2438": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'consciousness' as a generic term (Descartes' defining property of mind); not a name, and the marks cover exactly the word."
+ },
+ "U2440": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"tour of held-out:19d5e41de2db\" is a common noun use of held-out:19d5e41de2db, not part of a name; marks cover exactly the word."
+ },
+ "U2434": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"sign\" is a noun here (a clinical sign). \"Babinski sign\" is a generic eponymous medical term, not a named test or title, so it should have been kept."
+ },
+ "U2435": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computations\" is a plural noun in a table-of-contents entry (no authors listed), so it is an ordinary use that should have been kept."
+ },
+ "U2441": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is a plain noun here (messy held-out:10c5166f4af0 of uncertainty), not in a name, and the marks cover exactly the word."
+ },
+ "U2442": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"biological held-out:67415e178146\" is a noun use, not in a name; marks cover exactly the word."
+ },
+ "U2445": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Common noun 'intelligence' (nature's inherent intelligence), not in a name; span exact."
+ },
+ "U2446": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"images\" is a plural noun, the target word, in \"AI-generated images\"; not in a name, and the marks cover exactly the word."
+ },
+ "U2447": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'held-out:912b00c7764c' (sensation), a generic use, not in a name; marks cover the word exactly."
+ },
+ "U2443": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"randomized control trial\" is a generic term. \"control\" works as a noun modifier before \"trial\", so it counts as a noun use. It isn't in a name, and the marks cover the whole word."
+ },
+ "U2444": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"held-out:861f9da96b43\" in \"held-out:861f9da96b43(s)\"; not a name, and the marks cover the word, with only the plural \"(s)\" left outside."
+ },
+ "U2449": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"memory\" is a noun modifier in \"semantic memory retrieval\"; a generic term, not a name."
+ },
+ "U2448": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"interpretation\" in \"(mis-)interpretation\"; the marks cover exactly the word, not in a name, so it should have been kept."
+ }
+}

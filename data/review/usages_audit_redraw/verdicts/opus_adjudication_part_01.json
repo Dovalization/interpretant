@@ -1,0 +1,17 @@
+{
+ "U3970": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "OCR damage, most likely of \"themes\" (\"radical themes and traditionalist assumptions\"). The text is noisy elsewhere (\"whedier\"), and in a review of Eagleton on Williams this reading fits much better than \"held-out:779d6b6eedf0\"."
+ },
+ "U4099": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun in the book's own table-of-contents heading, which counts as a use under the codebook; span is exact."
+ },
+ "U4169": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Tokamak Fusion Test Reactor\" (TFTR) names one specific machine, which the LBL beam sources were built for. The plural looks like a slip, so \"Fusion\" is inside a name and leaving it out was correct."
+ }
+}

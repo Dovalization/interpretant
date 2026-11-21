@@ -1,0 +1,252 @@
+{
+ "U0600": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "French quotation; \"même\" is the French word for \"same/itself\", not the English noun held-out:779d6b6eedf0, and the sentence is in French."
+ },
+ "U0602": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiments\" is a plural noun, a generic use of the target word, not part of a name. The marks cover the whole word."
+ },
+ "U0603": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"image\" is used as a common noun meaning a public picture or conception, not part of a name, and the marks cover the whole word."
+ },
+ "U0604": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is used as an ordinary noun (\"the emergence of the new\"). It isn't in a name, and the marks cover exactly the word."
+ },
+ "U0607": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Speaking Cognitions and Attention Scale (SCAS)\" is a named scale, so leaving out \"Cognitions\" as part of a name was correct."
+ },
+ "U0609": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signed\" is a verb (signed into law), not a noun use, so leaving it out was correct."
+ },
+ "U0606": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"neural networks\" is a generic noun use (the technique), not a name; the program should have kept it. The marked span covers the whole term."
+ },
+ "U0608": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'consciousness' is used as an ordinary noun in a quotation (Engels), not in a name; the marks cover exactly the word. It was missed but should have been kept."
+ },
+ "U0605": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is a plain noun in \"create order from held-out:10c5166f4af0\"; not in a name, and the marks cover exactly the word."
+ },
+ "U0601": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:c0dcb92b6a30\" is part of the coined name of one specific held-out:c0dcb92b6a30, MASTP (Mobile Agent Secure Transfer held-out:c0dcb92b6a30). A name would be left out, so the program was right to miss it."
+ },
+ "U0611": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:19d5e41de2db\" is a plural noun in a generic sense (procedures and held-out:19d5e41de2db), not in a name; the marks cover the whole word."
+ },
+ "U0610": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:02b12c17f936\" modifies \"people\" as an adjective, so it is a valid use. It is not in a name, and the marks cover exactly the word."
+ },
+ "U0614": {
+  "verdict": "wrong",
+  "reason": "not_english",
+  "note": "The sentence is French (\"hallucination\" is a French noun here), so it isn't an English use and the program was right to miss it."
+ },
+ "U0612": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Structured held-out:67415e178146 Network (SI-NET)\" is the name of one specific system, so leaving \"held-out:67415e178146\" out as a name was correct."
+ },
+ "U0616": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use: 'neural network' as a generic technique, not a name; marks cover exactly the word."
+ },
+ "U0615": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cognitions\" is a plural noun use of cognition (Kant's representations), in scare quotes but not a name. The program should have kept it."
+ },
+ "U0618": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of 'held-out:bd686ff4fd74' (capitalised in a list with Inhibition and Forgetting), not a name; the marks cover the word exactly."
+ },
+ "U0617": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" is a plural noun, a generic use outside any name, and the marks cover the whole word."
+ },
+ "U0622": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b5614820786\" is a plain noun use, not part of the institute's name; the marks cover exactly the word."
+ },
+ "U0620": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0\" is used as an ordinary noun (the held-out:7b1df4aa54d0 of the iceberg), not in a name, and the marks cover exactly the word."
+ },
+ "U0619": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is a noun modifier in \"emergence rates\" (fly emergence). The span is exact and it is not in a name, so the program should have kept it."
+ },
+ "U0621": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:baa86b4dabfd' (extent of held-out:baa86b4dabfd), not in a name; marks cover the word exactly."
+ },
+ "U0624": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Generic User Interface Questionnaire\" is a named instrument (Chin, Diehl & Norman, 1988), so leaving it out as a name was correct."
+ },
+ "U0628": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"scanning electron held-out:7b5614820786\" is a generic instrument term, a noun use, not a name. The marks cover exactly the word."
+ },
+ "U0623": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning\" is a noun in \"literal meaning\". The mark covers exactly the word. The apostrophe before it is only punctuation, and it is not part of a name, so this is a use the program should have kept."
+ },
+ "U0630": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term \"User Interface\" (spelled out from UI), a noun use, not a named product or scale; marks cover the full term."
+ },
+ "U0629": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is used as an ordinary noun (religious held-out:e39a19f9b2b4), not in a name, and the marks cover exactly the word."
+ },
+ "U0613": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Meaning\" is a noun in a table-of-contents heading (\"Modes of Meaning\"). The codebook counts TOC headings as ordinary uses, so the program should have kept it."
+ },
+ "U0626": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"system\" in scare quotes, meaning a way of life or social order. It isn't part of a name, and the marks cover exactly the word, so it should have been kept."
+ },
+ "U0632": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Relational memory\" is a generic cognitive construct, not a named test or scale. Memory is used as a noun here."
+ },
+ "U0634": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is a noun used generally, not part of a name; marks cover the whole word."
+ },
+ "U0625": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Ronald Fisher's fundamental held-out:ee104561c1ce\" refers to one specific named result (Fisher's fundamental held-out:ee104561c1ce of natural selection), so it is a name and not a use."
+ },
+ "U0627": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun in a table-of-contents heading, which counts as an ordinary use. The program should have kept it."
+ },
+ "U0633": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" is a noun modifier before \"virtual reality application\". It is not in a name, and the marks cover the whole word."
+ },
+ "U0631": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Image\" here is the noun, meaning image (mental imagery) practice. It labels a training condition, not a named scale or test. The marks cover exactly the word, so it should have been kept."
+ },
+ "U0636": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Part of a file path/directory identifier (table_scripts/...), a code identifier, not a use of the word."
+ },
+ "U0637": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun use of 'hallucinations', not in a name; marks cover the word exactly."
+ },
+ "U0640": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is a common noun describing Santorio; not part of a name, and the marks cover exactly the word."
+ },
+ "U0639": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"held-out:da17f59c700d\" here is part of a directory path (table_scripts/), a file/code identifier, not a use of the word."
+ },
+ "U0635": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bafa5557897f\" is a plural common noun, a normal use of the target word, not in a name; the marks cover the whole word."
+ },
+ "U0644": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is a generic term, not a name; \"intelligence\" is a noun used as part of the noun phrase modifier, so it counts as a use."
+ },
+ "U0643": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Title of another work (cited with author J. Searle) is a name, so leaving it out was correct."
+ },
+ "U0641": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed\" is used as a noun in Hume's held-out:7b1df4aa54d0 \"held-out:7dc7c59f90ed of sympathy\"; not a name, and marks cover exactly the word. The program should have kept it."
+ },
+ "U0642": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Artificial Intelligence\" here is a generic field or research theme, not a named organisation. It is an ordinary use of the noun, so it should have been kept."
+ },
+ "U0638": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The phrase is in a list of titles of other papers (\"Character pattern recognition on a computational neural network\"). A word in a cited title is a name, so the program was right to miss it."
+ },
+ "U0646": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Natural user interface\" is a generic technology term, not a named product. \"User interface\" is used as a noun here, and the marks cover exactly the two words."
+ },
+ "U0649": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'held-out:e39a19f9b2b4' in 'religious held-out:e39a19f9b2b4' (in scare quotes), not part of a name; span covers the word exactly."
+ },
+ "U0645": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:7d0f24edc7fd@home\" is the name of one specific system (a project), so \"held-out:7d0f24edc7fd\" here is part of a name and shouldn't be kept. The earlier \"data held-out:7d0f24edc7fd\" is a use, but it isn't the marked place."
+ },
+ "U0647": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Data held-out:7d0f24edc7fd\" is a table-of-contents heading, which counts as an ordinary use. It is the noun in the sense of data held-out:7d0f24edc7fd, and the marks cover exactly the word."
+ },
+ "U0648": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Experience\" is a noun in a heading (\"Direct Experience\"). Headings and table-of-contents entries count as ordinary uses, so the program should have kept it."
+ }
+}

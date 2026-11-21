@@ -1,0 +1,252 @@
+{
+ "U0300": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:c0dcb92b6a30\" is part of the organisation name National Industrial Information Infrastructure held-out:c0dcb92b6a30 Consortium (NIIIP), so leaving it out as a name was correct."
+ },
+ "U0301": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"little sign of flattening\" uses sign as a noun (an indication), not in a name; the marks cover exactly the word."
+ },
+ "U0303": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:baa86b4dabfd\" is used as an ordinary noun, outside any name, and the marks cover exactly the word."
+ },
+ "U0302": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a plural noun in 'number of held-out:e7866e6303be', a language index; not in a name, and the marks cover the whole word."
+ },
+ "U0304": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"healthy controls\" is a plural noun use of control (comparison participants), not in a name; span covers the word."
+ },
+ "U0307": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"interpretations\" is a plain noun use, outside any name. The title De Doctrina Christiana doesn't contain it. The program should have kept it."
+ },
+ "U0305": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Strong Artificial Intelligence\" is a generic concept (strong AI), not a name. It is a noun use, and the marks cover exactly the term, so the program should have kept it."
+ },
+ "U0309": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:779d6b6eedf0\" is used as a noun, a generic concept (Dawkins' held-out:779d6b6eedf0 concept), and the mention in quotes counts as a use. It is not a name, and the marks cover exactly the word."
+ },
+ "U0306": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\" is a plural noun in the hyphenated generic term \"strengths-based model\". It isn't a name, and the marks cover just the word, so it should have been kept."
+ },
+ "U0310": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"political consciousness\" is a plain noun use of consciousness, not in a name, and the marks cover exactly the word."
+ },
+ "U0312": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is a plural common noun for interface held-out:5ff5c82d203d, not part of a name; the marks cover the word exactly."
+ },
+ "U0313": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is an adjective modifying \"alcohol intoxication\"; not in a name, span correct."
+ },
+ "U0311": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"somatic held-out:11ee3fc840ad\" is a plain noun use of held-out:11ee3fc840ad. The span covers just the word. The footnote number after it is attached text, so the program should have kept this."
+ },
+ "U0316": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"alignment\" is a noun here (alignment of teams and phases), not part of a name, and the marks cover the whole word."
+ },
+ "U0317": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:779d6b6eedf0\" is a past participle verb (to held-out:779d6b6eedf0), and held-out:779d6b6eedf0 is studied only as noun/proper noun, so leaving it out was correct."
+ },
+ "U0319": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"systems\" is a plural noun in \"mobile middleware systems\", a generic term and not a name. The marks cover exactly the word."
+ },
+ "U0308": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(mis)alignment\" stands for \"alignment\" or \"misalignment\", so \"alignment\" is used here as a noun modifier before \"combinations\". The marks cover just that word, and it isn't in a name. The program should have kept it."
+ },
+ "U0318": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"alignments\" is a plural noun meaning political groupings/alignments of countries; not a name, span covers the word."
+ },
+ "U0315": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:86a125382979\" is used as a common noun for Anselm's held-out:86a125382979, not inside a name, and the marks cover exactly the word."
+ },
+ "U0322": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is used as a common noun (the double helix raised to the status of an held-out:5ff5c82d203d), not in a name, and the marks cover exactly the word."
+ },
+ "U0314": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:2c676bb34422\" here is a verbal gerund that takes a direct object (\"the project\"), so it works as a verb, not a noun. Leaving it out was correct."
+ },
+ "U0323": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experience\" is used as a noun (knowledge and experience of sports), not in a name; marks cover the word exactly."
+ },
+ "U0320": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Theory of mind\" is a generic concept, not a name. Here \"mind\" is a noun, and the marks cover exactly the word. The closing quote mark probably caused the miss."
+ },
+ "U0325": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs\" is a plural noun (gestures of sign language), not a name; marks cover the word exactly."
+ },
+ "U0324": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7d0f24edc7fd profession\" uses held-out:7d0f24edc7fd as a noun modifier (the extraction industry), not inside a name, and the marks cover exactly the word."
+ },
+ "U0327": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:11f8f1ec4ec9\" is a noun (held-out:11f8f1ec4ec9 value), not in a name; span covers the word exactly."
+ },
+ "U0321": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:07afa72fe9fc\" is a plain noun use, listed with depression as a factor. The marks cover exactly the word, and the following parenthesis doesn't change that. The program should have kept it."
+ },
+ "U0328": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bafa5557897f\" is a noun modifier in the hyphenated compound \"held-out:bafa5557897f-hospital\", a generic term rather than a name. The marks cover exactly the word, so it should have been kept."
+ },
+ "U0326": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"table_scripts.zip\" is a file name, an identifier, so it isn't a use of the word. The program was right to miss it."
+ },
+ "U0329": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"electron held-out:7b5614820786\" is a generic instrument noun, not a name; the marks cover exactly the word."
+ },
+ "U0330": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:10c5166f4af0\" is in the title of a cited book (Order out of held-out:10c5166f4af0) in a reference, so it counts as a name and leaving it out was correct."
+ },
+ "U0331": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agent\" is a noun here (a chemical deproteinizing agent). Every sense counts, and the marks cover just the word."
+ },
+ "U0334": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'information' (uncertain information), not in a name; span covers the word exactly."
+ },
+ "U0332": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:da17f59c700d\" is a participial adjective or verb form meaning standardized. It is not a noun or noun modifier, so leaving it out is correct."
+ },
+ "U0339": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Code identifier (document.location.held-out:c0dcb92b6a30) in scraped JavaScript, not a real use of the word."
+ },
+ "U0335": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is a plural noun use of held-out:50fa17396b00; \"diem\" is an OCR typo for \"them\" but doesn't affect the marked word."
+ },
+ "U0333": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Simulation Control Room\" is the capitalized name of a specific facility, parallel to \"Spacelab Payload Control Room\", so leaving it out as a name was correct."
+ },
+ "U0336": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agencies\" is a plural common noun (federal agencies), a generic use, not part of a name; it should have been kept."
+ },
+ "U0341": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is used as a noun (indoleamine held-out:5350e5a87b0b melatonin), not in a name; the marks cover the whole word."
+ },
+ "U0337": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c group\" is a noun modifier use of held-out:912b00c7764c, not part of a name. The program likely missed it because of the attached parenthesis."
+ },
+ "U0340": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behaviors\" is a plain noun use, plural of behavior, not part of a name; marks cover the word exactly."
+ },
+ "U0342": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5ff5c82d203d\" is a plural noun for religious images, a real use of held-out:5ff5c82d203d, not in a name. It should have been kept."
+ },
+ "U0343": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Simulation\" is part of the title of a cited work (Systems Analysis and Simulation 1988), so it counts as a name and leaving it out was correct."
+ },
+ "U0345": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"sense perception\" is a generic noun use of perception, and it is not inside a name. \"Warranted Christian Belief\" is a title, but the marked word is outside it."
+ },
+ "U0344": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is used as a generic noun modifier (AI dynamic clustering), not a name; the marks cover exactly the term."
+ },
+ "U0338": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:9384bbe72d46\" is a plain noun use, not in a name. The following hyphen is a dash, and the marks cover the word exactly. The program should have kept it."
+ },
+ "U0348": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is a noun in \"held-out:34711782a046/sex question\"; a plain use, not in a name, and the marks cover the word exactly. The program should have kept it."
+ },
+ "U0349": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is a verb here (visited often), and only the adjective is studied, so leaving it out was correct."
+ },
+ "U0347": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"User Interface Design Environment (VIDE)\" is the name of one specific system, so the marked words sit inside a name. Leaving them out was correct."
+ },
+ "U0346": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feeling held-out:7d0f24edc7fd\" (held-out:e39a19f9b2b4 held-out:7d0f24edc7fd) uses \"held-out:7d0f24edc7fd\" as a noun, the head of a noun phrase, and it isn't in a name. The program should have kept it."
+ }
+}

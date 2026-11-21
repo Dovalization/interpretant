@@ -1,0 +1,252 @@
+{
+ "U2452": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:d4bed87430ea' is used as a common noun for an early model of the computer; not a name."
+ },
+ "U2453": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic field term \"artificial intelligence\" used as a noun; span covers exactly the phrase, not a name."
+ },
+ "U2454": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:7b1df4aa54d0' (knight's move as a held-out:7b1df4aa54d0); not part of a name or title."
+ },
+ "U2451": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "BP Neural Network is a generic technique (backpropagation neural network), not a named organisation. It is a use of the noun and should have been kept."
+ },
+ "U2450": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Here \"held-out:1c5d119c45e3\" stands in for \"as follows\" or \"the following\", a predicate adjective, not the noun. Leaving it out as ADJ was correct."
+ },
+ "U2456": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:11ee3fc840ad is in the title of a cited paper (Hubel & Wiesel 1968), which counts as a name, so leaving it out was correct."
+ },
+ "U2455": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "HAVING here is the SQL clause keyword, not the verb or auxiliary. It is not a verb or aux use, so leaving it out was correct."
+ },
+ "U2460": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"survival held-out:bd686ff4fd74\" is a noun use (noun modifier/head), not a name; span covers exactly the word."
+ },
+ "U2461": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"networks\" is a plain noun (wireless networks), not in a name; marks cover the word exactly."
+ },
+ "U2459": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'symbols' used generically (marks and symbols); span covers the word, not in a name."
+ },
+ "U2458": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"experiences\" is a plural noun (users' experiences with technology), outside any name, and the marks cover just the word."
+ },
+ "U2457": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Contextual Cross-Attention Fusion Module (CCAFM)\" is the name of one specific module the authors coined, so leaving it out as a name was correct."
+ },
+ "U2462": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Symbol\" is a noun in a table-of-contents heading (\"Myth and Symbol\"). Headings count as ordinary uses, and this is not a name."
+ },
+ "U2463": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"audience feedback\" is a noun use of feedback, not in a name; marks cover exactly the word."
+ },
+ "U2464": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947\" takes a direct object (\"distributed cognition theory\") and an \"in\" phrase, so it works as a verb. Leaving it out was correct."
+ },
+ "U2467": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"with this in mind\" uses mind as a noun, in an idiom and not in a name. The marks cover the word exactly."
+ },
+ "U2465": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bd686ff4fd74\" is a plural noun use of held-out:bd686ff4fd74 (model-assigned held-out:bd686ff4fd74); the marks cover the word exactly, and it is not in a name."
+ },
+ "U2469": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:7b1df4aa54d0' is used as an ordinary noun, one of the listed angles of reflective design; not a name."
+ },
+ "U2470": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plain noun use, outside any name, and the marks cover exactly the word. The program should have kept it."
+ },
+ "U2471": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:f66e6d2190f6 complexity\" uses held-out:f66e6d2190f6 as a noun modifier; it is a generic use, not a name, and the marks cover exactly the word."
+ },
+ "U2466": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7d0f24edc7fd\" is a gerund with a direct object (\"distributed databases\"), so it works as a verb. Leaving it out is correct."
+ },
+ "U2472": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Word is in the title of a reviewed book (The Invisible World: ... Invention of the held-out:7b5614820786), so it is a name; leaving it out was correct."
+ },
+ "U2473": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'Memories' in a table-of-contents heading, which counts as an ordinary use. The marks cover the word exactly."
+ },
+ "U2474": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "These are theme headings in the abstract's own findings, not titles of other works. 'Feedback' is an ordinary noun use and should have been kept."
+ },
+ "U2468": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:02b12c17f936-held-out:da17f59c700d\" and \"Modern-held-out:da17f59c700d\" describe the held-out:da17f59c700d type of two versions of the text. This is an ordinary noun use of held-out:da17f59c700d inside a hyphenated modifier, not part of the work's title, so it should have been kept."
+ },
+ "U2475": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"event cognition\" is an ordinary noun use of cognition, not in a name; the marks cover exactly the word."
+ },
+ "U2477": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexities\" is a plural noun use of complexity, not in a name; span covers the whole word."
+ },
+ "U2476": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:c0dcb92b6a30\" is a plural noun (e.g., think-aloud held-out:c0dcb92b6a30) analyzed in the study; a genuine use, not in a name, span covers the word."
+ },
+ "U2478": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"frontal held-out:11ee3fc840ad\" is a common noun use of held-out:11ee3fc840ad, not in a name; marks cover the word exactly."
+ },
+ "U2479": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'interpretation' (an interpretation of Nietzsche's idea), not in a name; span is exact."
+ },
+ "U2481": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Adjective 'held-out:02b12c17f936' modifying 'hybrid discipline'; ordinary use, not in a name."
+ },
+ "U2480": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"dark cloud\" is a common noun for a physical cloud; a genuine use, not a name, span correct."
+ },
+ "U2482": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited work (Husserl's manuscripts 'Studies on the Structure of Consciousness'), so it is a name and leaving it out was correct."
+ },
+ "U2484": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:9384bbe72d46 War in Germany\" is the title of Engels' cited work, so it counts as a name. Leaving it out was correct."
+ },
+ "U2486": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"surface held-out:7d0f24edc7fd activities\": held-out:7d0f24edc7fd is a noun modifier (noun use), not a name; span covers the word."
+ },
+ "U2485": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:34711782a046' in 'age-/held-out:34711782a046-matched' is a noun use, part of a hyphenated word. The marks cover exactly the word, and it is not inside a name."
+ },
+ "U2483": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(tele)presence\" is the noun presence with an optional prefix, used as a generic concept, not inside a name. The marks cover exactly \"presence\"."
+ },
+ "U2489": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'information' (sensitive and private information); not a name, span is exact."
+ },
+ "U2488": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use: \"data processing system\" is a generic term, not a name; IBM 650 RAMAC is a separate named product."
+ },
+ "U2490": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is used as an ordinary noun (anti-pluralist and illiberal held-out:e39a19f9b2b4), not in a name; span covers exactly the word."
+ },
+ "U2487": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Quoted \"held-out:2c676bb34422\" is the term used as a noun (the role of held-out:2c676bb34422). The marks cover exactly the word, and it is not in a name, so it should have been kept."
+ },
+ "U2492": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d573b31a4663\" is an adjective modifying \"growth\"; ordinary use, not in a name, span exact."
+ },
+ "U2493": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'held-out:86a125382979' as the philosophical field; not a name, span is exact."
+ },
+ "U2491": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"The held-out:02b12c17f936\" is a noun (people of antiquity), not the adjective, so leaving it out was correct."
+ },
+ "U2495": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is a plain noun use, not in a name, and the marks cover the word exactly."
+ },
+ "U2494": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of \"image\" (stereotypical image(s)); the \"(s)\" is just an optional plural, and it isn't in a name."
+ },
+ "U2497": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"users\" is a plural noun, a generic use of the target word, not in a name; the marks cover the word exactly."
+ },
+ "U2498": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" is a plain noun use; the trailing \"4-6\" is a citation, not part of the word, and the marks cover just the word."
+ },
+ "U2496": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:c0dcb92b6a30\" is a noun here (therapy held-out:c0dcb92b6a30), not in a name; the marks cover exactly the word. The program likely missed it because \"(TRT)\" follows with no space."
+ },
+ "U2499": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67\" is in the title of a book (The User Is Always Right: ...), which counts as a name, so leaving it out was correct."
+ }
+}

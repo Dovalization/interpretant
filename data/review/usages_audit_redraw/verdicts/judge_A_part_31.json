@@ -1,0 +1,252 @@
+{
+ "U1552": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"receives more attention\" is an ordinary noun use, not in a name, and the marks cover exactly the word."
+ },
+ "U1551": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:50fa17396b00\" is in the title of a cited book (The Edge of Words: God and the held-out:50fa17396b00 of Language), so it counts as a name and leaving it out was correct."
+ },
+ "U1550": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'embodiment' (manifestation of Marx's revolution); not a name, span is exact."
+ },
+ "U1553": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Simulation\" is part of a journal title (International Journal of Nonlinear Sciences and Numerical Simulation) in a reference list, so it's a name. Leaving it out was correct."
+ },
+ "U1554": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:779d6b6eedf0 Comic Indonesia\" is the name of a specific group, so leaving \"held-out:779d6b6eedf0\" out was correct. The later \"held-out:779d6b6eedf0\" is a separate, ordinary use."
+ },
+ "U1555": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"negative feedback loop\" is a generic noun use, not a name, and the marks cover exactly the term."
+ },
+ "U1556": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:d573b31a4663 is the name of a specific tool (held-out:d573b31a4663 Ada Portable Interface Designer), an acronym for a named system, so leaving it out as a name/PROPN is correct."
+ },
+ "U1557": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"having\" is a verb (participle) in \"considered having sounds\", a use of the target word in a studied POS, with exact span."
+ },
+ "U1560": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"consciousness\" is used as an ordinary noun (the consciousness is militaristic), not in a name, and the marks cover exactly the word."
+ },
+ "U1559": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"complexity\" is a plain noun use, with the footnote marker 3 after it. The marks cover just the word, so the program should have kept it."
+ },
+ "U1558": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs\" is a plural noun (semiotic signs) in \"interplay of signs\". It isn't in a name, and the marks cover just the word. The attached dash probably caused the miss."
+ },
+ "U1561": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"AAMD Adaptive Behavior Scale\" is a named, specific instrument, so \"Behavior\" is inside a name and correctly left out."
+ },
+ "U1562": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"attention\" is a plain noun (\"attention was focused\"), not in a name, and the marks cover exactly the word."
+ },
+ "U1564": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading; headings are ordinary uses, so 'Consciousness' here is a noun use and should have been kept."
+ },
+ "U1563": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:15a9a9ab2b92\" is a noun in a table-of-contents heading, which counts as an ordinary use. The program should have kept it."
+ },
+ "U1566": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e39a19f9b2b4\" is a noun, used as an example attribute. It is not in a name, and the marks cover exactly the word. The program probably missed it because the text reads \"e.g.held-out:e39a19f9b2b4\" with no space."
+ },
+ "U1569": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the held-out:2c676bb34422 of hypotheses\" is a nominal gerund, so it is a noun use. The marks cover the whole word."
+ },
+ "U1568": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Component Security\" is a generic topic (security of components), not a named product. It is a noun modifier use and should have been kept."
+ },
+ "U1565": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Phenomenal Intentionality Research Programme\" is a capitalised generic label for a philosophical research approach, not a named organisation. The word is a real use as a noun, so it should have been kept."
+ },
+ "U1571": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Electrical transformer, a common noun; a real use of the target word, not a name, and the marks cover exactly the word."
+ },
+ "U1567": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "\"see symbol\" is a placeholder for a phonetic character (probably /ɹ/) that was lost in the text. The authors didn't use the word \"symbol\" here."
+ },
+ "U1570": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"normal held-out:1b596f30c66f\" is a generic technical term (least squares); plural noun use of held-out:1b596f30c66f, not a name, and the marks cover the whole word."
+ },
+ "U1573": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Neural network\" is a noun here, and \"dynamic fuzzy neural network\" is a generic technique, not a specific named system. The marks cover exactly the target phrase."
+ },
+ "U1572": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Fusion\" is a noun modifier in a descriptive, capitalised module description, not a coined proper name like BERT. It should have been kept as a use."
+ },
+ "U1575": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the ERIC boilerplate, \"Educational Resources Information Center\", which is an organisation name. Leaving it out was correct."
+ },
+ "U1574": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use in a table-of-contents chapter heading, which counts as an ordinary use. The program should have kept it."
+ },
+ "U1577": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c control\" is a noun modifier use of held-out:912b00c7764c, not in a name; marks cover exactly the word."
+ },
+ "U1576": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7dc7c59f90ed\" is a verb (participle) here, not a noun or noun modifier, so leaving it out was correct."
+ },
+ "U1578": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:bd686ff4fd74\" is a plural noun (detection held-out:bd686ff4fd74), a normal use of the target word that the program should have kept."
+ },
+ "U1579": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"learning opportunities\" is a noun modifier use of learning. It is not a name, and the marks cover exactly the word."
+ },
+ "U1582": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:912b00c7764c\" is a plain noun (release from held-out:912b00c7764c), not in a name; span covers exactly the word."
+ },
+ "U1587": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"took the control of\" is a noun use of control, not inside a name; the marks cover exactly the word."
+ },
+ "U1586": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'intelligence' (cognitive ability), not in a name; span covers exactly the word."
+ },
+ "U1585": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the coined name of one specific system (Spatial OLAP held-out:f66e6d2190f6 and Analysis Tool, SOVAT), so leaving it out was correct."
+ },
+ "U1584": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:07afa72fe9fc\" is part of the named instrument Hospital Depression & held-out:07afa72fe9fc Scale (HAD Scale), so leaving it out as a name was correct."
+ },
+ "U1580": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Behaviour\" is in the title of a cited book, which counts as a name, so leaving it out was correct."
+ },
+ "U1583": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of \"user interface\", not a name. The marks cover exactly the term, so the program should have kept it."
+ },
+ "U1581": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Wireless Local Area Networks\" is a generic technology term, not a name. The noun use is marked exactly, so the program should have kept it."
+ },
+ "U1588": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"alignment\" is used as a common noun for the generic task of aligning/matching networks; not a name or title."
+ },
+ "U1592": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Children's Sleep held-out:50fa17396b00 Questionnaire\" is a named instrument, so \"held-out:50fa17396b00\" is inside a name and leaving it out was correct."
+ },
+ "U1594": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning\" is a noun here (practical meaning of a relationship), not in a name, and the marks cover the whole word."
+ },
+ "U1589": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents chapter heading, which counts as an ordinary use. \"Computation\" is a noun here, so the program should have kept it."
+ },
+ "U1590": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"held-out:da17f59c700d\" is in the title of another work (a dictionary, in 《》 brackets), so it counts as a name. The program was right to skip it."
+ },
+ "U1593": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is a plural noun use of held-out:34711782a046. It sits right after the list number \"1.\", which probably caused the miss. The marks cover exactly the word."
+ },
+ "U1591": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behavior\" is a plain noun here, not in a name, and the marks cover exactly the word. It should have been kept."
+ },
+ "U1595": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:ff37e32092ff\" is a plain noun use (plural of held-out:ff37e32092ff), not in a name. The marks cover exactly the word. The program should have kept it."
+ },
+ "U1596": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"the model\" is a generic noun (vocal tract model), not a named system; span covers exactly the word."
+ },
+ "U1598": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The word is in the title of a cited book (Animating the Letter: The Figurative Embodiment of Writing...), listed with its author. Titles of other works count as names, so leaving it out was correct."
+ },
+ "U1599": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is a noun, used generically; the marks cover just the word (possessive 's is outside). Not part of a name."
+ },
+ "U1597": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"control\" in \"control group\" is a noun modifier, so it is a noun use. It is not part of a name, and the marks cover exactly the word. The program should have kept it."
+ }
+}

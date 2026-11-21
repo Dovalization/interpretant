@@ -1,0 +1,252 @@
+{
+ "U3552": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:1b596f30c66f\" is a plural noun in \"linear differential rate held-out:1b596f30c66f\"; a generic term, not a name, and the marks cover the whole word."
+ },
+ "U3550": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Affordance Account of Value Embedding\" is a descriptive theoretical account, not a title or a named product. Affordance is used as a noun, so it should have been kept."
+ },
+ "U3554": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"cerebral held-out:11ee3fc840ad\" is a noun use of held-out:11ee3fc840ad, not part of a name; the marks cover exactly the word."
+ },
+ "U3551": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Clouds\" here is the Clouds distributed operating system (a named system), not the weather or computing-cloud sense, so it is a name and would be left out."
+ },
+ "U3556": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term 'convolution neural networks' used as a noun; marks cover 'neural networks' exactly."
+ },
+ "U3557": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"meaning\" is a noun here (use and meaning of the verb), not in a name, and the marks cover exactly the word."
+ },
+ "U3553": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:e7866e6303be\" is in the title of a cited paper (Quiotepec Chinantec held-out:e7866e6303be Patterning), so it counts as a name and leaving it out was correct. The program's ORG label is wrong, but the outcome is the same."
+ },
+ "U3555": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Attention Regulation Framework (ARF)\" is the name of one specific framework, so attention sits inside a name and leaving it out was correct."
+ },
+ "U3558": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "MiNDS is the acronym of a specific named framework (The MiNDS Framework), so it is a name, not a use of 'mind'."
+ },
+ "U3561": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embodiment\" is used as an ordinary noun (practical embodiment of a moral theory), not in a name, and the marks cover the whole word."
+ },
+ "U3559": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading; ordinary noun use of 'behavior', not a name. It should have been kept."
+ },
+ "U3564": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"correctional system\" is a generic noun use of system, not a name; marks cover exactly the word."
+ },
+ "U3562": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "JINS held-out:779d6b6eedf0 is a specific product (smart glasses), so it is a name and leaving it out was correct."
+ },
+ "U3560": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea\" takes a direct object (Floracaching), so it is a verb use. Leaving it out as a verb was correct."
+ },
+ "U3563": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"artificial intelligence\" is a generic term, so it is not a name. The word is a noun and the marks cover exactly \"intelligence\"; the missing space before (AI) doesn't matter."
+ },
+ "U3565": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"embedding\" is used as a noun (a logical embedding of classical logic into S4); a generic term, not a name."
+ },
+ "U3566": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "The word is in the title of another work, listed with its authors, so it counts as a name. Leaving it out was correct."
+ },
+ "U3568": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"ghost\" held-out:7b1df4aa54d0 is a generic noun use; Just Follow Me is the name, not the held-out:7b1df4aa54d0."
+ },
+ "U3569": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is a plural noun and part of the hyphenated compound \"held-out:b3ea1fd57831-in-training\". Hyphenated parts count, and the marks cover the word exactly. It isn't a name."
+ },
+ "U3572": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'consciousness' as sentence subject; not a name, span is exact."
+ },
+ "U3571": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"strengths\" is a plural noun, part of the hyphenated \"strengths-based\"; it's a generic term, not a name, and the marks cover the word exactly."
+ },
+ "U3567": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'sensorimotor held-out:11ee3fc840ad' is a plain noun use of held-out:11ee3fc840ad, not in a name. The marks cover exactly the word, so it should have been kept."
+ },
+ "U3570": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Royal College of held-out:b3ea1fd57831\" is the name of a specific organisation, so leaving it out as a name was correct."
+ },
+ "U3573": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:34711782a046\" is used as a noun (\"constructs the social held-out:34711782a046\"), not in a name, and the marks cover exactly the word."
+ },
+ "U3574": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7d0f24edc7fd activity\": noun modifier (extraction of minerals), a noun use, not a name; marks cover the word exactly."
+ },
+ "U3575": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"their actual behavior\" is a plain noun use of behavior; marks cover exactly the word, not in a name."
+ },
+ "U3577": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"draws attention to\" - ordinary noun use of attention, not in a name; span covers the word exactly."
+ },
+ "U3579": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"User interface\" is used as a noun modifier in \"user interface (UI) design\", a generic term, not a name. The marks cover exactly the term, so it should be kept."
+ },
+ "U3576": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the title of a cited book (Bott, Family and Social Network), so it is a name and leaving it out was correct."
+ },
+ "U3581": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"a held-out:50fa17396b00 of becoming realities\" is a plain noun use, not in a name; the marks cover exactly the word."
+ },
+ "U3578": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Principles of Interpretation\" is the text's own section heading, so it is an ordinary noun use and not a person's name. The program should have kept it."
+ },
+ "U3580": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Item prompts\" is a plural noun in the document's own title, which counts as an ordinary use. SOPI is a generic test format, not a name that excludes the word."
+ },
+ "U3582": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b5614820786 system\" uses held-out:7b5614820786 as a noun modifier; it is a generic term, not a name."
+ },
+ "U3583": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'held-out:7dc7c59f90ed' (held-out:7b1df4aa54d0: technology as a held-out:7dc7c59f90ed), not in a name; span is exact."
+ },
+ "U3584": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Part of the organisation name International Federation for Information Processing (IFIP), so leaving it out was correct."
+ },
+ "U3585": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"system consciousness\" is a generic noun use of consciousness, not a name; marks cover exactly the word."
+ },
+ "U3587": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'consciousness' ('mythical consciousness'), not in a name; marks cover the word exactly."
+ },
+ "U3588": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information sharing\" - information used as a noun modifier, not in a name; span covers exactly the word."
+ },
+ "U3589": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:96da49af8e67 descriptors\" uses held-out:96da49af8e67 as a noun modifier, a generic term, not a name; marks cover the word exactly."
+ },
+ "U3586": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11ee3fc840ad\" is a noun (auditory held-out:11ee3fc840ad) in a section or contents heading. Headings count as ordinary uses, and the marks cover the word exactly."
+ },
+ "U3592": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:07afa72fe9fc\" is used as a noun for a condition, not in a name; span covers exactly the word."
+ },
+ "U3590": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"component\" is a genuine use meaning constituent, here adjective-like or noun, both studied; not in a name; the marks cover the word exactly."
+ },
+ "U3593": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:32a54748ce0a\" is an adjective modifying \"Interruptions\"; ordinary use, not a name."
+ },
+ "U3595": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"physiological feedback\" is a noun use of feedback, as a generic term and not a name; marks cover exactly the word."
+ },
+ "U3594": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'held-out:5350e5a87b0b' in 'held-out:5350e5a87b0b-based' is a hyphenated noun use of held-out:5350e5a87b0b. The marks cover exactly the word, and it is not in a name."
+ },
+ "U3596": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"signs and symbols\" is a plural noun in the semiotic sense; not part of a name, and the marks cover exactly the word."
+ },
+ "U3599": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:d4bed87430ea system\" is a noun modifier, so it counts as a noun use. It is not part of a name."
+ },
+ "U3591": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"computations\" is a plural noun in a table-of-contents entry of the volume itself. Such headings count as ordinary uses, and the span is exact."
+ },
+ "U3597": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:11ee3fc840ad is the name of a specific conference (the Conference for Research and Transdisciplinary Experiential Learning held-out:11ee3fc840ad 2026). It is a name, so leaving it out was correct."
+ },
+ "U3598": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Attention\" is a noun in the descriptive module term \"Bidirectional Complementary Attention\". It is a use of the attention mechanism, not a title or a person or organisation name. The marks cover just the word."
+ }
+}

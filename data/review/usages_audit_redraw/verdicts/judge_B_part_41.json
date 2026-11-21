@@ -1,0 +1,252 @@
+{
+ "U2050": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"super-held-out:779d6b6eedf0\" is a noun use of held-out:779d6b6eedf0 as part of a hyphenated word, not a name. The marks cover exactly \"held-out:779d6b6eedf0\", so it should have been kept."
+ },
+ "U2051": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"to control\" is an infinitive verb, and only noun/proper noun uses are studied, so leaving it out was correct."
+ },
+ "U2052": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"electron held-out:7b5614820786\" is a generic noun use, not a name; the marks cover exactly the word."
+ },
+ "U2054": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"simulation\" is a noun modifier in \"simulation programs\", a generic use and not a name."
+ },
+ "U2053": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"convolutional neural networks\" is a generic technique, not a name. It is a noun use of the target term, so the program should have kept it. The missing space before \"(CNNs)\" probably caused the miss."
+ },
+ "U2056": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"feedback loop\" is used as a generic noun phrase, with the marks covering exactly the term, and it is not part of a name."
+ },
+ "U2059": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "The word is in the title of a cited paper in a reference list, so it counts as a name and not a use."
+ },
+ "U2055": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"system\" is a noun in \"Steinitz system\", a generic mathematical structure, not a name for one specific system. The marks cover exactly the word. The program probably missed it because of the run-together \"aSteinitz\" and the adjacent parenthesis."
+ },
+ "U2058": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"graphic user interface\" is a generic noun use. The marks cover exactly the word. The program probably missed it because \"(GUI)\" follows with no space."
+ },
+ "U2061": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Simulation results\" uses simulation as a noun modifier; it is a generic term, not a name, and the marks cover the whole word."
+ },
+ "U2057": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This looks like the abstract's own title or heading, with \"PART THREE:\" as a series marker. It isn't a cited work, so \"held-out:5ff5c82d203d\" is an ordinary noun use and should have been kept."
+ },
+ "U2063": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading (\"Allocating Memory\") is an ordinary use; \"memory\" is a noun here, not a title of another work."
+ },
+ "U2060": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Environmental Complexity and Training Group\" is a descriptive label for an experimental group, not a real organisation or coined named system. The word is used as a noun for the enriched environment, so it should have been kept."
+ },
+ "U2065": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"American College of held-out:b3ea1fd57831\" is a named organization, so leaving it out as a name was correct."
+ },
+ "U2062": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:5350e5a87b0b\" in \"corticotropin releasing held-out:5350e5a87b0b\" is a generic noun use, not a name. The marks cover exactly the word, so the program should have kept it."
+ },
+ "U2064": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Part of a file path/directory name (table_scripts/get_table.py), a code identifier, not a use of the word."
+ },
+ "U2066": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"Cognition\" is part of the journal name \"Memory & Cognition\" in a citation, so it is a name and not a use."
+ },
+ "U2068": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"image\" is a noun modifier in \"image operators\", which counts as a noun use. It is not part of a name, and the marks cover exactly the word."
+ },
+ "U2069": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"behaviour\" is a noun (noun modifier in \"seeking or avoidance behaviour\"), not in a name; the marks cover exactly the word."
+ },
+ "U2067": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Image-Enhanced Multi-Level Sentence Representation Net (IEMLRN)\" is the name of one specific proposed model, so leaving it out as a name was correct."
+ },
+ "U2070": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"medium\" here is an adjective (size: small, medium, large), not the noun, so leaving it out was correct."
+ },
+ "U2071": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"in held-out:3cff64e5f947 their equal moral worth\" is a verb-like gerund (held-out:3cff64e5f947 something), not a noun use, so leaving it out was correct."
+ },
+ "U2072": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'agency' is used as an ordinary noun (capacity to act), not in a name; marks cover exactly the word."
+ },
+ "U2073": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"tangible user interfaces\" is a generic noun use, not a name. The marks cover exactly \"user interfaces\", so the program should have kept it."
+ },
+ "U2074": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Part of a file path/code identifier (table_scripts/get_greedy_seq.py), not a use of the word."
+ },
+ "U2077": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "\"memory\" is in the title of a cited work (Gordon, \"Meaning in memory and in attention\") in a reference list, so it counts as a name, not a use."
+ },
+ "U2078": {
+  "verdict": "wrong",
+  "reason": "other_word",
+  "note": "Part of a file path/identifier (table_scripts/lam_trans.json) in a command line, not a use of the word."
+ },
+ "U2076": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"agents\" is a plain noun (causal agents in taphonomy), not in a name; marks cover the word exactly."
+ },
+ "U2079": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Theory of Moral held-out:e39a19f9b2b4\" is the title of Smith's book, so it is a name. Leaving it out was correct."
+ },
+ "U2080": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"social networks\" is a generic noun use (plural), not a name; marks cover exactly the term."
+ },
+ "U2075": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'hallucinations' (visual hallucinations); the marks cover just the word. The attached footnote digit probably caused the miss."
+ },
+ "U2081": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"alignment\" is a noun (structural alignment, linguistic priming sense), not in a name, and the marks cover exactly the word."
+ },
+ "U2082": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:b3ea1fd57831\" is used as a common noun for a profession, not inside a name."
+ },
+ "U2085": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"American Association for Artificial Intelligence\" is a named organisation (AAAI), so leaving it out as a name was correct."
+ },
+ "U2088": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Santiago Solidarity Economy Network\" is the name of one specific organisation, so leaving \"Network\" out was correct."
+ },
+ "U2086": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"made on the model\" uses model as an ordinary noun (pattern/template, as in Old English word formation); not a name, and the marks cover exactly the word."
+ },
+ "U2087": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"intentionality\" is used as an ordinary noun (the intentionality of action), not in a name, and the marks cover exactly the word."
+ },
+ "U2084": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7d0f24edc7fd\" is a gerund taking a direct object (\"distributed textual data\"), so it works as a verb. Leaving it out as VERB was correct."
+ },
+ "U2083": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(re)held-out:2c676bb34422\" means \"held-out:2c676bb34422 or reframing\". Here it is a gerund used as a noun (subject of \"may be achieved\"), it is not in a name, and the marks cover \"held-out:2c676bb34422\" exactly. The program should have kept it."
+ },
+ "U2091": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Memory Self-Efficacy Scale\" is a named scale, so \"Memory\" is inside a name. Leaving it out was correct."
+ },
+ "U2089": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:86a125382979\" is a plural noun use in a table-of-contents entry. The codebook treats those headings as ordinary uses, and no authors are listed. The program should have kept it."
+ },
+ "U2093": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'strength' is a plain noun (man's strength) in a book review quote, not part of a name or title."
+ },
+ "U2092": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "'system' is used as an ordinary noun (corpus as a system of education), not part of a name; span covers the whole word."
+ },
+ "U2090": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"(re)held-out:2c676bb34422\" is used as a noun (a gerund in a list with \"held-out:7b1df4aa54d0\" and \"conceptual blending\"). The marks cover \"held-out:2c676bb34422\", so the use should have been kept."
+ },
+ "U2094": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "held-out:6b293b43d2b1 is part of the title of a cited book (Relative Races: Genealogies of Interracial held-out:6b293b43d2b1...), so it is a name and was correctly left out."
+ },
+ "U2095": {
+  "verdict": "wrong",
+  "reason": "none",
+  "note": "\"Artificial Neural Networks\" is a generic technique, not a named organisation. The program should have kept it as a use."
+ },
+ "U2096": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plain noun use of 'held-out:07afa72fe9fc' as a symptom measure; not a name, and the marks cover exactly the word."
+ },
+ "U2097": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Ordinary noun use of 'interpretation' (a three-factor interpretation); not a name, and the marks cover exactly the word."
+ },
+ "U2098": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"user interfaces\" is a plural noun use of the generic term, not a name; it should have been kept."
+ },
+ "U2099": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Representation\" is in the title of a cited work (Television and the Politics of Representation), so it's a name and was correctly left out."
+ }
+}

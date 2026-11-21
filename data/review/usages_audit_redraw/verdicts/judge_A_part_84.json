@@ -1,0 +1,122 @@
+{
+ "U4201": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b5614820786\" is a plain noun use (\"included a held-out:7b5614820786\"); the marks cover just the word. The following period is OCR noise and doesn't affect the span."
+ },
+ "U4202": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, which counts as an ordinary use. 'Intentionality' is a noun and the marks cover exactly the word."
+ },
+ "U4200": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Convolutional Neural Network\" is a generic technique, not a name. \"Network\" is a noun use and the marks cover exactly the word."
+ },
+ "U4205": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Plural noun 'models' used generically for ML models; not a name; span covers the word."
+ },
+ "U4203": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Sequential held-out:bd686ff4fd74 Ratio Test is a generic statistical technique, not a specific named instrument; 'held-out:bd686ff4fd74' is a valid noun use and should have been kept."
+ },
+ "U4204": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"emergence\" is a noun use (\"design and emergence life cycle\"); the marks cover exactly the word, and the missing space before \"life\" is only a typo."
+ },
+ "U4206": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Artificial Neural Networks\" is a generic technique, not a name. \"Networks\" is a noun, and the marks cover just that word."
+ },
+ "U4208": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:da17f59c700d writer\": held-out:da17f59c700d is a noun modifier (screenwriting sense), not in a name, and the marks cover the whole word."
+ },
+ "U4207": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Generic plural noun 'child welfare agencies', not a specific named organization; should have been kept as a use."
+ },
+ "U4210": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Passive Social Network Utilization Scale\" is a named scale, so the word is inside a name and leaving it out was correct."
+ },
+ "U4209": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Opinion held-out:7d0f24edc7fd\" is a generic technique term; held-out:7d0f24edc7fd is used as a noun (noun-modifier compound), not a name."
+ },
+ "U4212": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun use of \"user interface\" (designing user interface); marks cover the full term, not a name."
+ },
+ "U4213": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:11f8f1ec4ec9 assumption\" uses held-out:11f8f1ec4ec9 as an adjective/noun modifier, a studied part of speech; not in a name."
+ },
+ "U4211": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Digit Symbol Substitution Test\" is a named test, so leaving the word out as a name was correct."
+ },
+ "U4214": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Noun use of 'intentionality' as a generic term for an audience-involvement dimension; not a name, span is exact."
+ },
+ "U4217": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"violations of held-out:19d5e41de2db\" uses held-out:19d5e41de2db as a common noun (moral obligation), not in a name or title."
+ },
+ "U4216": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"2nd International Workshop on Presence\" is the name of a specific event, so leaving the word out was correct."
+ },
+ "U4215": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:3cff64e5f947\" here is a verbal gerund that takes the object \"design\" (to ground design in context). It is not a noun use, so leaving it out was correct."
+ },
+ "U4218": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"held-out:7b1df4aa54d0 Builder\" is the name of a specific software tool used to build the Visual Office, so leaving it out as a product name was correct."
+ },
+ "U4219": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading, so an ordinary use. \"Intentionality\" is a noun here and is not part of a name."
+ },
+ "U4221": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"Cerebral held-out:11ee3fc840ad\" is the name of a journal, so leaving it out as a name is correct."
+ },
+ "U4220": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"controlled\" here is a participial adjective/verb form modifying noise, not a noun use of control, so leaving it out was correct."
+ },
+ "U4222": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "This is another work's title listed with its author (Tracey Owens Patton), so it counts as a name. The word is also used verbally, as in '(Re)held-out:2c676bb34422 the ... Divide'."
+ },
+ "U4223": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Table-of-contents heading of the work itself, so an ordinary noun use of 'held-out:67415e178146' (not a cited title or name)."
+ }
+}
