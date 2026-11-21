@@ -297,7 +297,9 @@ drift, a class whose share moves over the decades or whose errors fall on one se
   same paper indexed twice below the near-duplicate threshold. Diachronic datasets de-duplicate
   before sampling (NorDiaChange; Shoemark et al. 2019; Antoniak and Mimno 2018). When two works
   share three or more target sentences at the same places, the later is a copy: its usages stay
-  in the table, marked with the work it copies, and are never drawn.
+  in the table, marked with the work it copies, and are never drawn. The rule counts sentences,
+  not usages, so it marks fewer: 160 works as copies, holding 1,852 usages
+  (`scripts/evidence/usages_redraw_breakdown.py`, `breakdown.json`, which also gives the 365).
 - **Each usage records its role, and the measures are checked with and without it.** Contextual
   vectors cluster by syntactic role (Giulianelli et al. 2020; Kutuzov et al. 2022), and the role
   mix moves: hyphen-part modifiers are 0.9% of the 1950s' usages and 1.9% of the 2020s', and for
