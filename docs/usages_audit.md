@@ -234,3 +234,78 @@ for every word with seed 20261306, since the fixes change every word's kept and 
 20 kept, 10 left out and 20 candidate misses per word. The judges, the codebook and the bars are
 unchanged; the calibration stands, as the codebook has not changed. A second failure goes to the
 author.
+
+## Amendment, before the redraw is drawn or scored (2026-11-20)
+
+**Scope is read by its cost** (the author, after the literature check below). The 3-of-10 rule
+measures how clean a word's left-out pool is, not what the exclusions cost the measures, and with
+10 items it cannot keep both of its errors low (a word with 10% real uses among its left-out
+usages is sent back 7% of the time, one with 30% 62%; acceptance sampling gives no better rule at
+that size). From the redraw on:
+
+- **The bar:** a word's estimated real uses wrongly left out are its left-out usages times the
+  share of its judged left-out items that were real uses; over its in-scope usages plus those, at
+  most 2% per word and 1% pooled, as for recall.
+- **The screen:** a word with 3 or more of its 10 left-out items wrongly left out is reviewed, as a
+  word with more than 2 kept errors is, without failing the audit.
+- **Reported:** the estimated share lost per decade (the judged left-out items pooled over words by
+  decade), and each word's combined loss, missed plus wrongly left out.
+
+**Judge error is reported as a check.** The agents' verdicts decide the bars. Beside each pooled
+rate the scorer reports the rate corrected for the judges' misclassification as the author's 60
+calibration items measure it, kind by kind (the Rogan–Gladen estimator, with uniform priors on each
+kind's sensitivity and specificity, and a 95% interval from their posterior draws). With 60 items
+the interval is wide; it is reported, not used to pass or fail.
+
+**The literature check** (2026-11-20) behind both:
+
+- Leaving names out is standard in semantic change work, as their contexts change with events
+  rather than meaning, but it is done word by word (Soni, Lerman and Eisenstein, *Follow the
+  Leader*, on legal opinions and scientific abstracts) or by keeping proper names apart from common
+  nouns (Kutuzov, Velldal and Øvrelid 2022), not usage by usage with a news-trained recognizer,
+  whose rarer labels are its least reliable even on news (WORK_OF_ART, LAW, PRODUCT).
+- Preprocessing errors of the kind this audit measures (missed targets, tagging and lemmatisation
+  errors) were found in the field's main benchmark, with a call to document and audit
+  preprocessing (Phan-Tat et al. 2026, *Evaluating the Evaluator*).
+- An LLM annotator is validated on an expert's random sample against a codebook, refined on its
+  errors and tested on fresh items; agreement between LLM runs is no evidence of validity (Pangakis
+  et al. 2023; Ziems et al. 2024).
+- Even accurate LLM labels can bias low rates estimated from them and break their intervals unless
+  expert labels correct them (Egami et al. 2023).
+
+**The rules reviewed against the corpus and the literature** (the author, 2026-11-20, before the
+redraw; `scripts/evidence/usage_rule_profile.py`, `rule_profile.json`). Each rule was weighed on
+whether what it drops does not carry the word's meaning, and on whether its errors could pose as
+drift, a class whose share moves over the decades or whose errors fall on one sense.
+
+- **Kept as they are:** the parts of speech per word (the norm in DWUG, SemEval-2020,
+  NorDiaChange; the verb-tagged uses of noun words left out are 2.5–2.9% of every decade, 10% of
+  them real uses); usages inside names left out, with the generic-term rule (dropping usages whose
+  target sits in a name is the best-supported variant, with a small measured effect, Martinc et
+  al. 2020; keeping every name would add about 25,000 usages, about 70% of them not uses, and half
+  the excluded names occur once and are names three times in four); hyphen parts and noun
+  modifiers (judged right 72 times in 75); one usage per abstract (one sense per discourse, Gale et
+  al. 1992); titles of cited works as names (Del Tredici et al. 2019 on referential contexts).
+- **A named instrument is a name.** The proper-noun tag lets in names the recognizer misses: 14 of
+  the 26 judged kept items tagged PROPN were names (named scales and tests, a principle, a journal,
+  a model), and such usages rise from 1.1% of the 1950s' usages to 2.9% of the 2020s'. A target in
+  a capitalised run ending in an instrument word (*Scale*, *Inventory*, *Test*, *Questionnaire*,
+  *Checklist*, *Battery* and the like) is inside a name: on the judged items the rule matched 30,
+  27 of them names, and it removes 4 of the 42 kept errors for 1 real use.
+- **Copies are not drawn.** 6,688 usages (3,536 drawn) sit in a sentence another work holds at the
+  same place, 0.6% of the 1980s' and 1990s' usages; 365 pairs of works share three or more, the
+  same paper indexed twice below the near-duplicate threshold. Diachronic datasets de-duplicate
+  before sampling (NorDiaChange; Shoemark et al. 2019; Antoniak and Mimno 2018). When two works
+  share three or more target sentences at the same places, the later is a copy: its usages stay
+  in the table, marked with the work it copies, and are never drawn.
+- **Each usage records its role, and the measures are checked with and without it.** Contextual
+  vectors cluster by syntactic role (Giulianelli et al. 2020; Kutuzov et al. 2022), and the role
+  mix moves: hyphen-part modifiers are 0.9% of the 1950s' usages and 1.9% of the 2020s', and for
+  single words much more (*agent* 0.6% to 14%, *prompt* 0 to 11%, *user* 2.7% to 9%). Each usage
+  is a head, a noun modifier (the next token a noun) or a compound part, and step 7's
+  pre-registration must report the drift measures with and without modifiers and compound parts.
+- **Flags, reported per decade, decided at step 7:** a capitalised target (not opening its
+  sentence), so the measures can be rerun without capitalised terms, where the name rules are
+  least reliable; the word mentioned as a word (*the term "attention"*); and a list-like sentence
+  (most of its words capitalised, or a table of contents' separators), where titles and
+  instrument lists sit.
