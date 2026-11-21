@@ -1,0 +1,102 @@
+{
+ "F001": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing units\" is a generic term used as a noun modifier; the marks cover the whole phrase, not a name."
+ },
+ "F003": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing capabilities\": noun modifier use of the generic term, not a name; span covers the full phrase."
+ },
+ "F000": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun-modifier use in 'information processing industry'. It is not a name, and the marks cover the whole term."
+ },
+ "F002": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic noun-modifier use in 'information processing system'; not a name, and the marks cover the whole term."
+ },
+ "F004": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"information processing operations\"; it is a generic term, not a name, and the marks cover the whole phrase."
+ },
+ "F005": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"information processing systems\", a generic term, not a name; marks cover the whole phrase."
+ },
+ "F007": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic technique/theory term used as a noun modifier (\"information processing model\"); not a name, and the marks cover the whole target."
+ },
+ "F006": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a generic noun modifier before \"system\"; not a name, and the marks cover the whole phrase."
+ },
+ "F009": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"optical information processing system\"; a generic term, not a name, and the span is exact."
+ },
+ "F008": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "Generic term \"information processing\" used as a noun modifier in \"information processing system\"; not a name, and the marks cover the full phrase."
+ },
+ "F010": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"taste information processing regions\". It is not a name, and the marks cover the full term."
+ },
+ "F011": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing systems\" is a generic noun-modifier use, not a name; the marks cover the full term."
+ },
+ "F012": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"information processing resources\", a generic term, not a name; marks cover the phrase exactly."
+ },
+ "F013": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a generic noun modifier before \"activities\"; not a name, and the marks cover exactly the phrase."
+ },
+ "F015": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" used as a noun modifier in \"information processing properties\"; generic term, not a name, span covers the full term."
+ },
+ "F014": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun phrase (noun modifier of \"mechanism\"), generic term, not a name; marks cover the full term."
+ },
+ "F016": {
+  "verdict": "wrong",
+  "reason": "name",
+  "note": "Title of a cited book (with its editors listed), so it counts as a name, not a use."
+ },
+ "F017": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a noun modifier in \"information processing structure\"; generic term, not a name, and the marks cover the whole phrase."
+ },
+ "F018": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" used as a noun modifier in a generic phrase (information processing system); not a name; marks cover the whole term."
+ },
+ "F019": {
+  "verdict": "right",
+  "reason": "none",
+  "note": "\"information processing\" is a generic term used as a noun modifier in \"human information processing system\"; not a name, and the marks cover exactly the phrase."
+ }
+}

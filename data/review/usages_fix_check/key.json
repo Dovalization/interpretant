@@ -1,0 +1,162 @@
+{
+ "F000": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W3209815263",
+  "word": "information processing",
+  "target_start": 137,
+  "target_end": 159,
+  "part": "compsci_1960"
+ },
+ "F001": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W1700216434",
+  "word": "information processing",
+  "target_start": 64,
+  "target_end": 86,
+  "part": "neuroscience_2000"
+ },
+ "F002": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2384823185",
+  "word": "information processing",
+  "target_start": 6,
+  "target_end": 28,
+  "part": "psychology_2000"
+ },
+ "F003": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W270663674",
+  "word": "information processing",
+  "target_start": 716,
+  "target_end": 738,
+  "part": "cogpsych_1970"
+ },
+ "F004": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W230106862",
+  "word": "information processing",
+  "target_start": 839,
+  "target_end": 861,
+  "part": "psychology_2000"
+ },
+ "F005": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W1964713516",
+  "word": "information processing",
+  "target_start": 382,
+  "target_end": 404,
+  "part": "compsci_1960"
+ },
+ "F006": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2099485417",
+  "word": "information processing",
+  "target_start": 150,
+  "target_end": 172,
+  "part": "psychology_1980"
+ },
+ "F007": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2413300566",
+  "word": "information processing",
+  "target_start": 3,
+  "target_end": 25,
+  "part": "cogpsych_1980"
+ },
+ "F008": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W1606458798",
+  "word": "information processing",
+  "target_start": 147,
+  "target_end": 169,
+  "part": "philosophy_1980"
+ },
+ "F009": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2521822125",
+  "word": "information processing",
+  "target_start": 11,
+  "target_end": 33,
+  "part": "ai_1980"
+ },
+ "F010": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W3035452468",
+  "word": "information processing",
+  "target_start": 1624,
+  "target_end": 1646,
+  "part": "neuroscience_2020"
+ },
+ "F011": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2130602626",
+  "word": "information processing",
+  "target_start": 209,
+  "target_end": 231,
+  "part": "ai_1970"
+ },
+ "F012": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W1971472599",
+  "word": "information processing",
+  "target_start": 255,
+  "target_end": 277,
+  "part": "hci_2000"
+ },
+ "F013": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2588538582",
+  "word": "information processing",
+  "target_start": 2156,
+  "target_end": 2178,
+  "part": "neuroscience_1990"
+ },
+ "F014": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2378143366",
+  "word": "information processing",
+  "target_start": 30,
+  "target_end": 52,
+  "part": "ai_2000"
+ },
+ "F015": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2061895255",
+  "word": "information processing",
+  "target_start": 574,
+  "target_end": 596,
+  "part": "neuroscience_1970"
+ },
+ "F016": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2146362576",
+  "word": "information processing",
+  "target_start": 348,
+  "target_end": 370,
+  "part": "communication_1980"
+ },
+ "F017": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2007454082",
+  "word": "information processing",
+  "target_start": 925,
+  "target_end": 947,
+  "part": "compsci_1960"
+ },
+ "F018": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2030305392",
+  "word": "information processing",
+  "target_start": 1636,
+  "target_end": 1658,
+  "part": "psychology_2000"
+ },
+ "F019": {
+  "kind": "kept",
+  "work_id": "https://openalex.org/W2076238342",
+  "word": "information processing",
+  "target_start": 627,
+  "target_end": 649,
+  "part": "cogpsych_1990"
+ }
+}
