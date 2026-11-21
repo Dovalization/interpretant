@@ -10,31 +10,44 @@ pre-registered bars:
 
 - precision: the kept items' errors pooled, against the smallest number that passes at least 96% of
   the time at a true error rate of 2% for the number judged; and per word, at most 2 errors;
-- scope: a word with 3 or more of its left-out items wrongly left out goes back;
+- scope: a word with 3 or more of its left-out items wrongly left out is screened; when the counts
+  hold each word's left-out usages (the redraw's), scope is read by its cost (the amendment of
+  2026-11-20): each word's estimated real uses wrongly left out (left-out usages times the share
+  judged wrongly left out) over its in-scope usages plus those, at most 2% per word and 1% pooled,
+  with the loss per decade and each word's combined loss, missed plus left out;
 - recall: each word's estimated misses (candidates times the share judged right) over its in-scope
   usages plus the misses, at most 2% per word and 1% pooled;
-- calibration, given the author's verdicts (a JSON object of item id to `right` or `wrong`): the
-  agents' final verdicts agree on at least 54 of 60.
+- with `--calibration DIR`, an audit folder holding the author's verdicts (`author.json`, item id
+  to `right` or `wrong`, on its `calibration.json` items): whether its agents' final verdicts agree
+  on at least 54 of 60, and as a check each kind's pooled rate corrected for the judges'
+  misclassification on those items.
 
 Words appear by their reported names (held-out words by a hash). Writes `results.json`. Run from the
-repository root: `python scripts/review/score_usages.py AUDIT_DIR pending|score [AUTHOR.json]`.
+repository root:
+`python scripts/review/score_usages.py AUDIT_DIR pending|score [--calibration DIR]`.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 from scipy.stats import binom
 
 KEPT_ERRORS_PER_WORD = 2
 LEFT_OUT_WRONG_PER_WORD = 3
-MISSED_PER_WORD = 0.02
 MISSED_POOLED = 0.01
 CALIBRATION_AGREEMENT = 54
+# A word's share of real uses lost, missed or wrongly left out (recall, and scope by its cost).
+LOST_PER_WORD = 0.02
+LOST_POOLED = 0.01
+DRAWS = 20_000
+CORRECTION_SEED = 20261307
 
 
 def load_judge(folder: Path, judge: str) -> dict[str, dict[str, Any]]:
@@ -119,8 +132,8 @@ def write_pending(audit: Path, key: dict[str, Any]) -> None:
     )
 
 
-def score(audit: Path, key: dict[str, Any], author: dict[str, str] | None) -> dict[str, Any]:
-    """The bars, from the final verdicts and the counts.
+def score(audit: Path, key: dict[str, Any], calibration: Path | None) -> dict[str, Any]:
+    """The bars, from the final verdicts and the counts; with a calibration, its checks.
 
     Raises:
         SystemExit: if an item is still unsettled.
@@ -141,28 +154,13 @@ def score(audit: Path, key: dict[str, Any], author: dict[str, str] | None) -> di
     kept_errors = sum(tally["wrong"] for tally in kept.values())
     bar = pooled_bar(kept_judged)
     failed_words = sorted(w for w, tally in kept.items() if tally["wrong"] > KEPT_ERRORS_PER_WORD)
-    back_words = sorted(
+    screened = sorted(
         w for w, tally in by_kind["left_out"].items() if tally["wrong"] >= LEFT_OUT_WRONG_PER_WORD
     )
-    recall = {}
-    estimated_total = in_scope_total = 0.0
-    for word, in_scope in counts["in_scope_usages"].items():
-        tally = by_kind["missed"].get(word, Counter())
-        judged = sum(tally.values())
-        candidates = counts["candidate_misses"].get(word, 0)
-        estimated = candidates * (tally["right"] / judged) if judged else 0.0
-        share = estimated / (in_scope + estimated) if in_scope + estimated else 0.0
-        recall[word] = {
-            "candidates": candidates,
-            "judged": judged,
-            "right": tally["right"],
-            "estimated_misses": round(estimated, 1),
-            "missed_share": round(share, 4),
-        }
-        estimated_total += estimated
-        in_scope_total += in_scope
-    pooled_missed = estimated_total / (in_scope_total + estimated_total)
-    recall_failed = sorted(w for w, r in recall.items() if r["missed_share"] > MISSED_PER_WORD)
+    recall = estimated_losses(
+        by_kind["missed"], counts["candidate_misses"], counts["in_scope_usages"], "right"
+    )
+    pooled_missed = pooled_share(recall, counts["in_scope_usages"])
     results: dict[str, Any] = {
         "items": len(key),
         "judges_agreed": agreed,
@@ -174,50 +172,211 @@ def score(audit: Path, key: dict[str, Any], author: dict[str, str] | None) -> di
             "error_reasons": dict(reasons),
             "words_over_two_errors": failed_words,
         },
-        "scope": {"words_sent_back": back_words},
+        "scope": {"words_screened": screened},
         "recall": {
             "pooled_missed_share": round(pooled_missed, 4),
             "passes_pooled": pooled_missed <= MISSED_POOLED,
-            "words_over_two_percent": recall_failed,
+            "words_over_two_percent": over_two_percent(recall),
             "by_word": recall,
         },
     }
-    if author is not None:
-        ids = json.loads((audit / "calibration.json").read_text())
-        agree = sum(author[item_id] == final[item_id] for item_id in ids)
-        results["calibration"] = {
-            "items": len(ids),
-            "agree": agree,
-            "passes": agree >= CALIBRATION_AGREEMENT,
-            "disagreements": [i for i in ids if author[i] != final[i]],
+    if "left_out_usages" in counts:
+        results["scope"] |= scope_cost(key, final, by_kind["left_out"], counts, recall)
+    if calibration is not None:
+        results["calibration"] = calibration_agreement(calibration)
+        observed = {
+            "kept": (kept_errors, kept_judged),
+            "left_out": _positives(by_kind["left_out"], "wrong"),
+            "missed": _positives(by_kind["missed"], "right"),
         }
+        results["corrected_for_judge_error"] = corrected_rates(calibration, observed)
     return results
+
+
+def estimated_losses(
+    tallies: dict[str, Counter[str]],
+    pools: dict[str, int],
+    in_scope: dict[str, int],
+    real: str,
+) -> dict[str, dict[str, Any]]:
+    """Each word's real uses lost from a pool: its size times the share of its items judged real.
+
+    The pool is the candidate misses (real uses judged right) or the left-out usages (real uses
+    judged wrongly left out); the share lost is over the word's in-scope usages plus the loss.
+    """
+    losses = {}
+    for word, base in in_scope.items():
+        tally = tallies.get(word, Counter())
+        judged = sum(tally.values())
+        pool = pools.get(word, 0)
+        estimated = pool * tally[real] / judged if judged else 0.0
+        losses[word] = {
+            "pool": pool,
+            "judged": judged,
+            "real": tally[real],
+            "estimated": round(estimated, 1),
+            "share": round(estimated / (base + estimated), 4) if base + estimated else 0.0,
+        }
+    return losses
+
+
+def pooled_share(losses: dict[str, dict[str, Any]], in_scope: dict[str, int]) -> float:
+    """The pooled share lost: every word's estimated loss over in-scope usages plus the losses."""
+    lost = sum(loss["estimated"] for loss in losses.values())
+    return lost / (sum(in_scope.values()) + lost)
+
+
+def over_two_percent(losses: dict[str, dict[str, Any]]) -> list[str]:
+    """The words losing more than 2% of their uses."""
+    return sorted(word for word, loss in losses.items() if loss["share"] > LOST_PER_WORD)
+
+
+def scope_cost(
+    key: dict[str, Any],
+    final: dict[str, str],
+    left_out: dict[str, Counter[str]],
+    counts: dict[str, Any],
+    recall: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """The scope bar read by its cost (the amendment of 2026-11-20), by word and by decade."""
+    in_scope = counts["in_scope_usages"]
+    lost = estimated_losses(left_out, counts["left_out_usages"], in_scope, "wrong")
+    pooled = pooled_share(lost, in_scope)
+    combined = {}
+    for word, base in in_scope.items():
+        both = lost[word]["estimated"] + recall[word]["estimated"]
+        combined[word] = round(both / (base + both), 4) if base + both else 0.0
+    by_decade: dict[str, Counter[str]] = defaultdict(Counter)
+    for item_id, entry in key.items():
+        if entry["kind"] == "left_out":
+            by_decade[entry["part"].rsplit("_", 1)[1]][final[item_id]] += 1
+    decades = estimated_losses(
+        by_decade, counts["left_out_by_decade"], counts["in_scope_by_decade"], "wrong"
+    )
+    return {
+        "pooled_lost_share": round(pooled, 4),
+        "passes_pooled": pooled <= LOST_POOLED,
+        "words_over_two_percent": over_two_percent(lost),
+        "by_word": lost,
+        "by_decade": decades,
+        "combined_loss_by_word": combined,
+    }
+
+
+def _positives(tallies: dict[str, Counter[str]], positive: str) -> tuple[int, int]:
+    return (
+        sum(tally[positive] for tally in tallies.values()),
+        sum(sum(tally.values()) for tally in tallies.values()),
+    )
+
+
+def calibration_agreement(calibration: Path) -> dict[str, Any]:
+    """The author's calibration verdicts against that audit's final verdicts."""
+    key = json.loads((calibration / "key.json").read_text())
+    final, _, _ = final_verdicts(calibration, key)
+    author = json.loads((calibration / "author.json").read_text())
+    ids = json.loads((calibration / "calibration.json").read_text())
+    agree = sum(author[item_id] == final[item_id] for item_id in ids)
+    return {
+        "audit": str(calibration),
+        "items": len(ids),
+        "agree": agree,
+        "passes": agree >= CALIBRATION_AGREEMENT,
+        "disagreements": [i for i in ids if author[i] != final[i]],
+    }
+
+
+# The verdict that marks the rate each kind's bar reads: an error, a real use left out, a miss.
+POSITIVE = {"kept": "wrong", "left_out": "wrong", "missed": "right"}
+
+
+def corrected_rates(
+    calibration: Path, observed: dict[str, tuple[int, int]]
+) -> dict[str, dict[str, Any]]:
+    """Each kind's pooled rate corrected for the judges' misclassification (Rogan–Gladen).
+
+    The author's calibration verdicts give each kind's sensitivity and specificity, drawn from
+    their posteriors under uniform priors; the observed rate is drawn the same way; the corrected
+    rate is (observed + specificity - 1) / (sensitivity + specificity - 1), clipped to [0, 1].
+    """
+    key = json.loads((calibration / "key.json").read_text())
+    final, _, _ = final_verdicts(calibration, key)
+    author = json.loads((calibration / "author.json").read_text())
+    ids = json.loads((calibration / "calibration.json").read_text())
+    rng = np.random.default_rng(CORRECTION_SEED)
+    out = {}
+    for kind, (positives, total) in observed.items():
+        positive = POSITIVE[kind]
+        pairs = [
+            (author[i] == positive, final[i] == positive) for i in ids if key[i]["kind"] == kind
+        ]
+        table = {
+            "both": sum(a and g for a, g in pairs),
+            "author_only": sum(a and not g for a, g in pairs),
+            "judges_only": sum(g and not a for a, g in pairs),
+            "neither": sum(not a and not g for a, g in pairs),
+        }
+        sensitivity = rng.beta(1 + table["both"], 1 + table["author_only"], DRAWS)
+        specificity = rng.beta(1 + table["neither"], 1 + table["judges_only"], DRAWS)
+        rate = rng.beta(1 + positives, 1 + total - positives, DRAWS)
+        informative = sensitivity + specificity > 1
+        corrected = np.clip(
+            (rate[informative] + specificity[informative] - 1)
+            / (sensitivity[informative] + specificity[informative] - 1),
+            0,
+            1,
+        )
+        low, middle, high = np.percentile(corrected, [2.5, 50, 97.5])
+        out[kind] = {
+            "observed": round(positives / total, 4) if total else 0.0,
+            "corrected": round(float(middle), 4),
+            "interval": [round(float(low), 4), round(float(high), 4)],
+            "calibration": table,
+        }
+    return out
 
 
 def main() -> None:
     """Write the adjudicator's items, or score the audit and write the results."""
-    audit, mode = Path(sys.argv[1]), sys.argv[2]
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("audit", type=Path)
+    parser.add_argument("mode", choices=["pending", "score"])
+    parser.add_argument(
+        "--calibration", type=Path, help="the audit folder holding the author's author.json"
+    )
+    options = parser.parse_args()
+    audit = options.audit
     key = json.loads((audit / "key.json").read_text())
-    if mode == "pending":
+    if options.mode == "pending":
         write_pending(audit, key)
         return
-    author = json.loads(Path(sys.argv[3]).read_text()) if len(sys.argv) > 3 else None
-    results = score(audit, key, author)
+    results = score(audit, key, options.calibration)
     (audit / "results.json").write_text(json.dumps(results, indent=1) + "\n")
-    precision, recall = results["precision"], results["recall"]
+    precision, scope, recall = results["precision"], results["scope"], results["recall"]
     verdict = "passes" if precision["passes"] else "fails"
-    over_two = len(precision["words_over_two_errors"])
-    sent_back = len(results["scope"]["words_sent_back"])
-    recall_failed = len(recall["words_over_two_percent"])
-    sys.stdout.write(
+    lines = [
         f"precision: {precision['errors']} errors in {precision['judged']} "
-        f"(bar {precision['bar']}, {verdict}); words over two errors: {over_two}; "
-        f"words sent back on scope: {sent_back}; missed share pooled "
-        f"{recall['pooled_missed_share']:.2%}, words over 2%: {recall_failed}\n"
-    )
+        f"(bar {precision['bar']}, {verdict}); "
+        f"words over two errors: {len(precision['words_over_two_errors'])}",
+        f"scope: {len(scope['words_screened'])} words screened (3 or more of 10)",
+        f"recall: missed share pooled {recall['pooled_missed_share']:.2%}, words over 2%: "
+        f"{len(recall['words_over_two_percent'])}",
+    ]
+    if "pooled_lost_share" in scope:
+        lines.append(
+            f"scope cost: lost share pooled {scope['pooled_lost_share']:.2%}, words over 2%: "
+            f"{len(scope['words_over_two_percent'])}"
+        )
     if "calibration" in results:
         calibration = results["calibration"]
-        sys.stdout.write(f"calibration: {calibration['agree']} of {calibration['items']}\n")
+        lines.append(f"calibration: {calibration['agree']} of {calibration['items']}")
+        for kind, rate in results["corrected_for_judge_error"].items():
+            low, high = rate["interval"]
+            lines.append(
+                f"{kind}: observed {rate['observed']:.2%}, corrected {rate['corrected']:.2%} "
+                f"({low:.2%} to {high:.2%})"
+            )
+    sys.stdout.write("\n".join(lines) + "\n")
 
 
 if __name__ == "__main__":
