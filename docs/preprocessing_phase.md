@@ -484,9 +484,14 @@ forbidden list, and agenda 8.1 is updated (it named `corpus/target_matching.py`)
 - the seed.
 
 **Retires here:**
-- the two `key_of` copies (`scripts/build_vector_store.py`, `scripts/review/build.py`);
-- `pilot_labellers.usage_id`;
+- the two `key_of` copies (`scripts/build_vector_store.py`, `scripts/review/build.py`): done
+  2026-11-21, both scripts take `build_content_key`, which hashes the same text, so no stored key
+  changes;
 - the old store layout once nothing reads it.
+
+`pilot_labellers.usage_id` moved to the store's rebuild (the author, 2026-11-21): it keys the
+committed labels in `data/labels/pilot/`, and the whole script is deleted when the store is rebuilt
+(agenda 1b), so re-keying those labels first would gain nothing.
 
 `drift/senses.py`, `preprocess_text` and `TARGET_VARIANTS` go when their scripts are replaced
 (agenda 1b).
