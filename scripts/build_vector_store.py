@@ -17,13 +17,12 @@ regular plural, tidied as every round tidies usages):
 - every word-targeted cell of the full words under ``data/raw/openalex_words``.
 
 Vectors are stored as float16 under ``data/store/``, which is not committed; the manifest gives
-each usage's word, field, decade, year, source and key (``key_of`` as in the scorers).
+each usage's word, field, decade, year, source and content key (``usages/identifiers.py``).
 """
 
 from __future__ import annotations
 
 import gzip
-import hashlib
 import json
 import sys
 from pathlib import Path
@@ -34,6 +33,7 @@ from interpretant.corpus import quality
 from interpretant.drift.classifier import tidy_usage
 from interpretant.drift.pairs import Usage
 from interpretant.drift.senses import Sampling, cased_abstracts, sample_many
+from interpretant.usages.identifiers import build_content_key
 
 GRID = Path("data/raw/openalex")
 WORDS = Path("data/raw/openalex_words")
@@ -55,10 +55,6 @@ FULL_WORDS = (
 )
 UNCAPPED = Sampling(cap=10**7, plural=True, quality=True)
 LONGLIST_SAMPLING = Sampling(cap=300, plural=True, quality=True)
-
-
-def key_of(text: str, start: int, end: int) -> str:
-    return hashlib.sha256(f"{start}:{end}:{text}".encode()).hexdigest()[:20]
 
 
 def years(root: Path, field: str, decade: int) -> dict[str, int]:
@@ -96,7 +92,7 @@ def export(part: str) -> None:
                 for occurrence in drawn[word]:
                     usage = tidy_usage(Usage(occurrence.context, occurrence.start, occurrence.end))
                     row = {
-                        "key": key_of(usage.text, usage.start, usage.end),
+                        "key": build_content_key(usage.text, usage.start, usage.end),
                         "word": word,
                         "source": "grid" if root == GRID else f"words/{root.name}",
                         "field": field,
@@ -308,7 +304,7 @@ def dev() -> None:
 def _usage_row(usage: Usage) -> dict[str, object]:
     tidied = tidy_usage(usage)
     return {
-        "key": key_of(tidied.text, tidied.start, tidied.end),
+        "key": build_content_key(tidied.text, tidied.start, tidied.end),
         "text": tidied.text,
         "start": tidied.start,
         "end": tidied.end,

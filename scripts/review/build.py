@@ -12,7 +12,6 @@ are cached by usage, so a rerun after a cue change encodes only newly caught sen
     uv run python scripts/review/build.py USAGES.jsonl VECTORS.npz PREVIEWS.json [LISTS.toml]
 """
 
-import hashlib
 import json
 import random
 import sys
@@ -33,6 +32,7 @@ from interpretant.drift.classifier import (
 )
 from interpretant.drift.labels import shown
 from interpretant.drift.pairs import Usage, XLLexeme
+from interpretant.usages.identifiers import build_content_key
 
 LABEL = {
     "ai": "AI",
@@ -68,10 +68,6 @@ rows = [
 print(f"{_before - len(rows)} out-of-scope usages dropped", flush=True)
 
 
-def key_of(text: str, start: int, end: int) -> str:
-    return hashlib.sha256(f"{start}:{end}:{text}".encode()).hexdigest()[:20]
-
-
 # Stage 2: cue matches
 seeds: dict[str, dict[str, list[dict]]] = {}
 for word, body in draft.items():
@@ -87,7 +83,11 @@ for word, body in draft.items():
         if sense:
             matched = [c for c in cues[sense] if cue_sense(usage, {sense: [c]}) == sense]
             by_sense[sense].append(
-                {**row, "cues": matched, "key": key_of(row["text"], row["start"], row["end"])}
+                {
+                    **row,
+                    "cues": matched,
+                    "key": build_content_key(row["text"], row["start"], row["end"]),
+                }
             )
     seeds[word] = by_sense
 
@@ -101,7 +101,7 @@ for word, body in draft.items():
     for s in body["senses"]:
         ex = example_usage(body["word"], s["example"])
         if ex is not None:
-            k = key_of(ex.text, ex.start, ex.end)
+            k = build_content_key(ex.text, ex.start, ex.end)
             if k not in cache:
                 pending[k] = ex
         for seed in seeds[word][s["key"]]:
@@ -129,7 +129,7 @@ for word, body in draft.items():
     for s in body["senses"]:
         ex = example_usage(body["word"], s["example"])
         if ex is not None:
-            examples.append((key_of(ex.text, ex.start, ex.end), s["key"]))
+            examples.append((build_content_key(ex.text, ex.start, ex.end), s["key"]))
     all_seeds = [(seed, sense) for sense in senses for seed in seeds[word][sense]]
 
     # Out-of-fold doubt
