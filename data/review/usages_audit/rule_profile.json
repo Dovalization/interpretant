@@ -1,0 +1,1130 @@
+{
+ "usages": 1982381,
+ "by_decade_percent": {
+  "all usages": {
+   "1950": 39253.0,
+   "1960": 88774.0,
+   "1970": 144884.0,
+   "1980": 228082.0,
+   "1990": 307636.0,
+   "2000": 332136.0,
+   "2010": 379801.0,
+   "2020": 461815.0
+  },
+  "kept:adjective tag": {
+   "1950": 2.209,
+   "1960": 1.823,
+   "1970": 1.387,
+   "1980": 1.213,
+   "1990": 1.072,
+   "2000": 1.124,
+   "2010": 1.119,
+   "2020": 1.214
+  },
+  "kept:generic entity": {
+   "1950": 0.206,
+   "1960": 0.383,
+   "1970": 0.391,
+   "1980": 0.377,
+   "1990": 0.305,
+   "2000": 0.26,
+   "2010": 0.268,
+   "2020": 0.377
+  },
+  "kept:hyphen head": {
+   "1950": 1.19,
+   "1960": 1.169,
+   "1970": 1.188,
+   "1980": 1.153,
+   "1990": 1.251,
+   "2000": 1.403,
+   "2010": 1.355,
+   "2020": 1.379
+  },
+  "kept:hyphen modifier": {
+   "1950": 0.935,
+   "1960": 0.813,
+   "1970": 1.048,
+   "1980": 1.242,
+   "1990": 1.338,
+   "2000": 1.416,
+   "2010": 1.358,
+   "2020": 1.921
+  },
+  "kept:phrase": {
+   "1950": 0.087,
+   "1960": 0.386,
+   "1970": 0.519,
+   "1980": 1.83,
+   "1990": 2.881,
+   "2000": 1.926,
+   "2010": 1.725,
+   "2020": 2.38
+  },
+  "kept:plain": {
+   "1950": 89.591,
+   "1960": 88.688,
+   "1970": 89.668,
+   "1980": 88.54,
+   "1990": 87.528,
+   "2000": 88.335,
+   "2010": 88.157,
+   "2020": 85.989
+  },
+  "kept:proper-noun tag": {
+   "1950": 1.098,
+   "1960": 1.985,
+   "1970": 1.378,
+   "1980": 1.604,
+   "1990": 1.66,
+   "2000": 1.628,
+   "2010": 1.998,
+   "2020": 2.884
+  },
+  "out:name:EVENT": {
+   "1950": 0.076,
+   "1960": 0.065,
+   "1970": 0.025,
+   "1980": 0.022,
+   "1990": 0.033,
+   "2000": 0.026,
+   "2010": 0.032,
+   "2020": 0.018
+  },
+  "out:name:FAC": {
+   "1950": 0.018,
+   "1960": 0.016,
+   "1970": 0.021,
+   "1980": 0.011,
+   "1990": 0.013,
+   "2000": 0.008,
+   "2010": 0.007,
+   "2020": 0.006
+  },
+  "out:name:GPE": {
+   "1980": 0.001,
+   "1990": 0.001,
+   "2000": 0.001,
+   "2010": 0.001
+  },
+  "out:name:LANGUAGE": {
+   "2010": 0.0,
+   "2020": 0.0
+  },
+  "out:name:LAW": {
+   "1950": 0.038,
+   "1960": 0.046,
+   "1970": 0.043,
+   "1980": 0.047,
+   "1990": 0.049,
+   "2000": 0.036,
+   "2010": 0.038,
+   "2020": 0.046
+  },
+  "out:name:LOC": {
+   "1950": 0.005,
+   "1960": 0.002,
+   "1970": 0.006,
+   "1980": 0.004,
+   "1990": 0.002,
+   "2000": 0.004,
+   "2010": 0.002,
+   "2020": 0.003
+  },
+  "out:name:NORP": {
+   "1950": 0.005,
+   "1960": 0.002,
+   "1970": 0.006,
+   "1980": 0.004,
+   "1990": 0.006,
+   "2000": 0.008,
+   "2010": 0.012,
+   "2020": 0.026
+  },
+  "out:name:ORG": {
+   "1950": 0.662,
+   "1960": 0.907,
+   "1970": 0.642,
+   "1980": 0.585,
+   "1990": 0.546,
+   "2000": 0.409,
+   "2010": 0.403,
+   "2020": 0.375
+  },
+  "out:name:PERSON": {
+   "1950": 0.028,
+   "1960": 0.014,
+   "1970": 0.013,
+   "1980": 0.011,
+   "1990": 0.006,
+   "2000": 0.004,
+   "2010": 0.002,
+   "2020": 0.002
+  },
+  "out:name:PRODUCT": {
+   "1950": 0.079,
+   "1960": 0.151,
+   "1970": 0.167,
+   "1980": 0.24,
+   "1990": 0.173,
+   "2000": 0.127,
+   "2010": 0.137,
+   "2020": 0.161
+  },
+  "out:name:WORK_OF_ART": {
+   "1950": 0.634,
+   "1960": 0.595,
+   "1970": 0.516,
+   "1980": 0.373,
+   "1990": 0.36,
+   "2000": 0.3,
+   "2010": 0.227,
+   "2020": 0.184
+  },
+  "out:pos:ADJ": {
+   "1950": 0.316,
+   "1960": 0.311,
+   "1970": 0.269,
+   "1980": 0.185,
+   "1990": 0.174,
+   "2000": 0.191,
+   "2010": 0.226,
+   "2020": 0.309
+  },
+  "out:pos:ADP": {
+   "1970": 0.001,
+   "2000": 0.001,
+   "2010": 0.0
+  },
+  "out:pos:ADV": {
+   "1960": 0.005,
+   "1970": 0.003,
+   "1980": 0.002,
+   "1990": 0.001,
+   "2000": 0.002,
+   "2010": 0.002,
+   "2020": 0.002
+  },
+  "out:pos:INTJ": {
+   "1980": 0.0,
+   "1990": 0.001,
+   "2000": 0.001
+  },
+  "out:pos:NOUN": {
+   "1950": 0.059,
+   "1960": 0.046,
+   "1970": 0.035,
+   "1980": 0.019,
+   "1990": 0.021,
+   "2000": 0.012,
+   "2010": 0.011,
+   "2020": 0.007
+  },
+  "out:pos:PROPN": {
+   "1950": 0.084,
+   "1960": 0.05,
+   "1970": 0.049,
+   "1980": 0.036,
+   "1990": 0.039,
+   "2000": 0.043,
+   "2010": 0.041,
+   "2020": 0.037
+  },
+  "out:pos:PUNCT": {
+   "1990": 0.0
+  },
+  "out:pos:VERB": {
+   "1950": 2.665,
+   "1960": 2.503,
+   "1970": 2.59,
+   "1980": 2.475,
+   "1990": 2.527,
+   "2000": 2.726,
+   "2010": 2.872,
+   "2020": 2.677
+  },
+  "out:pos:X": {
+   "1950": 0.015,
+   "1960": 0.041,
+   "1970": 0.037,
+   "1980": 0.024,
+   "1990": 0.014,
+   "2000": 0.01,
+   "2010": 0.006,
+   "2020": 0.004
+  }
+ },
+ "judged_by_class": {
+  "unmatched": 0,
+  "kept_errors": {
+   "kept:plain": {
+    "judged": 1644,
+    "flagged": 16
+   },
+   "kept:phrase": {
+    "judged": 140,
+    "flagged": 2
+   },
+   "kept:adjective tag": {
+    "judged": 89,
+    "flagged": 1
+   },
+   "kept:hyphen head": {
+    "judged": 38,
+    "flagged": 2
+   },
+   "kept:hyphen modifier": {
+    "judged": 37,
+    "flagged": 1
+   },
+   "kept:proper-noun tag": {
+    "judged": 26,
+    "flagged": 14
+   },
+   "out:pos:X": {
+    "judged": 6,
+    "flagged": 6
+   }
+  },
+  "left_out_real_uses": {
+   "out:name:WORK_OF_ART": {
+    "judged": 222,
+    "flagged": 34
+   },
+   "out:name:ORG": {
+    "judged": 162,
+    "flagged": 31
+   },
+   "kept:generic entity": {
+    "judged": 148,
+    "flagged": 87
+   },
+   "out:pos:VERB": {
+    "judged": 144,
+    "flagged": 15
+   },
+   "out:name:PRODUCT": {
+    "judged": 79,
+    "flagged": 25
+   },
+   "kept:adjective tag": {
+    "judged": 41,
+    "flagged": 41
+   },
+   "out:pos:PROPN": {
+    "judged": 32,
+    "flagged": 18
+   },
+   "out:name:LAW": {
+    "judged": 31,
+    "flagged": 10
+   },
+   "out:pos:X": {
+    "judged": 26,
+    "flagged": 11
+   },
+   "out:pos:ADJ": {
+    "judged": 19,
+    "flagged": 7
+   },
+   "out:name:EVENT": {
+    "judged": 18,
+    "flagged": 1
+   },
+   "out:pos:NOUN": {
+    "judged": 12,
+    "flagged": 2
+   },
+   "out:name:FAC": {
+    "judged": 6,
+    "flagged": 0
+   },
+   "out:name:PERSON": {
+    "judged": 4,
+    "flagged": 3
+   },
+   "out:name:NORP": {
+    "judged": 3,
+    "flagged": 3
+   },
+   "out:name:GPE": {
+    "judged": 1,
+    "flagged": 0
+   },
+   "out:name:LOC": {
+    "judged": 1,
+    "flagged": 1
+   },
+   "out:pos:ADV": {
+    "judged": 1,
+    "flagged": 1
+   }
+  }
+ },
+ "names": {
+  "usages": 25753,
+  "distinct_names": 16347,
+  "names_recurring_10_or_more": 169,
+  "usages_in_recurring_names": 3867,
+  "recurring_names_half_in_one_decade": 86,
+  "usages_in_those": 2138,
+  "judged_by_how_often_the_name_recurs": {
+   "seen once": {
+    "judged": 362,
+    "real_uses": 86,
+    "usages": 12649
+   },
+   "2 to 9 times": {
+    "judged": 239,
+    "real_uses": 69,
+    "usages": 9237
+   },
+   "10 or more": {
+    "judged": 69,
+    "real_uses": 35,
+    "usages": 3867
+   }
+  }
+ },
+ "duplicates": {
+  "usages_shared_with_another_work": 6688,
+  "drawn_usages_shared": 3536,
+  "by_decade": {
+   "1950": {
+    "usages": 39253,
+    "shared": 186,
+    "shared_drawn": 131
+   },
+   "1960": {
+    "usages": 88774,
+    "shared": 401,
+    "shared_drawn": 276
+   },
+   "1970": {
+    "usages": 144884,
+    "shared": 769,
+    "shared_drawn": 469
+   },
+   "1980": {
+    "usages": 228082,
+    "shared": 1500,
+    "shared_drawn": 777
+   },
+   "1990": {
+    "usages": 307636,
+    "shared": 1777,
+    "shared_drawn": 782
+   },
+   "2000": {
+    "usages": 332136,
+    "shared": 1092,
+    "shared_drawn": 555
+   },
+   "2010": {
+    "usages": 379801,
+    "shared": 665,
+    "shared_drawn": 386
+   },
+   "2020": {
+    "usages": 461815,
+    "shared": 298,
+    "shared_drawn": 160
+   }
+  }
+ },
+ "hyphen_share_by_word": [
+  {
+   "word": "agent",
+   "first_decade": 1950,
+   "first_share": 0.0057,
+   "last_decade": 2020,
+   "last_share": 0.1403
+  },
+  {
+   "word": "prompt",
+   "first_decade": 1980,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.1126
+  },
+  {
+   "word": "cloud",
+   "first_decade": 2000,
+   "first_share": 0.0805,
+   "last_decade": 2020,
+   "last_share": 0.1693
+  },
+  {
+   "word": "mind",
+   "first_decade": 1950,
+   "first_share": 0.0169,
+   "last_decade": 2020,
+   "last_share": 0.096
+  },
+  {
+   "word": "held-out:11f8f1ec4ec9",
+   "first_decade": 1980,
+   "first_share": 0.0096,
+   "last_decade": 2020,
+   "last_share": 0.0797
+  },
+  {
+   "word": "held-out:d7b1fc674098",
+   "first_decade": 1960,
+   "first_share": 0.0097,
+   "last_decade": 2020,
+   "last_share": 0.0759
+  },
+  {
+   "word": "user",
+   "first_decade": 1950,
+   "first_share": 0.0268,
+   "last_decade": 2020,
+   "last_share": 0.0897
+  },
+  {
+   "word": "held-out:b3ea1fd57831",
+   "first_decade": 1950,
+   "first_share": 0.0145,
+   "last_decade": 2020,
+   "last_share": 0.0701
+  },
+  {
+   "word": "attention",
+   "first_decade": 1950,
+   "first_share": 0.0087,
+   "last_decade": 2020,
+   "last_share": 0.0642
+  },
+  {
+   "word": "medium",
+   "first_decade": 1950,
+   "first_share": 0.0987,
+   "last_decade": 2020,
+   "last_share": 0.1515
+  },
+  {
+   "word": "held-out:34711782a046",
+   "first_decade": 1970,
+   "first_share": 0.0625,
+   "last_decade": 2020,
+   "last_share": 0.1133
+  },
+  {
+   "word": "held-out:19d5e41de2db",
+   "first_decade": 1950,
+   "first_share": 0.012,
+   "last_decade": 2020,
+   "last_share": 0.0518
+  },
+  {
+   "word": "held-out:10c5166f4af0",
+   "first_decade": 1990,
+   "first_share": 0.0045,
+   "last_decade": 2020,
+   "last_share": 0.0432
+  },
+  {
+   "word": "meaning",
+   "first_decade": 1950,
+   "first_share": 0.0103,
+   "last_decade": 2020,
+   "last_share": 0.0488
+  },
+  {
+   "word": "hallucination",
+   "first_decade": 2000,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0379
+  },
+  {
+   "word": "platform",
+   "first_decade": 1970,
+   "first_share": 0.0076,
+   "last_decade": 2020,
+   "last_share": 0.0349
+  },
+  {
+   "word": "held-out:bd686ff4fd74",
+   "first_decade": 1950,
+   "first_share": 0.0448,
+   "last_decade": 2020,
+   "last_share": 0.0714
+  },
+  {
+   "word": "held-out:6b293b43d2b1",
+   "first_decade": 1970,
+   "first_share": 0.0181,
+   "last_decade": 2020,
+   "last_share": 0.0426
+  },
+  {
+   "word": "computation",
+   "first_decade": 1950,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.024
+  },
+  {
+   "word": "embodiment",
+   "first_decade": 1990,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0238
+  },
+  {
+   "word": "held-out:3cff64e5f947",
+   "first_decade": 1990,
+   "first_share": 0.0155,
+   "last_decade": 2020,
+   "last_share": 0.038
+  },
+  {
+   "word": "presence",
+   "first_decade": 1950,
+   "first_share": 0.0037,
+   "last_decade": 2020,
+   "last_share": 0.0249
+  },
+  {
+   "word": "artificial intelligence",
+   "first_decade": 1970,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0211
+  },
+  {
+   "word": "agency",
+   "first_decade": 1950,
+   "first_share": 0.0056,
+   "last_decade": 2020,
+   "last_share": 0.0266
+  },
+  {
+   "word": "simulation",
+   "first_decade": 1960,
+   "first_share": 0.0138,
+   "last_decade": 2020,
+   "last_share": 0.0338
+  },
+  {
+   "word": "held-out:7b5614820786",
+   "first_decade": 1950,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0194
+  },
+  {
+   "word": "control",
+   "first_decade": 1950,
+   "first_share": 0.0249,
+   "last_decade": 2020,
+   "last_share": 0.0442
+  },
+  {
+   "word": "held-out:c0dcb92b6a30",
+   "first_decade": 1960,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0187
+  },
+  {
+   "word": "learning",
+   "first_decade": 1950,
+   "first_share": 0.033,
+   "last_decade": 2020,
+   "last_share": 0.0516
+  },
+  {
+   "word": "held-out:86a125382979",
+   "first_decade": 1960,
+   "first_share": 0.0087,
+   "last_decade": 2020,
+   "last_share": 0.0246
+  },
+  {
+   "word": "held-out:5350e5a87b0b",
+   "first_decade": 1950,
+   "first_share": 0.0055,
+   "last_decade": 2020,
+   "last_share": 0.021
+  },
+  {
+   "word": "held-out:912b00c7764c",
+   "first_decade": 1950,
+   "first_share": 0.0139,
+   "last_decade": 2020,
+   "last_share": 0.0289
+  },
+  {
+   "word": "held-out:67415e178146",
+   "first_decade": 1970,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0146
+  },
+  {
+   "word": "held-out:d573b31a4663",
+   "first_decade": 1950,
+   "first_share": 0.0153,
+   "last_decade": 2020,
+   "last_share": 0.0283
+  },
+  {
+   "word": "alignment",
+   "first_decade": 1980,
+   "first_share": 0.0055,
+   "last_decade": 2020,
+   "last_share": 0.0177
+  },
+  {
+   "word": "held-out:2c676bb34422",
+   "first_decade": 1990,
+   "first_share": 0.0132,
+   "last_decade": 2020,
+   "last_share": 0.0251
+  },
+  {
+   "word": "held-out:15a9a9ab2b92",
+   "first_decade": 1960,
+   "first_share": 0.0078,
+   "last_decade": 2020,
+   "last_share": 0.0193
+  },
+  {
+   "word": "component",
+   "first_decade": 1950,
+   "first_share": 0.0126,
+   "last_decade": 2020,
+   "last_share": 0.024
+  },
+  {
+   "word": "neural network",
+   "first_decade": 1980,
+   "first_share": 0.0092,
+   "last_decade": 2020,
+   "last_share": 0.0203
+  },
+  {
+   "word": "held-out:d4bed87430ea",
+   "first_decade": 1970,
+   "first_share": 0.0101,
+   "last_decade": 2020,
+   "last_share": 0.0206
+  },
+  {
+   "word": "emergence",
+   "first_decade": 1950,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0105
+  },
+  {
+   "word": "intelligence",
+   "first_decade": 1950,
+   "first_share": 0.0093,
+   "last_decade": 2020,
+   "last_share": 0.0173
+  },
+  {
+   "word": "affordance",
+   "first_decade": 2000,
+   "first_share": 0.0088,
+   "last_decade": 2020,
+   "last_share": 0.0167
+  },
+  {
+   "word": "held-out:da17f59c700d",
+   "first_decade": 1970,
+   "first_share": 0.0305,
+   "last_decade": 2020,
+   "last_share": 0.0379
+  },
+  {
+   "word": "cognition",
+   "first_decade": 1960,
+   "first_share": 0.0267,
+   "last_decade": 2020,
+   "last_share": 0.0335
+  },
+  {
+   "word": "held-out:11ee3fc840ad",
+   "first_decade": 1950,
+   "first_share": 0.0103,
+   "last_decade": 2020,
+   "last_share": 0.0161
+  },
+  {
+   "word": "held-out:7d0f24edc7fd",
+   "first_decade": 1980,
+   "first_share": 0.0377,
+   "last_decade": 2020,
+   "last_share": 0.0433
+  },
+  {
+   "word": "held-out:1b596f30c66f",
+   "first_decade": 1950,
+   "first_share": 0.0033,
+   "last_decade": 2020,
+   "last_share": 0.0083
+  },
+  {
+   "word": "held-out:96da49af8e67",
+   "first_decade": 2000,
+   "first_share": 0.0474,
+   "last_decade": 2020,
+   "last_share": 0.0515
+  },
+  {
+   "word": "held-out:f66e6d2190f6",
+   "first_decade": 1970,
+   "first_share": 0.0095,
+   "last_decade": 2020,
+   "last_share": 0.0133
+  },
+  {
+   "word": "representation",
+   "first_decade": 1950,
+   "first_share": 0.0169,
+   "last_decade": 2020,
+   "last_share": 0.0203
+  },
+  {
+   "word": "perception",
+   "first_decade": 1950,
+   "first_share": 0.0258,
+   "last_decade": 2020,
+   "last_share": 0.0292
+  },
+  {
+   "word": "feedback",
+   "first_decade": 1950,
+   "first_share": 0.0282,
+   "last_decade": 2020,
+   "last_share": 0.0313
+  },
+  {
+   "word": "held-out:1c5d119c45e3",
+   "first_decade": 1960,
+   "first_share": 0.0312,
+   "last_decade": 2020,
+   "last_share": 0.0335
+  },
+  {
+   "word": "system",
+   "first_decade": 1950,
+   "first_share": 0.0092,
+   "last_decade": 2020,
+   "last_share": 0.0115
+  },
+  {
+   "word": "held-out:779d6b6eedf0",
+   "first_decade": 2010,
+   "first_share": 0.02,
+   "last_decade": 2020,
+   "last_share": 0.0223
+  },
+  {
+   "word": "held-out:7b1df4aa54d0",
+   "first_decade": 1970,
+   "first_share": 0.0072,
+   "last_decade": 2020,
+   "last_share": 0.0094
+  },
+  {
+   "word": "model",
+   "first_decade": 1950,
+   "first_share": 0.0139,
+   "last_decade": 2020,
+   "last_share": 0.0159
+  },
+  {
+   "word": "symbol",
+   "first_decade": 1950,
+   "first_share": 0.0219,
+   "last_decade": 2020,
+   "last_share": 0.0236
+  },
+  {
+   "word": "held-out:e7866e6303be",
+   "first_decade": 1950,
+   "first_share": 0.0756,
+   "last_decade": 2020,
+   "last_share": 0.0771
+  },
+  {
+   "word": "held-out:baa86b4dabfd",
+   "first_decade": 1960,
+   "first_share": 0.0356,
+   "last_decade": 2020,
+   "last_share": 0.0365
+  },
+  {
+   "word": "held-out:ab139acf9360",
+   "first_decade": 1950,
+   "first_share": 0.0153,
+   "last_decade": 2020,
+   "last_share": 0.0161
+  },
+  {
+   "word": "having",
+   "first_decade": 1950,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0008
+  },
+  {
+   "word": "held-out:ff37e32092ff",
+   "first_decade": 1950,
+   "first_share": 0.0464,
+   "last_decade": 2020,
+   "last_share": 0.0466
+  },
+  {
+   "word": "held-out:164ebb5df0ea",
+   "first_decade": 2020,
+   "first_share": 0.0256,
+   "last_decade": 2020,
+   "last_share": 0.0256
+  },
+  {
+   "word": "transformer",
+   "first_decade": 2020,
+   "first_share": 0.2585,
+   "last_decade": 2020,
+   "last_share": 0.2585
+  },
+  {
+   "word": "feedback loop",
+   "first_decade": 2020,
+   "first_share": 0.014,
+   "last_decade": 2020,
+   "last_share": 0.014
+  },
+  {
+   "word": "mental representation",
+   "first_decade": 1990,
+   "first_share": 0.0,
+   "last_decade": 2020,
+   "last_share": 0.0
+  },
+  {
+   "word": "held-out:32a54748ce0a",
+   "first_decade": 1950,
+   "first_share": 0.005,
+   "last_decade": 2020,
+   "last_share": 0.0037
+  },
+  {
+   "word": "held-out:ee104561c1ce",
+   "first_decade": 1950,
+   "first_share": 0.0191,
+   "last_decade": 2020,
+   "last_share": 0.0174
+  },
+  {
+   "word": "behavior",
+   "first_decade": 1950,
+   "first_share": 0.0112,
+   "last_decade": 2020,
+   "last_share": 0.0095
+  },
+  {
+   "word": "held-out:02b12c17f936",
+   "first_decade": 1950,
+   "first_share": 0.0037,
+   "last_decade": 2020,
+   "last_share": 0.0014
+  },
+  {
+   "word": "held-out:861f9da96b43",
+   "first_decade": 1950,
+   "first_share": 0.0081,
+   "last_decade": 2020,
+   "last_share": 0.0051
+  },
+  {
+   "word": "information",
+   "first_decade": 1950,
+   "first_share": 0.0189,
+   "last_decade": 2020,
+   "last_share": 0.0154
+  },
+  {
+   "word": "interpretation",
+   "first_decade": 1950,
+   "first_share": 0.0095,
+   "last_decade": 2020,
+   "last_share": 0.0057
+  },
+  {
+   "word": "intentionality",
+   "first_decade": 1970,
+   "first_share": 0.0093,
+   "last_decade": 2020,
+   "last_share": 0.0053
+  },
+  {
+   "word": "social network",
+   "first_decade": 1990,
+   "first_share": 0.0081,
+   "last_decade": 2020,
+   "last_share": 0.0037
+  },
+  {
+   "word": "experience",
+   "first_decade": 1950,
+   "first_share": 0.0157,
+   "last_decade": 2020,
+   "last_share": 0.0103
+  },
+  {
+   "word": "held-out:e39a19f9b2b4",
+   "first_decade": 1960,
+   "first_share": 0.0208,
+   "last_decade": 2020,
+   "last_share": 0.015
+  },
+  {
+   "word": "network",
+   "first_decade": 1950,
+   "first_share": 0.0286,
+   "last_decade": 2020,
+   "last_share": 0.0223
+  },
+  {
+   "word": "information processing",
+   "first_decade": 1960,
+   "first_share": 0.0097,
+   "last_decade": 2020,
+   "last_share": 0.0031
+  },
+  {
+   "word": "complexity",
+   "first_decade": 1950,
+   "first_share": 0.0249,
+   "last_decade": 2020,
+   "last_share": 0.0166
+  },
+  {
+   "word": "interface",
+   "first_decade": 1960,
+   "first_share": 0.0179,
+   "last_decade": 2020,
+   "last_share": 0.0083
+  },
+  {
+   "word": "user interface",
+   "first_decade": 1980,
+   "first_share": 0.0126,
+   "last_decade": 2020,
+   "last_share": 0.0029
+  },
+  {
+   "word": "held-out:bafa5557897f",
+   "first_decade": 1960,
+   "first_share": 0.038,
+   "last_decade": 2020,
+   "last_share": 0.0261
+  },
+  {
+   "word": "held-out:50fa17396b00",
+   "first_decade": 1950,
+   "first_share": 0.0341,
+   "last_decade": 2020,
+   "last_share": 0.0188
+  },
+  {
+   "word": "sign",
+   "first_decade": 1950,
+   "first_share": 0.0475,
+   "last_decade": 2020,
+   "last_share": 0.0306
+  },
+  {
+   "word": "held-out:9384bbe72d46",
+   "first_decade": 1970,
+   "first_share": 0.0355,
+   "last_decade": 1990,
+   "last_share": 0.0155
+  },
+  {
+   "word": "fusion",
+   "first_decade": 1950,
+   "first_share": 0.061,
+   "last_decade": 2020,
+   "last_share": 0.0399
+  },
+  {
+   "word": "held-out:f6604b2573e2",
+   "first_decade": 2010,
+   "first_share": 0.0679,
+   "last_decade": 2020,
+   "last_share": 0.044
+  },
+  {
+   "word": "memory",
+   "first_decade": 1950,
+   "first_share": 0.0554,
+   "last_decade": 2020,
+   "last_share": 0.0306
+  },
+  {
+   "word": "held-out:07afa72fe9fc",
+   "first_decade": 1950,
+   "first_share": 0.0645,
+   "last_decade": 2020,
+   "last_share": 0.036
+  },
+  {
+   "word": "consciousness",
+   "first_decade": 1950,
+   "first_share": 0.1058,
+   "last_decade": 2020,
+   "last_share": 0.0734
+  },
+  {
+   "word": "strength",
+   "first_decade": 1950,
+   "first_share": 0.0499,
+   "last_decade": 2020,
+   "last_share": 0.0167
+  },
+  {
+   "word": "held-out:7dc7c59f90ed",
+   "first_decade": 1950,
+   "first_share": 0.1429,
+   "last_decade": 2020,
+   "last_share": 0.1066
+  },
+  {
+   "word": "held-out:5ff5c82d203d",
+   "first_decade": 1980,
+   "first_share": 0.052,
+   "last_decade": 2020,
+   "last_share": 0.0119
+  },
+  {
+   "word": "held-out:f151e0c23aaf",
+   "first_decade": 2000,
+   "first_share": 0.1709,
+   "last_decade": 2020,
+   "last_share": 0.1037
+  },
+  {
+   "word": "embedding",
+   "first_decade": 1980,
+   "first_share": 0.1009,
+   "last_decade": 2020,
+   "last_share": 0.0291
+  },
+  {
+   "word": "image",
+   "first_decade": 1950,
+   "first_share": 0.1333,
+   "last_decade": 2020,
+   "last_share": 0.0474
+  }
+ ]
+}
