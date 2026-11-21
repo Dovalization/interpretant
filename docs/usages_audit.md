@@ -309,3 +309,76 @@ drift, a class whose share moves over the decades or whose errors fall on one se
   least reliable; the word mentioned as a word (*the term "attention"*); and a list-like sentence
   (most of its words capitalised, or a table of contents' separators), where titles and
   instrument lists sit.
+
+## The redraw's results (2026-11-21)
+
+The two judges agreed on 4,171 of 4,224 items and the adjudicator settled the other 53
+(`data/review/usages_audit_redraw/`). The calibration of record stands (57 of 60).
+
+| Bar | Result |
+|---|---|
+| Precision, pooled | fails: 55 errors in 1,980 (bar 51): 40 names, 5 other words, 4 not English, 4 parts of speech, 2 unstated |
+| Precision, per word (screen) | 4 words over 2 errors: *medium* (3 parts of speech, 1 name) and three held-out words (3 not English and 2 other words and 1 unstated; 3 names and 1 unstated; 2 other words, 1 name, 1 not English) |
+| Scope cost, pooled | passes: 0.32% of real uses wrongly left out (bar 1%) |
+| Scope cost, per word | fails: 6 words over 2%: *prompt* (14.1%), *information processing* (5.3%), *agency* (2.7%) and three held-out words (6.4%, 3.8%, 2.1%) |
+| Scope screen | 29 words with 3 or more of their 10 left-out items real uses |
+| Recall, pooled | passes: 0.21% missed |
+| Recall, per word | fails: *intentionality* (2.4%), the tokenizer gap left as it is |
+| Judge error (check) | kept 2.78% observed, 0.78% corrected (0.00–9.22%); left out 19.1% and 1.8% (0.0–20.3%); missed 88.2% and 93.2% (0–100%). The calibration holds one kept error in 30, so the intervals say little |
+
+**Where the kept errors are.** Targets capitalised mid-sentence are 87 of the 1,980 kept items
+and hold 32 of the 55 errors (37% of them wrong, against 1.2% of the rest); proper-noun-tagged
+targets were wrong 16 times in 34, the generic-term rule 3 times in 5. The errors fall with time:
+43 in the 1,117 items before 2000 (3.9%), 12 in the 863 from 2000 (1.4%). Capitalised targets were
+wrong 24 times in 56 before 2000 and 8 times in 31 from 2000, where most are technical terms
+written in capitals (*Artificial Intelligence*, *User Interface*, *Neural Networks*). No rule on
+what the table records removes errors without losing as many real uses. With each word weighted by
+its kept usages, leaving out capitalised targets would bring the kept error rate from 2.8% to 0.7%
+and lose 2.3% of real uses; proper-noun tags 1.1% and 1.3%; capitalised proper-noun tags 1.1% and
+1.2%; list-like sentences 2.2% and 1.1%. The losses would fall mostly on the recent decades' terms.
+
+**Where the scope cost is.** *information processing*: the transformer tags the phrase's -ing head
+as a verb, and 6 of the 7 judged verb-tagged items were real uses. *prompt*'s 14.1% rests on one
+real use in 10, an adjective-tagged noun modifier. Adjective-tagged *prompt* before a noun runs at
+12–22 usages a decade until the 2010s and 130 in the 2020s (*prompt engineering*), about a tenth of
+the 2020s' uses; adding the tag would also let in the adjective (*prompt response*), about 25
+usages a decade, as many as all of *prompt*'s kept uses in the 1960s. *agency* (3 of 10 inside
+organisation names) and the three held-out words (1 to 5 of 10 over several labels and tags) show
+no single pattern. The per-word bar reads 10 items, so it cannot resolve a word whose left-out
+usages outnumber its kept ones: one real use among 10 of *prompt*'s 2,799 left-out usages is 14% of
+its 1,705 kept ones. This was not checked when the bar was set; the bar stands as recorded.
+
+**The author's decisions (2026-11-21).**
+
+- **Precision is accepted as measured:** 2.8% of kept usages, 3.9% before 2000 and 1.4% after.
+  Step 7's pre-registration must rerun the drift measures without capitalised targets and report
+  both, as a required check.
+- **information processing takes VERB** (`curated/words.tsv`). The fix is checked without
+  redrawing the audit: 20 drawn usages it brings into scope, seed 20261308, are judged like the
+  precision items and pass with at most 2 errors, the precision screen's bar per word
+  (`scripts/review/usages_fix_check.py`, `data/review/usages_fix_check/`). The rebuilt table holds
+  213 more usages in scope (171 of them drawn) and nothing else changed; the check **passes**, 1
+  error in 20, the two judges agreeing on all 20.
+- **The other five words are recorded, not fixed:** *prompt*'s 2020s noun modifiers stay lost to
+  the adjective tag (step 7's runs without modifiers do not depend on them), and *agency* and the
+  three held-out words keep their rules.
+- **Three more name tests were run and none is used.** Each was set before it ran and read the 151
+  capitalised kept items of both audits (51 wrong, 100 right; `data/review/usages_audit_redraw/`):
+  - **A second recognizer** (`scripts/evidence/gliner_names.py`, `gliner_names.json`): GLiNER
+    (large v2.1, threshold 0.5, the codebook's name types as labels) put 25 of the wrong items and
+    31 of the right ones inside a name of more than the target (26 and 40 for any name covering
+    it), short of its bar (half the wrong items caught, twice as many wrong items as right ones
+    removed). Like the transformer's recognizer, it does not tell a name from a term in capitals.
+  - **The lower-case check** (`scripts/evidence/capitalised_runs.py`, `capitalised_runs.json`;
+    Mikheev 2002): a capitalised run the corpus writes in lower case under a tenth of the time,
+    seen at least 3 times, removed 9 wrong items for 5 right ones (7 for 2 on the first audit's
+    items, 2 for 3 on the redraw's), short of its bar (5 wrong items and twice as many as right
+    ones). Counting runs seen fewer than 3 times as names removed 39 for 44: most of the names are
+    cited titles seen once, where the corpus holds no evidence.
+  - **Publication and organisation words** in the run (*Journal*, *Society*, *Institute* and the
+    like, as the instrument rule's test words): 2 wrong items for 1 right one.
+- **Further work waits on step 7** (the author). If the drift measures with and without
+  capitalised targets agree, the names are left as they are. If they differ, a classifier is
+  trained on capitalised uses labelled by the judges (about 1,000) and confirmed by a fresh
+  precision draw. A filter judging every capitalised use with a language model (about 83,000) was
+  set aside for its cost and for putting a language model inside the pipeline.
