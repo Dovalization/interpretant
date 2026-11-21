@@ -26,6 +26,7 @@ multirun/
 
 # Logs
 logs/*.log
+logs/*.log.exit
 !logs/.gitkeep
 
 # Data & models
