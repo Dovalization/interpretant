@@ -7,13 +7,17 @@ plurals, its other spellings from the spelling map and theirs, alone or as a hyp
 with a space or a hyphen between their words). A hit no mention of the word overlaps is a
 candidate miss; 20 per word are drawn. Writes the items in shuffled batches (they quote corpus
 sentences and stay out of git), the key, the calibration set (seed 20261305: 30 kept, 15 left out,
-15 missed) and `counts.json`, each word's in-scope usages and candidate misses for the missed-share
-estimate. Held-out words are judged like the others; the key and counts name them by a hash. Run
-from the repository root: `python scripts/review/usages_audit.py OUT [PROCESSES]`.
+15 missed) and `counts.json`: each word's in-scope usages, candidate misses and left-out usages,
+and the in-scope and left-out usages per decade, for the estimates of real uses lost. Held-out
+words are judged like the others; the key and counts name them by a hash. A redraw after a failed
+bar (`--seed 20261306 --skip-calibration`) draws the same way with its own seed and keeps the
+calibration of record. Run from the repository root:
+`python scripts/review/usages_audit.py OUT [PROCESSES] [--seed SEED] [--skip-calibration]`.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import random
 import re
@@ -74,9 +78,9 @@ def allocate(available: dict[int, int], total: int) -> dict[int, int]:
     return shares
 
 
-def audit_key(work_id: str, word: str, place: str) -> str:
+def audit_key(seed: int, work_id: str, word: str, place: str) -> str:
     """The seeded key ordering one usage or hit in the draws."""
-    return build_draw_key(AUDIT_SEED, work_id, word, place)
+    return build_draw_key(seed, work_id, word, place)
 
 
 def forms_of(word: Word, spellings: dict[str, str]) -> list[str]:
@@ -114,6 +118,7 @@ class SearchJob:
 
     catalog: CatalogConfig
     patterns: dict[str, re.Pattern[str]]
+    seed: int
 
 
 def search_part(part: str, job: SearchJob) -> dict[str, Any]:
@@ -165,7 +170,7 @@ def search_part(part: str, job: SearchJob) -> dict[str, Any]:
                         "sentence_start": bounds[index][0],
                         "sentence_end": bounds[index][1],
                         "part": part,
-                        "key": audit_key(work_id, word, f"{start}:{end}"),
+                        "key": audit_key(job.seed, work_id, word, f"{start}:{end}"),
                     }
                 )
     smallest = {
@@ -188,21 +193,21 @@ def load_usages_with_decades(catalog: CatalogConfig) -> pl.DataFrame:
     )
 
 
-def with_keys(usages: pl.DataFrame) -> pl.DataFrame:
+def with_keys(usages: pl.DataFrame, seed: int) -> pl.DataFrame:
     """The usages with their audit keys."""
     return usages.with_columns(
         pl.struct("work_id", "word", "content_key")
         .map_elements(
-            lambda row: audit_key(row["work_id"], row["word"], row["content_key"]),
+            lambda row: audit_key(seed, row["work_id"], row["word"], row["content_key"]),
             return_dtype=pl.String,
         )
         .alias("key")
     )
 
 
-def draw_kept(usages: pl.DataFrame) -> pl.DataFrame:
+def draw_kept(usages: pl.DataFrame, seed: int) -> pl.DataFrame:
     """20 drawn in-scope usages per word, spread over decades, the smallest keys in each."""
-    drawn = with_keys(usages.filter(pl.col("drawn") & pl.col("in_scope")))
+    drawn = with_keys(usages.filter(pl.col("drawn") & pl.col("in_scope")), seed)
     chosen = []
     for (_,), rows in drawn.group_by("word"):
         counts = dict(rows.group_by("decade").len().iter_rows())
@@ -211,10 +216,15 @@ def draw_kept(usages: pl.DataFrame) -> pl.DataFrame:
     return pl.concat(chosen)
 
 
-def draw_left_out(usages: pl.DataFrame) -> pl.DataFrame:
+def draw_left_out(usages: pl.DataFrame, seed: int) -> pl.DataFrame:
     """10 usages per word the table left out of scope, the smallest keys."""
-    left_out = with_keys(usages.filter(~pl.col("in_scope")))
+    left_out = with_keys(usages.filter(~pl.col("in_scope")), seed)
     return left_out.sort("key").group_by("word", maintain_order=True).head(LEFT_OUT_PER_WORD)
+
+
+def decade_counts(usages: pl.DataFrame) -> dict[str, int]:
+    """The usages per decade, keyed as the parts name it."""
+    return {str(decade): n for decade, n in sorted(usages.group_by("decade").len().iter_rows())}
 
 
 def marked(text: str, row: dict[str, Any]) -> str:
@@ -241,22 +251,27 @@ def left_out_reason(row: dict[str, Any], word: Word) -> str:
 
 def main() -> None:
     """Draw the three samples, build and shuffle the items, and write them with their key."""
-    out = Path(sys.argv[1])
-    processes = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("out", type=Path)
+    parser.add_argument("processes", type=int, nargs="?", default=10)
+    parser.add_argument("--seed", type=int, default=AUDIT_SEED)
+    parser.add_argument("--skip-calibration", action="store_true")
+    options = parser.parse_args()
+    out, processes, seed = options.out, options.processes, options.seed
     out.mkdir(parents=True, exist_ok=True)
     catalog = read_catalog()
     words = {word.lemma: word for word in load_words(catalog)}
     spellings = {spelling.form: spelling.standard for spelling in load_spellings(catalog)}
     usages = load_usages_with_decades(catalog)
-    kept = draw_kept(usages)
-    left_out = draw_left_out(usages)
+    kept = draw_kept(usages, seed)
+    left_out = draw_left_out(usages, seed)
     patterns = {lemma: search_pattern(word, spellings) for lemma, word in words.items()}
     parts = sorted(usages["part"].unique())
     with LiveProgress(Console()) as live:
         live.stage("searching for missed mentions", total=len(parts))
         results = map_parts(
             search_part,
-            dict.fromkeys(parts, SearchJob(catalog, patterns)),
+            dict.fromkeys(parts, SearchJob(catalog, patterns, seed)),
             process_count=processes,
             progress=live,
         )
@@ -285,7 +300,7 @@ def main() -> None:
         frame = load_abstracts_part(catalog, part, ["work_id", "text"])
         texts |= dict(frame.filter(pl.col("work_id").is_in(sorted(ids))).iter_rows())
 
-    rng = random.Random(AUDIT_SEED)
+    rng = random.Random(seed)
     rng.shuffle(samples)
     items, key_map = [], {}
     for index, (kind, row) in enumerate(samples):
@@ -314,15 +329,23 @@ def main() -> None:
             for item in items[start : start + BATCH]:
                 handle.write(json.dumps(item, ensure_ascii=False) + "\n")
     (out / "key.json").write_text(json.dumps(key_map, indent=1) + "\n")
-    calibration_rng = random.Random(CALIBRATION_SEED)
-    calibration = []
-    for kind, size in CALIBRATION.items():
-        of_kind = sorted(item_id for item_id, entry in key_map.items() if entry["kind"] == kind)
-        calibration += calibration_rng.sample(of_kind, min(size, len(of_kind)))
-    (out / "calibration.json").write_text(json.dumps(sorted(calibration), indent=1) + "\n")
+    if not options.skip_calibration:
+        calibration_rng = random.Random(CALIBRATION_SEED)
+        calibration = []
+        for kind, size in CALIBRATION.items():
+            of_kind = sorted(i for i, entry in key_map.items() if entry["kind"] == kind)
+            calibration += calibration_rng.sample(of_kind, min(size, len(of_kind)))
+        (out / "calibration.json").write_text(json.dumps(sorted(calibration), indent=1) + "\n")
     in_scope = usages.filter("in_scope").group_by("word").len().iter_rows()
+    left_out_usages = usages.filter(~pl.col("in_scope"))
     counts = {
         "in_scope_usages": {words[word].reported_name: n for word, n in sorted(in_scope)},
+        "left_out_usages": {
+            words[word].reported_name: n
+            for word, n in sorted(left_out_usages.group_by("word").len().iter_rows())
+        },
+        "in_scope_by_decade": decade_counts(usages.filter("in_scope")),
+        "left_out_by_decade": decade_counts(left_out_usages),
         "candidate_misses": {
             words[word].reported_name: n for word, n in sorted(candidates.items())
         },
