@@ -6,7 +6,7 @@ import polars as pl
 
 from interpretant.catalog.words import Word
 from interpretant.usages.identifiers import build_draw_key
-from interpretant.usages.usage_selection import is_in_scope, mark_drawn
+from interpretant.usages.usage_selection import find_copies, is_in_scope, mark_copies, mark_drawn
 
 MEDIUM = Word(lemma="medium", pos=("NOUN", "PROPN"), match="lemma", held_out=False)
 SEED = 20261301
@@ -86,3 +86,37 @@ def test_the_draw_does_not_depend_on_other_abstracts_words_or_row_order() -> Non
     assert drawn(list(reversed(base))) == before
     fewer = [row for row in base if row["work_id"] != "https://openalex.org/W2"]
     assert drawn(fewer) == {row for row in before if row[0] != "https://openalex.org/W2"}
+
+
+def shared(*rows: tuple[str, str, int]) -> pl.DataFrame:
+    """Usages as (work, content key, sentence number)."""
+    return pl.DataFrame(rows, schema=["work_id", "content_key", "sentence_number"], orient="row")
+
+
+def test_works_sharing_three_target_sentences_are_one_work_twice() -> None:
+    usages = shared(
+        *[("W1", f"k{n}", n) for n in range(3)],
+        *[("W2", f"k{n}", n + 4) for n in range(3)],
+        ("W3", "k0", 0),
+        ("W3", "k1", 1),
+    )
+    years = {"W1": 1995, "W2": 1991, "W3": 1980}
+    assert find_copies(usages, years) == {"W1": "W2"}
+
+
+def test_targets_in_one_sentence_count_once_and_a_group_keeps_its_earliest_work() -> None:
+    one_sentence = shared(*[(w, f"k{n}", 0) for w in ("W1", "W2") for n in range(3)])
+    assert find_copies(one_sentence, {"W1": 1990, "W2": 1991}) == {}
+    chain = shared(
+        *[(w, f"a{n}", n) for w in ("W1", "W2") for n in range(3)],
+        *[(w, f"b{n}", n) for w in ("W2", "W3") for n in range(3)],
+    )
+    years = {"W1": 2001, "W2": 1999, "W3": 2001}
+    assert find_copies(chain, years) == {"W1": "W2", "W3": "W2"}
+
+
+def test_a_copys_usages_are_marked_and_not_drawn() -> None:
+    table = pl.DataFrame({"work_id": ["W1", "W2"], "drawn": [True, True]})
+    marked = mark_copies(table, {"W1": "W2"})
+    assert marked["copy_of"].to_list() == ["W2", None]
+    assert marked["drawn"].to_list() == [False, True]

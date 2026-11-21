@@ -53,6 +53,7 @@ def usage_row(**changes: Any) -> dict[str, Any]:
         "capitalised": False,
         "mention": False,
         "list_like": False,
+        "copy_of": None,
     }
     row.update(changes)
     return row

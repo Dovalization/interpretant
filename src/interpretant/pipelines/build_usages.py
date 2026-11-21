@@ -53,7 +53,7 @@ from interpretant.catalog.lemma_exceptions import LemmaException, load_lemma_exc
 from interpretant.catalog.sentence_view import REMOVED, load_sentence_view_part
 from interpretant.catalog.spellings import load_spellings
 from interpretant.catalog.static_view import load_static_view
-from interpretant.catalog.usages import USAGES_COLUMNS, save_usages
+from interpretant.catalog.usages import USAGES_COLUMNS, load_usages_part, save_usages
 from interpretant.catalog.words import Word, load_words
 from interpretant.corpus.lemma_exceptions import lemma_exception_ruler
 from interpretant.corpus.sentence_view import merge_ranges
@@ -76,7 +76,7 @@ from interpretant.usages.entities import (
 from interpretant.usages.identifiers import build_content_key, build_draw_key
 from interpretant.usages.target_matching import TargetMention, build_target_matcher, match_targets
 from interpretant.usages.traits import usage_traits
-from interpretant.usages.usage_selection import is_in_scope, mark_drawn
+from interpretant.usages.usage_selection import find_copies, is_in_scope, mark_copies, mark_drawn
 
 
 class UsagesSettings(ParamsSettings):
@@ -199,6 +199,7 @@ def build_usages(
             usage's content key or offsets do not match its text.
     """
     parts = corpus_parts(corpus_cells(catalog, selection))
+    every_part = list(parts)
     job = _PartJob(
         catalog,
         settings,
@@ -220,6 +221,7 @@ def build_usages(
         )
         for result in results.values():
             counts.update(result)
+        counts.update(_mark_copies(catalog, every_part))
         return UsagesResult(parts=parts, counts=dict(counts))
     if resume:
         done = [part for part in parts if _annotated_by_transformer(catalog, part)]
@@ -259,7 +261,42 @@ def build_usages(
     for part in parts:
         counts.update(found[part])
         counts.update(annotated[part])
+    counts.update(_mark_copies(catalog, every_part))
     return UsagesResult(parts=parts, counts=dict(counts))
+
+
+def _mark_copies(catalog: CatalogConfig, parts: Sequence[str]) -> Counter[str]:
+    """Find the copies across every part, then redraw and rewrite the parts whose marks change.
+
+    A copy and the work it copies can sit in different fields or decades, so this runs once all
+    parts are written; each part is drawn afresh, so a rerun or a resumed run marks the same.
+    """
+    keys = pl.concat(
+        [
+            load_usages_part(
+                catalog, part, ["work_id", "content_key", "sentence_number"]
+            ).with_columns(pl.lit(part).alias("part"))
+            for part in parts
+        ]
+    )
+    shared = keys.filter(pl.col("content_key").is_duplicated())
+    years: dict[str, int] = {}
+    for (part,), group in shared.group_by("part"):
+        ids = group["work_id"].unique().to_list()
+        years |= dict(
+            load_abstracts_part(catalog, str(part), ["work_id", "year"])
+            .filter(pl.col("work_id").is_in(ids))
+            .iter_rows()
+        )
+    copies = find_copies(shared, years)
+    counts: Counter[str] = Counter({"copy_works": len(copies)})
+    for part in parts:
+        table = load_usages_part(catalog, part)
+        marked = mark_copies(mark_drawn(table), copies)
+        counts["copies_undrawn"] += int(table["drawn"].sum()) - int(marked["drawn"].sum())
+        if not marked.equals(table):
+            save_usages(catalog, marked, part=part)
+    return counts
 
 
 def _build_part(part: str, job: _PartJob) -> Counter[str]:
@@ -800,6 +837,7 @@ def _add_usages(
             None,  # capitalised, set with the scope
             None,  # a mention, set with the scope
             None,  # a list-like sentence, set with the scope
+            None,  # the work it copies, set once every part is written
         ]
         sink.add(work, sentence, mention, row, words[mention.word])
 

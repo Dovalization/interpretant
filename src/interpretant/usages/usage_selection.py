@@ -10,9 +10,15 @@ One usage is drawn per abstract and word, among its in-scope usages in sentences
 keeps out (not removed, not cut off): the one with the smallest draw key, a cryptographic hash of
 the seed, the work, the word and the content key (`usages/identifiers.py`). So abstracts stay
 independent observations, and a draw never depends on other abstracts, other words or row order.
+A work that copies an earlier one (three or more target sentences at the same places) keeps its
+usages, marked with the work it copies, but none of them is drawn.
 """
 
 from __future__ import annotations
+
+from collections import defaultdict
+from collections.abc import Mapping
+from itertools import combinations
 
 import polars as pl
 
@@ -51,3 +57,72 @@ def mark_drawn(usages: pl.DataFrame) -> pl.DataFrame:
     eligible = pl.col("in_scope") & pl.col("sentence_exclusion").is_null()
     smallest = pl.col("draw_key").filter(eligible).min().over("work_id", "word")
     return usages.with_columns((eligible & (pl.col("draw_key") == smallest)).alias("drawn"))
+
+
+# Works sharing this many target sentences at the same places are one work twice: the same paper
+# indexed twice below the corpus's near-duplicate threshold (`docs/usages_audit.md`, 2026-11-20).
+COPY_SHARED_SENTENCES = 3
+
+
+def find_copies(usages: pl.DataFrame, years: Mapping[str, int]) -> dict[str, str]:
+    """Each copy and the work it copies.
+
+    Two works are linked when they share ``COPY_SHARED_SENTENCES`` or more target sentences at the
+    same places (usages with one content key, counted by sentence); in each group of linked works
+    the earliest (by year, then by id) is kept and the others are its copies. The table needs the
+    columns ``work_id``, ``content_key`` and ``sentence_number``.
+    """
+    shared = (
+        usages.group_by("content_key", "work_id")
+        .agg(pl.col("sentence_number").min())
+        .group_by("content_key")
+        .agg(pl.col("work_id"), pl.col("sentence_number"))
+        .filter(pl.col("work_id").list.len() > 1)
+    )
+    sentences: dict[tuple[str, str], set[int]] = defaultdict(set)
+    for ids, numbers in shared.select("work_id", "sentence_number").iter_rows():
+        for (first, number), (second, _) in combinations(sorted(zip(ids, numbers, strict=True)), 2):
+            sentences[(first, second)].add(number)
+    group = _Groups()
+    for (first, second), numbers in sentences.items():
+        if len(numbers) >= COPY_SHARED_SENTENCES:
+            group.join(first, second)
+    copies: dict[str, str] = {}
+    for members in group.members():
+        kept = min(members, key=lambda work: (years[work], work))
+        copies |= {work: kept for work in members if work != kept}
+    return copies
+
+
+def mark_copies(usages: pl.DataFrame, copies: Mapping[str, str]) -> pl.DataFrame:
+    """The usages with ``copy_of`` set from the copies, and a copy's usages not drawn."""
+    copy_of = pl.col("work_id").replace_strict(dict(copies), default=None, return_dtype=pl.String)
+    return usages.with_columns(copy_of.alias("copy_of")).with_columns(
+        (pl.col("drawn") & pl.col("copy_of").is_null()).alias("drawn")
+    )
+
+
+class _Groups:
+    """Works joined into groups (union-find)."""
+
+    def __init__(self) -> None:
+        self.parent: dict[str, str] = {}
+
+    def root(self, work: str) -> str:
+        """The work standing for the work's group."""
+        self.parent.setdefault(work, work)
+        while self.parent[work] != work:
+            self.parent[work] = self.parent[self.parent[work]]
+            work = self.parent[work]
+        return work
+
+    def join(self, first: str, second: str) -> None:
+        """Put the two works' groups together."""
+        self.parent[self.root(first)] = self.root(second)
+
+    def members(self) -> list[list[str]]:
+        """Every group's works."""
+        groups: dict[str, list[str]] = defaultdict(list)
+        for work in list(self.parent):
+            groups[self.root(work)].append(work)
+        return list(groups.values())

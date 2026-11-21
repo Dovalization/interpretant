@@ -10,7 +10,8 @@ it is in scope;
 whether it is the one usage drawn for its work and word; the model that annotated it; whether
 the model read only a window around the target (a sentence over 512 tokens); and its role (head,
 noun modifier or compound part) and three flags for the drift checks: a capitalised target, the
-word mentioned as a word, and a list-like sentence (`usages/traits.py`). Text is not copied:
+word mentioned as a word, and a list-like sentence (`usages/traits.py`); and the earlier work it
+copies, if its work copies one (none of a copy's usages is drawn). Text is not copied:
 the abstracts table holds it. A part is written whole or not at all.
 """
 
@@ -60,6 +61,7 @@ USAGES_COLUMNS = pl.Schema(
         "capitalised": pl.Boolean(),
         "mention": pl.Boolean(),
         "list_like": pl.Boolean(),
+        "copy_of": pl.String(),
     }
 )
 _SUFFIX = ".parquet"
@@ -78,6 +80,11 @@ def _drawn_usages_are_eligible(data: PolarsData) -> pl.LazyFrame:
     checked: pl.LazyFrame = data.lazyframe.select(
         ~pl.col("drawn") | (pl.col("in_scope") & pl.col("sentence_exclusion").is_null())
     )
+    return checked
+
+
+def _drawn_usages_are_not_copies(data: PolarsData) -> pl.LazyFrame:
+    checked: pl.LazyFrame = data.lazyframe.select(~pl.col("drawn") | pl.col("copy_of").is_null())
     return checked
 
 
@@ -125,10 +132,16 @@ USAGES_SCHEMA = pa.DataFrameSchema(
         "capitalised": pa.Column(USAGES_COLUMNS["capitalised"]),
         "mention": pa.Column(USAGES_COLUMNS["mention"]),
         "list_like": pa.Column(USAGES_COLUMNS["list_like"]),
+        "copy_of": pa.Column(
+            USAGES_COLUMNS["copy_of"],
+            nullable=True,
+            checks=pa.Check.str_startswith("https://openalex.org/W"),
+        ),
     },
     checks=[
         pa.Check(_offsets_are_ordered, name="the target lies inside its sentence"),
         pa.Check(_drawn_usages_are_eligible, name="a drawn usage is in scope and not excluded"),
+        pa.Check(_drawn_usages_are_not_copies, name="a copy's usages are not drawn"),
     ],
     unique=["work_id", "word", "content_key"],
     strict=True,
@@ -154,6 +167,21 @@ def save_usages(catalog: CatalogConfig, usages: pl.DataFrame, part: str) -> Path
     validated.write_parquet(staging)
     staging.replace(target)
     return target
+
+
+def load_usages_part(
+    catalog: CatalogConfig, part: str, columns: list[str] | None = None
+) -> pl.DataFrame:
+    """One saved part; only ``columns`` when given.
+
+    Raises:
+        ValueError: if the part name is not safe as a file name.
+        FileNotFoundError: if the part has not been saved.
+    """
+    path = part_path(catalog.usages.path, part, _SUFFIX)
+    if not path.exists():
+        raise FileNotFoundError(f"no part {part!r} of the usages table at {path}")
+    return pl.read_parquet(path, columns=columns)
 
 
 def load_usages(catalog: CatalogConfig) -> pl.LazyFrame:

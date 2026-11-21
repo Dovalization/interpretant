@@ -35,6 +35,8 @@ COUNT_LABELS = {
     "usages": "Usages",
     "in_scope": "In scope",
     "drawn": "Drawn",
+    "copy_works": "Works copying an earlier one",
+    "copies_undrawn": "Drawn usages given up as copies",
 }
 
 
