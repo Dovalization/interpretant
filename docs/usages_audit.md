@@ -326,7 +326,9 @@ The two judges agreed on 4,171 of 4,224 items and the adjudicator settled the ot
 | Recall, per word | fails: *intentionality* (2.4%), the tokenizer gap left as it is |
 | Judge error (check) | kept 2.78% observed, 0.78% corrected (0.00–9.22%); left out 19.1% and 1.8% (0.0–20.3%); missed 88.2% and 93.2% (0–100%). The calibration holds one kept error in 30, so the intervals say little |
 
-**Where the kept errors are.** Targets capitalised mid-sentence are 87 of the 1,980 kept items
+**Where the kept errors are** (`scripts/evidence/usages_redraw_breakdown.py`, `breakdown.json`;
+it reads the table as rebuilt for *information processing*, which changes only that word's
+left-out items). Targets capitalised mid-sentence are 87 of the 1,980 kept items
 and hold 32 of the 55 errors (37% of them wrong, against 1.2% of the rest); proper-noun-tagged
 targets were wrong 16 times in 34, the generic-term rule 3 times in 5. The errors fall with time:
 43 in the 1,117 items before 2000 (3.9%), 12 in the 863 from 2000 (1.4%). Capitalised targets were
@@ -337,8 +339,8 @@ its kept usages, leaving out capitalised targets would bring the kept error rate
 and lose 2.3% of real uses; proper-noun tags 1.1% and 1.3%; capitalised proper-noun tags 1.1% and
 1.2%; list-like sentences 2.2% and 1.1%. The losses would fall mostly on the recent decades' terms.
 
-**Where the scope cost is.** *information processing*: the transformer tags the phrase's -ing head
-as a verb, and 6 of the 7 judged verb-tagged items were real uses. *prompt*'s 14.1% rests on one
+**Where the scope cost is** (the same report). *information processing*: the transformer tags
+the phrase's -ing head as a verb, and 6 of the 7 judged verb-tagged items were real uses. *prompt*'s 14.1% rests on one
 real use in 10, an adjective-tagged noun modifier. Adjective-tagged *prompt* before a noun runs at
 12–22 usages a decade until the 2010s and 130 in the 2020s (*prompt engineering*), about a tenth of
 the 2020s' uses; adding the tag would also let in the adjective (*prompt response*), about 25
