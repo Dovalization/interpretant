@@ -11,7 +11,9 @@ The figures in "Where the kept errors are" and "Where the scope cost is" come fr
   each word's in-scope usages over its judged items (`counts.json`), an estimate for the table;
 - **left-out items by class**, pooled and for the words over the per-word scope bar;
 - *prompt*'s and *information processing*'s usages per decade by tag and role, and the
-  capitalised share of in-scope usages per decade.
+  capitalised share of in-scope usages per decade;
+- **copies:** the pairs of works sharing three or more usages (a content key held by just the two),
+  and what the copy rule, which counts shared sentences, marks (`usage_selection.find_copies`).
 
 Classes and flags are read from the usages table as it stands. The table has changed in one way
 since the redraw was drawn: *information processing*'s verb-tagged usages came into scope (the
@@ -41,7 +43,7 @@ from interpretant.catalog.config import read_catalog
 from interpretant.catalog.words import load_words
 
 COLUMNS = ["work_id", "word", "target_start", "position", "pos", "entity", "in_scope"]
-COLUMNS += ["capitalised", "list_like", "mention", "role"]
+COLUMNS += ["capitalised", "list_like", "mention", "role", "content_key", "copy_of"]
 JOIN = ["part", "work_id", "word", "target_start"]
 OPEN, CLOSE = "⟨t⟩", "⟨/t⟩"
 WORD = re.compile(r"[A-Za-z][A-Za-z'’-]*")
@@ -227,6 +229,19 @@ def table_by_decade(usages: pl.DataFrame) -> dict[str, Any]:
     return report
 
 
+def copies(usages: pl.DataFrame) -> dict[str, int]:
+    """Work pairs sharing three or more usages, and the works and usages the copy rule marks."""
+    works_per_key = usages.group_by("content_key").agg(pl.col("work_id").unique().sort())
+    pairs = works_per_key.filter(pl.col("work_id").list.len() == 2)
+    usages_per_pair = pairs.group_by(pl.col("work_id").list.join("|")).len()
+    marked = usages.filter(pl.col("copy_of").is_not_null())
+    return {
+        "work_pairs_sharing_three_or_more_usages": usages_per_pair.filter(pl.col("len") >= 3).height,
+        "works_marked_as_copies": marked["work_id"].n_unique(),
+        "usages_of_copies": marked.height,
+    }
+
+
 def main() -> None:
     """Break the redraw's judged items down and write the report."""
     audit, out = Path(sys.argv[1]), Path(sys.argv[2])
@@ -254,6 +269,7 @@ def main() -> None:
             judged.filter(pl.col("kind") == "left_out"), results["scope"]["words_over_two_percent"]
         ),
         "table_by_decade": table_by_decade(usages),
+        "copies": copies(usages),
     }
     out.write_text(json.dumps(report, indent=1) + "\n")
     sys.stdout.write(f"{judged.height} judged items broken down; written to {out}\n")
