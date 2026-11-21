@@ -7,8 +7,10 @@ modifier) when it is part of a hyphenated word; the head token's part of speech,
 and lemma, the entity it sits in, and the static view's entry for it; whether it sits inside a
 name (an entity with a name label that is not a generic term, or a named instrument) and whether
 it is in scope;
-whether it is the one usage drawn for its work and word; the model that annotated it; and whether
-the model read only a window around the target (a sentence over 512 tokens). Text is not copied:
+whether it is the one usage drawn for its work and word; the model that annotated it; whether
+the model read only a window around the target (a sentence over 512 tokens); and its role (head,
+noun modifier or compound part) and three flags for the drift checks: a capitalised target, the
+word mentioned as a word, and a list-like sentence (`usages/traits.py`). Text is not copied:
 the abstracts table holds it. A part is written whole or not at all.
 """
 
@@ -24,6 +26,8 @@ from interpretant.catalog.config import CatalogConfig
 from interpretant.catalog.parts import part_path
 
 MODELS = ("en_core_web_sm", "en_core_web_trf")
+# A usage's syntactic role (`usages/traits.py`).
+ROLES = ("head", "modifier", "compound")
 USAGES_COLUMNS = pl.Schema(
     {
         "work_id": pl.String(),
@@ -52,6 +56,10 @@ USAGES_COLUMNS = pl.Schema(
         "drawn": pl.Boolean(),
         "model": pl.String(),
         "windowed": pl.Boolean(),
+        "role": pl.String(),
+        "capitalised": pl.Boolean(),
+        "mention": pl.Boolean(),
+        "list_like": pl.Boolean(),
     }
 )
 _SUFFIX = ".parquet"
@@ -113,6 +121,10 @@ USAGES_SCHEMA = pa.DataFrameSchema(
         "drawn": pa.Column(USAGES_COLUMNS["drawn"]),
         "model": pa.Column(USAGES_COLUMNS["model"], checks=pa.Check.isin(MODELS)),
         "windowed": pa.Column(USAGES_COLUMNS["windowed"]),
+        "role": pa.Column(USAGES_COLUMNS["role"], checks=pa.Check.isin(ROLES)),
+        "capitalised": pa.Column(USAGES_COLUMNS["capitalised"]),
+        "mention": pa.Column(USAGES_COLUMNS["mention"]),
+        "list_like": pa.Column(USAGES_COLUMNS["list_like"]),
     },
     checks=[
         pa.Check(_offsets_are_ordered, name="the target lies inside its sentence"),

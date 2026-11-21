@@ -49,6 +49,10 @@ def usage_row(**changes: Any) -> dict[str, Any]:
         "drawn": True,
         "model": "en_core_web_sm",
         "windowed": False,
+        "role": "head",
+        "capitalised": False,
+        "mention": False,
+        "list_like": False,
     }
     row.update(changes)
     return row
@@ -73,8 +77,17 @@ def test_save_usages_writes_a_valid_part(catalog: CatalogConfig) -> None:
         {"drawn": True, "sentence_exclusion": "cut_off"},
         {"position": "middle"},
         {"model": "en_core_web_lg"},
+        {"role": "subject"},
     ],
-    ids=["key", "span outside", "drawn out of scope", "drawn excluded", "position", "model"],
+    ids=[
+        "key",
+        "span outside",
+        "drawn out of scope",
+        "drawn excluded",
+        "position",
+        "model",
+        "role",
+    ],
 )
 def test_save_usages_refuses_a_bad_row(catalog: CatalogConfig, changes: dict[str, Any]) -> None:
     with pytest.raises(pandera.errors.SchemaError):

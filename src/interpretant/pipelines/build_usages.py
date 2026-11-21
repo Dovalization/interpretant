@@ -75,6 +75,7 @@ from interpretant.usages.entities import (
 )
 from interpretant.usages.identifiers import build_content_key, build_draw_key
 from interpretant.usages.target_matching import TargetMention, build_target_matcher, match_targets
+from interpretant.usages.traits import usage_traits
 from interpretant.usages.usage_selection import is_in_scope, mark_drawn
 
 
@@ -114,6 +115,9 @@ _ENTITY = _COLUMN_NAMES.index("entity")
 _INSIDE_NAME = _COLUMN_NAMES.index("inside_name")
 _IN_SCOPE = _COLUMN_NAMES.index("in_scope")
 _WINDOWED = _COLUMN_NAMES.index("windowed")
+_TRAITS = tuple(
+    _COLUMN_NAMES.index(name) for name in ("role", "capitalised", "mention", "list_like")
+)
 
 
 class TextMismatchError(ValueError):
@@ -477,6 +481,9 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
             inside_name = inside_entity or in_named_instrument(
                 doc, start - span_start, end - span_start
             )
+            traits = usage_traits(
+                doc, start - span_start, end - span_start, head_offset, hyphen_part=hyphen_part
+            )
             values = {
                 "pos": head.pos_,
                 "tag": head.tag_,
@@ -487,6 +494,10 @@ def _annotate_part(part: str, job: _PartJob, report: Report) -> Counter[str]:
                 "in_scope": is_in_scope(
                     head.pos_, words[word], inside_name=inside_name, hyphen_part=hyphen_part
                 ),
+                "role": traits.role,
+                "capitalised": traits.capitalised,
+                "mention": traits.mention,
+                "list_like": traits.list_like,
             }
             for name, value in values.items():
                 annotation[name][index] = value
@@ -630,7 +641,10 @@ def _annotated_by_transformer(catalog: CatalogConfig, part: str) -> bool:
 
 
 # The columns the transformer's reading sets.
-_ANNOTATED = ("pos", "tag", "morph", "lemma", "entity", "inside_name", "in_scope")
+_ANNOTATED = (
+    "pos", "tag", "morph", "lemma", "entity", "inside_name", "in_scope",
+    "role", "capitalised", "mention", "list_like",
+)  # fmt: skip
 
 
 @dataclass(frozen=True)
@@ -641,6 +655,7 @@ class _Waiting:
     sentence: tuple[str, int]
     start: int
     end: int
+    head: int
     word: Word
     hyphen_part: bool
 
@@ -685,6 +700,7 @@ class _EntityBatch:
                 key,
                 mention.start_char - span.start_char,
                 mention.end_char - span.start_char,
+                mention.token_index - span.start,
                 word,
                 mention.position is not None,
             )
@@ -709,6 +725,15 @@ class _EntityBatch:
             row[_IN_SCOPE] = is_in_scope(
                 row[_POS], waiting.word, inside_name=inside_name, hyphen_part=waiting.hyphen_part
             )
+            traits = usage_traits(
+                doc, waiting.start, waiting.end, waiting.head, hyphen_part=waiting.hyphen_part
+            )
+            for index, value in zip(
+                _TRAITS,
+                (traits.role, traits.capitalised, traits.mention, traits.list_like),
+                strict=True,
+            ):
+                row[index] = value
             self.rows.append(tuple(row))
         self.spans.clear()
         self.waiting.clear()
@@ -771,6 +796,10 @@ def _add_usages(
             False,
             settings.model,
             False,  # windowed, set by the staging for a long sentence
+            None,  # the role, set with the scope
+            None,  # capitalised, set with the scope
+            None,  # a mention, set with the scope
+            None,  # a list-like sentence, set with the scope
         ]
         sink.add(work, sentence, mention, row, words[mention.word])
 

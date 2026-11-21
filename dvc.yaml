@@ -247,6 +247,7 @@ stages:
       - src/interpretant/usages/entities.py
       - src/interpretant/usages/identifiers.py
       - src/interpretant/usages/target_matching.py
+      - src/interpretant/usages/traits.py
       - src/interpretant/usages/usage_selection.py
       - ${abstracts.path}
       - ${annotations.path}
