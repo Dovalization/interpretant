@@ -1,0 +1,121 @@
+{
+ "model": "urchade/gliner_large-v2.1",
+ "threshold": 0.5,
+ "labels": [
+  "person",
+  "organisation",
+  "location",
+  "product",
+  "event",
+  "law",
+  "named test or scale",
+  "title of a cited work",
+  "named system or model"
+ ],
+ "items": {
+  "usages_audit": 64,
+  "usages_audit_redraw": 87
+ },
+ "strict": {
+  "wrong_caught": 25,
+  "wrong_total": 51,
+  "right_lost": 31,
+  "right_total": 100,
+  "by_label": {
+   "organisation": 20,
+   "named system or model": 12,
+   "title of a cited work": 12,
+   "named test or scale": 7,
+   "event": 3,
+   "product": 1,
+   "person": 1
+  },
+  "meets_bar": false
+ },
+ "any": {
+  "wrong_caught": 26,
+  "wrong_total": 51,
+  "right_lost": 40,
+  "right_total": 100,
+  "by_label": {
+   "organisation": 25,
+   "named system or model": 12,
+   "title of a cited work": 12,
+   "named test or scale": 7,
+   "event": 5,
+   "product": 2,
+   "location": 1,
+   "law": 1,
+   "person": 1
+  },
+  "meets_bar": false
+ },
+ "by_audit": {
+  "usages_audit": {
+   "strict": {
+    "wrong_caught": 10,
+    "wrong_total": 19,
+    "right_lost": 14,
+    "right_total": 45,
+    "by_label": {
+     "organisation": 10,
+     "named test or scale": 5,
+     "title of a cited work": 4,
+     "named system or model": 3,
+     "event": 2
+    },
+    "meets_bar": false
+   },
+   "any": {
+    "wrong_caught": 11,
+    "wrong_total": 19,
+    "right_lost": 17,
+    "right_total": 45,
+    "by_label": {
+     "organisation": 13,
+     "named test or scale": 5,
+     "title of a cited work": 4,
+     "event": 3,
+     "named system or model": 3
+    },
+    "meets_bar": false
+   }
+  },
+  "usages_audit_redraw": {
+   "strict": {
+    "wrong_caught": 15,
+    "wrong_total": 32,
+    "right_lost": 17,
+    "right_total": 55,
+    "by_label": {
+     "organisation": 10,
+     "named system or model": 9,
+     "title of a cited work": 8,
+     "named test or scale": 2,
+     "event": 1,
+     "product": 1,
+     "person": 1
+    },
+    "meets_bar": false
+   },
+   "any": {
+    "wrong_caught": 15,
+    "wrong_total": 32,
+    "right_lost": 23,
+    "right_total": 55,
+    "by_label": {
+     "organisation": 12,
+     "named system or model": 9,
+     "title of a cited work": 8,
+     "named test or scale": 2,
+     "event": 2,
+     "product": 2,
+     "location": 1,
+     "law": 1,
+     "person": 1
+    },
+    "meets_bar": false
+   }
+  }
+ }
+}
