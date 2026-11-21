@@ -234,9 +234,10 @@ def copies(usages: pl.DataFrame) -> dict[str, int]:
     works_per_key = usages.group_by("content_key").agg(pl.col("work_id").unique().sort())
     pairs = works_per_key.filter(pl.col("work_id").list.len() == 2)
     usages_per_pair = pairs.group_by(pl.col("work_id").list.join("|")).len()
+    sharing_three = usages_per_pair.filter(pl.col("len") >= 3)
     marked = usages.filter(pl.col("copy_of").is_not_null())
     return {
-        "work_pairs_sharing_three_or_more_usages": usages_per_pair.filter(pl.col("len") >= 3).height,
+        "work_pairs_sharing_three_or_more_usages": sharing_three.height,
         "works_marked_as_copies": marked["work_id"].n_unique(),
         "usages_of_copies": marked.height,
     }
