@@ -101,7 +101,8 @@ def _submit_and_follow(options: dict[str, Any], flow_name: str, parameters: dict
         )
     except submission.SubmissionError as exc:
         raise click.ClickException(str(exc)) from exc
-    click.echo(f"started {flow_name} on the {role} as {flow_run_id}")
+    where = "on the runner" if role == "runner" else "locally"
+    click.echo(f"started {flow_name} {where} as {flow_run_id}")
     try:
         final = submission.follow_run(flow_run_id, echo=click.echo)
     except KeyboardInterrupt:
