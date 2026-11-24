@@ -28,6 +28,8 @@ from rich.progress import (
 )
 from rich.text import Text
 
+from interpretant.pipelines.progress import format_duration, format_pace
+
 
 class LiveProgress:
     """A pipeline's progress reporter for the command line, used as a context manager."""
@@ -113,12 +115,12 @@ class LiveProgress:
             elapsed = self.clock() - self.started
             done = f"{self.completed:,} items, " if self.completed else ""
             earlier = f"{self.skipped:,} of them from an earlier run, " if self.skipped else ""
-            self.console.print(f"{self.name}: done ({done}{earlier}{_duration(elapsed)})")
+            self.console.print(f"{self.name}: done ({done}{earlier}{format_duration(elapsed)})")
         self.name = ""
 
     def _figures(self, now: float) -> str:
         remaining = self.total - self.completed if self.total else None
-        pace = _pace(self.completed - self.skipped, now - self.started, remaining)
+        pace = format_pace(self.completed - self.skipped, now - self.started, remaining)
         if not self.total:
             position = f"{self.completed:,} items"
         else:
@@ -134,37 +136,4 @@ class _PaceColumn(ProgressColumn):
         """The task's pace, empty until this run has done an item."""
         remaining = None if task.finished or task.total is None else task.remaining
         done = task.completed - task.fields.get("skipped", 0)
-        return Text(_pace(done, task.elapsed or 0.0, remaining), style="progress.remaining")
-
-
-def _pace(done: float, seconds: float, remaining: float | None) -> str:
-    """The rate of ``done`` items in ``seconds`` and, with ``remaining`` items, the time left."""
-    if done <= 0:
-        return ""
-    rate = done / max(seconds, 1e-9)
-    if remaining is None:
-        return _rate(rate)
-    return f"{_rate(rate)}, about {_duration(remaining / rate)} left"
-
-
-def _rate(per_second: float) -> str:
-    """The rate in a unit that keeps a figure: whole items a second, then decimals, then a minute.
-
-    Stages that count parts finish fewer than one a second, which a whole-number rate shows as
-    "0/s".
-    """
-    if per_second >= 10:
-        return f"{per_second:,.0f}/s"
-    if per_second >= 1:
-        return f"{per_second:.1f}/s"
-    return f"{per_second * 60:.1f}/min"
-
-
-def _duration(seconds: float) -> str:
-    minutes, rest = divmod(round(seconds), 60)
-    hours, minutes = divmod(minutes, 60)
-    if hours:
-        return f"{hours} h {minutes:02d} min"
-    if minutes:
-        return f"{minutes} min {rest:02d} s"
-    return f"{rest} s"
+        return Text(format_pace(done, task.elapsed or 0.0, remaining), style="progress.remaining")

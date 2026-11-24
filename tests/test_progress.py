@@ -15,7 +15,7 @@ from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpu
 from interpretant.pipelines.build_linked_tables import build_linked_tables
 from interpretant.pipelines.clean_corpus import clean_corpus
 from interpretant.pipelines.detect_languages import detect_languages
-from interpretant.pipelines.progress import StageTimer
+from interpretant.pipelines.progress import StageTimer, TeeProgress
 from tests.corpus_catalog import (
     ANNOTATE_SETTINGS,
     CLEAN_SETTINGS,
@@ -187,3 +187,30 @@ def test_the_corpus_stages_report_every_step_and_every_abstract(
     ]
     counts = {name: (total, done) for name, total, done in built.stages}
     assert counts["near-duplicates"] == (3, 3)
+
+
+class _Recorder:
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, object]] = []
+
+    def stage(self, name: str, total: int | None = None) -> None:
+        self.calls.append(("stage", (name, total)))
+
+    def advance(self, amount: int = 1) -> None:
+        self.calls.append(("advance", amount))
+
+    def skip(self, amount: int) -> None:
+        self.calls.append(("skip", amount))
+
+
+def test_tee_progress_passes_everything_to_every_reporter_in_order() -> None:
+    first, second = _Recorder(), _Recorder()
+    progress = TeeProgress(first, second)
+
+    progress.stage("encoding", 10)
+    progress.skip(3)
+    progress.advance(2)
+
+    expected = [("stage", ("encoding", 10)), ("skip", 3), ("advance", 2)]
+    assert first.calls == expected
+    assert second.calls == expected
