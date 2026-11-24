@@ -77,7 +77,13 @@ analysis: predictions first, in their own commit.
   each with its pydantic settings object reading a section of `params.yaml`
   (`pipelines/params.py`; `.env` for the OpenAlex key); `pipelines/corpus.py` holds what the
   two corpus stages share.
-  Import contracts: `__main__` → `cli` → `pipelines` → `review` → `corpus` → `catalog`.
+  Import contracts: `__main__` → `orchestration` → `cli` → `pipelines` → `review` → `corpus` →
+  `catalog`; only `orchestration` may import Prefect.
+- `orchestration/`: the long jobs as Prefect flows (`flows.py`, deployed by `prefect.yaml` on the
+  runner and locally), their shared steps (`steps.py`: the run's log file, `dvc pull`/`push`, the
+  record commit under a git lock), progress published as an artifact (`progress.py`), and
+  `interpretant submit` / `interpretant runs` (`submit.py`, `commands.py`). Needs the
+  `orchestration` extra.
 - `review/` (rebuild): the corpus review (4b): `corpus_report.py` (what each rule dropped,
   removed and flagged, by decade, field and repository; rendered as Markdown by Polars).
 - `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`) and

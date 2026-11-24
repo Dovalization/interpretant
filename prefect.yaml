@@ -1,0 +1,53 @@
+# The Prefect deployments of interpretant's jobs (src/interpretant/orchestration), registered with
+# `.venv/bin/prefect deploy --all`. Each job deploys twice: on the runner, the machine with the GPU,
+# from a submitted commit; and locally, in the working checkout as it is. Machine names, folders and
+# worker commands are Prefect variables set outside this public repository (interpretant_runner_*,
+# interpretant_local_*), so nothing here names a host.
+name: interpretant
+prefect-version: 3.9.3
+
+definitions:
+  roles:
+    runner: &runner
+      work_pool:
+        name: "{{ prefect.variables.interpretant_runner_pool }}"
+        # One run at a time in the runner's one checkout: two commits can't be checked out at once
+        work_queue_name: interpretant
+        job_variables:
+          command: "{{ prefect.variables.interpretant_runner_command }}"
+      pull:
+        - prefect.deployments.steps.set_working_directory:
+            directory: "{{ prefect.variables.interpretant_runner_dir }}"
+        # Before the flow's code is imported: refuse a checkout with someone's work in it, then check
+        # out the submitted commit and make sure the environment matches its lock. Each line runs
+        # in its own shell.
+        - prefect.deployments.steps.run_shell_script:
+            shell: true
+            stream_output: true
+            script: |
+              test -z "$(git status --porcelain --untracked-files=no)" || { echo "the runner's checkout has changes to tracked files; commit or discard them there" >&2; exit 1; }
+              test -n "$(git for-each-ref --count=1 --contains HEAD)" || { echo "the runner's checkout is on a commit no branch holds; save it with git switch -c first" >&2; exit 1; }
+              git fetch --quiet relay
+              git checkout --quiet --detach "${INTERPRETANT_COMMIT:-relay/main}"
+              uv sync --check --locked --inexact --extra orchestration --extra gpu --extra labels >/dev/null 2>&1 || { echo "the runner's environment doesn't match uv.lock; run there: uv sync --locked --extra orchestration --extra gpu --extra labels" >&2; exit 1; }
+    local: &local
+      work_pool:
+        name: "{{ prefect.variables.interpretant_local_pool }}"
+        job_variables:
+          command: "{{ prefect.variables.interpretant_local_command }}"
+      pull:
+        - prefect.deployments.steps.set_working_directory:
+            directory: "{{ prefect.variables.interpretant_local_dir }}"
+
+deployments:
+  - name: runner
+    description: Any command on the runner, from the submitted commit
+    entrypoint: src/interpretant/orchestration/flows.py:run_command
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: Any command in the local checkout as it is
+    entrypoint: src/interpretant/orchestration/flows.py:run_command
+    parameters: {role: local}
+    <<: *local

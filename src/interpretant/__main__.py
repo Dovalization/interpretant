@@ -22,6 +22,7 @@ from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.measure_cleaning_sensitivity import measure_cleaning_sensitivity_command
 from interpretant.cli.measure_lemma_sensitivity import measure_lemma_sensitivity_command
 from interpretant.cli.report_corpus import report_corpus_command
+from interpretant.orchestration.commands import runs, submit
 
 console = Console()
 
@@ -32,6 +33,8 @@ def cli() -> None:
     """interpretant — diachronic semantic drift tracker for academic corpora."""
 
 
+cli.add_command(submit)
+cli.add_command(runs)
 cli.add_command(fetch_metadata_command)
 cli.add_command(fetch_linked_sources_command)
 cli.add_command(build_linked_tables_command)

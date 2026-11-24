@@ -122,6 +122,7 @@ type = "forbidden"
 source_modules = ["interpretant.catalog"]
 forbidden_modules = [
     "interpretant.__main__",
+    "interpretant.orchestration",
     "interpretant.cli",
     "interpretant.corpus",
     "interpretant.drift",
