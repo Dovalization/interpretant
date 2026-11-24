@@ -32,9 +32,14 @@ def record_run(
     stages: Sequence[tuple[str, float]],
     counts: Mapping[str, int],
     root: Path = REPOSITORY,
+    checkout: tuple[str | None, bool] | None = None,
 ) -> Path:
-    """Append the record of one run to the run log and return the log's file."""
-    commit, has_uncommitted_changes = checkout_state(root)
+    """Append the record of one run to the run log and return the log's file.
+
+    ``checkout`` is the commit and uncommitted state the run started from (``checkout_state``);
+    without it they are read at the end, which is wrong if the checkout changed during the run.
+    """
+    commit, has_uncommitted_changes = checkout if checkout is not None else checkout_state(root)
     record = {
         "command": command,
         "finished": datetime.now(UTC).isoformat(timespec="seconds"),

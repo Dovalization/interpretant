@@ -62,3 +62,46 @@ def test_checkout_state_names_the_commit_and_ignores_the_run_outputs(tmp_path: P
 
 def test_checkout_state_outside_a_repository_is_unknown(tmp_path: Path) -> None:
     assert checkout_state(tmp_path) == (None, False)
+
+
+def test_record_run_keeps_the_checkout_the_run_started_from(
+    catalog: CatalogConfig, tmp_path: Path
+) -> None:
+    repository_with_one_commit(tmp_path)
+    (tmp_path / "code.py").write_text("edited after the run started\n")
+
+    record_run(
+        catalog,
+        command="build-corpus",
+        stages=[],
+        counts={},
+        root=tmp_path,
+        checkout=("abc", False),
+    )
+
+    [record] = [json.loads(line) for line in catalog.run_log.path.read_text().splitlines()]
+    assert (record["commit"], record["uncommitted_changes"]) == ("abc", False)
+
+
+def test_run_records_made_on_different_commits_combine(tmp_path: Path) -> None:
+    """The repository's own .gitattributes lets a run's record commit be cherry-picked onto a
+    branch that recorded another run meanwhile."""
+    repository_with_one_commit(tmp_path)
+    attributes = Path(__file__).resolve().parents[1] / ".gitattributes"
+    (tmp_path / ".gitattributes").write_text(attributes.read_text())
+    (tmp_path / "metrics" / "runs.jsonl").write_text('{"command": "first"}\n')
+    git(tmp_path, "add", ".")
+    git(tmp_path, "commit", "--quiet", "-m", "run log")
+    base = git(tmp_path, "rev-parse", "HEAD")
+    for command in ("on-the-runner", "on-this-machine"):
+        git(tmp_path, "checkout", "--quiet", "-B", command, base)
+        with (tmp_path / "metrics" / "runs.jsonl").open("a") as log:
+            log.write(f'{{"command": "{command}"}}\n')
+        git(tmp_path, "commit", "--quiet", "-am", command)
+
+    git(tmp_path, "cherry-pick", "on-the-runner")
+
+    lines = (tmp_path / "metrics" / "runs.jsonl").read_text().splitlines()
+    assert sorted(lines) == sorted(
+        ['{"command": "first"}', '{"command": "on-this-machine"}', '{"command": "on-the-runner"}']
+    )

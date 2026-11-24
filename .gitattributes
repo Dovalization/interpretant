@@ -1,0 +1,3 @@
+# Runs on different machines append to the run log on different commits; their records combine
+# line by line when one is cherry-picked onto the other (interpretant submit collects them).
+metrics/runs.jsonl merge=union
