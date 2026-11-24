@@ -56,6 +56,11 @@ labels = [
     "anthropic>=2.8.0",
     "typesafe-sdk>=0.7.5",
 ]
+# The Prefect flows that run the long jobs (src/interpretant/orchestration); the same version as the
+# server and workers that run them
+orchestration = [
+    "prefect==3.9.3",
+]
 # CuPy for spaCy on a CUDA 12 GPU (the homelab). Linux only, so `uv sync --all-extras` still works
 # on the Mac. Required directly, not through spacy[cuda12x], whose resolution picks a CuPy that
 # forces NumPy 1.
@@ -107,6 +112,8 @@ ignore_names = ["env_settings", "dotenv_settings", "file_secret_settings"]
 
 [tool.importlinter]
 root_packages = ["interpretant"]
+# Third-party packages are nodes too, so a contract can keep one (Prefect) out of most of the code
+include_external_packages = true
 
 # Layers from the decision agenda, step 8. Fix the import; never widen a contract to pass.
 [[tool.importlinter.contracts]]
@@ -137,6 +144,24 @@ layers = [
     "interpretant.corpus",
     "interpretant.catalog",
 ]
+
+# Only orchestration runs things in Prefect: the pipelines and jobs stay usable without it, from the
+# command line and in tests.
+[[tool.importlinter.contracts]]
+name = "Only orchestration imports Prefect"
+type = "forbidden"
+source_modules = [
+    "interpretant.catalog",
+    "interpretant.cli",
+    "interpretant.corpus",
+    "interpretant.drift",
+    "interpretant.embedding",
+    "interpretant.pipelines",
+    "interpretant.predictions",
+    "interpretant.review",
+    "interpretant.usages",
+]
+forbidden_modules = ["prefect"]
 
 [tool.uv.sources]
 en-core-web-sm = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl" }
