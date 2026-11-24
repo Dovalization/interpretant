@@ -77,3 +77,16 @@ def test_a_record_without_its_lock_fails_rather_than_racing(checkout: Path) -> N
 
     assert state.is_failed()
     assert git(checkout, "log", "-1", "--format=%s") == "first"
+
+
+def test_a_command_finds_the_checkouts_own_tools(checkout: Path) -> None:
+    tools = checkout / ".venv" / "bin"
+    tools.mkdir(parents=True)
+    (tools / "probe-tool").write_text("#!/bin/sh\necho found the checkout tool\n")
+    (tools / "probe-tool").chmod(0o755)
+
+    state = run_command(["probe-tool"], "tool", return_state=True)
+
+    assert state.is_completed()
+    [log] = (checkout / "logs").glob("*-tool.log")
+    assert "found the checkout tool" in log.read_text()
