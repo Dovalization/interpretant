@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from contextlib import ExitStack
+from dataclasses import dataclass
+from functools import partial
 from pathlib import Path
 from typing import IO, cast
 
@@ -17,7 +19,8 @@ from prefect.cache_policies import NO_CACHE
 from prefect.concurrency.sync import concurrency
 from rich.console import Console
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig, read_catalog
+from interpretant.catalog.reports import append_run_record
 from interpretant.cli.jobs import JobRun
 from interpretant.cli.progress import LiveProgress
 from interpretant.orchestration.progress import PrefectProgress
@@ -33,10 +36,18 @@ from interpretant.orchestration.steps import (
     record_outputs,
 )
 from interpretant.pipelines.progress import StageTimer, TeeProgress
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.runs import build_run_record
 
 GPU_LIMIT = "interpretant-runner-gpu"
 CPU_LIMIT = "interpretant-runner-cpu"
+
+
+@dataclass(frozen=True)
+class WorkDone:
+    """A job's counts and the record of its run, which the record step appends and commits."""
+
+    counts: Mapping[str, int]
+    record: dict[str, object]
 
 
 def run_job(
@@ -58,13 +69,15 @@ def run_job(
     if save_outputs and job.stage is None:
         raise ValueError(f"{job.name} is not a DVC stage, so it has no outputs to record")
     root = Path.cwd()
+    catalog = read_catalog(root / CATALOG_FILE.name)  # the checkout's, whose paths are its own
     with open_run_log(job.name, root=root) as log:
         checkout = capture_checkout_state(root)
         if pull:
             pull_data(pull, root=root)
-        counts = do_work(
+        done = do_work(
             job,
             run,
+            catalog,
             role=role,
             process_count=process_count,
             checkout=checkout,
@@ -75,24 +88,32 @@ def run_job(
         if save_outputs and job.stage is not None:
             record_outputs(role, job.stage, root=root)
             paths.append(str(DVC_LOCK))
-        commit_record(role, job.name, str(runtime.flow_run.id), paths, root=root)
+        commit_record(
+            role,
+            job.name,
+            str(runtime.flow_run.id),
+            paths,
+            root=root,
+            write_record=partial(append_run_record, catalog, done.record),
+        )
         if save_outputs and job.stage is not None:
             push_data(role, [job.stage], root=root)
-    return counts
+    return done.counts
 
 
 @task(name="work", cache_policy=NO_CACHE)
 def do_work(
     job: Job,
     run: JobRun,
+    catalog: CatalogConfig,
     *,
     role: Role,
     process_count: int,
     checkout: tuple[str | None, bool],
     log: IO[str],
     record_as: str,
-) -> Mapping[str, int]:
-    """Run the job's work under its limits, then append its record to the run log.
+) -> WorkDone:
+    """Run the job's work under its limits; its counts and the record of the run.
 
     Its progress goes to the log file and to a progress artifact on the run.
     """
@@ -100,7 +121,6 @@ def do_work(
     # Rich writes and flushes only; typeshed doesn't count a TextIOBase as an IO[str]
     output = cast(IO[str], RunOutput(log))
     console = Console(file=output, force_terminal=False, soft_wrap=True)
-    catalog = read_catalog(root / CATALOG_FILE.name)  # the checkout's, whose paths are its own
     artifact = PrefectProgress(job.name)
     with ExitStack() as limits:
         if role == "runner" and job.uses_gpu:
@@ -111,12 +131,7 @@ def do_work(
             timer = StageTimer(TeeProgress(live, artifact))
             counts = run(catalog, timer, console)
         artifact.close()
-    record_run(
-        catalog,
-        command=record_as,
-        stages=timer.finish(),
-        counts=counts,
-        root=root,
-        checkout=checkout,
+    record = build_run_record(
+        command=record_as, stages=timer.finish(), counts=counts, root=root, checkout=checkout
     )
-    return counts
+    return WorkDone(counts, record)

@@ -16,13 +16,14 @@ import os
 import subprocess
 import sys
 import time
-from collections.abc import Iterator, Sequence
+from collections.abc import Callable, Iterator, Sequence
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import IO
 
 from prefect import get_run_logger, task
+from prefect.cache_policies import NO_CACHE
 from prefect.concurrency.sync import concurrency
 from prefect.exceptions import MissingContextError
 from prefect.logging.handlers import APILogHandler
@@ -138,19 +139,30 @@ def record_outputs(role: Role, stage: str, *, root: Path) -> None:
         _run(["dvc", "commit", "--force", stage], root)
 
 
-@task(name="record")
+@task(name="record", cache_policy=NO_CACHE)
 def commit_record(
-    role: Role, name: str, flow_run_id: str, paths: Sequence[str] = (), *, root: Path
+    role: Role,
+    name: str,
+    flow_run_id: str,
+    paths: Sequence[str] = (),
+    *,
+    root: Path,
+    write_record: Callable[[], object] | None = None,
 ) -> str | None:
     """Commit the run's record and the tracked files it rewrote; the commit, if any.
 
-    ``paths`` are those files. On the runner the commit is pushed to the relay. Nothing is
+    ``paths`` are those files. ``write_record`` appends the run's record to the run log, under
+    the same lock as the commit: two runs sharing a checkout then each commit their own record,
+    not one commit holding both. A command run through the ``command`` flow writes its record
+    itself, while it runs. On the runner the commit is pushed to the relay. Nothing is
     committed when the run left the files unchanged. On the local machine a rebase or merge in
     progress there is left alone and the record stays uncommitted. Any other failure is the run's:
     a run whose record is lost is not done.
     """
     files = [str(RUN_LOG), *paths]
     with concurrency(f"interpretant-git-{role}", strict=True):
+        if write_record is not None:
+            write_record()
         if _git(root, "status", "--porcelain", "--", *files) == "":
             return None
         if role == "local" and _is_mid_operation(root):

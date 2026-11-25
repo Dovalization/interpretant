@@ -7,10 +7,12 @@ are replaced, so no server is needed (``test_orchestration_flow.py`` runs a flow
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import threading
 from collections.abc import Iterator
 from contextlib import nullcontext
+from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -157,6 +159,28 @@ def test_a_runner_record_is_committed_and_pushed_to_its_own_branch(
 
     assert git(runner, "log", "-1", "--format=%s") == "chore(metrics): record probe"
     assert git(runner, "ls-remote", "relay", "refs/heads/runs/run-1").split()[0] == commit
+
+
+@pytest.mark.usefixtures("no_limits")
+def test_each_run_sharing_a_checkout_commits_its_own_record(relay: Path, tmp_path: Path) -> None:
+    local = clone(relay, tmp_path / "local")
+
+    for command in ("first-run", "second-run"):
+        steps.commit_record.fn(
+            "local",
+            command,
+            command,
+            root=local,
+            write_record=partial(append_record, local, command),
+        )
+
+    added = git(local, "log", "-2", "--format=%s", "-p", "--", "metrics/runs.jsonl")
+    assert re.findall(r"record (\S+)|\+\{\"command\": \"(\S+)\"\}", added) == [
+        ("second-run", ""),
+        ("", "second-run"),
+        ("first-run", ""),
+        ("", "first-run"),
+    ]
 
 
 @pytest.mark.usefixtures("no_limits")

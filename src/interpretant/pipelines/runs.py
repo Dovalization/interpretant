@@ -34,13 +34,28 @@ def record_run(
     root: Path = REPOSITORY,
     checkout: tuple[str | None, bool] | None = None,
 ) -> Path:
-    """Append the record of one run to the run log and return the log's file.
+    """Append the record of one run to the run log and return the log's file."""
+    record = build_run_record(
+        command=command, stages=stages, counts=counts, root=root, checkout=checkout
+    )
+    return append_run_record(catalog, record)
+
+
+def build_run_record(
+    *,
+    command: str,
+    stages: Sequence[tuple[str, float]],
+    counts: Mapping[str, int],
+    root: Path = REPOSITORY,
+    checkout: tuple[str | None, bool] | None = None,
+) -> dict[str, object]:
+    """The record of one run, as the run log keeps it.
 
     ``checkout`` is the commit and uncommitted state the run started from (``checkout_state``);
     without it they are read at the end, which is wrong if the checkout changed during the run.
     """
     commit, has_uncommitted_changes = checkout if checkout is not None else checkout_state(root)
-    record = {
+    return {
         "command": command,
         "finished": datetime.now(UTC).isoformat(timespec="seconds"),
         "machine": f"{platform.system()} {platform.machine()}, {os.cpu_count()} CPUs",
@@ -51,7 +66,6 @@ def record_run(
         "counts": dict(counts),
         "peak_memory_mb": peak_memory_mb(),
     }
-    return append_run_record(catalog, record)
 
 
 def peak_memory_mb() -> dict[str, float]:
