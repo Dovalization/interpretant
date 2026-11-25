@@ -95,7 +95,8 @@ analysis: predictions first, in their own commit.
 - `review/` (rebuild): the corpus review (4b): `corpus_report.py` (what each rule dropped,
   removed and flagged, by decade, field and repository; rendered as Markdown by Polars), and
   `judging.py` (review items as the judges see them: the answer schemas, the rendered items,
-  parts of 50). The judges themselves are `pipelines/judge_api.py` (Message Batches API, within
+  parts of 50), and `usages_audit.py` (the matching audit's draws: kept, left-out and missed
+  usages as items, run as `draw-usages-audit`). The judges themselves are `pipelines/judge_api.py` (Message Batches API, within
   a dollar cap; the key from the checkout's secrets file only) and
   `pipelines/judge_claude_code.py` (Claude Code's command line on the subscription, never given
   the API key), run as `judge-api` and `judge-claude-code`.

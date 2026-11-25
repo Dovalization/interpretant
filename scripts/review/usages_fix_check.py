@@ -24,10 +24,11 @@ import polars as pl
 from interpretant.catalog.abstracts import load_abstracts_part
 from interpretant.catalog.config import read_catalog
 from interpretant.catalog.words import load_words
+from interpretant.pipelines.draw_usages_audit import load_usages_with_decades
+from interpretant.review.usages_audit import build_with_keys, render_marked_sentence
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from score_usages import final_verdicts
-from usages_audit import load_usages_with_decades, marked, with_keys
 
 CHECK_SEED = 20261308
 SIZE = 20
@@ -41,7 +42,7 @@ def draw(out: Path, lemma: str, pos: str) -> None:
     usages = load_usages_with_decades(catalog).filter(
         (pl.col("word") == lemma) & (pl.col("pos") == pos) & pl.col("in_scope") & pl.col("drawn")
     )
-    chosen = with_keys(usages, CHECK_SEED).sort("key").head(SIZE).to_dicts()
+    chosen = build_with_keys(usages, CHECK_SEED).sort("key").head(SIZE).to_dicts()
     texts: dict[str, str] = {}
     for part in sorted({row["part"] for row in chosen}):
         ids = sorted(row["work_id"] for row in chosen if row["part"] == part)
@@ -58,7 +59,7 @@ def draw(out: Path, lemma: str, pos: str) -> None:
                 "kind": "kept",
                 "word": lemma,
                 "parts_of_speech": list(word.pos),
-                "sentence": marked(texts[row["work_id"]], row),
+                "sentence": render_marked_sentence(texts[row["work_id"]], row),
             }
             handle.write(json.dumps(item, ensure_ascii=False) + "\n")
             key[item_id] = {

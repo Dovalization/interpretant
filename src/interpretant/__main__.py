@@ -17,6 +17,7 @@ from interpretant.cli.clean_corpus import clean_corpus_command
 from interpretant.cli.compare_corpus import compare_corpus_command
 from interpretant.cli.count_word_repairs import count_word_repairs_command
 from interpretant.cli.detect_languages import detect_languages_command
+from interpretant.cli.draw_usages_audit import draw_usages_audit_command
 from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.judge_api import judge_api_command
@@ -52,6 +53,7 @@ cli.add_command(report_corpus_command)
 cli.add_command(compare_corpus_command)
 cli.add_command(measure_cleaning_sensitivity_command)
 cli.add_command(measure_lemma_sensitivity_command)
+cli.add_command(draw_usages_audit_command)
 cli.add_command(judge_api_command)
 cli.add_command(judge_claude_code_command)
 
