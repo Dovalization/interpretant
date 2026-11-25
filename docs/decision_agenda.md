@@ -2082,7 +2082,7 @@ The sized tasks come to about 4 hours; three are not yet sized.
 - [x] `docs/experiments.md`: the record of past experiments, written before any step 1 deletion
   (37 entries; the README points to it).
 - [ ] Push: the local commits wait for the author's go.
-- [ ] The homelab's old checkout (`~/interpretant-old`, 20 GB, 24 uncommitted changes, set aside
+- [ ] The remote runner's old checkout (`~/interpretant-old`, 20 GB, 24 uncommitted changes, set aside
   2026-11-17 when the run checkout moved to `~/Developer/interpretant`): kept or deleted, the
   author decides.
 - [ ] Devlog 07: waiting for the author's review.

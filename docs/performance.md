@@ -2,7 +2,7 @@
 
 *Where the pipelines' time and memory go, what was changed to cut them, and what each change
 did. Started 2026-11-16 from the speed records then spread over the decision agenda and
-`docs/methods.md`. Figures come from the homelab machine (Linux x86_64, 12 CPUs, which are 6
+`docs/methods.md`. Figures come from the remote runner (Linux x86_64, 12 CPUs, which are 6
 physical cores with two threads each; an NVIDIA RTX 4070 SUPER; 31 GB of memory; ten worker
 processes) unless they say otherwise.*
 
@@ -112,7 +112,7 @@ is not yet a worker's peak (an open item, below).
 - **srsly's msgpack extensions looked up once in the pass** (`b1805b41`): srsly asked its
   registries on every pack and unpack, a third of the main process. The fix took the function
   calls on 4,000 abstracts from 83.6 million to 23.6 million and rebuilding the documents from
-  7.1 s to 0.8 s (cProfile on the Mac); on the homelab machine the main process went from 95% to
+  7.1 s to 0.8 s (cProfile on the local machine); on the remote runner the main process went from 95% to
   84% busy, the workers from 60–67% to 78–90%, and the pass from about 285 to 350 abstracts a
   second (+23%). The gain was smaller than the profile's third suggested; the 6 physical cores
   were given as the reason, not measured.
@@ -330,7 +330,7 @@ RTX 4070 SUPER over 6,000 real target sentences (`scripts/evidence/transformer_s
 ## The transformer path of the usages stage (2026-11-19)
 
 The model comparison chose the transformer (`docs/usages_audit.md`), so the stage annotates every
-target sentence with `en_core_web_trf`: 1,333,751 sentences. GPU figures come from the homelab's
+target sentence with `en_core_web_trf`: 1,333,751 sentences. GPU figures come from the remote runner's
 Prometheus (15 s samples); the remote runner's card has 11.65 GB, the desktop holds about 1.5 GB.
 
 - **Two failed runs, diagnosed.** With four processes the card filled within two minutes of the GPU

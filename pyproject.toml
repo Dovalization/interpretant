@@ -61,7 +61,7 @@ labels = [
 orchestration = [
     "prefect==3.9.3",
 ]
-# CuPy for spaCy on a CUDA 12 GPU (the homelab). Linux only, so `uv sync --all-extras` still works
+# CuPy for spaCy on a CUDA 12 GPU (the remote runner). Linux only, so `uv sync --all-extras` still works
 # on the Mac. Required directly, not through spacy[cuda12x], whose resolution picks a CuPy that
 # forces NumPy 1.
 gpu = [

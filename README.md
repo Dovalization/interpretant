@@ -161,7 +161,7 @@ The stack was settled on 2026-11-11, before the data audit and the store's rebui
 
 - **spaCy** gives every annotation a target occurrence needs from one pipeline and streams over
   large inputs: the small model on the CPU for corpus-wide passes, the transformer model on the
-  homelab GPU where accuracy matters. It also replaces simplemma in the plural and spelling map.
+  remote runner's GPU where accuracy matters. It also replaces simplemma in the plural and spelling map.
 - **lingua** checks the language of each sentence, not only each abstract: a bilingual abstract
   passes the abstract-level check, and a usage's sentence can be its other half. It was chosen
   over fastText's identifier, whose repository was archived in March 2024.

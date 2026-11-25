@@ -178,7 +178,7 @@ Each item that produces results gets its predictions committed first.
    the cleaned cells, rerun the candidate scan on the new models, and check in a pre-registered
    robustness round that the README's robust findings survive the cleaning.
 8f. **An open LLM as encoder and labeller** (noted 2026-11-11, after round A′). Hidden states of an
-   open-weight 7–8B decoder (Llama 3.1 8B or Qwen2.5-7B, quantised to fit the homelab's 12 GB)
+   open-weight 7–8B decoder (Llama 3.1 8B or Qwen2.5-7B, quantised to fit the remote runner's 12 GB)
    as a third encoder beside XL-LEXEME and DeBERTa-v3-large, and the same model as a local
    comparison labeller beside Sonnet and JEV: free, private and pinned. Exploratory: the layer,
    pooling and quantisation are chosen on development data, which is why it is not round A′'s

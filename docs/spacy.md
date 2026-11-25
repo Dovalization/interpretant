@@ -53,7 +53,7 @@ words no rule can tell apart.
 | Named entities | Flagging proper-name uses (a product called Transformer, a person called Williams, company names with *Cloud*) | Adds a filter; these now enter the usages unseen |
 | Noun chunks | Compound terms around a target (*attention mechanism*, *cloud computing*) as evidence for senses and list gaps | Complements the Wiktionary check on written lists |
 | Span groups, custom attributes, `DocBin` | Each target occurrence stored as a labelled span; annotated documents saved once and reused by every round | Start and end offsets in the store's records |
-| `nlp.pipe`, `prefer_gpu`, the transformer model | Throughput on the CPU; accuracy on the homelab GPU | — |
+| `nlp.pipe`, `prefer_gpu`, the transformer model | Throughput on the CPU; accuracy on the remote runner's GPU | — |
 | lingua as a custom component | Language checks inside the same pipeline | A separate pass |
 | `textcat`, `spancat` | An experiment for counting senses with a classifier on the transformer model | An alternative to the scikit-learn cue classifier |
 | Entity linker | Possibly: link each usage to a sense entry with a definition, close to the definition-reading model | Needs training data |

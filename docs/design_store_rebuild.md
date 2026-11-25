@@ -7,7 +7,7 @@ needs.*
 ## The store today
 
 `scripts/build_vector_store.py` exports usages per part (a grid field, or the word-targeted
-cells), merges them into one manifest (`data/store/usages.jsonl.gz`), encodes them on the homelab
+cells), merges them into one manifest (`data/store/usages.jsonl.gz`), encodes them on the remote runner
 GPU into float16 shards, and indexes key to shard and row. Each record holds the key, word,
 source, field, decade, year, work id, the context text and the target's start and end.
 Quality rules version 2 apply to every cell; each abstract gives one occurrence of a word, with
@@ -63,7 +63,7 @@ The 2026-11-11 audit found it sound (four cells re-derived identically) but limi
    plus the sentence (and its character offsets in the abstract), tag, morphology, lemma, entity
    label, sentence language and confidence, near-duplicate group, and a content hash that serves
    as the key.
-8. **Encoding.** As now: XL-LEXEME and DeBERTa on the homelab GPU, resumable float16 shards,
+8. **Encoding.** As now: XL-LEXEME and DeBERTa on the remote runner's GPU, resumable float16 shards,
    keyed by the content hash, so an unchanged usage keeps its vector across rebuilds.
 9. **Checks.** pandera schemas on the manifest, run on every rebuild (below).
 10. **Datasheet and versioning.** `docs/datasheet.md` with the counts per cell and per removal
@@ -110,5 +110,5 @@ sentence boundaries); then re-baseline round X on the new store before any new e
    field, compared with the current store and the current processed files; then the lemma map
    relearned on that text and its audit rerun.
 3. The manifest, the pandera checks and the datasheet.
-4. The full rebuild, then encoding on the homelab.
+4. The full rebuild, then encoding on the remote runner.
 5. Round X re-baselined on the new store.
