@@ -18,7 +18,7 @@ from uuid import UUID
 
 from prefect.artifacts import create_progress_artifact, update_progress_artifact
 
-from interpretant.pipelines.progress import format_pace
+from interpretant.pipelines.progress import format_duration, format_pace
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class PrefectProgress:
     def stage(self, name: str, total: int | None = None) -> None:
         """Close the running stage's artifact and start one for the next stage."""
         with self._lock:
-            self._publish_locked()
+            self._publish_locked(is_done=True)
             self._name, self._total = name, total
             self._completed = self._skipped = 0
             self._started = self._published = self.clock()
@@ -73,9 +73,9 @@ class PrefectProgress:
         self._count(amount, skipped=amount)
 
     def close(self) -> None:
-        """Publish the last stage's final position."""
+        """Publish the last stage as done; called once the work has returned."""
         with self._lock:
-            self._publish_locked()
+            self._publish_locked(is_done=True)
 
     def _count(self, amount: int, *, skipped: int) -> None:
         with self._lock:
@@ -84,7 +84,8 @@ class PrefectProgress:
             if self.clock() - self._published >= self.interval:
                 self._publish_locked()
 
-    def _publish_locked(self) -> None:
+    def _publish_locked(self, *, is_done: bool = False) -> None:
+        """Publish the stage's position; a stage ends only when it is done, whatever its count."""
         if self._artifact is None:
             return
         now = self.clock()
@@ -93,15 +94,19 @@ class PrefectProgress:
         try:
             update_progress_artifact(
                 artifact_id=self._artifact,
-                progress=min(share, 100.0),
-                description=self._describe(now),
+                progress=100.0 if is_done else min(share, 100.0),
+                description=self._describe(now, is_done=is_done),
             )
         except Exception:
             logger.warning("couldn't update the progress of %s", self._name, exc_info=True)
 
-    def _describe(self, now: float) -> str:
+    def _describe(self, now: float, *, is_done: bool = False) -> str:
+        elapsed = now - self._started
+        if is_done:
+            counted = f", {self._completed:,} items" if self._completed else ""
+            return f"{self._name}: done in {format_duration(elapsed)}{counted}"
         remaining = self._total - self._completed if self._total else None
-        pace = format_pace(self._completed - self._skipped, now - self._started, remaining)
+        pace = format_pace(self._completed - self._skipped, elapsed, remaining)
         position = (
             f"{self._completed:,}/{self._total:,}" if self._total else f"{self._completed:,} items"
         )

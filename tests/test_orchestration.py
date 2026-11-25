@@ -239,8 +239,23 @@ def test_progress_is_published_at_most_every_interval(artifacts: list[dict[str, 
     progress.close()
 
     updates = [call["update"] for call in artifacts if "update" in call]
-    assert [update["progress"] for update in updates] == [30.0, 30.0]
+    assert [update["progress"] for update in updates] == [30.0, 100.0]
     assert artifacts[0]["create"]["key"] == "build-usages-annotating"
+
+
+def test_a_stage_without_a_total_shows_done_when_the_next_starts(
+    artifacts: list[dict[str, Any]],
+) -> None:
+    clock = FakeClock()
+    progress = PrefectProgress("report-corpus", interval=30, clock=clock)
+
+    progress.stage("loading the abstracts table")
+    clock.now = 4
+    progress.stage("writing the report")
+
+    [update] = [call["update"] for call in artifacts if "update" in call]
+    assert update["progress"] == 100.0
+    assert update["description"] == "loading the abstracts table: done in 4 s"
 
 
 def test_progress_from_a_worker_thread_is_counted(artifacts: list[dict[str, Any]]) -> None:
