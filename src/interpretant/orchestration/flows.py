@@ -28,12 +28,13 @@ from interpretant.cli.count_word_repairs import run_count_word_repairs
 from interpretant.cli.detect_languages import run_detect_languages
 from interpretant.cli.fetch_linked_sources import run_fetch_linked_sources
 from interpretant.cli.fetch_metadata import run_fetch_metadata
+from interpretant.cli.judge_api import run_judge_api
+from interpretant.cli.judge_claude_code import run_judge_claude_code
 from interpretant.cli.options import default_process_count
 from interpretant.cli.report_corpus import run_report_corpus
 from interpretant.orchestration.jobs import run_job
-from interpretant.orchestration.registry import JOBS
+from interpretant.orchestration.registry import JOBS, Role
 from interpretant.orchestration.steps import (
-    Role,
     capture_checkout_state,
     commit_record,
     open_run_log,
@@ -41,10 +42,17 @@ from interpretant.orchestration.steps import (
     push_data,
     send_output_line,
 )
+from interpretant.pipelines.judge_api import ApiJudging, Thinking
+from interpretant.pipelines.judge_claude_code import CommandLineJudging
+from interpretant.review.judging import Answers, Effort
 
 
 class CommandFailedError(RuntimeError):
     """The command exited with a status other than 0."""
+
+
+class JudgingIncompleteError(RuntimeError):
+    """Some parts were not judged; a retry, or the next run, judges only those."""
 
 
 @flow(name="command", flow_run_name="{name}", timeout_seconds=12 * 3600)
@@ -378,3 +386,90 @@ def fetch_linked_sources(
         pull=pull,
         save_outputs=False,
     )
+
+
+@flow(name="judge-api", timeout_seconds=JOBS["judge-api"].timeout_seconds)
+def judge_api(
+    items: Path,
+    out: Path,
+    codebook: Path,
+    answers: Answers,
+    model: str,
+    effort: Effort,
+    max_dollars: float,
+    chunk: int = 500,
+    max_tokens: int = 4096,
+    thinking: Thinking = "adaptive",
+    *,
+    role: Role = "local",
+    pull: list[str] | None = None,
+) -> None:
+    """Judge review items through the Message Batches API, within a cap of this run's spending."""
+    judging = ApiJudging(
+        codebook=codebook,
+        answers=answers,
+        model=model,
+        effort=effort,
+        max_dollars=max_dollars,
+        chunk=chunk,
+        max_tokens=max_tokens,
+        thinking=thinking,
+    )
+    run_job(
+        JOBS["judge-api"],
+        lambda catalog, progress, console: run_judge_api(
+            catalog, items, out, judging, progress=progress, console=console
+        ),
+        role=role,
+        process_count=1,
+        pull=pull,
+        save_outputs=False,
+        record_as=f"judge-api {model}",
+    )
+
+
+@flow(
+    name="judge-claude-code",
+    timeout_seconds=JOBS["judge-claude-code"].timeout_seconds,
+    retries=JOBS["judge-claude-code"].retries,
+    retry_delay_seconds=JOBS["judge-claude-code"].retry_delay_seconds,
+)
+def judge_claude_code(
+    items: Path,
+    verdicts: Path,
+    name: str,
+    codebook: Path,
+    answers: Answers,
+    model: str,
+    effort: Effort,
+    items_per_call: int = 1,
+    parallel: int = 4,
+    claude: str = "claude",
+    *,
+    role: Role = "local",
+    pull: list[str] | None = None,
+) -> None:
+    """Judge review items with Claude Code on the subscription; fails if a part failed."""
+    judging = CommandLineJudging(
+        name=name,
+        codebook=codebook,
+        answers=answers,
+        model=model,
+        effort=effort,
+        items_per_call=items_per_call,
+        parallel=parallel,
+        claude=claude,
+    )
+    counts = run_job(
+        JOBS["judge-claude-code"],
+        lambda catalog, progress, console: run_judge_claude_code(
+            catalog, items, verdicts, judging, progress=progress, console=console
+        ),
+        role=role,
+        process_count=1,
+        pull=pull,
+        save_outputs=False,
+        record_as=f"judge-claude-code {model}",
+    )
+    if counts["failed_parts"]:
+        raise JudgingIncompleteError(f"{counts['failed_parts']} parts failed")

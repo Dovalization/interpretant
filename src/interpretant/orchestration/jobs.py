@@ -7,6 +7,7 @@ the log, as the command line draws it for a file, and to a progress artifact.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from contextlib import ExitStack
 from pathlib import Path
 from typing import IO, cast
@@ -20,10 +21,9 @@ from interpretant.catalog.config import CATALOG_FILE, read_catalog
 from interpretant.cli.jobs import JobRun
 from interpretant.cli.progress import LiveProgress
 from interpretant.orchestration.progress import PrefectProgress
-from interpretant.orchestration.registry import Job
+from interpretant.orchestration.registry import Job, Role
 from interpretant.orchestration.steps import (
     DVC_LOCK,
-    Role,
     RunOutput,
     capture_checkout_state,
     commit_record,
@@ -47,11 +47,13 @@ def run_job(
     process_count: int,
     pull: list[str] | None,
     save_outputs: bool,
-) -> None:
-    """Run the job in the checkout, then commit its record.
+    record_as: str | None = None,
+) -> Mapping[str, int]:
+    """Run the job in the checkout, commit its record, and return its counts.
 
     With ``save_outputs`` its stage's outputs are recorded in ``dvc.lock`` and pushed too.
     ``process_count`` is the worker processes the job starts, each taking a CPU slot on the runner.
+    ``record_as`` names the run in the run log (the job's name by default).
     """
     if save_outputs and job.stage is None:
         raise ValueError(f"{job.name} is not a DVC stage, so it has no outputs to record")
@@ -60,7 +62,15 @@ def run_job(
         checkout = capture_checkout_state(root)
         if pull:
             pull_data(pull, root=root)
-        do_work(job, run, role=role, process_count=process_count, checkout=checkout, log=log)
+        counts = do_work(
+            job,
+            run,
+            role=role,
+            process_count=process_count,
+            checkout=checkout,
+            log=log,
+            record_as=record_as or job.name,
+        )
         paths = list(job.tracked_outputs)
         if save_outputs and job.stage is not None:
             record_outputs(role, job.stage, root=root)
@@ -68,6 +78,7 @@ def run_job(
         commit_record(role, job.name, str(runtime.flow_run.id), paths, root=root)
         if save_outputs and job.stage is not None:
             push_data(role, [job.stage], root=root)
+    return counts
 
 
 @task(name="work", cache_policy=NO_CACHE)
@@ -79,7 +90,8 @@ def do_work(
     process_count: int,
     checkout: tuple[str | None, bool],
     log: IO[str],
-) -> None:
+    record_as: str,
+) -> Mapping[str, int]:
     """Run the job's work under its limits, then append its record to the run log.
 
     Its progress goes to the log file and to a progress artifact on the run.
@@ -101,9 +113,10 @@ def do_work(
         artifact.close()
     record_run(
         catalog,
-        command=job.name,
+        command=record_as,
         stages=timer.finish(),
         counts=counts,
         root=root,
         checkout=checkout,
     )
+    return counts

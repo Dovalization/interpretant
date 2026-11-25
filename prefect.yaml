@@ -197,3 +197,15 @@ deployments:
     entrypoint: src/interpretant/orchestration/flows.py:fetch_linked_sources
     parameters: {role: local}
     <<: *local
+
+  - name: local
+    description: "Judge review items through the Message Batches API, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:judge_api
+    parameters: {role: local}
+    <<: *local
+
+  - name: local
+    description: "Judge review items with Claude Code on the subscription, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:judge_claude_code
+    parameters: {role: local}
+    <<: *local

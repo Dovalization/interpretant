@@ -20,16 +20,15 @@ from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import IO, Literal
+from typing import IO
 
 from prefect import get_run_logger, task
 from prefect.concurrency.sync import concurrency
 from prefect.exceptions import MissingContextError
 from prefect.logging.handlers import APILogHandler
 
+from interpretant.orchestration.registry import Role
 from interpretant.pipelines.runs import checkout_state
-
-Role = Literal["runner", "local"]
 
 RUN_LOG = Path("metrics/runs.jsonl")
 DVC_LOCK = Path("dvc.lock")

@@ -20,7 +20,8 @@ from prefect.client.schemas.filters import LogFilter, LogFilterFlowRunId
 from prefect.client.schemas.sorting import LogSort
 from prefect.deployments import run_deployment
 
-from interpretant.orchestration.steps import RELAY, Role
+from interpretant.orchestration.registry import Role
+from interpretant.orchestration.steps import RELAY
 
 POLL_SECONDS = 2.0
 LOG_PAGE = 200

@@ -9,8 +9,12 @@ both, and each flow's parameters against its command's options).
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Literal
 
 HOUR = 3600
+# Where a run goes: the runner, the machine with the GPU, from a submitted commit; or locally, in
+# the working checkout as it is
+Role = Literal["runner", "local"]
 
 
 @dataclass(frozen=True)
@@ -20,7 +24,8 @@ class Job:
     ``stage`` is its DVC stage, whose outputs a run can record (``dvc commit``) and push.
     ``tracked_outputs`` are the files it rewrites that git tracks, committed with the run's record
     so the runner's checkout is left clean. On the runner, a job with ``uses_gpu`` takes the GPU's
-    limit, and one with ``uses_cpus`` takes a CPU slot per worker process.
+    limit, and one with ``uses_cpus`` takes a CPU slot per worker process. ``roles`` are where it
+    is deployed.
     """
 
     name: str
@@ -31,6 +36,7 @@ class Job:
     uses_cpus: bool = True
     retries: int = 0
     retry_delay_seconds: int = 0
+    roles: tuple[Role, ...] = ("runner", "local")
 
 
 JOBS: dict[str, Job] = {
@@ -68,6 +74,18 @@ JOBS: dict[str, Job] = {
             uses_cpus=False,
             retries=2,
             retry_delay_seconds=600,
+        ),
+        # The judges run where Claude Code is signed in and the review items are: locally.
+        # judge-api is never retried, as its cap counts one run's spending only
+        Job("judge-api", 6 * HOUR, uses_cpus=False, roles=("local",)),
+        # judge-claude-code resumes by part, so a run with failed parts is retried once
+        Job(
+            "judge-claude-code",
+            6 * HOUR,
+            uses_cpus=False,
+            retries=1,
+            retry_delay_seconds=60,
+            roles=("local",),
         ),
     )
 }

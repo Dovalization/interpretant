@@ -23,9 +23,10 @@ from interpretant.cli.count_word_repairs import count_word_repairs_command
 from interpretant.cli.detect_languages import detect_languages_command
 from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
+from interpretant.cli.judge_api import judge_api_command
+from interpretant.cli.judge_claude_code import judge_claude_code_command
 from interpretant.cli.report_corpus import report_corpus_command
-from interpretant.orchestration.registry import JOBS
-from interpretant.orchestration.steps import Role
+from interpretant.orchestration.registry import JOBS, Role
 
 REPOSITORY = Path(__file__).resolve().parents[3]
 # The jobs' own commands, whose options their submissions take (but --catalog)
@@ -42,6 +43,8 @@ JOB_COMMANDS: tuple[click.Command, ...] = (
     build_usages_command,
     fetch_metadata_command,
     fetch_linked_sources_command,
+    judge_api_command,
+    judge_claude_code_command,
 )
 
 
@@ -111,10 +114,10 @@ def build_job_submission(command: click.Command) -> click.Command:
 
     @click.pass_context
     def submit_job(context: click.Context, /, **values: object) -> None:
-        parameters = {
-            name: list(value) if isinstance(value, tuple) else value
-            for name, value in values.items()
-        }
+        if context.obj["where"] not in job.roles:
+            where = " or ".join(job.roles)
+            raise click.UsageError(f"{job.name} runs only {where}: use --where {where}")
+        parameters = {name: build_parameter(value) for name, value in values.items()}
         _submit_and_follow(context.obj, job.name, parameters)
 
     return click.Command(
@@ -124,6 +127,21 @@ def build_job_submission(command: click.Command) -> click.Command:
         help=command.help,
         short_help=command.get_short_help_str(),
     )
+
+
+def build_parameter(value: object) -> object:
+    """An option's value as the flow's parameter: a list for a tuple, a path relative to the repo.
+
+    A relative path lets the run find it in its own checkout, whatever folder it was submitted from.
+    """
+    if isinstance(value, tuple):
+        return list(value)
+    if isinstance(value, Path):
+        try:
+            return str(value.resolve().relative_to(REPOSITORY))
+        except ValueError as exc:
+            raise click.BadParameter(f"{value} is outside the repository") from exc
+    return value
 
 
 for _command in JOB_COMMANDS:

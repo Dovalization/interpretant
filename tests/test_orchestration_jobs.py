@@ -61,7 +61,7 @@ def test_each_job_deploys_on_the_runner_and_locally(job: Job) -> None:
         if deployment["entrypoint"] == entrypoint
     }
 
-    assert roles == {"runner": {"role": "runner"}, "local": {"role": "local"}}
+    assert roles == {role: {"role": role} for role in job.roles}
 
 
 @pytest.mark.parametrize("job", JOBS.values(), ids=lambda job: job.name)
@@ -83,7 +83,7 @@ def test_each_flow_takes_its_commands_options_with_their_defaults(job: Job) -> N
         if name not in ADDED_PARAMETERS
     }
     command_defaults = {
-        param.name: () if getattr(param, "multiple", False) else param.default
+        param.name: get_flow_default(param)
         for param in get_command(job).params
         if param.name != "catalog_file"
     }
@@ -93,6 +93,13 @@ def test_each_flow_takes_its_commands_options_with_their_defaults(job: Job) -> N
         ADDED_PARAMETERS if job.stage is not None else ADDED_PARAMETERS - {"save_outputs"}
     )
     assert set(signature.parameters) - set(flow_defaults) == expected_added
+
+
+def get_flow_default(param: click.Parameter) -> object:
+    """The default a flow's parameter takes for a command's option: none for a required one."""
+    if param.required:
+        return inspect.Parameter.empty
+    return () if getattr(param, "multiple", False) else param.default
 
 
 def test_every_job_has_a_submission_and_nothing_else_does() -> None:
@@ -153,6 +160,63 @@ def test_a_submission_sends_the_flows_parameters(monkeypatch: pytest.MonkeyPatch
     assert validated["decades"] == (2010,)
     assert validated["resume"] is True
     assert validated["save_outputs"] is True
+
+
+def test_a_local_job_is_refused_on_the_runner(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(commands, "_submit_and_follow", lambda *_: pytest.fail("submitted"))
+    codebook = REPOSITORY / "curated" / "judging" / "usages" / "prompt.md"
+
+    result = CliRunner().invoke(
+        commands.submit,
+        [
+            *["--where", "runner", "judge-claude-code", "curated", "verdicts", "--name", "judge_A"],
+            *f"--codebook {codebook} --answers usages --model m --effort low".split(),
+        ],
+    )
+
+    assert result.exit_code == 2
+    assert "judge-claude-code runs only local" in result.output
+
+
+def test_a_submitted_path_is_relative_to_the_repository(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    sent: list[dict[str, Any]] = []
+    monkeypatch.setattr(
+        commands, "_submit_and_follow", lambda _, __, parameters: sent.append(parameters)
+    )
+    monkeypatch.chdir(REPOSITORY / "curated")
+
+    result = CliRunner().invoke(
+        commands.submit,
+        [
+            *[
+                "--where",
+                "local",
+                "judge-claude-code",
+                "judging",
+                "../data/verdicts",
+                "--name",
+                "A",
+            ],
+            *[
+                "--codebook",
+                "judging/usages/prompt.md",
+                "--answers",
+                "usages",
+                "--model",
+                "m",
+                "--effort",
+                "low",
+            ],
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    [parameters] = sent
+    assert parameters["items"] == "curated/judging"
+    assert parameters["verdicts"] == "data/verdicts"
+    assert parameters["codebook"] == "curated/judging/usages/prompt.md"
 
 
 def test_a_job_without_a_stage_has_no_save_outputs_option() -> None:
