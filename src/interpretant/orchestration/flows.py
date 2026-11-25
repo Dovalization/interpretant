@@ -26,6 +26,7 @@ from interpretant.cli.build_usages import run_build_usages
 from interpretant.cli.clean_corpus import run_clean_corpus
 from interpretant.cli.count_word_repairs import run_count_word_repairs
 from interpretant.cli.detect_languages import run_detect_languages
+from interpretant.cli.draw_usages_audit import run_draw_usages_audit
 from interpretant.cli.fetch_linked_sources import run_fetch_linked_sources
 from interpretant.cli.fetch_metadata import run_fetch_metadata
 from interpretant.cli.judge_api import run_judge_api
@@ -45,6 +46,7 @@ from interpretant.orchestration.steps import (
 from interpretant.pipelines.judge_api import ApiJudging, Thinking
 from interpretant.pipelines.judge_claude_code import CommandLineJudging
 from interpretant.review.judging import Answers, Effort
+from interpretant.review.usages_audit import AUDIT_SEED
 
 
 class CommandFailedError(RuntimeError):
@@ -391,6 +393,39 @@ def fetch_linked_sources(
         process_count=1,
         pull=pull,
         save_outputs=False,
+    )
+
+
+@flow(name="draw-usages-audit", timeout_seconds=JOBS["draw-usages-audit"].timeout_seconds)
+def draw_usages_audit(
+    out: Path,
+    seed: int = AUDIT_SEED,
+    process_count: int | None = None,
+    *,
+    skip_calibration: bool = False,
+    role: Role = "local",
+    pull: list[str] | None = None,
+) -> None:
+    """Draw the matching audit's kept, left-out and missed usages as review items."""
+    processes = process_count or default_process_count()
+    run_job(
+        JOBS["draw-usages-audit"],
+        lambda catalog, progress, console: run_draw_usages_audit(
+            catalog,
+            out,
+            seed,
+            processes,
+            skip_calibration=skip_calibration,
+            progress=progress,
+            console=console,
+        ),
+        role=role,
+        process_count=processes,
+        pull=pull,
+        save_outputs=False,
+        record_as=f"draw-usages-audit {seed}",
+        # The items quote corpus sentences and stay out of git
+        outputs=[out / "key.json", out / "calibration.json", out / "counts.json"],
     )
 
 

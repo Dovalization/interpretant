@@ -24,8 +24,7 @@ class Job:
     ``stage`` is its DVC stage, whose outputs a run can record (``dvc commit``) and push.
     ``tracked_outputs`` are the files it rewrites that git tracks, committed with the run's record
     so the runner's checkout is left clean. On the runner, a job with ``uses_gpu`` takes the GPU's
-    limit, and one with ``uses_cpus`` takes a CPU slot per worker process. ``roles`` are where it
-    is deployed.
+    limit, and one with ``uses_cpus`` takes a CPU slot per worker process.
     """
 
     name: str
@@ -36,7 +35,6 @@ class Job:
     uses_cpus: bool = True
     retries: int = 0
     retry_delay_seconds: int = 0
-    roles: tuple[Role, ...] = ("runner", "local")
 
 
 JOBS: dict[str, Job] = {
@@ -75,17 +73,11 @@ JOBS: dict[str, Job] = {
             retries=2,
             retry_delay_seconds=600,
         ),
-        # The judges run where Claude Code is signed in and the review items are: locally.
+        # The audit's items are drawn where the usages table is, and judged there too
+        Job("draw-usages-audit", 1 * HOUR),
         # judge-api is never retried, as its cap counts one run's spending only
-        Job("judge-api", 6 * HOUR, uses_cpus=False, roles=("local",)),
+        Job("judge-api", 6 * HOUR, uses_cpus=False),
         # judge-claude-code resumes by part, so a run with failed parts is retried once
-        Job(
-            "judge-claude-code",
-            6 * HOUR,
-            uses_cpus=False,
-            retries=1,
-            retry_delay_seconds=60,
-            roles=("local",),
-        ),
+        Job("judge-claude-code", 6 * HOUR, uses_cpus=False, retries=1, retry_delay_seconds=60),
     )
 }

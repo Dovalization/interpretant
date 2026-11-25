@@ -61,7 +61,7 @@ def test_each_job_deploys_on_the_runner_and_locally(job: Job) -> None:
         if deployment["entrypoint"] == entrypoint
     }
 
-    assert roles == {role: {"role": role} for role in job.roles}
+    assert roles == {role: {"role": role} for role in ("runner", "local")}
 
 
 @pytest.mark.parametrize("job", JOBS.values(), ids=lambda job: job.name)
@@ -160,22 +160,6 @@ def test_a_submission_sends_the_flows_parameters(monkeypatch: pytest.MonkeyPatch
     assert validated["decades"] == (2010,)
     assert validated["resume"] is True
     assert validated["save_outputs"] is True
-
-
-def test_a_local_job_is_refused_on_the_runner(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(commands, "_submit_and_follow", lambda *_: pytest.fail("submitted"))
-    codebook = REPOSITORY / "curated" / "judging" / "usages" / "prompt.md"
-
-    result = CliRunner().invoke(
-        commands.submit,
-        [
-            *["--where", "runner", "judge-claude-code", "curated", "verdicts", "--name", "judge_A"],
-            *f"--codebook {codebook} --answers usages --model m --effort low".split(),
-        ],
-    )
-
-    assert result.exit_code == 2
-    assert "judge-claude-code runs only local" in result.output
 
 
 def test_a_submitted_path_is_relative_to_the_repository(

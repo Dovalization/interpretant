@@ -198,11 +198,35 @@ deployments:
     parameters: {role: local}
     <<: *local
 
+  - name: runner
+    description: "Draw the matching audit's kept, left-out and missed usages as review items, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:draw_usages_audit
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Draw the matching audit's kept, left-out and missed usages as review items, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:draw_usages_audit
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Judge review items through the Message Batches API, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:judge_api
+    parameters: {role: runner}
+    <<: *runner
+
   - name: local
     description: "Judge review items through the Message Batches API, in the local checkout as it is"
     entrypoint: src/interpretant/orchestration/flows.py:judge_api
     parameters: {role: local}
     <<: *local
+
+  - name: runner
+    description: "Judge review items with Claude Code on the subscription, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:judge_claude_code
+    parameters: {role: runner}
+    <<: *runner
 
   - name: local
     description: "Judge review items with Claude Code on the subscription, in the local checkout as it is"

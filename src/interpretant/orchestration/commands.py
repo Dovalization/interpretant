@@ -21,6 +21,7 @@ from interpretant.cli.build_usages import build_usages_command
 from interpretant.cli.clean_corpus import clean_corpus_command
 from interpretant.cli.count_word_repairs import count_word_repairs_command
 from interpretant.cli.detect_languages import detect_languages_command
+from interpretant.cli.draw_usages_audit import draw_usages_audit_command
 from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.judge_api import judge_api_command
@@ -43,6 +44,7 @@ JOB_COMMANDS: tuple[click.Command, ...] = (
     build_usages_command,
     fetch_metadata_command,
     fetch_linked_sources_command,
+    draw_usages_audit_command,
     judge_api_command,
     judge_claude_code_command,
 )
@@ -123,9 +125,6 @@ def build_job_submission(command: click.Command) -> click.Command:
 
     @click.pass_context
     def submit_job(context: click.Context, /, **values: object) -> None:
-        if context.obj["where"] not in job.roles:
-            where = " or ".join(job.roles)
-            raise click.UsageError(f"{job.name} runs only {where}: use --where {where}")
         parameters = {name: build_parameter(value) for name, value in values.items()}
         _submit_and_follow(context.obj, job.name, parameters)
 
