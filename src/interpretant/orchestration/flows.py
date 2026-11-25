@@ -1,10 +1,9 @@
 """The Prefect flows that run interpretant's jobs, one per job (``prefect.yaml`` deploys each).
 
 Each job's flow takes its command's options as parameters (but ``--catalog``: a run uses its
-checkout's catalog) and runs the command's work in-process (``jobs.run_job``). A stage's flow can
-also record its outputs in ``dvc.lock`` and push them. ``run_command`` is the escape hatch: any
-command, for one-off scripts and the scorers, whose output is copied into the run's log file and
-the Prefect run.
+checkout's catalog) and runs the command's work in-process (``jobs.run_job``). ``run_command`` runs
+any other command: one-off scripts, the scorers, and ``dvc repro`` when a stage's outputs are to be
+recorded in ``dvc.lock``. Its output is copied into the run's log file and the Prefect run.
 """
 
 from __future__ import annotations
@@ -113,7 +112,7 @@ def run_and_copy_output(command: Sequence[str], *, root: Path) -> None:
     name="build-linked-tables",
     timeout_seconds=JOBS["build-linked-tables"].timeout_seconds,
 )
-def build_linked_tables(*, pull: list[str] | None = None, save_outputs: bool = False) -> None:
+def build_linked_tables(*, pull: list[str] | None = None) -> None:
     """Write the staging tables of OpenAlex, Crossref and PubMed works from the raw files."""
     run_job(
         JOBS["build-linked-tables"],
@@ -121,7 +120,6 @@ def build_linked_tables(*, pull: list[str] | None = None, save_outputs: bool = F
             catalog, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -130,7 +128,6 @@ def count_word_repairs(
     process_count: int | None = None,
     *,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Count the word repairs and write the repaired texts the spaCy pass reads."""
     processes = process_count or default_process_count()
@@ -140,7 +137,6 @@ def count_word_repairs(
             catalog, processes, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -152,7 +148,6 @@ def annotate_corpus(
     process_count: int | None = None,
     *,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Annotate the selected cells with spaCy (stage 2), part by part."""
     processes = process_count or default_process_count()
@@ -162,7 +157,6 @@ def annotate_corpus(
             catalog, fields, decades, batch_size, processes, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -171,7 +165,6 @@ def detect_languages(
     process_count: int | None = None,
     *,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Give each sentence its language with lingua."""
     processes = process_count or default_process_count()
@@ -181,7 +174,6 @@ def detect_languages(
             catalog, processes, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -190,7 +182,6 @@ def clean_corpus(
     process_count: int | None = None,
     *,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Apply the cleaning rules to the annotated abstracts."""
     processes = process_count or default_process_count()
@@ -200,7 +191,6 @@ def clean_corpus(
             catalog, processes, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -209,7 +199,6 @@ def build_corpus(
     process_count: int | None = None,
     *,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Apply the corpus-level rules to every part and write the abstracts table (stage 3)."""
     processes = process_count or default_process_count()
@@ -219,12 +208,11 @@ def build_corpus(
             catalog, processes, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
 @flow(name="report-corpus", timeout_seconds=JOBS["report-corpus"].timeout_seconds)
-def report_corpus(*, pull: list[str] | None = None, save_outputs: bool = False) -> None:
+def report_corpus(*, pull: list[str] | None = None) -> None:
     """Write the corpus report and its metrics, read before the review (4b)."""
     run_job(
         JOBS["report-corpus"],
@@ -232,7 +220,6 @@ def report_corpus(*, pull: list[str] | None = None, save_outputs: bool = False) 
             catalog, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -241,7 +228,6 @@ def build_static_view(
     process_count: int | None = None,
     *,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Write the static view: lemma exceptions, then the spelling and compound maps applied."""
     processes = process_count or default_process_count()
@@ -251,7 +237,6 @@ def build_static_view(
             catalog, processes, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -260,7 +245,6 @@ def build_sentence_view(
     process_count: int | None = None,
     *,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Write the sentence view, with the sentence cuts repaired."""
     processes = process_count or default_process_count()
@@ -270,7 +254,6 @@ def build_sentence_view(
             catalog, processes, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -285,7 +268,6 @@ def build_usages(
     resume: bool = False,
     reuse_cache: bool = False,
     pull: list[str] | None = None,
-    save_outputs: bool = False,
 ) -> None:
     """Find the targets' mentions and write their usages, on the GPU (decision agenda 4.1-4.6)."""
     processes = process_count or default_process_count()
@@ -304,7 +286,6 @@ def build_usages(
             console=console,
         ),
         pull=pull,
-        save_outputs=save_outputs,
     )
 
 
@@ -328,7 +309,6 @@ def fetch_metadata(
             catalog, fields, decades, workers, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=False,
     )
 
 
@@ -352,7 +332,6 @@ def fetch_linked_sources(
             catalog, sources, fields, decades, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=False,
     )
 
 
@@ -379,7 +358,6 @@ def draw_usages_audit(
             console=console,
         ),
         pull=pull,
-        save_outputs=False,
         record_as=f"draw-usages-audit {seed}",
         # The items quote corpus sentences and stay out of git
         outputs=[out / "key.json", out / "calibration.json", out / "counts.json"],
@@ -423,7 +401,6 @@ def judge_api(
             catalog, items, out, judging, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=False,
         record_as=f"judge-api {model}",
     )
 
@@ -465,7 +442,6 @@ def judge_claude_code(
             catalog, items, verdicts, judging, progress=progress, console=console
         ),
         pull=pull,
-        save_outputs=False,
         record_as=f"judge-claude-code {model}",
     )
     if counts["failed_parts"]:

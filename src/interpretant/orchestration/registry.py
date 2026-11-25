@@ -11,6 +11,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 HOUR = 3600
+# Where DVC records each stage's outputs, committed with a reproduced stage's record
+DVC_LOCK = "dvc.lock"
 
 
 @dataclass(frozen=True)

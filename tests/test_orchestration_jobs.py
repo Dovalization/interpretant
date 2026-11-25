@@ -33,7 +33,7 @@ from interpretant.orchestration.registry import JOBS, Job
 from interpretant.pipelines.progress import Progress
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-ADDED_PARAMETERS = {"pull", "save_outputs"}
+ADDED_PARAMETERS = {"pull"}
 
 
 def read_deployments() -> list[dict[str, Any]]:
@@ -89,10 +89,7 @@ def test_each_flow_takes_its_commands_options_with_their_defaults(job: Job) -> N
     }
 
     assert flow_defaults == command_defaults
-    expected_added = (
-        ADDED_PARAMETERS if job.stage is not None else ADDED_PARAMETERS - {"save_outputs"}
-    )
-    assert set(signature.parameters) - set(flow_defaults) == expected_added
+    assert set(signature.parameters) - set(flow_defaults) == ADDED_PARAMETERS
 
 
 def get_flow_default(param: click.Parameter) -> object:
@@ -149,7 +146,7 @@ def test_a_submission_sends_the_flows_parameters(monkeypatch: pytest.MonkeyPatch
 
     result = CliRunner().invoke(
         commands.submit,
-        ["build-usages", "--field", "ai", "--decade", "2010", "--resume", "--save-outputs"],
+        ["build-usages", "--field", "ai", "--decade", "2010", "--resume"],
     )
 
     assert result.exit_code == 0, result.output
@@ -159,7 +156,6 @@ def test_a_submission_sends_the_flows_parameters(monkeypatch: pytest.MonkeyPatch
     assert validated["fields"] == ("ai",)
     assert validated["decades"] == (2010,)
     assert validated["resume"] is True
-    assert validated["save_outputs"] is True
 
 
 def test_a_runner_submission_takes_a_path_that_exists_only_on_the_runner(
@@ -224,11 +220,31 @@ def test_a_submitted_path_is_relative_to_the_repository(
     assert parameters["codebook"] == "curated/judging/usages/prompt.md"
 
 
-def test_a_job_without_a_stage_has_no_save_outputs_option() -> None:
-    result = CliRunner().invoke(commands.submit, ["fetch-metadata", "--save-outputs"])
+def test_reproducing_a_stage_runs_dvc_repro_and_brings_back_its_lock(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    sent: list[tuple[str, dict[str, Any]]] = []
+    monkeypatch.setattr(
+        commands,
+        "_submit_and_follow",
+        lambda options, flow_name, parameters: sent.append((flow_name, parameters)),
+    )
+
+    result = CliRunner().invoke(commands.submit, ["repro", "report_corpus"])
+
+    assert result.exit_code == 0, result.output
+    [(flow_name, parameters)] = sent
+    assert flow_name == "command"
+    assert parameters["command"] == ["dvc", "repro", "report_corpus"]
+    assert parameters["outputs"] == ["dvc.lock", "metrics/corpus.json"]
+    assert parameters["push_outputs"] is True
+    flows.run_command.validate_parameters(parameters)
+
+
+def test_only_a_dvc_stage_is_reproduced() -> None:
+    result = CliRunner().invoke(commands.submit, ["repro", "fetch-metadata"])
 
     assert result.exit_code != 0
-    assert "No such option" in result.output
 
 
 # End to end, with a job whose work prints a table, reports progress and rewrites a tracked file
@@ -245,8 +261,8 @@ def run_probe(catalog: CatalogConfig, progress: Progress, console: Console) -> d
 
 
 @flow(name="probe")
-def probe_flow(*, save_outputs: bool = False) -> None:
-    run_job(PROBE, run_probe, pull=None, save_outputs=save_outputs)
+def probe_flow() -> None:
+    run_job(PROBE, run_probe, pull=None)
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -299,7 +315,7 @@ def test_a_job_runs_logs_and_commits_its_record_with_its_outputs(checkout: Path)
 
 @flow(name="probe-with-outputs")
 def probe_with_outputs_flow() -> None:
-    run_job(PROBE, run_probe, pull=None, save_outputs=False, outputs=[Path("audit/key.json")])
+    run_job(PROBE, run_probe, pull=None, outputs=[Path("audit/key.json")])
 
 
 def test_a_runs_outputs_are_committed_with_its_record(
@@ -322,11 +338,3 @@ def test_a_jobs_progress_is_published_as_an_artifact(checkout: Path) -> None:
             artifact_filter=ArtifactFilter(type=ArtifactFilterType(any_=["progress"]))
         )
     assert any(artifact.key == "probe-probing" and artifact.data == 100.0 for artifact in artifacts)
-
-
-def test_saving_the_outputs_of_a_job_without_a_stage_fails_before_running(checkout: Path) -> None:
-    state = probe_flow(save_outputs=True, return_state=True)
-
-    assert state.is_failed()
-    assert not (checkout / "logs").exists()
-    assert git(checkout, "log", "-1", "--format=%s") == "first"

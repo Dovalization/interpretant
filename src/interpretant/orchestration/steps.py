@@ -29,7 +29,6 @@ from prefect.logging.handlers import APILogHandler
 from interpretant.pipelines.runs import checkout_state
 
 RUN_LOG = Path("metrics/runs.jsonl")
-DVC_LOCK = Path("dvc.lock")
 # Where the code comes from and the records go: the public repository
 ORIGIN = "origin"
 LOGS = Path("logs")
@@ -127,12 +126,6 @@ def pull_data(paths: Sequence[str], *, root: Path) -> None:
 def push_data(targets: Sequence[str] = (), *, root: Path) -> None:
     """Upload the outputs the checkout records (``targets``' or all) to the DVC remote."""
     _run(["dvc", "push", *targets], root)
-
-
-@task(name="dvc-commit")
-def record_outputs(stage: str, *, root: Path) -> None:
-    """Record in ``dvc.lock`` the stage's outputs as the run just made them from the checkout."""
-    _run(["dvc", "commit", "--force", stage], root)
 
 
 @task(name="record", cache_policy=NO_CACHE)

@@ -46,8 +46,11 @@ retired.
   tracked files and a commit no GitHub branch holds. The runner fetches and checks that commit out
   before the flow is imported, refusing a checkout holding someone's changes, and installs what its
   `uv.lock` says.
-- **Data.** `--pull PATH` runs `dvc pull` first; a stage's `--save-outputs` records its outputs in
-  `dvc.lock` and pushes them after the run.
+- **Data.** `--pull PATH` runs `dvc pull` first. `interpretant submit repro STAGE` runs
+  `dvc repro STAGE` on the runner, which runs the stage's command from `dvc.yaml` if its inputs
+  changed; its outputs are pushed and `dvc.lock` comes back with the record (DVC's own way to
+  record a stage, rather than `dvc commit --force` after a run, which records whatever the folder
+  holds).
 - **One run at a time.** The runner's work queue takes one interpretant run at a time (one
   checkout), so no run needs a lock.
 - **Records.** The run's output goes to `logs/<UTC time>-<name>.log`, its progress to a Prefect

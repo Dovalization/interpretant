@@ -24,14 +24,11 @@ from interpretant.cli.progress import LiveProgress
 from interpretant.orchestration.progress import PrefectProgress
 from interpretant.orchestration.registry import Job
 from interpretant.orchestration.steps import (
-    DVC_LOCK,
     RunOutput,
     capture_checkout_state,
     commit_record,
     open_run_log,
     pull_data,
-    push_data,
-    record_outputs,
 )
 from interpretant.pipelines.progress import StageTimer, TeeProgress
 from interpretant.pipelines.runs import build_run_record
@@ -50,19 +47,15 @@ def run_job(
     run: JobRun,
     *,
     pull: list[str] | None,
-    save_outputs: bool,
     record_as: str | None = None,
     outputs: Sequence[Path] = (),
 ) -> Mapping[str, int]:
     """Run the job in the runner's checkout, commit its record, and return its counts.
 
-    With ``save_outputs`` its stage's outputs are recorded in ``dvc.lock`` and pushed too.
     ``record_as`` names the run in the run log (the job's name by default). ``outputs`` are the
     files, or folders, this run wrote that git keeps (an audit's key and counts), committed with
     the record, as nobody works in the runner's checkout to commit them.
     """
-    if save_outputs and job.stage is None:
-        raise ValueError(f"{job.name} is not a DVC stage, so it has no outputs to record")
     root = Path.cwd()
     catalog = read_catalog(root / CATALOG_FILE.name)  # the checkout's, whose paths are its own
     with open_run_log(job.name, root=root) as log:
@@ -73,9 +66,6 @@ def run_job(
             job, run, catalog, checkout=checkout, log=log, record_as=record_as or job.name
         )
         paths = [*job.tracked_outputs, *(str(path) for path in outputs)]
-        if save_outputs and job.stage is not None:
-            record_outputs(job.stage, root=root)
-            paths.append(str(DVC_LOCK))
         commit_record(
             job.name,
             str(runtime.flow_run.id),
@@ -83,8 +73,6 @@ def run_job(
             root=root,
             write_record=partial(append_run_record, catalog, done.record),
         )
-        if save_outputs and job.stage is not None:
-            push_data([job.stage], root=root)
     return done.counts
 
 

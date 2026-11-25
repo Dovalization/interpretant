@@ -28,7 +28,7 @@ from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.judge_api import judge_api_command
 from interpretant.cli.judge_claude_code import judge_claude_code_command
 from interpretant.cli.report_corpus import report_corpus_command
-from interpretant.orchestration.registry import JOBS
+from interpretant.orchestration.registry import DVC_LOCK, JOBS
 
 REPOSITORY = Path(__file__).resolve().parents[3]
 # The jobs' own commands, whose options their submissions take (but --catalog)
@@ -97,11 +97,35 @@ def submit_command(
     _submit_and_follow(context.obj, "command", parameters)
 
 
+@submit.command("repro")
+@click.argument(
+    "stage", type=click.Choice(sorted(job.stage for job in JOBS.values() if job.stage is not None))
+)
+@click.option("--pull", multiple=True, help="A DVC-tracked path to pull first (repeatable).")
+@click.pass_context
+def submit_repro(context: click.Context, stage: str, pull: tuple[str, ...]) -> None:
+    """Run a DVC stage with `dvc repro` on the runner, recording its outputs in dvc.lock.
+
+    DVC runs the stage's command from dvc.yaml if its inputs changed, then the outputs are pushed
+    to the DVC remote, and dvc.lock and the stage's tracked outputs come back with the record. A
+    reproduced stage starts from deleted outputs, so it doesn't resume a stopped run.
+    """
+    [job] = [job for job in JOBS.values() if job.stage == stage]
+    parameters = {
+        "command": ["dvc", "repro", stage],
+        "name": f"repro-{job.name}",
+        "pull": list(pull),
+        "outputs": [DVC_LOCK, *job.tracked_outputs],
+        "push_outputs": True,
+    }
+    _submit_and_follow(context.obj, "command", parameters)
+
+
 def build_job_submission(command: click.Command) -> click.Command:
     """The ``interpretant submit <job>`` command for a job's own command.
 
-    It takes the job's options, ``--pull``, and for a DVC stage ``--save-outputs``; their values
-    are the job's flow's parameters, by name.
+    It takes the job's options and ``--pull``; their values are the job's flow's parameters, by
+    name. A stage whose outputs are to be recorded runs through ``submit repro`` instead.
     """
     assert command.name is not None
     job = JOBS[command.name]
@@ -111,14 +135,6 @@ def build_job_submission(command: click.Command) -> click.Command:
             ["--pull"], multiple=True, help="A DVC-tracked path to pull first (repeatable)."
         )
     )
-    if job.stage is not None:
-        options.append(
-            click.Option(
-                ["--save-outputs"],
-                is_flag=True,
-                help=f"After the run, record the outputs in dvc.lock (dvc commit {job.stage}) and push them.",  # noqa: E501
-            )
-        )
 
     @click.pass_context
     def submit_job(context: click.Context, /, **values: object) -> None:
