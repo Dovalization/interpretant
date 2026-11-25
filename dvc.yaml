@@ -256,6 +256,7 @@ stages:
       - ${lemma_exceptions.path}
       - ${spellings.path}
       - ${words.path}
+      - ${held_out_words.path}
     params:
       - build_usages
       - corpus

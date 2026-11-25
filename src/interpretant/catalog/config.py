@@ -56,6 +56,8 @@ class CatalogConfig(BaseModel):
     annotation_cache: DatasetEntry
     lemma_exceptions: DatasetEntry
     words: DatasetEntry
+    held_out_words: DatasetEntry
+    held_out_evidence: DatasetEntry
     spellings: DatasetEntry
     compounds: DatasetEntry
     sentence_languages: DatasetEntry

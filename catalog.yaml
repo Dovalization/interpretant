@@ -171,6 +171,16 @@ words:
   path: curated/words.tsv
   format: tsv
 
+# The held-out words (agenda 6.2; docs/held_out.md), with each one's sealed name, and the evidence for
+# each: tracked by DVC, never by git, so the public repository doesn't name the set.
+held_out_words:
+  path: curated/held_out.tsv
+  format: tsv
+
+held_out_evidence:
+  path: curated/held_out_evidence.jsonl
+  format: jsonl
+
 # The spelling map (decision agenda 3.4; docs/spellings.md): each British or American variant and
 # the standard it is written as, the form the corpus uses more often; audited before use.
 spellings:

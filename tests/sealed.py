@@ -12,6 +12,15 @@ from collections.abc import Sequence
 
 import pytest
 
+from interpretant.catalog.config import read_catalog
+
+# The held-out words are tracked by DVC, not git, so a checkout without them (CI) skips the checks
+# that read the real table
+requires_held_out = pytest.mark.skipif(
+    not read_catalog().held_out_words.path.exists(),
+    reason="the held-out words are tracked by DVC (dvc pull curated/held_out.tsv)",
+)
+
 
 def fail_sealed(words: Sequence[str], what: str) -> None:
     """Fail the test if ``words`` is not empty, naming only their count and hash prefixes."""

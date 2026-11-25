@@ -112,6 +112,9 @@ def write_corpus_catalog(folder: Path) -> Path:
         "annotation_cache:\n  path: annotation_cache\n  format: parquet\n"
         f"lemma_exceptions:\n  path: '{repository.lemma_exceptions.path}'\n  format: tsv\n"
         f"words:\n  path: '{repository.words.path}'\n  format: tsv\n"
+        # The development words only: the held-out ones are tracked by DVC, absent on CI
+        "held_out_words:\n  path: held_out.tsv\n  format: tsv\n"
+        "held_out_evidence:\n  path: held_out_evidence.jsonl\n  format: jsonl\n"
         f"spellings:\n  path: '{repository.spellings.path}'\n  format: tsv\n"
         f"compounds:\n  path: '{repository.compounds.path}'\n  format: tsv\n"
         "sentence_languages:\n  path: sentence_languages\n  format: parquet\n"
@@ -120,6 +123,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "corpus_metrics:\n  path: metrics/corpus.json\n  format: json\n"
         "run_log:\n  path: metrics/runs.jsonl\n  format: jsonl\n"
     )
+    (folder / "held_out.tsv").write_text("lemma\tpos\tmatch\tsealed_name\n", encoding="utf-8")
     for (field, decade), works in CELLS.items():
         write_raw_cell(catalog_file, field, decade, works)
     count_word_repairs(read_catalog(catalog_file), CorpusSelection(), WORD_REPAIRS_SETTINGS)

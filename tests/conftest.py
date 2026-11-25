@@ -76,6 +76,8 @@ def catalog_text() -> str:
         "annotation_cache:\n  path: data/annotation_cache\n  format: parquet\n"
         "lemma_exceptions:\n  path: curated/lemma_exceptions.tsv\n  format: tsv\n"
         "words:\n  path: curated/words.tsv\n  format: tsv\n"
+        "held_out_words:\n  path: curated/held_out.tsv\n  format: tsv\n"
+        "held_out_evidence:\n  path: curated/held_out_evidence.jsonl\n  format: jsonl\n"
         "spellings:\n  path: curated/spellings.tsv\n  format: tsv\n"
         "compounds:\n  path: curated/compounds.tsv\n  format: tsv\n"
         "sentence_languages:\n  path: data/sentence_languages\n  format: parquet\n"

@@ -9,7 +9,7 @@ from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.spellings import load_spellings
 from interpretant.catalog.words import load_words
 from interpretant.corpus.spelling import mapped_away, spell
-from tests.sealed import fail_sealed
+from tests.sealed import fail_sealed, requires_held_out
 
 HEADER = "# A comment line.\nform\tstandard\tsource\n"
 
@@ -59,6 +59,7 @@ def test_load_spellings_refuses_a_bad_map(
         load_spellings(write_spellings(catalog, rows, header))
 
 
+@requires_held_out
 def test_no_spelling_sends_a_word_of_the_table_away() -> None:
     catalog = read_catalog()
     spellings = {spelling.form: spelling.standard for spelling in load_spellings(catalog)}
@@ -66,6 +67,7 @@ def test_no_spelling_sends_a_word_of_the_table_away() -> None:
     fail_sealed(mapped_away(spellings, words), "mapped away")
 
 
+@requires_held_out
 def test_no_standard_merges_two_words_of_the_table() -> None:
     catalog = read_catalog()
     spellings = {spelling.form: spelling.standard for spelling in load_spellings(catalog)}

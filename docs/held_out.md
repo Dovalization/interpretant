@@ -45,3 +45,21 @@ earlier, unpushed commits still hold them.
   any measurement of these words; drawn from words used nowhere in development; filtered from
   development outputs by their reported name; their labels, if any, are made after the plan is
   frozen.
+
+## Moved out of git (2026-11-25)
+
+The author chose to keep the set secret and to publish the repository's history, so the set left git:
+
+- **Where it lives.** The held-out words are in `curated/held_out.tsv` and their evidence in
+  `curated/held_out_evidence.jsonl`, both tracked by DVC (their `.dvc` files hold only a path, a size
+  and an md5) and stored with the project's data. `curated/words.tsv` keeps the 53 development words.
+  `load_words` reads both files and refuses to run without the held-out one; the tests that read the
+  real set skip where it is absent, as on CI.
+- **Sealed names.** A held-out word's reported name was `held-out:` plus the first 12 hex digits of
+  its lemma's sha256, which anyone could read back by hashing candidate words. Each word now has a
+  random sealed name, fixed once and kept beside it in `curated/held_out.tsv`; every committed output
+  was re-sealed with it. The list's sha256 above still identifies the set, as no one can try every
+  46-word combination.
+- **History.** The commits not yet published were rewritten so none of them holds the set, its
+  evidence, an unsealed note or an old hashed name (`docs/commit_map.tsv` maps their old hashes to
+  the new).

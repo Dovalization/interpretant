@@ -9,7 +9,7 @@ from interpretant.catalog.compounds import load_compounds
 from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.words import load_words
 from interpretant.corpus.compound_spelling import build_compound_map, compounds_written_away
-from tests.sealed import fail_sealed
+from tests.sealed import fail_sealed, requires_held_out
 
 HEADER = "# A comment line.\nform\tstandard\tsource\n"
 
@@ -84,6 +84,7 @@ def test_load_compounds_refuses_a_bad_map(
         load_compounds(write_compounds(catalog, rows, header))
 
 
+@requires_held_out
 def test_no_compound_writes_a_word_of_the_table_away() -> None:
     catalog = read_catalog()
     compounds = build_compound_map(

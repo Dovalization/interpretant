@@ -26,7 +26,9 @@ from interpretant.review.usages_audit import (
 )
 
 ATTENTION = Word(lemma="attention", pos=("NOUN",), match="lemma", held_out=False)
-MEMORY = Word(lemma="memory", pos=("NOUN",), match="lemma", held_out=True)
+MEMORY = Word(
+    lemma="memory", pos=("NOUN",), match="lemma", held_out=True, sealed_name="held-out:0123456789ab"
+)
 NEURAL_NETWORK = Word(lemma="neural network", pos=("NOUN",), match="lemma", held_out=False)
 
 
