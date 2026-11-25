@@ -27,6 +27,7 @@ from prefect.testing.utilities import prefect_test_harness
 from rich.console import Console
 
 from interpretant.catalog.config import CatalogConfig
+from interpretant.cli.judge_claude_code import judge_claude_code_command
 from interpretant.orchestration import commands, flows, jobs
 from interpretant.orchestration.jobs import run_job
 from interpretant.orchestration.registry import JOBS, Job, Role
@@ -160,6 +161,29 @@ def test_a_submission_sends_the_flows_parameters(monkeypatch: pytest.MonkeyPatch
     assert validated["decades"] == (2010,)
     assert validated["resume"] is True
     assert validated["save_outputs"] is True
+
+
+def test_a_runner_submission_takes_a_path_that_exists_only_on_the_runner(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    submitted: list[dict[str, Any]] = []
+    monkeypatch.setattr(
+        commands, "_submit_and_follow", lambda _, __, parameters: submitted.append(parameters)
+    )
+    codebook = REPOSITORY / "curated" / "judging" / "usages" / "prompt.md"
+
+    result = CliRunner().invoke(
+        commands.submit,
+        [
+            *["--where", "runner", "judge-claude-code", "data/review/only_on_the_runner/items"],
+            *["data/review/only_on_the_runner/verdicts", "--name", "judge_A"],
+            *f"--codebook {codebook} --answers usages --model m --effort low".split(),
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert submitted[0]["items"] == "data/review/only_on_the_runner/items"
+    assert judge_claude_code_command.params[0].type.exists  # type: ignore[attr-defined]
 
 
 def test_a_submitted_path_is_relative_to_the_repository(

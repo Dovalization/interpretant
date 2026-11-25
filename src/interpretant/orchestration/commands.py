@@ -6,6 +6,7 @@ without the ``orchestration`` extra.
 
 from __future__ import annotations
 
+import copy
 from pathlib import Path
 from typing import Any
 from uuid import UUID
@@ -108,7 +109,7 @@ def build_job_submission(command: click.Command) -> click.Command:
     """
     assert command.name is not None
     job = JOBS[command.name]
-    options = [param for param in command.params if param.name != "catalog_file"]
+    options = [build_unchecked(param) for param in command.params if param.name != "catalog_file"]
     options.append(
         click.Option(
             ["--pull"], multiple=True, help="A DVC-tracked path to pull first (repeatable)."
@@ -135,6 +136,20 @@ def build_job_submission(command: click.Command) -> click.Command:
         help=command.help,
         short_help=command.get_short_help_str(),
     )
+
+
+def build_unchecked(param: click.Parameter) -> click.Parameter:
+    """A copy of a job's option that doesn't require its path to exist here.
+
+    The run's checkout is the one that must hold it: review items, for one, exist only on the
+    runner.
+    """
+    if not isinstance(param.type, click.Path) or not param.type.exists:
+        return param
+    unchecked = copy.copy(param)
+    unchecked.type = copy.copy(param.type)
+    unchecked.type.exists = False
+    return unchecked
 
 
 def build_parameter(value: object) -> object:
