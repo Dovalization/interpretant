@@ -120,6 +120,15 @@ def test_draw_kept_takes_each_words_share_per_decade_and_is_seeded() -> None:
     assert set(kept["key"]) != set(draw_kept(usages_table(), 8)["key"])
 
 
+def test_draw_kept_gives_the_same_rows_in_the_same_order_whatever_the_tables_order() -> None:
+    usages = usages_table()
+    expected = draw_kept(usages, 7)["key"].to_list()
+
+    for seed in range(5):
+        shuffled = usages.sample(fraction=1.0, shuffle=True, seed=seed)
+        assert draw_kept(shuffled, 7)["key"].to_list() == expected
+
+
 def test_draw_left_out_takes_the_smallest_keys_per_word() -> None:
     left_out = draw_left_out(usages_table(), 7)
     assert left_out.height == LEFT_OUT_PER_WORD

@@ -103,10 +103,14 @@ def build_with_keys(usages: pl.DataFrame, seed: int) -> pl.DataFrame:
 
 
 def draw_kept(usages: pl.DataFrame, seed: int) -> pl.DataFrame:
-    """20 drawn in-scope usages per word, spread over decades, the smallest keys in each."""
+    """20 drawn in-scope usages per word, spread over decades, the smallest keys in each.
+
+    The words come in order, so the items built from the draw, and their ids, are the same each
+    time: Polars' groups otherwise come in an order that changes from call to call.
+    """
     drawn = build_with_keys(usages.filter(pl.col("drawn") & pl.col("in_scope")), seed)
     chosen = []
-    for (_,), rows in drawn.group_by("word"):
+    for (_,), rows in drawn.sort("word").group_by("word", maintain_order=True):
         counts = dict(rows.group_by("decade").len().iter_rows())
         for decade, share in compute_shares(counts, KEPT_PER_WORD).items():
             chosen.append(rows.filter(pl.col("decade") == decade).sort("key").head(share))
