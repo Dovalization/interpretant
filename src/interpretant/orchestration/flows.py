@@ -429,6 +429,11 @@ def draw_usages_audit(
     )
 
 
+# The judges' verdicts stay where they were written, out of git: their reasons can quote corpus
+# sentences and name held-out words. A scorer run there brings back only its results, which seal
+# those names.
+
+
 @flow(name="judge-api", timeout_seconds=JOBS["judge-api"].timeout_seconds)
 def judge_api(
     items: Path,
@@ -466,7 +471,6 @@ def judge_api(
         pull=pull,
         save_outputs=False,
         record_as=f"judge-api {model}",
-        outputs=[out, out.with_suffix(".manifest.json")],
     )
 
 
@@ -512,7 +516,6 @@ def judge_claude_code(
         pull=pull,
         save_outputs=False,
         record_as=f"judge-claude-code {model}",
-        outputs=[verdicts],
     )
     if counts["failed_parts"]:
         raise JudgingIncompleteError(f"{counts['failed_parts']} parts failed")

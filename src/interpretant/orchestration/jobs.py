@@ -66,7 +66,7 @@ def run_job(
     With ``save_outputs`` its stage's outputs are recorded in ``dvc.lock`` and pushed too.
     ``process_count`` is the worker processes the job starts, each taking a CPU slot on the runner.
     ``record_as`` names the run in the run log (the job's name by default). ``outputs`` are the
-    files, or folders, this run wrote that git keeps (an audit's key, a judge's verdicts): on the
+    files, or folders, this run wrote that git keeps (an audit's key and counts): on the
     runner they are committed with the record, as nobody works in its checkout to commit them;
     locally they are left for the author.
     """
