@@ -149,18 +149,20 @@ def commit_record(
     root: Path,
     write_record: Callable[[], object] | None = None,
 ) -> str | None:
-    """Commit the run's record and the tracked files it rewrote; the commit, if any.
+    """Commit the run's record and the files it wrote that git keeps; the commit, if any.
 
-    ``paths`` are those files. ``write_record`` appends the run's record to the run log, under
-    the same lock as the commit: two runs sharing a checkout then each commit their own record,
-    not one commit holding both. A command run through the ``command`` flow writes its record
+    ``paths`` are those files, or folders of them: new ones are added, and files git ignores
+    inside a folder are left out (a path naming an ignored file fails the run); a path the run did
+    not write is passed over. ``write_record`` appends the run's record to the run log, under the
+    same lock as the commit: two runs sharing a checkout then each commit their own record, not
+    one commit holding both. A command run through the ``command`` flow writes its record
     itself, while it runs. On the runner the commit is pushed to the relay. Nothing is
     committed when the run left the files unchanged. On the local machine a rebase or merge in
     progress there is left alone and the record stays uncommitted. Any other failure is the run's:
     a run whose record is lost is not done, and the record it wrote is taken out of the run log
     again, so the next run's commit does not carry it under that run's name.
     """
-    files = [str(RUN_LOG), *paths]
+    files = [str(RUN_LOG), *(path for path in paths if (root / path).exists())]
     run_log = root / RUN_LOG
     with concurrency(f"interpretant-git-{role}", strict=True):
         before = run_log.read_bytes() if run_log.exists() else b""
@@ -173,6 +175,7 @@ def commit_record(
             _logger().warning("left %s uncommitted: a rebase or merge is in progress here", RUN_LOG)
             return None
         try:
+            _add_with_index_lock_retries(root, files)
             _commit_with_index_lock_retries(root, name, files)
         except RecordError:
             _remove_written(run_log, written)
@@ -193,11 +196,21 @@ def _remove_written(run_log: Path, written: bytes) -> None:
         run_log.write_bytes(text[:start] + text[start + len(written) :])
 
 
+def _add_with_index_lock_retries(root: Path, files: Sequence[str]) -> None:
+    _git_with_index_lock_retries(root, ["git", "add", "--", *files])
+
+
 def _commit_with_index_lock_retries(root: Path, name: str, files: Sequence[str]) -> None:
-    command = ["git", "commit", "--quiet", "--no-verify", "-m", f"chore(metrics): record {name}"]
+    message = f"chore(metrics): record {name}"
+    _git_with_index_lock_retries(
+        root, ["git", "commit", "--quiet", "--no-verify", "-m", message, "--", *files]
+    )
+
+
+def _git_with_index_lock_retries(root: Path, command: Sequence[str]) -> None:
     for attempt in range(INDEX_LOCK_ATTEMPTS):
         completed = subprocess.run(
-            [*command, "--", *files], cwd=root, capture_output=True, text=True, check=False
+            list(command), cwd=root, capture_output=True, text=True, check=False
         )
         if completed.returncode == 0:
             return

@@ -27,9 +27,9 @@ from prefect.testing.utilities import prefect_test_harness
 from rich.console import Console
 
 from interpretant.catalog.config import CatalogConfig
-from interpretant.orchestration import commands, flows
+from interpretant.orchestration import commands, flows, jobs
 from interpretant.orchestration.jobs import run_job
-from interpretant.orchestration.registry import JOBS, Job
+from interpretant.orchestration.registry import JOBS, Job, Role
 from interpretant.pipelines.progress import Progress
 
 REPOSITORY = Path(__file__).resolve().parents[1]
@@ -290,6 +290,32 @@ def test_a_job_runs_logs_and_commits_its_record_with_its_outputs(checkout: Path)
     assert record["stages"][0]["name"] == "probing"
     [log] = (checkout / "logs").glob("*-probe.log")
     assert "probe table: 3 probed" in log.read_text()
+
+
+@flow(name="probe-with-outputs")
+def probe_with_outputs_flow(role: Role) -> None:
+    run_job(
+        PROBE,
+        run_probe,
+        role=role,
+        process_count=1,
+        pull=None,
+        save_outputs=False,
+        outputs=[Path("audit/key.json")],
+    )
+
+
+@pytest.mark.parametrize(("role", "committed"), [("runner", True), ("local", False)])
+def test_a_runs_outputs_are_committed_with_its_record_on_the_runner_only(
+    checkout: Path, monkeypatch: pytest.MonkeyPatch, role: Role, *, committed: bool
+) -> None:
+    paths: list[str] = []
+    monkeypatch.setattr(jobs, "commit_record", lambda *arguments, **_: paths.extend(arguments[3]))
+
+    probe_with_outputs_flow(role)
+
+    assert ("audit/key.json" in paths) is committed
+    assert "metrics/probe.json" in paths
 
 
 def test_a_jobs_progress_is_published_as_an_artifact(checkout: Path) -> None:

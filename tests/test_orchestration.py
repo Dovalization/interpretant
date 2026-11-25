@@ -184,6 +184,48 @@ def test_each_run_sharing_a_checkout_commits_its_own_record(relay: Path, tmp_pat
 
 
 @pytest.mark.usefixtures("no_limits")
+def test_a_runner_record_adds_the_new_files_of_its_outputs_but_not_the_ignored_ones(
+    relay: Path, tmp_path: Path
+) -> None:
+    runner = clone(relay, tmp_path / "runner")
+    (runner / ".gitignore").write_text("audit/batch_*.jsonl\n")
+    audit = runner / "audit"
+    (audit / "verdicts").mkdir(parents=True)
+    (audit / "batch_00.jsonl").write_text("an item quoting the corpus\n")
+    (audit / "key.json").write_text("{}\n")
+    (audit / "verdicts" / "judge_A_part_00.json").write_text("{}\n")
+    append_record(runner, "probe")
+
+    steps.commit_record.fn(
+        "runner",
+        "probe",
+        "run-1",
+        ["audit/key.json", "audit/verdicts", "audit/gone.json"],
+        root=runner,
+    )
+
+    committed = git(runner, "show", "--name-only", "--format=", "HEAD").splitlines()
+    assert sorted(committed) == [
+        "audit/key.json",
+        "audit/verdicts/judge_A_part_00.json",
+        "metrics/runs.jsonl",
+    ]
+
+
+@pytest.mark.usefixtures("no_limits")
+def test_a_record_naming_an_ignored_file_fails_the_run(relay: Path, tmp_path: Path) -> None:
+    runner = clone(relay, tmp_path / "runner")
+    (runner / ".gitignore").write_text("batch_*.jsonl\n")
+    (runner / "batch_00.jsonl").write_text("an item quoting the corpus\n")
+    append_record(runner, "probe")
+
+    with pytest.raises(steps.RecordError, match="ignored"):
+        steps.commit_record.fn("runner", "probe", "run-1", ["batch_00.jsonl"], root=runner)
+
+    assert "batch_00.jsonl" not in git(runner, "ls-files")
+
+
+@pytest.mark.usefixtures("no_limits")
 def test_a_run_that_recorded_nothing_commits_nothing(relay: Path, tmp_path: Path) -> None:
     runner = clone(relay, tmp_path / "runner")
 

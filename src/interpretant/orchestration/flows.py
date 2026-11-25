@@ -60,18 +60,24 @@ def run_command(
     command: list[str],
     name: str,
     pull: list[str] | None = None,
+    outputs: list[str] | None = None,
     *,
     push_outputs: bool = False,
     role: Role = "local",
 ) -> None:
-    """Run ``command`` in the checkout, then commit the run's record (and push its outputs)."""
+    """Run ``command`` in the checkout, then commit the run's record (and push its outputs).
+
+    ``outputs`` are the files, or folders, the command writes that git keeps (a scorer's results):
+    on the runner they are committed with the record; locally they are left for the author.
+    """
     root = Path.cwd()
     with open_run_log(name, root=root):
         capture_checkout_state(root)
         if pull:
             pull_data(pull, root=root)
         run_and_copy_output(command, root=root)
-        commit_record(role, name, str(runtime.flow_run.id), root=root)
+        kept = outputs if outputs and role == "runner" else []
+        commit_record(role, name, str(runtime.flow_run.id), kept, root=root)
         if push_outputs:
             push_data(role, root=root)
 
@@ -425,6 +431,7 @@ def judge_api(
         pull=pull,
         save_outputs=False,
         record_as=f"judge-api {model}",
+        outputs=[out, out.with_suffix(".manifest.json")],
     )
 
 
@@ -470,6 +477,7 @@ def judge_claude_code(
         pull=pull,
         save_outputs=False,
         record_as=f"judge-claude-code {model}",
+        outputs=[verdicts],
     )
     if counts["failed_parts"]:
         raise JudgingIncompleteError(f"{counts['failed_parts']} parts failed")

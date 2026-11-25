@@ -7,7 +7,7 @@ the log, as the command line draws it for a file, and to a progress artifact.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from contextlib import ExitStack
 from dataclasses import dataclass
 from functools import partial
@@ -59,12 +59,16 @@ def run_job(
     pull: list[str] | None,
     save_outputs: bool,
     record_as: str | None = None,
+    outputs: Sequence[Path] = (),
 ) -> Mapping[str, int]:
     """Run the job in the checkout, commit its record, and return its counts.
 
     With ``save_outputs`` its stage's outputs are recorded in ``dvc.lock`` and pushed too.
     ``process_count`` is the worker processes the job starts, each taking a CPU slot on the runner.
-    ``record_as`` names the run in the run log (the job's name by default).
+    ``record_as`` names the run in the run log (the job's name by default). ``outputs`` are the
+    files, or folders, this run wrote that git keeps (an audit's key, a judge's verdicts): on the
+    runner they are committed with the record, as nobody works in its checkout to commit them;
+    locally they are left for the author.
     """
     if save_outputs and job.stage is None:
         raise ValueError(f"{job.name} is not a DVC stage, so it has no outputs to record")
@@ -84,7 +88,7 @@ def run_job(
             log=log,
             record_as=record_as or job.name,
         )
-        paths = list(job.tracked_outputs)
+        paths = [*job.tracked_outputs, *(str(path) for path in outputs if role == "runner")]
         if save_outputs and job.stage is not None:
             record_outputs(role, job.stage, root=root)
             paths.append(str(DVC_LOCK))

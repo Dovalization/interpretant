@@ -68,6 +68,13 @@ def submit(context: click.Context, where: Role, *, stay_awake: bool) -> None:
 @submit.command("command", context_settings={"ignore_unknown_options": True})
 @click.option("--name", help="The run's name, and its log file's (default: the command's).")
 @click.option("--pull", multiple=True, help="A DVC-tracked path to pull first (repeatable).")
+@click.option(
+    "--output",
+    "outputs",
+    multiple=True,
+    type=click.Path(path_type=Path),
+    help="A file or folder the command writes that git keeps, committed with the runner's record (repeatable).",  # noqa: E501
+)
 @click.option("--push-outputs", is_flag=True, help="dvc push after the run succeeds.")
 @click.argument("command", nargs=-1, type=click.UNPROCESSED, required=True)
 @click.pass_context
@@ -75,6 +82,7 @@ def submit_command(
     context: click.Context,
     name: str | None,
     pull: tuple[str, ...],
+    outputs: tuple[Path, ...],
     command: tuple[str, ...],
     *,
     push_outputs: bool,
@@ -84,6 +92,7 @@ def submit_command(
         "command": list(command),
         "name": name or Path(command[0]).stem,
         "pull": list(pull),
+        "outputs": [build_parameter(output) for output in outputs],
         "push_outputs": push_outputs,
     }
     _submit_and_follow(context.obj, "command", parameters)
