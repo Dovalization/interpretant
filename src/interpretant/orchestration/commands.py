@@ -28,7 +28,7 @@ from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.judge_api import judge_api_command
 from interpretant.cli.judge_claude_code import judge_claude_code_command
 from interpretant.cli.report_corpus import report_corpus_command
-from interpretant.orchestration.registry import JOBS, Role
+from interpretant.orchestration.registry import JOBS
 
 REPOSITORY = Path(__file__).resolve().parents[3]
 # The jobs' own commands, whose options their submissions take (but --catalog)
@@ -53,19 +53,15 @@ JOB_COMMANDS: tuple[click.Command, ...] = (
 
 @click.group()
 @click.option(
-    "--where",
-    type=click.Choice(["runner", "local"]),
-    default="runner",
-    show_default=True,
-    help="runner: the machine with the GPU, from the committed code; local: this checkout as it is.",  # noqa: E501
-)
-@click.option(
     "--stay-awake", is_flag=True, help="Keep the runner awake after the run instead of sleeping."
 )
 @click.pass_context
-def submit(context: click.Context, where: Role, *, stay_awake: bool) -> None:
-    """Run a job as a Prefect run, follow it, and bring its record back."""
-    context.obj = {"where": where, "stay_awake": stay_awake}
+def submit(context: click.Context, *, stay_awake: bool) -> None:
+    """Run a job on the runner from this commit (pushed to GitHub), follow it, collect its record.
+
+    To run a job on this machine instead, run its command (`interpretant <job>`).
+    """
+    context.obj = {"stay_awake": stay_awake}
 
 
 @submit.command("command", context_settings={"ignore_unknown_options": True})
@@ -173,7 +169,7 @@ for _command in JOB_COMMANDS:
 
 @click.group()
 def runs() -> None:
-    """Follow a Prefect run, or bring back run records left on the relay."""
+    """Follow a Prefect run, or bring back run records left on GitHub."""
 
 
 @runs.command("follow")
@@ -188,43 +184,33 @@ def follow_command(flow_run_id: UUID) -> None:
 
 @runs.command("collect")
 def collect_command() -> None:
-    """Cherry-pick every run record still on the relay into this branch."""
+    """Cherry-pick every run record still on GitHub into this branch."""
     from interpretant.orchestration import submit as submission
 
     left = submission.collect_records(REPOSITORY)
     for branch in left:
-        click.echo(f"couldn't apply {branch}; cherry-pick it by hand from the relay")
+        click.echo(f"couldn't apply {branch}; cherry-pick it by hand from GitHub")
     raise SystemExit(1 if left else 0)
 
 
 def _submit_and_follow(options: dict[str, Any], flow_name: str, parameters: dict[str, Any]) -> None:
     from interpretant.orchestration import submit as submission
 
-    role: Role = options["where"]
     try:
-        commit = (
-            submission.publish_commit(REPOSITORY)
-            if role == "runner"
-            else submission.get_commit(REPOSITORY)
-        )
+        commit = submission.get_published_commit(REPOSITORY)
         flow_run_id = submission.start_run(
             submission.build_submission(
-                flow_name, role, parameters, commit=commit, stay_awake=options["stay_awake"]
+                flow_name, parameters, commit=commit, stay_awake=options["stay_awake"]
             )
         )
     except submission.SubmissionError as exc:
         raise click.ClickException(str(exc)) from exc
-    where = "on the runner" if role == "runner" else "locally"
-    click.echo(f"started {flow_name} {where} as {flow_run_id}")
+    click.echo(f"started {flow_name} on the runner as {flow_run_id}")
     try:
         final = submission.follow_run(flow_run_id, echo=click.echo)
     except KeyboardInterrupt:
         click.echo(f"\nstill running; follow it with: interpretant runs follow {flow_run_id}")
         raise SystemExit(130) from None
-    if (
-        final == "Completed"
-        and role == "runner"
-        and not submission.collect_record(flow_run_id, REPOSITORY)
-    ):
+    if final == "Completed" and not submission.collect_record(flow_run_id, REPOSITORY):
         click.echo("its record didn't apply here; run `interpretant runs collect`")
     raise SystemExit(0 if final == "Completed" else 1)

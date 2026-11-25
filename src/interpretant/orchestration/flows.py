@@ -34,7 +34,7 @@ from interpretant.cli.judge_claude_code import run_judge_claude_code
 from interpretant.cli.options import default_process_count
 from interpretant.cli.report_corpus import run_report_corpus
 from interpretant.orchestration.jobs import run_job
-from interpretant.orchestration.registry import JOBS, Role
+from interpretant.orchestration.registry import JOBS
 from interpretant.orchestration.steps import (
     capture_checkout_state,
     commit_record,
@@ -65,12 +65,11 @@ def run_command(
     outputs: list[str] | None = None,
     *,
     push_outputs: bool = False,
-    role: Role = "local",
 ) -> None:
     """Run ``command`` in the checkout, then commit the run's record (and push its outputs).
 
-    ``outputs`` are the files, or folders, the command writes that git keeps (a scorer's results):
-    on the runner they are committed with the record; locally they are left for the author.
+    ``outputs`` are the files, or folders, the command writes that git keeps (a scorer's results),
+    committed with the record.
     """
     root = Path.cwd()
     with open_run_log(name, root=root):
@@ -78,10 +77,9 @@ def run_command(
         if pull:
             pull_data(pull, root=root)
         run_and_copy_output(command, root=root)
-        kept = outputs if outputs and role == "runner" else []
-        commit_record(role, name, str(runtime.flow_run.id), kept, root=root)
+        commit_record(name, str(runtime.flow_run.id), outputs or [], root=root)
         if push_outputs:
-            push_data(role, root=root)
+            push_data(root=root)
 
 
 @task(name="run")
@@ -115,17 +113,13 @@ def run_and_copy_output(command: Sequence[str], *, root: Path) -> None:
     name="build-linked-tables",
     timeout_seconds=JOBS["build-linked-tables"].timeout_seconds,
 )
-def build_linked_tables(
-    *, role: Role = "local", pull: list[str] | None = None, save_outputs: bool = False
-) -> None:
+def build_linked_tables(*, pull: list[str] | None = None, save_outputs: bool = False) -> None:
     """Write the staging tables of OpenAlex, Crossref and PubMed works from the raw files."""
     run_job(
         JOBS["build-linked-tables"],
         lambda catalog, progress, console: run_build_linked_tables(
             catalog, progress=progress, console=console
         ),
-        role=role,
-        process_count=1,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -135,7 +129,6 @@ def build_linked_tables(
 def count_word_repairs(
     process_count: int | None = None,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -146,8 +139,6 @@ def count_word_repairs(
         lambda catalog, progress, console: run_count_word_repairs(
             catalog, processes, progress=progress, console=console
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -160,7 +151,6 @@ def annotate_corpus(
     batch_size: int = 256,
     process_count: int | None = None,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -171,8 +161,6 @@ def annotate_corpus(
         lambda catalog, progress, console: run_annotate_corpus(
             catalog, fields, decades, batch_size, processes, progress=progress, console=console
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -182,7 +170,6 @@ def annotate_corpus(
 def detect_languages(
     process_count: int | None = None,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -193,8 +180,6 @@ def detect_languages(
         lambda catalog, progress, console: run_detect_languages(
             catalog, processes, progress=progress, console=console
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -204,7 +189,6 @@ def detect_languages(
 def clean_corpus(
     process_count: int | None = None,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -215,8 +199,6 @@ def clean_corpus(
         lambda catalog, progress, console: run_clean_corpus(
             catalog, processes, progress=progress, console=console
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -226,7 +208,6 @@ def clean_corpus(
 def build_corpus(
     process_count: int | None = None,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -237,25 +218,19 @@ def build_corpus(
         lambda catalog, progress, console: run_build_corpus(
             catalog, processes, progress=progress, console=console
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
 
 
 @flow(name="report-corpus", timeout_seconds=JOBS["report-corpus"].timeout_seconds)
-def report_corpus(
-    *, role: Role = "local", pull: list[str] | None = None, save_outputs: bool = False
-) -> None:
+def report_corpus(*, pull: list[str] | None = None, save_outputs: bool = False) -> None:
     """Write the corpus report and its metrics, read before the review (4b)."""
     run_job(
         JOBS["report-corpus"],
         lambda catalog, progress, console: run_report_corpus(
             catalog, progress=progress, console=console
         ),
-        role=role,
-        process_count=1,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -265,7 +240,6 @@ def report_corpus(
 def build_static_view(
     process_count: int | None = None,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -276,8 +250,6 @@ def build_static_view(
         lambda catalog, progress, console: run_build_static_view(
             catalog, processes, progress=progress, console=console
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -287,7 +259,6 @@ def build_static_view(
 def build_sentence_view(
     process_count: int | None = None,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -298,8 +269,6 @@ def build_sentence_view(
         lambda catalog, progress, console: run_build_sentence_view(
             catalog, processes, progress=progress, console=console
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -315,7 +284,6 @@ def build_usages(
     *,
     resume: bool = False,
     reuse_cache: bool = False,
-    role: Role = "local",
     pull: list[str] | None = None,
     save_outputs: bool = False,
 ) -> None:
@@ -335,8 +303,6 @@ def build_usages(
             progress=progress,
             console=console,
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=save_outputs,
     )
@@ -353,7 +319,6 @@ def fetch_metadata(
     decades: tuple[int, ...] = (),
     workers: int = 8,
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
 ) -> None:
     """Fetch OpenAlex's record of every raw work, resuming where it stopped."""
@@ -362,8 +327,6 @@ def fetch_metadata(
         lambda catalog, progress, console: run_fetch_metadata(
             catalog, fields, decades, workers, progress=progress, console=console
         ),
-        role=role,
-        process_count=1,
         pull=pull,
         save_outputs=False,
     )
@@ -380,7 +343,6 @@ def fetch_linked_sources(
     fields: tuple[str, ...] = (),
     decades: tuple[int, ...] = (),
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
 ) -> None:
     """Look each raw work up in Crossref and PubMed, resuming where it stopped."""
@@ -389,8 +351,6 @@ def fetch_linked_sources(
         lambda catalog, progress, console: run_fetch_linked_sources(
             catalog, sources, fields, decades, progress=progress, console=console
         ),
-        role=role,
-        process_count=1,
         pull=pull,
         save_outputs=False,
     )
@@ -403,7 +363,6 @@ def draw_usages_audit(
     process_count: int | None = None,
     *,
     skip_calibration: bool = False,
-    role: Role = "local",
     pull: list[str] | None = None,
 ) -> None:
     """Draw the matching audit's kept, left-out and missed usages as review items."""
@@ -419,8 +378,6 @@ def draw_usages_audit(
             progress=progress,
             console=console,
         ),
-        role=role,
-        process_count=processes,
         pull=pull,
         save_outputs=False,
         record_as=f"draw-usages-audit {seed}",
@@ -447,7 +404,6 @@ def judge_api(
     max_tokens: int = 4096,
     thinking: Thinking = "adaptive",
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
 ) -> None:
     """Judge review items through the Message Batches API, within a cap of this run's spending."""
@@ -466,8 +422,6 @@ def judge_api(
         lambda catalog, progress, console: run_judge_api(
             catalog, items, out, judging, progress=progress, console=console
         ),
-        role=role,
-        process_count=1,
         pull=pull,
         save_outputs=False,
         record_as=f"judge-api {model}",
@@ -492,7 +446,6 @@ def judge_claude_code(
     parallel: int = 4,
     claude: str = "claude",
     *,
-    role: Role = "local",
     pull: list[str] | None = None,
 ) -> None:
     """Judge review items with Claude Code on the subscription; fails if a part failed."""
@@ -511,8 +464,6 @@ def judge_claude_code(
         lambda catalog, progress, console: run_judge_claude_code(
             catalog, items, verdicts, judging, progress=progress, console=console
         ),
-        role=role,
-        process_count=1,
         pull=pull,
         save_outputs=False,
         record_as=f"judge-claude-code {model}",

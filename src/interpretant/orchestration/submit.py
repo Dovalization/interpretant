@@ -1,8 +1,8 @@
 """Submitting a run to Prefect from this checkout, following it, and collecting its record.
 
-A runner run starts from a commit, not from this working tree: the commit is pushed to the relay
-(``refs/heads/submitted``), and the runner checks it out when the run starts. Its record comes
-back on the relay branch ``runs/<flow run id>`` and is cherry-picked here.
+A run starts from a commit, not from this working tree: the commit must already be on GitHub, and
+the runner checks it out when the run starts. Its record comes back on the GitHub branch
+``runs/<flow run id>`` and is cherry-picked here.
 """
 
 from __future__ import annotations
@@ -20,8 +20,7 @@ from prefect.client.schemas.filters import LogFilter, LogFilterFlowRunId
 from prefect.client.schemas.sorting import LogSort
 from prefect.deployments import run_deployment
 
-from interpretant.orchestration.registry import Role
-from interpretant.orchestration.steps import RELAY
+from interpretant.orchestration.steps import ORIGIN
 
 POLL_SECONDS = 2.0
 LOG_PAGE = 200
@@ -45,28 +44,26 @@ class Submission:
 
 def build_submission(
     flow_name: str,
-    role: Role,
     parameters: Mapping[str, Any],
     *,
     commit: str,
     stay_awake: bool,
 ) -> Submission:
-    """The deployment run for ``flow_name`` on ``role``, starting from ``commit``."""
-    job_variables = {"env": {"INTERPRETANT_COMMIT": commit}} if role == "runner" else {}
+    """The runner deployment run for ``flow_name``, starting from ``commit``."""
     tags = ["interpretant", f"commit:{commit[:8]}", *(["stay-awake"] if stay_awake else [])]
-    return Submission(f"{flow_name}/{role}", dict(parameters), job_variables, tags)
+    return Submission(
+        f"{flow_name}/runner", dict(parameters), {"env": {"INTERPRETANT_COMMIT": commit}}, tags
+    )
 
 
-def publish_commit(root: Path) -> str:
-    """Push this checkout's commit to the relay for the runner; refuses uncommitted changes."""
+def get_published_commit(root: Path) -> str:
+    """The commit this checkout is on, which must be on GitHub; refuses uncommitted changes."""
     if _git(root, "status", "--porcelain", "--untracked-files=no"):
-        raise SubmissionError("commit or stash the changes to tracked files before a runner run")
-    _git(root, "push", "--quiet", "--force", RELAY, "HEAD:refs/heads/submitted")
-    return _git(root, "rev-parse", "HEAD")
-
-
-def get_commit(root: Path) -> str:
-    """The commit this checkout is on."""
+        raise SubmissionError("commit or stash the changes to tracked files first")
+    _git(root, "fetch", "--quiet", ORIGIN)
+    branches = _git(root, "branch", "--remotes", "--contains", "HEAD", "--format=%(refname)")
+    if not any(name.startswith(f"refs/remotes/{ORIGIN}/") for name in branches.splitlines()):
+        raise SubmissionError("push this commit to GitHub first: the runner runs published code")
     return _git(root, "rev-parse", "HEAD")
 
 
@@ -131,29 +128,29 @@ def follow_run(flow_run_id: UUID, *, echo: Callable[[str], None]) -> str:
 
 
 def collect_record(flow_run_id: UUID, root: Path) -> bool:
-    """Cherry-pick the run's record commit from the relay; False if it couldn't be applied."""
+    """Cherry-pick the run's record commit from GitHub; False if it couldn't be applied."""
     branch = f"runs/{flow_run_id}"
-    if not _git(root, "ls-remote", RELAY, f"refs/heads/{branch}"):
+    if not _git(root, "ls-remote", ORIGIN, f"refs/heads/{branch}"):
         return True
-    _git(root, "fetch", "--quiet", RELAY, branch)
+    _git(root, "fetch", "--quiet", ORIGIN, branch)
     if not _apply(root, "FETCH_HEAD"):
         return False
-    _git(root, "push", "--quiet", RELAY, f":refs/heads/{branch}")
+    _git(root, "push", "--quiet", ORIGIN, f":refs/heads/{branch}")
     return True
 
 
 def collect_records(root: Path) -> list[str]:
-    """Cherry-pick every run record still on the relay; the branches it couldn't apply."""
+    """Cherry-pick every run record still on GitHub; the branches it couldn't apply."""
     left: list[str] = []
-    for line in _git(root, "ls-remote", RELAY, "refs/heads/runs/*").splitlines():
+    for line in _git(root, "ls-remote", ORIGIN, "refs/heads/runs/*").splitlines():
         commit, reference = line.split()
         branch = reference.removeprefix("refs/heads/")
-        _git(root, "fetch", "--quiet", RELAY, branch)
+        _git(root, "fetch", "--quiet", ORIGIN, branch)
         is_new = _git(root, "cherry", "HEAD", commit).startswith("+")
         if is_new and not _apply(root, commit):
             left.append(branch)
             continue
-        _git(root, "push", "--quiet", RELAY, f":{reference}")
+        _git(root, "push", "--quiet", ORIGIN, f":{reference}")
     return left
 
 

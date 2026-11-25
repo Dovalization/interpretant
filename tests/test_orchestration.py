@@ -1,6 +1,6 @@
 """Running jobs in Prefect: the runner's checkout, the record commit, progress and submission.
 
-Real git in temporary folders, with a bare repository standing in for the relay; Prefect's own calls
+Real git in temporary folders, with a bare repository standing in for GitHub; Prefect's own calls
 are replaced, so no server is needed (``test_orchestration_flow.py`` runs a flow on a test server).
 """
 
@@ -11,7 +11,6 @@ import re
 import subprocess
 import threading
 from collections.abc import Iterator
-from contextlib import nullcontext
 from functools import partial
 from pathlib import Path
 from types import SimpleNamespace
@@ -46,9 +45,9 @@ def commit_file(root: Path, name: str, text: str) -> str:
 
 
 @pytest.fixture
-def relay(tmp_path: Path) -> Path:
-    """A bare relay holding the repository's .gitattributes and a run log."""
-    bare = tmp_path / "relay.git"
+def github(tmp_path: Path) -> Path:
+    """A bare repository standing in for GitHub, holding the .gitattributes and a run log."""
+    bare = tmp_path / "github.git"
     git(tmp_path, "init", "--quiet", "--bare", "--initial-branch=main", str(bare))
     seed = tmp_path / "seed"
     git(tmp_path, "clone", "--quiet", str(bare), str(seed))
@@ -60,8 +59,8 @@ def relay(tmp_path: Path) -> Path:
     return bare
 
 
-def clone(relay: Path, path: Path) -> Path:
-    git(path.parent, "clone", "--quiet", "--origin", "relay", str(relay), str(path))
+def clone(github: Path, path: Path) -> Path:
+    git(path.parent, "clone", "--quiet", str(github), str(path))
     git(path, "config", "user.email", "test@example.com")
     git(path, "config", "user.name", "Test")
     return path
@@ -97,18 +96,18 @@ def run_script(checkout: Path, *, commit: str, uv_status: int = 0) -> tuple[int,
     return 0, ""
 
 
-def test_the_runner_checks_out_the_submitted_commit(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
-    mac = clone(relay, tmp_path / "mac")
+def test_the_runner_checks_out_the_submitted_commit(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
+    mac = clone(github, tmp_path / "mac")
     submitted = commit_file(mac, "code.py", "new\n")
-    git(mac, "push", "--quiet", "relay", "HEAD:refs/heads/submitted")
+    git(mac, "push", "--quiet", "origin", "HEAD:main")
 
     assert run_script(runner, commit=submitted) == (0, "")
     assert git(runner, "rev-parse", "HEAD") == submitted
 
 
-def test_the_runner_refuses_a_checkout_with_changes(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
+def test_the_runner_refuses_a_checkout_with_changes(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
     (runner / "metrics" / "runs.jsonl").write_text("someone's edit\n")
 
     status, message = run_script(runner, commit="HEAD")
@@ -116,30 +115,21 @@ def test_the_runner_refuses_a_checkout_with_changes(relay: Path, tmp_path: Path)
     assert status != 0 and "changes to tracked files" in message
 
 
-def test_the_runner_refuses_a_commit_no_branch_holds(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
-    git(runner, "checkout", "--quiet", "--detach")
-    commit_file(runner, "notes.md", "work done by hand on the runner\n")
+def test_the_runner_stops_when_it_cant_install_the_locked_environment(
+    github: Path, tmp_path: Path
+) -> None:
+    runner = clone(github, tmp_path / "runner")
 
-    status, message = run_script(runner, commit="relay/main")
+    status, _ = run_script(runner, commit="origin/main", uv_status=1)
 
-    assert status != 0 and "no branch holds" in message
-
-
-def test_the_runner_stops_when_its_environment_is_out_of_date(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
-
-    status, message = run_script(runner, commit="relay/main", uv_status=1)
-
-    assert status != 0 and "uv sync --locked" in message
+    assert status != 0
 
 
 # The record commit
 
 
 @pytest.fixture
-def no_limits(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(steps, "concurrency", lambda *_, **__: nullcontext())
+def fast_retries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(steps, "INDEX_LOCK_WAIT_SECONDS", 0)
 
 
@@ -148,33 +138,32 @@ def append_record(checkout: Path, command: str) -> None:
         log.write(f'{{"command": "{command}"}}\n')
 
 
-@pytest.mark.usefixtures("no_limits")
+@pytest.mark.usefixtures("fast_retries")
 def test_a_runner_record_is_committed_and_pushed_to_its_own_branch(
-    relay: Path, tmp_path: Path
+    github: Path, tmp_path: Path
 ) -> None:
-    runner = clone(relay, tmp_path / "runner")
+    runner = clone(github, tmp_path / "runner")
     append_record(runner, "probe")
 
-    commit = steps.commit_record.fn("runner", "probe", "run-1", root=runner)
+    commit = steps.commit_record.fn("probe", "run-1", root=runner)
 
     assert git(runner, "log", "-1", "--format=%s") == "chore(metrics): record probe"
-    assert git(runner, "ls-remote", "relay", "refs/heads/runs/run-1").split()[0] == commit
+    assert git(runner, "ls-remote", "origin", "refs/heads/runs/run-1").split()[0] == commit
 
 
-@pytest.mark.usefixtures("no_limits")
-def test_each_run_sharing_a_checkout_commits_its_own_record(relay: Path, tmp_path: Path) -> None:
-    local = clone(relay, tmp_path / "local")
+@pytest.mark.usefixtures("fast_retries")
+def test_each_run_sharing_a_checkout_commits_its_own_record(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
 
     for command in ("first-run", "second-run"):
         steps.commit_record.fn(
-            "local",
             command,
             command,
-            root=local,
-            write_record=partial(append_record, local, command),
+            root=runner,
+            write_record=partial(append_record, runner, command),
         )
 
-    added = git(local, "log", "-2", "--format=%s", "-p", "--", "metrics/runs.jsonl")
+    added = git(runner, "log", "-2", "--format=%s", "-p", "--", "metrics/runs.jsonl")
     assert re.findall(r"record (\S+)|\+\{\"command\": \"(\S+)\"\}", added) == [
         ("second-run", ""),
         ("", "second-run"),
@@ -183,11 +172,11 @@ def test_each_run_sharing_a_checkout_commits_its_own_record(relay: Path, tmp_pat
     ]
 
 
-@pytest.mark.usefixtures("no_limits")
+@pytest.mark.usefixtures("fast_retries")
 def test_a_runner_record_adds_the_new_files_of_its_outputs_but_not_the_ignored_ones(
-    relay: Path, tmp_path: Path
+    github: Path, tmp_path: Path
 ) -> None:
-    runner = clone(relay, tmp_path / "runner")
+    runner = clone(github, tmp_path / "runner")
     (runner / ".gitignore").write_text("audit/batch_*.jsonl\n")
     audit = runner / "audit"
     (audit / "verdicts").mkdir(parents=True)
@@ -197,7 +186,6 @@ def test_a_runner_record_adds_the_new_files_of_its_outputs_but_not_the_ignored_o
     append_record(runner, "probe")
 
     steps.commit_record.fn(
-        "runner",
         "probe",
         "run-1",
         ["audit/key.json", "audit/verdicts", "audit/gone.json"],
@@ -212,64 +200,53 @@ def test_a_runner_record_adds_the_new_files_of_its_outputs_but_not_the_ignored_o
     ]
 
 
-@pytest.mark.usefixtures("no_limits")
-def test_a_record_naming_an_ignored_file_fails_the_run(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
+@pytest.mark.usefixtures("fast_retries")
+def test_a_record_naming_an_ignored_file_fails_the_run(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
     (runner / ".gitignore").write_text("batch_*.jsonl\n")
     (runner / "batch_00.jsonl").write_text("an item quoting the corpus\n")
     append_record(runner, "probe")
 
     with pytest.raises(steps.RecordError, match="ignored"):
-        steps.commit_record.fn("runner", "probe", "run-1", ["batch_00.jsonl"], root=runner)
+        steps.commit_record.fn("probe", "run-1", ["batch_00.jsonl"], root=runner)
 
     assert "batch_00.jsonl" not in git(runner, "ls-files")
 
 
-@pytest.mark.usefixtures("no_limits")
-def test_a_run_that_recorded_nothing_commits_nothing(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
+@pytest.mark.usefixtures("fast_retries")
+def test_a_run_that_recorded_nothing_commits_nothing(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
 
-    assert steps.commit_record.fn("runner", "probe", "run-1", root=runner) is None
+    assert steps.commit_record.fn("probe", "run-1", root=runner) is None
 
 
-@pytest.mark.usefixtures("no_limits")
-def test_a_record_that_cant_be_committed_fails_the_run(relay: Path, tmp_path: Path) -> None:
-    local = clone(relay, tmp_path / "local")
-    append_record(local, "probe")
-    (local / ".git" / "index.lock").write_text("")
+@pytest.mark.usefixtures("fast_retries")
+def test_a_record_that_cant_be_committed_fails_the_run(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
+    append_record(runner, "probe")
+    (runner / ".git" / "index.lock").write_text("")
 
     with pytest.raises(steps.RecordError, match=r"index\.lock"):
-        steps.commit_record.fn("local", "probe", "run-1", root=local)
+        steps.commit_record.fn("probe", "run-1", root=runner)
 
 
-@pytest.mark.usefixtures("no_limits")
+@pytest.mark.usefixtures("fast_retries")
 def test_a_record_that_cant_be_committed_leaves_the_run_log_as_it_was(
-    relay: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    github: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(steps, "INDEX_LOCK_WAIT_SECONDS", 0)
-    local = clone(relay, tmp_path / "local")
-    (local / ".git" / "index.lock").write_text("")
+    runner = clone(github, tmp_path / "runner")
+    (runner / ".git" / "index.lock").write_text("")
 
     with pytest.raises(steps.RecordError):
         steps.commit_record.fn(
-            "local",
             "probe",
             "run-1",
-            root=local,
-            write_record=partial(append_record, local, "probe"),
+            root=runner,
+            write_record=partial(append_record, runner, "probe"),
         )
 
-    assert (local / "metrics" / "runs.jsonl").read_text() == '{"command": "first"}\n'
-
-
-@pytest.mark.usefixtures("no_limits")
-def test_a_local_record_waits_out_a_merge_in_progress(relay: Path, tmp_path: Path) -> None:
-    local = clone(relay, tmp_path / "local")
-    append_record(local, "probe")
-    (local / ".git" / "MERGE_HEAD").write_text(git(local, "rev-parse", "HEAD"))
-
-    assert steps.commit_record.fn("local", "probe", "run-1", root=local) is None
-    assert git(local, "status", "--porcelain") == "M metrics/runs.jsonl"
+    assert (runner / "metrics" / "runs.jsonl").read_text() == '{"command": "first"}\n'
 
 
 # The run's log file
@@ -368,22 +345,14 @@ def test_an_artifact_key_keeps_to_what_prefect_accepts() -> None:
 # Submitting and collecting
 
 
-def test_a_runner_submission_carries_its_commit_and_tags() -> None:
+def test_a_submission_carries_its_commit_and_tags() -> None:
     submission = submit.build_submission(
-        "command", "runner", {"command": ["true"]}, commit="abcdef0123456789", stay_awake=True
+        "command", {"command": ["true"]}, commit="abcdef0123456789", stay_awake=True
     )
 
     assert submission.deployment == "command/runner"
     assert submission.job_variables == {"env": {"INTERPRETANT_COMMIT": "abcdef0123456789"}}
     assert submission.tags == ["interpretant", "commit:abcdef01", "stay-awake"]
-
-
-def test_a_local_submission_needs_no_commit_in_its_environment() -> None:
-    submission = submit.build_submission(
-        "command", "local", {"command": ["true"]}, commit="abc", stay_awake=False
-    )
-
-    assert (submission.deployment, submission.job_variables) == ("command/local", {})
 
 
 class LateLinesClient:
@@ -431,45 +400,53 @@ def test_following_a_run_waits_for_lines_sent_before_it_ended(
     assert shown == ["judging: started", "[Running]", "the report", "judging: done", "[Completed]"]
 
 
-def test_publishing_refuses_uncommitted_changes(relay: Path, tmp_path: Path) -> None:
-    mac = clone(relay, tmp_path / "mac")
+def test_submitting_refuses_uncommitted_changes(github: Path, tmp_path: Path) -> None:
+    mac = clone(github, tmp_path / "mac")
     (mac / "metrics" / "runs.jsonl").write_text("edited\n")
 
     with pytest.raises(submit.SubmissionError, match="commit or stash"):
-        submit.publish_commit(mac)
+        submit.get_published_commit(mac)
 
 
-def test_publishing_puts_the_commit_on_the_relay(relay: Path, tmp_path: Path) -> None:
-    mac = clone(relay, tmp_path / "mac")
-    commit = commit_file(mac, "code.py", "new\n")
+def test_submitting_refuses_a_commit_not_on_github(github: Path, tmp_path: Path) -> None:
+    mac = clone(github, tmp_path / "mac")
+    commit_file(mac, "code.py", "not pushed\n")
 
-    assert submit.publish_commit(mac) == commit
-    assert git(mac, "ls-remote", "relay", "refs/heads/submitted").split()[0] == commit
+    with pytest.raises(submit.SubmissionError, match="push this commit"):
+        submit.get_published_commit(mac)
 
 
-@pytest.mark.usefixtures("no_limits")
-def test_a_run_record_comes_back_and_its_branch_goes(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
-    mac = clone(relay, tmp_path / "mac")
+def test_submitting_takes_a_commit_pushed_to_github(github: Path, tmp_path: Path) -> None:
+    mac = clone(github, tmp_path / "mac")
+    commit = commit_file(mac, "code.py", "pushed\n")
+    git(mac, "push", "--quiet", "origin", "HEAD:main")
+
+    assert submit.get_published_commit(mac) == commit
+
+
+@pytest.mark.usefixtures("fast_retries")
+def test_a_run_record_comes_back_and_its_branch_goes(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
+    mac = clone(github, tmp_path / "mac")
     append_record(runner, "on-the-runner")
     run_id = uuid4()
-    steps.commit_record.fn("runner", "on-the-runner", str(run_id), root=runner)
+    steps.commit_record.fn("on-the-runner", str(run_id), root=runner)
 
     assert submit.collect_record(run_id, mac)
     assert '{"command": "on-the-runner"}' in (mac / "metrics" / "runs.jsonl").read_text()
-    assert git(mac, "ls-remote", "relay", f"refs/heads/runs/{run_id}") == ""
+    assert git(mac, "ls-remote", "origin", f"refs/heads/runs/{run_id}") == ""
 
 
-@pytest.mark.usefixtures("no_limits")
-def test_collecting_applies_every_record_left_on_the_relay(relay: Path, tmp_path: Path) -> None:
-    runner = clone(relay, tmp_path / "runner")
-    mac = clone(relay, tmp_path / "mac")
+@pytest.mark.usefixtures("fast_retries")
+def test_collecting_applies_every_record_left_on_github(github: Path, tmp_path: Path) -> None:
+    runner = clone(github, tmp_path / "runner")
+    mac = clone(github, tmp_path / "mac")
     for command in ("first-run", "second-run"):
-        git(runner, "checkout", "--quiet", "--detach", "relay/main")
+        git(runner, "checkout", "--quiet", "--detach", "origin/main")
         append_record(runner, command)
-        steps.commit_record.fn("runner", command, command, root=runner)
+        steps.commit_record.fn(command, command, root=runner)
 
     assert submit.collect_records(mac) == []
     log = (mac / "metrics" / "runs.jsonl").read_text()
     assert '"first-run"' in log and '"second-run"' in log
-    assert git(mac, "ls-remote", "relay", "refs/heads/runs/*") == ""
+    assert git(mac, "ls-remote", "origin", "refs/heads/runs/*") == ""

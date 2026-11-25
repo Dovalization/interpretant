@@ -21,7 +21,6 @@ import yaml
 from click.testing import CliRunner
 from prefect import flow
 from prefect.client.orchestration import get_client
-from prefect.client.schemas.actions import GlobalConcurrencyLimitCreate
 from prefect.client.schemas.filters import ArtifactFilter, ArtifactFilterType
 from prefect.testing.utilities import prefect_test_harness
 from rich.console import Console
@@ -30,11 +29,11 @@ from interpretant.catalog.config import CatalogConfig
 from interpretant.cli.judge_claude_code import judge_claude_code_command
 from interpretant.orchestration import commands, flows, jobs
 from interpretant.orchestration.jobs import run_job
-from interpretant.orchestration.registry import JOBS, Job, Role
+from interpretant.orchestration.registry import JOBS, Job
 from interpretant.pipelines.progress import Progress
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-ADDED_PARAMETERS = {"role", "pull", "save_outputs"}
+ADDED_PARAMETERS = {"pull", "save_outputs"}
 
 
 def read_deployments() -> list[dict[str, Any]]:
@@ -54,15 +53,15 @@ def get_command(job: Job) -> click.Command:
 
 
 @pytest.mark.parametrize("job", JOBS.values(), ids=lambda job: job.name)
-def test_each_job_deploys_on_the_runner_and_locally(job: Job) -> None:
+def test_each_job_deploys_on_the_runner(job: Job) -> None:
     entrypoint = f"src/interpretant/orchestration/flows.py:{job.name.replace('-', '_')}"
-    roles = {
-        deployment["name"]: deployment["parameters"]
+    names = [
+        deployment["name"]
         for deployment in read_deployments()
         if deployment["entrypoint"] == entrypoint
-    }
+    ]
 
-    assert roles == {role: {"role": role} for role in ("runner", "local")}
+    assert names == ["runner"]
 
 
 @pytest.mark.parametrize("job", JOBS.values(), ids=lambda job: job.name)
@@ -175,7 +174,7 @@ def test_a_runner_submission_takes_a_path_that_exists_only_on_the_runner(
     result = CliRunner().invoke(
         commands.submit,
         [
-            *["--where", "runner", "judge-claude-code", "data/review/only_on_the_runner/items"],
+            *["judge-claude-code", "data/review/only_on_the_runner/items"],
             *["data/review/only_on_the_runner/verdicts", "--name", "judge_A"],
             *f"--codebook {codebook} --answers usages --model m --effort low".split(),
         ],
@@ -199,8 +198,6 @@ def test_a_submitted_path_is_relative_to_the_repository(
         commands.submit,
         [
             *[
-                "--where",
-                "local",
                 "judge-claude-code",
                 "judging",
                 "../data/verdicts",
@@ -236,7 +233,7 @@ def test_a_job_without_a_stage_has_no_save_outputs_option() -> None:
 
 # End to end, with a job whose work prints a table, reports progress and rewrites a tracked file
 
-PROBE = Job("probe", 60, tracked_outputs=("metrics/probe.json",), uses_cpus=False)
+PROBE = Job("probe", 60, tracked_outputs=("metrics/probe.json",))
 
 
 def run_probe(catalog: CatalogConfig, progress: Progress, console: Console) -> dict[str, int]:
@@ -249,17 +246,12 @@ def run_probe(catalog: CatalogConfig, progress: Progress, console: Console) -> d
 
 @flow(name="probe")
 def probe_flow(*, save_outputs: bool = False) -> None:
-    run_job(PROBE, run_probe, role="local", process_count=1, pull=None, save_outputs=save_outputs)
+    run_job(PROBE, run_probe, pull=None, save_outputs=save_outputs)
 
 
 @pytest.fixture(scope="module", autouse=True)
 def _prefect_server() -> Iterator[None]:
     with prefect_test_harness():
-        with get_client(sync_client=True) as client:
-            for name in ("interpretant-git-local", "interpretant-dvc-local"):
-                client.create_global_concurrency_limit(
-                    GlobalConcurrencyLimitCreate(name=name, limit=1)
-                )
         yield
 
 
@@ -273,17 +265,22 @@ def git(root: Path, *arguments: str) -> str:
 
 @pytest.fixture
 def checkout(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
-    git(tmp_path, "init", "--quiet")
-    git(tmp_path, "config", "user.email", "test@example.com")
-    git(tmp_path, "config", "user.name", "Test")
-    shutil.copy(REPOSITORY / "catalog.yaml", tmp_path / "catalog.yaml")
-    (tmp_path / "metrics").mkdir()
-    (tmp_path / "metrics" / "runs.jsonl").write_text('{"command": "first"}\n')
-    (tmp_path / "metrics" / "probe.json").write_text('{"probed": 0}\n')
-    git(tmp_path, "add", ".")
-    git(tmp_path, "commit", "--quiet", "-m", "first")
-    monkeypatch.chdir(tmp_path)
-    return tmp_path
+    """The runner's checkout, with a bare repository standing in for GitHub as its origin."""
+    github, root = tmp_path / "github.git", tmp_path / "checkout"
+    git(tmp_path, "init", "--quiet", "--bare", str(github))
+    root.mkdir()
+    git(root, "init", "--quiet")
+    git(root, "config", "user.email", "test@example.com")
+    git(root, "config", "user.name", "Test")
+    git(root, "remote", "add", "origin", str(github))
+    shutil.copy(REPOSITORY / "catalog.yaml", root / "catalog.yaml")
+    (root / "metrics").mkdir()
+    (root / "metrics" / "runs.jsonl").write_text('{"command": "first"}\n')
+    (root / "metrics" / "probe.json").write_text('{"probed": 0}\n')
+    git(root, "add", ".")
+    git(root, "commit", "--quiet", "-m", "first")
+    monkeypatch.chdir(root)
+    return root
 
 
 def test_a_job_runs_logs_and_commits_its_record_with_its_outputs(checkout: Path) -> None:
@@ -301,28 +298,19 @@ def test_a_job_runs_logs_and_commits_its_record_with_its_outputs(checkout: Path)
 
 
 @flow(name="probe-with-outputs")
-def probe_with_outputs_flow(role: Role) -> None:
-    run_job(
-        PROBE,
-        run_probe,
-        role=role,
-        process_count=1,
-        pull=None,
-        save_outputs=False,
-        outputs=[Path("audit/key.json")],
-    )
+def probe_with_outputs_flow() -> None:
+    run_job(PROBE, run_probe, pull=None, save_outputs=False, outputs=[Path("audit/key.json")])
 
 
-@pytest.mark.parametrize(("role", "committed"), [("runner", True), ("local", False)])
-def test_a_runs_outputs_are_committed_with_its_record_on_the_runner_only(
-    checkout: Path, monkeypatch: pytest.MonkeyPatch, role: Role, *, committed: bool
+def test_a_runs_outputs_are_committed_with_its_record(
+    checkout: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     paths: list[str] = []
-    monkeypatch.setattr(jobs, "commit_record", lambda *arguments, **_: paths.extend(arguments[3]))
+    monkeypatch.setattr(jobs, "commit_record", lambda *arguments, **_: paths.extend(arguments[2]))
 
-    probe_with_outputs_flow(role)
+    probe_with_outputs_flow()
 
-    assert ("audit/key.json" in paths) is committed
+    assert "audit/key.json" in paths
     assert "metrics/probe.json" in paths
 
 

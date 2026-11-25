@@ -2,9 +2,9 @@
 
 They are the run's log file, the checkout it started from, DVC's pull and push, and committing the
 run's record. A run's output goes to ``logs/<UTC time>-<name>.log`` as it always has, so the
-dashboard that reads those files keeps working. Its record is committed under a lock per role, so
-two runs ending at once never collide on git's index; on the runner the commit is pushed to the
-relay on a branch of its own, ``runs/<flow run id>``, for ``interpretant runs collect`` to bring
+dashboard that reads those files keeps working. The runner takes one run at a time (its work queue's
+limit), so nothing here takes a lock. The record's commit is pushed to GitHub on a branch of its
+own, ``runs/<flow run id>``, for ``interpretant submit`` or ``interpretant runs collect`` to bring
 back.
 """
 
@@ -22,18 +22,16 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import IO
 
-from prefect import get_run_logger, task
+from prefect import task
 from prefect.cache_policies import NO_CACHE
-from prefect.concurrency.sync import concurrency
-from prefect.exceptions import MissingContextError
 from prefect.logging.handlers import APILogHandler
 
-from interpretant.orchestration.registry import Role
 from interpretant.pipelines.runs import checkout_state
 
 RUN_LOG = Path("metrics/runs.jsonl")
 DVC_LOCK = Path("dvc.lock")
-RELAY = "relay"
+# Where the code comes from and the records go: the public repository
+ORIGIN = "origin"
 LOGS = Path("logs")
 # git leaves its index lock for a moment while another git command runs; a record waits for it
 INDEX_LOCK_ATTEMPTS = 5
@@ -126,22 +124,19 @@ def pull_data(paths: Sequence[str], *, root: Path) -> None:
 
 
 @task(name="dvc-push", retries=2, retry_delay_seconds=[30, 120])
-def push_data(role: Role, targets: Sequence[str] = (), *, root: Path) -> None:
-    """Upload the outputs the checkout records (``targets``' or all), one push per role at once."""
-    with concurrency(f"interpretant-dvc-{role}", strict=True):
-        _run(["dvc", "push", *targets], root)
+def push_data(targets: Sequence[str] = (), *, root: Path) -> None:
+    """Upload the outputs the checkout records (``targets``' or all) to the DVC remote."""
+    _run(["dvc", "push", *targets], root)
 
 
 @task(name="dvc-commit")
-def record_outputs(role: Role, stage: str, *, root: Path) -> None:
+def record_outputs(stage: str, *, root: Path) -> None:
     """Record in ``dvc.lock`` the stage's outputs as the run just made them from the checkout."""
-    with concurrency(f"interpretant-dvc-{role}", strict=True):
-        _run(["dvc", "commit", "--force", stage], root)
+    _run(["dvc", "commit", "--force", stage], root)
 
 
 @task(name="record", cache_policy=NO_CACHE)
 def commit_record(
-    role: Role,
     name: str,
     flow_run_id: str,
     paths: Sequence[str] = (),
@@ -153,37 +148,30 @@ def commit_record(
 
     ``paths`` are those files, or folders of them: new ones are added, and files git ignores
     inside a folder are left out (a path naming an ignored file fails the run); a path the run did
-    not write is passed over. ``write_record`` appends the run's record to the run log, under the
-    same lock as the commit: two runs sharing a checkout then each commit their own record, not
-    one commit holding both. A command run through the ``command`` flow writes its record
-    itself, while it runs. On the runner the commit is pushed to the relay. Nothing is
-    committed when the run left the files unchanged. On the local machine a rebase or merge in
-    progress there is left alone and the record stays uncommitted. Any other failure is the run's:
-    a run whose record is lost is not done, and the record it wrote is taken out of the run log
-    again, so the next run's commit does not carry it under that run's name.
+    not write is passed over. ``write_record`` appends the run's record to the run log just before
+    the commit. A command run through the ``command`` flow writes its record itself, while it
+    runs. The commit is pushed to GitHub as ``runs/<flow run id>``. Nothing is committed when the
+    run left the files unchanged. Any failure is the run's: a run whose record is lost is not done,
+    and the record it wrote is taken out of the run log again, so the next run's commit does not
+    carry it under that run's name.
     """
     files = [str(RUN_LOG), *(path for path in paths if (root / path).exists())]
     run_log = root / RUN_LOG
-    with concurrency(f"interpretant-git-{role}", strict=True):
-        before = run_log.read_bytes() if run_log.exists() else b""
-        if write_record is not None:
-            write_record()
-        written = run_log.read_bytes()[len(before) :] if run_log.exists() else b""
-        if _git(root, "status", "--porcelain", "--", *files) == "":
-            return None
-        if role == "local" and _is_mid_operation(root):
-            _logger().warning("left %s uncommitted: a rebase or merge is in progress here", RUN_LOG)
-            return None
-        try:
-            _add_with_index_lock_retries(root, files)
-            _commit_with_index_lock_retries(root, name, files)
-        except RecordError:
-            _remove_written(run_log, written)
-            raise
-        commit = _git(root, "rev-parse", "HEAD")
-        if role == "runner":
-            _run(["git", "push", "--quiet", RELAY, f"HEAD:refs/heads/runs/{flow_run_id}"], root)
-        return commit
+    before = run_log.read_bytes() if run_log.exists() else b""
+    if write_record is not None:
+        write_record()
+    written = run_log.read_bytes()[len(before) :] if run_log.exists() else b""
+    if _git(root, "status", "--porcelain", "--", *files) == "":
+        return None
+    try:
+        _add_with_index_lock_retries(root, files)
+        _commit_with_index_lock_retries(root, name, files)
+    except RecordError:
+        _remove_written(run_log, written)
+        raise
+    commit = _git(root, "rev-parse", "HEAD")
+    _run(["git", "push", "--quiet", ORIGIN, f"HEAD:refs/heads/runs/{flow_run_id}"], root)
+    return commit
 
 
 def _remove_written(run_log: Path, written: bytes) -> None:
@@ -217,20 +205,6 @@ def _git_with_index_lock_retries(root: Path, command: Sequence[str]) -> None:
         if "index.lock" not in completed.stderr or attempt == INDEX_LOCK_ATTEMPTS - 1:
             raise RecordError(f"couldn't commit the run's record: {completed.stderr.strip()}")
         time.sleep(INDEX_LOCK_WAIT_SECONDS)
-
-
-def _logger() -> logging.Logger | logging.LoggerAdapter[logging.Logger]:
-    """The run's logger inside a Prefect run, this module's outside one (tests, scripts)."""
-    try:
-        return get_run_logger()
-    except MissingContextError:
-        return logging.getLogger(__name__)
-
-
-def _is_mid_operation(root: Path) -> bool:
-    git_dir = Path(_git(root, "rev-parse", "--absolute-git-dir"))
-    markers = ("rebase-merge", "rebase-apply", "MERGE_HEAD", "CHERRY_PICK_HEAD")
-    return any((git_dir / marker).exists() for marker in markers)
 
 
 def _git(root: Path, *arguments: str) -> str:

@@ -36,27 +36,26 @@ script and its local hosts file (`scripts/run.py`, `hosts.local.yaml`), agreed o
 retired.
 
 - **One flow per job.** Each job (`orchestration/registry.py`) is a Prefect flow taking its
-  command's options, and `prefect.yaml` deploys it twice: `<job>/runner`, on the remote runner from
-  a submitted commit, and `<job>/local`, in the working checkout as it is. `command` runs any other
-  command, for one-off scripts and the scorers.
-- **`interpretant submit [--where runner|local] <job> [options]`** checks Prefect is reachable,
-  starts the deployment run, follows its states and log lines, and exits with its outcome. Nothing
-  falls back silently: a runner run waits, queued, until the runner is up, and a job runs locally
-  only with `--where local`.
-- **Code.** For a runner run the committed tree is pushed to a private relay repository
-  (`refs/heads/submitted`), and the runner checks that commit out before the flow is imported; it
-  refuses a checkout holding someone's changes. Uncommitted changes to tracked files refuse the
-  submission.
+  command's options, and `prefect.yaml` deploys it on the remote runner as `<job>/runner`.
+  `command` runs any other command, for one-off scripts and the scorers. On the local machine a job
+  runs as its plain command (`interpretant <job>`), which records the run in the run log.
+- **`interpretant submit <job> [options]`** checks Prefect is reachable, starts the deployment run,
+  follows its states and log lines, and exits with its outcome. Nothing falls back silently: a run
+  waits, queued, until the runner is up.
+- **Code.** A run starts from a commit published on GitHub: `submit` refuses uncommitted changes to
+  tracked files and a commit no GitHub branch holds. The runner fetches and checks that commit out
+  before the flow is imported, refusing a checkout holding someone's changes, and installs what its
+  `uv.lock` says.
 - **Data.** `--pull PATH` runs `dvc pull` first; a stage's `--save-outputs` records its outputs in
-  `dvc.lock` (`dvc commit`) and pushes them after the run.
-- **Limits.** The runner takes one interpretant run at a time (one checkout); on it, the GPU and CPU
-  slots are Prefect concurrency limits, and git and DVC take a lock per machine.
+  `dvc.lock` and pushes them after the run.
+- **One run at a time.** The runner's work queue takes one interpretant run at a time (one
+  checkout), so no run needs a lock.
 - **Records.** The run's output goes to `logs/<UTC time>-<name>.log`, its progress to a Prefect
-  artifact. On success its record is appended to `metrics/runs.jsonl` and committed under the git
-  lock, with the files git keeps that it wrote (a stage's tracked outputs, an audit's key and
-  counts, a scorer's results via `submit command --output`); on the runner the commit goes to the
-  relay as `runs/<flow run id>`, and `submit` cherry-picks it into the local branch
-  (`interpretant runs collect` brings back any left behind). A failed run records nothing.
+  artifact. On success its record is appended to `metrics/runs.jsonl` and committed with the files
+  git keeps that it wrote (a stage's tracked outputs, an audit's key and counts, a scorer's results
+  via `submit command --output`); the commit goes to GitHub as `runs/<flow run id>`, and `submit`
+  cherry-picks it into the local branch and deletes it (`interpretant runs collect` brings back any
+  left behind). A failed run records nothing.
 - **Machines.** Host names, folders, pools and worker commands are Prefect variables set outside
   this repository, so nothing here names a host (principle 5).
 
@@ -111,8 +110,8 @@ transformer path is slow there. Data comes from the DVC remote.
 
 ## Decisions (the author, 2026-11-24 and 2026-11-25)
 
-- Runs go through Prefect, one flow per job, with code reaching the runner through a private relay
-  repository rather than GitHub.
+- Runs go through Prefect, one flow per job. Code first reached the runner through a private relay
+  repository; once the held-out set left git (2026-11-25) it comes from GitHub, and so do records.
 - The judges run on the runner too, where the items are, and their verdicts stay there; the scorer
   runs there as a command job and brings back only its results.
 - The record commit is made with `--no-verify`: it holds the run log and data files, which the

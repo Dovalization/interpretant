@@ -9,8 +9,6 @@ from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
-from prefect.client.orchestration import get_client
-from prefect.client.schemas.actions import GlobalConcurrencyLimitCreate
 from prefect.testing.utilities import prefect_test_harness
 
 from interpretant.orchestration.flows import run_command
@@ -24,11 +22,6 @@ RECORDING = (
 @pytest.fixture(scope="module", autouse=True)
 def _prefect_server() -> Iterator[None]:
     with prefect_test_harness():
-        with get_client(sync_client=True) as client:
-            for name in ("interpretant-git-local", "interpretant-dvc-local"):
-                client.create_global_concurrency_limit(
-                    GlobalConcurrencyLimitCreate(name=name, limit=1)
-                )
         yield
 
 
@@ -42,15 +35,20 @@ def git(root: Path, *arguments: str) -> str:
 
 @pytest.fixture
 def checkout(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
-    git(tmp_path, "init", "--quiet")
-    git(tmp_path, "config", "user.email", "test@example.com")
-    git(tmp_path, "config", "user.name", "Test")
-    (tmp_path / "metrics").mkdir()
-    (tmp_path / "metrics" / "runs.jsonl").write_text('{"command": "first"}\n')
-    git(tmp_path, "add", ".")
-    git(tmp_path, "commit", "--quiet", "-m", "first")
-    monkeypatch.chdir(tmp_path)
-    return tmp_path
+    """The runner's checkout, with a bare repository standing in for GitHub as its origin."""
+    github, root = tmp_path / "github.git", tmp_path / "checkout"
+    git(tmp_path, "init", "--quiet", "--bare", str(github))
+    root.mkdir()
+    git(root, "init", "--quiet")
+    git(root, "config", "user.email", "test@example.com")
+    git(root, "config", "user.name", "Test")
+    git(root, "remote", "add", "origin", str(github))
+    (root / "metrics").mkdir()
+    (root / "metrics" / "runs.jsonl").write_text('{"command": "first"}\n')
+    git(root, "add", ".")
+    git(root, "commit", "--quiet", "-m", "first")
+    monkeypatch.chdir(root)
+    return root
 
 
 def test_a_command_runs_logs_and_commits_its_record(checkout: Path) -> None:
@@ -58,22 +56,14 @@ def test_a_command_runs_logs_and_commits_its_record(checkout: Path) -> None:
 
     assert state.is_completed()
     assert git(checkout, "log", "-1", "--format=%s") == "chore(metrics): record probe"
+    [branch] = git(checkout, "ls-remote", "origin", "refs/heads/runs/*").splitlines()
+    assert branch.split()[0] == git(checkout, "rev-parse", "HEAD")
     [log] = (checkout / "logs").glob("*-probe.log")
     assert "working" in log.read_text()
 
 
 def test_a_failing_command_fails_the_run_and_records_nothing(checkout: Path) -> None:
     state = run_command([sys.executable, "-c", "raise SystemExit(3)"], "broken", return_state=True)
-
-    assert state.is_failed()
-    assert git(checkout, "log", "-1", "--format=%s") == "first"
-
-
-def test_a_record_without_its_lock_fails_rather_than_racing(checkout: Path) -> None:
-    """The runner's git limit doesn't exist on this server; the commit refuses to go ahead."""
-    state = run_command(
-        [sys.executable, "-c", RECORDING], "unlocked", role="runner", return_state=True
-    )
 
     assert state.is_failed()
     assert git(checkout, "log", "-1", "--format=%s") == "first"
