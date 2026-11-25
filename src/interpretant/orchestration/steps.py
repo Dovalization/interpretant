@@ -157,22 +157,40 @@ def commit_record(
     itself, while it runs. On the runner the commit is pushed to the relay. Nothing is
     committed when the run left the files unchanged. On the local machine a rebase or merge in
     progress there is left alone and the record stays uncommitted. Any other failure is the run's:
-    a run whose record is lost is not done.
+    a run whose record is lost is not done, and the record it wrote is taken out of the run log
+    again, so the next run's commit does not carry it under that run's name.
     """
     files = [str(RUN_LOG), *paths]
+    run_log = root / RUN_LOG
     with concurrency(f"interpretant-git-{role}", strict=True):
+        before = run_log.read_bytes() if run_log.exists() else b""
         if write_record is not None:
             write_record()
+        written = run_log.read_bytes()[len(before) :] if run_log.exists() else b""
         if _git(root, "status", "--porcelain", "--", *files) == "":
             return None
         if role == "local" and _is_mid_operation(root):
             _logger().warning("left %s uncommitted: a rebase or merge is in progress here", RUN_LOG)
             return None
-        _commit_with_index_lock_retries(root, name, files)
+        try:
+            _commit_with_index_lock_retries(root, name, files)
+        except RecordError:
+            _remove_written(run_log, written)
+            raise
         commit = _git(root, "rev-parse", "HEAD")
         if role == "runner":
             _run(["git", "push", "--quiet", RELAY, f"HEAD:refs/heads/runs/{flow_run_id}"], root)
         return commit
+
+
+def _remove_written(run_log: Path, written: bytes) -> None:
+    """Take the lines this run wrote back out of the run log, wherever they now are."""
+    if not written:
+        return
+    text = run_log.read_bytes()
+    start = text.rfind(written)
+    if start != -1:
+        run_log.write_bytes(text[:start] + text[start + len(written) :])
 
 
 def _commit_with_index_lock_retries(root: Path, name: str, files: Sequence[str]) -> None:

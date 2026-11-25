@@ -201,6 +201,26 @@ def test_a_record_that_cant_be_committed_fails_the_run(relay: Path, tmp_path: Pa
 
 
 @pytest.mark.usefixtures("no_limits")
+def test_a_record_that_cant_be_committed_leaves_the_run_log_as_it_was(
+    relay: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(steps, "INDEX_LOCK_WAIT_SECONDS", 0)
+    local = clone(relay, tmp_path / "local")
+    (local / ".git" / "index.lock").write_text("")
+
+    with pytest.raises(steps.RecordError):
+        steps.commit_record.fn(
+            "local",
+            "probe",
+            "run-1",
+            root=local,
+            write_record=partial(append_record, local, "probe"),
+        )
+
+    assert (local / "metrics" / "runs.jsonl").read_text() == '{"command": "first"}\n'
+
+
+@pytest.mark.usefixtures("no_limits")
 def test_a_local_record_waits_out_a_merge_in_progress(relay: Path, tmp_path: Path) -> None:
     local = clone(relay, tmp_path / "local")
     append_record(local, "probe")
