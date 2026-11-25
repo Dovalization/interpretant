@@ -296,8 +296,8 @@ stages:
       size: 4649
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -332,8 +332,8 @@ stages:
       size: 2106
     - path: src/interpretant/cli/report_corpus.py
       hash: md5
-      md5: 19923b2a29e3a51e3371508756966703
-      size: 1302
+      md5: d3e413d870f9cc8587ff6bcb05df7397
+      size: 1444
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
@@ -348,8 +348,8 @@ stages:
       size: 8668
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/report_corpus.py
       hash: md5
       md5: c414ba7cadfebb0e8d20d9e25adf4d16
@@ -361,8 +361,8 @@ stages:
     outs:
     - path: data/processed/corpus_report.md
       hash: md5
-      md5: cc8d3f95fc3083d4fdfc1b2c19add8b1
-      size: 21954
+      md5: 09ed5b844791a19da065aa789d7964d7
+      size: 21410
     - path: metrics/corpus.json
       hash: md5
       md5: 9fbe32a575df5ff97810beaf4c4cdaa3
