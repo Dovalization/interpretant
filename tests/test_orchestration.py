@@ -12,11 +12,13 @@ import threading
 from collections.abc import Iterator
 from contextlib import nullcontext
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 from uuid import uuid4
 
 import pytest
 import yaml
+from prefect.states import Completed, Running
 
 from interpretant.orchestration import progress as progress_module
 from interpretant.orchestration import steps, submit
@@ -296,6 +298,51 @@ def test_a_local_submission_needs_no_commit_in_its_environment() -> None:
     )
 
     assert (submission.deployment, submission.job_variables) == ("command/local", {})
+
+
+class LateLinesClient:
+    """A Prefect client whose run turns final before its last log lines reach the server."""
+
+    def __init__(self) -> None:
+        self.polls = 0
+        # Each poll: the run's state and every line the server holds by then
+        self.timeline = [
+            (Running(), ["judging: started"]),
+            (Completed(), ["judging: started"]),
+            (Completed(), ["judging: started", "the report", "judging: done"]),
+        ]
+
+    def __enter__(self) -> LateLinesClient:
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        return None
+
+    def read_flow_run(self, flow_run_id: object) -> SimpleNamespace:
+        self.polls += 1
+        return SimpleNamespace(state=self.timeline[min(self.polls, 3) - 1][0])
+
+    def read_logs(self, *, offset: int, **query: object) -> list[SimpleNamespace]:
+        lines = self.timeline[min(self.polls, 3) - 1][1]
+        return [SimpleNamespace(message=line) for line in lines[offset:]]
+
+
+def test_following_a_run_waits_for_lines_sent_before_it_ended(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    clock = [0.0]
+
+    def sleep(seconds: float) -> None:
+        clock[0] += seconds
+
+    monkeypatch.setattr(submit, "get_client", lambda **options: LateLinesClient())
+    monkeypatch.setattr(submit, "time", SimpleNamespace(monotonic=lambda: clock[0], sleep=sleep))
+    shown: list[str] = []
+
+    final = submit.follow_run(uuid4(), echo=shown.append)
+
+    assert final == "Completed"
+    assert shown == ["judging: started", "[Running]", "the report", "judging: done", "[Completed]"]
 
 
 def test_publishing_refuses_uncommitted_changes(relay: Path, tmp_path: Path) -> None:

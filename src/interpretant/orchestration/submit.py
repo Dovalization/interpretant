@@ -25,6 +25,8 @@ from interpretant.orchestration.steps import RELAY
 
 POLL_SECONDS = 2.0
 LOG_PAGE = 200
+# How long the lines a run sent before ending may take to arrive: FlowRunSubscriber's default
+STRAGGLER_SECONDS = 3.0
 
 
 class SubmissionError(RuntimeError):
@@ -88,9 +90,17 @@ def start_run(submission: Submission) -> UUID:
 
 
 def follow_run(flow_run_id: UUID, *, echo: Callable[[str], None]) -> str:
-    """Print the run's states and log lines until it ends; its final state's name."""
+    """Print the run's states and log lines until it ends; its final state's name.
+
+    The run sends its log lines in batches, so its last lines can reach the server after its
+    final state does. Once the state is final, the lines are read until ``STRAGGLER_SECONDS``
+    pass without a new one, as Prefect's own ``FlowRunSubscriber`` does, and the final state
+    is printed after them.
+    """
     shown = 0
     last_state = ""
+    last_line_at = time.monotonic()
+    final_seen_at: float | None = None
     with get_client(sync_client=True) as client:
         while True:
             flow_run = client.read_flow_run(flow_run_id)
@@ -101,15 +111,21 @@ def follow_run(flow_run_id: UUID, *, echo: Callable[[str], None]) -> str:
                 limit=LOG_PAGE,
                 sort=LogSort.TIMESTAMP_ASC,
             )
+            now = time.monotonic()
             for log in logs:
                 echo(log.message)
             shown += len(logs)
+            if logs:
+                last_line_at = now
             name = state.name if state is not None and state.name else "Unknown"
-            if name != last_state:
+            if state is not None and state.is_final():
+                final_seen_at = now if final_seen_at is None else final_seen_at
+                if not logs and now - max(final_seen_at, last_line_at) >= STRAGGLER_SECONDS:
+                    echo(f"[{name}]")
+                    return name
+            elif name != last_state:
                 echo(f"[{name}]")
                 last_state = name
-            if state is not None and state.is_final() and len(logs) < LOG_PAGE:
-                return name
             if len(logs) < LOG_PAGE:
                 time.sleep(POLL_SECONDS)
 
