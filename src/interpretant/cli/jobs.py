@@ -21,11 +21,12 @@ from interpretant.pipelines.runs import record_run
 JobRun = Callable[[CatalogConfig, Progress, Console], Mapping[str, int]]
 
 
-def run_on_command_line(command: str, catalog_file: Path, run: JobRun) -> None:
-    """Run a job with live progress on the console, then append its record to the run log."""
+def run_on_command_line(command: str, catalog_file: Path, run: JobRun) -> Mapping[str, int]:
+    """Run a job with live progress on the console and append its record; its counts."""
     console = Console()
     catalog = read_catalog(catalog_file)
     with LiveProgress(console) as live:
         timer = StageTimer(live)
         counts = run(catalog, timer, console)
     record_run(catalog, command=command, stages=timer.finish(), counts=counts)
+    return counts

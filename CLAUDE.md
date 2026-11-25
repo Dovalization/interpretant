@@ -93,7 +93,12 @@ analysis: predictions first, in their own commit.
   `commands.JOB_COMMANDS`; `tests/test_orchestration_jobs.py` checks they agree. Needs the
   `orchestration` extra.
 - `review/` (rebuild): the corpus review (4b): `corpus_report.py` (what each rule dropped,
-  removed and flagged, by decade, field and repository; rendered as Markdown by Polars).
+  removed and flagged, by decade, field and repository; rendered as Markdown by Polars), and
+  `judging.py` (review items as the judges see them: the answer schemas, the rendered items,
+  parts of 50). The judges themselves are `pipelines/judge_api.py` (Message Batches API, within
+  a dollar cap; the key from the checkout's secrets file only) and
+  `pipelines/judge_claude_code.py` (Claude Code's command line on the subscription, never given
+  the API key), run as `judge-api` and `judge-claude-code`.
 - `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`) and
   each raw work's OpenAlex metadata (`metadata.py`), the
   abstracts table's pandera schema and its parquet parts, the curated cleaning rules and spaCy

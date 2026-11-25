@@ -1,31 +1,18 @@
-"""The command-line judge (`scripts/review/judge_cli.py`): parts, isolation, retries, resuming."""
+"""The Claude Code judge (`pipelines/judge_claude_code.py`): parts, isolation, retries, manifest."""
 
 from __future__ import annotations
 
-import argparse
-import importlib.util
 import itertools
 import json
 import sys
 from pathlib import Path
-from types import ModuleType
 from typing import Any
 
-REPOSITORY = Path(__file__).resolve().parents[1]
+import pytest
 
-
-def load_script() -> ModuleType:
-    """The command-line judge as a module."""
-    path = REPOSITORY / "scripts" / "review" / "judge_cli.py"
-    spec = importlib.util.spec_from_file_location("judge_cli_script", path)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["judge_cli_script"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-judge_cli = load_script()
+from interpretant.pipelines import judge_claude_code as judge_cli
+from interpretant.pipelines.judge_claude_code import CommandLineJudging
+from interpretant.review.judging import ADJUDICATION, render_message, split_parts
 
 
 def item(item_id: str) -> dict[str, Any]:
@@ -39,20 +26,18 @@ def item(item_id: str) -> dict[str, Any]:
     }
 
 
-def options(tmp_path: Path) -> argparse.Namespace:
-    """The script's options for a judge writing under ``tmp_path``."""
+def options(tmp_path: Path, items_per_call: int = 50) -> CommandLineJudging:
+    """How a judge writing under ``tmp_path`` judges."""
     codebook = tmp_path / "prompt.md"
     codebook.write_text("Judge the usages.")
-    return argparse.Namespace(
-        verdicts=tmp_path / "verdicts",
+    return CommandLineJudging(
         name="judge_A",
         codebook=codebook,
         answers="usages",
         model="sonnet",
         effort="low",
+        items_per_call=items_per_call,
         parallel=2,
-        slice=50,
-        claude="claude",
     )
 
 
@@ -88,15 +73,15 @@ def test_parts_are_batch_files_or_slices_of_one_file(tmp_path: Path) -> None:
     folder.mkdir()
     for number in (0, 1):
         (folder / f"batch_0{number}.jsonl").write_text(json.dumps(item(f"i{number}")) + "\n")
-    assert sorted(judge_cli.parts_of(folder)) == ["00", "01"]
+    assert sorted(split_parts(folder)) == ["00", "01"]
     single = tmp_path / "adjudicate.jsonl"
     single.write_text("".join(json.dumps(item(f"i{n}")) + "\n" for n in range(120)))
-    slices = judge_cli.parts_of(single)
+    slices = split_parts(single)
     assert [len(items) for items in slices.values()] == [50, 50, 20]
 
 
 def test_every_call_is_isolated_and_constrained_to_the_schema(tmp_path: Path) -> None:
-    arguments = judge_cli.command(options(tmp_path))
+    arguments = judge_cli.build_command(options(tmp_path))
     flags = dict(itertools.pairwise(arguments))
     assert flags["--tools"] == ""
     assert flags["--setting-sources"] == ""
@@ -111,16 +96,16 @@ def test_every_call_is_isolated_and_constrained_to_the_schema(tmp_path: Path) ->
     ]
 
 
-def test_judge_all_writes_each_part_and_skips_those_already_judged(tmp_path: Path) -> None:
+def test_judging_writes_each_part_and_skips_those_already_judged(tmp_path: Path) -> None:
     parts = {"00": [item("a"), item("b")], "01": [item("c")]}
     calls, call = answering()
-    run = judge_cli.judge_all(parts, options(tmp_path), call)
+    run = judge_cli.generate_verdicts(parts, options(tmp_path), tmp_path / "verdicts", call)
     written = json.loads((tmp_path / "verdicts" / "judge_A_part_00.json").read_text())
     assert sorted(written) == ["a", "b"]
     assert written["a"] == {"verdict": "right", "reason": "none", "note": ""}
     assert run["judged"] == 3
     assert run["models"] == ["claude-sonnet-5-5"]
-    again = judge_cli.judge_all(parts, options(tmp_path), call)
+    again = judge_cli.generate_verdicts(parts, options(tmp_path), tmp_path / "verdicts", call)
     assert again["judged"] == 0
     assert len(calls) == 2
 
@@ -128,12 +113,15 @@ def test_judge_all_writes_each_part_and_skips_those_already_judged(tmp_path: Pat
 def test_a_part_answered_with_other_ids_is_retried_once_then_reported(tmp_path: Path) -> None:
     parts = {"00": [item("a"), item("b")]}
     calls, call = answering(wrong_first=1)
-    assert judge_cli.judge_all(parts, options(tmp_path), call)["judged"] == 2
+    assert (
+        judge_cli.generate_verdicts(parts, options(tmp_path), tmp_path / "verdicts", call)["judged"]
+        == 2
+    )
     assert len(calls) == 2
     other = tmp_path / "other"
     other.mkdir()
     calls, call = answering(wrong_first=2)
-    run = judge_cli.judge_all(parts, options(other), call)
+    run = judge_cli.generate_verdicts(parts, options(other), other / "verdicts", call)
     assert run["failed"] == {"00": "answered 1 distinct ids for 2 items"}
     assert not (other / "verdicts" / "judge_A_part_00.json").exists()
     assert run["tokens"]["input_tokens"] == 20
@@ -147,7 +135,7 @@ def test_the_manifest_adds_up_every_run() -> None:
         "models": ["claude-sonnet-5-5"],
         "failed": {},
     }
-    manifest = judge_cli.merged_manifest(earlier, run, {"model": "sonnet"})
+    manifest = judge_cli.build_merged_manifest(earlier, run, {"model": "sonnet"})
     assert manifest["judged"] == 60
     assert manifest["tokens"] == {"input_tokens": 105}
     assert manifest["model"] == "sonnet"
@@ -155,10 +143,8 @@ def test_the_manifest_adds_up_every_run() -> None:
 
 def test_a_part_judged_one_item_per_call_is_written_once_whole(tmp_path: Path) -> None:
     parts = {"00": [item("a"), item("b"), item("c")], "01": [item("d")]}
-    one_each = options(tmp_path)
-    one_each.slice = 1
     calls, call = answering()
-    run = judge_cli.judge_all(parts, one_each, call)
+    run = judge_cli.generate_verdicts(parts, options(tmp_path, 1), tmp_path / "verdicts", call)
     assert len(calls) == 4
     written = json.loads((tmp_path / "verdicts" / "judge_A_part_00.json").read_text())
     assert sorted(written) == ["a", "b", "c"]
@@ -166,10 +152,10 @@ def test_a_part_judged_one_item_per_call_is_written_once_whole(tmp_path: Path) -
 
 
 def test_a_part_with_a_failed_call_is_not_written(tmp_path: Path) -> None:
-    one_each = options(tmp_path)
-    one_each.slice = 1
     _, call = answering(wrong_first=2)
-    run = judge_cli.judge_all({"00": [item("a"), item("b")]}, one_each, call)
+    run = judge_cli.generate_verdicts(
+        {"00": [item("a"), item("b")]}, options(tmp_path, 1), tmp_path / "verdicts", call
+    )
     assert "00" in run["failed"]
     assert not (tmp_path / "verdicts" / "judge_A_part_00.json").exists()
 
@@ -179,8 +165,21 @@ def test_an_adjudication_item_is_sent_with_both_answers_and_the_instruction() ->
         "judge_1": {"verdict": "right", "reason": "none", "note": "a use"},
         "judge_2": {"verdict": "wrong", "reason": "name", "note": "a name"},
     }
-    text = judge_cli.message([disputed], "usages")
-    assert text.startswith(judge_cli.ADJUDICATION)
+    text = render_message([disputed], "usages")
+    assert text.startswith(ADJUDICATION)
     assert "Judge 1 answered:" in text
     assert "Judge 2 answered:" in text
-    assert not judge_cli.message([item("b")], "usages").startswith(judge_cli.ADJUDICATION)
+    assert not render_message([item("b")], "usages").startswith(ADJUDICATION)
+
+
+def test_the_command_line_never_sees_the_api_key(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """With the key, Claude Code would bill the API instead of the subscription."""
+    monkeypatch.setenv(judge_cli.API_KEY_VARIABLE, "sk-test")
+    monkeypatch.setattr(judge_cli, "EMPTY_FOLDER", tmp_path / "empty")
+    probe = "import json, os; print(json.dumps({'key': os.environ.get('ANTHROPIC_API_KEY')}))"
+
+    result = judge_cli.generate_with_claude([sys.executable, "-c", probe], "")
+
+    assert result == {"key": None}

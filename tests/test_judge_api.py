@@ -1,32 +1,19 @@
-"""The judging script (`scripts/review/judge.py`): requests, the cap, retries, the usage."""
+"""The API judge (`pipelines/judge_api.py`): requests, the cap, retries, the usage."""
 
 from __future__ import annotations
 
-import argparse
-import importlib.util
+import dataclasses
 import json
-import sys
 from pathlib import Path
-from types import ModuleType, SimpleNamespace
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
 
-REPOSITORY = Path(__file__).resolve().parents[1]
+from interpretant.pipelines import judge_api as judge
+from interpretant.pipelines.judge_api import ApiJudging
+from interpretant.review.judging import render
 
-
-def load_judge() -> ModuleType:
-    """The judging script as a module."""
-    path = REPOSITORY / "scripts" / "review" / "judge.py"
-    spec = importlib.util.spec_from_file_location("judge_script", path)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["judge_script"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-judge = load_judge()
 MODEL = "claude-sonnet-5-5"
 
 
@@ -90,24 +77,20 @@ class FakeClient:
         )
 
 
-def options(tmp_path: Path, max_dollars: float = 5.0) -> argparse.Namespace:
+def options(tmp_path: Path, max_dollars: float = 5.0) -> ApiJudging:
     codebook = tmp_path / "codebook.md"
     codebook.write_text("Judge whether the marked place is a use of the word.")
-    return argparse.Namespace(
+    return ApiJudging(
         codebook=codebook,
         answers="usages",
         model=MODEL,
         effort="medium",
         max_dollars=max_dollars,
-        chunk=500,
-        max_tokens=4096,
-        thinking="adaptive",
-        out=tmp_path / "verdicts.json",
     )
 
 
 def test_cost_prices_each_kind_of_token_at_batch_prices() -> None:
-    spent = judge.cost(
+    spent = judge.compute_cost(
         usage(
             input_tokens=1_000_000,
             cache_creation_input_tokens=1_000_000,
@@ -120,10 +103,10 @@ def test_cost_prices_each_kind_of_token_at_batch_prices() -> None:
 
 
 def test_worst_case_covers_a_typical_request() -> None:
-    typical = judge.cost(
+    typical = judge.compute_cost(
         usage(input_tokens=200, cache_read_input_tokens=1500, output_tokens=600), MODEL
     )
-    assert judge.worst_case(judge.render(item("U1"), "usages"), 1500, 4096, MODEL) > typical
+    assert judge.compute_worst_case(render(item("U1"), "usages"), 1500, 4096, MODEL) > typical
 
 
 def test_judge_retries_an_errored_request_once_and_records_a_refusal(tmp_path: Path) -> None:
@@ -135,8 +118,12 @@ def test_judge_retries_an_errored_request_once_and_records_a_refusal(tmp_path: P
         ]
     )
     verdicts: dict[str, Any] = {}
-    manifest = judge.judge(
-        [item("U1"), item("U2"), item("U3")], options(tmp_path), client, verdicts
+    manifest = judge.generate_verdicts(
+        [item("U1"), item("U2"), item("U3")],
+        options(tmp_path),
+        client,
+        verdicts,
+        tmp_path / "verdicts.json",
     )
     assert verdicts["U1"] == {"verdict": "right", "reason": None, "note": "a use"}
     assert "U2" in verdicts
@@ -145,12 +132,14 @@ def test_judge_retries_an_errored_request_once_and_records_a_refusal(tmp_path: P
     assert manifest["tokens"]["cache_read_input_tokens"] == 4500
     assert manifest["spent_dollars"] > 0
     assert json.loads((tmp_path / "verdicts.json").read_text()) == verdicts
-    assert "cost at batch prices" in judge.report(manifest)
+    assert "cost at batch prices" in judge.render_report(manifest)
 
 
 def test_judge_stops_before_a_chunk_that_could_pass_the_cap(tmp_path: Path) -> None:
     client = FakeClient([])
-    manifest = judge.judge([item("U1"), item("U2")], options(tmp_path, 0.001), client, {})
+    manifest = judge.generate_verdicts(
+        [item("U1"), item("U2")], options(tmp_path, 0.001), client, {}, tmp_path / "out.json"
+    )
     assert client.messages.batches.submitted == []
     assert manifest["left_by_cap"] == ["U1", "U2"]
     assert manifest["spent_dollars"] == 0
@@ -160,7 +149,9 @@ def test_judge_skips_items_already_judged_and_sends_the_cached_codebook(tmp_path
     right = json.dumps({"verdict": "wrong", "reason": "name", "note": "a title"})
     client = FakeClient([[succeeded("U2", right)]])
     verdicts = {"U1": {"verdict": "right", "reason": None, "note": "earlier"}}
-    judge.judge([item("U1"), item("U2")], options(tmp_path), client, verdicts)
+    judge.generate_verdicts(
+        [item("U1"), item("U2")], options(tmp_path), client, verdicts, tmp_path / "out.json"
+    )
     [requests] = client.messages.batches.submitted
     assert [request["custom_id"] for request in requests] == ["U2"]
     params = requests[0]["params"]
@@ -172,7 +163,8 @@ def test_judge_skips_items_already_judged_and_sends_the_cached_codebook(tmp_path
 def test_thinking_off_asks_for_an_answer_without_reasoning(tmp_path: Path) -> None:
     settings = options(tmp_path)
     system = [{"type": "text", "text": "codebook"}]
-    assert "thinking" not in judge.request(item("U1"), settings, system)["params"]
-    settings.thinking = "off"
-    params = judge.request(item("U1"), settings, system)["params"]
+    assert "thinking" not in judge.build_request(item("U1"), settings, system)["params"]
+    params = judge.build_request(item("U1"), dataclasses.replace(settings, thinking="off"), system)[
+        "params"
+    ]
     assert params["thinking"] == {"type": "between_tools"}
