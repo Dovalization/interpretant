@@ -14,8 +14,8 @@ stages:
       size: 3310
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -42,16 +42,16 @@ stages:
       size: 1800
     - path: src/interpretant/cli/annotate_corpus.py
       hash: md5
-      md5: fa1be97e91af401f8ada9844620df1f2
-      size: 2418
+      md5: ba4f9f00155ede5c3814a3b8f8a6e44d
+      size: 2682
     - path: src/interpretant/corpus/annotation.py
       hash: md5
-      md5: 74e61f8b5ba67580e917317e6fc3d556
-      size: 15260
+      md5: b8ebae10cfc93a338df597ff42a7dd14
+      size: 15274
     - path: src/interpretant/corpus/attribute_rules.py
       hash: md5
-      md5: 8f2a4ff368b001823a7932053e6274fc
-      size: 4881
+      md5: 1a292b8ac73f0f574cb05a53bc6f2284
+      size: 4891
     - path: src/interpretant/corpus/repair.py
       hash: md5
       md5: a59cf74f837451d4f20e3579bbeb72b2
@@ -70,16 +70,16 @@ stages:
       size: 4707
     - path: src/interpretant/pipelines/params.py
       hash: md5
-      md5: 3948a4fd681587ab2f99892050d25b62
-      size: 1593
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 4229c9975a7f21c8694b34d4e6ad9365
-      size: 7085
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
     params:
       params.yaml:
         annotate_corpus:
@@ -152,8 +152,8 @@ stages:
       size: 4649
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -184,8 +184,8 @@ stages:
       size: 2106
     - path: src/interpretant/cli/build_corpus.py
       hash: md5
-      md5: 480ae6ea5276f23636c3b9050fca2f52
-      size: 1776
+      md5: d0d831a94c2943f3b49668186102cb11
+      size: 1946
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
@@ -232,16 +232,16 @@ stages:
       size: 4707
     - path: src/interpretant/pipelines/params.py
       hash: md5
-      md5: 3948a4fd681587ab2f99892050d25b62
-      size: 1593
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 4229c9975a7f21c8694b34d4e6ad9365
-      size: 7085
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
     params:
       params.yaml:
         build_corpus:
@@ -382,8 +382,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -414,8 +414,8 @@ stages:
       size: 1800
     - path: src/interpretant/cli/detect_languages.py
       hash: md5
-      md5: 5e94e382629d86cfe99f95e6b5a7683a
-      size: 1919
+      md5: a9f96b4233198ec95a273251fc671aca
+      size: 2075
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: f61baff05035379afccbb1ad54a947b4
@@ -434,16 +434,16 @@ stages:
       size: 6247
     - path: src/interpretant/pipelines/params.py
       hash: md5
-      md5: 3948a4fd681587ab2f99892050d25b62
-      size: 1593
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 4229c9975a7f21c8694b34d4e6ad9365
-      size: 7085
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
     params:
       params.yaml:
         corpus:
@@ -538,8 +538,8 @@ stages:
       size: 3310
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -570,8 +570,8 @@ stages:
       size: 7809
     - path: src/interpretant/cli/clean_corpus.py
       hash: md5
-      md5: 2f46cb0b38288ba5c9714acc21f2a34d
-      size: 1781
+      md5: 2d3a7694f08894209872c8cfe8e03b24
+      size: 1941
     - path: src/interpretant/corpus/language.py
       hash: md5
       md5: f61baff05035379afccbb1ad54a947b4
@@ -598,16 +598,16 @@ stages:
       size: 4707
     - path: src/interpretant/pipelines/params.py
       hash: md5
-      md5: 3948a4fd681587ab2f99892050d25b62
-      size: 1593
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 4229c9975a7f21c8694b34d4e6ad9365
-      size: 7085
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
     params:
       params.yaml:
         clean_corpus:
@@ -664,8 +664,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -696,8 +696,8 @@ stages:
       size: 2106
     - path: src/interpretant/cli/build_linked_tables.py
       hash: md5
-      md5: 5158d98b46f042f865b81a99c5fc6ede
-      size: 1515
+      md5: f148b7715c0863a4e6c5aeb487557703
+      size: 1661
     - path: src/interpretant/corpus/bibliographic.py
       hash: md5
       md5: 52093d502f981b1eb653dee8ce79766a
@@ -724,8 +724,8 @@ stages:
       size: 3798
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     outs:
     - path: data/interim/crossref_works.parquet
       hash: md5
@@ -762,8 +762,8 @@ stages:
       nfiles: 88
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/curated.py
       hash: md5
       md5: f8f421d986229c8be503688b79f5089d
@@ -802,8 +802,8 @@ stages:
       size: 1970
     - path: src/interpretant/cli/count_word_repairs.py
       hash: md5
-      md5: 3f609db4432faca5b02e5bc806727ca2
-      size: 2319
+      md5: ada87089eb11a93337aa6b51be4d2627
+      size: 2482
     - path: src/interpretant/corpus/dictionary.py
       hash: md5
       md5: 4f7ca84fdbd2e558bdd9edf3faf1ad6c
@@ -842,16 +842,16 @@ stages:
       size: 13732
     - path: src/interpretant/pipelines/params.py
       hash: md5
-      md5: 3948a4fd681587ab2f99892050d25b62
-      size: 1593
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 4229c9975a7f21c8694b34d4e6ad9365
-      size: 7085
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
     params:
       params.yaml:
         corpus:
@@ -939,8 +939,8 @@ stages:
       size: 4157
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/json_lines.py
       hash: md5
       md5: 18fb2759772b5e9b95b480b56c0af1f8
@@ -971,12 +971,12 @@ stages:
       size: 2514
     - path: src/interpretant/cli/build_static_view.py
       hash: md5
-      md5: 381575d52bde9d47618566194c26bad4
-      size: 2559
+      md5: 52822cd4e01cd038b060305cbc804132
+      size: 2722
     - path: src/interpretant/corpus/attribute_rules.py
       hash: md5
-      md5: 8f2a4ff368b001823a7932053e6274fc
-      size: 4881
+      md5: 1a292b8ac73f0f574cb05a53bc6f2284
+      size: 4891
     - path: src/interpretant/corpus/compound_spelling.py
       hash: md5
       md5: 6b56fb4bfa9fba5c19c458fe4bd6ea0d
@@ -1007,16 +1007,16 @@ stages:
       size: 4707
     - path: src/interpretant/pipelines/params.py
       hash: md5
-      md5: 3948a4fd681587ab2f99892050d25b62
-      size: 1593
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 4229c9975a7f21c8694b34d4e6ad9365
-      size: 7085
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
     params:
       params.yaml:
         corpus:
@@ -1061,8 +1061,8 @@ stages:
       size: 4649
     - path: src/interpretant/catalog/config.py
       hash: md5
-      md5: a7c9203dd7bada1413fef1a9fe090b12
-      size: 2426
+      md5: 287e97320d5b4f2e84a955c054121a70
+      size: 2461
     - path: src/interpretant/catalog/parts.py
       hash: md5
       md5: bd9edd2c1e8cbe90de37d96b91bf92be
@@ -1077,8 +1077,8 @@ stages:
       size: 5389
     - path: src/interpretant/cli/build_sentence_view.py
       hash: md5
-      md5: 8c55e9cd9de8d70332e26a702da76606
-      size: 2838
+      md5: 235b1bb273f0c61f462372e2e612d84f
+      size: 3013
     - path: src/interpretant/corpus/cleaning.py
       hash: md5
       md5: 1608ee959caae88b72fb7692165a8bc6
@@ -1093,12 +1093,12 @@ stages:
       size: 3106
     - path: src/interpretant/pipelines/progress.py
       hash: md5
-      md5: 22394da32ea7c6b1bae98d4ea88baa5c
-      size: 2694
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
     - path: src/interpretant/pipelines/workers.py
       hash: md5
-      md5: 4229c9975a7f21c8694b34d4e6ad9365
-      size: 7085
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
     outs:
     - path: data/processed/sentence_view
       hash: md5
