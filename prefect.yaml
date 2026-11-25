@@ -40,30 +40,8 @@ definitions:
       pull:
         - prefect.deployments.steps.set_working_directory:
             directory: "{{ prefect.variables.interpretant_local_dir }}"
-    # Procedures (orchestration/procedures.py) run on a machine that stays up, from a clone of the
-    # relay with only Prefect installed, and wait for their steps' runs on the runner
-    procedures: &procedures
-      tags: [interpretant]
-      work_pool:
-        name: "{{ prefect.variables.interpretant_procedures_pool }}"
-        job_variables:
-          command: "{{ prefect.variables.interpretant_procedures_command }}"
-      pull:
-        - prefect.deployments.steps.set_working_directory:
-            directory: "{{ prefect.variables.interpretant_procedures_dir }}"
-        - prefect.deployments.steps.run_shell_script:
-            shell: true
-            stream_output: true
-            script: |
-              git fetch --quiet relay
-              git checkout --quiet --detach "${INTERPRETANT_COMMIT:-relay/main}"
 
 deployments:
-  - name: procedures
-    description: "The matching audit: draw, judge and adjudicate on the runner, wait for the author's amendment and scorer, then score"
-    entrypoint: src/interpretant/orchestration/procedures.py:usages_audit
-    <<: *procedures
-
   - name: runner
     description: Any command on the runner, from the submitted commit
     entrypoint: src/interpretant/orchestration/flows.py:run_command

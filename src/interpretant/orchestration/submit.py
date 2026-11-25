@@ -17,10 +17,8 @@ from uuid import UUID
 
 from prefect.client.orchestration import get_client
 from prefect.client.schemas.filters import LogFilter, LogFilterFlowRunId
-from prefect.client.schemas.objects import State
 from prefect.client.schemas.sorting import LogSort
 from prefect.deployments import run_deployment
-from prefect.flow_runs import resume_flow_run
 
 from interpretant.orchestration.registry import Role
 from interpretant.orchestration.steps import RELAY
@@ -91,21 +89,15 @@ def start_run(submission: Submission) -> UUID:
     return flow_run_id
 
 
-def follow_run(
-    flow_run_id: UUID,
-    *,
-    echo: Callable[[str], None],
-    is_done: Callable[[State], bool] = State.is_final,
-    shown: int = 0,
-) -> str:
+def follow_run(flow_run_id: UUID, *, echo: Callable[[str], None]) -> str:
     """Print the run's states and log lines until it ends; its final state's name.
 
     The run sends its log lines in batches, so its last lines can reach the server after its
     final state does. Once the state is final, the lines are read until ``STRAGGLER_SECONDS``
     pass without a new one, as Prefect's own ``FlowRunSubscriber`` does, and the final state
-    is printed after them. ``is_done`` says which state ends the following (a final one by
-    default); ``shown`` log lines are skipped, as printed before.
+    is printed after them.
     """
+    shown = 0
     last_state = ""
     last_line_at = time.monotonic()
     final_seen_at: float | None = None
@@ -126,7 +118,7 @@ def follow_run(
             if logs:
                 last_line_at = now
             name = state.name if state is not None and state.name else "Unknown"
-            if state is not None and is_done(state):
+            if state is not None and state.is_final():
                 final_seen_at = now if final_seen_at is None else final_seen_at
                 if not logs and now - max(final_seen_at, last_line_at) >= STRAGGLER_SECONDS:
                     echo(f"[{name}]")
@@ -136,39 +128,6 @@ def follow_run(
                 last_state = name
             if len(logs) < LOG_PAGE:
                 time.sleep(POLL_SECONDS)
-
-
-def resume_and_follow(
-    flow_run_id: UUID, run_input: dict[str, str], *, echo: Callable[[str], None]
-) -> str:
-    """Resume a suspended run with ``run_input`` and follow it until it ends or waits again.
-
-    Returns the name of the state it stopped in: ``Paused`` when it waits again.
-    """
-    with get_client(sync_client=True) as client:
-        state = client.read_flow_run(flow_run_id).state
-        if state is None or not state.is_paused():
-            name = state.name if state is not None else "unknown"
-            raise SubmissionError(f"the run is {name}, not waiting to be resumed")
-        shown = 0
-        while page := client.read_logs(
-            log_filter=LogFilter(flow_run_id=LogFilterFlowRunId(any_=[flow_run_id])),
-            offset=shown,
-            limit=LOG_PAGE,
-        ):
-            shown += len(page)
-    resume_flow_run(flow_run_id, run_input=run_input)
-    return follow_run(
-        flow_run_id,
-        echo=echo,
-        is_done=lambda state: state.is_final() or state.is_paused(),
-        shown=shown,
-    )
-
-
-def resolve_commit(root: Path, revision: str) -> str:
-    """The full id of the commit ``revision`` names here."""
-    return _git(root, "rev-parse", "--verify", f"{revision}^{{commit}}")
 
 
 def collect_record(flow_run_id: UUID, root: Path) -> bool:

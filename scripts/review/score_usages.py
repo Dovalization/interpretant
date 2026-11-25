@@ -24,7 +24,9 @@ pre-registered bars:
 
 Words appear by their reported names (held-out words by a hash). Writes `results.json`. Run from the
 repository root:
-`python scripts/review/score_usages.py AUDIT_DIR pending|score [--calibration DIR]`.
+`python scripts/review/score_usages.py AUDIT_DIR pending|score [--calibration DIR]
+[--amendment COMMIT]`. Scoring runs only from a checkout that keeps the pre-registration
+(`check_scoring`): `--amendment` names the commit that last changed the plan before scoring.
 """
 
 from __future__ import annotations
@@ -38,6 +40,8 @@ from typing import Any
 
 import numpy as np
 from scipy.stats import binom
+
+from interpretant.pipelines.preregistration import PreregistrationError, check_scoring
 
 KEPT_ERRORS_PER_WORD = 2
 LEFT_OUT_WRONG_PER_WORD = 3
@@ -344,12 +348,22 @@ def main() -> None:
     parser.add_argument(
         "--calibration", type=Path, help="the audit folder holding the author's author.json"
     )
+    parser.add_argument(
+        "--amendment",
+        help="score: the commit of the plan's last change before scoring (the pre-registration)",
+    )
     options = parser.parse_args()
     audit = options.audit
     key = json.loads((audit / "key.json").read_text())
     if options.mode == "pending":
         write_pending(audit, key)
         return
+    if options.amendment is None:
+        parser.error("score needs --amendment: the commit that last changed the plan")
+    try:
+        check_scoring(Path.cwd(), audit, options.amendment, options.calibration)
+    except PreregistrationError as error:
+        raise SystemExit(f"not scored: {error}") from error
     results = score(audit, key, options.calibration)
     (audit / "results.json").write_text(json.dumps(results, indent=1) + "\n")
     precision, scope, recall = results["precision"], results["scope"], results["recall"]

@@ -164,32 +164,6 @@ source_modules = [
 ]
 forbidden_modules = ["prefect"]
 
-# A procedure runs from a clone with only Prefect installed (orchestration/procedures.py), so it
-# imports nothing else of interpretant's.
-[[tool.importlinter.contracts]]
-name = "Procedures import nothing else of interpretant's"
-type = "forbidden"
-source_modules = ["interpretant.orchestration.procedures"]
-forbidden_modules = [
-    "interpretant.__main__",
-    "interpretant.catalog",
-    "interpretant.cli",
-    "interpretant.corpus",
-    "interpretant.drift",
-    "interpretant.embedding",
-    "interpretant.pipelines",
-    "interpretant.predictions",
-    "interpretant.review",
-    "interpretant.usages",
-    "interpretant.orchestration.commands",
-    "interpretant.orchestration.flows",
-    "interpretant.orchestration.jobs",
-    "interpretant.orchestration.progress",
-    "interpretant.orchestration.registry",
-    "interpretant.orchestration.steps",
-    "interpretant.orchestration.submit",
-]
-
 [tool.uv.sources]
 en-core-web-sm = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl" }
 en-core-web-trf = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl" }

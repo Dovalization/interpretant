@@ -171,66 +171,6 @@ for _command in JOB_COMMANDS:
     submit.add_command(build_job_submission(_command))
 
 
-@submit.command("usages-audit")
-@click.argument("audit", type=click.Path(file_okay=False, path_type=Path))
-@click.option("--seed", type=int, help="The draws' seed (default: the audit's).")
-@click.option(
-    "--calibration",
-    type=click.Path(file_okay=False, path_type=Path),
-    help="The folder with the author's calibration verdicts to score with (author.json).",
-)
-@click.option("--skip-calibration", is_flag=True, help="Draw no calibration set (a redraw).")
-@click.option("--judge-model", help="The two judges' model, as Claude Code names it.")
-@click.option("--adjudicator-model", help="The adjudicator's model.")
-@click.option("--effort", help="The judges' and the adjudicator's effort.")
-def submit_usages_audit(
-    audit: Path,
-    seed: int | None,
-    calibration: Path | None,
-    judge_model: str | None,
-    adjudicator_model: str | None,
-    effort: str | None,
-    *,
-    skip_calibration: bool,
-) -> None:
-    """Start the matching audit's procedure from this commit (docs/usages_audit.md).
-
-    It draws into AUDIT, judges and adjudicates on the runner, then waits for the author: collect
-    the records, judge the calibration, commit any amendment and the scorer, push them to the
-    relay, and answer with `interpretant runs resume`. Options left out take the procedure's
-    defaults. Runs on the procedures machine; this command returns once it has started.
-    """
-    from interpretant.orchestration import submit as submission
-
-    given = {
-        "seed": seed,
-        "calibration": build_parameter(calibration) if calibration else None,
-        "judge_model": judge_model,
-        "adjudicator_model": adjudicator_model,
-        "effort": effort,
-    }
-    parameters = {name: value for name, value in given.items() if value is not None}
-    try:
-        commit = submission.publish_commit(REPOSITORY)
-        flow_run_id = submission.start_run(
-            submission.Submission(
-                "usages-audit/procedures",
-                {
-                    "audit": build_parameter(audit),
-                    "commit": commit,
-                    "skip_calibration": skip_calibration,
-                    **parameters,
-                },
-                {"env": {"INTERPRETANT_COMMIT": commit}},
-                ["interpretant", f"commit:{commit[:8]}"],
-            )
-        )
-    except submission.SubmissionError as exc:
-        raise click.ClickException(str(exc)) from exc
-    click.echo(f"started usages-audit as {flow_run_id}")
-    click.echo(f"follow it with: interpretant runs follow {flow_run_id}")
-
-
 @click.group()
 def runs() -> None:
     """Follow a Prefect run, or bring back run records left on the relay."""
@@ -243,35 +183,6 @@ def follow_command(flow_run_id: UUID) -> None:
     from interpretant.orchestration import submit as submission
 
     final = submission.follow_run(flow_run_id, echo=click.echo)
-    raise SystemExit(0 if final == "Completed" else 1)
-
-
-@runs.command("resume")
-@click.argument("flow_run_id", type=click.UUID)
-@click.option("--amendment", required=True, help="The commit amending the plan before scoring.")
-@click.option("--scorer", required=True, help="The commit holding the scorer and the records.")
-def resume_command(flow_run_id: UUID, amendment: str, scorer: str) -> None:
-    """Answer a procedure waiting at its gate with two commits, and follow it.
-
-    Both must be on the relay (git push relay). The procedure checks them: if it refuses, it says
-    why and waits again; if it accepts, it runs the scorer and this follows it to the end.
-    """
-    from interpretant.orchestration import submit as submission
-
-    try:
-        commits = [submission.resolve_commit(REPOSITORY, commit) for commit in (amendment, scorer)]
-        final = submission.resume_and_follow(
-            flow_run_id,
-            {"amendment_commit": commits[0], "scorer_commit": commits[1]},
-            echo=click.echo,
-        )
-    except submission.SubmissionError as exc:
-        raise click.ClickException(str(exc)) from exc
-    if final == "Completed":
-        for branch in submission.collect_records(REPOSITORY):
-            click.echo(f"couldn't apply {branch}; cherry-pick it by hand from the relay")
-    elif final == "Paused":
-        click.echo("refused; it waits for other commits (the reason is above)")
     raise SystemExit(0 if final == "Completed" else 1)
 
 

@@ -88,10 +88,7 @@ analysis: predictions first, in their own commit.
   work under its limits with its output in the log file and the Prefect run (`jobs.py`), the
   shared steps (`steps.py`: the run's log file, `dvc pull`/`commit`/`push`, the record commit
   under a git lock), progress published as an artifact (`progress.py`), and
-  `interpretant submit <job>` / `interpretant runs` (`submit.py`, `commands.py`), and the
-  procedures (`procedures.py`: runs of several jobs with the author's pre-registration gates
-  between them, from a clone with only Prefect installed; `usages-audit`, started with
-  `interpretant submit usages-audit` and answered with `interpretant runs resume`). Adding a job:
+  `interpretant submit <job>` / `interpretant runs` (`submit.py`, `commands.py`). Adding a job:
   its `run_<job>` function, a registry entry, a flow, two deployments and its command in
   `commands.JOB_COMMANDS`; `tests/test_orchestration_jobs.py` checks they agree. Needs the
   `orchestration` extra.

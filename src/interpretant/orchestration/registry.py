@@ -1,6 +1,6 @@
 """What Prefect needs to know about each job: its limits, timeout, retries and DVC stage.
 
-Plain data, with no Prefect import, so tests and a slim procedures environment can read it. The
+Plain data, with no Prefect import, so tests and the command line can read it. The
 flows (``flows.py``) take their decorators' settings from here, and ``prefect.yaml`` deploys one
 runner and one local deployment per job named here (``tests/test_orchestration_jobs.py`` checks
 both, and each flow's parameters against its command's options).
