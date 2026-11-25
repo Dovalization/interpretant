@@ -105,6 +105,10 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Review items and adjudication lists quote corpus sentences, in any review folder, including one
+# a runner run drew (whose key and counts come back with its record).
+data/review/**/batch_*.jsonl
+data/review/**/adjudicate*.jsonl
 # The spelling audit's items quote corpus sentences; only the key and the verdicts are committed.
 data/review/spellings/batch_*.jsonl
 data/review/spellings/calibration.json
