@@ -21,6 +21,7 @@ import json
 import os
 import subprocess
 import tempfile
+import threading
 from collections import Counter
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -44,6 +45,10 @@ USAGE_FIELDS = (
 )
 # Runs the command line with a message on its standard input; returns its JSON result.
 Call = Callable[[list[str], str], dict[str, Any]]
+# The command-line calls running now, stopped when the run is interrupted (stop_running_calls): they
+# run in worker threads, which a cancelled run's process would otherwise leave behind
+_running: set[subprocess.Popen[str]] = set()
+_running_lock = threading.Lock()
 
 
 @dataclass(frozen=True)
@@ -97,21 +102,38 @@ def generate_with_claude(arguments: list[str], text: str) -> dict[str, Any]:
     if any(EMPTY_FOLDER.iterdir()):
         raise RuntimeError(f"{EMPTY_FOLDER} must stay empty: files there could reach the judge")
     environment = {name: value for name, value in os.environ.items() if name != API_KEY_VARIABLE}
-    done = subprocess.run(
+    with subprocess.Popen(
         arguments,
-        input=text,
-        capture_output=True,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
         text=True,
         cwd=EMPTY_FOLDER,
         env=environment,
-        timeout=TIMEOUT_SECONDS,
-        check=False,
-    )
+    ) as process:
+        with _running_lock:
+            _running.add(process)
+        try:
+            stdout, stderr = process.communicate(text, timeout=TIMEOUT_SECONDS)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.communicate()
+            raise
+        finally:
+            with _running_lock:
+                _running.discard(process)
     try:
-        result: dict[str, Any] = json.loads(done.stdout)
+        result: dict[str, Any] = json.loads(stdout)
     except json.JSONDecodeError:
-        return {"is_error": True, "result": f"exit {done.returncode}: {done.stderr[-300:]}"}
+        return {"is_error": True, "result": f"exit {process.returncode}: {stderr[-300:]}"}
     return result
+
+
+def stop_running_calls() -> None:
+    """Kill every command-line call still running, so an interrupted run leaves none behind."""
+    with _running_lock:
+        for process in _running:
+            process.kill()
 
 
 def generate_call_answers(
@@ -149,7 +171,8 @@ def generate_verdicts(
     """Judge every part without a verdict file under ``verdicts``, in parallel calls.
 
     A part's file is written once all of its calls have answered; a part with a failed call is
-    reported and left for the next run. Returns this run's usage and failures.
+    reported and left for the next run. An interrupted run (a cancelled Prefect run's termination,
+    Ctrl-C) stops its running calls before it ends. Returns this run's usage and failures.
     """
     verdicts.mkdir(parents=True, exist_ok=True)
     pending = {
@@ -173,21 +196,27 @@ def generate_verdicts(
                 text = render_message(chunk, judging.answers)
                 futures[pool.submit(generate_call_answers, chunk, arguments, text, call)] = part
                 calls_left[part] += 1
-        for future in as_completed(futures):
-            part = futures[future]
-            answers, call_usage, call_models, problem = future.result()
-            usage.update(call_usage)
-            models |= call_models
-            calls_left[part] -= 1
-            if answers is None:
-                failed.setdefault(part, problem)
-            else:
-                answered[part] |= answers
-                progress.advance(len(answers))
-            if calls_left[part] == 0 and part not in failed:
-                path = verdicts / f"{judging.name}_part_{part}.json"
-                path.write_text(json.dumps(answered[part], indent=1, ensure_ascii=False) + "\n")
-                judged += len(answered[part])
+        try:
+            for future in as_completed(futures):
+                part = futures[future]
+                answers, call_usage, call_models, problem = future.result()
+                usage.update(call_usage)
+                models |= call_models
+                calls_left[part] -= 1
+                if answers is None:
+                    failed.setdefault(part, problem)
+                else:
+                    answered[part] |= answers
+                    progress.advance(len(answers))
+                if calls_left[part] == 0 and part not in failed:
+                    path = verdicts / f"{judging.name}_part_{part}.json"
+                    path.write_text(json.dumps(answered[part], indent=1, ensure_ascii=False) + "\n")
+                    judged += len(answered[part])
+        except BaseException:
+            for future in futures:
+                future.cancel()
+            stop_running_calls()
+            raise
     return {"judged": judged, "tokens": dict(usage), "models": sorted(models), "failed": failed}
 
 

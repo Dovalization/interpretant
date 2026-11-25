@@ -5,6 +5,8 @@ from __future__ import annotations
 import itertools
 import json
 import sys
+import threading
+import time
 from pathlib import Path
 from typing import Any
 
@@ -183,3 +185,57 @@ def test_the_command_line_never_sees_the_api_key(
     result = judge_cli.generate_with_claude([sys.executable, "-c", probe], "")
 
     assert result == {"key": None}
+
+
+def test_a_running_call_is_stopped_when_asked(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(judge_cli, "EMPTY_FOLDER", tmp_path / "empty")
+    results: list[dict[str, Any]] = []
+    caller = threading.Thread(
+        target=lambda: results.append(
+            judge_cli.generate_with_claude(
+                [sys.executable, "-c", "import time; time.sleep(60)"], ""
+            )
+        )
+    )
+    caller.start()
+    deadline = time.monotonic() + 10
+    while not judge_cli._running and time.monotonic() < deadline:
+        time.sleep(0.05)
+
+    judge_cli.stop_running_calls()
+    caller.join(timeout=10)
+
+    assert not caller.is_alive()
+    assert results[0]["is_error"]
+
+
+def test_an_interrupted_run_stops_its_calls(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    stopped: list[bool] = []
+    monkeypatch.setattr(judge_cli, "stop_running_calls", lambda: stopped.append(True))
+    _, call = answering()
+
+    class Interrupting:
+        def stage(self, name: str, total: int | None = None) -> None:
+            del name, total
+
+        def advance(self, amount: int = 1) -> None:
+            raise KeyboardInterrupt
+
+        def skip(self, amount: int) -> None:
+            del amount
+
+    parts = {"00": [item("a"), item("b")]}
+    with pytest.raises(KeyboardInterrupt):
+        judge_cli.generate_verdicts(
+            parts,
+            options(tmp_path, items_per_call=1),
+            tmp_path / "v",
+            call,
+            progress=Interrupting(),
+        )
+
+    assert stopped == [True]
