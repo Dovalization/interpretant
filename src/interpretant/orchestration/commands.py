@@ -12,9 +12,37 @@ from uuid import UUID
 
 import click
 
+from interpretant.cli.annotate_corpus import annotate_corpus_command
+from interpretant.cli.build_corpus import build_corpus_command
+from interpretant.cli.build_linked_tables import build_linked_tables_command
+from interpretant.cli.build_sentence_view import build_sentence_view_command
+from interpretant.cli.build_static_view import build_static_view_command
+from interpretant.cli.build_usages import build_usages_command
+from interpretant.cli.clean_corpus import clean_corpus_command
+from interpretant.cli.count_word_repairs import count_word_repairs_command
+from interpretant.cli.detect_languages import detect_languages_command
+from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
+from interpretant.cli.fetch_metadata import fetch_metadata_command
+from interpretant.cli.report_corpus import report_corpus_command
+from interpretant.orchestration.registry import JOBS
 from interpretant.orchestration.steps import Role
 
 REPOSITORY = Path(__file__).resolve().parents[3]
+# The jobs' own commands, whose options their submissions take (but --catalog)
+JOB_COMMANDS: tuple[click.Command, ...] = (
+    build_linked_tables_command,
+    count_word_repairs_command,
+    annotate_corpus_command,
+    detect_languages_command,
+    clean_corpus_command,
+    build_corpus_command,
+    report_corpus_command,
+    build_static_view_command,
+    build_sentence_view_command,
+    build_usages_command,
+    fetch_metadata_command,
+    fetch_linked_sources_command,
+)
 
 
 @click.group()
@@ -56,6 +84,50 @@ def submit_command(
         "push_outputs": push_outputs,
     }
     _submit_and_follow(context.obj, "command", parameters)
+
+
+def build_job_submission(command: click.Command) -> click.Command:
+    """The ``interpretant submit <job>`` command for a job's own command.
+
+    It takes the job's options, ``--pull``, and for a DVC stage ``--save-outputs``; their values
+    are the job's flow's parameters, by name.
+    """
+    assert command.name is not None
+    job = JOBS[command.name]
+    options = [param for param in command.params if param.name != "catalog_file"]
+    options.append(
+        click.Option(
+            ["--pull"], multiple=True, help="A DVC-tracked path to pull first (repeatable)."
+        )
+    )
+    if job.stage is not None:
+        options.append(
+            click.Option(
+                ["--save-outputs"],
+                is_flag=True,
+                help=f"After the run, record the outputs in dvc.lock (dvc commit {job.stage}) and push them.",  # noqa: E501
+            )
+        )
+
+    @click.pass_context
+    def submit_job(context: click.Context, /, **values: object) -> None:
+        parameters = {
+            name: list(value) if isinstance(value, tuple) else value
+            for name, value in values.items()
+        }
+        _submit_and_follow(context.obj, job.name, parameters)
+
+    return click.Command(
+        job.name,
+        params=options,
+        callback=submit_job,
+        help=command.help,
+        short_help=command.get_short_help_str(),
+    )
+
+
+for _command in JOB_COMMANDS:
+    submit.add_command(build_job_submission(_command))
 
 
 @click.group()

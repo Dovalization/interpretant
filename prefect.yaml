@@ -9,6 +9,7 @@ prefect-version: 3.9.3
 definitions:
   roles:
     runner: &runner
+      tags: [interpretant]
       work_pool:
         name: "{{ prefect.variables.interpretant_runner_pool }}"
         # One run at a time in the runner's one checkout: two commits can't be checked out at once
@@ -31,6 +32,7 @@ definitions:
               git checkout --quiet --detach "${INTERPRETANT_COMMIT:-relay/main}"
               uv sync --check --locked --inexact --extra orchestration --extra gpu --extra labels >/dev/null 2>&1 || { echo "the runner's environment doesn't match uv.lock; run there: uv sync --locked --extra orchestration --extra gpu --extra labels" >&2; exit 1; }
     local: &local
+      tags: [interpretant]
       work_pool:
         name: "{{ prefect.variables.interpretant_local_pool }}"
         job_variables:
@@ -49,5 +51,149 @@ deployments:
   - name: local
     description: Any command in the local checkout as it is
     entrypoint: src/interpretant/orchestration/flows.py:run_command
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Write the staging tables of OpenAlex, Crossref and PubMed works from the raw files, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:build_linked_tables
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Write the staging tables of OpenAlex, Crossref and PubMed works from the raw files, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:build_linked_tables
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Count the word repairs and write the repaired texts the spaCy pass reads, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:count_word_repairs
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Count the word repairs and write the repaired texts the spaCy pass reads, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:count_word_repairs
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Annotate the selected cells with spaCy (stage 2), part by part, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:annotate_corpus
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Annotate the selected cells with spaCy (stage 2), part by part, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:annotate_corpus
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Give each sentence its language with lingua, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:detect_languages
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Give each sentence its language with lingua, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:detect_languages
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Apply the cleaning rules to the annotated abstracts, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:clean_corpus
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Apply the cleaning rules to the annotated abstracts, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:clean_corpus
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Apply the corpus-level rules to every part and write the abstracts table (stage 3), on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:build_corpus
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Apply the corpus-level rules to every part and write the abstracts table (stage 3), in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:build_corpus
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Write the corpus report and its metrics, read before the review (4b), on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:report_corpus
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Write the corpus report and its metrics, read before the review (4b), in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:report_corpus
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Write the static view: lemma exceptions, then the spelling and compound maps applied, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:build_static_view
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Write the static view: lemma exceptions, then the spelling and compound maps applied, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:build_static_view
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Write the sentence view, with the sentence cuts repaired, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:build_sentence_view
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Write the sentence view, with the sentence cuts repaired, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:build_sentence_view
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Find the targets' mentions and write their usages, on the GPU (decision agenda 4.1-4.6), on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:build_usages
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Find the targets' mentions and write their usages, on the GPU (decision agenda 4.1-4.6), in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:build_usages
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Fetch OpenAlex's record of every raw work, resuming where it stopped, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:fetch_metadata
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Fetch OpenAlex's record of every raw work, resuming where it stopped, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:fetch_metadata
+    parameters: {role: local}
+    <<: *local
+
+  - name: runner
+    description: "Look each raw work up in Crossref and PubMed, resuming where it stopped, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:fetch_linked_sources
+    parameters: {role: runner}
+    <<: *runner
+
+  - name: local
+    description: "Look each raw work up in Crossref and PubMed, resuming where it stopped, in the local checkout as it is"
+    entrypoint: src/interpretant/orchestration/flows.py:fetch_linked_sources
     parameters: {role: local}
     <<: *local

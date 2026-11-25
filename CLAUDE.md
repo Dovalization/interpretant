@@ -79,10 +79,18 @@ analysis: predictions first, in their own commit.
   two corpus stages share.
   Import contracts: `__main__` → `orchestration` → `cli` → `pipelines` → `review` → `corpus` →
   `catalog`; only `orchestration` may import Prefect.
-- `orchestration/`: the long jobs as Prefect flows (`flows.py`, deployed by `prefect.yaml` on the
-  runner and locally), their shared steps (`steps.py`: the run's log file, `dvc pull`/`push`, the
-  record commit under a git lock), progress published as an artifact (`progress.py`), and
-  `interpretant submit` / `interpretant runs` (`submit.py`, `commands.py`). Needs the
+  Each job's command module has a `run_<job>` function doing its work (options to pipeline call,
+  printed result, counts for the run log); the command runs it through `cli/jobs.py`
+  (`run_on_command_line`) and a Prefect flow runs the same function.
+- `orchestration/`: the long jobs as Prefect flows, one per job (`flows.py`, deployed by
+  `prefect.yaml` on the runner and locally; each flow's parameters are its command's options),
+  each job's limits, timeout, retries and DVC stage (`registry.py`, Prefect-free), running a job's
+  work under its limits with its output in the log file and the Prefect run (`jobs.py`), the
+  shared steps (`steps.py`: the run's log file, `dvc pull`/`commit`/`push`, the record commit
+  under a git lock), progress published as an artifact (`progress.py`), and
+  `interpretant submit <job>` / `interpretant runs` (`submit.py`, `commands.py`). Adding a job:
+  its `run_<job>` function, a registry entry, a flow, two deployments and its command in
+  `commands.JOB_COMMANDS`; `tests/test_orchestration_jobs.py` checks they agree. Needs the
   `orchestration` extra.
 - `review/` (rebuild): the corpus review (4b): `corpus_report.py` (what each rule dropped,
   removed and flagged, by decade, field and repository; rendered as Markdown by Polars).
