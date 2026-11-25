@@ -7,14 +7,13 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.cli.options import default_process_count, process_count_option
-from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_language_result
 from interpretant.pipelines.detect_languages import DetectLanguagesSettings, detect_languages
 from interpretant.pipelines.params import CorpusSelection
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 
 @click.command("detect-languages")
@@ -33,17 +32,25 @@ def detect_languages_command(catalog_file: Path, process_count: int | None) -> N
     Each worker process takes whole parts. Progress is shown live: a bar in a terminal, a line
     every half minute in a log file.
     """
-    console = Console()
-    catalog = read_catalog(catalog_file)
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        result = detect_languages(
-            catalog,
-            CorpusSelection(),
-            DetectLanguagesSettings(),
-            process_count=process_count or default_process_count(),
-            progress=timer,
-        )
-    counts = {"abstracts": result.abstract_count, "sentences": sum(result.sentence_counts.values())}
-    record_run(catalog, command="detect-languages", stages=timer.finish(), counts=counts)
+    run_on_command_line(
+        "detect-languages",
+        catalog_file,
+        lambda catalog, progress, console: run_detect_languages(
+            catalog, process_count, progress=progress, console=console
+        ),
+    )
+
+
+def run_detect_languages(
+    catalog: CatalogConfig, process_count: int | None, *, progress: Progress, console: Console
+) -> dict[str, int]:
+    """Detect each sentence's language; the abstracts and sentences for the run log."""
+    result = detect_languages(
+        catalog,
+        CorpusSelection(),
+        DetectLanguagesSettings(),
+        process_count=process_count or default_process_count(),
+        progress=progress,
+    )
     console.print(render_language_result(result))
+    return {"abstracts": result.abstract_count, "sentences": sum(result.sentence_counts.values())}

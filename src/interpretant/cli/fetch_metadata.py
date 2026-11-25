@@ -8,8 +8,8 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
-from interpretant.cli.progress import LiveProgress
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.pipelines.fetch_metadata import (
     OpenAlexSettings,
     count_works,
@@ -17,8 +17,7 @@ from interpretant.pipelines.fetch_metadata import (
     openalex_fetcher,
     select_raw_cells,
 )
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 
 @click.command("fetch-metadata")
@@ -55,19 +54,34 @@ def fetch_metadata_command(
     About one request per 100 works, inside the API key's free daily budget for the regular
     samples. Progress is shown live, and one line is printed per cell as it finishes.
     """
-    catalog = read_catalog(catalog_file)
+    run_on_command_line(
+        "fetch-metadata",
+        catalog_file,
+        lambda catalog, progress, console: run_fetch_metadata(
+            catalog, fields, decades, workers, progress=progress, console=console
+        ),
+    )
+
+
+def run_fetch_metadata(
+    catalog: CatalogConfig,
+    fields: tuple[str, ...],
+    decades: tuple[int, ...],
+    workers: int,
+    *,
+    progress: Progress,
+    console: Console,
+) -> dict[str, int]:
+    """Fetch the selected cells' metadata, printing a line per cell; the works for the run log."""
     cells = select_raw_cells(catalog, fields=fields, decades=decades)
     fetch = openalex_fetcher(OpenAlexSettings(), today=date.today())
-    console = Console()
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        timer.stage("counting the raw works")
-        total = count_works(catalog, cells)
-        timer.stage("fetching metadata", total=total)
-        for number, cell in enumerate(cells, start=1):
-            result = fetch_cell_metadata(catalog, cell, fetch, workers=workers, progress=timer)
-            console.print(
-                f"[{number}/{len(cells)}] {cell.field} {cell.decade}: {result.fetched:,} "
-                f"fetched, {result.missing:,} missing, {result.already_fetched:,} already there"
-            )
-    record_run(catalog, command="fetch-metadata", stages=timer.finish(), counts={"works": total})
+    progress.stage("counting the raw works")
+    total = count_works(catalog, cells)
+    progress.stage("fetching metadata", total=total)
+    for number, cell in enumerate(cells, start=1):
+        result = fetch_cell_metadata(catalog, cell, fetch, workers=workers, progress=progress)
+        console.print(
+            f"[{number}/{len(cells)}] {cell.field} {cell.decade}: {result.fetched:,} "
+            f"fetched, {result.missing:,} missing, {result.already_fetched:,} already there"
+        )
+    return {"works": total}

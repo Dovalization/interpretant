@@ -7,14 +7,13 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.cli.options import default_process_count, process_count_option
-from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_result, result_counts
 from interpretant.pipelines.build_corpus import BuildCorpusSettings, build_corpus
 from interpretant.pipelines.params import CorpusSelection
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 
 @click.command("build-corpus")
@@ -32,16 +31,25 @@ def build_corpus_command(catalog_file: Path, process_count: int | None) -> None:
 
     Progress is shown live: a bar in a terminal, a line every half minute in a log file.
     """
-    console = Console()
-    catalog = read_catalog(catalog_file)
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        result = build_corpus(
-            catalog,
-            CorpusSelection(),
-            BuildCorpusSettings(),
-            process_count=process_count or default_process_count(),
-            progress=timer,
-        )
-    record_run(catalog, command="build-corpus", stages=timer.finish(), counts=result_counts(result))
+    run_on_command_line(
+        "build-corpus",
+        catalog_file,
+        lambda catalog, progress, console: run_build_corpus(
+            catalog, process_count, progress=progress, console=console
+        ),
+    )
+
+
+def run_build_corpus(
+    catalog: CatalogConfig, process_count: int | None, *, progress: Progress, console: Console
+) -> dict[str, int]:
+    """Build the corpus from the annotated parts; its headline counts for the run log."""
+    result = build_corpus(
+        catalog,
+        CorpusSelection(),
+        BuildCorpusSettings(),
+        process_count=process_count or default_process_count(),
+        progress=progress,
+    )
     console.print(render_result(result))
+    return result_counts(result)

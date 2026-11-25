@@ -9,9 +9,9 @@ import click
 from rich.console import Console
 from rich.table import Table
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.cli.options import default_process_count, process_count_option
-from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.build_usages import (
     BATCH_TOKENS,
     UsagesResult,
@@ -19,8 +19,7 @@ from interpretant.pipelines.build_usages import (
     build_usages,
 )
 from interpretant.pipelines.params import CorpusSelection
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 COUNT_LABELS = {
     "mentions": "Mentions",
@@ -104,28 +103,56 @@ def build_usages_command(
     Each worker process takes whole parts. Progress is shown live: a bar in a terminal, a line
     every half minute in a log file.
     """
-    console = Console()
-    catalog = read_catalog(catalog_file)
+    run_on_command_line(
+        "build-usages",
+        catalog_file,
+        lambda catalog, progress, console: run_build_usages(
+            catalog,
+            fields,
+            decades,
+            gpu_process_count,
+            batch_tokens,
+            process_count,
+            resume=resume,
+            reuse_cache=reuse_cache,
+            progress=progress,
+            console=console,
+        ),
+    )
+
+
+def run_build_usages(
+    catalog: CatalogConfig,
+    fields: tuple[str, ...],
+    decades: tuple[int, ...],
+    gpu_process_count: int,
+    batch_tokens: int,
+    process_count: int | None,
+    *,
+    resume: bool,
+    reuse_cache: bool,
+    progress: Progress,
+    console: Console,
+) -> dict[str, int]:
+    """Write the usages of the selected cells; the mentions and usages for the run log."""
     overrides: dict[str, Any] = {}  # only the options given override params.yaml
     if fields:
         overrides["fields"] = fields
     if decades:
         overrides["decades"] = decades
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        result = build_usages(
-            catalog,
-            CorpusSelection(**overrides),
-            UsagesSettings(),
-            process_count=process_count or default_process_count(),
-            gpu_process_count=gpu_process_count,
-            batch_tokens=batch_tokens,
-            resume=resume,
-            reuse_cache=reuse_cache,
-            progress=timer,
-        )
-    record_run(catalog, command="build-usages", stages=timer.finish(), counts=result.counts)
+    result = build_usages(
+        catalog,
+        CorpusSelection(**overrides),
+        UsagesSettings(),
+        process_count=process_count or default_process_count(),
+        gpu_process_count=gpu_process_count,
+        batch_tokens=batch_tokens,
+        resume=resume,
+        reuse_cache=reuse_cache,
+        progress=progress,
+    )
     console.print(render_usages_result(result))
+    return dict(result.counts)
 
 
 def render_usages_result(result: UsagesResult) -> Table:

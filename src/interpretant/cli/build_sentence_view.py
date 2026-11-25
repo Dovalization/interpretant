@@ -8,12 +8,11 @@ import click
 from rich.console import Console
 from rich.table import Table
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.cli.options import default_process_count, process_count_option
-from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.build_sentence_view import SentenceViewResult, build_sentence_view
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 
 @click.command("build-sentence-view")
@@ -36,14 +35,24 @@ def build_sentence_view_command(catalog_file: Path, process_count: int | None) -
     Each worker process takes whole parts. Progress is shown live: a bar in a terminal, a line
     every half minute in a log file.
     """
-    console = Console()
-    catalog = read_catalog(catalog_file)
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        result = build_sentence_view(
-            catalog, process_count=process_count or default_process_count(), progress=timer
-        )
-    counts = {
+    run_on_command_line(
+        "build-sentence-view",
+        catalog_file,
+        lambda catalog, progress, console: run_build_sentence_view(
+            catalog, process_count, progress=progress, console=console
+        ),
+    )
+
+
+def run_build_sentence_view(
+    catalog: CatalogConfig, process_count: int | None, *, progress: Progress, console: Console
+) -> dict[str, int]:
+    """Write the sentence view; its works, sentences and repairs for the run log."""
+    result = build_sentence_view(
+        catalog, process_count=process_count or default_process_count(), progress=progress
+    )
+    console.print(render_sentence_view_result(result))
+    return {
         "works": result.work_count,
         "sentences": result.sentence_count,
         "joined": result.joined_count,
@@ -51,8 +60,6 @@ def build_sentence_view_command(catalog_file: Path, process_count: int | None) -
         "removed": result.removed_count,
         "cut_off": result.cut_off_count,
     }
-    record_run(catalog, command="build-sentence-view", stages=timer.finish(), counts=counts)
-    console.print(render_sentence_view_result(result))
 
 
 def render_sentence_view_result(result: SentenceViewResult) -> Table:

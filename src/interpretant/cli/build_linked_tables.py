@@ -7,11 +7,10 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
-from interpretant.cli.progress import LiveProgress
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.pipelines.build_linked_tables import build_linked_tables
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 
 @click.command("build-linked-tables")
@@ -25,15 +24,26 @@ from interpretant.pipelines.runs import record_run
 )
 def build_linked_tables_command(catalog_file: Path) -> None:
     """Build one checked table per source (OpenAlex, Crossref, PubMed), keyed by work id."""
-    console = Console()
-    catalog = read_catalog(catalog_file)
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        result = build_linked_tables(catalog, progress=timer)
-    counts = {"openalex_works": result.openalex, "crossref_works": result.crossref}
-    counts["pubmed_works"] = result.pubmed
-    record_run(catalog, command="build-linked-tables", stages=timer.finish(), counts=counts)
+    run_on_command_line(
+        "build-linked-tables",
+        catalog_file,
+        lambda catalog, progress, console: run_build_linked_tables(
+            catalog, progress=progress, console=console
+        ),
+    )
+
+
+def run_build_linked_tables(
+    catalog: CatalogConfig, *, progress: Progress, console: Console
+) -> dict[str, int]:
+    """Write the three staging tables; their works for the run log."""
+    result = build_linked_tables(catalog, progress=progress)
     console.print(
         f"Staging tables written: {result.openalex:,} OpenAlex, {result.crossref:,} Crossref and "
         f"{result.pubmed:,} PubMed works"
     )
+    return {
+        "openalex_works": result.openalex,
+        "crossref_works": result.crossref,
+        "pubmed_works": result.pubmed,
+    }

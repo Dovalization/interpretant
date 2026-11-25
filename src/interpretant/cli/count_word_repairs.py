@@ -7,14 +7,13 @@ from pathlib import Path
 import click
 from rich.console import Console
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.cli.options import default_process_count, process_count_option
-from interpretant.cli.progress import LiveProgress
 from interpretant.cli.results import render_word_repairs_result
 from interpretant.pipelines.count_word_repairs import CountWordRepairsSettings, count_word_repairs
 from interpretant.pipelines.params import CorpusSelection
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 
 @click.command("count-word-repairs")
@@ -33,18 +32,28 @@ def count_word_repairs_command(catalog_file: Path, process_count: int | None) ->
     The settings come from params.yaml and the kept-joined words from the curated file. Progress
     is shown live: a bar in a terminal, a line every half minute in a log file.
     """
-    console = Console()
-    catalog = read_catalog(catalog_file)
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        result = count_word_repairs(
-            catalog,
-            CorpusSelection(),
-            CountWordRepairsSettings(),
-            process_count=process_count or default_process_count(),
-            progress=timer,
-        )
-    counts = {
+    run_on_command_line(
+        "count-word-repairs",
+        catalog_file,
+        lambda catalog, progress, console: run_count_word_repairs(
+            catalog, process_count, progress=progress, console=console
+        ),
+    )
+
+
+def run_count_word_repairs(
+    catalog: CatalogConfig, process_count: int | None, *, progress: Progress, console: Console
+) -> dict[str, int]:
+    """Count the word repairs and write the repaired texts; the counts for the run log."""
+    result = count_word_repairs(
+        catalog,
+        CorpusSelection(),
+        CountWordRepairsSettings(),
+        process_count=process_count or default_process_count(),
+        progress=progress,
+    )
+    console.print(render_word_repairs_result(result))
+    return {
         "abstracts": result.abstract_count,
         "glued_words": result.glued_word_count,
         "glued_words_split": sum(result.glued_split_counts.values()),
@@ -53,5 +62,3 @@ def count_word_repairs_command(catalog_file: Path, process_count: int | None) ->
         "split_words_joined": result.split_joined_count,
         "split_join_occurrences": result.split_join_occurrences,
     }
-    record_run(catalog, command="count-word-repairs", stages=timer.finish(), counts=counts)
-    console.print(render_word_repairs_result(result))

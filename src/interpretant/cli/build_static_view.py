@@ -8,13 +8,12 @@ import click
 from rich.console import Console
 from rich.table import Table
 
-from interpretant.catalog.config import CATALOG_FILE, read_catalog
+from interpretant.catalog.config import CATALOG_FILE, CatalogConfig
+from interpretant.cli.jobs import run_on_command_line
 from interpretant.cli.options import default_process_count, process_count_option
-from interpretant.cli.progress import LiveProgress
 from interpretant.pipelines.build_static_view import StaticViewResult, build_static_view
 from interpretant.pipelines.params import CorpusSelection
-from interpretant.pipelines.progress import StageTimer
-from interpretant.pipelines.runs import record_run
+from interpretant.pipelines.progress import Progress
 
 
 @click.command("build-static-view")
@@ -36,25 +35,33 @@ def build_static_view_command(catalog_file: Path, process_count: int | None) -> 
     Each worker process takes whole parts. Progress is shown live: a bar in a terminal, a line
     every half minute in a log file.
     """
-    console = Console()
-    catalog = read_catalog(catalog_file)
-    with LiveProgress(console) as live:
-        timer = StageTimer(live)
-        result = build_static_view(
-            catalog,
-            CorpusSelection(),
-            process_count=process_count or default_process_count(),
-            progress=timer,
-        )
-    counts = {
+    run_on_command_line(
+        "build-static-view",
+        catalog_file,
+        lambda catalog, progress, console: run_build_static_view(
+            catalog, process_count, progress=progress, console=console
+        ),
+    )
+
+
+def run_build_static_view(
+    catalog: CatalogConfig, process_count: int | None, *, progress: Progress, console: Console
+) -> dict[str, int]:
+    """Write the static view; its documents, tokens and maps applied for the run log."""
+    result = build_static_view(
+        catalog,
+        CorpusSelection(),
+        process_count=process_count or default_process_count(),
+        progress=progress,
+    )
+    console.print(render_static_view_result(result))
+    return {
         "documents": result.document_count,
         "tokens": result.token_count,
         "lemma_exceptions": result.exception_count,
         "spellings": result.spelling_count,
         "compounds": result.compound_count,
     }
-    record_run(catalog, command="build-static-view", stages=timer.finish(), counts=counts)
-    console.print(render_static_view_result(result))
 
 
 def render_static_view_result(result: StaticViewResult) -> Table:
