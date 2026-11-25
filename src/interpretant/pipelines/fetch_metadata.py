@@ -13,7 +13,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date
 from functools import partial
-from pathlib import Path
 from typing import Any
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -26,9 +25,8 @@ from interpretant.corpus.work_metadata import (
     configure_openalex,
     fetch_work_metadata,
 )
+from interpretant.pipelines.params import ENV_FILE
 from interpretant.pipelines.progress import SILENT, Progress
-
-ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
 
 Fetcher = Callable[[Sequence[str]], list[dict[str, Any]]]
 

@@ -17,6 +17,8 @@ from pydantic_settings import (
 )
 
 PARAMS_FILE = Path(__file__).resolve().parents[3] / "params.yaml"
+# The checkout's secrets (API keys), read by the settings that need them; never the shell's
+ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
 
 
 class ParamsSettings(BaseSettings):

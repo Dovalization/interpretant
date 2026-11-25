@@ -20,7 +20,6 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import date
 from functools import partial
-from pathlib import Path
 from typing import Any
 
 from Bio.Entrez.Parser import CorruptedXMLError
@@ -50,9 +49,9 @@ from interpretant.corpus.pubmed import (
     select_pubmed_works,
 )
 from interpretant.corpus.work_metadata import correct_dois
+from interpretant.pipelines.params import ENV_FILE
 from interpretant.pipelines.progress import SILENT, Progress
 
-ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
 TOOL_NAME = "interpretant"
 # Statuses worth asking again after a pause: rate limiting and the server's own failures.
 TRANSIENT_STATUSES = frozenset({429, 500, 502, 503, 504})
