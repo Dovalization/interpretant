@@ -35,6 +35,7 @@ from interpretant.cli.report_corpus import run_report_corpus
 from interpretant.orchestration.jobs import run_job
 from interpretant.orchestration.registry import JOBS
 from interpretant.orchestration.steps import (
+    build_checkout_environment,
     capture_checkout_state,
     commit_record,
     open_run_log,
@@ -84,12 +85,10 @@ def run_command(
 @task(name="run")
 def run_and_copy_output(command: Sequence[str], *, root: Path) -> None:
     """Run the command, copying each line of its output to the log file and the Prefect run."""
-    # The checkout's environment first, as on its command line: `interpretant`, `dvc`, `python`
-    path = f"{root / '.venv' / 'bin'}{os.pathsep}{os.environ.get('PATH', '')}"
     with subprocess.Popen(
         list(command),
         cwd=root,
-        env={**os.environ, "PATH": path},
+        env=build_checkout_environment(root),
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,

@@ -450,3 +450,15 @@ def test_collecting_applies_every_record_left_on_github(github: Path, tmp_path: 
     log = (mac / "metrics" / "runs.jsonl").read_text()
     assert '"first-run"' in log and '"second-run"' in log
     assert git(mac, "ls-remote", "origin", "refs/heads/runs/*") == ""
+
+
+def test_the_dvc_steps_use_the_checkouts_own_dvc(tmp_path: Path) -> None:
+    """The worker's PATH doesn't hold the checkout's venv, where its `dvc` is."""
+    tools = tmp_path / ".venv" / "bin"
+    tools.mkdir(parents=True)
+    (tools / "dvc").write_text('#!/bin/sh\necho "$@" > called-with\n')
+    (tools / "dvc").chmod(0o755)
+
+    steps.push_data.fn(["a_stage"], root=tmp_path)
+
+    assert (tmp_path / "called-with").read_text() == "push a_stage\n"

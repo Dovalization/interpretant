@@ -207,6 +207,18 @@ def _git(root: Path, *arguments: str) -> str:
     return completed.stdout.strip()
 
 
+def build_checkout_environment(root: Path) -> dict[str, str]:
+    """This process's environment with the checkout's tools first, as on its command line.
+
+    The worker's own PATH doesn't hold the checkout's venv, where `interpretant`, `dvc` and its
+    `python` are.
+    """
+    return {
+        **os.environ,
+        "PATH": f"{root / '.venv' / 'bin'}{os.pathsep}{os.environ.get('PATH', '')}",
+    }
+
+
 def _run(command: Sequence[str], root: Path) -> None:
-    """Run a command with its output in this process's output (the run's log file)."""
-    subprocess.run(command, cwd=root, check=True)
+    """Run a checkout tool with its output in this process's output (the run's log file)."""
+    subprocess.run(command, cwd=root, env=build_checkout_environment(root), check=True)
