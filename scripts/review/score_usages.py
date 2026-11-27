@@ -40,7 +40,11 @@ from typing import Any
 
 import numpy as np
 
-from interpretant.pipelines.preregistration import PreregistrationError, check_scoring
+from interpretant.pipelines.preregistration import (
+    USAGES_AUDIT,
+    PreregistrationError,
+    check_scoring,
+)
 from interpretant.review import verdicts
 from interpretant.review.sampling_plans import (
     ConfusionMatrix,
@@ -351,9 +355,9 @@ def main() -> None:
     if options.amendment is None:
         parser.error("score needs --amendment: the commit that last changed the plan")
     try:
-        check_scoring(Path.cwd(), audit, options.amendment, options.calibration)
-    except PreregistrationError as error:
-        raise SystemExit(f"not scored: {error}") from error
+        check_scoring(USAGES_AUDIT, Path.cwd(), audit, options.amendment, options.calibration)
+    except PreregistrationError as exc:
+        raise SystemExit(f"not scored: {exc}") from exc
     results = score(audit, key, options.calibration)
     (audit / "results.json").write_text(json.dumps(results, indent=1) + "\n")
     precision, scope, recall = results["precision"], results["scope"], results["recall"]
