@@ -149,8 +149,10 @@ def generate_verdicts(
 ) -> dict[str, Any]:
     """Judge every item not yet in ``verdicts`` within the cap; the manifest of the run.
 
-    The verdicts are saved to ``out`` after each chunk.
+    The verdicts are saved to ``out`` after each chunk. Its folder is made before any batch is
+    sent, so a missing folder can't fail the run after the batch has been paid for.
     """
+    out.parent.mkdir(parents=True, exist_ok=True)
     codebook = judging.codebook.read_text()
     system = [
         {"type": "text", "text": codebook, "cache_control": {"type": "ephemeral", "ttl": "1h"}}

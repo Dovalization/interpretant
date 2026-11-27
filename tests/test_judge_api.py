@@ -160,6 +160,14 @@ def test_judge_skips_items_already_judged_and_sends_the_cached_codebook(tmp_path
     assert "Target word: network" in params["messages"][0]["content"]
 
 
+def test_judge_saves_its_verdicts_in_a_folder_that_does_not_exist_yet(tmp_path: Path) -> None:
+    answer = json.dumps({"verdict": "right", "reason": "none", "note": "a use"})
+    client = FakeClient([[succeeded("U1", answer)]])
+    out = tmp_path / "verdicts" / "judge_A.json"
+    judge.generate_verdicts([item("U1")], options(tmp_path), client, {}, out)
+    assert list(json.loads(out.read_text())) == ["U1"]
+
+
 def test_thinking_off_asks_for_an_answer_without_reasoning(tmp_path: Path) -> None:
     settings = options(tmp_path)
     system = [{"type": "text", "text": "codebook"}]
