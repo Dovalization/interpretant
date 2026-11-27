@@ -1,21 +1,21 @@
 {
  "records": 197,
- "judges_agreed": 198,
+ "judges_agreed": 200,
  "bars": {
   "agreement": {
-   "count": 192,
+   "count": 193,
    "of": 197,
    "bar": 178,
    "passes": true
   },
   "junk_found": {
-   "count": 28,
+   "count": 27,
    "of": 31,
    "bar": 27,
    "passes": true
   },
   "abstracts_called_junk": {
-   "count": 2,
+   "count": 0,
    "of": 166,
    "bar": 6,
    "passes": true
@@ -23,20 +23,19 @@
  },
  "passes": true,
  "disputed": [
+  "r023",
   "r135",
   "r148",
-  "r170",
-  "r173",
-  "r182"
+  "r173"
  ],
  "second_look": {
   "records": 197,
   "second_looks": 5,
   "confusion": {
-   "true_positives": 28,
-   "false_negatives": 0,
-   "false_positives": 2,
-   "true_negatives": 167
+   "true_positives": 27,
+   "false_negatives": 1,
+   "false_positives": 0,
+   "true_negatives": 169
   }
  }
 }
