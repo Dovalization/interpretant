@@ -28,5 +28,15 @@
   "r170",
   "r173",
   "r182"
- ]
+ ],
+ "second_look": {
+  "records": 197,
+  "second_looks": 5,
+  "confusion": {
+   "true_positives": 28,
+   "false_negatives": 0,
+   "false_positives": 2,
+   "true_negatives": 167
+  }
+ }
 }
