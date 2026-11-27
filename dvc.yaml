@@ -292,6 +292,74 @@ stages:
     outs:
       - ${record_vectors.path}
 
+  # The junk gate's classifier and screen (docs/junk_gate.md): every record behind a drawn usage
+  # scored, every drawn usage's OCR score, and the cells the screen flags for the judges. The
+  # labels are git-tracked; the words file and the held-out file give the reported names.
+  build_junk_gate:
+    cmd: interpretant build-junk-gate
+    deps:
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/junk_gate.py
+      - src/interpretant/catalog/junk_gate_tables.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/record_vectors.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/sentence_view.py
+      - src/interpretant/catalog/staging.py
+      - src/interpretant/catalog/static_view.py
+      - src/interpretant/catalog/usages.py
+      - src/interpretant/catalog/words.py
+      - src/interpretant/cli/build_junk_gate.py
+      - src/interpretant/corpus/cell_versions.py
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/dictionary.py
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/removals.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/sentence_view.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/drift/grid.py
+      - src/interpretant/drift/metrics.py
+      - src/interpretant/drift/stability.py
+      - src/interpretant/embedding/base.py
+      - src/interpretant/embedding/ppmi.py
+      - src/interpretant/pipelines/build_junk_gate.py
+      - src/interpretant/pipelines/cleaning_sensitivity.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/workers.py
+      - src/interpretant/review/junk_classifier.py
+      - src/interpretant/review/junk_gate.py
+      - src/interpretant/review/junk_rules.py
+      - src/interpretant/review/ocr_damage.py
+      - src/interpretant/review/sampling_plans.py
+      - src/interpretant/review/usages_audit.py
+      - src/interpretant/usages/identifiers.py
+      - ${usages.path}
+      - ${abstracts.path}
+      - ${static_view.path}
+      - ${record_vectors.path}
+      - ${junk_labels.path}
+      - ${openalex_works.path}
+      - ${words.path}
+      - ${held_out_words.path}
+    params:
+      - junk_gate.classifier
+      - junk_gate.screen
+      - junk_gate.ocr
+    outs:
+      - ${junk_scores.path}
+      - ${usage_ocr_scores.path}
+      - ${junk_cells.path}
+      - ${junk_classifier.path}
+    metrics:
+      # Kept in git, with words by their reported names only
+      - ${junk_gate_metrics.path}:
+          cache: false
+
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:

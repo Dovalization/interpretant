@@ -59,11 +59,11 @@ SPECIFICITY_BAR = 0.97
 LIST_SEPARATOR = ".-"
 FINAL_STOPS = (".", "?", "!")
 # A word is a run of letters: digits, underscores and punctuation split words
-_WORD = re.compile(r"[^\W\d_]+")
+WORD = re.compile(r"[^\W\d_]+")
 # A sentence ends at a full stop, question mark or exclamation mark followed by a space
 _SENTENCE_BREAK = re.compile(r"(?<=[.?!])\s+")
 # Records scored at once: the float32 vectors are widened to float64 one chunk at a time
-_SCORING_CHUNK = 65_536
+_SCORING_CHUNK = 8192
 # The two-sided 95% interval of a correction term
 _INTERVAL_CONFIDENCE = 0.95
 
@@ -130,6 +130,8 @@ class LinearScorer:
     ) -> NDArray[np.float64]:
         """Each record's junk probability, from its vector and its raw surface features.
 
+        A record's score depends on its own row alone, whatever batch it is scored in.
+
         Raises:
             ValueError: if the vectors and features do not have the weights' dimensions.
         """
@@ -144,9 +146,11 @@ class LinearScorer:
         for start in range(0, len(vectors), _SCORING_CHUNK):
             stop = start + _SCORING_CHUNK
             standardised = (features[start:stop] - self.feature_means) / self.feature_scales
+            # Products summed row by row, not a matrix product: BLAS blocks a product's rows by
+            # the batch's size, which moves a score's last digits with its batch
             logits = (
-                vectors[start:stop].astype(np.float64) @ vector_weights
-                + standardised @ feature_weights
+                (vectors[start:stop].astype(np.float64) * vector_weights).sum(axis=1)
+                + (standardised * feature_weights).sum(axis=1)
                 + self.intercept
             )
             scores[start:stop] = expit(logits)
@@ -235,7 +239,7 @@ def compute_surface_features(
     sentence's opening "A" is not. The finite-verb flag, the removed share and the unknown-word
     share (the OCR score of the whole kept text) come from outside the text.
     """
-    words = _WORD.findall(kept)
+    words = WORD.findall(kept)
     word_count = len(words)
     sentence_count = max(1, sum(1 for piece in _SENTENCE_BREAK.split(kept) if piece.strip()))
     character_count = len(kept)

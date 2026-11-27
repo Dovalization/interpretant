@@ -305,6 +305,19 @@ def test_the_parsed_classifier_scores_exactly_as_the_trained_one() -> None:
     assert parsed.cut_off == classifier.cut_off
 
 
+def test_a_records_score_does_not_depend_on_the_batch_it_is_scored_in() -> None:
+    training = build_training(labelled_count=2000)
+    scorer = train_final_classifier(training, SPEC).scorer
+
+    everything = scorer.compute_scores(training.vectors, training.features)
+
+    for start, stop in [(0, 1), (3, 20), (7, 330), (100, 2060)]:
+        np.testing.assert_array_equal(
+            scorer.compute_scores(training.vectors[start:stop], training.features[start:stop]),
+            everything[start:stop],
+        )
+
+
 def test_a_classifier_file_with_other_features_is_refused() -> None:
     text = format_classifier(train_final_classifier(build_training(), SPEC))
 

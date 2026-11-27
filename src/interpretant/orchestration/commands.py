@@ -15,6 +15,7 @@ import click
 
 from interpretant.cli.annotate_corpus import annotate_corpus_command
 from interpretant.cli.build_corpus import build_corpus_command
+from interpretant.cli.build_junk_gate import build_junk_gate_command
 from interpretant.cli.build_linked_tables import build_linked_tables_command
 from interpretant.cli.build_sentence_view import build_sentence_view_command
 from interpretant.cli.build_static_view import build_static_view_command
@@ -47,6 +48,7 @@ JOB_COMMANDS: tuple[click.Command, ...] = (
     build_sentence_view_command,
     build_usages_command,
     embed_records_command,
+    build_junk_gate_command,
     fetch_metadata_command,
     fetch_linked_sources_command,
     draw_usages_audit_command,

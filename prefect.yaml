@@ -93,6 +93,11 @@ deployments:
     <<: *runner
 
   - name: runner
+    description: "Score every record behind a drawn usage for junk and screen the cells, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:build_junk_gate
+    <<: *runner
+
+  - name: runner
     description: "Fetch OpenAlex's record of every raw work, resuming where it stopped, on the runner, from the submitted commit"
     entrypoint: src/interpretant/orchestration/flows.py:fetch_metadata
     <<: *runner

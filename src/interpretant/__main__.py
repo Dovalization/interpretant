@@ -9,6 +9,7 @@ from rich.console import Console
 
 from interpretant.cli.annotate_corpus import annotate_corpus_command
 from interpretant.cli.build_corpus import build_corpus_command
+from interpretant.cli.build_junk_gate import build_junk_gate_command
 from interpretant.cli.build_linked_tables import build_linked_tables_command
 from interpretant.cli.build_sentence_view import build_sentence_view_command
 from interpretant.cli.build_static_view import build_static_view_command
@@ -53,6 +54,7 @@ cli.add_command(build_corpus_command)
 cli.add_command(build_sentence_view_command)
 cli.add_command(build_usages_command)
 cli.add_command(embed_records_command)
+cli.add_command(build_junk_gate_command)
 cli.add_command(report_corpus_command)
 cli.add_command(compare_corpus_command)
 cli.add_command(measure_cleaning_sensitivity_command)

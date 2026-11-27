@@ -18,6 +18,7 @@ from prefect import flow, runtime, task
 from interpretant.catalog.linked_records import LinkedSource
 from interpretant.cli.annotate_corpus import run_annotate_corpus
 from interpretant.cli.build_corpus import run_build_corpus
+from interpretant.cli.build_junk_gate import run_build_junk_gate
 from interpretant.cli.build_linked_tables import run_build_linked_tables
 from interpretant.cli.build_sentence_view import run_build_sentence_view
 from interpretant.cli.build_static_view import run_build_static_view
@@ -300,6 +301,22 @@ def embed_records(*, pull: list[str] | None = None) -> None:
         JOBS["embed-records"],
         lambda catalog, progress, console: run_embed_records(
             catalog, progress=progress, console=console
+        ),
+        pull=pull,
+    )
+
+
+@flow(name="build-junk-gate", timeout_seconds=JOBS["build-junk-gate"].timeout_seconds)
+def build_junk_gate(
+    process_count: int | None = None,
+    *,
+    pull: list[str] | None = None,
+) -> None:
+    """Score every record behind a drawn usage for junk and screen the cells."""
+    run_job(
+        JOBS["build-junk-gate"],
+        lambda catalog, progress, console: run_build_junk_gate(
+            catalog, process_count, progress=progress, console=console
         ),
         pull=pull,
     )

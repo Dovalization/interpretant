@@ -127,3 +127,25 @@ junk_gate:
     revision: a5beb1e3e68b9ab74eb54cfd186867f64f240e1a
     max_tokens: 512
     batch_size: 64
+  # The classifier (build-junk-gate), as pre-registered: logistic regression at C = 1 with balanced
+  # class weights and scikit-learn's default solver, cross-fitted in 5 folds by source, each
+  # model's cut-off the lowest score that 97% of its inner held-out abstracts score below. The
+  # iteration budget only bounds the solver: a fit that has not converged in it stops the run.
+  classifier:
+    regularisation: 1.0
+    class_weight: balanced
+    folds: 5
+    specificity_target: 0.97
+    max_iterations: 1000
+  # The cell screen: the cells with at least this many drawn usages are gated, and flagged when
+  # their count of usages from records called junk has a binomial tail probability under alpha.
+  screen:
+    min_drawn_usages: 100
+    alpha: 0.01
+  # The OCR score: lower-case words of at least min_letters letters, the target left out; a
+  # sentence with fewer than min_words such words has no score; a word is known when spaCy's
+  # dictionary knows it or the kept text of at least min_known_works kept works holds it.
+  ocr:
+    min_letters: 3
+    min_words: 5
+    min_known_works: 20
