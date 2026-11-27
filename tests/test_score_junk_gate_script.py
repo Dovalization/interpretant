@@ -1,17 +1,30 @@
-"""The junk gate's scorer (`scripts/review/score_junk_gate.py`): adjudication, bars and labels."""
+"""The junk gate's scorer (`scripts/review/score_junk_gate.py`): adjudication, labels, gate."""
 
 from __future__ import annotations
 
 import importlib.util
 import json
+import shutil
+import subprocess
 import sys
 from pathlib import Path
-from types import ModuleType
+from types import ModuleType, SimpleNamespace
 from typing import Any
 
+import polars as pl
 import pytest
 
-from interpretant.catalog.junk_gate import JunkLabel, JunkLabels, Run3Verdict
+from interpretant.catalog.config import read_catalog
+from interpretant.catalog.junk_gate import JunkLabel, JunkLabels, Run3Verdict, save_junk_labels
+from interpretant.catalog.junk_gate_tables import (
+    JUNK_CELLS_TABLE_COLUMNS,
+    JUNK_SCORES_COLUMNS,
+    SURFACE_FEATURES,
+    save_junk_cells,
+    save_junk_scores,
+)
+from interpretant.review.sampling_plans import ConfusionMatrix
+from tests.junk_gate_records import SEALED, SyntheticRecord, work_id, write_records, write_words
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 CODEBOOK_SHA256 = "c" * 64
@@ -362,3 +375,296 @@ def test_the_authors_answers_are_read_as_verdicts_or_the_pages_answers(tmp_path:
 
     assert scorer.load_author_answers(path) == {"r001": "junk", "r002": "abstract"}
     assert scorer.load_author_answers(tmp_path / "missing.json") == {}
+
+
+# The gate's scoring: the decade rule, the cells' confirmation and the exclusions
+
+DECADES = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020]
+PERFECT_JUDGES = ConfusionMatrix(
+    true_positives=28, false_negatives=0, false_positives=0, true_negatives=169
+)
+
+
+def decade_labels(junk_by_decade: dict[int, int]) -> dict[str, JunkLabel]:
+    """L's 500 usages in each decade, the first ones junk: half by verdict, half by sentence."""
+    items = {}
+    for decade, junk in junk_by_decade.items():
+        for index in range(500):
+            is_junk_record = index < junk and index % 2 == 0
+            is_other_sentence = index < junk and index % 2 == 1
+            items[f"L{decade}{index:03d}"] = JunkLabel(
+                set="labelled",
+                stratum=None,
+                work_id=f"https://openalex.org/W{decade}{index:03d}",
+                part=f"ai_{decade}",
+                decade=decade,
+                word="attention",
+                content_key=f"{index:020d}",
+                verdict="junk" if is_junk_record else "abstract",
+                kind="fragment" if is_junk_record else "none",
+                sentence="other" if is_other_sentence else "own",
+                damaged="no",
+            )
+    return items
+
+
+def every_decade_at(junk: int, **changes: int) -> JunkLabels:
+    counts = dict.fromkeys(DECADES, junk) | {
+        int(name[1:]): count for name, count in changes.items()
+    }
+    return JunkLabels(codebook_sha256=CODEBOOK_SHA256, items=decade_labels(counts))
+
+
+def test_a_decade_passes_the_bar_at_52_junk_usages_and_fails_at_53() -> None:
+    passing = scorer.score_decades(every_decade_at(45, d1950=52), PERFECT_JUDGES)
+    failing = scorer.score_decades(every_decade_at(45, d1950=53), PERFECT_JUDGES)
+
+    assert passing["decades"]["1950"]["junk"] == 52
+    assert passing["decades"]["1950"]["passes"]
+    assert passing["passes"]
+    assert failing["decades"]["1950"]["junk"] == 53
+    assert not failing["decades"]["1950"]["passes_bar"]
+    assert failing["decades"]["1950"]["passes_comparison"]
+    assert not failing["passes"]
+
+
+def test_a_decade_within_the_bar_fails_when_fishers_test_finds_more_junk_than_elsewhere() -> None:
+    results = scorer.score_decades(every_decade_at(10, d1990=50), PERFECT_JUDGES)
+
+    nineties = results["decades"]["1990"]
+    assert nineties["passes_bar"]
+    assert nineties["fisher_p"] < 0.05 / 8
+    assert not nineties["passes_comparison"]
+    assert not results["passes"]
+    assert results["decades"]["1950"]["passes"]
+
+
+def test_each_decades_share_has_its_interval_and_its_correction_for_the_judges() -> None:
+    labels = every_decade_at(40)
+
+    results = scorer.score_decades(labels, PERFECT_JUDGES)
+
+    fifties = results["decades"]["1950"]
+    assert fifties["share"] == 0.08
+    assert fifties["interval"][0] < 0.08 < fifties["interval"][1]
+    assert (
+        fifties["corrected_interval"][0] < fifties["corrected"] < fifties["corrected_interval"][1]
+    )
+    assert abs(fifties["corrected"] - 0.08) < 0.02
+    assert results == scorer.score_decades(labels, PERFECT_JUDGES)
+
+
+def test_a_decade_short_of_its_500_labelled_usages_is_refused() -> None:
+    labels = every_decade_at(10)
+    labels = labels.model_copy(update={"items": dict(list(labels.items.items())[1:])})
+
+    with pytest.raises(SystemExit, match="without 500 labelled usages"):
+        scorer.score_decades(labels, PERFECT_JUDGES)
+
+
+GATE_RECORDS = [
+    SyntheticRecord(number, 1995, is_junk=number <= 4, has_network=number <= 6)
+    for number in range(1, 11)
+] + [
+    SyntheticRecord(number, 2005, is_junk=number <= 1003, has_network=number <= 1005)
+    for number in range(1001, 1011)
+]
+
+
+def confirmation_labels(junk: int) -> dict[str, JunkLabel]:
+    return {
+        f"C{number:04d}": JunkLabel(
+            set="confirmation",
+            stratum=None,
+            work_id=f"https://openalex.org/W9{number:04d}",
+            part="ai_1990",
+            decade=1990,
+            word=SEALED,
+            content_key=f"{number:020d}",
+            verdict="junk" if number <= junk else "abstract",
+            kind="fragment" if number <= junk else "none",
+            sentence="own",
+            damaged="no",
+        )
+        for number in range(1, 41)
+    }
+
+
+def write_gate(folder: Path, *, nineties_junk: int, confirmed_junk: int) -> SimpleNamespace:
+    """A checkout's catalog with the stage's outputs, the labels, the calibration and the key.
+
+    The screen flags *network* (held out) in the 1990s; the 1990s hold ``nineties_junk`` junk
+    usages of L's 500 (the other decades 20), and the flagged cell ``confirmed_junk`` of its 40.
+    """
+    shutil.copy(REPOSITORY / "catalog.yaml", folder / "catalog.yaml")
+    catalog = read_catalog(folder / "catalog.yaml")
+    write_words(catalog)
+    write_records(catalog, GATE_RECORDS)
+    save_junk_scores(
+        catalog,
+        pl.DataFrame(
+            {
+                "work_id": sorted(work_id(record.number) for record in GATE_RECORDS),
+                **{name: [0.0] * len(GATE_RECORDS) for name in SURFACE_FEATURES},
+                "score": [0.5] * len(GATE_RECORDS),
+                "predicted_junk": [
+                    record.is_junk
+                    for record in sorted(GATE_RECORDS, key=lambda record: work_id(record.number))
+                ],
+                "fold": [None] * len(GATE_RECORDS),
+            },
+            schema=JUNK_SCORES_COLUMNS,
+        ),
+    )
+    cells = [("attention", 1990, 10, 4), ("attention", 2000, 10, 3)]
+    cells += [("network", 1990, 6, 4), ("network", 2000, 5, 3)]
+    save_junk_cells(
+        catalog,
+        pl.DataFrame(
+            [
+                (word, decade, drawn, junk, 0.4, None, word == "network" and decade == 1990, True)
+                for word, decade, drawn, junk in cells
+            ],
+            schema=JUNK_CELLS_TABLE_COLUMNS,
+            orient="row",
+        ),
+    )
+    labels = every_decade_at(20, d1990=nineties_junk).items | confirmation_labels(confirmed_junk)
+    save_junk_labels(catalog, JunkLabels(codebook_sha256=CODEBOOK_SHA256, items=labels))
+    catalog.junk_gate_metrics.path.parent.mkdir(parents=True, exist_ok=True)
+    catalog.junk_gate_metrics.path.write_text(
+        json.dumps(
+            {
+                "classifier": {
+                    "sensitivity": {"share": 0.8},
+                    "specificity": {"share": 0.98},
+                    "bar": {"sensitivity": 0.7, "specificity": 0.97},
+                    "meets_bar": True,
+                }
+            }
+        )
+    )
+    gate_folder = folder / "data" / "review" / "junk_gate"
+    gate_folder.mkdir(parents=True, exist_ok=True)
+    (gate_folder / "calibration.json").write_text(
+        json.dumps({"second_look": {"confusion": vars(PERFECT_JUDGES)}})
+    )
+    confirmation = gate_folder / "confirmation"
+    confirmation.mkdir()
+    (confirmation / "key.json").write_text(
+        json.dumps(
+            {
+                "items": {},
+                "cells": [
+                    {"word": SEALED, "decade": 1990, "items": sorted(confirmation_labels(0))}
+                ],
+            }
+        )
+    )
+    return SimpleNamespace(catalog=catalog, gate_folder=gate_folder, confirmation=confirmation)
+
+
+def test_a_failed_cell_excludes_its_words_predicted_junk_in_every_decade_and_nothing_else(
+    tmp_path: Path,
+) -> None:
+    gate = write_gate(tmp_path, nineties_junk=20, confirmed_junk=9)
+
+    results, exclusions = scorer.score_gate(gate.catalog, gate.gate_folder, gate.confirmation)
+
+    assert results["cells"]["confirmed"] == [
+        {"word": SEALED, "decade": 1990, "junk": 9, "of": 40, "fails": True}
+    ]
+    assert exclusions.rows() == sorted(
+        (work_id(number), "network") for number in [1, 2, 3, 4, 1001, 1002, 1003]
+    )
+    assert results["exclusions"]["scope"] == "the failed cells' words"
+    assert results["exclusions"]["by_word_and_decade"] == {SEALED: {"1990": 4, "2000": 3}}
+    assert results["decade_rule"]["passes"]
+    assert not results["passes"]
+
+
+def test_a_failed_decade_excludes_predicted_junk_of_every_word_in_every_decade(
+    tmp_path: Path,
+) -> None:
+    gate = write_gate(tmp_path, nineties_junk=60, confirmed_junk=8)
+
+    results, exclusions = scorer.score_gate(gate.catalog, gate.gate_folder, gate.confirmation)
+
+    assert not results["decade_rule"]["decades"]["1990"]["passes"]
+    assert not results["cells"]["confirmed"][0]["fails"]
+    assert results["exclusions"]["scope"] == "every word"
+    junk = [1, 2, 3, 4, 1001, 1002, 1003]
+    assert exclusions.rows() == sorted(
+        (work_id(number), word) for number in junk for word in ("attention", "network")
+    )
+    assert results["exclusions"]["by_word_and_decade"] == {
+        "attention": {"1990": 4, "2000": 3},
+        SEALED: {"1990": 4, "2000": 3},
+    }
+    assert "network" not in json.dumps(results)
+
+
+def test_the_gate_passes_with_every_decade_and_cell_passing_and_excludes_nothing(
+    tmp_path: Path,
+) -> None:
+    gate = write_gate(tmp_path, nineties_junk=20, confirmed_junk=8)
+
+    results, exclusions = scorer.score_gate(gate.catalog, gate.gate_folder, gate.confirmation)
+
+    assert results["passes"]
+    assert exclusions.height == 0
+    assert results["exclusions"] == {"scope": "none", "usages": 0, "by_word_and_decade": {}}
+
+
+def test_flagged_cells_need_their_confirmation(tmp_path: Path) -> None:
+    gate = write_gate(tmp_path, nineties_junk=20, confirmed_junk=8)
+
+    with pytest.raises(SystemExit, match="1 cells are flagged"):
+        scorer.score_gate(gate.catalog, gate.gate_folder, None)
+
+
+def git(root: Path, *arguments: str) -> str:
+    completed = subprocess.run(
+        ["git", *arguments], cwd=root, capture_output=True, text=True, check=True
+    )
+    return completed.stdout.strip()
+
+
+def commit(root: Path, files: dict[str, str]) -> str:
+    for name, text in files.items():
+        (root / name).parent.mkdir(parents=True, exist_ok=True)
+        (root / name).write_text(text)
+        git(root, "add", name)
+    git(root, "commit", "--quiet", "-m", f"write {', '.join(files)}")
+    return git(root, "rev-parse", "HEAD")
+
+
+def test_the_gate_is_not_scored_by_an_uncommitted_scorer_nor_twice(tmp_path: Path) -> None:
+    root = tmp_path / "checkout"
+    root.mkdir()
+    git(root, "init", "--quiet")
+    git(root, "config", "user.email", "test@example.com")
+    git(root, "config", "user.name", "Test")
+    sample = scorer.SAMPLE_FOLDER
+    commit(
+        root,
+        {
+            "docs/junk_gate.md": "the plan\n",
+            "curated/judging/junk_gate/prompt.md": "the codebook\n",
+            f"{sample}/key.json": "{}\n",
+            f"{sample}/counts.json": "{}\n",
+        },
+    )
+    amendment = commit(root, {"docs/junk_gate.md": "the plan, amended\n"})
+    scorer_path = root / "scripts" / "review" / "score_junk_gate.py"
+    scorer_path.parent.mkdir(parents=True)
+    scorer_path.write_text("score\n")
+
+    with pytest.raises(SystemExit, match=r"score_junk_gate\.py is not committed unchanged"):
+        scorer.check_preregistration(root, amendment, None)
+
+    commit(root, {"scripts/review/score_junk_gate.py": "score\n"})
+    scorer.check_preregistration(root, amendment, None)
+    (root / scorer.GATE_FOLDER / "results.json").write_text("{}\n")
+    with pytest.raises(SystemExit, match="the gate is scored"):
+        scorer.check_preregistration(root, amendment, None)

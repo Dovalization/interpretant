@@ -1,4 +1,4 @@
-"""The junk gate's outputs (`docs/junk_gate.md`, "Storage"), written by the build_junk_gate stage.
+"""The junk gate's outputs (`docs/junk_gate.md`, "Storage"): its stage's and its scorer's tables.
 
 - **The records' scores** (``junk_scores``): one row per record behind a drawn usage, with its 13
   surface features, the classifier's score and call, and the fold that held it out (L's records
@@ -12,6 +12,10 @@
   writes and parses it).
 - **The metrics** (``junk_gate_metrics``): the gate's figures, tracked by git, so a word appears by
   its reported name only.
+- **The exclusions** (``junk_exclusions``): the drawn usages the measures leave out, a work and a
+  word (its lemma) per row, written by the gate's scorer (``scripts/review/score_junk_gate.py``).
+
+The stage, ``build_junk_gate``, writes all but the exclusions.
 """
 
 from __future__ import annotations
@@ -60,6 +64,7 @@ USAGE_OCR_SCORES_COLUMNS = pl.Schema(
         "ocr_words": pl.Int64(),
     }
 )
+JUNK_EXCLUSIONS_COLUMNS = pl.Schema({"work_id": pl.String(), "word": pl.String()})
 JUNK_CELLS_TABLE_COLUMNS = pl.Schema(
     {
         "word": pl.String(),
@@ -83,6 +88,21 @@ def save_junk_scores(catalog: CatalogConfig, scores: pl.DataFrame) -> Path:
     return _save_table(catalog.junk_scores.path, scores, JUNK_SCORES_COLUMNS)
 
 
+def load_junk_scores(catalog: CatalogConfig) -> pl.DataFrame:
+    """The records' scores, calls and folds.
+
+    Raises:
+        FileNotFoundError: if the gate's stage has not run.
+        ValueError: if the columns are not the table's.
+    """
+    path = catalog.junk_scores.path
+    if not path.exists():
+        raise FileNotFoundError(f"no records' scores at {path}: build-junk-gate writes them")
+    scores = pl.read_parquet(path)
+    _check_columns(scores, JUNK_SCORES_COLUMNS, path)
+    return scores
+
+
 def save_usage_ocr_scores(catalog: CatalogConfig, scores: pl.DataFrame) -> Path:
     """Write the drawn usages' OCR scores, replacing the file.
 
@@ -99,6 +119,15 @@ def save_junk_cells(catalog: CatalogConfig, cells: pl.DataFrame) -> Path:
         ValueError: if the columns are not the table's (``JUNK_CELLS_TABLE_COLUMNS``).
     """
     return _save_table(catalog.junk_cells.path, cells, JUNK_CELLS_TABLE_COLUMNS)
+
+
+def save_junk_exclusions(catalog: CatalogConfig, exclusions: pl.DataFrame) -> Path:
+    """Write the exclusions, replacing the file.
+
+    Raises:
+        ValueError: if the columns are not a work id and a word (``JUNK_EXCLUSIONS_COLUMNS``).
+    """
+    return _save_table(catalog.junk_exclusions.path, exclusions, JUNK_EXCLUSIONS_COLUMNS)
 
 
 def save_junk_classifier(catalog: CatalogConfig, text: str) -> Path:

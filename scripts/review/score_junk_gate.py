@@ -21,11 +21,21 @@ verdict is `junk`; `abstract` and `mixed` are not. Run from the repository root 
 - `fresh [--redraw]`: step 3's 30 records for the author to judge blind
   (`data/review/junk_gate/fresh.json`), and their agreement with the judges once the author's
   answers are saved (`fresh_author.json`); `--redraw` is the redraw after a failed bar
-  (`fresh_redraw.json`, `fresh_redraw_author.json`).
+  (`fresh_redraw.json`, `fresh_redraw_author.json`);
+- `score --amendment COMMIT [--confirmation FOLDER]`: the gate itself, once `build-junk-gate` has
+  run and the flagged cells' confirmation samples are labelled. The decade rule on L alone (at most
+  52 junk usages of each decade's 500, and Fisher's exact test against the other decades at
+  0.05/8), with each decade's Wilson interval and its share corrected for the judges' error
+  against the second look (`calibration.json`); the classifier's bar, from
+  `metrics/junk_gate.json`; and each flagged cell's 40 usages, failing at 9 junk usages. Writes
+  the catalog's `junk_exclusions` (the drawn usages from records the classifier calls junk, of the
+  failed cells' words in all their decades, or of every word when a decade fails) and
+  `data/review/junk_gate/results.json`. It scores only from a checkout that keeps the
+  pre-registration (`check_scoring`, on the sample's draw and the confirmation's), once.
 
-The author's answers map an item id to `abstract`, `junk` or `unsure`, or to the answer the review
-page saves (`{"verdict": ...}`). Words appear by their reported names. The gate's final scoring is
-not here yet: it comes with the classifier.
+A junk usage is one whose final verdict is `junk` or whose marked sentence is `other`. The author's
+answers map an item id to `abstract`, `junk` or `unsure`, or to the answer the review page saves
+(`{"verdict": ...}`). Words appear by their reported names.
 """
 
 from __future__ import annotations
@@ -41,18 +51,39 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from interpretant.catalog.config import read_catalog
+import numpy as np
+import polars as pl
+
+from interpretant.catalog.config import CatalogConfig, read_catalog
 from interpretant.catalog.junk_gate import (
     JunkLabel,
     JunkLabels,
     Run3Verdict,
+    load_junk_cells,
     load_junk_labels,
     load_run3_verdicts,
     save_junk_labels,
 )
+from interpretant.catalog.junk_gate_tables import load_junk_scores, save_junk_exclusions
+from interpretant.catalog.words import Word, load_words
+from interpretant.pipelines.draw_usages_audit import load_usages_with_decades
+from interpretant.pipelines.preregistration import JUNK_GATE, PreregistrationError, check_scoring
 from interpretant.review import verdicts
 from interpretant.review.judging import load_items
-from interpretant.review.sampling_plans import ConfusionMatrix
+from interpretant.review.junk_gate import CONFIRMATION_PER_CELL, LABELLED_PER_DECADE
+from interpretant.review.junk_rules import (
+    CELL_FAILING_JUNK,
+    DECADE_COMPARISON_ALPHA,
+    DECADE_JUNK_BAR,
+    build_exclusions,
+    compute_decade_verdicts,
+    is_junk_usage,
+)
+from interpretant.review.sampling_plans import (
+    ConfusionMatrix,
+    compute_corrected_rate,
+    compute_wilson_interval,
+)
 
 Answer = verdicts.Answer
 CODEBOOK = Path("curated/judging/junk_gate/prompt.md")
@@ -70,6 +101,11 @@ RECODED_AS_JUNK = frozenset({"r018"})
 FRESH_SEED = 20261403
 REDRAW_SEED = 20261409
 FRESH_AGREEMENT_BAR = 27
+# The gate's scoring: the labelled sample's draw, and the posterior draws that correct each
+# decade's share for the judges' error (docs/junk_gate.md, "The decade rule")
+SAMPLE_FOLDER = GATE_FOLDER / "sample"
+CORRECTION_SEED = 20261407
+CORRECTION_DRAWS = 20_000
 
 
 @dataclass(frozen=True)
@@ -374,6 +410,216 @@ def load_author_answers(path: Path) -> dict[str, str]:
     }
 
 
+def check_preregistration(root: Path, amendment: str, confirmation: Path | None) -> None:
+    """Refuse to score the gate from a checkout that does not keep its pre-registration.
+
+    ``check_scoring`` runs on the sample's draw and, when given, the confirmation's: the amendment,
+    the scorer, the codebook and each draw's key and counts must be as committed. The gate is
+    scored once: its results must not exist yet.
+
+    Raises:
+        SystemExit: naming the first rule the checkout breaks.
+    """
+    try:
+        for folder in [SAMPLE_FOLDER, *([confirmation] if confirmation is not None else [])]:
+            check_scoring(JUNK_GATE, root, folder, amendment, None)
+    except PreregistrationError as exc:
+        raise SystemExit(f"not scored: {exc}") from exc
+    if (root / GATE_FOLDER / "results.json").exists():
+        raise SystemExit(f"not scored: {GATE_FOLDER}/results.json exists: the gate is scored")
+
+
+def count_decades(labels: JunkLabels) -> dict[int, tuple[int, int]]:
+    """Each decade's junk usages and labelled usages in L.
+
+    Raises:
+        SystemExit: if a decade does not hold L's 500 labelled usages.
+    """
+    counts: dict[int, tuple[int, int]] = {}
+    for label in labels.items.values():
+        if label.set != "labelled":
+            continue
+        junk, total = counts.get(label.decade, (0, 0))
+        counts[label.decade] = (junk + is_junk_usage(label.verdict, label.sentence), total + 1)
+    short = {decade: total for decade, (_, total) in counts.items() if total != LABELLED_PER_DECADE}
+    if short:
+        raise SystemExit(f"decades without {LABELLED_PER_DECADE} labelled usages: {short}")
+    return counts
+
+
+def score_decades(labels: JunkLabels, confusion: ConfusionMatrix) -> dict[str, Any]:
+    """The decade rule on L: each decade's count, interval, corrected share, Fisher's p, verdict.
+
+    The share is corrected for the judges' error from ``confusion`` (Rogan and Gladen 1978), with
+    one generator seeded 20261407 for every decade, in decade order.
+    """
+    generator = np.random.default_rng(CORRECTION_SEED)
+    decades = {}
+    for verdict in compute_decade_verdicts(count_decades(labels)):
+        low, high = compute_wilson_interval(verdict.junk, verdict.labelled)
+        corrected = compute_corrected_rate(
+            confusion, verdict.junk, verdict.labelled, seed=generator, draws=CORRECTION_DRAWS
+        )
+        decades[str(verdict.decade)] = {
+            "junk": verdict.junk,
+            "of": verdict.labelled,
+            "share": round(verdict.junk / verdict.labelled, 4),
+            "interval": [round(low, 4), round(high, 4)],
+            "corrected": round(corrected.median, 4),
+            "corrected_interval": [round(corrected.low, 4), round(corrected.high, 4)],
+            "fisher_p": float(f"{verdict.fisher_p:.4g}"),
+            "passes_bar": verdict.passes_bar,
+            "passes_comparison": verdict.passes_comparison,
+            "passes": verdict.passes,
+        }
+    return {
+        "bar": DECADE_JUNK_BAR,
+        "comparison_alpha": DECADE_COMPARISON_ALPHA,
+        "decades": decades,
+        "passes": all(decade["passes"] for decade in decades.values()),
+    }
+
+
+def load_confusion(gate_folder: Path) -> ConfusionMatrix:
+    """The judges' confusion table against the author's second look, from the calibration.
+
+    Raises:
+        SystemExit: if the calibration holds no second look.
+    """
+    calibration = json.loads((gate_folder / "calibration.json").read_text())
+    if "second_look" not in calibration:
+        raise SystemExit("the calibration holds no second look: run calibrate once it is saved")
+    return ConfusionMatrix(**calibration["second_look"]["confusion"])
+
+
+def read_classifier_bar(catalog: CatalogConfig) -> dict[str, Any]:
+    """The classifier's cross-fitted sensitivity, specificity and bar, from the stage's metrics."""
+    classifier = json.loads(catalog.junk_gate_metrics.path.read_text())["classifier"]
+    return {name: classifier[name] for name in ("sensitivity", "specificity", "bar", "meets_bar")}
+
+
+def load_flagged_cells(catalog: CatalogConfig, words: Mapping[str, Word]) -> list[tuple[str, int]]:
+    """The cells the screen flags, each word by its reported name, and its decade."""
+    cells = load_junk_cells(catalog).filter("flagged")
+    return [(words[word].reported_name, decade) for word, decade, _ in cells.iter_rows()]
+
+
+def score_cells(
+    flagged: Sequence[tuple[str, int]], labels: JunkLabels, confirmation: Path | None
+) -> list[dict[str, Any]]:
+    """Each flagged cell's confirmation: its junk usages of its 40, and whether it fails at 9.
+
+    ``flagged`` names the screen's cells, words by their reported names; the confirmation draw's
+    key lists each one's 40 item ids, whose labels are read from the labels file.
+
+    Raises:
+        SystemExit: if cells are flagged and no confirmation is given, the confirmation's cells
+            are not the flagged ones, or a cell lacks its 40 usages or a label.
+    """
+    if confirmation is None:
+        if flagged:
+            raise SystemExit(f"{len(flagged)} cells are flagged: score needs --confirmation")
+        return []
+    cells = json.loads((confirmation / "key.json").read_text())["cells"]
+    if {(cell["word"], cell["decade"]) for cell in cells} != set(flagged):
+        raise SystemExit("the confirmation's cells are not the cells the screen flags")
+    confirmed = []
+    for cell in cells:
+        item_ids = cell["items"]
+        unlabelled = [item_id for item_id in item_ids if item_id not in labels.items]
+        if len(item_ids) != CONFIRMATION_PER_CELL or unlabelled:
+            raise SystemExit(
+                f"{cell['word']} in the {cell['decade']}s has {len(item_ids)} usages, "
+                f"{len(unlabelled)} without a label, not {CONFIRMATION_PER_CELL} labelled"
+            )
+        junk = sum(
+            is_junk_usage(labels.items[item_id].verdict, labels.items[item_id].sentence)
+            for item_id in item_ids
+        )
+        confirmed.append(
+            {
+                "word": cell["word"],
+                "decade": cell["decade"],
+                "junk": junk,
+                "of": len(item_ids),
+                "fails": junk >= CELL_FAILING_JUNK,
+            }
+        )
+    return confirmed
+
+
+def load_drawn_calls(catalog: CatalogConfig) -> pl.DataFrame:
+    """Each drawn usage's work, word (a lemma) and decade, and the classifier's call on its record.
+
+    Raises:
+        SystemExit: if a record behind a drawn usage has no score.
+    """
+    drawn = load_usages_with_decades(catalog, ["work_id", "word", "drawn"]).filter("drawn")
+    calls = load_junk_scores(catalog).select("work_id", "predicted_junk")
+    joined = drawn.join(calls, on="work_id", how="left")
+    unscored = joined["predicted_junk"].null_count()
+    if unscored:
+        raise SystemExit(f"{unscored} drawn usages' records have no score: rerun build-junk-gate")
+    return joined.select("work_id", "word", "decade", "predicted_junk")
+
+
+def count_exclusions(
+    exclusions: pl.DataFrame, drawn: pl.DataFrame, words: Mapping[str, Word]
+) -> dict[str, dict[str, int]]:
+    """The excluded usages by word, its reported name, and decade."""
+    counts = (
+        exclusions.join(drawn.select("work_id", "word", "decade"), on=["work_id", "word"])
+        .group_by("word", "decade")
+        .len()
+    )
+    by_word: dict[str, dict[str, int]] = {}
+    for word, decade, count in counts.sort("decade").iter_rows():
+        by_word.setdefault(words[word].reported_name, {})[str(decade)] = count
+    return dict(sorted(by_word.items()))
+
+
+def score_gate(
+    catalog: CatalogConfig, gate_folder: Path, confirmation: Path | None
+) -> tuple[dict[str, Any], pl.DataFrame]:
+    """The gate's results and its exclusions table.
+
+    The exclusions are the drawn usages from records the classifier calls junk: of every word when
+    a decade fails the decade rule, otherwise of each failed cell's word in all its decades.
+    The gate passes when every decade passes, the classifier meets its bar and no cell fails.
+    """
+    words = {word.lemma: word for word in load_words(catalog)}
+    labels = load_junk_labels(catalog)
+    decades = score_decades(labels, load_confusion(gate_folder))
+    classifier = read_classifier_bar(catalog)
+    cells = score_cells(load_flagged_cells(catalog, words), labels, confirmation)
+    drawn = load_drawn_calls(catalog)
+    lemmas = {word.reported_name: lemma for lemma, word in words.items()}
+    failed_words = {lemmas[cell["word"]] for cell in cells if cell["fails"]}
+    if not decades["passes"]:
+        scope, excluded_words = "every word", set(drawn["word"])
+    elif failed_words:
+        scope, excluded_words = "the failed cells' words", failed_words
+    else:
+        scope, excluded_words = "none", set()
+    exclusions = build_exclusions(drawn, excluded_words)
+    results = {
+        "decade_rule": decades,
+        "classifier": classifier,
+        "cells": {
+            "fails_at": CELL_FAILING_JUNK,
+            "confirmed": cells,
+            "failed": sum(cell["fails"] for cell in cells),
+        },
+        "exclusions": {
+            "scope": scope,
+            "usages": exclusions.height,
+            "by_word_and_decade": count_exclusions(exclusions, drawn, words),
+        },
+        "passes": decades["passes"] and classifier["meets_bar"] and not failed_words,
+    }
+    return results, exclusions
+
+
 def compute_committed_sha256(path: Path) -> str:
     """The sha256 of a file as committed at HEAD."""
     committed = subprocess.run(
@@ -428,11 +674,42 @@ def run_fresh(options: argparse.Namespace) -> str:
     return summary
 
 
+def run_score(options: argparse.Namespace) -> str:
+    """The ``score`` mode."""
+    check_preregistration(Path.cwd(), options.amendment, options.confirmation)
+    catalog = read_catalog()
+    results, exclusions = score_gate(catalog, GATE_FOLDER, options.confirmation)
+    path = save_junk_exclusions(catalog, exclusions)
+    _write_json(GATE_FOLDER / "results.json", {"amendment": options.amendment} | results)
+    failing = [
+        decade
+        for decade, verdict in results["decade_rule"]["decades"].items()
+        if not verdict["passes"]
+    ]
+    failed_cells = [
+        f"{cell['word']} {cell['decade']}"
+        for cell in results["cells"]["confirmed"]
+        if cell["fails"]
+    ]
+    bar = "meets" if results["classifier"]["meets_bar"] else "fails"
+    return "\n".join(
+        [
+            f"decade rule: {len(failing)} decades fail {failing}",
+            f"classifier: {bar} its bar",
+            f"cells: {len(failed_cells)} of {len(results['cells']['confirmed'])} flagged fail "
+            f"{failed_cells}",
+            f"exclusions ({results['exclusions']['scope']}): {exclusions.height} usages in {path}",
+            f"the gate {'passes' if results['passes'] else 'fails'}",
+        ]
+    )
+
+
 MODES: dict[str, Callable[[argparse.Namespace], str]] = {
     "pending": run_pending,
     "calibrate": run_calibrate,
     "labels": run_labels,
     "fresh": run_fresh,
+    "score": run_score,
 }
 
 
@@ -447,6 +724,15 @@ def main() -> None:
     labels.add_argument("confirmation", type=Path, nargs="?")
     fresh = modes.add_parser("fresh", help="step 3's fresh records")
     fresh.add_argument("--redraw", action="store_true", help="the redraw after a failed bar")
+    score = modes.add_parser("score", help="the gate's rules and its exclusions")
+    score.add_argument(
+        "--amendment", required=True, help="the commit that last changed the plan before scoring"
+    )
+    score.add_argument(
+        "--confirmation",
+        type=Path,
+        help="the confirmation draw's folder, from the repository's root, when cells are flagged",
+    )
     options = parser.parse_args()
     sys.stdout.write(MODES[options.mode](options) + "\n")
 
