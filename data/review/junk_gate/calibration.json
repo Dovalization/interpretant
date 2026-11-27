@@ -3,13 +3,13 @@
  "judges_agreed": 200,
  "bars": {
   "agreement": {
-   "count": 193,
+   "count": 194,
    "of": 197,
    "bar": 178,
    "passes": true
   },
   "junk_found": {
-   "count": 27,
+   "count": 28,
    "of": 31,
    "bar": 27,
    "passes": true
@@ -23,7 +23,6 @@
  },
  "passes": true,
  "disputed": [
-  "r023",
   "r135",
   "r148",
   "r173"
@@ -32,8 +31,8 @@
   "records": 197,
   "second_looks": 5,
   "confusion": {
-   "true_positives": 27,
-   "false_negatives": 1,
+   "true_positives": 28,
+   "false_negatives": 0,
    "false_positives": 0,
    "true_negatives": 169
   }
