@@ -23,6 +23,7 @@ from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.judge_api import judge_api_command
 from interpretant.cli.judge_claude_code import judge_claude_code_command
+from interpretant.cli.judge_ollama import judge_ollama_command
 from interpretant.cli.measure_cleaning_sensitivity import measure_cleaning_sensitivity_command
 from interpretant.cli.measure_lemma_sensitivity import measure_lemma_sensitivity_command
 from interpretant.cli.report_corpus import report_corpus_command
@@ -58,6 +59,7 @@ cli.add_command(draw_usages_audit_command)
 cli.add_command(draw_junk_gate_command)
 cli.add_command(judge_api_command)
 cli.add_command(judge_claude_code_command)
+cli.add_command(judge_ollama_command)
 
 
 # ---------------------------------------------------------------------------

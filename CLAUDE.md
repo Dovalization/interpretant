@@ -101,6 +101,8 @@ analysis: predictions first, in their own commit.
   a dollar cap; the key from the checkout's secrets file only) and
   `pipelines/judge_claude_code.py` (Claude Code's command line on the subscription, never given
   the API key), run as `judge-api` and `judge-claude-code`.
+  `pipelines/judge_ollama.py` runs local chat and decision models on an Ollama server, for the
+  junk gate's local trial (`judge-ollama`); its manifest names the server by a label only.
 - `catalog/`: `catalog.yaml`'s reader (`read_catalog`), the raw OpenAlex cells (`raw.py`) and
   each raw work's OpenAlex metadata (`metadata.py`), the
   abstracts table's pandera schema and its parquet parts, the curated cleaning rules and spaCy

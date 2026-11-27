@@ -117,3 +117,8 @@ deployments:
     entrypoint: src/interpretant/orchestration/flows.py:judge_claude_code
     <<: *runner
 
+  - name: runner
+    description: "Judge review items with a local model on an Ollama server, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:judge_ollama
+    <<: *runner
+

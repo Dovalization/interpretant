@@ -71,5 +71,7 @@ JOBS: dict[str, Job] = {
         Job("judge-api", 6 * HOUR),
         # judge-claude-code resumes by part, so a run with failed parts is retried once
         Job("judge-claude-code", 6 * HOUR, retries=1, retry_delay_seconds=60),
+        # judge-ollama resumes by part too, so a run with failed parts is retried once
+        Job("judge-ollama", 12 * HOUR, retries=1, retry_delay_seconds=60),
     )
 }

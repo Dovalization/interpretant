@@ -28,6 +28,7 @@ from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
 from interpretant.cli.judge_api import judge_api_command
 from interpretant.cli.judge_claude_code import judge_claude_code_command
+from interpretant.cli.judge_ollama import judge_ollama_command
 from interpretant.cli.report_corpus import report_corpus_command
 from interpretant.orchestration.registry import DVC_LOCK, JOBS
 
@@ -50,6 +51,7 @@ JOB_COMMANDS: tuple[click.Command, ...] = (
     draw_junk_gate_command,
     judge_api_command,
     judge_claude_code_command,
+    judge_ollama_command,
 )
 
 

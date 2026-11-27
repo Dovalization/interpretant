@@ -31,6 +31,7 @@ from interpretant.cli.fetch_linked_sources import run_fetch_linked_sources
 from interpretant.cli.fetch_metadata import run_fetch_metadata
 from interpretant.cli.judge_api import run_judge_api
 from interpretant.cli.judge_claude_code import run_judge_claude_code
+from interpretant.cli.judge_ollama import run_judge_ollama
 from interpretant.cli.options import default_process_count
 from interpretant.cli.report_corpus import run_report_corpus
 from interpretant.orchestration.jobs import run_job
@@ -46,6 +47,7 @@ from interpretant.orchestration.steps import (
 )
 from interpretant.pipelines.judge_api import ApiJudging, Thinking
 from interpretant.pipelines.judge_claude_code import CommandLineJudging
+from interpretant.pipelines.judge_ollama import JudgeKind, OllamaJudging
 from interpretant.review.judging import Answers, Effort
 from interpretant.review.junk_gate import DrawSet
 from interpretant.review.usages_audit import AUDIT_SEED
@@ -466,6 +468,50 @@ def judge_claude_code(
         ),
         pull=pull,
         record_as=f"judge-claude-code {model}",
+    )
+    if counts["failed_parts"]:
+        raise JudgingIncompleteError(f"{counts['failed_parts']} parts failed")
+
+
+@flow(
+    name="judge-ollama",
+    timeout_seconds=JOBS["judge-ollama"].timeout_seconds,
+    retries=JOBS["judge-ollama"].retries,
+    retry_delay_seconds=JOBS["judge-ollama"].retry_delay_seconds,
+)
+def judge_ollama(
+    items: Path,
+    verdicts: Path,
+    name: str,
+    codebook: Path,
+    answers: Answers,
+    model: str,
+    kind: JudgeKind,
+    host: str,
+    host_label: str,
+    parallel: int = 1,
+    keep_alive: str = "2m",
+    *,
+    pull: list[str] | None = None,
+) -> None:
+    """Judge review items with a local model on an Ollama server; fails if a part failed."""
+    judging = OllamaJudging(
+        name=name,
+        codebook=codebook,
+        answers=answers,
+        model=model,
+        kind=kind,
+        host_label=host_label,
+        parallel=parallel,
+        keep_alive=keep_alive,
+    )
+    counts = run_job(
+        JOBS["judge-ollama"],
+        lambda catalog, progress, console: run_judge_ollama(
+            catalog, items, verdicts, judging, host, progress=progress, console=console
+        ),
+        pull=pull,
+        record_as=f"judge-ollama {model} on {host_label}",
     )
     if counts["failed_parts"]:
         raise JudgingIncompleteError(f"{counts['failed_parts']} parts failed")
