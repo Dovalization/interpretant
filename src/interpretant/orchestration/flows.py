@@ -525,6 +525,7 @@ def judge_ollama(
     host_label: str,
     parallel: int = 1,
     keep_alive: str = "2m",
+    context_length: int = 8192,
     *,
     pull: list[str] | None = None,
 ) -> None:
@@ -538,6 +539,7 @@ def judge_ollama(
         host_label=host_label,
         parallel=parallel,
         keep_alive=keep_alive,
+        context_length=context_length,
     )
     counts = run_job(
         JOBS["judge-ollama"],

@@ -92,6 +92,7 @@ class OllamaJudging:
     host_label: str
     parallel: int = 1
     keep_alive: str = "2m"
+    context_length: int = 8192
 
     def __post_init__(self) -> None:
         if self.answers != "records":
@@ -169,7 +170,9 @@ def build_chat_request(
         "think": False,
         "stream": False,
         "keep_alive": judging.keep_alive,
-        "options": {"temperature": 0, "seed": SEED},
+        # Per request, so the server's own default (which can be very large) is left alone and a
+        # model needs only the memory one record takes
+        "options": {"temperature": 0, "seed": SEED, "num_ctx": judging.context_length},
     }
 
 
@@ -427,6 +430,7 @@ def build_run_record(run: OllamaRunResult, judging: OllamaJudging) -> dict[str, 
         "host_label": judging.host_label,
         "parallel": judging.parallel,
         "keep_alive": judging.keep_alive,
+        "context_length": judging.context_length,
         "items_judged": run.items_judged,
         "items_failed": run.items_failed,
         "seconds_total": round(run.seconds_total, 3),

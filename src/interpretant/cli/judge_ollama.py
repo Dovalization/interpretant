@@ -57,6 +57,13 @@ from interpretant.review.judging import Answers, split_parts
     show_default=True,
     help="How long the server keeps the model loaded after the last request.",
 )
+@click.option(
+    "--context-length",
+    type=click.IntRange(min=1024),
+    default=8192,
+    show_default=True,
+    help="A chat model's context window for each request (num_ctx); the server's default stays.",
+)
 def judge_ollama_command(
     items: Path,
     verdicts: Path,
@@ -69,6 +76,7 @@ def judge_ollama_command(
     host_label: str,
     parallel: int,
     keep_alive: str,
+    context_length: int,
 ) -> None:
     """Judge review items with a local model on an Ollama server (the junk gate's local trial).
 
@@ -87,6 +95,7 @@ def judge_ollama_command(
         host_label=host_label,
         parallel=parallel,
         keep_alive=keep_alive,
+        context_length=context_length,
     )
     counts = run_on_command_line(
         f"judge-ollama {model} on {host_label}",

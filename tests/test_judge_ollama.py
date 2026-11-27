@@ -129,7 +129,7 @@ def test_a_chat_request_sends_the_codebook_and_the_schema_with_thinking_off(
     assert request["think"] is False
     assert request["stream"] is False
     assert request["keep_alive"] == "2m"
-    assert request["options"] == {"temperature": 0, "seed": 20261408}
+    assert request["options"] == {"temperature": 0, "seed": 20261408, "num_ctx": 8192}
 
 
 def test_a_chat_answer_is_parsed_and_checked_against_the_schema() -> None:
@@ -381,6 +381,7 @@ def test_no_written_file_names_the_host_only_its_label(
             assert "127.0.0.1" not in path.read_text(encoding="utf-8"), path
     manifest = json.loads((verdicts / "local.manifest.json").read_text())
     assert manifest["runs"][0]["host_label"] == "runner"
+    assert manifest["runs"][0]["context_length"] == 8192
     assert "127.0.0.1" not in output.getvalue()
 
 
