@@ -1,0 +1,32 @@
+{
+ "records": 197,
+ "judges_agreed": 198,
+ "bars": {
+  "agreement": {
+   "count": 192,
+   "of": 197,
+   "bar": 178,
+   "passes": true
+  },
+  "junk_found": {
+   "count": 28,
+   "of": 31,
+   "bar": 27,
+   "passes": true
+  },
+  "abstracts_called_junk": {
+   "count": 2,
+   "of": 166,
+   "bar": 6,
+   "passes": true
+  }
+ },
+ "passes": true,
+ "disputed": [
+  "r135",
+  "r148",
+  "r170",
+  "r173",
+  "r182"
+ ]
+}
