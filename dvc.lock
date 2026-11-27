@@ -1329,3 +1329,93 @@ stages:
       md5: 947f15730e7c94b850b0446e35810ddc.dir
       size: 122230350
       nfiles: 88
+  embed_records:
+    cmd: interpretant embed-records
+    deps:
+    - path: data/processed/abstracts
+      hash: md5
+      md5: 468c90361d4c9d5c82b0552272ea318e.dir
+      size: 288325283
+      nfiles: 88
+    - path: data/processed/usages
+      hash: md5
+      md5: 947f15730e7c94b850b0446e35810ddc.dir
+      size: 122230350
+      nfiles: 88
+    - path: src/interpretant/catalog/abstracts.py
+      hash: md5
+      md5: a96b4f1a2380be67a9eac4dc4d52d3ef
+      size: 4649
+    - path: src/interpretant/catalog/config.py
+      hash: md5
+      md5: 857877587cc075526016437df66fbf1f
+      size: 2822
+    - path: src/interpretant/catalog/curated.py
+      hash: md5
+      md5: f8f421d986229c8be503688b79f5089d
+      size: 11084
+    - path: src/interpretant/catalog/parts.py
+      hash: md5
+      md5: bd9edd2c1e8cbe90de37d96b91bf92be
+      size: 603
+    - path: src/interpretant/catalog/raw.py
+      hash: md5
+      md5: 79df39a6daf4785b0f869fc2b5bee60a
+      size: 1913
+    - path: src/interpretant/catalog/record_vectors.py
+      hash: md5
+      md5: ddf07add3749deddc51230a1d3b6980b
+      size: 2718
+    - path: src/interpretant/catalog/schemas.py
+      hash: md5
+      md5: 710987f427c34a378079ff53cf823cce
+      size: 7809
+    - path: src/interpretant/catalog/usages.py
+      hash: md5
+      md5: 330449528dd2b8f1494b6a9634a2f437
+      size: 8267
+    - path: src/interpretant/cli/embed_records.py
+      hash: md5
+      md5: c33bad82c490f68c09546e58323bebd6
+      size: 2184
+    - path: src/interpretant/corpus/language.py
+      hash: md5
+      md5: f61baff05035379afccbb1ad54a947b4
+      size: 9737
+    - path: src/interpretant/corpus/removals.py
+      hash: md5
+      md5: 0b121ee2e6457b7528907c8e35371a34
+      size: 15107
+    - path: src/interpretant/corpus/repair.py
+      hash: md5
+      md5: a59cf74f837451d4f20e3579bbeb72b2
+      size: 10875
+    - path: src/interpretant/corpus/works.py
+      hash: md5
+      md5: c4a97f7d0484dcd331505542be27fecc
+      size: 1895
+    - path: src/interpretant/pipelines/embed_records.py
+      hash: md5
+      md5: 48e65e405b5cb0c9bffe78445d240c63
+      size: 8367
+    - path: src/interpretant/pipelines/params.py
+      hash: md5
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
+    - path: src/interpretant/pipelines/progress.py
+      hash: md5
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
+    params:
+      params.yaml:
+        junk_gate.encoder:
+          model: BAAI/bge-base-en-v1.5
+          revision: a5beb1e3e68b9ab74eb54cfd186867f64f240e1a
+          max_tokens: 512
+          batch_size: 64
+    outs:
+    - path: data/interim/record_vectors
+      hash: md5
+      md5: 32e1db920426de52af88504017b1fbb4.dir
+      size: 1272918121
+      nfiles: 88
