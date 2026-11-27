@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import itertools
 import json
 import sys
@@ -14,7 +15,12 @@ import pytest
 
 from interpretant.pipelines import judge_claude_code as judge_cli
 from interpretant.pipelines.judge_claude_code import CommandLineJudging
-from interpretant.review.judging import ADJUDICATION, render_message, split_parts
+from interpretant.review.judging import (
+    ADJUDICATION,
+    build_batch_schema,
+    render_message,
+    split_parts,
+)
 
 
 def item(item_id: str) -> dict[str, Any]:
@@ -96,6 +102,35 @@ def test_every_call_is_isolated_and_constrained_to_the_schema(tmp_path: Path) ->
         "reason",
         "note",
     ]
+
+
+def test_records_are_judged_with_the_records_answers(tmp_path: Path) -> None:
+    junk = {
+        "note": "A table of contents.",
+        "verdict": "junk",
+        "kind": "contents_or_list",
+        "sentence": "other",
+        "damaged": "no",
+    }
+    sent: list[tuple[list[str], str]] = []
+
+    def call(arguments: list[str], text: str) -> dict[str, Any]:
+        sent.append((arguments, text))
+        return {"is_error": False, "structured_output": {"answers": [{"id": "R1"} | junk]}}
+
+    judge_cli.generate_verdicts(
+        {"00": [{"id": "R1", "text": "Contents. ⟦Chapter 1.⟧"}]},
+        dataclasses.replace(options(tmp_path, 1), answers="records"),
+        tmp_path / "verdicts",
+        call,
+    )
+
+    [(arguments, text)] = sent
+    flags = dict(itertools.pairwise(arguments))
+    assert json.loads(flags["--json-schema"]) == build_batch_schema("records")
+    assert text.endswith("Item id: R1\nContents. ⟦Chapter 1.⟧")
+    written = json.loads((tmp_path / "verdicts" / "judge_A_part_00.json").read_text())
+    assert written == {"R1": junk}
 
 
 def test_judging_writes_each_part_and_skips_those_already_judged(tmp_path: Path) -> None:

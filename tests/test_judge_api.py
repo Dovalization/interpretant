@@ -12,7 +12,7 @@ import pytest
 
 from interpretant.pipelines import judge_api as judge
 from interpretant.pipelines.judge_api import ApiJudging
-from interpretant.review.judging import render
+from interpretant.review.judging import SCHEMAS, render
 
 MODEL = "claude-sonnet-5-5"
 
@@ -168,3 +168,29 @@ def test_thinking_off_asks_for_an_answer_without_reasoning(tmp_path: Path) -> No
         "params"
     ]
     assert params["thinking"] == {"type": "between_tools"}
+
+
+def test_a_record_is_judged_on_its_text_with_the_records_answers(tmp_path: Path) -> None:
+    abstract = {
+        "note": "A short summary.",
+        "verdict": "abstract",
+        "kind": "none",
+        "sentence": "own",
+        "damaged": "no",
+    }
+    client = FakeClient([[succeeded("R1", json.dumps(abstract))]])
+    verdicts: dict[str, Any] = {}
+
+    judge.generate_verdicts(
+        [{"id": "R1", "text": "We study attention. ⟦It drifts.⟧"}],
+        dataclasses.replace(options(tmp_path), answers="records"),
+        client,
+        verdicts,
+        tmp_path / "out.json",
+    )
+
+    [[request]] = client.messages.batches.submitted
+    params = request["params"]
+    assert params["messages"][0]["content"] == "Item id: R1\nWe study attention. ⟦It drifts.⟧"
+    assert params["output_config"]["format"]["schema"] == SCHEMAS["records"]
+    assert verdicts == {"R1": abstract}

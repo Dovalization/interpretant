@@ -13,7 +13,7 @@ import shutil
 import subprocess
 from collections.abc import Iterator
 from pathlib import Path
-from typing import Any
+from typing import Any, get_args
 
 import click
 import pytest
@@ -31,6 +31,7 @@ from interpretant.orchestration import commands, flows, jobs
 from interpretant.orchestration.jobs import run_job
 from interpretant.orchestration.registry import JOBS, Job
 from interpretant.pipelines.progress import Progress
+from interpretant.review.judging import Answers
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 ADDED_PARAMETERS = {"pull"}
@@ -156,6 +157,26 @@ def test_a_submission_sends_the_flows_parameters(monkeypatch: pytest.MonkeyPatch
     assert validated["fields"] == ("ai",)
     assert validated["decades"] == (2010,)
     assert validated["resume"] is True
+
+
+@pytest.mark.parametrize("job_name", ["judge-api", "judge-claude-code"])
+def test_each_judging_command_offers_every_kind_of_answers(job_name: str) -> None:
+    [option] = [
+        parameter for parameter in get_command(JOBS[job_name]).params if parameter.name == "answers"
+    ]
+
+    assert isinstance(option.type, click.Choice)
+    assert sorted(option.type.choices) == sorted(get_args(Answers))
+
+
+@pytest.mark.parametrize("answers", get_args(Answers))
+def test_each_judging_flow_takes_every_kind_of_answers(answers: str) -> None:
+    shared = {"codebook": "prompt.md", "answers": answers, "effort": "high"}
+    api = {"items": "items.jsonl", "out": "judge_A.json", "model": "m", "max_dollars": 20.0}
+    claude_code = {"items": "items.jsonl", "verdicts": "verdicts", "name": "judge_A", "model": "m"}
+
+    assert flows.judge_api.validate_parameters(shared | api)["answers"] == answers
+    assert flows.judge_claude_code.validate_parameters(shared | claude_code)["answers"] == answers
 
 
 def test_a_runner_submission_takes_a_path_that_exists_only_on_the_runner(
