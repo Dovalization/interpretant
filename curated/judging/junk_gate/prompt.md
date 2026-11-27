@@ -28,8 +28,8 @@ Is the text **the work's own prose**: the authors writing about their own work, 
     examples or names with no prose around it;
   - `archive_or_catalogue`: a description of an archive item: a photograph, a newspaper page, a
     letter in a collection, a catalogue note;
-  - `other_work`: text taken from another work or about something else: a quotation standing
-    alone, a chronology, a biography of an interviewee;
+  - `other_work`: text about something other than the work, or another work's text standing in
+    for it: a quotation used as an epigraph, a chronology, a biography of an interviewee;
   - `letter_obituary_erratum_news`: a letter to the editor, an obituary or death notice, a
     correction notice, a news item or announcement;
   - `fragment`: a piece with no complete sentence of its own, such as a few words or a broken line;
@@ -52,6 +52,11 @@ Is the text **the work's own prose**: the authors writing about their own work, 
   editorial or a comment is an abstract.
 - **A description of what a book or issue contains** is an abstract when it summarises the
   argument in prose, and junk when it lists contents or sells the book.
+- **A passage of an older or primary text** (a philosopher's, a classic author's, a scripture's,
+  a historical document's) standing as the record's text is the work's own text: the work is
+  usually an edition, a translation, an anthology or a study that opens with it. It is junk only
+  when the record plainly belongs to something else, such as a quotation printed above a
+  publisher's description.
 - **Damage is not junk.** Glued or split words, stray characters and lost punctuation do not change
   the verdict. They are recorded separately (below).
 - **When unsure between `abstract` and `junk`,** ask whether a reader would learn what the work

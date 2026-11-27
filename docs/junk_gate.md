@@ -357,6 +357,29 @@ A comparison, set before any local model has judged a record. It changes no verd
   Journal of Epidemiology* 107:71–76.
 - van Strien et al. 2020, "Assessing the impact of OCR quality on downstream NLP tasks", ICAART.
 
+## Amendment, 2026-11-27, before L and E are judged
+
+- **What run 3 showed.** Under the codebook as first committed, the judges passed all three bars
+  of step 1: 192 of 197 agreed with the author, 28 of the 31 junk records were found, and 2 of the
+  166 abstracts were called junk. The author's second look at the 5 disputed records
+  (`data/review/junk_gate/run3_second_look.json`) called all five abstracts: three the author had
+  called junk on 2026-11-14, where the judges were right, and the two the judges called junk.
+  Against the second look the judges found all 28 junk records and called 2 of 169 abstracts junk.
+- **The pattern.** Both false junk records are a passage of an older philosophical or theological
+  text standing as the record's text. The codebook listed "a quotation standing alone" as junk
+  (`other_work`), and both judges followed it. The author called both abstracts, on 2026-11-14 and
+  again on the second look: such a work is usually an edition, a translation or a study that opens
+  with the text, so the text is the work's own, in line with the rule that an article's opening
+  counts as an abstract (agenda 4b).
+- **The change** (the author, 2026-11-27). The codebook now says that a passage of an older or
+  primary text standing as the record's text is the work's own text, and junk only when the record
+  plainly belongs to something else. `other_work` keeps a quotation used as an epigraph, a
+  chronology and an interviewee's biography.
+- **What follows,** as "If a bar fails" requires for a revised codebook. Run 3 is judged again
+  under the amended codebook and step 1's three bars are checked again on it; the second look
+  stays the reference for the judges' error rates. L and E have not been judged, so no other label
+  is affected. The first judging's verdicts are kept on the runner, apart from the new ones.
+
 ## Results
 
 *To be appended.*
