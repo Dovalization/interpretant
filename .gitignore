@@ -109,6 +109,9 @@ yarn-error.log*
 # a runner run drew (whose key and counts come back with its record).
 data/review/**/batch_*.jsonl
 data/review/**/adjudicate*.jsonl
+# The junk gate's judges' answers carry notes that can quote the record; only the labels built
+# from them, with no note, are committed (docs/junk_gate.md, "Storage").
+data/review/junk_gate/**/verdicts/
 # The spelling audit's items quote corpus sentences; only the key and the verdicts are committed.
 data/review/spellings/batch_*.jsonl
 data/review/spellings/calibration.json
