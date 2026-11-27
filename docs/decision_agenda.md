@@ -1941,7 +1941,8 @@ and nothing waits on work that comes later:
 7. Matching and the usages table, with named entities recognised on target sentences; one
    mention drawn per abstract (4.1–4.5). Then the junk gate (4b, decided 2026-11-16): the share
    of each target's sampled usages, per decade, that come from records the calibrated judges call
-   junk, against a threshold pre-registered before the usages are drawn.
+   junk, against a threshold pre-registered before the usages are drawn (as set on 2026-11-27,
+   before step 6's locked run and before any record is judged: `docs/junk_gate.md`).
 8. The gap report; a top-up download if a cell is under the floor, after which stages 2–7 run for
    the new abstracts and the corpus-level rules rerun in full (4.8).
 9. Control candidates generated and approved (step 5); encoding of targets, controls, sense-list
@@ -1973,7 +1974,7 @@ and the gap report (stage 8) can send new abstracts through stages 2–7.
 | 4 | The full static view: exceptions, spellings and compounds (*done 2026-11-18: lock `8fad6e8f`, `docs/preprocessing_phase.md`*) | Alignment with R_B, every change explained by the maps, the target check and a spot check (`docs/preprocessing_phase.md`, step 4) |
 | 5 | The contextual sentence view (2.2) (*done 2026-11-18: lock `9eeb2274`, merge and split rules, `docs/sentence_view.md`*) | An audit of sentence boundaries |
 | 6 | Matching and the usages table (4.1–4.6), in one `usages` package as the code review of 2026-11-12 advised; the small or transformer model for entities by the one-field comparison (4.9) | An audit of matched usages (the right word, part of speech and scope) and a recall check |
-| 7 | The junk gate (4b) | Its threshold pre-registered before the usages are drawn |
+| 7 | The junk gate (4b) (*pre-registered 2026-11-27, `docs/junk_gate.md`*) | Its threshold pre-registered before step 6's locked run and before any record is judged |
 | 8 | The gap report (4.8) | A top-up download plan only for cells under the floor, approved by the author |
 
 ## Step 10: terminology pass (later)

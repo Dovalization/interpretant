@@ -533,16 +533,45 @@ committed labels in `data/labels/pilot/`, and the whole script is deleted when t
     - sentences glued together with no space or stop between them;
     - other OCR noise inside words (*l* for *I*, *rn* for *m*, stray characters).
 
-**To decide:**
-- the threshold (absolute, e.g. ≤10% per word and decade, or relative to the corpus);
-- n per cell and the sampling rule;
-- what failing does (judge the whole cell and leave out the junk, or drop the cell from its
-  comparisons);
-- the judge setup: scripted or agents, and the calibration rebuilt from run 3 plus the author's 7
-  corrections;
-- storage: `curated/judging/junk_gate/` and `data/review/junk_gate/`;
-- sealed handling of held-out words;
-- rerunning after a top-up.
+**Decided in the planning pass of 2026-11-27** (three scouts, a design review and the author's
+choices; the pre-registration is `docs/junk_gate.md`, which holds every bar and seed):
+- **The checks that need J move to inference.** Step 6 handed this step the drift measures with
+  and without capitalised targets, roles and flags, and the test of whether OCR-heavy usages move
+  J. Nothing encodes the usages table before the phase ends, so the pre-registration fixes those
+  checks and they run at the start of inference, before any target's drift is read.
+- **A trained classifier scores every record; judges label only a small set.** Judging 32,000 to
+  44,000 records with the Claude judges was priced (about $130–180 through the API) and set aside.
+  The judges label about 6,000 records through the API, and a classifier on frozen text vectors
+  and surface features scores all the records behind drawn usages.
+- **The threshold.**
+  - Per decade, from a labelled sample of 500 drawn usages: at most 52 junk, and no decade
+    significantly above the other seven.
+  - Per word and decade, for cells of at least 100 drawn usages: the classifier flags a cell whose
+    junk count is improbably high for its decade, and the judges confirm it on 40 usages, where 9
+    or more junk fails it.
+- **What failing does.** The cell stays in its comparisons. The usages of the records the
+  classifier calls junk are left out for the whole word (or for every word, if a decade fails),
+  and the measures are reported with and without them. Cleaning one side of a comparison alone
+  could itself look like change.
+- **The judges and their calibration.** Two Sonnet judges and an Opus adjudicator through
+  `judge-api`. Three bars on run 3's 200 records (agreement, junk found, false junk), the author's
+  second look at the disputed records, which stands in for the 7 unsaved corrections, and 30 fresh
+  records the author judges blind.
+- **OCR damage.** A score per drawn usage's sentence (the share of its words that neither the
+  dictionary nor the corpus knows), checked against the judges' damage marks. It is computed in
+  the gate's own stage, so step 6's table is not touched.
+- **Local models are trialled as judges,** as a comparison that changes no verdict: chat and
+  decision models served by Ollama on the runner and on a second machine, compared with the Claude
+  judges on the same records for accuracy and speed, alone and in combinations.
+- **Storage, sealing and top-ups** as the pre-registration sets them: `curated/judging/junk_gate/`,
+  `data/review/junk_gate/`, `data/processed/junk_gate/`; held-out words under their sealed names;
+  after a top-up the unchanged classifier scores the new records and the changed cells are gated
+  again.
+
+**One contradiction settled.** Agenda 4b and 9.1 say the threshold is pre-registered "before the
+usages are drawn". The working table has drawn usages already, and the audits of step 6 sampled
+them. The rule that holds is this plan's: the pre-registration is committed before step 6's locked
+run and before any record of the gate's population is judged.
 
 ## Step 8: the gap report (4.8)
 
@@ -614,6 +643,10 @@ committed labels in `data/labels/pilot/`, and the whole script is deleted when t
   form biases contextual vectors (Laicher et al. 2021).
 - **A small test of sentence against abstract context** (Martinc et al. 2020 raise it, untested).
 - **Document-level bootstrap intervals** (Lijffijt et al. 2016).
+- **The junk gate's checks** (`docs/junk_gate.md`, "The checks left for inference"), before any
+  target's drift is read: whether J moves when capitalised targets, modifier and compound roles,
+  list-like sentences, mentions, short sentences, OCR-heavy usages or predicted junk are removed,
+  each against the same number of usages removed at random, and what each outcome does.
 
 ## Verification
 
