@@ -400,6 +400,38 @@ no rule of their own: their documents are reused while their text is unchanged, 
 decision is frozen. The plan's other steps, one metadata check and the repaired texts written
 once, were done in the first round. The reuse waits until more passes are expected.
 
+## Judging rounds through the API (2026-11-27)
+
+The junk gate's labelled sample (4,600 records, two Sonnet judges; `docs/junk_gate.md`) took about
+2 hours of wall time, about 75 minutes of it judging. About 45 minutes would have done.
+
+- **What it took.**
+  - Judge A judged the 4,600 in 28 minutes, for $4.51. Its batches of 500 took 6, then 4, then
+    under 3 minutes each: the batch API speeds up once a run is under way.
+  - Judge B ran after it, since the runner's queue takes one run at a time, in batches of 300. Its
+    cap was sized by hand and stopped it at 3,000 of 4,600, and the queued steps after it failed
+    until the rest was judged.
+  - Run 3's calibration took three judging rounds, one per codebook version, at $0.17 a judge.
+- **What would have made it faster:**
+  1. **Both judges in one run** (`judge-api --second-out`, added the same evening): about 30
+     minutes instead of about 75.
+  2. **Caps computed by the code.** A cap is checked against each chunk's worst case
+     (`compute_worst_case`: 3 characters a token, every answer at `--max-tokens`). Answers took
+     about 80 output tokens against a limit of 4,096, so a limit set from them, before the first
+     judge so both judges match, lets bigger chunks fit the same budget. A mode that prints the cap
+     a chunk size needs would replace hand arithmetic.
+  3. **GPU work first.** The record vectors (`embed_records`) need no labels and could have run
+     while the judging waited on the API; on the one-at-a-time queue they wait behind it instead.
+  4. **A check before each submission**: a clean checkout, the deployment's options current, and a
+     2-item trial of any new kind of run. Five set-up slips (an unregistered deployment, a missing
+     output folder, a wrong trial file, a preview's record in the run log, and tests reaching the
+     outer repository from a worktree) cost 5 to 20 minutes each.
+  5. **A pilot of the codebook** on a dozen known hard cases before the calibration rounds: both
+     amendments came from kinds that were known beforehand.
+- **Follow-ups:** the cap estimate in `judge-api`; a second work queue for jobs that use none of
+  the runner's resources (API judging), so they don't hold GPU jobs back; a pre-submission check
+  in `interpretant submit`.
+
 ## Measured and not adopted
 
 - **Moving the row-building into the spaCy workers** (2026-11-13): the same time with or
