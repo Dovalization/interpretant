@@ -39,9 +39,14 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-from scipy.stats import binom
 
 from interpretant.pipelines.preregistration import PreregistrationError, check_scoring
+from interpretant.review import verdicts
+from interpretant.review.sampling_plans import (
+    ConfusionMatrix,
+    compute_acceptance_number,
+    compute_corrected_rate,
+)
 
 KEPT_ERRORS_PER_WORD = 2
 LEFT_OUT_WRONG_PER_WORD = 3
@@ -69,16 +74,10 @@ def load_parts(folder: Path, name: str) -> dict[str, dict[str, Any]]:
     Raises:
         SystemExit: if an item is judged twice.
     """
-    verdicts: dict[str, dict[str, Any]] = {}
-    paths = [folder / f"{name}.json", *sorted(folder.glob(f"{name}_part_*.json"))]
-    for path in paths:
-        if not path.exists() or path.name.endswith(".manifest.json"):
-            continue
-        for item_id, verdict in json.loads(path.read_text()).items():
-            if item_id in verdicts:
-                raise SystemExit(f"{name} judged {item_id} twice")
-            verdicts[item_id] = verdict
-    return verdicts
+    try:
+        return verdicts.load_parts(folder, name)
+    except verdicts.VerdictsError as exc:
+        raise SystemExit(str(exc)) from exc
 
 
 def load_items(audit: Path) -> dict[str, dict[str, Any]]:
@@ -93,7 +92,7 @@ def load_items(audit: Path) -> dict[str, dict[str, Any]]:
 
 def pooled_bar(judged: int) -> int:
     """The most kept errors that pass: the smallest count passing 96% of the time at 2%."""
-    return next(count for count in range(judged + 1) if binom.cdf(count, judged, 0.02) >= 0.96)
+    return compute_acceptance_number(judged, true_rate=0.02, pass_probability=0.96)
 
 
 def final_verdicts(audit: Path, key: dict[str, Any]) -> tuple[dict[str, str], int, list[str]]:
@@ -107,18 +106,13 @@ def final_verdicts(audit: Path, key: dict[str, Any]) -> tuple[dict[str, str], in
     missing = sorted(set(key) - set(first) | set(key) - set(second))
     if missing:
         raise SystemExit(f"{len(missing)} items lack a judge's verdict, such as {missing[:5]}")
-    settled = load_parts(folder, "opus_adjudication")
-    final, agreed, unsettled = {}, 0, []
-    for item_id in key:
-        one, two = first[item_id]["verdict"], second[item_id]["verdict"]
-        if one == two:
-            final[item_id] = one
-            agreed += 1
-        elif item_id in settled:
-            final[item_id] = settled[item_id]["verdict"]
-        else:
-            unsettled.append(item_id)
-    return final, agreed, unsettled
+    final, agreed, unsettled = verdicts.merge_verdicts(
+        {item_id: first[item_id] for item_id in key},
+        {item_id: second[item_id] for item_id in key},
+        load_parts(folder, "opus_adjudication"),
+        differ=lambda one, two: one["verdict"] != two["verdict"],
+    )
+    return {item_id: answer["verdict"] for item_id, answer in final.items()}, agreed, unsettled
 
 
 def write_pending(audit: Path, key: dict[str, Any]) -> None:
@@ -126,10 +120,9 @@ def write_pending(audit: Path, key: dict[str, Any]) -> None:
     folder = audit / "verdicts"
     first, second = load_judge(folder, "A"), load_judge(folder, "B")
     _, agreed, unsettled = final_verdicts(audit, key)
-    items = load_items(audit)
+    rows = verdicts.build_pending(load_items(audit).values(), first, second, unsettled)
     with (audit / "adjudicate.jsonl").open("w", encoding="utf-8") as handle:
-        for item_id in unsettled:
-            row = items[item_id] | {"judge_1": first[item_id], "judge_2": second[item_id]}
+        for row in rows:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
     sys.stdout.write(
         f"judges agree on {agreed} of {len(key)}; {len(unsettled)} items for the adjudicator\n"
@@ -320,21 +313,18 @@ def corrected_rates(
             "judges_only": sum(g and not a for a, g in pairs),
             "neither": sum(not a and not g for a, g in pairs),
         }
-        sensitivity = rng.beta(1 + table["both"], 1 + table["author_only"], DRAWS)
-        specificity = rng.beta(1 + table["neither"], 1 + table["judges_only"], DRAWS)
-        rate = rng.beta(1 + positives, 1 + total - positives, DRAWS)
-        informative = sensitivity + specificity > 1
-        corrected = np.clip(
-            (rate[informative] + specificity[informative] - 1)
-            / (sensitivity[informative] + specificity[informative] - 1),
-            0,
-            1,
+        confusion = ConfusionMatrix(
+            true_positives=table["both"],
+            false_negatives=table["author_only"],
+            false_positives=table["judges_only"],
+            true_negatives=table["neither"],
         )
-        low, middle, high = np.percentile(corrected, [2.5, 50, 97.5])
+        # One generator for every kind: each kind's draws follow the last kind's
+        corrected = compute_corrected_rate(confusion, positives, total, seed=rng, draws=DRAWS)
         out[kind] = {
             "observed": round(positives / total, 4) if total else 0.0,
-            "corrected": round(float(middle), 4),
-            "interval": [round(float(low), 4), round(float(high), 4)],
+            "corrected": round(corrected.median, 4),
+            "interval": [round(corrected.low, 4), round(corrected.high, 4)],
             "calibration": table,
         }
     return out
