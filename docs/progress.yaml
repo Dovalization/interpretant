@@ -1,0 +1,14 @@
+# The preprocessing phase's steps (docs/preprocessing_phase.md), read by the runner's metrics
+# collector for a dashboard card. It reads one step per line with a line pattern, not a YAML
+# parser, so keep each step on one line in this shape: n, name in quotes, status (done | now |
+# next). When a step closes, mark it done and the next one now, in the step's commit.
+steps:
+  - {n: "0", name: "Leftovers", status: done}
+  - {n: "1", name: "Word table", status: done}
+  - {n: "2", name: "Spellings", status: done}
+  - {n: "3", name: "Compound variants", status: done}
+  - {n: "4", name: "Full static view", status: done}
+  - {n: "5", name: "Contextual sentence view", status: done}
+  - {n: "6", name: "Matching and usages table", status: done}
+  - {n: "7", name: "Junk gate", status: now}
+  - {n: "8", name: "Gap report", status: next}
