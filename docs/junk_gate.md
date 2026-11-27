@@ -397,6 +397,15 @@ A comparison, set before any local model has judged a record. It changes no verd
 - **What follows,** as for the first amendment: run 3 is judged again under this codebook and step
   1's bars are checked again; the earlier verdicts are kept on the runner, apart from the new ones.
 
+## Budget note, 2026-11-27, while L and E are judged
+
+The overall cap of "The Claude judges" is lowered from 60 to 20 US dollars (the author): the API
+balance available is less than 60 dollars, and other work draws on it. Each remaining run's cap is
+set so that even its worst case (every answer at the maximum length) keeps the total within 20
+dollars. The first judge of L and E had already started under its own cap of 20 dollars; its actual
+spend counts toward the total. If the confirmation samples would pass the cap, the judging stops
+and the author decides, as before. Nothing else changes.
+
 ## Results
 
 *To be appended.*
