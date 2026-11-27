@@ -1,0 +1,4178 @@
+{
+ "items": {
+  "labelled": 4000,
+  "enrichment": 600
+ },
+ "drawn_usages_by_decade": {
+  "1950": 23635,
+  "1960": 51557,
+  "1970": 82758,
+  "1980": 123618,
+  "1990": 159830,
+  "2000": 174562,
+  "2010": 196059,
+  "2020": 243182
+ },
+ "records_by_decade": {
+  "1950": 13404,
+  "1960": 28301,
+  "1970": 43464,
+  "1980": 57516,
+  "1990": 67639,
+  "2000": 73414,
+  "2010": 78593,
+  "2020": 83356
+ },
+ "usages_by_word_and_decade": {
+  "affordance": {
+   "1970": {
+    "matched": 3,
+    "in_scope": 3,
+    "drawn": 3
+   },
+   "1980": {
+    "matched": 2,
+    "in_scope": 2,
+    "drawn": 2
+   },
+   "1990": {
+    "matched": 73,
+    "in_scope": 73,
+    "drawn": 50
+   },
+   "2000": {
+    "matched": 226,
+    "in_scope": 226,
+    "drawn": 123
+   },
+   "2010": {
+    "matched": 427,
+    "in_scope": 426,
+    "drawn": 268
+   },
+   "2020": {
+    "matched": 664,
+    "in_scope": 660,
+    "drawn": 403
+   }
+  },
+  "agency": {
+   "1950": {
+    "matched": 397,
+    "in_scope": 355,
+    "drawn": 236
+   },
+   "1960": {
+    "matched": 647,
+    "in_scope": 580,
+    "drawn": 393
+   },
+   "1970": {
+    "matched": 734,
+    "in_scope": 616,
+    "drawn": 430
+   },
+   "1980": {
+    "matched": 1006,
+    "in_scope": 902,
+    "drawn": 596
+   },
+   "1990": {
+    "matched": 1265,
+    "in_scope": 1163,
+    "drawn": 811
+   },
+   "2000": {
+    "matched": 1441,
+    "in_scope": 1331,
+    "drawn": 914
+   },
+   "2010": {
+    "matched": 2010,
+    "in_scope": 1851,
+    "drawn": 1266
+   },
+   "2020": {
+    "matched": 2897,
+    "in_scope": 2709,
+    "drawn": 1694
+   }
+  },
+  "agent": {
+   "1950": {
+    "matched": 350,
+    "in_scope": 350,
+    "drawn": 259
+   },
+   "1960": {
+    "matched": 560,
+    "in_scope": 556,
+    "drawn": 400
+   },
+   "1970": {
+    "matched": 1053,
+    "in_scope": 1045,
+    "drawn": 692
+   },
+   "1980": {
+    "matched": 1651,
+    "in_scope": 1645,
+    "drawn": 956
+   },
+   "1990": {
+    "matched": 4037,
+    "in_scope": 4007,
+    "drawn": 1730
+   },
+   "2000": {
+    "matched": 5549,
+    "in_scope": 5502,
+    "drawn": 2254
+   },
+   "2010": {
+    "matched": 3864,
+    "in_scope": 3836,
+    "drawn": 1866
+   },
+   "2020": {
+    "matched": 4172,
+    "in_scope": 4154,
+    "drawn": 2083
+   }
+  },
+  "alignment": {
+   "1950": {
+    "matched": 26,
+    "in_scope": 26,
+    "drawn": 22
+   },
+   "1960": {
+    "matched": 43,
+    "in_scope": 43,
+    "drawn": 38
+   },
+   "1970": {
+    "matched": 95,
+    "in_scope": 94,
+    "drawn": 63
+   },
+   "1980": {
+    "matched": 184,
+    "in_scope": 183,
+    "drawn": 124
+   },
+   "1990": {
+    "matched": 306,
+    "in_scope": 306,
+    "drawn": 191
+   },
+   "2000": {
+    "matched": 481,
+    "in_scope": 478,
+    "drawn": 307
+   },
+   "2010": {
+    "matched": 671,
+    "in_scope": 667,
+    "drawn": 401
+   },
+   "2020": {
+    "matched": 1592,
+    "in_scope": 1583,
+    "drawn": 1051
+   }
+  },
+  "artificial intelligence": {
+   "1950": {
+    "matched": 4,
+    "in_scope": 3,
+    "drawn": 2
+   },
+   "1960": {
+    "matched": 77,
+    "in_scope": 72,
+    "drawn": 60
+   },
+   "1970": {
+    "matched": 281,
+    "in_scope": 257,
+    "drawn": 215
+   },
+   "1980": {
+    "matched": 1214,
+    "in_scope": 1150,
+    "drawn": 959
+   },
+   "1990": {
+    "matched": 643,
+    "in_scope": 609,
+    "drawn": 503
+   },
+   "2000": {
+    "matched": 345,
+    "in_scope": 330,
+    "drawn": 290
+   },
+   "2010": {
+    "matched": 567,
+    "in_scope": 557,
+    "drawn": 425
+   },
+   "2020": {
+    "matched": 4017,
+    "in_scope": 3971,
+    "drawn": 3020
+   }
+  },
+  "attention": {
+   "1950": {
+    "matched": 1269,
+    "in_scope": 1269,
+    "drawn": 1082
+   },
+   "1960": {
+    "matched": 2140,
+    "in_scope": 2139,
+    "drawn": 1842
+   },
+   "1970": {
+    "matched": 3318,
+    "in_scope": 3301,
+    "drawn": 2763
+   },
+   "1980": {
+    "matched": 4081,
+    "in_scope": 4073,
+    "drawn": 3395
+   },
+   "1990": {
+    "matched": 5133,
+    "in_scope": 5127,
+    "drawn": 3997
+   },
+   "2000": {
+    "matched": 6416,
+    "in_scope": 6394,
+    "drawn": 4779
+   },
+   "2010": {
+    "matched": 8291,
+    "in_scope": 8264,
+    "drawn": 5815
+   },
+   "2020": {
+    "matched": 11105,
+    "in_scope": 11022,
+    "drawn": 7874
+   }
+  },
+  "behavior": {
+   "1950": {
+    "matched": 2524,
+    "in_scope": 2487,
+    "drawn": 1428
+   },
+   "1960": {
+    "matched": 5077,
+    "in_scope": 5033,
+    "drawn": 2929
+   },
+   "1970": {
+    "matched": 8077,
+    "in_scope": 7981,
+    "drawn": 4425
+   },
+   "1980": {
+    "matched": 9056,
+    "in_scope": 8914,
+    "drawn": 5109
+   },
+   "1990": {
+    "matched": 10337,
+    "in_scope": 10185,
+    "drawn": 5910
+   },
+   "2000": {
+    "matched": 11025,
+    "in_scope": 10859,
+    "drawn": 6231
+   },
+   "2010": {
+    "matched": 13044,
+    "in_scope": 12894,
+    "drawn": 7086
+   },
+   "2020": {
+    "matched": 14016,
+    "in_scope": 13838,
+    "drawn": 7924
+   }
+  },
+  "cloud": {
+   "1950": {
+    "matched": 38,
+    "in_scope": 27,
+    "drawn": 25
+   },
+   "1960": {
+    "matched": 112,
+    "in_scope": 94,
+    "drawn": 41
+   },
+   "1970": {
+    "matched": 113,
+    "in_scope": 86,
+    "drawn": 64
+   },
+   "1980": {
+    "matched": 96,
+    "in_scope": 78,
+    "drawn": 62
+   },
+   "1990": {
+    "matched": 107,
+    "in_scope": 86,
+    "drawn": 60
+   },
+   "2000": {
+    "matched": 179,
+    "in_scope": 149,
+    "drawn": 98
+   },
+   "2010": {
+    "matched": 1787,
+    "in_scope": 1729,
+    "drawn": 667
+   },
+   "2020": {
+    "matched": 2139,
+    "in_scope": 2067,
+    "drawn": 895
+   }
+  },
+  "cognition": {
+   "1950": {
+    "matched": 81,
+    "in_scope": 80,
+    "drawn": 42
+   },
+   "1960": {
+    "matched": 193,
+    "in_scope": 187,
+    "drawn": 125
+   },
+   "1970": {
+    "matched": 386,
+    "in_scope": 378,
+    "drawn": 260
+   },
+   "1980": {
+    "matched": 829,
+    "in_scope": 798,
+    "drawn": 567
+   },
+   "1990": {
+    "matched": 1258,
+    "in_scope": 1221,
+    "drawn": 823
+   },
+   "2000": {
+    "matched": 1762,
+    "in_scope": 1731,
+    "drawn": 1158
+   },
+   "2010": {
+    "matched": 2198,
+    "in_scope": 2160,
+    "drawn": 1366
+   },
+   "2020": {
+    "matched": 2796,
+    "in_scope": 2766,
+    "drawn": 1738
+   }
+  },
+  "complexity": {
+   "1950": {
+    "matched": 201,
+    "in_scope": 201,
+    "drawn": 166
+   },
+   "1960": {
+    "matched": 797,
+    "in_scope": 792,
+    "drawn": 554
+   },
+   "1970": {
+    "matched": 1370,
+    "in_scope": 1367,
+    "drawn": 964
+   },
+   "1980": {
+    "matched": 1971,
+    "in_scope": 1966,
+    "drawn": 1428
+   },
+   "1990": {
+    "matched": 2680,
+    "in_scope": 2673,
+    "drawn": 1965
+   },
+   "2000": {
+    "matched": 2847,
+    "in_scope": 2844,
+    "drawn": 2156
+   },
+   "2010": {
+    "matched": 3304,
+    "in_scope": 3292,
+    "drawn": 2469
+   },
+   "2020": {
+    "matched": 3932,
+    "in_scope": 3925,
+    "drawn": 3116
+   }
+  },
+  "component": {
+   "1950": {
+    "matched": 717,
+    "in_scope": 716,
+    "drawn": 498
+   },
+   "1960": {
+    "matched": 1880,
+    "in_scope": 1878,
+    "drawn": 1151
+   },
+   "1970": {
+    "matched": 3223,
+    "in_scope": 3219,
+    "drawn": 2115
+   },
+   "1980": {
+    "matched": 4865,
+    "in_scope": 4854,
+    "drawn": 3229
+   },
+   "1990": {
+    "matched": 5629,
+    "in_scope": 5620,
+    "drawn": 3725
+   },
+   "2000": {
+    "matched": 5473,
+    "in_scope": 5463,
+    "drawn": 3723
+   },
+   "2010": {
+    "matched": 5552,
+    "in_scope": 5543,
+    "drawn": 3968
+   },
+   "2020": {
+    "matched": 6040,
+    "in_scope": 6032,
+    "drawn": 4453
+   }
+  },
+  "computation": {
+   "1950": {
+    "matched": 257,
+    "in_scope": 244,
+    "drawn": 171
+   },
+   "1960": {
+    "matched": 772,
+    "in_scope": 721,
+    "drawn": 435
+   },
+   "1970": {
+    "matched": 687,
+    "in_scope": 673,
+    "drawn": 497
+   },
+   "1980": {
+    "matched": 1111,
+    "in_scope": 1102,
+    "drawn": 814
+   },
+   "1990": {
+    "matched": 1334,
+    "in_scope": 1314,
+    "drawn": 954
+   },
+   "2000": {
+    "matched": 1193,
+    "in_scope": 1183,
+    "drawn": 905
+   },
+   "2010": {
+    "matched": 1248,
+    "in_scope": 1238,
+    "drawn": 915
+   },
+   "2020": {
+    "matched": 1256,
+    "in_scope": 1249,
+    "drawn": 948
+   }
+  },
+  "consciousness": {
+   "1950": {
+    "matched": 279,
+    "in_scope": 274,
+    "drawn": 169
+   },
+   "1960": {
+    "matched": 568,
+    "in_scope": 559,
+    "drawn": 328
+   },
+   "1970": {
+    "matched": 1191,
+    "in_scope": 1141,
+    "drawn": 637
+   },
+   "1980": {
+    "matched": 1165,
+    "in_scope": 1138,
+    "drawn": 692
+   },
+   "1990": {
+    "matched": 1628,
+    "in_scope": 1574,
+    "drawn": 844
+   },
+   "2000": {
+    "matched": 1810,
+    "in_scope": 1757,
+    "drawn": 983
+   },
+   "2010": {
+    "matched": 1992,
+    "in_scope": 1968,
+    "drawn": 1048
+   },
+   "2020": {
+    "matched": 2746,
+    "in_scope": 2708,
+    "drawn": 1334
+   }
+  },
+  "control": {
+   "1950": {
+    "matched": 2199,
+    "in_scope": 1568,
+    "drawn": 1008
+   },
+   "1960": {
+    "matched": 6321,
+    "in_scope": 4784,
+    "drawn": 2832
+   },
+   "1970": {
+    "matched": 8948,
+    "in_scope": 7055,
+    "drawn": 4399
+   },
+   "1980": {
+    "matched": 12555,
+    "in_scope": 10017,
+    "drawn": 5890
+   },
+   "1990": {
+    "matched": 15207,
+    "in_scope": 12033,
+    "drawn": 6692
+   },
+   "2000": {
+    "matched": 15227,
+    "in_scope": 11477,
+    "drawn": 6466
+   },
+   "2010": {
+    "matched": 17287,
+    "in_scope": 12962,
+    "drawn": 7009
+   },
+   "2020": {
+    "matched": 17226,
+    "in_scope": 12926,
+    "drawn": 7280
+   }
+  },
+  "embedding": {
+   "1950": {
+    "matched": 7,
+    "in_scope": 7,
+    "drawn": 7
+   },
+   "1960": {
+    "matched": 44,
+    "in_scope": 44,
+    "drawn": 29
+   },
+   "1970": {
+    "matched": 96,
+    "in_scope": 96,
+    "drawn": 70
+   },
+   "1980": {
+    "matched": 109,
+    "in_scope": 109,
+    "drawn": 78
+   },
+   "1990": {
+    "matched": 163,
+    "in_scope": 163,
+    "drawn": 121
+   },
+   "2000": {
+    "matched": 242,
+    "in_scope": 241,
+    "drawn": 177
+   },
+   "2010": {
+    "matched": 717,
+    "in_scope": 715,
+    "drawn": 373
+   },
+   "2020": {
+    "matched": 1549,
+    "in_scope": 1546,
+    "drawn": 919
+   }
+  },
+  "embodiment": {
+   "1950": {
+    "matched": 16,
+    "in_scope": 16,
+    "drawn": 16
+   },
+   "1960": {
+    "matched": 31,
+    "in_scope": 31,
+    "drawn": 29
+   },
+   "1970": {
+    "matched": 66,
+    "in_scope": 65,
+    "drawn": 55
+   },
+   "1980": {
+    "matched": 63,
+    "in_scope": 62,
+    "drawn": 51
+   },
+   "1990": {
+    "matched": 147,
+    "in_scope": 145,
+    "drawn": 115
+   },
+   "2000": {
+    "matched": 308,
+    "in_scope": 305,
+    "drawn": 223
+   },
+   "2010": {
+    "matched": 399,
+    "in_scope": 395,
+    "drawn": 271
+   },
+   "2020": {
+    "matched": 675,
+    "in_scope": 671,
+    "drawn": 440
+   }
+  },
+  "emergence": {
+   "1950": {
+    "matched": 111,
+    "in_scope": 109,
+    "drawn": 82
+   },
+   "1960": {
+    "matched": 242,
+    "in_scope": 237,
+    "drawn": 200
+   },
+   "1970": {
+    "matched": 464,
+    "in_scope": 458,
+    "drawn": 400
+   },
+   "1980": {
+    "matched": 567,
+    "in_scope": 560,
+    "drawn": 484
+   },
+   "1990": {
+    "matched": 828,
+    "in_scope": 820,
+    "drawn": 706
+   },
+   "2000": {
+    "matched": 1120,
+    "in_scope": 1107,
+    "drawn": 935
+   },
+   "2010": {
+    "matched": 1478,
+    "in_scope": 1470,
+    "drawn": 1237
+   },
+   "2020": {
+    "matched": 1818,
+    "in_scope": 1810,
+    "drawn": 1579
+   }
+  },
+  "experience": {
+   "1950": {
+    "matched": 2026,
+    "in_scope": 1787,
+    "drawn": 1229
+   },
+   "1960": {
+    "matched": 3697,
+    "in_scope": 3153,
+    "drawn": 2137
+   },
+   "1970": {
+    "matched": 6098,
+    "in_scope": 5012,
+    "drawn": 3220
+   },
+   "1980": {
+    "matched": 8048,
+    "in_scope": 6327,
+    "drawn": 4254
+   },
+   "1990": {
+    "matched": 10608,
+    "in_scope": 8252,
+    "drawn": 5544
+   },
+   "2000": {
+    "matched": 13484,
+    "in_scope": 10706,
+    "drawn": 6750
+   },
+   "2010": {
+    "matched": 19204,
+    "in_scope": 15365,
+    "drawn": 9053
+   },
+   "2020": {
+    "matched": 24985,
+    "in_scope": 19413,
+    "drawn": 11566
+   }
+  },
+  "feedback": {
+   "1950": {
+    "matched": 142,
+    "in_scope": 142,
+    "drawn": 48
+   },
+   "1960": {
+    "matched": 798,
+    "in_scope": 797,
+    "drawn": 414
+   },
+   "1970": {
+    "matched": 1331,
+    "in_scope": 1326,
+    "drawn": 715
+   },
+   "1980": {
+    "matched": 1530,
+    "in_scope": 1525,
+    "drawn": 858
+   },
+   "1990": {
+    "matched": 1976,
+    "in_scope": 1971,
+    "drawn": 1165
+   },
+   "2000": {
+    "matched": 2554,
+    "in_scope": 2547,
+    "drawn": 1451
+   },
+   "2010": {
+    "matched": 3800,
+    "in_scope": 3791,
+    "drawn": 1939
+   },
+   "2020": {
+    "matched": 4703,
+    "in_scope": 4688,
+    "drawn": 2607
+   }
+  },
+  "feedback loop": {
+   "1950": {
+    "matched": 1,
+    "in_scope": 1,
+    "drawn": 1
+   },
+   "1960": {
+    "matched": 24,
+    "in_scope": 24,
+    "drawn": 23
+   },
+   "1970": {
+    "matched": 32,
+    "in_scope": 32,
+    "drawn": 30
+   },
+   "1980": {
+    "matched": 46,
+    "in_scope": 46,
+    "drawn": 35
+   },
+   "1990": {
+    "matched": 32,
+    "in_scope": 32,
+    "drawn": 29
+   },
+   "2000": {
+    "matched": 88,
+    "in_scope": 88,
+    "drawn": 68
+   },
+   "2010": {
+    "matched": 70,
+    "in_scope": 70,
+    "drawn": 63
+   },
+   "2020": {
+    "matched": 143,
+    "in_scope": 143,
+    "drawn": 126
+   }
+  },
+  "fusion": {
+   "1950": {
+    "matched": 164,
+    "in_scope": 164,
+    "drawn": 82
+   },
+   "1960": {
+    "matched": 135,
+    "in_scope": 134,
+    "drawn": 94
+   },
+   "1970": {
+    "matched": 141,
+    "in_scope": 136,
+    "drawn": 98
+   },
+   "1980": {
+    "matched": 295,
+    "in_scope": 289,
+    "drawn": 192
+   },
+   "1990": {
+    "matched": 609,
+    "in_scope": 603,
+    "drawn": 339
+   },
+   "2000": {
+    "matched": 772,
+    "in_scope": 767,
+    "drawn": 435
+   },
+   "2010": {
+    "matched": 931,
+    "in_scope": 919,
+    "drawn": 495
+   },
+   "2020": {
+    "matched": 1564,
+    "in_scope": 1527,
+    "drawn": 939
+   }
+  },
+  "hallucination": {
+   "1950": {
+    "matched": 97,
+    "in_scope": 97,
+    "drawn": 53
+   },
+   "1960": {
+    "matched": 87,
+    "in_scope": 87,
+    "drawn": 51
+   },
+   "1970": {
+    "matched": 57,
+    "in_scope": 57,
+    "drawn": 42
+   },
+   "1980": {
+    "matched": 65,
+    "in_scope": 65,
+    "drawn": 40
+   },
+   "1990": {
+    "matched": 73,
+    "in_scope": 73,
+    "drawn": 50
+   },
+   "2000": {
+    "matched": 111,
+    "in_scope": 110,
+    "drawn": 63
+   },
+   "2010": {
+    "matched": 148,
+    "in_scope": 146,
+    "drawn": 73
+   },
+   "2020": {
+    "matched": 397,
+    "in_scope": 396,
+    "drawn": 204
+   }
+  },
+  "having": {
+   "1950": {
+    "matched": 940,
+    "in_scope": 940,
+    "drawn": 792
+   },
+   "1960": {
+    "matched": 1719,
+    "in_scope": 1713,
+    "drawn": 1498
+   },
+   "1970": {
+    "matched": 2182,
+    "in_scope": 2179,
+    "drawn": 1919
+   },
+   "1980": {
+    "matched": 2638,
+    "in_scope": 2634,
+    "drawn": 2302
+   },
+   "1990": {
+    "matched": 2638,
+    "in_scope": 2636,
+    "drawn": 2350
+   },
+   "2000": {
+    "matched": 2649,
+    "in_scope": 2643,
+    "drawn": 2328
+   },
+   "2010": {
+    "matched": 3119,
+    "in_scope": 3115,
+    "drawn": 2684
+   },
+   "2020": {
+    "matched": 2618,
+    "in_scope": 2615,
+    "drawn": 2241
+   }
+  },
+  "held-out:02b12c17f936": {
+   "1950": {
+    "matched": 313,
+    "in_scope": 269,
+    "drawn": 233
+   },
+   "1960": {
+    "matched": 467,
+    "in_scope": 407,
+    "drawn": 337
+   },
+   "1970": {
+    "matched": 648,
+    "in_scope": 541,
+    "drawn": 464
+   },
+   "1980": {
+    "matched": 850,
+    "in_scope": 741,
+    "drawn": 556
+   },
+   "1990": {
+    "matched": 1062,
+    "in_scope": 889,
+    "drawn": 704
+   },
+   "2000": {
+    "matched": 1430,
+    "in_scope": 1283,
+    "drawn": 890
+   },
+   "2010": {
+    "matched": 1300,
+    "in_scope": 1172,
+    "drawn": 861
+   },
+   "2020": {
+    "matched": 1566,
+    "in_scope": 1412,
+    "drawn": 1001
+   }
+  },
+  "held-out:07afa72fe9fc": {
+   "1950": {
+    "matched": 714,
+    "in_scope": 700,
+    "drawn": 322
+   },
+   "1960": {
+    "matched": 1338,
+    "in_scope": 1254,
+    "drawn": 578
+   },
+   "1970": {
+    "matched": 2594,
+    "in_scope": 2415,
+    "drawn": 1014
+   },
+   "1980": {
+    "matched": 4119,
+    "in_scope": 3873,
+    "drawn": 1500
+   },
+   "1990": {
+    "matched": 4478,
+    "in_scope": 4227,
+    "drawn": 1676
+   },
+   "2000": {
+    "matched": 5103,
+    "in_scope": 4818,
+    "drawn": 1742
+   },
+   "2010": {
+    "matched": 6685,
+    "in_scope": 6312,
+    "drawn": 2169
+   },
+   "2020": {
+    "matched": 10189,
+    "in_scope": 9706,
+    "drawn": 3367
+   }
+  },
+  "held-out:10c5166f4af0": {
+   "1950": {
+    "matched": 28,
+    "in_scope": 27,
+    "drawn": 22
+   },
+   "1960": {
+    "matched": 57,
+    "in_scope": 56,
+    "drawn": 48
+   },
+   "1970": {
+    "matched": 57,
+    "in_scope": 55,
+    "drawn": 51
+   },
+   "1980": {
+    "matched": 78,
+    "in_scope": 75,
+    "drawn": 65
+   },
+   "1990": {
+    "matched": 223,
+    "in_scope": 221,
+    "drawn": 154
+   },
+   "2000": {
+    "matched": 231,
+    "in_scope": 229,
+    "drawn": 155
+   },
+   "2010": {
+    "matched": 208,
+    "in_scope": 194,
+    "drawn": 138
+   },
+   "2020": {
+    "matched": 189,
+    "in_scope": 185,
+    "drawn": 131
+   }
+  },
+  "held-out:11ee3fc840ad": {
+   "1950": {
+    "matched": 682,
+    "in_scope": 681,
+    "drawn": 376
+   },
+   "1960": {
+    "matched": 784,
+    "in_scope": 782,
+    "drawn": 427
+   },
+   "1970": {
+    "matched": 1067,
+    "in_scope": 1066,
+    "drawn": 540
+   },
+   "1980": {
+    "matched": 1568,
+    "in_scope": 1568,
+    "drawn": 766
+   },
+   "1990": {
+    "matched": 2118,
+    "in_scope": 2116,
+    "drawn": 1038
+   },
+   "2000": {
+    "matched": 2489,
+    "in_scope": 2485,
+    "drawn": 1282
+   },
+   "2010": {
+    "matched": 2782,
+    "in_scope": 2781,
+    "drawn": 1462
+   },
+   "2020": {
+    "matched": 2180,
+    "in_scope": 2175,
+    "drawn": 1338
+   }
+  },
+  "held-out:11f8f1ec4ec9": {
+   "1950": {
+    "matched": 16,
+    "in_scope": 16,
+    "drawn": 9
+   },
+   "1960": {
+    "matched": 9,
+    "in_scope": 9,
+    "drawn": 9
+   },
+   "1970": {
+    "matched": 46,
+    "in_scope": 43,
+    "drawn": 31
+   },
+   "1980": {
+    "matched": 210,
+    "in_scope": 208,
+    "drawn": 114
+   },
+   "1990": {
+    "matched": 408,
+    "in_scope": 399,
+    "drawn": 197
+   },
+   "2000": {
+    "matched": 252,
+    "in_scope": 250,
+    "drawn": 167
+   },
+   "2010": {
+    "matched": 422,
+    "in_scope": 415,
+    "drawn": 312
+   },
+   "2020": {
+    "matched": 454,
+    "in_scope": 439,
+    "drawn": 351
+   }
+  },
+  "held-out:15a9a9ab2b92": {
+   "1950": {
+    "matched": 104,
+    "in_scope": 91,
+    "drawn": 72
+   },
+   "1960": {
+    "matched": 286,
+    "in_scope": 256,
+    "drawn": 180
+   },
+   "1970": {
+    "matched": 973,
+    "in_scope": 920,
+    "drawn": 601
+   },
+   "1980": {
+    "matched": 2450,
+    "in_scope": 2380,
+    "drawn": 1372
+   },
+   "1990": {
+    "matched": 3911,
+    "in_scope": 3806,
+    "drawn": 2118
+   },
+   "2000": {
+    "matched": 3631,
+    "in_scope": 3533,
+    "drawn": 2177
+   },
+   "2010": {
+    "matched": 4380,
+    "in_scope": 4301,
+    "drawn": 2606
+   },
+   "2020": {
+    "matched": 5092,
+    "in_scope": 5030,
+    "drawn": 3218
+   }
+  },
+  "held-out:164ebb5df0ea": {
+   "1950": {
+    "matched": 6,
+    "in_scope": 3,
+    "drawn": 2
+   },
+   "1960": {
+    "matched": 37,
+    "in_scope": 37,
+    "drawn": 23
+   },
+   "1970": {
+    "matched": 28,
+    "in_scope": 27,
+    "drawn": 23
+   },
+   "1980": {
+    "matched": 56,
+    "in_scope": 56,
+    "drawn": 36
+   },
+   "1990": {
+    "matched": 62,
+    "in_scope": 62,
+    "drawn": 45
+   },
+   "2000": {
+    "matched": 73,
+    "in_scope": 73,
+    "drawn": 50
+   },
+   "2010": {
+    "matched": 95,
+    "in_scope": 95,
+    "drawn": 58
+   },
+   "2020": {
+    "matched": 237,
+    "in_scope": 234,
+    "drawn": 143
+   }
+  },
+  "held-out:19d5e41de2db": {
+   "1950": {
+    "matched": 250,
+    "in_scope": 249,
+    "drawn": 200
+   },
+   "1960": {
+    "matched": 355,
+    "in_scope": 352,
+    "drawn": 270
+   },
+   "1970": {
+    "matched": 422,
+    "in_scope": 413,
+    "drawn": 277
+   },
+   "1980": {
+    "matched": 473,
+    "in_scope": 468,
+    "drawn": 313
+   },
+   "1990": {
+    "matched": 592,
+    "in_scope": 586,
+    "drawn": 375
+   },
+   "2000": {
+    "matched": 647,
+    "in_scope": 639,
+    "drawn": 403
+   },
+   "2010": {
+    "matched": 589,
+    "in_scope": 586,
+    "drawn": 396
+   },
+   "2020": {
+    "matched": 699,
+    "in_scope": 695,
+    "drawn": 435
+   }
+  },
+  "held-out:1b596f30c66f": {
+   "1950": {
+    "matched": 617,
+    "in_scope": 613,
+    "drawn": 341
+   },
+   "1960": {
+    "matched": 1486,
+    "in_scope": 1459,
+    "drawn": 727
+   },
+   "1970": {
+    "matched": 1431,
+    "in_scope": 1423,
+    "drawn": 851
+   },
+   "1980": {
+    "matched": 1471,
+    "in_scope": 1464,
+    "drawn": 932
+   },
+   "1990": {
+    "matched": 1307,
+    "in_scope": 1304,
+    "drawn": 848
+   },
+   "2000": {
+    "matched": 983,
+    "in_scope": 977,
+    "drawn": 705
+   },
+   "2010": {
+    "matched": 1022,
+    "in_scope": 1021,
+    "drawn": 755
+   },
+   "2020": {
+    "matched": 1346,
+    "in_scope": 1330,
+    "drawn": 1033
+   }
+  },
+  "held-out:1c5d119c45e3": {
+   "1950": {
+    "matched": 62,
+    "in_scope": 61,
+    "drawn": 56
+   },
+   "1960": {
+    "matched": 129,
+    "in_scope": 128,
+    "drawn": 107
+   },
+   "1970": {
+    "matched": 185,
+    "in_scope": 185,
+    "drawn": 158
+   },
+   "1980": {
+    "matched": 171,
+    "in_scope": 170,
+    "drawn": 147
+   },
+   "1990": {
+    "matched": 171,
+    "in_scope": 171,
+    "drawn": 156
+   },
+   "2000": {
+    "matched": 120,
+    "in_scope": 119,
+    "drawn": 104
+   },
+   "2010": {
+    "matched": 324,
+    "in_scope": 324,
+    "drawn": 234
+   },
+   "2020": {
+    "matched": 388,
+    "in_scope": 388,
+    "drawn": 274
+   }
+  },
+  "held-out:2c676bb34422": {
+   "1950": {
+    "matched": 9,
+    "in_scope": 5,
+    "drawn": 5
+   },
+   "1960": {
+    "matched": 22,
+    "in_scope": 11,
+    "drawn": 10
+   },
+   "1970": {
+    "matched": 54,
+    "in_scope": 36,
+    "drawn": 24
+   },
+   "1980": {
+    "matched": 51,
+    "in_scope": 29,
+    "drawn": 20
+   },
+   "1990": {
+    "matched": 224,
+    "in_scope": 152,
+    "drawn": 100
+   },
+   "2000": {
+    "matched": 509,
+    "in_scope": 389,
+    "drawn": 240
+   },
+   "2010": {
+    "matched": 854,
+    "in_scope": 693,
+    "drawn": 438
+   },
+   "2020": {
+    "matched": 1566,
+    "in_scope": 1317,
+    "drawn": 742
+   }
+  },
+  "held-out:32a54748ce0a": {
+   "1950": {
+    "matched": 205,
+    "in_scope": 200,
+    "drawn": 174
+   },
+   "1960": {
+    "matched": 381,
+    "in_scope": 376,
+    "drawn": 332
+   },
+   "1970": {
+    "matched": 458,
+    "in_scope": 452,
+    "drawn": 404
+   },
+   "1980": {
+    "matched": 645,
+    "in_scope": 638,
+    "drawn": 554
+   },
+   "1990": {
+    "matched": 774,
+    "in_scope": 764,
+    "drawn": 673
+   },
+   "2000": {
+    "matched": 860,
+    "in_scope": 844,
+    "drawn": 708
+   },
+   "2010": {
+    "matched": 1052,
+    "in_scope": 1032,
+    "drawn": 848
+   },
+   "2020": {
+    "matched": 1099,
+    "in_scope": 1086,
+    "drawn": 968
+   }
+  },
+  "held-out:34711782a046": {
+   "1950": {
+    "matched": 69,
+    "in_scope": 69,
+    "drawn": 20
+   },
+   "1960": {
+    "matched": 77,
+    "in_scope": 73,
+    "drawn": 52
+   },
+   "1970": {
+    "matched": 213,
+    "in_scope": 208,
+    "drawn": 134
+   },
+   "1980": {
+    "matched": 1090,
+    "in_scope": 1086,
+    "drawn": 608
+   },
+   "1990": {
+    "matched": 2808,
+    "in_scope": 2784,
+    "drawn": 1664
+   },
+   "2000": {
+    "matched": 3027,
+    "in_scope": 3004,
+    "drawn": 1779
+   },
+   "2010": {
+    "matched": 4061,
+    "in_scope": 4019,
+    "drawn": 2280
+   },
+   "2020": {
+    "matched": 5260,
+    "in_scope": 5239,
+    "drawn": 2867
+   }
+  },
+  "held-out:3cff64e5f947": {
+   "1950": {
+    "matched": 6,
+    "in_scope": 5,
+    "drawn": 5
+   },
+   "1960": {
+    "matched": 14,
+    "in_scope": 9,
+    "drawn": 9
+   },
+   "1970": {
+    "matched": 42,
+    "in_scope": 36,
+    "drawn": 34
+   },
+   "1980": {
+    "matched": 83,
+    "in_scope": 54,
+    "drawn": 49
+   },
+   "1990": {
+    "matched": 172,
+    "in_scope": 128,
+    "drawn": 103
+   },
+   "2000": {
+    "matched": 215,
+    "in_scope": 167,
+    "drawn": 126
+   },
+   "2010": {
+    "matched": 266,
+    "in_scope": 184,
+    "drawn": 128
+   },
+   "2020": {
+    "matched": 487,
+    "in_scope": 342,
+    "drawn": 250
+   }
+  },
+  "held-out:50fa17396b00": {
+   "1950": {
+    "matched": 265,
+    "in_scope": 264,
+    "drawn": 203
+   },
+   "1960": {
+    "matched": 315,
+    "in_scope": 312,
+    "drawn": 260
+   },
+   "1970": {
+    "matched": 413,
+    "in_scope": 406,
+    "drawn": 308
+   },
+   "1980": {
+    "matched": 394,
+    "in_scope": 391,
+    "drawn": 323
+   },
+   "1990": {
+    "matched": 490,
+    "in_scope": 484,
+    "drawn": 363
+   },
+   "2000": {
+    "matched": 558,
+    "in_scope": 544,
+    "drawn": 416
+   },
+   "2010": {
+    "matched": 978,
+    "in_scope": 950,
+    "drawn": 645
+   },
+   "2020": {
+    "matched": 1229,
+    "in_scope": 1192,
+    "drawn": 834
+   }
+  },
+  "held-out:5350e5a87b0b": {
+   "1950": {
+    "matched": 363,
+    "in_scope": 363,
+    "drawn": 184
+   },
+   "1960": {
+    "matched": 483,
+    "in_scope": 478,
+    "drawn": 233
+   },
+   "1970": {
+    "matched": 747,
+    "in_scope": 745,
+    "drawn": 365
+   },
+   "1980": {
+    "matched": 910,
+    "in_scope": 906,
+    "drawn": 484
+   },
+   "1990": {
+    "matched": 735,
+    "in_scope": 732,
+    "drawn": 474
+   },
+   "2000": {
+    "matched": 802,
+    "in_scope": 802,
+    "drawn": 471
+   },
+   "2010": {
+    "matched": 562,
+    "in_scope": 561,
+    "drawn": 325
+   },
+   "2020": {
+    "matched": 527,
+    "in_scope": 525,
+    "drawn": 319
+   }
+  },
+  "held-out:5ff5c82d203d": {
+   "1950": {
+    "matched": 2,
+    "in_scope": 2,
+    "drawn": 2
+   },
+   "1960": {
+    "matched": 5,
+    "in_scope": 4,
+    "drawn": 4
+   },
+   "1970": {
+    "matched": 17,
+    "in_scope": 17,
+    "drawn": 13
+   },
+   "1980": {
+    "matched": 177,
+    "in_scope": 173,
+    "drawn": 87
+   },
+   "1990": {
+    "matched": 527,
+    "in_scope": 521,
+    "drawn": 221
+   },
+   "2000": {
+    "matched": 398,
+    "in_scope": 394,
+    "drawn": 220
+   },
+   "2010": {
+    "matched": 337,
+    "in_scope": 334,
+    "drawn": 184
+   },
+   "2020": {
+    "matched": 341,
+    "in_scope": 335,
+    "drawn": 146
+   }
+  },
+  "held-out:67415e178146": {
+   "1950": {
+    "matched": 48,
+    "in_scope": 47,
+    "drawn": 39
+   },
+   "1960": {
+    "matched": 87,
+    "in_scope": 85,
+    "drawn": 70
+   },
+   "1970": {
+    "matched": 131,
+    "in_scope": 129,
+    "drawn": 100
+   },
+   "1980": {
+    "matched": 336,
+    "in_scope": 334,
+    "drawn": 208
+   },
+   "1990": {
+    "matched": 338,
+    "in_scope": 336,
+    "drawn": 244
+   },
+   "2000": {
+    "matched": 272,
+    "in_scope": 271,
+    "drawn": 194
+   },
+   "2010": {
+    "matched": 270,
+    "in_scope": 266,
+    "drawn": 173
+   },
+   "2020": {
+    "matched": 206,
+    "in_scope": 205,
+    "drawn": 161
+   }
+  },
+  "held-out:6b293b43d2b1": {
+   "1950": {
+    "matched": 74,
+    "in_scope": 74,
+    "drawn": 44
+   },
+   "1960": {
+    "matched": 76,
+    "in_scope": 76,
+    "drawn": 57
+   },
+   "1970": {
+    "matched": 169,
+    "in_scope": 166,
+    "drawn": 106
+   },
+   "1980": {
+    "matched": 152,
+    "in_scope": 149,
+    "drawn": 99
+   },
+   "1990": {
+    "matched": 166,
+    "in_scope": 163,
+    "drawn": 104
+   },
+   "2000": {
+    "matched": 113,
+    "in_scope": 112,
+    "drawn": 70
+   },
+   "2010": {
+    "matched": 125,
+    "in_scope": 125,
+    "drawn": 84
+   },
+   "2020": {
+    "matched": 145,
+    "in_scope": 141,
+    "drawn": 102
+   }
+  },
+  "held-out:779d6b6eedf0": {
+   "1950": {
+    "matched": 1,
+    "in_scope": 0,
+    "drawn": 0
+   },
+   "1960": {
+    "matched": 12,
+    "in_scope": 2,
+    "drawn": 2
+   },
+   "1970": {
+    "matched": 15,
+    "in_scope": 2,
+    "drawn": 2
+   },
+   "1980": {
+    "matched": 26,
+    "in_scope": 4,
+    "drawn": 4
+   },
+   "1990": {
+    "matched": 27,
+    "in_scope": 19,
+    "drawn": 12
+   },
+   "2000": {
+    "matched": 69,
+    "in_scope": 55,
+    "drawn": 18
+   },
+   "2010": {
+    "matched": 158,
+    "in_scope": 150,
+    "drawn": 60
+   },
+   "2020": {
+    "matched": 280,
+    "in_scope": 269,
+    "drawn": 93
+   }
+  },
+  "held-out:7b1df4aa54d0": {
+   "1950": {
+    "matched": 26,
+    "in_scope": 26,
+    "drawn": 20
+   },
+   "1960": {
+    "matched": 98,
+    "in_scope": 95,
+    "drawn": 57
+   },
+   "1970": {
+    "matched": 284,
+    "in_scope": 278,
+    "drawn": 184
+   },
+   "1980": {
+    "matched": 704,
+    "in_scope": 690,
+    "drawn": 388
+   },
+   "1990": {
+    "matched": 1355,
+    "in_scope": 1337,
+    "drawn": 763
+   },
+   "2000": {
+    "matched": 1149,
+    "in_scope": 1129,
+    "drawn": 658
+   },
+   "2010": {
+    "matched": 1013,
+    "in_scope": 1005,
+    "drawn": 611
+   },
+   "2020": {
+    "matched": 1078,
+    "in_scope": 1069,
+    "drawn": 606
+   }
+  },
+  "held-out:7b5614820786": {
+   "1950": {
+    "matched": 145,
+    "in_scope": 144,
+    "drawn": 112
+   },
+   "1960": {
+    "matched": 190,
+    "in_scope": 190,
+    "drawn": 149
+   },
+   "1970": {
+    "matched": 261,
+    "in_scope": 259,
+    "drawn": 186
+   },
+   "1980": {
+    "matched": 241,
+    "in_scope": 240,
+    "drawn": 176
+   },
+   "1990": {
+    "matched": 237,
+    "in_scope": 232,
+    "drawn": 151
+   },
+   "2000": {
+    "matched": 241,
+    "in_scope": 237,
+    "drawn": 144
+   },
+   "2010": {
+    "matched": 150,
+    "in_scope": 148,
+    "drawn": 109
+   },
+   "2020": {
+    "matched": 161,
+    "in_scope": 155,
+    "drawn": 92
+   }
+  },
+  "held-out:7d0f24edc7fd": {
+   "1950": {
+    "matched": 44,
+    "in_scope": 42,
+    "drawn": 32
+   },
+   "1960": {
+    "matched": 74,
+    "in_scope": 61,
+    "drawn": 45
+   },
+   "1970": {
+    "matched": 99,
+    "in_scope": 88,
+    "drawn": 61
+   },
+   "1980": {
+    "matched": 119,
+    "in_scope": 106,
+    "drawn": 76
+   },
+   "1990": {
+    "matched": 245,
+    "in_scope": 221,
+    "drawn": 132
+   },
+   "2000": {
+    "matched": 902,
+    "in_scope": 807,
+    "drawn": 449
+   },
+   "2010": {
+    "matched": 1424,
+    "in_scope": 1290,
+    "drawn": 740
+   },
+   "2020": {
+    "matched": 942,
+    "in_scope": 854,
+    "drawn": 503
+   }
+  },
+  "held-out:7dc7c59f90ed": {
+   "1950": {
+    "matched": 140,
+    "in_scope": 119,
+    "drawn": 79
+   },
+   "1960": {
+    "matched": 234,
+    "in_scope": 192,
+    "drawn": 130
+   },
+   "1970": {
+    "matched": 298,
+    "in_scope": 220,
+    "drawn": 140
+   },
+   "1980": {
+    "matched": 387,
+    "in_scope": 272,
+    "drawn": 182
+   },
+   "1990": {
+    "matched": 476,
+    "in_scope": 300,
+    "drawn": 207
+   },
+   "2000": {
+    "matched": 544,
+    "in_scope": 324,
+    "drawn": 195
+   },
+   "2010": {
+    "matched": 555,
+    "in_scope": 352,
+    "drawn": 234
+   },
+   "2020": {
+    "matched": 607,
+    "in_scope": 319,
+    "drawn": 218
+   }
+  },
+  "held-out:861f9da96b43": {
+   "1950": {
+    "matched": 508,
+    "in_scope": 491,
+    "drawn": 327
+   },
+   "1960": {
+    "matched": 609,
+    "in_scope": 597,
+    "drawn": 408
+   },
+   "1970": {
+    "matched": 1048,
+    "in_scope": 1027,
+    "drawn": 581
+   },
+   "1980": {
+    "matched": 1753,
+    "in_scope": 1716,
+    "drawn": 888
+   },
+   "1990": {
+    "matched": 2308,
+    "in_scope": 2277,
+    "drawn": 1253
+   },
+   "2000": {
+    "matched": 2492,
+    "in_scope": 2434,
+    "drawn": 1233
+   },
+   "2010": {
+    "matched": 2103,
+    "in_scope": 2069,
+    "drawn": 1088
+   },
+   "2020": {
+    "matched": 1603,
+    "in_scope": 1564,
+    "drawn": 792
+   }
+  },
+  "held-out:86a125382979": {
+   "1950": {
+    "matched": 37,
+    "in_scope": 36,
+    "drawn": 22
+   },
+   "1960": {
+    "matched": 121,
+    "in_scope": 115,
+    "drawn": 71
+   },
+   "1970": {
+    "matched": 290,
+    "in_scope": 277,
+    "drawn": 170
+   },
+   "1980": {
+    "matched": 322,
+    "in_scope": 313,
+    "drawn": 222
+   },
+   "1990": {
+    "matched": 593,
+    "in_scope": 583,
+    "drawn": 332
+   },
+   "2000": {
+    "matched": 2433,
+    "in_scope": 2413,
+    "drawn": 958
+   },
+   "2010": {
+    "matched": 2343,
+    "in_scope": 2316,
+    "drawn": 964
+   },
+   "2020": {
+    "matched": 1441,
+    "in_scope": 1423,
+    "drawn": 753
+   }
+  },
+  "held-out:912b00c7764c": {
+   "1950": {
+    "matched": 220,
+    "in_scope": 216,
+    "drawn": 129
+   },
+   "1960": {
+    "matched": 343,
+    "in_scope": 337,
+    "drawn": 196
+   },
+   "1970": {
+    "matched": 509,
+    "in_scope": 498,
+    "drawn": 267
+   },
+   "1980": {
+    "matched": 749,
+    "in_scope": 737,
+    "drawn": 363
+   },
+   "1990": {
+    "matched": 1017,
+    "in_scope": 990,
+    "drawn": 447
+   },
+   "2000": {
+    "matched": 1409,
+    "in_scope": 1386,
+    "drawn": 511
+   },
+   "2010": {
+    "matched": 2000,
+    "in_scope": 1959,
+    "drawn": 669
+   },
+   "2020": {
+    "matched": 2366,
+    "in_scope": 2329,
+    "drawn": 778
+   }
+  },
+  "held-out:9384bbe72d46": {
+   "1950": {
+    "matched": 43,
+    "in_scope": 39,
+    "drawn": 30
+   },
+   "1960": {
+    "matched": 98,
+    "in_scope": 97,
+    "drawn": 73
+   },
+   "1970": {
+    "matched": 147,
+    "in_scope": 141,
+    "drawn": 95
+   },
+   "1980": {
+    "matched": 154,
+    "in_scope": 150,
+    "drawn": 99
+   },
+   "1990": {
+    "matched": 138,
+    "in_scope": 129,
+    "drawn": 80
+   },
+   "2000": {
+    "matched": 86,
+    "in_scope": 81,
+    "drawn": 59
+   },
+   "2010": {
+    "matched": 75,
+    "in_scope": 73,
+    "drawn": 41
+   },
+   "2020": {
+    "matched": 52,
+    "in_scope": 43,
+    "drawn": 33
+   }
+  },
+  "held-out:96da49af8e67": {
+   "1950": {
+    "matched": 6,
+    "in_scope": 3,
+    "drawn": 3
+   },
+   "1960": {
+    "matched": 6,
+    "in_scope": 5,
+    "drawn": 5
+   },
+   "1970": {
+    "matched": 27,
+    "in_scope": 22,
+    "drawn": 15
+   },
+   "1980": {
+    "matched": 60,
+    "in_scope": 57,
+    "drawn": 41
+   },
+   "1990": {
+    "matched": 68,
+    "in_scope": 67,
+    "drawn": 56
+   },
+   "2000": {
+    "matched": 192,
+    "in_scope": 190,
+    "drawn": 92
+   },
+   "2010": {
+    "matched": 366,
+    "in_scope": 361,
+    "drawn": 164
+   },
+   "2020": {
+    "matched": 493,
+    "in_scope": 482,
+    "drawn": 213
+   }
+  },
+  "held-out:ab139acf9360": {
+   "1950": {
+    "matched": 745,
+    "in_scope": 719,
+    "drawn": 485
+   },
+   "1960": {
+    "matched": 1296,
+    "in_scope": 1275,
+    "drawn": 901
+   },
+   "1970": {
+    "matched": 2521,
+    "in_scope": 2483,
+    "drawn": 1671
+   },
+   "1980": {
+    "matched": 2470,
+    "in_scope": 2430,
+    "drawn": 1715
+   },
+   "1990": {
+    "matched": 2501,
+    "in_scope": 2464,
+    "drawn": 1831
+   },
+   "2000": {
+    "matched": 2324,
+    "in_scope": 2293,
+    "drawn": 1653
+   },
+   "2010": {
+    "matched": 2375,
+    "in_scope": 2355,
+    "drawn": 1754
+   },
+   "2020": {
+    "matched": 2254,
+    "in_scope": 2235,
+    "drawn": 1671
+   }
+  },
+  "held-out:b3ea1fd57831": {
+   "1950": {
+    "matched": 818,
+    "in_scope": 761,
+    "drawn": 490
+   },
+   "1960": {
+    "matched": 1122,
+    "in_scope": 995,
+    "drawn": 670
+   },
+   "1970": {
+    "matched": 932,
+    "in_scope": 861,
+    "drawn": 558
+   },
+   "1980": {
+    "matched": 1205,
+    "in_scope": 1111,
+    "drawn": 673
+   },
+   "1990": {
+    "matched": 1111,
+    "in_scope": 1051,
+    "drawn": 611
+   },
+   "2000": {
+    "matched": 1191,
+    "in_scope": 1128,
+    "drawn": 606
+   },
+   "2010": {
+    "matched": 962,
+    "in_scope": 927,
+    "drawn": 547
+   },
+   "2020": {
+    "matched": 906,
+    "in_scope": 870,
+    "drawn": 543
+   }
+  },
+  "held-out:baa86b4dabfd": {
+   "1950": {
+    "matched": 53,
+    "in_scope": 52,
+    "drawn": 43
+   },
+   "1960": {
+    "matched": 270,
+    "in_scope": 253,
+    "drawn": 135
+   },
+   "1970": {
+    "matched": 393,
+    "in_scope": 372,
+    "drawn": 181
+   },
+   "1980": {
+    "matched": 501,
+    "in_scope": 480,
+    "drawn": 246
+   },
+   "1990": {
+    "matched": 812,
+    "in_scope": 789,
+    "drawn": 388
+   },
+   "2000": {
+    "matched": 1101,
+    "in_scope": 1075,
+    "drawn": 452
+   },
+   "2010": {
+    "matched": 1077,
+    "in_scope": 1066,
+    "drawn": 454
+   },
+   "2020": {
+    "matched": 1109,
+    "in_scope": 1095,
+    "drawn": 467
+   }
+  },
+  "held-out:bafa5557897f": {
+   "1950": {
+    "matched": 100,
+    "in_scope": 87,
+    "drawn": 51
+   },
+   "1960": {
+    "matched": 372,
+    "in_scope": 342,
+    "drawn": 145
+   },
+   "1970": {
+    "matched": 350,
+    "in_scope": 327,
+    "drawn": 170
+   },
+   "1980": {
+    "matched": 371,
+    "in_scope": 342,
+    "drawn": 174
+   },
+   "1990": {
+    "matched": 435,
+    "in_scope": 410,
+    "drawn": 189
+   },
+   "2000": {
+    "matched": 505,
+    "in_scope": 483,
+    "drawn": 211
+   },
+   "2010": {
+    "matched": 649,
+    "in_scope": 606,
+    "drawn": 251
+   },
+   "2020": {
+    "matched": 573,
+    "in_scope": 537,
+    "drawn": 211
+   }
+  },
+  "held-out:bd686ff4fd74": {
+   "1950": {
+    "matched": 362,
+    "in_scope": 357,
+    "drawn": 229
+   },
+   "1960": {
+    "matched": 1218,
+    "in_scope": 1201,
+    "drawn": 741
+   },
+   "1970": {
+    "matched": 1774,
+    "in_scope": 1766,
+    "drawn": 1018
+   },
+   "1980": {
+    "matched": 1960,
+    "in_scope": 1943,
+    "drawn": 1114
+   },
+   "1990": {
+    "matched": 2084,
+    "in_scope": 2067,
+    "drawn": 1250
+   },
+   "2000": {
+    "matched": 2083,
+    "in_scope": 2076,
+    "drawn": 1265
+   },
+   "2010": {
+    "matched": 1830,
+    "in_scope": 1822,
+    "drawn": 1202
+   },
+   "2020": {
+    "matched": 1648,
+    "in_scope": 1639,
+    "drawn": 1115
+   }
+  },
+  "held-out:c0dcb92b6a30": {
+   "1950": {
+    "matched": 42,
+    "in_scope": 40,
+    "drawn": 30
+   },
+   "1960": {
+    "matched": 105,
+    "in_scope": 104,
+    "drawn": 85
+   },
+   "1970": {
+    "matched": 269,
+    "in_scope": 263,
+    "drawn": 175
+   },
+   "1980": {
+    "matched": 1031,
+    "in_scope": 1019,
+    "drawn": 537
+   },
+   "1990": {
+    "matched": 1548,
+    "in_scope": 1524,
+    "drawn": 839
+   },
+   "2000": {
+    "matched": 2095,
+    "in_scope": 2055,
+    "drawn": 1115
+   },
+   "2010": {
+    "matched": 2225,
+    "in_scope": 2181,
+    "drawn": 1209
+   },
+   "2020": {
+    "matched": 2707,
+    "in_scope": 2627,
+    "drawn": 1736
+   }
+  },
+  "held-out:d4bed87430ea": {
+   "1950": {
+    "matched": 36,
+    "in_scope": 36,
+    "drawn": 26
+   },
+   "1960": {
+    "matched": 96,
+    "in_scope": 95,
+    "drawn": 81
+   },
+   "1970": {
+    "matched": 302,
+    "in_scope": 298,
+    "drawn": 229
+   },
+   "1980": {
+    "matched": 1326,
+    "in_scope": 1270,
+    "drawn": 855
+   },
+   "1990": {
+    "matched": 1935,
+    "in_scope": 1853,
+    "drawn": 1241
+   },
+   "2000": {
+    "matched": 2205,
+    "in_scope": 2126,
+    "drawn": 1426
+   },
+   "2010": {
+    "matched": 2060,
+    "in_scope": 1971,
+    "drawn": 1303
+   },
+   "2020": {
+    "matched": 1877,
+    "in_scope": 1745,
+    "drawn": 1146
+   }
+  },
+  "held-out:d573b31a4663": {
+   "1950": {
+    "matched": 409,
+    "in_scope": 392,
+    "drawn": 336
+   },
+   "1960": {
+    "matched": 809,
+    "in_scope": 784,
+    "drawn": 696
+   },
+   "1970": {
+    "matched": 969,
+    "in_scope": 942,
+    "drawn": 828
+   },
+   "1980": {
+    "matched": 1203,
+    "in_scope": 1174,
+    "drawn": 1031
+   },
+   "1990": {
+    "matched": 1397,
+    "in_scope": 1349,
+    "drawn": 1154
+   },
+   "2000": {
+    "matched": 1329,
+    "in_scope": 1271,
+    "drawn": 1140
+   },
+   "2010": {
+    "matched": 1477,
+    "in_scope": 1427,
+    "drawn": 1290
+   },
+   "2020": {
+    "matched": 2359,
+    "in_scope": 2300,
+    "drawn": 2116
+   }
+  },
+  "held-out:d7b1fc674098": {
+   "1950": {
+    "matched": 37,
+    "in_scope": 37,
+    "drawn": 24
+   },
+   "1960": {
+    "matched": 104,
+    "in_scope": 103,
+    "drawn": 68
+   },
+   "1970": {
+    "matched": 229,
+    "in_scope": 227,
+    "drawn": 146
+   },
+   "1980": {
+    "matched": 730,
+    "in_scope": 725,
+    "drawn": 372
+   },
+   "1990": {
+    "matched": 683,
+    "in_scope": 680,
+    "drawn": 363
+   },
+   "2000": {
+    "matched": 732,
+    "in_scope": 726,
+    "drawn": 379
+   },
+   "2010": {
+    "matched": 660,
+    "in_scope": 646,
+    "drawn": 300
+   },
+   "2020": {
+    "matched": 639,
+    "in_scope": 623,
+    "drawn": 315
+   }
+  },
+  "held-out:da17f59c700d": {
+   "1950": {
+    "matched": 66,
+    "in_scope": 66,
+    "drawn": 41
+   },
+   "1960": {
+    "matched": 65,
+    "in_scope": 65,
+    "drawn": 40
+   },
+   "1970": {
+    "matched": 202,
+    "in_scope": 197,
+    "drawn": 118
+   },
+   "1980": {
+    "matched": 339,
+    "in_scope": 333,
+    "drawn": 192
+   },
+   "1990": {
+    "matched": 388,
+    "in_scope": 378,
+    "drawn": 250
+   },
+   "2000": {
+    "matched": 380,
+    "in_scope": 355,
+    "drawn": 244
+   },
+   "2010": {
+    "matched": 574,
+    "in_scope": 552,
+    "drawn": 321
+   },
+   "2020": {
+    "matched": 621,
+    "in_scope": 607,
+    "drawn": 373
+   }
+  },
+  "held-out:e39a19f9b2b4": {
+   "1950": {
+    "matched": 58,
+    "in_scope": 58,
+    "drawn": 49
+   },
+   "1960": {
+    "matched": 147,
+    "in_scope": 144,
+    "drawn": 109
+   },
+   "1970": {
+    "matched": 176,
+    "in_scope": 154,
+    "drawn": 111
+   },
+   "1980": {
+    "matched": 164,
+    "in_scope": 156,
+    "drawn": 113
+   },
+   "1990": {
+    "matched": 226,
+    "in_scope": 220,
+    "drawn": 135
+   },
+   "2000": {
+    "matched": 214,
+    "in_scope": 207,
+    "drawn": 162
+   },
+   "2010": {
+    "matched": 1096,
+    "in_scope": 1085,
+    "drawn": 430
+   },
+   "2020": {
+    "matched": 2220,
+    "in_scope": 2205,
+    "drawn": 865
+   }
+  },
+  "held-out:e7866e6303be": {
+   "1950": {
+    "matched": 292,
+    "in_scope": 291,
+    "drawn": 129
+   },
+   "1960": {
+    "matched": 520,
+    "in_scope": 519,
+    "drawn": 242
+   },
+   "1970": {
+    "matched": 1169,
+    "in_scope": 1168,
+    "drawn": 485
+   },
+   "1980": {
+    "matched": 1472,
+    "in_scope": 1472,
+    "drawn": 634
+   },
+   "1990": {
+    "matched": 1699,
+    "in_scope": 1694,
+    "drawn": 670
+   },
+   "2000": {
+    "matched": 1576,
+    "in_scope": 1574,
+    "drawn": 633
+   },
+   "2010": {
+    "matched": 1025,
+    "in_scope": 1023,
+    "drawn": 479
+   },
+   "2020": {
+    "matched": 818,
+    "in_scope": 817,
+    "drawn": 372
+   }
+  },
+  "held-out:ee104561c1ce": {
+   "1950": {
+    "matched": 472,
+    "in_scope": 470,
+    "drawn": 237
+   },
+   "1960": {
+    "matched": 1043,
+    "in_scope": 1029,
+    "drawn": 585
+   },
+   "1970": {
+    "matched": 912,
+    "in_scope": 902,
+    "drawn": 569
+   },
+   "1980": {
+    "matched": 824,
+    "in_scope": 817,
+    "drawn": 517
+   },
+   "1990": {
+    "matched": 709,
+    "in_scope": 702,
+    "drawn": 442
+   },
+   "2000": {
+    "matched": 444,
+    "in_scope": 437,
+    "drawn": 279
+   },
+   "2010": {
+    "matched": 388,
+    "in_scope": 382,
+    "drawn": 256
+   },
+   "2020": {
+    "matched": 472,
+    "in_scope": 460,
+    "drawn": 270
+   }
+  },
+  "held-out:f151e0c23aaf": {
+   "1950": {
+    "matched": 2,
+    "in_scope": 2,
+    "drawn": 2
+   },
+   "1960": {
+    "matched": 9,
+    "in_scope": 9,
+    "drawn": 6
+   },
+   "1970": {
+    "matched": 22,
+    "in_scope": 22,
+    "drawn": 14
+   },
+   "1980": {
+    "matched": 55,
+    "in_scope": 55,
+    "drawn": 45
+   },
+   "1990": {
+    "matched": 76,
+    "in_scope": 75,
+    "drawn": 62
+   },
+   "2000": {
+    "matched": 120,
+    "in_scope": 117,
+    "drawn": 92
+   },
+   "2010": {
+    "matched": 294,
+    "in_scope": 259,
+    "drawn": 212
+   },
+   "2020": {
+    "matched": 370,
+    "in_scope": 347,
+    "drawn": 281
+   }
+  },
+  "held-out:f6604b2573e2": {
+   "1950": {
+    "matched": 5,
+    "in_scope": 5,
+    "drawn": 5
+   },
+   "1960": {
+    "matched": 26,
+    "in_scope": 24,
+    "drawn": 15
+   },
+   "1970": {
+    "matched": 25,
+    "in_scope": 25,
+    "drawn": 21
+   },
+   "1980": {
+    "matched": 32,
+    "in_scope": 32,
+    "drawn": 26
+   },
+   "1990": {
+    "matched": 25,
+    "in_scope": 25,
+    "drawn": 19
+   },
+   "2000": {
+    "matched": 79,
+    "in_scope": 79,
+    "drawn": 52
+   },
+   "2010": {
+    "matched": 163,
+    "in_scope": 162,
+    "drawn": 103
+   },
+   "2020": {
+    "matched": 279,
+    "in_scope": 273,
+    "drawn": 200
+   }
+  },
+  "held-out:f66e6d2190f6": {
+   "1950": {
+    "matched": 20,
+    "in_scope": 18,
+    "drawn": 15
+   },
+   "1960": {
+    "matched": 41,
+    "in_scope": 40,
+    "drawn": 30
+   },
+   "1970": {
+    "matched": 107,
+    "in_scope": 104,
+    "drawn": 76
+   },
+   "1980": {
+    "matched": 222,
+    "in_scope": 221,
+    "drawn": 138
+   },
+   "1990": {
+    "matched": 792,
+    "in_scope": 761,
+    "drawn": 452
+   },
+   "2000": {
+    "matched": 1026,
+    "in_scope": 1011,
+    "drawn": 631
+   },
+   "2010": {
+    "matched": 1288,
+    "in_scope": 1266,
+    "drawn": 732
+   },
+   "2020": {
+    "matched": 1293,
+    "in_scope": 1277,
+    "drawn": 818
+   }
+  },
+  "held-out:ff37e32092ff": {
+   "1950": {
+    "matched": 437,
+    "in_scope": 431,
+    "drawn": 177
+   },
+   "1960": {
+    "matched": 870,
+    "in_scope": 861,
+    "drawn": 325
+   },
+   "1970": {
+    "matched": 2297,
+    "in_scope": 2274,
+    "drawn": 767
+   },
+   "1980": {
+    "matched": 2800,
+    "in_scope": 2779,
+    "drawn": 897
+   },
+   "1990": {
+    "matched": 2831,
+    "in_scope": 2823,
+    "drawn": 861
+   },
+   "2000": {
+    "matched": 2446,
+    "in_scope": 2439,
+    "drawn": 793
+   },
+   "2010": {
+    "matched": 2465,
+    "in_scope": 2456,
+    "drawn": 734
+   },
+   "2020": {
+    "matched": 2127,
+    "in_scope": 2124,
+    "drawn": 664
+   }
+  },
+  "image": {
+   "1950": {
+    "matched": 860,
+    "in_scope": 848,
+    "drawn": 412
+   },
+   "1960": {
+    "matched": 1682,
+    "in_scope": 1645,
+    "drawn": 928
+   },
+   "1970": {
+    "matched": 3385,
+    "in_scope": 3307,
+    "drawn": 1609
+   },
+   "1980": {
+    "matched": 5944,
+    "in_scope": 5779,
+    "drawn": 2639
+   },
+   "1990": {
+    "matched": 8196,
+    "in_scope": 8073,
+    "drawn": 3607
+   },
+   "2000": {
+    "matched": 9469,
+    "in_scope": 9350,
+    "drawn": 4159
+   },
+   "2010": {
+    "matched": 11904,
+    "in_scope": 11753,
+    "drawn": 4995
+   },
+   "2020": {
+    "matched": 12557,
+    "in_scope": 12442,
+    "drawn": 5547
+   }
+  },
+  "information": {
+   "1950": {
+    "matched": 2146,
+    "in_scope": 2109,
+    "drawn": 1373
+   },
+   "1960": {
+    "matched": 5423,
+    "in_scope": 5302,
+    "drawn": 3261
+   },
+   "1970": {
+    "matched": 8247,
+    "in_scope": 8095,
+    "drawn": 5196
+   },
+   "1980": {
+    "matched": 13196,
+    "in_scope": 12876,
+    "drawn": 7855
+   },
+   "1990": {
+    "matched": 18308,
+    "in_scope": 17720,
+    "drawn": 10259
+   },
+   "2000": {
+    "matched": 20648,
+    "in_scope": 20364,
+    "drawn": 11646
+   },
+   "2010": {
+    "matched": 22184,
+    "in_scope": 21933,
+    "drawn": 12731
+   },
+   "2020": {
+    "matched": 21651,
+    "in_scope": 21400,
+    "drawn": 12704
+   }
+  },
+  "information processing": {
+   "1950": {
+    "matched": 28,
+    "in_scope": 28,
+    "drawn": 20
+   },
+   "1960": {
+    "matched": 257,
+    "in_scope": 236,
+    "drawn": 176
+   },
+   "1970": {
+    "matched": 324,
+    "in_scope": 313,
+    "drawn": 266
+   },
+   "1980": {
+    "matched": 657,
+    "in_scope": 644,
+    "drawn": 506
+   },
+   "1990": {
+    "matched": 614,
+    "in_scope": 606,
+    "drawn": 472
+   },
+   "2000": {
+    "matched": 543,
+    "in_scope": 539,
+    "drawn": 419
+   },
+   "2010": {
+    "matched": 481,
+    "in_scope": 476,
+    "drawn": 377
+   },
+   "2020": {
+    "matched": 341,
+    "in_scope": 340,
+    "drawn": 286
+   }
+  },
+  "intelligence": {
+   "1950": {
+    "matched": 666,
+    "in_scope": 617,
+    "drawn": 343
+   },
+   "1960": {
+    "matched": 1349,
+    "in_scope": 1245,
+    "drawn": 743
+   },
+   "1970": {
+    "matched": 1985,
+    "in_scope": 1768,
+    "drawn": 1026
+   },
+   "1980": {
+    "matched": 3065,
+    "in_scope": 2770,
+    "drawn": 1857
+   },
+   "1990": {
+    "matched": 2430,
+    "in_scope": 2192,
+    "drawn": 1273
+   },
+   "2000": {
+    "matched": 2439,
+    "in_scope": 2297,
+    "drawn": 1223
+   },
+   "2010": {
+    "matched": 3044,
+    "in_scope": 2881,
+    "drawn": 1497
+   },
+   "2020": {
+    "matched": 7025,
+    "in_scope": 6863,
+    "drawn": 4156
+   }
+  },
+  "intentionality": {
+   "1950": {
+    "matched": 9,
+    "in_scope": 7,
+    "drawn": 3
+   },
+   "1960": {
+    "matched": 17,
+    "in_scope": 16,
+    "drawn": 12
+   },
+   "1970": {
+    "matched": 110,
+    "in_scope": 107,
+    "drawn": 59
+   },
+   "1980": {
+    "matched": 186,
+    "in_scope": 184,
+    "drawn": 102
+   },
+   "1990": {
+    "matched": 187,
+    "in_scope": 185,
+    "drawn": 112
+   },
+   "2000": {
+    "matched": 203,
+    "in_scope": 200,
+    "drawn": 119
+   },
+   "2010": {
+    "matched": 187,
+    "in_scope": 185,
+    "drawn": 120
+   },
+   "2020": {
+    "matched": 191,
+    "in_scope": 190,
+    "drawn": 137
+   }
+  },
+  "interface": {
+   "1950": {
+    "matched": 8,
+    "in_scope": 8,
+    "drawn": 7
+   },
+   "1960": {
+    "matched": 123,
+    "in_scope": 112,
+    "drawn": 77
+   },
+   "1970": {
+    "matched": 492,
+    "in_scope": 419,
+    "drawn": 308
+   },
+   "1980": {
+    "matched": 4200,
+    "in_scope": 3990,
+    "drawn": 1856
+   },
+   "1990": {
+    "matched": 9898,
+    "in_scope": 9673,
+    "drawn": 4016
+   },
+   "2000": {
+    "matched": 8109,
+    "in_scope": 7986,
+    "drawn": 3926
+   },
+   "2010": {
+    "matched": 6272,
+    "in_scope": 6133,
+    "drawn": 3158
+   },
+   "2020": {
+    "matched": 4902,
+    "in_scope": 4821,
+    "drawn": 2892
+   }
+  },
+  "interpretation": {
+   "1950": {
+    "matched": 855,
+    "in_scope": 842,
+    "drawn": 639
+   },
+   "1960": {
+    "matched": 1653,
+    "in_scope": 1632,
+    "drawn": 1262
+   },
+   "1970": {
+    "matched": 3234,
+    "in_scope": 3189,
+    "drawn": 2256
+   },
+   "1980": {
+    "matched": 4224,
+    "in_scope": 4175,
+    "drawn": 2868
+   },
+   "1990": {
+    "matched": 3984,
+    "in_scope": 3946,
+    "drawn": 2799
+   },
+   "2000": {
+    "matched": 3326,
+    "in_scope": 3295,
+    "drawn": 2441
+   },
+   "2010": {
+    "matched": 3542,
+    "in_scope": 3508,
+    "drawn": 2588
+   },
+   "2020": {
+    "matched": 4039,
+    "in_scope": 4016,
+    "drawn": 3073
+   }
+  },
+  "learning": {
+   "1950": {
+    "matched": 1251,
+    "in_scope": 1241,
+    "drawn": 628
+   },
+   "1960": {
+    "matched": 3710,
+    "in_scope": 3657,
+    "drawn": 1900
+   },
+   "1970": {
+    "matched": 5716,
+    "in_scope": 5614,
+    "drawn": 2909
+   },
+   "1980": {
+    "matched": 8053,
+    "in_scope": 7912,
+    "drawn": 4001
+   },
+   "1990": {
+    "matched": 12643,
+    "in_scope": 12424,
+    "drawn": 5719
+   },
+   "2000": {
+    "matched": 15598,
+    "in_scope": 15345,
+    "drawn": 7131
+   },
+   "2010": {
+    "matched": 23339,
+    "in_scope": 23029,
+    "drawn": 9606
+   },
+   "2020": {
+    "matched": 37101,
+    "in_scope": 36633,
+    "drawn": 15828
+   }
+  },
+  "meaning": {
+   "1950": {
+    "matched": 1138,
+    "in_scope": 1070,
+    "drawn": 698
+   },
+   "1960": {
+    "matched": 2204,
+    "in_scope": 2092,
+    "drawn": 1317
+   },
+   "1970": {
+    "matched": 3734,
+    "in_scope": 3576,
+    "drawn": 2225
+   },
+   "1980": {
+    "matched": 4226,
+    "in_scope": 4083,
+    "drawn": 2580
+   },
+   "1990": {
+    "matched": 4958,
+    "in_scope": 4741,
+    "drawn": 2984
+   },
+   "2000": {
+    "matched": 5901,
+    "in_scope": 5657,
+    "drawn": 3531
+   },
+   "2010": {
+    "matched": 6089,
+    "in_scope": 5789,
+    "drawn": 3628
+   },
+   "2020": {
+    "matched": 7067,
+    "in_scope": 6774,
+    "drawn": 4064
+   }
+  },
+  "medium": {
+   "1950": {
+    "matched": 258,
+    "in_scope": 223,
+    "drawn": 169
+   },
+   "1960": {
+    "matched": 565,
+    "in_scope": 451,
+    "drawn": 337
+   },
+   "1970": {
+    "matched": 968,
+    "in_scope": 782,
+    "drawn": 553
+   },
+   "1980": {
+    "matched": 1226,
+    "in_scope": 1075,
+    "drawn": 782
+   },
+   "1990": {
+    "matched": 1555,
+    "in_scope": 1393,
+    "drawn": 1032
+   },
+   "2000": {
+    "matched": 1567,
+    "in_scope": 1339,
+    "drawn": 1001
+   },
+   "2010": {
+    "matched": 1650,
+    "in_scope": 1381,
+    "drawn": 1063
+   },
+   "2020": {
+    "matched": 1860,
+    "in_scope": 1511,
+    "drawn": 1227
+   }
+  },
+  "memory": {
+   "1950": {
+    "matched": 659,
+    "in_scope": 649,
+    "drawn": 387
+   },
+   "1960": {
+    "matched": 1839,
+    "in_scope": 1823,
+    "drawn": 994
+   },
+   "1970": {
+    "matched": 2932,
+    "in_scope": 2898,
+    "drawn": 1582
+   },
+   "1980": {
+    "matched": 4698,
+    "in_scope": 4630,
+    "drawn": 2393
+   },
+   "1990": {
+    "matched": 6533,
+    "in_scope": 6449,
+    "drawn": 2841
+   },
+   "2000": {
+    "matched": 7127,
+    "in_scope": 7018,
+    "drawn": 2905
+   },
+   "2010": {
+    "matched": 8496,
+    "in_scope": 8393,
+    "drawn": 3394
+   },
+   "2020": {
+    "matched": 8477,
+    "in_scope": 8404,
+    "drawn": 3814
+   }
+  },
+  "mental representation": {
+   "1960": {
+    "matched": 1,
+    "in_scope": 1,
+    "drawn": 1
+   },
+   "1970": {
+    "matched": 11,
+    "in_scope": 11,
+    "drawn": 11
+   },
+   "1980": {
+    "matched": 78,
+    "in_scope": 78,
+    "drawn": 60
+   },
+   "1990": {
+    "matched": 175,
+    "in_scope": 172,
+    "drawn": 113
+   },
+   "2000": {
+    "matched": 171,
+    "in_scope": 170,
+    "drawn": 118
+   },
+   "2010": {
+    "matched": 143,
+    "in_scope": 143,
+    "drawn": 99
+   },
+   "2020": {
+    "matched": 100,
+    "in_scope": 100,
+    "drawn": 77
+   }
+  },
+  "mind": {
+   "1950": {
+    "matched": 1041,
+    "in_scope": 1003,
+    "drawn": 741
+   },
+   "1960": {
+    "matched": 1564,
+    "in_scope": 1501,
+    "drawn": 1093
+   },
+   "1970": {
+    "matched": 2581,
+    "in_scope": 2448,
+    "drawn": 1655
+   },
+   "1980": {
+    "matched": 2619,
+    "in_scope": 2534,
+    "drawn": 1790
+   },
+   "1990": {
+    "matched": 3238,
+    "in_scope": 3064,
+    "drawn": 2044
+   },
+   "2000": {
+    "matched": 3188,
+    "in_scope": 3054,
+    "drawn": 2092
+   },
+   "2010": {
+    "matched": 3415,
+    "in_scope": 3289,
+    "drawn": 2183
+   },
+   "2020": {
+    "matched": 3191,
+    "in_scope": 3037,
+    "drawn": 1947
+   }
+  },
+  "model": {
+   "1950": {
+    "matched": 753,
+    "in_scope": 719,
+    "drawn": 436
+   },
+   "1960": {
+    "matched": 3684,
+    "in_scope": 3566,
+    "drawn": 1956
+   },
+   "1970": {
+    "matched": 9352,
+    "in_scope": 8928,
+    "drawn": 4692
+   },
+   "1980": {
+    "matched": 17620,
+    "in_scope": 16676,
+    "drawn": 8352
+   },
+   "1990": {
+    "matched": 25133,
+    "in_scope": 23552,
+    "drawn": 11464
+   },
+   "2000": {
+    "matched": 27652,
+    "in_scope": 26010,
+    "drawn": 12918
+   },
+   "2010": {
+    "matched": 30989,
+    "in_scope": 29235,
+    "drawn": 14365
+   },
+   "2020": {
+    "matched": 47498,
+    "in_scope": 45763,
+    "drawn": 21040
+   }
+  },
+  "network": {
+   "1950": {
+    "matched": 316,
+    "in_scope": 315,
+    "drawn": 166
+   },
+   "1960": {
+    "matched": 1281,
+    "in_scope": 1245,
+    "drawn": 623
+   },
+   "1970": {
+    "matched": 2362,
+    "in_scope": 2288,
+    "drawn": 1151
+   },
+   "1980": {
+    "matched": 6243,
+    "in_scope": 6106,
+    "drawn": 2719
+   },
+   "1990": {
+    "matched": 12528,
+    "in_scope": 12304,
+    "drawn": 5159
+   },
+   "2000": {
+    "matched": 12439,
+    "in_scope": 12205,
+    "drawn": 5579
+   },
+   "2010": {
+    "matched": 16038,
+    "in_scope": 15638,
+    "drawn": 6923
+   },
+   "2020": {
+    "matched": 19340,
+    "in_scope": 18977,
+    "drawn": 9307
+   }
+  },
+  "neural network": {
+   "1950": {
+    "matched": 5,
+    "in_scope": 5,
+    "drawn": 3
+   },
+   "1960": {
+    "matched": 34,
+    "in_scope": 34,
+    "drawn": 23
+   },
+   "1970": {
+    "matched": 74,
+    "in_scope": 74,
+    "drawn": 52
+   },
+   "1980": {
+    "matched": 987,
+    "in_scope": 978,
+    "drawn": 603
+   },
+   "1990": {
+    "matched": 3946,
+    "in_scope": 3915,
+    "drawn": 2029
+   },
+   "2000": {
+    "matched": 2524,
+    "in_scope": 2512,
+    "drawn": 1445
+   },
+   "2010": {
+    "matched": 2583,
+    "in_scope": 2562,
+    "drawn": 1586
+   },
+   "2020": {
+    "matched": 4718,
+    "in_scope": 4676,
+    "drawn": 3284
+   }
+  },
+  "perception": {
+   "1950": {
+    "matched": 943,
+    "in_scope": 931,
+    "drawn": 550
+   },
+   "1960": {
+    "matched": 1617,
+    "in_scope": 1582,
+    "drawn": 1023
+   },
+   "1970": {
+    "matched": 2825,
+    "in_scope": 2788,
+    "drawn": 1771
+   },
+   "1980": {
+    "matched": 3971,
+    "in_scope": 3919,
+    "drawn": 2434
+   },
+   "1990": {
+    "matched": 4601,
+    "in_scope": 4545,
+    "drawn": 2875
+   },
+   "2000": {
+    "matched": 5560,
+    "in_scope": 5501,
+    "drawn": 3356
+   },
+   "2010": {
+    "matched": 7273,
+    "in_scope": 7222,
+    "drawn": 4348
+   },
+   "2020": {
+    "matched": 8518,
+    "in_scope": 8443,
+    "drawn": 5277
+   }
+  },
+  "platform": {
+   "1950": {
+    "matched": 34,
+    "in_scope": 34,
+    "drawn": 28
+   },
+   "1960": {
+    "matched": 80,
+    "in_scope": 76,
+    "drawn": 61
+   },
+   "1970": {
+    "matched": 133,
+    "in_scope": 132,
+    "drawn": 106
+   },
+   "1980": {
+    "matched": 135,
+    "in_scope": 132,
+    "drawn": 101
+   },
+   "1990": {
+    "matched": 653,
+    "in_scope": 648,
+    "drawn": 463
+   },
+   "2000": {
+    "matched": 1615,
+    "in_scope": 1596,
+    "drawn": 1108
+   },
+   "2010": {
+    "matched": 3431,
+    "in_scope": 3413,
+    "drawn": 2284
+   },
+   "2020": {
+    "matched": 7794,
+    "in_scope": 7760,
+    "drawn": 4826
+   }
+  },
+  "presence": {
+   "1950": {
+    "matched": 543,
+    "in_scope": 541,
+    "drawn": 456
+   },
+   "1960": {
+    "matched": 1148,
+    "in_scope": 1144,
+    "drawn": 945
+   },
+   "1970": {
+    "matched": 1690,
+    "in_scope": 1686,
+    "drawn": 1381
+   },
+   "1980": {
+    "matched": 2318,
+    "in_scope": 2309,
+    "drawn": 1893
+   },
+   "1990": {
+    "matched": 3174,
+    "in_scope": 3151,
+    "drawn": 2327
+   },
+   "2000": {
+    "matched": 3271,
+    "in_scope": 3253,
+    "drawn": 2379
+   },
+   "2010": {
+    "matched": 3484,
+    "in_scope": 3469,
+    "drawn": 2525
+   },
+   "2020": {
+    "matched": 4113,
+    "in_scope": 4082,
+    "drawn": 2869
+   }
+  },
+  "prompt": {
+   "1950": {
+    "matched": 109,
+    "in_scope": 1,
+    "drawn": 1
+   },
+   "1960": {
+    "matched": 181,
+    "in_scope": 23,
+    "drawn": 15
+   },
+   "1970": {
+    "matched": 340,
+    "in_scope": 81,
+    "drawn": 42
+   },
+   "1980": {
+    "matched": 428,
+    "in_scope": 105,
+    "drawn": 71
+   },
+   "1990": {
+    "matched": 465,
+    "in_scope": 97,
+    "drawn": 53
+   },
+   "2000": {
+    "matched": 489,
+    "in_scope": 107,
+    "drawn": 67
+   },
+   "2010": {
+    "matched": 664,
+    "in_scope": 225,
+    "drawn": 111
+   },
+   "2020": {
+    "matched": 1828,
+    "in_scope": 1066,
+    "drawn": 593
+   }
+  },
+  "representation": {
+   "1950": {
+    "matched": 241,
+    "in_scope": 237,
+    "drawn": 178
+   },
+   "1960": {
+    "matched": 719,
+    "in_scope": 712,
+    "drawn": 497
+   },
+   "1970": {
+    "matched": 1773,
+    "in_scope": 1765,
+    "drawn": 1191
+   },
+   "1980": {
+    "matched": 4372,
+    "in_scope": 4344,
+    "drawn": 2690
+   },
+   "1990": {
+    "matched": 5968,
+    "in_scope": 5927,
+    "drawn": 3557
+   },
+   "2000": {
+    "matched": 5419,
+    "in_scope": 5396,
+    "drawn": 3291
+   },
+   "2010": {
+    "matched": 5647,
+    "in_scope": 5624,
+    "drawn": 3439
+   },
+   "2020": {
+    "matched": 6475,
+    "in_scope": 6450,
+    "drawn": 4153
+   }
+  },
+  "sign": {
+   "1950": {
+    "matched": 613,
+    "in_scope": 526,
+    "drawn": 323
+   },
+   "1960": {
+    "matched": 767,
+    "in_scope": 668,
+    "drawn": 458
+   },
+   "1970": {
+    "matched": 1031,
+    "in_scope": 878,
+    "drawn": 583
+   },
+   "1980": {
+    "matched": 1315,
+    "in_scope": 1162,
+    "drawn": 750
+   },
+   "1990": {
+    "matched": 1675,
+    "in_scope": 1463,
+    "drawn": 867
+   },
+   "2000": {
+    "matched": 2042,
+    "in_scope": 1803,
+    "drawn": 1006
+   },
+   "2010": {
+    "matched": 2891,
+    "in_scope": 2558,
+    "drawn": 1233
+   },
+   "2020": {
+    "matched": 5407,
+    "in_scope": 4991,
+    "drawn": 1896
+   }
+  },
+  "simulation": {
+   "1950": {
+    "matched": 47,
+    "in_scope": 46,
+    "drawn": 38
+   },
+   "1960": {
+    "matched": 516,
+    "in_scope": 508,
+    "drawn": 362
+   },
+   "1970": {
+    "matched": 1088,
+    "in_scope": 1079,
+    "drawn": 781
+   },
+   "1980": {
+    "matched": 1775,
+    "in_scope": 1754,
+    "drawn": 1239
+   },
+   "1990": {
+    "matched": 3042,
+    "in_scope": 3022,
+    "drawn": 2033
+   },
+   "2000": {
+    "matched": 3620,
+    "in_scope": 3611,
+    "drawn": 2628
+   },
+   "2010": {
+    "matched": 3640,
+    "in_scope": 3617,
+    "drawn": 2585
+   },
+   "2020": {
+    "matched": 3025,
+    "in_scope": 3013,
+    "drawn": 2127
+   }
+  },
+  "social network": {
+   "1950": {
+    "matched": 3,
+    "in_scope": 3,
+    "drawn": 3
+   },
+   "1960": {
+    "matched": 8,
+    "in_scope": 8,
+    "drawn": 7
+   },
+   "1970": {
+    "matched": 56,
+    "in_scope": 56,
+    "drawn": 40
+   },
+   "1980": {
+    "matched": 100,
+    "in_scope": 97,
+    "drawn": 61
+   },
+   "1990": {
+    "matched": 125,
+    "in_scope": 124,
+    "drawn": 88
+   },
+   "2000": {
+    "matched": 350,
+    "in_scope": 349,
+    "drawn": 225
+   },
+   "2010": {
+    "matched": 1301,
+    "in_scope": 1276,
+    "drawn": 789
+   },
+   "2020": {
+    "matched": 1081,
+    "in_scope": 1076,
+    "drawn": 730
+   }
+  },
+  "strength": {
+   "1950": {
+    "matched": 402,
+    "in_scope": 401,
+    "drawn": 284
+   },
+   "1960": {
+    "matched": 685,
+    "in_scope": 678,
+    "drawn": 490
+   },
+   "1970": {
+    "matched": 799,
+    "in_scope": 790,
+    "drawn": 603
+   },
+   "1980": {
+    "matched": 1175,
+    "in_scope": 1171,
+    "drawn": 954
+   },
+   "1990": {
+    "matched": 1369,
+    "in_scope": 1362,
+    "drawn": 1093
+   },
+   "2000": {
+    "matched": 1419,
+    "in_scope": 1401,
+    "drawn": 1115
+   },
+   "2010": {
+    "matched": 1865,
+    "in_scope": 1836,
+    "drawn": 1365
+   },
+   "2020": {
+    "matched": 2103,
+    "in_scope": 2061,
+    "drawn": 1589
+   }
+  },
+  "symbol": {
+   "1950": {
+    "matched": 412,
+    "in_scope": 411,
+    "drawn": 242
+   },
+   "1960": {
+    "matched": 835,
+    "in_scope": 827,
+    "drawn": 504
+   },
+   "1970": {
+    "matched": 1016,
+    "in_scope": 996,
+    "drawn": 591
+   },
+   "1980": {
+    "matched": 1081,
+    "in_scope": 1068,
+    "drawn": 631
+   },
+   "1990": {
+    "matched": 1038,
+    "in_scope": 1015,
+    "drawn": 662
+   },
+   "2000": {
+    "matched": 910,
+    "in_scope": 893,
+    "drawn": 603
+   },
+   "2010": {
+    "matched": 1003,
+    "in_scope": 992,
+    "drawn": 613
+   },
+   "2020": {
+    "matched": 863,
+    "in_scope": 838,
+    "drawn": 551
+   }
+  },
+  "system": {
+   "1950": {
+    "matched": 4987,
+    "in_scope": 4888,
+    "drawn": 2553
+   },
+   "1960": {
+    "matched": 13649,
+    "in_scope": 13370,
+    "drawn": 6575
+   },
+   "1970": {
+    "matched": 21170,
+    "in_scope": 20777,
+    "drawn": 10382
+   },
+   "1980": {
+    "matched": 35627,
+    "in_scope": 35069,
+    "drawn": 15705
+   },
+   "1990": {
+    "matched": 38327,
+    "in_scope": 37784,
+    "drawn": 17576
+   },
+   "2000": {
+    "matched": 38389,
+    "in_scope": 37952,
+    "drawn": 18537
+   },
+   "2010": {
+    "matched": 35016,
+    "in_scope": 34562,
+    "drawn": 17174
+   },
+   "2020": {
+    "matched": 37647,
+    "in_scope": 36968,
+    "drawn": 18885
+   }
+  },
+  "transformer": {
+   "1950": {
+    "matched": 10,
+    "in_scope": 9,
+    "drawn": 9
+   },
+   "1960": {
+    "matched": 21,
+    "in_scope": 21,
+    "drawn": 16
+   },
+   "1970": {
+    "matched": 25,
+    "in_scope": 24,
+    "drawn": 19
+   },
+   "1980": {
+    "matched": 35,
+    "in_scope": 34,
+    "drawn": 19
+   },
+   "1990": {
+    "matched": 34,
+    "in_scope": 34,
+    "drawn": 19
+   },
+   "2000": {
+    "matched": 31,
+    "in_scope": 31,
+    "drawn": 17
+   },
+   "2010": {
+    "matched": 42,
+    "in_scope": 42,
+    "drawn": 27
+   },
+   "2020": {
+    "matched": 1573,
+    "in_scope": 1528,
+    "drawn": 943
+   }
+  },
+  "user": {
+   "1950": {
+    "matched": 112,
+    "in_scope": 112,
+    "drawn": 94
+   },
+   "1960": {
+    "matched": 888,
+    "in_scope": 875,
+    "drawn": 553
+   },
+   "1970": {
+    "matched": 2124,
+    "in_scope": 2103,
+    "drawn": 1274
+   },
+   "1980": {
+    "matched": 7552,
+    "in_scope": 7463,
+    "drawn": 3355
+   },
+   "1990": {
+    "matched": 16205,
+    "in_scope": 16063,
+    "drawn": 6323
+   },
+   "2000": {
+    "matched": 19167,
+    "in_scope": 19082,
+    "drawn": 7976
+   },
+   "2010": {
+    "matched": 22322,
+    "in_scope": 22239,
+    "drawn": 9159
+   },
+   "2020": {
+    "matched": 22745,
+    "in_scope": 22599,
+    "drawn": 9254
+   }
+  },
+  "user interface": {
+   "1950": {
+    "matched": 1,
+    "in_scope": 1,
+    "drawn": 1
+   },
+   "1960": {
+    "matched": 4,
+    "in_scope": 4,
+    "drawn": 2
+   },
+   "1970": {
+    "matched": 39,
+    "in_scope": 39,
+    "drawn": 32
+   },
+   "1980": {
+    "matched": 1325,
+    "in_scope": 1274,
+    "drawn": 684
+   },
+   "1990": {
+    "matched": 3641,
+    "in_scope": 3575,
+    "drawn": 1850
+   },
+   "2000": {
+    "matched": 2568,
+    "in_scope": 2545,
+    "drawn": 1435
+   },
+   "2010": {
+    "matched": 1651,
+    "in_scope": 1640,
+    "drawn": 984
+   },
+   "2020": {
+    "matched": 1040,
+    "in_scope": 1034,
+    "drawn": 748
+   }
+  }
+ },
+ "cells_with_at_least_100_drawn": 613,
+ "enrichment_strata": {
+  "no_finite_verb": 2454,
+  "list_like": 8799,
+  "short_repository_only": 5364
+ },
+ "held_out_words": 46
+}
