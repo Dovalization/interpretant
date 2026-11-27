@@ -1105,3 +1105,227 @@ stages:
       md5: b9076d5c5947618c0e8d6cbfddcccd5b.dir
       size: 25710897
       nfiles: 88
+  build_usages:
+    cmd: interpretant build-usages
+    deps:
+    - path: curated/held_out.tsv
+      hash: md5
+      md5: a011e1e692b0a5a7a31cf172a8d4d575
+      size: 2470
+    - path: curated/lemma_exceptions.tsv
+      hash: md5
+      md5: 670182762d3a5d8cc2a87b14d7d79b03
+      size: 132565
+    - path: curated/spellings.tsv
+      hash: md5
+      md5: ec22e83266aa06d6d3051595c6f431a6
+      size: 65030
+    - path: curated/words.tsv
+      hash: md5
+      md5: 86f4549e0974b939b4dd6cb2b37385ce
+      size: 2459
+    - path: data/interim/annotations
+      hash: md5
+      md5: 5296686b29af5701b256720b3a61006d.dir
+      size: 1138192599
+      nfiles: 88
+    - path: data/interim/static_view
+      hash: md5
+      md5: e9e18d81434461b6d0d4cb2cc9b1bd93.dir
+      size: 422819236
+      nfiles: 88
+    - path: data/processed/abstracts
+      hash: md5
+      md5: 468c90361d4c9d5c82b0552272ea318e.dir
+      size: 288325283
+      nfiles: 88
+    - path: data/processed/sentence_view
+      hash: md5
+      md5: b9076d5c5947618c0e8d6cbfddcccd5b.dir
+      size: 25710897
+      nfiles: 88
+    - path: src/interpretant/catalog/abstracts.py
+      hash: md5
+      md5: a96b4f1a2380be67a9eac4dc4d52d3ef
+      size: 4649
+    - path: src/interpretant/catalog/annotation_cache.py
+      hash: md5
+      md5: 58b1529dcb8c0e4497af084334d03699
+      size: 2793
+    - path: src/interpretant/catalog/annotations.py
+      hash: md5
+      md5: 941b22a4f1940a9af8ca57748c72edc9
+      size: 3310
+    - path: src/interpretant/catalog/config.py
+      hash: md5
+      md5: 857877587cc075526016437df66fbf1f
+      size: 2822
+    - path: src/interpretant/catalog/json_lines.py
+      hash: md5
+      md5: 18fb2759772b5e9b95b480b56c0af1f8
+      size: 1613
+    - path: src/interpretant/catalog/lemma_exceptions.py
+      hash: md5
+      md5: d9df3b21e70a5f43905a0600cc1b1798
+      size: 2717
+    - path: src/interpretant/catalog/metadata.py
+      hash: md5
+      md5: f29bf6c15b0dd82aa083d4d2a43297c3
+      size: 4185
+    - path: src/interpretant/catalog/parts.py
+      hash: md5
+      md5: bd9edd2c1e8cbe90de37d96b91bf92be
+      size: 603
+    - path: src/interpretant/catalog/raw.py
+      hash: md5
+      md5: 79df39a6daf4785b0f869fc2b5bee60a
+      size: 1913
+    - path: src/interpretant/catalog/schemas.py
+      hash: md5
+      md5: 710987f427c34a378079ff53cf823cce
+      size: 7809
+    - path: src/interpretant/catalog/sentence_view.py
+      hash: md5
+      md5: 01042cf89dd32b2ebda9c33633ba416d
+      size: 5389
+    - path: src/interpretant/catalog/spellings.py
+      hash: md5
+      md5: 16197eabce6b8c60e8f004196480adb0
+      size: 2533
+    - path: src/interpretant/catalog/static_view.py
+      hash: md5
+      md5: 995b96313132fa5d155200444d32485e
+      size: 2514
+    - path: src/interpretant/catalog/usages.py
+      hash: md5
+      md5: 330449528dd2b8f1494b6a9634a2f437
+      size: 8267
+    - path: src/interpretant/catalog/words.py
+      hash: md5
+      md5: 1f88dbc27e5c43506cb04b5f5da5f8c9
+      size: 6476
+    - path: src/interpretant/cli/build_usages.py
+      hash: md5
+      md5: 5240c13a2aea9055d4b1df35d4f69253
+      size: 5256
+    - path: src/interpretant/corpus/attribute_rules.py
+      hash: md5
+      md5: 1a292b8ac73f0f574cb05a53bc6f2284
+      size: 4891
+    - path: src/interpretant/corpus/cleaning.py
+      hash: md5
+      md5: 1608ee959caae88b72fb7692165a8bc6
+      size: 8800
+    - path: src/interpretant/corpus/compound_spelling.py
+      hash: md5
+      md5: 6b56fb4bfa9fba5c19c458fe4bd6ea0d
+      size: 3165
+    - path: src/interpretant/corpus/lemma_exceptions.py
+      hash: md5
+      md5: 8acdb41c79602a6005bb0b7d00459d91
+      size: 1384
+    - path: src/interpretant/corpus/sentence_view.py
+      hash: md5
+      md5: e8f3a23a31df086c1d7871d0646cd5f4
+      size: 11615
+    - path: src/interpretant/corpus/spelling.py
+      hash: md5
+      md5: f7bfcaa05f716459894297f5d363ed18
+      size: 1529
+    - path: src/interpretant/corpus/static_view.py
+      hash: md5
+      md5: 4a11f07c08d8bd43eadfefc269e261ad
+      size: 4754
+    - path: src/interpretant/corpus/works.py
+      hash: md5
+      md5: c4a97f7d0484dcd331505542be27fecc
+      size: 1895
+    - path: src/interpretant/pipelines/build_usages.py
+      hash: md5
+      md5: c09a294cc51a39dca367a04979815be6
+      size: 35892
+    - path: src/interpretant/pipelines/corpus.py
+      hash: md5
+      md5: 7d3eb9ce0103d26080bfe5fba4ced20b
+      size: 4707
+    - path: src/interpretant/pipelines/params.py
+      hash: md5
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
+    - path: src/interpretant/pipelines/progress.py
+      hash: md5
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
+    - path: src/interpretant/pipelines/workers.py
+      hash: md5
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
+    - path: src/interpretant/usages/checks.py
+      hash: md5
+      md5: 1117f2c33a6932cbb76cfb1c447dcb0d
+      size: 3849
+    - path: src/interpretant/usages/entities.py
+      hash: md5
+      md5: 3bc11cbfc60a74faeeb0d6490ee24f6e
+      size: 9023
+    - path: src/interpretant/usages/identifiers.py
+      hash: md5
+      md5: 196f82b49c8f332e55812a83419e06a3
+      size: 1468
+    - path: src/interpretant/usages/target_matching.py
+      hash: md5
+      md5: 2b5bcf2bc67940a819733bc87e7243d2
+      size: 10518
+    - path: src/interpretant/usages/traits.py
+      hash: md5
+      md5: b2eeb6c7fbb26d00febe3604409e417d
+      size: 3215
+    - path: src/interpretant/usages/usage_selection.py
+      hash: md5
+      md5: 4c8bcfda599e071488631a7bb835666c
+      size: 5907
+    params:
+      params.yaml:
+        build_usages:
+          seed: 20261301
+          model: en_core_web_trf
+          name_labels:
+          - PERSON
+          - NORP
+          - FAC
+          - ORG
+          - GPE
+          - LOC
+          - PRODUCT
+          - EVENT
+          - WORK_OF_ART
+          - LAW
+          - LANGUAGE
+        corpus:
+          fields:
+          - ai
+          - cogpsych
+          - communication
+          - compsci
+          - hci
+          - histphilsci
+          - linguistics
+          - neuroscience
+          - philosophy
+          - psychology
+          - sociology
+          decades:
+          - 1950
+          - 1960
+          - 1970
+          - 1980
+          - 1990
+          - 2000
+          - 2010
+          - 2020
+    outs:
+    - path: data/processed/usages
+      hash: md5
+      md5: 947f15730e7c94b850b0446e35810ddc.dir
+      size: 122230350
+      nfiles: 88
