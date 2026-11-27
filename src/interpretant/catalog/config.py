@@ -61,6 +61,15 @@ class CatalogConfig(BaseModel):
     spellings: DatasetEntry
     compounds: DatasetEntry
     sentence_languages: DatasetEntry
+    run3_records: DatasetEntry
+    junk_labels: DatasetEntry
+    record_vectors: DatasetEntry
+    junk_scores: DatasetEntry
+    usage_ocr_scores: DatasetEntry
+    junk_cells: DatasetEntry
+    junk_exclusions: DatasetEntry
+    junk_classifier: DatasetEntry
+    junk_gate_metrics: DatasetEntry
 
 
 def read_catalog(catalog_file: Path = CATALOG_FILE) -> CatalogConfig:

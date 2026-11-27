@@ -197,3 +197,54 @@ compounds:
 sentence_languages:
   path: data/interim/sentence_languages
   format: parquet
+
+# The junk gate (phase step 7; docs/junk_gate.md). Run 3's 200 judged records with the text they
+# had in that run, for the judges' calibration: tracked by DVC, since they quote the corpus.
+run3_records:
+  path: data/review/run3/records.parquet
+  format: parquet
+
+# The judges' labels on the gate's items (verdict, kind, sentence and damage, with no note), which
+# the classifier learns from and the gate's rules read.
+junk_labels:
+  path: data/review/junk_gate/labels.json
+  format: json
+
+# One vector per record behind a drawn usage, from the frozen text encoder, one part per field and
+# decade.
+record_vectors:
+  path: data/interim/record_vectors
+  format: parquet
+
+# Each of those records' junk score and verdict from the classifier, with its surface features.
+junk_scores:
+  path: data/processed/junk_gate/records.parquet
+  format: parquet
+
+# Each drawn usage's OCR score: the share of its sentence's words that neither the dictionary nor
+# the corpus knows.
+usage_ocr_scores:
+  path: data/processed/junk_gate/usage_scores.parquet
+  format: parquet
+
+# Each word and decade's drawn usages, how many the classifier calls junk, and whether the screen
+# flags the cell and the judges' confirmation fails it.
+junk_cells:
+  path: data/processed/junk_gate/cells.parquet
+  format: parquet
+
+# The usages the measures leave out, a work and a word per row: predicted junk of the words with a
+# failing cell, or of every word when a decade fails.
+junk_exclusions:
+  path: data/processed/junk_gate/exclusions.parquet
+  format: parquet
+
+# The trained classifier: its weights, the features' scaling and its cut-off.
+junk_classifier:
+  path: data/processed/junk_gate/classifier.json
+  format: json
+
+# The gate's counts for the datasheet and the run log, with held-out words under their sealed names.
+junk_gate_metrics:
+  path: metrics/junk_gate.json
+  format: json
