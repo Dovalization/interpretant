@@ -32,7 +32,6 @@ from interpretant.catalog.static_view import load_static_view
 from interpretant.catalog.words import load_words
 from interpretant.corpus.removals import Removal, kept_text
 from interpretant.corpus.work_metadata import REPOSITORY_ONLY
-from interpretant.pipelines.cleaning_sensitivity import has_finite_verb_outside
 from interpretant.pipelines.draw_usages_audit import (
     load_texts,
     load_usages_with_decades,
@@ -40,6 +39,7 @@ from interpretant.pipelines.draw_usages_audit import (
 )
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts
+from interpretant.review.finite_verbs import has_finite_verb_outside
 from interpretant.review.junk_gate import (
     CONFIRMATION_PER_CELL,
     CONFIRMATION_SEED,

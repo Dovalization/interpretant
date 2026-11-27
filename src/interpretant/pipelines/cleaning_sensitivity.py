@@ -40,6 +40,7 @@ from interpretant.drift.stability import movement
 from interpretant.embedding.ppmi import SvdBackend, train_lines
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import Report, map_parts_reporting
+from interpretant.review.finite_verbs import has_finite_verb_outside
 
 BASE_SEED = 20261116
 # Bootstrap replicates are seeded apart from the placebos'.
@@ -267,16 +268,6 @@ def locate_works(catalog: CatalogConfig, plans: dict[str, dict[int, CellPlan]]) 
                     f"{len(missing)} works of cell {name}_{decade} have no static view"
                 )
             plan.view_parts = sorted({part_of[work_id] for work_id in plan.work_ids})
-
-
-def has_finite_verb_outside(
-    starts: list[int], finite_verbs: list[bool], removals: list[Range]
-) -> bool:
-    """Whether a finite verb lies outside every removed range."""
-    return any(
-        finite and not any(start <= offset < end for start, end in removals)
-        for offset, finite in zip(starts, finite_verbs, strict=True)
-    )
 
 
 def _added_ranges(base_ranges: list[Range], later: list[dict[str, Any]]) -> list[Range]:

@@ -39,10 +39,10 @@ from interpretant.catalog.static_view import load_static_view
 from interpretant.catalog.usages import load_usages_part
 from interpretant.catalog.words import Word, load_words
 from interpretant.corpus.removals import kept_text
-from interpretant.pipelines.cleaning_sensitivity import has_finite_verb_outside
 from interpretant.pipelines.params import ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts, worker_pool
+from interpretant.review.finite_verbs import has_finite_verb_outside
 from interpretant.review.junk_classifier import (
     FEATURE_NAMES,
     SENSITIVITY_BAR,

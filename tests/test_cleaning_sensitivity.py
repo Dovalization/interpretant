@@ -15,11 +15,11 @@ from interpretant.pipelines.build_static_view import build_static_view
 from interpretant.pipelines.cleaning_sensitivity import (
     SensitivitySettings,
     average_pairs,
-    has_finite_verb_outside,
     measure_cleaning_sensitivity,
     plan_cells,
 )
 from interpretant.pipelines.params import CorpusSelection
+from interpretant.review.finite_verbs import has_finite_verb_outside
 from tests.corpus_catalog import ANNOTATE_SETTINGS
 
 BUILD_SCHEMA = {

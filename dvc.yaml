@@ -313,7 +313,6 @@ stages:
       - src/interpretant/catalog/usages.py
       - src/interpretant/catalog/words.py
       - src/interpretant/cli/build_junk_gate.py
-      - src/interpretant/corpus/cell_versions.py
       - src/interpretant/corpus/cleaning.py
       - src/interpretant/corpus/dictionary.py
       - src/interpretant/corpus/language.py
@@ -321,18 +320,13 @@ stages:
       - src/interpretant/corpus/repair.py
       - src/interpretant/corpus/sentence_view.py
       - src/interpretant/corpus/works.py
-      - src/interpretant/drift/grid.py
-      - src/interpretant/drift/metrics.py
-      - src/interpretant/drift/stability.py
-      - src/interpretant/embedding/base.py
-      - src/interpretant/embedding/ppmi.py
       - src/interpretant/pipelines/build_junk_gate.py
-      - src/interpretant/pipelines/cleaning_sensitivity.py
       - src/interpretant/pipelines/params.py
       - src/interpretant/pipelines/progress.py
       - src/interpretant/pipelines/workers.py
       - src/interpretant/review/junk_classifier.py
       - src/interpretant/review/junk_gate.py
+      - src/interpretant/review/finite_verbs.py
       - src/interpretant/review/junk_rules.py
       - src/interpretant/review/ocr_damage.py
       - src/interpretant/review/sampling_plans.py
