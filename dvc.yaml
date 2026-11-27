@@ -263,6 +263,35 @@ stages:
     outs:
       - ${usages.path}
 
+  # The junk gate's record vectors (docs/junk_gate.md, the classifier): every record behind a
+  # drawn usage, encoded once by the frozen text encoder, on the GPU.
+  embed_records:
+    cmd: interpretant embed-records
+    deps:
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/record_vectors.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/usages.py
+      - src/interpretant/cli/embed_records.py
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/removals.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/embed_records.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - ${usages.path}
+      - ${abstracts.path}
+    params:
+      # Only the encoder's keys: the gate's other settings do not change the vectors
+      - junk_gate.encoder
+    outs:
+      - ${record_vectors.path}
+
   clean_corpus:
     cmd: interpretant clean-corpus
     deps:

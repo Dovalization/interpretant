@@ -88,6 +88,11 @@ deployments:
     <<: *runner
 
   - name: runner
+    description: "Encode every record behind a drawn usage with the frozen text encoder, on the GPU, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:embed_records
+    <<: *runner
+
+  - name: runner
     description: "Fetch OpenAlex's record of every raw work, resuming where it stopped, on the runner, from the submitted commit"
     entrypoint: src/interpretant/orchestration/flows.py:fetch_metadata
     <<: *runner

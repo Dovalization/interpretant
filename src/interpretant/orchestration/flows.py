@@ -27,6 +27,7 @@ from interpretant.cli.count_word_repairs import run_count_word_repairs
 from interpretant.cli.detect_languages import run_detect_languages
 from interpretant.cli.draw_junk_gate import run_draw_junk_gate
 from interpretant.cli.draw_usages_audit import run_draw_usages_audit
+from interpretant.cli.embed_records import run_embed_records
 from interpretant.cli.fetch_linked_sources import run_fetch_linked_sources
 from interpretant.cli.fetch_metadata import run_fetch_metadata
 from interpretant.cli.judge_api import run_judge_api
@@ -287,6 +288,18 @@ def build_usages(
             reuse_cache=reuse_cache,
             progress=progress,
             console=console,
+        ),
+        pull=pull,
+    )
+
+
+@flow(name="embed-records", timeout_seconds=JOBS["embed-records"].timeout_seconds)
+def embed_records(*, pull: list[str] | None = None) -> None:
+    """Encode every record behind a drawn usage with the frozen text encoder, on the GPU."""
+    run_job(
+        JOBS["embed-records"],
+        lambda catalog, progress, console: run_embed_records(
+            catalog, progress=progress, console=console
         ),
         pull=pull,
     )

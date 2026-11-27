@@ -116,3 +116,14 @@ build_usages:
   # The entity labels whose mentions are names, not uses of the word (4.1; all 11 name types,
   # the author, 2026-11-18). Dates, numbers, quantities and the like are not names.
   name_labels: [PERSON, NORP, FAC, ORG, GPE, LOC, PRODUCT, EVENT, WORK_OF_ART, LAW, LANGUAGE]
+
+# The junk gate (phase step 7; docs/junk_gate.md).
+junk_gate:
+  # The frozen text encoder behind the classifier's record vectors (embed-records). The model, its
+  # revision and the tokens it reads are pre-registered; the batch size only trades the GPU's
+  # memory for speed.
+  encoder:
+    model: BAAI/bge-base-en-v1.5
+    revision: a5beb1e3e68b9ab74eb54cfd186867f64f240e1a
+    max_tokens: 512
+    batch_size: 64

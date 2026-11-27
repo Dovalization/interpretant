@@ -51,6 +51,7 @@ JOBS: dict[str, Job] = {
         Job("build-sentence-view", 1 * HOUR, stage="build_sentence_view"),
         # No retries: a stopped run is finished with --resume, which skips the parts done
         Job("build-usages", 4 * HOUR, stage="build_usages"),
+        Job("embed-records", 2 * HOUR, stage="embed_records"),
         # The fetchers resume where they stopped, so a failed run (an API outage, a rate limit)
         # is retried twice, ten minutes apart
         Job(
