@@ -380,6 +380,23 @@ A comparison, set before any local model has judged a record. It changes no verd
   stays the reference for the judges' error rates. L and E have not been judged, so no other label
   is affected. The first judging's verdicts are kept on the runner, apart from the new ones.
 
+## Second amendment, 2026-11-27, before L and E are judged
+
+- **What the re-judging showed.** Under the amended codebook both judges agreed on all 200
+  records, and step 1's bars held: 193 of 197 agreed with the author, 27 of the 31 junk records
+  were found, and none of the 166 abstracts was called junk. The two records of the first
+  amendment became abstracts. One record went the other way: r023, a 1957 newspaper page the
+  author called junk on 2026-11-14, became an abstract.
+- **The cause.** The first amendment's wording counted "a historical document's" text as the
+  work's own, and an old newspaper page reads as one. The codebook's `archive_or_catalogue`
+  already lists newspaper pages as junk, as did the author's review (agenda 4b), so the wording,
+  not the case, was at fault (Claude's drafting error).
+- **The change** (the author, 2026-11-27). "A historical document's" is dropped from the rule, and
+  the rule adds that a newspaper page, a letter or another archive item stays junk, however old.
+  r023 keeps the author's 2026-11-14 verdict as its reference, with no second look.
+- **What follows,** as for the first amendment: run 3 is judged again under this codebook and step
+  1's bars are checked again; the earlier verdicts are kept on the runner, apart from the new ones.
+
 ## Results
 
 *To be appended.*

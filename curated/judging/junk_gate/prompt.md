@@ -52,11 +52,11 @@ Is the text **the work's own prose**: the authors writing about their own work, 
   editorial or a comment is an abstract.
 - **A description of what a book or issue contains** is an abstract when it summarises the
   argument in prose, and junk when it lists contents or sells the book.
-- **A passage of an older or primary text** (a philosopher's, a classic author's, a scripture's,
-  a historical document's) standing as the record's text is the work's own text: the work is
-  usually an edition, a translation, an anthology or a study that opens with it. It is junk only
-  when the record plainly belongs to something else, such as a quotation printed above a
-  publisher's description.
+- **A passage of an older or primary text** (a philosopher's, a classic author's, a scripture's)
+  standing as the record's text is the work's own text: the work is usually an edition, a
+  translation, an anthology or a study that opens with it. It is junk only when the record
+  plainly belongs to something else, such as a quotation printed above a publisher's description.
+  A newspaper page, a letter or another archive item stays junk, however old.
 - **Damage is not junk.** Glued or split words, stray characters and lost punctuation do not change
   the verdict. They are recorded separately (below).
 - **When unsure between `abstract` and `junk`,** ask whether a reader would learn what the work
