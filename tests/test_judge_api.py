@@ -3,15 +3,19 @@
 from __future__ import annotations
 
 import dataclasses
+import io
 import json
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
 import pytest
+from rich.console import Console
 
+from interpretant.cli import judge_api as command
 from interpretant.pipelines import judge_api as judge
 from interpretant.pipelines.judge_api import ApiJudging
+from interpretant.pipelines.progress import SILENT
 from interpretant.review.judging import SCHEMAS, render
 
 MODEL = "claude-sonnet-5-5"
@@ -202,3 +206,60 @@ def test_a_record_is_judged_on_its_text_with_the_records_answers(tmp_path: Path)
     assert params["messages"][0]["content"] == "Item id: R1\nWe study attention. ⟦It drifts.⟧"
     assert params["output_config"]["format"]["schema"] == SCHEMAS["records"]
     assert verdicts == {"R1": abstract}
+
+
+class AnsweringBatches:
+    """Batches that end at once and answer every request they were sent with the same verdict."""
+
+    def __init__(self, answer: str) -> None:
+        self.answer = answer
+        self.by_batch: dict[str, list[dict[str, Any]]] = {}
+
+    def create(self, requests: list[dict[str, Any]]) -> SimpleNamespace:
+        batch_id = f"batch-{len(self.by_batch) + 1}"
+        self.by_batch[batch_id] = requests
+        return SimpleNamespace(id=batch_id)
+
+    def retrieve(self, _batch_id: str) -> SimpleNamespace:
+        return SimpleNamespace(processing_status="ended")
+
+    def results(self, batch_id: str) -> list[SimpleNamespace]:
+        return [succeeded(request["custom_id"], self.answer) for request in self.by_batch[batch_id]]
+
+
+def test_a_pair_of_judges_writes_two_verdict_files_and_adds_their_counts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    answer = json.dumps({"verdict": "right", "reason": "none", "note": "a use"})
+    clients: list[SimpleNamespace] = []
+
+    def make_client(**_: Any) -> SimpleNamespace:
+        client = SimpleNamespace(
+            messages=SimpleNamespace(
+                count_tokens=lambda **_: SimpleNamespace(input_tokens=1500),
+                batches=AnsweringBatches(answer),
+            )
+        )
+        clients.append(client)
+        return client
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    monkeypatch.setattr(command.anthropic, "Anthropic", make_client)
+    items = tmp_path / "items.jsonl"
+    items.write_text("".join(json.dumps(item(item_id)) + "\n" for item_id in ("U1", "U2", "U3")))
+    first, second = tmp_path / "verdicts" / "judge_A.json", tmp_path / "verdicts" / "judge_B.json"
+    counts = command.run_judge_api(
+        None,  # type: ignore[arg-type]
+        items,
+        first,
+        options(tmp_path),
+        progress=SILENT,
+        console=Console(file=io.StringIO()),
+        second_out=second,
+    )
+    assert len(clients) == 2
+    for out in (first, second):
+        assert sorted(json.loads(out.read_text())) == ["U1", "U2", "U3"]
+        assert out.with_suffix(".manifest.json").exists()
+    assert counts["judged"] == 6
+    assert command.build_record_name(MODEL, second) == f"judge-api {MODEL} pair"

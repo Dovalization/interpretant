@@ -31,7 +31,7 @@ from interpretant.cli.draw_usages_audit import run_draw_usages_audit
 from interpretant.cli.embed_records import run_embed_records
 from interpretant.cli.fetch_linked_sources import run_fetch_linked_sources
 from interpretant.cli.fetch_metadata import run_fetch_metadata
-from interpretant.cli.judge_api import run_judge_api
+from interpretant.cli.judge_api import build_record_name, run_judge_api
 from interpretant.cli.judge_claude_code import run_judge_claude_code
 from interpretant.cli.judge_ollama import run_judge_ollama
 from interpretant.cli.options import default_process_count
@@ -436,10 +436,14 @@ def judge_api(
     chunk: int = 500,
     max_tokens: int = 4096,
     thinking: Thinking = "adaptive",
+    second_out: Path | None = None,
     *,
     pull: list[str] | None = None,
 ) -> None:
-    """Judge review items through the Message Batches API, within a cap of this run's spending."""
+    """Judge review items through the Message Batches API, within a cap of this run's spending.
+
+    With ``second_out``, a second judge judges the same items beside the first.
+    """
     judging = ApiJudging(
         codebook=codebook,
         answers=answers,
@@ -453,10 +457,10 @@ def judge_api(
     run_job(
         JOBS["judge-api"],
         lambda catalog, progress, console: run_judge_api(
-            catalog, items, out, judging, progress=progress, console=console
+            catalog, items, out, judging, progress=progress, console=console, second_out=second_out
         ),
         pull=pull,
-        record_as=f"judge-api {model}",
+        record_as=build_record_name(model, second_out),
     )
 
 
