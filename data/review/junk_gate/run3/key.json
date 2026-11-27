@@ -1,0 +1,1202 @@
+{
+ "r000": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1968507206",
+  "decade": 1950,
+  "field": "psychology"
+ },
+ "r001": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1979791163",
+  "decade": 1950,
+  "field": "sociology"
+ },
+ "r002": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1995231756",
+  "decade": 1950,
+  "field": "neuroscience"
+ },
+ "r003": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2041733025",
+  "decade": 1950,
+  "field": "philosophy"
+ },
+ "r004": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2043794984",
+  "decade": 1950,
+  "field": "psychology"
+ },
+ "r005": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2066285589",
+  "decade": 1950,
+  "field": "compsci"
+ },
+ "r006": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2312393326",
+  "decade": 1950,
+  "field": "psychology"
+ },
+ "r007": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2319330867",
+  "decade": 1950,
+  "field": "sociology"
+ },
+ "r008": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2321368926",
+  "decade": 1950,
+  "field": "philosophy"
+ },
+ "r009": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2409049063",
+  "decade": 1950,
+  "field": "sociology"
+ },
+ "r010": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2412252982",
+  "decade": 1950,
+  "field": "neuroscience"
+ },
+ "r011": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2485505345",
+  "decade": 1950,
+  "field": "sociology"
+ },
+ "r012": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2528808621",
+  "decade": 1950,
+  "field": "histphilsci"
+ },
+ "r013": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2756014940",
+  "decade": 1950,
+  "field": "psychology"
+ },
+ "r014": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2800284286",
+  "decade": 1950,
+  "field": "sociology"
+ },
+ "r015": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3216013295",
+  "decade": 1950,
+  "field": "compsci"
+ },
+ "r016": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W340150483",
+  "decade": 1950,
+  "field": "histphilsci"
+ },
+ "r017": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4213150160",
+  "decade": 1950,
+  "field": "sociology"
+ },
+ "r018": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4229711053",
+  "decade": 1950,
+  "field": "neuroscience"
+ },
+ "r019": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4229790175",
+  "decade": 1950,
+  "field": "histphilsci"
+ },
+ "r020": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4246305551",
+  "decade": 1950,
+  "field": "linguistics"
+ },
+ "r021": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4251686349",
+  "decade": 1950,
+  "field": "psychology"
+ },
+ "r022": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W561379330",
+  "decade": 1950,
+  "field": "cogpsych"
+ },
+ "r023": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7205167320",
+  "decade": 1950,
+  "field": "sociology"
+ },
+ "r024": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7209161724",
+  "decade": 1950,
+  "field": "communication"
+ },
+ "r025": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1963755835",
+  "decade": 1960,
+  "field": "histphilsci"
+ },
+ "r026": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1973708192",
+  "decade": 1960,
+  "field": "psychology"
+ },
+ "r027": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1986879667",
+  "decade": 1960,
+  "field": "sociology"
+ },
+ "r028": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2027520326",
+  "decade": 1960,
+  "field": "psychology"
+ },
+ "r029": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2029536476",
+  "decade": 1960,
+  "field": "cogpsych"
+ },
+ "r030": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2049044566",
+  "decade": 1960,
+  "field": "psychology"
+ },
+ "r031": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2126910835",
+  "decade": 1960,
+  "field": "histphilsci"
+ },
+ "r032": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2151104527",
+  "decade": 1960,
+  "field": "neuroscience"
+ },
+ "r033": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2158069862",
+  "decade": 1960,
+  "field": "cogpsych"
+ },
+ "r034": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2320876513",
+  "decade": 1960,
+  "field": "psychology"
+ },
+ "r035": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2321855087",
+  "decade": 1960,
+  "field": "compsci"
+ },
+ "r036": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2326111711",
+  "decade": 1960,
+  "field": "psychology"
+ },
+ "r037": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2329099104",
+  "decade": 1960,
+  "field": "ai"
+ },
+ "r038": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2477260214",
+  "decade": 1960,
+  "field": "philosophy"
+ },
+ "r039": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W252710758",
+  "decade": 1960,
+  "field": "compsci"
+ },
+ "r040": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2802993032",
+  "decade": 1960,
+  "field": "sociology"
+ },
+ "r041": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2817580790",
+  "decade": 1960,
+  "field": "sociology"
+ },
+ "r042": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2951467504",
+  "decade": 1960,
+  "field": "linguistics"
+ },
+ "r043": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2971551988",
+  "decade": 1960,
+  "field": "sociology"
+ },
+ "r044": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2971635531",
+  "decade": 1960,
+  "field": "linguistics"
+ },
+ "r045": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4234761411",
+  "decade": 1960,
+  "field": "histphilsci"
+ },
+ "r046": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4243257892",
+  "decade": 1960,
+  "field": "philosophy"
+ },
+ "r047": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4400560471",
+  "decade": 1960,
+  "field": "philosophy"
+ },
+ "r048": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7161941447",
+  "decade": 1960,
+  "field": "neuroscience"
+ },
+ "r049": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7207888611",
+  "decade": 1960,
+  "field": "psychology"
+ },
+ "r050": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W161430841",
+  "decade": 1970,
+  "field": "ai"
+ },
+ "r051": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1966971937",
+  "decade": 1970,
+  "field": "psychology"
+ },
+ "r052": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1980284874",
+  "decade": 1970,
+  "field": "psychology"
+ },
+ "r053": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2022161679",
+  "decade": 1970,
+  "field": "sociology"
+ },
+ "r054": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2024240760",
+  "decade": 1970,
+  "field": "neuroscience"
+ },
+ "r055": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2044222665",
+  "decade": 1970,
+  "field": "histphilsci"
+ },
+ "r056": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2122468314",
+  "decade": 1970,
+  "field": "compsci"
+ },
+ "r057": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2147915661",
+  "decade": 1970,
+  "field": "compsci"
+ },
+ "r058": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2155445278",
+  "decade": 1970,
+  "field": "psychology"
+ },
+ "r059": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2321832891",
+  "decade": 1970,
+  "field": "philosophy"
+ },
+ "r060": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2323112124",
+  "decade": 1970,
+  "field": "sociology"
+ },
+ "r061": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2329232121",
+  "decade": 1970,
+  "field": "sociology"
+ },
+ "r062": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2333519265",
+  "decade": 1970,
+  "field": "philosophy"
+ },
+ "r063": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2480343881",
+  "decade": 1970,
+  "field": "histphilsci"
+ },
+ "r064": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2503557015",
+  "decade": 1970,
+  "field": "philosophy"
+ },
+ "r065": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2792412232",
+  "decade": 1970,
+  "field": "linguistics"
+ },
+ "r066": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2795917008",
+  "decade": 1970,
+  "field": "sociology"
+ },
+ "r067": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2908192424",
+  "decade": 1970,
+  "field": "philosophy"
+ },
+ "r068": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2938043229",
+  "decade": 1970,
+  "field": "communication"
+ },
+ "r069": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2938214306",
+  "decade": 1970,
+  "field": "sociology"
+ },
+ "r070": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4230859704",
+  "decade": 1970,
+  "field": "histphilsci"
+ },
+ "r071": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4241039227",
+  "decade": 1970,
+  "field": "compsci"
+ },
+ "r072": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4402816312",
+  "decade": 1970,
+  "field": "linguistics"
+ },
+ "r073": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7153958247",
+  "decade": 1970,
+  "field": "philosophy"
+ },
+ "r074": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7208997850",
+  "decade": 1970,
+  "field": "psychology"
+ },
+ "r075": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1579977837",
+  "decade": 1980,
+  "field": "communication"
+ },
+ "r076": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W188214127",
+  "decade": 1980,
+  "field": "philosophy"
+ },
+ "r077": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1974609519",
+  "decade": 1980,
+  "field": "philosophy"
+ },
+ "r078": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2017675882",
+  "decade": 1980,
+  "field": "sociology"
+ },
+ "r079": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2019782367",
+  "decade": 1980,
+  "field": "psychology"
+ },
+ "r080": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2041350801",
+  "decade": 1980,
+  "field": "ai"
+ },
+ "r081": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2119679924",
+  "decade": 1980,
+  "field": "sociology"
+ },
+ "r082": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2144192739",
+  "decade": 1980,
+  "field": "philosophy"
+ },
+ "r083": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2151256304",
+  "decade": 1980,
+  "field": "cogpsych"
+ },
+ "r084": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2318839514",
+  "decade": 1980,
+  "field": "histphilsci"
+ },
+ "r085": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2320491982",
+  "decade": 1980,
+  "field": "linguistics"
+ },
+ "r086": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2327946510",
+  "decade": 1980,
+  "field": "philosophy"
+ },
+ "r087": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2333412405",
+  "decade": 1980,
+  "field": "linguistics"
+ },
+ "r088": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2470136573",
+  "decade": 1980,
+  "field": "sociology"
+ },
+ "r089": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2490764051",
+  "decade": 1980,
+  "field": "sociology"
+ },
+ "r090": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2771937615",
+  "decade": 1980,
+  "field": "linguistics"
+ },
+ "r091": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2783916997",
+  "decade": 1980,
+  "field": "compsci"
+ },
+ "r092": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2914806273",
+  "decade": 1980,
+  "field": "compsci"
+ },
+ "r093": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2946278916",
+  "decade": 1980,
+  "field": "psychology"
+ },
+ "r094": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2946448394",
+  "decade": 1980,
+  "field": "philosophy"
+ },
+ "r095": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4234643696",
+  "decade": 1980,
+  "field": "compsci"
+ },
+ "r096": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4246845771",
+  "decade": 1980,
+  "field": "linguistics"
+ },
+ "r097": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W562309978",
+  "decade": 1980,
+  "field": "linguistics"
+ },
+ "r098": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7127241022",
+  "decade": 1980,
+  "field": "sociology"
+ },
+ "r099": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7204221455",
+  "decade": 1980,
+  "field": "histphilsci"
+ },
+ "r100": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1549447146",
+  "decade": 1990,
+  "field": "neuroscience"
+ },
+ "r101": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1631789991",
+  "decade": 1990,
+  "field": "neuroscience"
+ },
+ "r102": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W196647617",
+  "decade": 1990,
+  "field": "histphilsci"
+ },
+ "r103": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2014680026",
+  "decade": 1990,
+  "field": "hci"
+ },
+ "r104": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2017272824",
+  "decade": 1990,
+  "field": "histphilsci"
+ },
+ "r105": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2041049939",
+  "decade": 1990,
+  "field": "sociology"
+ },
+ "r106": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2128271571",
+  "decade": 1990,
+  "field": "sociology"
+ },
+ "r107": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2151281532",
+  "decade": 1990,
+  "field": "compsci"
+ },
+ "r108": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2157544393",
+  "decade": 1990,
+  "field": "neuroscience"
+ },
+ "r109": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2329017912",
+  "decade": 1990,
+  "field": "sociology"
+ },
+ "r110": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2332148028",
+  "decade": 1990,
+  "field": "philosophy"
+ },
+ "r111": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2376192011",
+  "decade": 1990,
+  "field": "compsci"
+ },
+ "r112": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2407122903",
+  "decade": 1990,
+  "field": "psychology"
+ },
+ "r113": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2499740017",
+  "decade": 1990,
+  "field": "philosophy"
+ },
+ "r114": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2538868268",
+  "decade": 1990,
+  "field": "linguistics"
+ },
+ "r115": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2989913428",
+  "decade": 1990,
+  "field": "communication"
+ },
+ "r116": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2992240408",
+  "decade": 1990,
+  "field": "psychology"
+ },
+ "r117": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3146341807",
+  "decade": 1990,
+  "field": "sociology"
+ },
+ "r118": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3186522262",
+  "decade": 1990,
+  "field": "ai"
+ },
+ "r119": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W318755627",
+  "decade": 1990,
+  "field": "hci"
+ },
+ "r120": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4254514807",
+  "decade": 1990,
+  "field": "philosophy"
+ },
+ "r121": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4388215548",
+  "decade": 1990,
+  "field": "philosophy"
+ },
+ "r122": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W587491895",
+  "decade": 1990,
+  "field": "philosophy"
+ },
+ "r123": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7111776455",
+  "decade": 1990,
+  "field": "histphilsci"
+ },
+ "r124": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7164774838",
+  "decade": 1990,
+  "field": "communication"
+ },
+ "r125": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1554093384",
+  "decade": 2000,
+  "field": "communication"
+ },
+ "r126": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W166792899",
+  "decade": 2000,
+  "field": "histphilsci"
+ },
+ "r127": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1967883527",
+  "decade": 2000,
+  "field": "neuroscience"
+ },
+ "r128": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2040501068",
+  "decade": 2000,
+  "field": "neuroscience"
+ },
+ "r129": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2044144660",
+  "decade": 2000,
+  "field": "hci"
+ },
+ "r130": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2080072756",
+  "decade": 2000,
+  "field": "cogpsych"
+ },
+ "r131": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2170804703",
+  "decade": 2000,
+  "field": "hci"
+ },
+ "r132": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2277196152",
+  "decade": 2000,
+  "field": "linguistics"
+ },
+ "r133": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2302897710",
+  "decade": 2000,
+  "field": "ai"
+ },
+ "r134": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2370410701",
+  "decade": 2000,
+  "field": "linguistics"
+ },
+ "r135": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2371551997",
+  "decade": 2000,
+  "field": "sociology"
+ },
+ "r136": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2376355927",
+  "decade": 2000,
+  "field": "ai"
+ },
+ "r137": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2379969341",
+  "decade": 2000,
+  "field": "linguistics"
+ },
+ "r138": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2404710766",
+  "decade": 2000,
+  "field": "cogpsych"
+ },
+ "r139": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2481770353",
+  "decade": 2000,
+  "field": "linguistics"
+ },
+ "r140": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W263969887",
+  "decade": 2000,
+  "field": "compsci"
+ },
+ "r141": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2701302113",
+  "decade": 2000,
+  "field": "philosophy"
+ },
+ "r142": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2809357805",
+  "decade": 2000,
+  "field": "communication"
+ },
+ "r143": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2902026433",
+  "decade": 2000,
+  "field": "neuroscience"
+ },
+ "r144": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2902393029",
+  "decade": 2000,
+  "field": "psychology"
+ },
+ "r145": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4233116043",
+  "decade": 2000,
+  "field": "sociology"
+ },
+ "r146": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4243584913",
+  "decade": 2000,
+  "field": "hci"
+ },
+ "r147": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4391001123",
+  "decade": 2000,
+  "field": "philosophy"
+ },
+ "r148": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W655449250",
+  "decade": 2000,
+  "field": "sociology"
+ },
+ "r149": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7132354115",
+  "decade": 2000,
+  "field": "hci"
+ },
+ "r150": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1833160622",
+  "decade": 2010,
+  "field": "cogpsych"
+ },
+ "r151": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W1981261802",
+  "decade": 2010,
+  "field": "compsci"
+ },
+ "r152": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2025227276",
+  "decade": 2010,
+  "field": "cogpsych"
+ },
+ "r153": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2166856245",
+  "decade": 2010,
+  "field": "neuroscience"
+ },
+ "r154": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2177869309",
+  "decade": 2010,
+  "field": "linguistics"
+ },
+ "r155": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2319274312",
+  "decade": 2010,
+  "field": "neuroscience"
+ },
+ "r156": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2610067044",
+  "decade": 2010,
+  "field": "psychology"
+ },
+ "r157": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2746667616",
+  "decade": 2010,
+  "field": "philosophy"
+ },
+ "r158": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2759260075",
+  "decade": 2010,
+  "field": "sociology"
+ },
+ "r159": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2890980245",
+  "decade": 2010,
+  "field": "hci"
+ },
+ "r160": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2893089674",
+  "decade": 2010,
+  "field": "linguistics"
+ },
+ "r161": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2901123945",
+  "decade": 2010,
+  "field": "communication"
+ },
+ "r162": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2904590504",
+  "decade": 2010,
+  "field": "ai"
+ },
+ "r163": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2941991544",
+  "decade": 2010,
+  "field": "linguistics"
+ },
+ "r164": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2950816238",
+  "decade": 2010,
+  "field": "ai"
+ },
+ "r165": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2990783597",
+  "decade": 2010,
+  "field": "histphilsci"
+ },
+ "r166": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W2991354853",
+  "decade": 2010,
+  "field": "hci"
+ },
+ "r167": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3002354836",
+  "decade": 2010,
+  "field": "psychology"
+ },
+ "r168": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3006483722",
+  "decade": 2010,
+  "field": "neuroscience"
+ },
+ "r169": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3006519829",
+  "decade": 2010,
+  "field": "ai"
+ },
+ "r170": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4230421301",
+  "decade": 2010,
+  "field": "philosophy"
+ },
+ "r171": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4238319750",
+  "decade": 2010,
+  "field": "cogpsych"
+ },
+ "r172": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4256074650",
+  "decade": 2010,
+  "field": "compsci"
+ },
+ "r173": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W634222504",
+  "decade": 2010,
+  "field": "linguistics"
+ },
+ "r174": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7128669343",
+  "decade": 2010,
+  "field": "histphilsci"
+ },
+ "r175": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3048622993",
+  "decade": 2020,
+  "field": "neuroscience"
+ },
+ "r176": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3110908895",
+  "decade": 2020,
+  "field": "linguistics"
+ },
+ "r177": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W3157292362",
+  "decade": 2020,
+  "field": "communication"
+ },
+ "r178": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4240750036",
+  "decade": 2020,
+  "field": "philosophy"
+ },
+ "r179": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4254841695",
+  "decade": 2020,
+  "field": "cogpsych"
+ },
+ "r180": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4310497837",
+  "decade": 2020,
+  "field": "psychology"
+ },
+ "r181": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4399181314",
+  "decade": 2020,
+  "field": "communication"
+ },
+ "r182": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4402151111",
+  "decade": 2020,
+  "field": "communication"
+ },
+ "r183": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4402852526",
+  "decade": 2020,
+  "field": "ai"
+ },
+ "r184": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4409543009",
+  "decade": 2020,
+  "field": "psychology"
+ },
+ "r185": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4409761989",
+  "decade": 2020,
+  "field": "cogpsych"
+ },
+ "r186": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4410876043",
+  "decade": 2020,
+  "field": "cogpsych"
+ },
+ "r187": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4411610757",
+  "decade": 2020,
+  "field": "sociology"
+ },
+ "r188": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4415382681",
+  "decade": 2020,
+  "field": "histphilsci"
+ },
+ "r189": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W4416644593",
+  "decade": 2020,
+  "field": "compsci"
+ },
+ "r190": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7129320645",
+  "decade": 2020,
+  "field": "sociology"
+ },
+ "r191": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7130646040",
+  "decade": 2020,
+  "field": "sociology"
+ },
+ "r192": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7136099333",
+  "decade": 2020,
+  "field": "neuroscience"
+ },
+ "r193": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7139540951",
+  "decade": 2020,
+  "field": "histphilsci"
+ },
+ "r194": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7139624418",
+  "decade": 2020,
+  "field": "communication"
+ },
+ "r195": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7165158609",
+  "decade": 2020,
+  "field": "neuroscience"
+ },
+ "r196": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7169552283",
+  "decade": 2020,
+  "field": "communication"
+ },
+ "r197": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7214013265",
+  "decade": 2020,
+  "field": "cogpsych"
+ },
+ "r198": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7220009832",
+  "decade": 2020,
+  "field": "histphilsci"
+ },
+ "r199": {
+  "set": "run3",
+  "work_id": "https://openalex.org/W7220562253",
+  "decade": 2020,
+  "field": "linguistics"
+ }
+}
