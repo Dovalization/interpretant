@@ -14,6 +14,7 @@ import json
 import re
 from bisect import bisect_right
 from collections import Counter, defaultdict
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -126,11 +127,13 @@ def draw_usages_audit(
     )
 
 
-def load_usages_with_decades(catalog: CatalogConfig) -> pl.DataFrame:
-    """The working usages table's audit columns, with each row's part and decade."""
+def load_usages_with_decades(
+    catalog: CatalogConfig, columns: Sequence[str] = COLUMNS
+) -> pl.DataFrame:
+    """The usages table's ``columns`` (the audit's by default), with each row's part and decade."""
     return pl.concat(
         [
-            pl.read_parquet(path, columns=COLUMNS).with_columns(
+            pl.read_parquet(path, columns=list(columns)).with_columns(
                 pl.lit(path.stem).alias("part"),
                 pl.lit(int(path.stem.rsplit("_", 1)[1])).alias("decade"),
             )

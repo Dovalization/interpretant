@@ -66,6 +66,7 @@ JOBS: dict[str, Job] = {
             retry_delay_seconds=600,
         ),
         Job("draw-usages-audit", 1 * HOUR),
+        Job("draw-junk-gate", 1 * HOUR),
         # judge-api is never retried, as its cap counts one run's spending only
         Job("judge-api", 6 * HOUR),
         # judge-claude-code resumes by part, so a run with failed parts is retried once

@@ -103,6 +103,11 @@ deployments:
     <<: *runner
 
   - name: runner
+    description: "Draw one of the junk gate's sets of records as review items, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:draw_junk_gate
+    <<: *runner
+
+  - name: runner
     description: "Judge review items through the Message Batches API, on the runner, from the submitted commit"
     entrypoint: src/interpretant/orchestration/flows.py:judge_api
     <<: *runner

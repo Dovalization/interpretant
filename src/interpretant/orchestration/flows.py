@@ -25,6 +25,7 @@ from interpretant.cli.build_usages import run_build_usages
 from interpretant.cli.clean_corpus import run_clean_corpus
 from interpretant.cli.count_word_repairs import run_count_word_repairs
 from interpretant.cli.detect_languages import run_detect_languages
+from interpretant.cli.draw_junk_gate import run_draw_junk_gate
 from interpretant.cli.draw_usages_audit import run_draw_usages_audit
 from interpretant.cli.fetch_linked_sources import run_fetch_linked_sources
 from interpretant.cli.fetch_metadata import run_fetch_metadata
@@ -46,6 +47,7 @@ from interpretant.orchestration.steps import (
 from interpretant.pipelines.judge_api import ApiJudging, Thinking
 from interpretant.pipelines.judge_claude_code import CommandLineJudging
 from interpretant.review.judging import Answers, Effort
+from interpretant.review.junk_gate import DrawSet
 from interpretant.review.usages_audit import AUDIT_SEED
 
 
@@ -360,6 +362,28 @@ def draw_usages_audit(
         record_as=f"draw-usages-audit {seed}",
         # The items quote corpus sentences and stay out of git
         outputs=[out / "key.json", out / "calibration.json", out / "counts.json"],
+    )
+
+
+@flow(name="draw-junk-gate", timeout_seconds=JOBS["draw-junk-gate"].timeout_seconds)
+def draw_junk_gate(
+    out: Path,
+    draw_set: DrawSet = "sample",
+    process_count: int | None = None,
+    *,
+    pull: list[str] | None = None,
+) -> None:
+    """Draw one of the junk gate's sets of records as review items."""
+    processes = process_count or default_process_count()
+    run_job(
+        JOBS["draw-junk-gate"],
+        lambda catalog, progress, console: run_draw_junk_gate(
+            catalog, out, draw_set, processes, progress=progress, console=console
+        ),
+        pull=pull,
+        record_as=f"draw-junk-gate {draw_set}",
+        # The items quote the corpus and stay out of git
+        outputs=[out / "key.json", out / "counts.json"],
     )
 
 

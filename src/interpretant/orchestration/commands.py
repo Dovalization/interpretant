@@ -22,6 +22,7 @@ from interpretant.cli.build_usages import build_usages_command
 from interpretant.cli.clean_corpus import clean_corpus_command
 from interpretant.cli.count_word_repairs import count_word_repairs_command
 from interpretant.cli.detect_languages import detect_languages_command
+from interpretant.cli.draw_junk_gate import draw_junk_gate_command
 from interpretant.cli.draw_usages_audit import draw_usages_audit_command
 from interpretant.cli.fetch_linked_sources import fetch_linked_sources_command
 from interpretant.cli.fetch_metadata import fetch_metadata_command
@@ -46,6 +47,7 @@ JOB_COMMANDS: tuple[click.Command, ...] = (
     fetch_metadata_command,
     fetch_linked_sources_command,
     draw_usages_audit_command,
+    draw_junk_gate_command,
     judge_api_command,
     judge_claude_code_command,
 )
