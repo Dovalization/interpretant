@@ -1419,3 +1419,214 @@ stages:
       md5: 32e1db920426de52af88504017b1fbb4.dir
       size: 1272918121
       nfiles: 88
+  build_junk_gate:
+    cmd: interpretant build-junk-gate
+    deps:
+    - path: curated/held_out.tsv
+      hash: md5
+      md5: a011e1e692b0a5a7a31cf172a8d4d575
+      size: 2470
+    - path: curated/words.tsv
+      hash: md5
+      md5: 86f4549e0974b939b4dd6cb2b37385ce
+      size: 2459
+    - path: data/interim/openalex_works.parquet
+      hash: md5
+      md5: c74affd56f494e163d271e91393878ff
+      size: 38380657
+    - path: data/interim/record_vectors
+      hash: md5
+      md5: 32e1db920426de52af88504017b1fbb4.dir
+      size: 1272918121
+      nfiles: 88
+    - path: data/interim/static_view
+      hash: md5
+      md5: e9e18d81434461b6d0d4cb2cc9b1bd93.dir
+      size: 422819236
+      nfiles: 88
+    - path: data/processed/abstracts
+      hash: md5
+      md5: 468c90361d4c9d5c82b0552272ea318e.dir
+      size: 288325283
+      nfiles: 88
+    - path: data/processed/usages
+      hash: md5
+      md5: 947f15730e7c94b850b0446e35810ddc.dir
+      size: 122230350
+      nfiles: 88
+    - path: data/review/junk_gate/labels.json
+      hash: md5
+      md5: 9d41119c0e771781af95d141950920c8
+      size: 1441394
+    - path: src/interpretant/catalog/abstracts.py
+      hash: md5
+      md5: a96b4f1a2380be67a9eac4dc4d52d3ef
+      size: 4649
+    - path: src/interpretant/catalog/config.py
+      hash: md5
+      md5: 857877587cc075526016437df66fbf1f
+      size: 2822
+    - path: src/interpretant/catalog/curated.py
+      hash: md5
+      md5: f8f421d986229c8be503688b79f5089d
+      size: 11084
+    - path: src/interpretant/catalog/junk_gate.py
+      hash: md5
+      md5: 44d7b61cf74b03498407fc1826ae51ea
+      size: 6495
+    - path: src/interpretant/catalog/junk_gate_tables.py
+      hash: md5
+      md5: 26bfde67609cc4bd23a0dfcb7c3bd9f6
+      size: 5999
+    - path: src/interpretant/catalog/parts.py
+      hash: md5
+      md5: bd9edd2c1e8cbe90de37d96b91bf92be
+      size: 603
+    - path: src/interpretant/catalog/raw.py
+      hash: md5
+      md5: 79df39a6daf4785b0f869fc2b5bee60a
+      size: 1913
+    - path: src/interpretant/catalog/record_vectors.py
+      hash: md5
+      md5: ddf07add3749deddc51230a1d3b6980b
+      size: 2718
+    - path: src/interpretant/catalog/schemas.py
+      hash: md5
+      md5: 710987f427c34a378079ff53cf823cce
+      size: 7809
+    - path: src/interpretant/catalog/sentence_view.py
+      hash: md5
+      md5: 01042cf89dd32b2ebda9c33633ba416d
+      size: 5389
+    - path: src/interpretant/catalog/staging.py
+      hash: md5
+      md5: c110d3fac4f69035a1f6690acee00013
+      size: 2106
+    - path: src/interpretant/catalog/static_view.py
+      hash: md5
+      md5: 995b96313132fa5d155200444d32485e
+      size: 2514
+    - path: src/interpretant/catalog/usages.py
+      hash: md5
+      md5: 330449528dd2b8f1494b6a9634a2f437
+      size: 8267
+    - path: src/interpretant/catalog/words.py
+      hash: md5
+      md5: 1f88dbc27e5c43506cb04b5f5da5f8c9
+      size: 6476
+    - path: src/interpretant/cli/build_junk_gate.py
+      hash: md5
+      md5: 3f1bf8f325c0ae5d4b378cbda5d7541a
+      size: 3523
+    - path: src/interpretant/corpus/cleaning.py
+      hash: md5
+      md5: 1608ee959caae88b72fb7692165a8bc6
+      size: 8800
+    - path: src/interpretant/corpus/dictionary.py
+      hash: md5
+      md5: 4f7ca84fdbd2e558bdd9edf3faf1ad6c
+      size: 2330
+    - path: src/interpretant/corpus/language.py
+      hash: md5
+      md5: f61baff05035379afccbb1ad54a947b4
+      size: 9737
+    - path: src/interpretant/corpus/removals.py
+      hash: md5
+      md5: 0b121ee2e6457b7528907c8e35371a34
+      size: 15107
+    - path: src/interpretant/corpus/repair.py
+      hash: md5
+      md5: a59cf74f837451d4f20e3579bbeb72b2
+      size: 10875
+    - path: src/interpretant/corpus/sentence_view.py
+      hash: md5
+      md5: e8f3a23a31df086c1d7871d0646cd5f4
+      size: 11615
+    - path: src/interpretant/corpus/works.py
+      hash: md5
+      md5: c4a97f7d0484dcd331505542be27fecc
+      size: 1895
+    - path: src/interpretant/pipelines/build_junk_gate.py
+      hash: md5
+      md5: 1eb3a76bca87e3e6f4b3f37a9f82676b
+      size: 24659
+    - path: src/interpretant/pipelines/params.py
+      hash: md5
+      md5: 8c24dc10222553270451bab6e91afdce
+      size: 1741
+    - path: src/interpretant/pipelines/progress.py
+      hash: md5
+      md5: f268ab869f3c4e662d3609408619c2ff
+      size: 4811
+    - path: src/interpretant/pipelines/workers.py
+      hash: md5
+      md5: 8f764a67762601d9b2be5e4a9669a3ba
+      size: 7697
+    - path: src/interpretant/review/finite_verbs.py
+      hash: md5
+      md5: db10364a377502039ba8cf8ca742a7fb
+      size: 757
+    - path: src/interpretant/review/junk_classifier.py
+      hash: md5
+      md5: 264954ac078855dff7ad3215a1d5b3e6
+      size: 22913
+    - path: src/interpretant/review/junk_gate.py
+      hash: md5
+      md5: dc8fd57f1ee59b3c1277462de6233597
+      size: 16465
+    - path: src/interpretant/review/junk_rules.py
+      hash: md5
+      md5: d5987a20eac6c2c38d595f6358c0a3bc
+      size: 6107
+    - path: src/interpretant/review/ocr_damage.py
+      hash: md5
+      md5: 8d07d084b7e6e729783810787354f67a
+      size: 5188
+    - path: src/interpretant/review/sampling_plans.py
+      hash: md5
+      md5: 6afd41827073fe100117c143b90c9d81
+      size: 5037
+    - path: src/interpretant/review/usages_audit.py
+      hash: md5
+      md5: 0564fb0e98127e65c2e8c2c2e1d96d28
+      size: 9566
+    - path: src/interpretant/usages/identifiers.py
+      hash: md5
+      md5: 196f82b49c8f332e55812a83419e06a3
+      size: 1468
+    params:
+      params.yaml:
+        junk_gate.classifier:
+          regularisation: 1.0
+          class_weight: balanced
+          folds: 5
+          specificity_target: 0.97
+          max_iterations: 1000
+        junk_gate.ocr:
+          min_letters: 3
+          min_words: 5
+          min_known_works: 20
+        junk_gate.screen:
+          min_drawn_usages: 100
+          alpha: 0.01
+    outs:
+    - path: data/processed/junk_gate/cells.parquet
+      hash: md5
+      md5: 730b214579170b7a39ef6d281e92881c
+      size: 11884
+    - path: data/processed/junk_gate/classifier.json
+      hash: md5
+      md5: 30bf4a709533f6415f91a951d3d290aa
+      size: 18980
+    - path: data/processed/junk_gate/records.parquet
+      hash: md5
+      md5: c28ea891de19146816011feffe33583d
+      size: 14556554
+    - path: data/processed/junk_gate/usage_scores.parquet
+      hash: md5
+      md5: 7142d427e84ccf5dd6af732c1407adff
+      size: 17656154
+    - path: metrics/junk_gate.json
+      hash: md5
+      md5: 5e2a6312ebe6cb66fcc54ef94458c5b8
+      size: 55846
