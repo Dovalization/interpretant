@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import numpy as np
@@ -20,6 +21,18 @@ VOCAB = ["network", "atom", "information", "model", "evolution", "structure"]
 DECADES = [1960, 1970, 1980, 1990, 2000, 2010]
 VECTOR_DIM = 300
 SEED = 42
+
+
+@pytest.fixture(autouse=True)
+def without_git_hook_variables(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Drop git's own variables, so a test's git commands act on its temporary repository.
+
+    The pre-commit hook runs the tests with GIT_DIR, GIT_INDEX_FILE and their kin set. In a
+    worktree they are absolute paths to the outer repository, so a test that commits and pushes in
+    a temporary repository would commit into the outer one and push to its remote instead.
+    """
+    for name in [name for name in os.environ if name.startswith("GIT_")]:
+        monkeypatch.delenv(name)
 
 
 @pytest.fixture(scope="session")
