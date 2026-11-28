@@ -1,0 +1,47 @@
+{
+ "bge-base-en-v1.5 (the stage's vectors)": {
+  "dimensions": 768,
+  "records_per_second": null,
+  "sensitivity": [
+   80,
+   101,
+   0.792
+  ],
+  "specificity": [
+   3745,
+   3879,
+   0.9655
+  ],
+  "meets_bar": false
+ },
+ "bge-large-en-v1.5": {
+  "dimensions": 1024,
+  "records_per_second": 65.5,
+  "sensitivity": [
+   79,
+   101,
+   0.782
+  ],
+  "specificity": [
+   3743,
+   3879,
+   0.9649
+  ],
+  "meets_bar": false
+ },
+ "Qwen3-Embedding-0.6B": {
+  "dimensions": 1024,
+  "records_per_second": 35.7,
+  "sensitivity": [
+   77,
+   101,
+   0.762
+  ],
+  "specificity": [
+   3744,
+   3879,
+   0.9652
+  ],
+  "meets_bar": false
+ }
+}
