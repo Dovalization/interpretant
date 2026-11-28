@@ -29,11 +29,13 @@ Is the text **the work's own prose**: the authors writing about their own work, 
   - `archive_or_catalogue`: a description of an archive item: a photograph, a newspaper page, a
     letter in a collection, a catalogue note;
   - `other_work`: text about something other than the work, or another work's text standing in
-    for it: a quotation used as an epigraph, a chronology, a biography of an interviewee;
+    for it: a quotation used as an epigraph, a bare quotation of a person's statement or speech, a
+    chronology, a biography of an interviewee;
   - `letter_obituary_erratum_news`: a letter to the editor, an obituary or death notice, a
-    correction notice, a news item or announcement;
+    correction notice, a news item or announcement, including a society's or a journal's own news;
   - `fragment`: a piece with no complete sentence of its own, such as a few words or a broken line;
-  - `not_english`: text that is mostly not in English;
+  - `not_english`: text that is mostly not readable English: another language, or text so damaged
+    by scanning or conversion that fewer than half its words can be read;
   - `other`: junk of another kind (say which in the note).
 - **`mixed`**: the work's own prose **and** a block of other material in the same record, for
   example an abstract followed by a reference list, or a contents list before a summary. Give the
@@ -56,9 +58,12 @@ Is the text **the work's own prose**: the authors writing about their own work, 
   standing as the record's text is the work's own text: the work is usually an edition, a
   translation, an anthology or a study that opens with it. It is junk only when the record
   plainly belongs to something else, such as a quotation printed above a publisher's description.
-  A newspaper page, a letter or another archive item stays junk, however old.
-- **Damage is not junk.** Glued or split words, stray characters and lost punctuation do not change
-  the verdict. They are recorded separately (below).
+  A bare quotation of a person's statement, speech or policy, with nothing of the work's own, is
+  junk (`other_work`). A newspaper page, a letter or another archive item stays junk, however old.
+- **Damage is not junk, until the text cannot be read.** Glued or split words, stray characters
+  and lost punctuation do not change the verdict; they are recorded separately (below). Text of
+  which fewer than half the words can be read is junk: a record that is mostly like that is
+  `not_english`, and a marked sentence like that is `other`.
 - **When unsure between `abstract` and `junk`,** ask whether a reader would learn what the work
   argues or found. If yes, it is an abstract.
 
@@ -67,7 +72,7 @@ Is the text **the work's own prose**: the authors writing about their own work, 
 - **`sentence`**: is the marked sentence part of the work's own prose?
   - `own`: yes;
   - `other`: no, it belongs to the other material (a citation, a heading list, a notice, a
-    quotation of another work);
+    quotation of another work), or fewer than half its words can be read;
   - `none`: no sentence is marked.
 - In a `junk` record the marked sentence is `other`. In an `abstract` it is usually `own`, but a
   marked leftover (a copyright line, a stray reference) is `other`.

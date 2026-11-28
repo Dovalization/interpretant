@@ -1,0 +1,12 @@
+{
+ "when": "2026-11-28",
+ "blind": false,
+ "note": "Outside step 3's plan: the author looked again after seeing the judges' labels and Claude's reading against the codebook. Recorded, not used for any bar.",
+ "verdicts": {
+  "S0177": "abstract",
+  "S0213": "junk",
+  "S0624": "junk",
+  "S1577": "junk",
+  "S2709": "junk"
+ }
+}

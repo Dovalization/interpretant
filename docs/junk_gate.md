@@ -406,6 +406,41 @@ dollars. The first judge of L and E had already started under its own cap of 20 
 spend counts toward the total. If the confirmation samples would pass the cap, the judging stops
 and the author decides, as before. Nothing else changes.
 
+## Third amendment, 2026-11-28, after the fresh 30
+
+- **What the fresh 30 showed.** The author agreed with the judges on 25 of the 30 (the bar is 27),
+  so step 3 fails (`data/review/junk_gate/fresh.json`). The judges called three records junk that
+  the author called abstracts (S0213, S0624, S2709), and two records abstracts that the author
+  called junk (S0177, S1577).
+- **A second look, outside the plan.** The author looked again at the five records after seeing
+  the judges' labels and Claude's reading of each against the codebook, so this look is not blind.
+  It is a deviation from step 3, recorded in `data/review/junk_gate/fresh_second_look.json` and not
+  used for any bar: step 3's figure stays the blind 25 of 30. The author now calls S0177 an
+  abstract (an article's opening with epigraphs) and the other four junk: S0213 (chapter titles run
+  together), S2709 (a society's report of a talk at its own banquet), S0624 (a bare quotation of a
+  1940s colonial policy statement) and S1577 (a marked sentence that is mostly scanning damage).
+- **The pattern.** In three of the five (S0177, S0213, S2709) the judges followed the codebook. Two
+  showed gaps in it. For S0624 two rules pointed opposite ways: the rule for an older or primary
+  text standing as the record's text, and the test of whether a reader learns what the work argues.
+  For S1577 the rule "damage is not junk" did not foresee a sentence too damaged to be read.
+- **The change** (the author, 2026-11-28).
+  - A bare quotation of a person's statement, speech or policy, with nothing of the work's own, is
+    junk (`other_work`). The rule for an older or primary text is otherwise unchanged.
+  - Text of which fewer than half the words can be read is junk: a record that is mostly like that
+    is `not_english`, whose description widens to "mostly not readable English", and a marked
+    sentence like that is `other`. Lesser damage is still not junk.
+  - The rule for news names a society's or a journal's own news; its meaning does not change.
+  - The answer's fields and kinds do not change, so no code changes.
+- **What follows,** as "If a bar fails" requires for step 3. Every label made under the old
+  codebook is judged again by the same judges and adjudicator: run 3's 200 records and L and E's
+  4,600. Step 1's three bars are checked again on run 3, and every figure read from L's labels (the
+  decade rule, the bars for the classifier and the decision models) is computed again. A new 30 is
+  drawn from the new labels with seed 20261409 and the author judges them blind. A second failure
+  goes to the author. The earlier verdicts are kept on the runner, apart from the new ones.
+- **Budget** (the author, 2026-11-28). Judging everything again costs about 9.50 dollars, nearly all
+  that was left of the 20-dollar cap (10.51 dollars spent), so the overall cap rises to 30 dollars.
+  Each run's cap is still set from its worst case so that the total stays within it.
+
 ## Results
 
 *To be appended.*
