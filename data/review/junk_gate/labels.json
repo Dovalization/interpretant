@@ -1,5 +1,5 @@
 {
- "codebook_sha256": "1c32074a156527d2109c3013e0d013a462cc4b1148f36bd3b24ad3f0a27709f2",
+ "codebook_sha256": "b66ec50d8d23a9dc988b1c05085b564472e3a74f0846945c0a72f8d59d3dff79",
  "items": {
   "S0001": {
    "set": "labelled",
@@ -402,7 +402,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0032": {
    "set": "labelled",
@@ -542,8 +542,8 @@
    "decade": 1960,
    "word": "attention",
    "content_key": "89ad2496398ce5476d1d",
-   "verdict": "abstract",
-   "kind": "none",
+   "verdict": "mixed",
+   "kind": "other_work",
    "sentence": "own",
    "damaged": "no"
   },
@@ -649,7 +649,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0051": {
    "set": "labelled",
@@ -1598,7 +1598,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0124": {
    "set": "labelled",
@@ -2024,8 +2024,8 @@
    "decade": 1980,
    "word": "meaning",
    "content_key": "0432c22871b76583ee13",
-   "verdict": "mixed",
-   "kind": "citation_or_metadata",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "other",
    "damaged": "no"
   },
@@ -2389,7 +2389,7 @@
    "word": "held-out:1b596f30c66f",
    "content_key": "b6320125022121f6999e",
    "verdict": "junk",
-   "kind": "fragment",
+   "kind": "not_english",
    "sentence": "other",
    "damaged": "yes"
   },
@@ -2479,9 +2479,9 @@
    "decade": 2000,
    "word": "model",
    "content_key": "19868b050af4b9886fa0",
-   "verdict": "junk",
-   "kind": "letter_obituary_erratum_news",
-   "sentence": "other",
+   "verdict": "abstract",
+   "kind": "none",
+   "sentence": "own",
    "damaged": "no"
   },
   "S0192": {
@@ -3429,7 +3429,7 @@
    "word": "meaning",
    "content_key": "e34111bf4fd4729a96df",
    "verdict": "junk",
-   "kind": "fragment",
+   "kind": "other_work",
    "sentence": "other",
    "damaged": "no"
   },
@@ -4679,7 +4679,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S0361": {
    "set": "labelled",
@@ -4809,7 +4809,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0371": {
    "set": "labelled",
@@ -4874,7 +4874,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0376": {
    "set": "labelled",
@@ -5199,7 +5199,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S0401": {
    "set": "labelled",
@@ -5576,7 +5576,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S0430": {
    "set": "labelled",
@@ -5678,7 +5678,7 @@
    "word": "information",
    "content_key": "b57768b67c0966bf1b18",
    "verdict": "junk",
-   "kind": "citation_or_metadata",
+   "kind": "publisher_or_web",
    "sentence": "other",
    "damaged": "no"
   },
@@ -6304,7 +6304,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S0486": {
    "set": "enrichment",
@@ -6392,8 +6392,8 @@
    "decade": 1970,
    "word": "consciousness",
    "content_key": "82d836d657518084ba50",
-   "verdict": "abstract",
-   "kind": "none",
+   "verdict": "mixed",
+   "kind": "citation_or_metadata",
    "sentence": "own",
    "damaged": "yes"
   },
@@ -7565,7 +7565,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0583": {
    "set": "labelled",
@@ -10685,7 +10685,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S0823": {
    "set": "labelled",
@@ -11322,7 +11322,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S0872": {
    "set": "labelled",
@@ -11543,7 +11543,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S0889": {
    "set": "labelled",
@@ -11829,7 +11829,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0911": {
    "set": "enrichment",
@@ -11946,7 +11946,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0920": {
    "set": "labelled",
@@ -12544,7 +12544,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S0966": {
    "set": "labelled",
@@ -13024,7 +13024,7 @@
    "content_key": "fa54de7d9c859efaab35",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "no"
   },
   "S1003": {
@@ -13519,7 +13519,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1041": {
    "set": "enrichment",
@@ -13727,7 +13727,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1057": {
    "set": "labelled",
@@ -13764,7 +13764,7 @@
    "word": "perception",
    "content_key": "561034d9fc9d2c72ebcd",
    "verdict": "mixed",
-   "kind": "other_work",
+   "kind": "other",
    "sentence": "own",
    "damaged": "no"
   },
@@ -14013,7 +14013,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1079": {
    "set": "labelled",
@@ -14624,7 +14624,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1126": {
    "set": "labelled",
@@ -15339,7 +15339,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1181": {
    "set": "labelled",
@@ -15729,7 +15729,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1211": {
    "set": "labelled",
@@ -15820,7 +15820,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1218": {
    "set": "labelled",
@@ -16325,7 +16325,7 @@
    "word": "information",
    "content_key": "207caea969b50a1f19e3",
    "verdict": "mixed",
-   "kind": "publisher_or_web",
+   "kind": "archive_or_catalogue",
    "sentence": "other",
    "damaged": "yes"
   },
@@ -16975,7 +16975,7 @@
    "word": "model",
    "content_key": "00662c9c68f391304c00",
    "verdict": "junk",
-   "kind": "fragment",
+   "kind": "citation_or_metadata",
    "sentence": "other",
    "damaged": "no"
   },
@@ -17107,7 +17107,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1317": {
    "set": "enrichment",
@@ -17471,7 +17471,7 @@
    "verdict": "junk",
    "kind": "archive_or_catalogue",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1345": {
    "set": "labelled",
@@ -17510,7 +17510,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1348": {
    "set": "labelled",
@@ -17585,9 +17585,9 @@
    "decade": 2010,
    "word": "system",
    "content_key": "dbc0521d8060d55eeb79",
-   "verdict": "abstract",
-   "kind": "none",
-   "sentence": "own",
+   "verdict": "junk",
+   "kind": "fragment",
+   "sentence": "other",
    "damaged": "no"
   },
   "S1354": {
@@ -18225,7 +18225,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1403": {
    "set": "labelled",
@@ -18315,7 +18315,7 @@
    "content_key": "3eac0b49024ee85f8266",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "yes"
   },
   "S1410": {
@@ -18342,7 +18342,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1412": {
    "set": "labelled",
@@ -19161,7 +19161,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1475": {
    "set": "labelled",
@@ -19223,8 +19223,8 @@
    "decade": 1980,
    "word": "alignment",
    "content_key": "9fb52f3da7f53f953d0f",
-   "verdict": "mixed",
-   "kind": "other_work",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "own",
    "damaged": "no"
   },
@@ -19525,7 +19525,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1503": {
    "set": "labelled",
@@ -19639,8 +19639,8 @@
    "decade": 2010,
    "word": "control",
    "content_key": "b9639b2ab350d36ff94d",
-   "verdict": "mixed",
-   "kind": "publisher_or_web",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "own",
    "damaged": "no"
   },
@@ -19759,7 +19759,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1521": {
    "set": "labelled",
@@ -20200,8 +20200,8 @@
    "content_key": "cb640a442648cd402635",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
-   "damaged": "no"
+   "sentence": "other",
+   "damaged": "yes"
   },
   "S1555": {
    "set": "labelled",
@@ -20499,7 +20499,7 @@
    "content_key": "e8b04609dd1d07608a80",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "yes"
   },
   "S1578": {
@@ -20578,7 +20578,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1584": {
    "set": "enrichment",
@@ -20799,7 +20799,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1601": {
    "set": "labelled",
@@ -21345,7 +21345,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1643": {
    "set": "labelled",
@@ -21462,7 +21462,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1652": {
    "set": "labelled",
@@ -22658,7 +22658,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1744": {
    "set": "enrichment",
@@ -22957,7 +22957,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1767": {
    "set": "labelled",
@@ -23045,10 +23045,10 @@
    "decade": 1960,
    "word": "behavior",
    "content_key": "fb25ab78e5961bfc31cb",
-   "verdict": "mixed",
-   "kind": "citation_or_metadata",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1774": {
    "set": "labelled",
@@ -23997,7 +23997,7 @@
    "verdict": "junk",
    "kind": "archive_or_catalogue",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1847": {
    "set": "labelled",
@@ -24387,7 +24387,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1877": {
    "set": "labelled",
@@ -25154,7 +25154,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S1936": {
    "set": "labelled",
@@ -25427,7 +25427,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S1957": {
    "set": "labelled",
@@ -26753,7 +26753,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2059": {
    "set": "labelled",
@@ -26880,9 +26880,9 @@
    "decade": 2010,
    "word": "held-out:7b1df4aa54d0",
    "content_key": "c673b921efd43c1c38c1",
-   "verdict": "junk",
-   "kind": "fragment",
-   "sentence": "other",
+   "verdict": "abstract",
+   "kind": "none",
+   "sentence": "own",
    "damaged": "yes"
   },
   "S2069": {
@@ -27062,8 +27062,8 @@
    "decade": 1990,
    "word": "learning",
    "content_key": "7e2b5dad858e29f95454",
-   "verdict": "mixed",
-   "kind": "contents_or_list",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "own",
    "damaged": "no"
   },
@@ -27286,7 +27286,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2100": {
    "set": "labelled",
@@ -27650,7 +27650,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2128": {
    "set": "labelled",
@@ -29339,7 +29339,7 @@
    "content_key": "9ad0622154e28dd8eb03",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "no"
   },
   "S2258": {
@@ -30276,7 +30276,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2330": {
    "set": "labelled",
@@ -30627,7 +30627,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2357": {
    "set": "labelled",
@@ -31212,7 +31212,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2402": {
    "set": "labelled",
@@ -31329,7 +31329,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2411": {
    "set": "labelled",
@@ -31758,7 +31758,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2444": {
    "set": "labelled",
@@ -32459,7 +32459,7 @@
    "content_key": "b27defc572a0c60a2ad9",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "yes"
   },
   "S2498": {
@@ -32629,7 +32629,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2511": {
    "set": "enrichment",
@@ -32731,7 +32731,7 @@
    "word": "system",
    "content_key": "d152bc62ec436db5946b",
    "verdict": "junk",
-   "kind": "citation_or_metadata",
+   "kind": "fragment",
    "sentence": "other",
    "damaged": "no"
   },
@@ -33409,7 +33409,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2571": {
    "set": "labelled",
@@ -33511,7 +33511,7 @@
    "word": "agency",
    "content_key": "a86f2111aad68b4aa943",
    "verdict": "junk",
-   "kind": "archive_or_catalogue",
+   "kind": "letter_obituary_erratum_news",
    "sentence": "other",
    "damaged": "no"
   },
@@ -34397,7 +34397,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2647": {
    "set": "enrichment",
@@ -35190,7 +35190,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2708": {
    "set": "labelled",
@@ -35892,7 +35892,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2762": {
    "set": "labelled",
@@ -36139,7 +36139,7 @@
    "verdict": "junk",
    "kind": "archive_or_catalogue",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2781": {
    "set": "labelled",
@@ -36682,9 +36682,9 @@
    "decade": 1990,
    "word": "behavior",
    "content_key": "2e06c49f8e4f3db06459",
-   "verdict": "junk",
-   "kind": "publisher_or_web",
-   "sentence": "other",
+   "verdict": "abstract",
+   "kind": "none",
+   "sentence": "own",
    "damaged": "no"
   },
   "S2823": {
@@ -36955,9 +36955,9 @@
    "decade": 1970,
    "word": "held-out:ab139acf9360",
    "content_key": "e6f7fb4202f2f4141a75",
-   "verdict": "junk",
-   "kind": "other_work",
-   "sentence": "other",
+   "verdict": "abstract",
+   "kind": "none",
+   "sentence": "own",
    "damaged": "yes"
   },
   "S2844": {
@@ -36984,7 +36984,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2846": {
    "set": "labelled",
@@ -37153,7 +37153,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2859": {
    "set": "labelled",
@@ -37293,10 +37293,10 @@
    "decade": 1960,
    "word": "strength",
    "content_key": "4354dfe34e88e9c0349b",
-   "verdict": "mixed",
-   "kind": "citation_or_metadata",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2870": {
    "set": "labelled",
@@ -37517,7 +37517,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2887": {
    "set": "labelled",
@@ -37764,7 +37764,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2906": {
    "set": "labelled",
@@ -38011,7 +38011,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S2925": {
    "set": "labelled",
@@ -38024,7 +38024,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2926": {
    "set": "enrichment",
@@ -38037,7 +38037,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S2927": {
    "set": "labelled",
@@ -38619,9 +38619,9 @@
    "decade": 2020,
    "word": "control",
    "content_key": "65a548d51bceb3831ffd",
-   "verdict": "junk",
-   "kind": "fragment",
-   "sentence": "other",
+   "verdict": "abstract",
+   "kind": "none",
+   "sentence": "own",
    "damaged": "no"
   },
   "S2972": {
@@ -38738,7 +38738,7 @@
    "content_key": "8686f55631e54dd18a4b",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "no"
   },
   "S2981": {
@@ -39584,7 +39584,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3046": {
    "set": "labelled",
@@ -39766,7 +39766,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3060": {
    "set": "labelled",
@@ -40286,7 +40286,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3100": {
    "set": "labelled",
@@ -40845,7 +40845,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3143": {
    "set": "enrichment",
@@ -41261,7 +41261,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3175": {
    "set": "labelled",
@@ -41622,9 +41622,9 @@
    "decade": 1990,
    "word": "information",
    "content_key": "aa45667f374ff31db9bd",
-   "verdict": "junk",
-   "kind": "publisher_or_web",
-   "sentence": "other",
+   "verdict": "abstract",
+   "kind": "none",
+   "sentence": "own",
    "damaged": "no"
   },
   "S3203": {
@@ -41765,8 +41765,8 @@
    "decade": 1950,
    "word": "held-out:d573b31a4663",
    "content_key": "348cf3f02a03082136d0",
-   "verdict": "abstract",
-   "kind": "none",
+   "verdict": "mixed",
+   "kind": "fragment",
    "sentence": "own",
    "damaged": "no"
   },
@@ -42184,7 +42184,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3246": {
    "set": "labelled",
@@ -43119,7 +43119,7 @@
    "content_key": "68f2694852d52d6563e3",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "other",
+   "sentence": "own",
    "damaged": "no"
   },
   "S3318": {
@@ -43445,7 +43445,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3343": {
    "set": "labelled",
@@ -44069,7 +44069,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3391": {
    "set": "labelled",
@@ -44459,7 +44459,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3421": {
    "set": "enrichment",
@@ -44615,7 +44615,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3433": {
    "set": "labelled",
@@ -45096,7 +45096,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3470": {
    "set": "labelled",
@@ -46734,7 +46734,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3596": {
    "set": "labelled",
@@ -47332,7 +47332,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3642": {
    "set": "labelled",
@@ -47709,7 +47709,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3671": {
    "set": "labelled",
@@ -48151,7 +48151,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3705": {
    "set": "labelled",
@@ -48317,9 +48317,9 @@
    "decade": 1970,
    "word": "information",
    "content_key": "07d08e6d30cf70584a68",
-   "verdict": "abstract",
-   "kind": "none",
-   "sentence": "own",
+   "verdict": "junk",
+   "kind": "letter_obituary_erratum_news",
+   "sentence": "other",
    "damaged": "yes"
   },
   "S3718": {
@@ -48957,7 +48957,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3767": {
    "set": "labelled",
@@ -49970,7 +49970,7 @@
    "content_key": "ec041d77682594244ed6",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "no"
   },
   "S3845": {
@@ -50465,7 +50465,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S3883": {
    "set": "labelled",
@@ -50881,7 +50881,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3915": {
    "set": "labelled",
@@ -51414,7 +51414,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S3956": {
    "set": "labelled",
@@ -52529,9 +52529,9 @@
    "decade": 2000,
    "word": "system",
    "content_key": "3b393664ca187e9a6a19",
-   "verdict": "abstract",
-   "kind": "none",
-   "sentence": "own",
+   "verdict": "junk",
+   "kind": "contents_or_list",
+   "sentence": "other",
    "damaged": "no"
   },
   "S4042": {
@@ -52753,7 +52753,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S4059": {
    "set": "labelled",
@@ -53143,7 +53143,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4089": {
    "set": "labelled",
@@ -53390,7 +53390,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4108": {
    "set": "labelled",
@@ -53480,7 +53480,7 @@
    "content_key": "b5f15bc723a9aa27059b",
    "verdict": "abstract",
    "kind": "none",
-   "sentence": "own",
+   "sentence": "other",
    "damaged": "yes"
   },
   "S4115": {
@@ -53546,7 +53546,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S4120": {
    "set": "labelled",
@@ -53754,7 +53754,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4136": {
    "set": "labelled",
@@ -54079,7 +54079,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S4161": {
    "set": "labelled",
@@ -54924,7 +54924,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4226": {
    "set": "labelled",
@@ -55314,7 +55314,7 @@
    "verdict": "junk",
    "kind": "contents_or_list",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4256": {
    "set": "labelled",
@@ -56367,7 +56367,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "no"
+   "damaged": "yes"
   },
   "S4337": {
    "set": "labelled",
@@ -56588,7 +56588,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4354": {
    "set": "enrichment",
@@ -58330,7 +58330,7 @@
    "verdict": "junk",
    "kind": "archive_or_catalogue",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4488": {
    "set": "labelled",
@@ -58369,7 +58369,7 @@
    "verdict": "junk",
    "kind": "publisher_or_web",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4491": {
    "set": "enrichment",
@@ -58639,8 +58639,8 @@
    "decade": 1990,
    "word": "held-out:d573b31a4663",
    "content_key": "2ed1b25e90fc96f01c37",
-   "verdict": "mixed",
-   "kind": "publisher_or_web",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "own",
    "damaged": "no"
   },
@@ -58990,10 +58990,10 @@
    "decade": 1950,
    "word": "information",
    "content_key": "38a93dcb60775ff2e8e2",
-   "verdict": "mixed",
-   "kind": "citation_or_metadata",
+   "verdict": "abstract",
+   "kind": "none",
    "sentence": "other",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4539": {
    "set": "enrichment",
@@ -59526,7 +59526,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4580": {
    "set": "labelled",
@@ -59721,7 +59721,7 @@
    "verdict": "abstract",
    "kind": "none",
    "sentence": "own",
-   "damaged": "yes"
+   "damaged": "no"
   },
   "S4595": {
    "set": "labelled",
