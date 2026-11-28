@@ -121,5 +121,19 @@
    "id": "S3928",
    "group": "enrichment_abstract"
   }
- ]
+ ],
+ "author": {
+  "items": 30,
+  "agree": 25,
+  "unsure": 0,
+  "bar": 27,
+  "passes": false,
+  "disagreements": [
+   "S0177",
+   "S0213",
+   "S0624",
+   "S1577",
+   "S2709"
+  ]
+ }
 }
