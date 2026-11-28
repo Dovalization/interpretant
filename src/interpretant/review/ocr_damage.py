@@ -12,6 +12,7 @@ surface features. Its check: how well the score separates the sentences the judg
 
 from __future__ import annotations
 
+import re
 from collections.abc import Collection, Iterable, Sequence
 from dataclasses import dataclass
 
@@ -21,8 +22,9 @@ from numpy.typing import NDArray
 from sklearn.metrics import roc_auc_score, roc_curve
 
 from interpretant.corpus.dictionary import is_dictionary_word
-from interpretant.review.junk_classifier import WORD
 
+# A word is a run of letters: digits, underscores and punctuation split words
+WORD = re.compile(r"[^\W\d_]+")
 # The score must separate the damaged sentences at least this well (area under the ROC curve)
 AUC_BAR = 0.75
 FREQUENCIES_SCHEMA = pl.Schema({"word": pl.String(), "works": pl.UInt32()})
@@ -60,7 +62,7 @@ def find_lower_case_words(
 ) -> list[str]:
     """The text's lower-case words of ``min_letters`` letters or more, in order.
 
-    A word is a run of letters (``junk_classifier.WORD``). Only the words inside ``within`` are
+    A word is a run of letters (``WORD``). Only the words inside ``within`` are
     read when it is given, and a word overlapping a span of ``left_out`` (a removed range, the
     target) is skipped.
     """

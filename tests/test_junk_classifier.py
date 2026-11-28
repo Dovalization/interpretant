@@ -2,28 +2,19 @@
 
 from __future__ import annotations
 
-import hashlib
 import math
 
 import numpy as np
-import polars as pl
 import pytest
 from numpy.typing import NDArray
 
-from interpretant.catalog.junk_gate import JunkLabel, JunkLabels
 from interpretant.review import junk_classifier
+from interpretant.review.junk_calls import compute_quality
 from interpretant.review.junk_classifier import (
     FEATURE_NAMES,
     ClassifierSpec,
     LinearScorer,
     TrainingSet,
-    build_folds,
-    build_record_labels,
-    build_sources,
-    compute_corrections,
-    compute_cut_off,
-    compute_false_alarms,
-    compute_quality,
     compute_removed_share,
     compute_surface_features,
     cross_fit,
@@ -66,22 +57,6 @@ def build_training(
         is_junk=is_junk,
         in_labelled_sample=in_labelled_sample,
         sources=tuple(f"source-{index % 40}" for index in range(count)),
-    )
-
-
-def label(work: int, item_set: str, verdict: str) -> JunkLabel:
-    return JunkLabel(
-        set=item_set,
-        stratum=None if item_set != "enrichment" else "list_like",
-        work_id=f"https://openalex.org/W{work}",
-        part="ai_1990",
-        decade=1990,
-        word="attention",
-        content_key="0" * 20,
-        verdict=verdict,
-        kind="none" if verdict != "junk" else "contents_or_list",
-        sentence="own",
-        damaged="no",
     )
 
 
@@ -137,64 +112,6 @@ def test_the_removed_share_counts_overlapping_ranges_once() -> None:
     assert compute_removed_share(0, []) == 0.0
 
 
-def test_a_record_takes_its_smallest_items_label_and_disagreements_are_counted() -> None:
-    labels = JunkLabels(
-        codebook_sha256="c" * 64,
-        items={
-            "S0009": label(1, "labelled", "abstract"),
-            "S0002": label(1, "labelled", "junk"),
-            "S0003": label(2, "labelled", "mixed"),
-            "S0004": label(2, "labelled", "abstract"),
-            "S0005": label(3, "enrichment", "junk"),
-            "C0001": label(4, "confirmation", "junk"),
-        },
-    )
-
-    records = build_record_labels(labels)
-
-    assert records.table.to_dicts() == [
-        {"work_id": "https://openalex.org/W1", "is_junk": True, "in_labelled_sample": True},
-        {"work_id": "https://openalex.org/W2", "is_junk": False, "in_labelled_sample": True},
-        {"work_id": "https://openalex.org/W3", "is_junk": True, "in_labelled_sample": False},
-    ]
-    assert records.disagreeing_count == 1
-
-
-def test_a_record_in_both_sets_counts_as_labelled() -> None:
-    labels = JunkLabels(
-        codebook_sha256="c" * 64,
-        items={"S0001": label(1, "enrichment", "junk"), "S0002": label(1, "labelled", "junk")},
-    )
-
-    assert build_record_labels(labels).table["in_labelled_sample"].to_list() == [True]
-
-
-def test_a_source_is_the_issn_then_the_source_name_then_the_work() -> None:
-    records = pl.DataFrame(
-        {
-            "work_id": ["W1", "W2", "W3", "W4"],
-            "issn_l": ["1234-5678", None, None, ""],
-            "source_name": ["Journal A", "Journal B", None, " "],
-        }
-    )
-
-    assert build_sources(records) == ["1234-5678", "Journal B", "W3", "W4"]
-
-
-def test_folds_are_the_sources_hash_and_never_split_a_source() -> None:
-    sources = [f"source-{index % 7}" for index in range(70)]
-
-    outer = build_folds(sources, folds=5, depth=0)
-    inner = build_folds(sources, folds=5, depth=1)
-
-    expected = int(hashlib.sha256(b"source-3").hexdigest(), 16) % 5
-    assert outer[3] == expected
-    for source in set(sources):
-        positions = [index for index, name in enumerate(sources) if name == source]
-        assert len(set(outer[positions])) == 1
-        assert len(set(inner[positions])) == 1
-
-
 def test_cross_fitted_folds_never_share_a_source() -> None:
     training = build_training()
 
@@ -231,19 +148,6 @@ def test_enrichment_records_are_never_held_out_and_always_trained_on(
     assert not np.isnan(result.scores[training.in_labelled_sample]).any()
     assert fitted_rows
     assert all(enrichment <= set(rows) for rows in fitted_rows)
-
-
-@pytest.mark.parametrize("count", [1, 33, 100, 200])
-def test_the_cut_off_is_the_lowest_score_clearing_97_percent_of_the_abstracts(
-    count: int,
-) -> None:
-    generator = np.random.default_rng(count)
-    scores = np.round(generator.random(count), 2)
-
-    cut_off = compute_cut_off(scores, target=0.97)
-
-    assert (scores < cut_off).mean() >= 0.97
-    assert (scores < np.nextafter(cut_off, -np.inf)).mean() < 0.97
 
 
 def test_each_cut_off_clears_97_percent_of_the_abstracts_it_was_set_on(
@@ -337,60 +241,3 @@ def test_a_trained_classifier_calls_the_rows_it_was_not_trained_on() -> None:
         >= classifier.cut_off
     )
     assert (called == training.is_junk[others]).mean() > 0.9
-
-
-def test_the_quality_bar_needs_both_point_estimates() -> None:
-    is_junk = np.array([True] * 10 + [False] * 100)
-    called = is_junk.copy()
-    called[:3] = False
-    called[10:13] = True
-
-    quality = compute_quality(is_junk, called)
-
-    assert quality.sensitivity.share == pytest.approx(0.7)
-    assert quality.specificity.share == pytest.approx(0.97)
-    assert quality.meets_bar
-    called[3] = False
-    assert not compute_quality(is_junk, called).meets_bar
-
-
-def test_false_alarms_count_only_abstracts_and_each_of_a_records_fields() -> None:
-    records = pl.DataFrame(
-        {
-            "is_junk": [False, False, False, True],
-            "predicted_junk": [True, False, False, True],
-            "decade": [1990, 1990, 2000, 2000],
-            "fields": [["ai", "compsci"], ["ai"], ["compsci"], ["ai"]],
-        }
-    )
-
-    by_field = compute_false_alarms(records, "fields")
-    by_decade = compute_false_alarms(records, "decade")
-
-    assert {field: (rate.count, rate.total) for field, rate in by_field.items()} == {
-        "ai": (1, 2),
-        "compsci": (1, 2),
-    }
-    assert {decade: (rate.count, rate.total) for decade, rate in by_decade.items()} == {
-        "1990": (1, 2),
-        "2000": (0, 1),
-    }
-
-
-def test_a_decades_correction_is_the_mean_label_minus_call_with_its_interval() -> None:
-    items = pl.DataFrame(
-        {
-            "decade": [1990] * 4 + [2000] * 2,
-            "is_junk_usage": [True, True, False, False, False, False],
-            "predicted_junk": [True, False, False, False, True, False],
-        }
-    )
-
-    corrections = compute_corrections(items)
-
-    assert corrections[1990].mean == pytest.approx(0.25)
-    assert corrections[1990].items == 4
-    margin = 1.959963984540054 * np.std([0, 1, 0, 0], ddof=1) / 2
-    assert corrections[1990].low == pytest.approx(0.25 - margin)
-    assert corrections[1990].high == pytest.approx(0.25 + margin)
-    assert corrections[2000].mean == pytest.approx(-0.5)

@@ -11,7 +11,6 @@ junk records, and the final model is trained on all of L and E with its cut-off 
 
 from __future__ import annotations
 
-import hashlib
 import json
 import math
 import re
@@ -19,20 +18,17 @@ import unicodedata
 import warnings
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from fractions import Fraction
 
 import numpy as np
-import polars as pl
 from numpy.typing import NDArray
 from pydantic import BaseModel, ConfigDict
 from scipy.special import expit
-from scipy.stats import norm
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import LogisticRegression
 
-from interpretant.catalog.junk_gate import JunkLabels
 from interpretant.corpus.sentence_view import merge_ranges
-from interpretant.review.sampling_plans import compute_wilson_interval
+from interpretant.review.junk_calls import build_folds, compute_cut_off
+from interpretant.review.ocr_damage import WORD
 
 # The 13 surface features in the spec's order (docs/junk_gate.md, "The surface features")
 FEATURE_NAMES = (
@@ -50,22 +46,13 @@ FEATURE_NAMES = (
     "ends_with_stop",
     "words_per_sentence",
 )
-# The label sets the classifier learns from: L ("labelled") and E ("enrichment")
-TRAINING_SETS = ("labelled", "enrichment")
-# The quality bar, on L's held-out calls, as point estimates
-SENSITIVITY_BAR = 0.70
-SPECIFICITY_BAR = 0.97
 # The separator of a run-on list of titles, as in a book's table of contents ("Methods.-Results")
 LIST_SEPARATOR = ".-"
 FINAL_STOPS = (".", "?", "!")
-# A word is a run of letters: digits, underscores and punctuation split words
-WORD = re.compile(r"[^\W\d_]+")
 # A sentence ends at a full stop, question mark or exclamation mark followed by a space
 _SENTENCE_BREAK = re.compile(r"(?<=[.?!])\s+")
 # Records scored at once: the float32 vectors are widened to float64 one chunk at a time
 _SCORING_CHUNK = 8192
-# The two-sided 95% interval of a correction term
-_INTERVAL_CONFIDENCE = 0.95
 
 # Advances a caller's progress by the models fitted
 Report = Callable[[int], None]
@@ -88,18 +75,6 @@ class ClassifierSpec:
     folds: int
     specificity_target: float
     max_iterations: int
-
-
-@dataclass(frozen=True)
-class RecordLabels:
-    """Each labelled record's label and set, and how many records' items disagree on junk.
-
-    ``table`` has one row per record, sorted by work id: ``work_id``, ``is_junk`` and
-    ``in_labelled_sample`` (in L; otherwise only in E).
-    """
-
-    table: pl.DataFrame
-    disagreeing_count: int
 
 
 @dataclass(frozen=True)
@@ -178,42 +153,6 @@ class CrossFitResult:
     cut_offs: dict[int, float]
 
 
-@dataclass(frozen=True)
-class Rate:
-    """A share of a count, with its Wilson interval."""
-
-    count: int
-    total: int
-    share: float
-    low: float
-    high: float
-
-
-@dataclass(frozen=True)
-class ClassifierQuality:
-    """The held-out calls' sensitivity and specificity against the judges' junk records."""
-
-    sensitivity: Rate
-    specificity: Rate
-
-    @property
-    def meets_bar(self) -> bool:
-        """Whether both clear the quality bar as point estimates (0.70 and 0.97)."""
-        return (
-            self.sensitivity.share >= SENSITIVITY_BAR and self.specificity.share >= SPECIFICITY_BAR
-        )
-
-
-@dataclass(frozen=True)
-class MeanDifference:
-    """A mean over items, with its 95% interval from the normal approximation."""
-
-    mean: float
-    low: float
-    high: float
-    items: int
-
-
 class _ClassifierDocument(BaseModel):
     """The classifier as its JSON file holds it."""
 
@@ -265,91 +204,6 @@ def compute_removed_share(text_length: int, removed: Sequence[tuple[int, int]]) 
     if text_length == 0:
         return 0.0
     return sum(end - start for start, end in merge_ranges(removed)) / text_length
-
-
-def build_record_labels(labels: JunkLabels) -> RecordLabels:
-    """Each record's label from L's and E's items: junk when its verdict is ``junk``.
-
-    A record with several items takes the label of its item with the smallest id; it counts as
-    disagreeing when its items do not all agree on junk. A record with an item in L is in L.
-    """
-    rows = [
-        (item_id, label.work_id, label.verdict == "junk", label.set == "labelled")
-        for item_id, label in labels.items.items()
-        if label.set in TRAINING_SETS
-    ]
-    items = pl.DataFrame(
-        rows,
-        schema={
-            "item_id": pl.String(),
-            "work_id": pl.String(),
-            "is_junk": pl.Boolean(),
-            "in_labelled_sample": pl.Boolean(),
-        },
-        orient="row",
-    )
-    records = (
-        items.sort("item_id")
-        .group_by("work_id", maintain_order=True)
-        .agg(
-            pl.col("is_junk").first(),
-            pl.col("in_labelled_sample").any(),
-            (pl.col("is_junk").n_unique() > 1).alias("disagrees"),
-        )
-        .sort("work_id")
-    )
-    return RecordLabels(
-        table=records.select("work_id", "is_junk", "in_labelled_sample"),
-        disagreeing_count=int(records["disagrees"].sum()),
-    )
-
-
-def build_sources(records: pl.DataFrame) -> list[str]:
-    """Each record's source: its ISSN-L, else its source name, else its own work id.
-
-    ``records`` has ``work_id``, ``issn_l`` and ``source_name``; an empty name counts as none.
-    """
-    blank_as_null = [
-        pl.when(pl.col(name).str.strip_chars() != "").then(pl.col(name))
-        for name in ("issn_l", "source_name")
-    ]
-    sources: list[str] = records.select(pl.coalesce(*blank_as_null, "work_id"))[:, 0].to_list()
-    return sources
-
-
-def build_folds(sources: Sequence[str], *, folds: int, depth: int) -> NDArray[np.int64]:
-    """Each source's fold: digit ``depth`` of its sha256 written in base ``folds``.
-
-    Depth 0 is ``sha256(source) % folds``, the cross-fitting's folds of L. Depth 1 is the next
-    digit, so an inner cross-fitting splits a training set (four outer folds) into ``folds`` folds
-    again, each still holding whole sources.
-    """
-    divisor = folds**depth
-    return np.array(
-        [
-            int(hashlib.sha256(source.encode()).hexdigest(), 16) // divisor % folds
-            for source in sources
-        ],
-        dtype=np.int64,
-    )
-
-
-def compute_cut_off(abstract_scores: NDArray[np.float64], *, target: float) -> float:
-    """The lowest score that at least ``target`` of the abstracts score below.
-
-    With k the smallest count reaching ``target`` of the scores, it is the next float above the
-    k-th smallest score: the most sensitive cut-off that still clears ``target`` of them.
-
-    Raises:
-        ValueError: if there are no scores, or the target is not above 0 and at most 1.
-    """
-    if not abstract_scores.size:
-        raise ValueError("no abstract's score to set the cut-off on")
-    if not 0 < target <= 1:
-        raise ValueError(f"a specificity target of {target} is not above 0 and at most 1")
-    # The target as a fraction, so 0.97 of 100 is 97 and not 97.00000000000001
-    needed = math.ceil(Fraction(str(target)) * abstract_scores.size)
-    return float(np.nextafter(np.sort(abstract_scores)[needed - 1], np.inf))
 
 
 def train_classifier(
@@ -418,84 +272,6 @@ def cross_fit(
 def train_final_classifier(training: TrainingSet, spec: ClassifierSpec) -> JunkClassifier:
     """The classifier trained on all of L and E, its cut-off set by the same inner rule over L."""
     return train_classifier(training, np.arange(training.is_junk.size), spec)
-
-
-def compute_rate(count: int, total: int) -> Rate:
-    """The share ``count`` of ``total``, with its Wilson interval.
-
-    Raises:
-        ValueError: if ``total`` is zero.
-    """
-    low, high = compute_wilson_interval(count, total)
-    return Rate(count=count, total=total, share=count / total, low=low, high=high)
-
-
-def compute_quality(
-    is_junk: NDArray[np.bool_], predicted_junk: NDArray[np.bool_]
-) -> ClassifierQuality:
-    """Sensitivity and specificity of the calls against the labels, record by record.
-
-    Raises:
-        ValueError: if the labels hold no junk record or no abstract.
-    """
-    if is_junk.all() or not is_junk.any():
-        raise ValueError("sensitivity and specificity need both junk records and abstracts")
-    return ClassifierQuality(
-        sensitivity=compute_rate(int((is_junk & predicted_junk).sum()), int(is_junk.sum())),
-        specificity=compute_rate(int((~is_junk & ~predicted_junk).sum()), int((~is_junk).sum())),
-    )
-
-
-def compute_false_alarms(records: pl.DataFrame, by: str) -> dict[str, Rate]:
-    """The share of the abstracts called junk, for each value of the column ``by``.
-
-    ``records`` has ``is_junk``, ``predicted_junk`` and ``by``. A list column (a record's fields)
-    counts each record under each of its values. The values come sorted.
-    """
-    abstracts = records.filter(~pl.col("is_junk"))
-    if isinstance(abstracts.schema[by], pl.List):
-        abstracts = abstracts.explode(by)
-    counts = (
-        abstracts.group_by(by)
-        .agg(pl.col("predicted_junk").sum().alias("count"), pl.len().alias("total"))
-        .sort(by)
-    )
-    return {
-        str(value): compute_rate(int(count), int(total))
-        for value, count, total in counts.iter_rows()
-    }
-
-
-def compute_corrections(items: pl.DataFrame) -> dict[int, MeanDifference]:
-    """Each decade's mean of the judges' junk-usage label minus the classifier's call on L.
-
-    ``items`` has one row per labelled usage: ``decade``, ``is_junk_usage`` (the judges' label)
-    and ``predicted_junk`` (the classifier's held-out call on its record). The mean is the
-    rectifier of prediction-powered inference (Angelopoulos et al. 2023, "Prediction-powered
-    inference"), with its 95% interval from the normal approximation and the sample standard
-    deviation.
-
-    Raises:
-        ValueError: if a decade has fewer than two items, where the interval has no width.
-    """
-    differences = items.select(
-        "decade",
-        (pl.col("is_junk_usage").cast(pl.Int64) - pl.col("predicted_junk").cast(pl.Int64)).alias(
-            "difference"
-        ),
-    )
-    critical = float(norm.ppf(0.5 + _INTERVAL_CONFIDENCE / 2))
-    corrections: dict[int, MeanDifference] = {}
-    for (decade,), group in differences.sort("decade").group_by("decade", maintain_order=True):
-        values = group["difference"].to_numpy().astype(np.float64)
-        if values.size < 2:
-            raise ValueError(f"decade {decade} has {values.size} labelled usage, not two or more")
-        mean = float(values.mean())
-        margin = critical * float(values.std(ddof=1)) / math.sqrt(values.size)
-        corrections[int(decade)] = MeanDifference(
-            mean=mean, low=mean - margin, high=mean + margin, items=values.size
-        )
-    return corrections
 
 
 def format_classifier(classifier: JunkClassifier) -> str:

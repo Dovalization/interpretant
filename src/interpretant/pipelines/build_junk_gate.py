@@ -43,22 +43,24 @@ from interpretant.pipelines.params import ParamsSettings
 from interpretant.pipelines.progress import SILENT, Progress
 from interpretant.pipelines.workers import map_parts, worker_pool
 from interpretant.review.finite_verbs import has_finite_verb_outside
-from interpretant.review.junk_classifier import (
-    FEATURE_NAMES,
+from interpretant.review.junk_calls import (
     SENSITIVITY_BAR,
     SPECIFICITY_BAR,
-    ClassifierQuality,
-    ClassifierSpec,
-    CrossFitResult,
-    JunkClassifier,
+    CallQuality,
     Rate,
-    TrainingSet,
     build_record_labels,
     build_sources,
     compute_corrections,
     compute_false_alarms,
     compute_quality,
     compute_rate,
+)
+from interpretant.review.junk_classifier import (
+    FEATURE_NAMES,
+    ClassifierSpec,
+    CrossFitResult,
+    JunkClassifier,
+    TrainingSet,
     compute_removed_share,
     compute_surface_features,
     cross_fit,
@@ -172,7 +174,7 @@ class JunkGateResult:
     record_count: int
     usage_count: int
     labelled_count: int
-    quality: ClassifierQuality
+    quality: CallQuality
     gated_count: int
     flagged_count: int
 
@@ -541,7 +543,7 @@ def _count_usages(usages: pl.DataFrame, cells: pl.DataFrame) -> dict[str, int]:
 
 
 def _report_classifier(
-    quality: ClassifierQuality,
+    quality: CallQuality,
     cross_fitted: CrossFitResult,
     final: JunkClassifier,
     records: pl.DataFrame,
