@@ -441,6 +441,64 @@ and the author decides, as before. Nothing else changes.
   that was left of the 20-dollar cap (10.51 dollars spent), so the overall cap rises to 30 dollars.
   Each run's cap is still set from its worst case so that the total stays within it.
 
+## Deviation, 2026-11-28: the predictor
+
+- **What the bars showed.** On the third amendment's labels, no predictor meets the bar of "The
+  classifier" (at least 70% of junk found and at least 97% of abstracts cleared, on L, cross-fitted
+  by source):
+
+  | Predictor | Junk found | Abstracts cleared | Source |
+  |---|---|---|---|
+  | the classifier, pre-registered settings | 79/100 = 0.790 | 3,750/3,880 = 0.9665 | `metrics/junk_gate.json` (`8a013fc`) |
+  | the classifier, settings chosen by nested cross-validation | 80/100 = 0.800 | 3,758/3,880 = 0.9686 | `classifier_settings.json` |
+  | Decider Flash v1.3 (`pplx-decider-flash:4b`) | 87/100 = 0.870 | 3,760/3,880 = 0.9691 | `decision_model_bar.json` |
+  | `d3:2b` | 87/100 = 0.870 | 3,758/3,880 = 0.9686 | `decision_model_bar_d3-2b-16k.json` |
+
+- **Why the bar cannot separate the decision models.** Each model's cut-off is set to clear 97% of
+  the training folds' abstracts, and the bar asks for 97% of the held-out folds'. A model as good as
+  the bar lands on it and passes or fails by chance, within about 0.3 points. The two decision
+  models do not differ. On the same records, the exact paired (McNemar) test gives p = 0.82: 81
+  against 85 abstracts flagged by one model alone, and 11 against 9 junk records.
+- **The classifier falls short by more than chance.** Its cut-off is set on the scores of inner
+  models and moved to a model trained on more rows, whose scores spread differently. Four frozen
+  encoder variants crossed with 36 classifier settings (C, class weight, cut-off target), chosen by
+  nested cross-validation (`scripts/evidence/classifier_settings.py`, `2252e00`), raise it only to
+  the second row above. Fine-tuning the encoder was not tried.
+- **The change** (the author, 2026-11-28). A record is called junk when both decision models call
+  it junk:
+  - `d3:2b` screens and Decider Flash confirms;
+  - each is asked the codebook's own-prose question alone;
+  - each has its own cut-off by the pre-registered rule (clear 97% of L's abstracts, folds by
+    source): L's records are called by their own fold's cut-offs, every other record by the cut-offs
+    set on all of L.
+
+  On L's review items this finds 77 of 100 junk records and clears 3,849 of 3,880 abstracts (0.770
+  and 0.992), so it meets the bar. Each model's false alarms number about 115, but only 34 are
+  shared, so their agreement clears far more abstracts than either model alone.
+- **How it is applied.**
+  - A new stage, `score_records`, scores every record behind a drawn usage with the screening model.
+    The confirming model scores L and E's records and every record the screening model could call
+    junk.
+  - Each record is read as its kept text cut for length, with no sentence marked, as run 3's items
+    were.
+  - `build_junk_gate` sets the cut-offs on the stage's own scores of L, and the figures it reports
+    on L are the gate's. They may differ slightly from the item-based figures above, whose items
+    marked a sentence.
+  - The decade rule, the screen, the cell rule and the exclusions are unchanged. Where they say
+    "the records the classifier calls junk", they now mean "the records both decision models call
+    junk".
+  - The model variants differ only in context and batch size, which `params.yaml` sets for speed.
+- **The classifier is removed.**
+  - Its last figures stand above. Its training, its record vectors (`embed_records`) and its surface
+    features are deleted.
+  - What "The classifier" promised to report (false alarms by decade and by field, and each
+    decade's gap between the judges' labels and the call) is reported for the agreement rule.
+  - The local trial's comparison with the classifier's score is dropped.
+  - After a top-up (step 8), the two decision models score the new records, with the cut-offs set on
+    L kept.
+- **For later pre-registrations.** A held-out bar must sit below the target the cut-off is tuned to
+  by more than the bar's sampling noise, or the bar tests luck.
+
 ## Results
 
 *To be appended.*
