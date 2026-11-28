@@ -1,35 +1,35 @@
 {
  "records": {
   "behind_drawn_usages": 445687,
-  "called_junk": 23197,
+  "called_junk": 23976,
   "labelled_sample": 3980,
-  "labelled_sample_junk": 101,
+  "labelled_sample_junk": 100,
   "enrichment": 600,
-  "enrichment_junk": 243,
+  "enrichment_junk": 241,
   "with_disagreeing_items": 0
  },
  "usages": {
   "drawn": 1055201,
-  "from_records_called_junk": 38427,
+  "from_records_called_junk": 39392,
   "with_ocr_score": 1040634
  },
  "classifier": {
   "sensitivity": {
-   "count": 80,
-   "of": 101,
-   "share": 0.7921,
+   "count": 79,
+   "of": 100,
+   "share": 0.79,
    "interval": [
-    0.703,
-    0.8598
+    0.7002,
+    0.8583
    ]
   },
   "specificity": {
-   "count": 3745,
-   "of": 3879,
-   "share": 0.9655,
+   "count": 3750,
+   "of": 3880,
+   "share": 0.9665,
    "interval": [
-    0.9592,
-    0.9708
+    0.9604,
+    0.9717
    ]
   },
   "bar": {
@@ -38,149 +38,149 @@
   },
   "meets_bar": false,
   "cut_offs_by_fold": {
-   "0": 0.278116033402245,
-   "1": 0.25117910019386236,
-   "2": 0.25263098875640627,
-   "3": 0.22184312542463475,
-   "4": 0.28175666760962914
+   "0": 0.25834279661456233,
+   "1": 0.2319995473192076,
+   "2": 0.22348215302048757,
+   "3": 0.21165482202432795,
+   "4": 0.26864236197940855
   },
-  "final_cut_off": 0.2911502109376768,
+  "final_cut_off": 0.2660054246269056,
   "false_alarms_by_decade": {
    "1950": {
-    "count": 34,
+    "count": 31,
     "of": 467,
-    "share": 0.0728,
+    "share": 0.0664,
     "interval": [
-     0.0526,
-     0.1
+     0.0472,
+     0.0927
     ]
    },
    "1960": {
-    "count": 29,
+    "count": 30,
     "of": 474,
-    "share": 0.0612,
+    "share": 0.0633,
     "interval": [
-     0.0429,
-     0.0865
+     0.0447,
+     0.0889
     ]
    },
    "1970": {
-    "count": 17,
+    "count": 14,
     "of": 484,
-    "share": 0.0351,
+    "share": 0.0289,
     "interval": [
-     0.022,
-     0.0555
+     0.0173,
+     0.048
     ]
    },
    "1980": {
-    "count": 17,
+    "count": 16,
     "of": 488,
-    "share": 0.0348,
+    "share": 0.0328,
     "interval": [
-     0.0219,
-     0.0551
+     0.0203,
+     0.0526
     ]
    },
    "1990": {
-    "count": 13,
-    "of": 480,
-    "share": 0.0271,
+    "count": 15,
+    "of": 481,
+    "share": 0.0312,
     "interval": [
-     0.0159,
-     0.0458
+     0.019,
+     0.0508
     ]
    },
    "2000": {
-    "count": 8,
+    "count": 7,
     "of": 493,
-    "share": 0.0162,
+    "share": 0.0142,
     "interval": [
-     0.0082,
-     0.0317
+     0.0069,
+     0.029
     ]
    },
    "2010": {
-    "count": 13,
+    "count": 12,
     "of": 495,
-    "share": 0.0263,
+    "share": 0.0242,
     "interval": [
-     0.0154,
-     0.0444
+     0.0139,
+     0.0419
     ]
    },
    "2020": {
-    "count": 3,
+    "count": 5,
     "of": 498,
-    "share": 0.006,
+    "share": 0.01,
     "interval": [
-     0.0021,
-     0.0176
+     0.0043,
+     0.0233
     ]
    }
   },
   "false_alarms_by_field": {
    "ai": {
-    "count": 3,
+    "count": 2,
     "of": 509,
-    "share": 0.0059,
+    "share": 0.0039,
     "interval": [
-     0.002,
-     0.0172
+     0.0011,
+     0.0142
     ]
    },
    "cogpsych": {
-    "count": 2,
+    "count": 3,
     "of": 365,
-    "share": 0.0055,
+    "share": 0.0082,
     "interval": [
-     0.0015,
-     0.0198
+     0.0028,
+     0.0239
     ]
    },
    "communication": {
     "count": 9,
-    "of": 211,
-    "share": 0.0427,
+    "of": 212,
+    "share": 0.0425,
     "interval": [
-     0.0226,
-     0.0791
+     0.0225,
+     0.0787
     ]
    },
    "compsci": {
-    "count": 16,
-    "of": 610,
-    "share": 0.0262,
+    "count": 14,
+    "of": 609,
+    "share": 0.023,
     "interval": [
-     0.0162,
-     0.0422
+     0.0137,
+     0.0382
     ]
    },
    "hci": {
-    "count": 4,
+    "count": 5,
     "of": 336,
-    "share": 0.0119,
+    "share": 0.0149,
     "interval": [
-     0.0046,
-     0.0302
+     0.0064,
+     0.0344
     ]
    },
    "histphilsci": {
-    "count": 33,
+    "count": 30,
     "of": 244,
-    "share": 0.1352,
+    "share": 0.123,
     "interval": [
-     0.0979,
-     0.1838
+     0.0875,
+     0.1701
     ]
    },
    "linguistics": {
-    "count": 13,
+    "count": 12,
     "of": 225,
-    "share": 0.0578,
+    "share": 0.0533,
     "interval": [
-     0.0341,
-     0.0963
+     0.0308,
+     0.0909
     ]
    },
    "neuroscience": {
@@ -193,95 +193,95 @@
     ]
    },
    "philosophy": {
-    "count": 15,
-    "of": 330,
-    "share": 0.0455,
+    "count": 16,
+    "of": 331,
+    "share": 0.0483,
     "interval": [
-     0.0277,
-     0.0736
+     0.03,
+     0.0771
     ]
    },
    "psychology": {
-    "count": 12,
+    "count": 10,
     "of": 440,
-    "share": 0.0273,
+    "share": 0.0227,
     "interval": [
-     0.0157,
-     0.0471
+     0.0124,
+     0.0413
     ]
    },
    "sociology": {
-    "count": 18,
+    "count": 20,
     "of": 311,
-    "share": 0.0579,
+    "share": 0.0643,
     "interval": [
-     0.0369,
-     0.0896
+     0.042,
+     0.0972
     ]
    }
   },
   "correction_by_decade": {
    "1950": {
-    "mean": -0.052,
+    "mean": -0.042,
     "interval": [
-     -0.0764,
-     -0.0276
+     -0.0662,
+     -0.0178
     ],
     "items": 500
    },
    "1960": {
-    "mean": -0.042,
+    "mean": -0.038,
     "interval": [
-     -0.0656,
-     -0.0184
+     -0.0629,
+     -0.0131
     ],
     "items": 500
    },
    "1970": {
-    "mean": -0.026,
+    "mean": -0.022,
     "interval": [
-     -0.0438,
-     -0.0082
+     -0.0381,
+     -0.0059
     ],
     "items": 500
    },
    "1980": {
-    "mean": -0.026,
+    "mean": -0.02,
     "interval": [
-     -0.0438,
-     -0.0082
+     -0.0375,
+     -0.0025
     ],
     "items": 500
    },
    "1990": {
-    "mean": -0.008,
+    "mean": -0.012,
     "interval": [
-     -0.0255,
-     0.0095
+     -0.0304,
+     0.0064
     ],
     "items": 500
    },
    "2000": {
-    "mean": -0.012,
+    "mean": -0.008,
     "interval": [
-     -0.0244,
-     0.0004
+     -0.0204,
+     0.0044
     ],
     "items": 500
    },
    "2010": {
-    "mean": -0.018,
+    "mean": -0.016,
     "interval": [
-     -0.0331,
-     -0.0029
+     -0.0306,
+     -0.0014
     ],
     "items": 500
    },
    "2020": {
-    "mean": 0.0,
+    "mean": -0.004,
     "interval": [
-     -0.0096,
-     0.0096
+     -0.0151,
+     0.0071
     ],
     "items": 500
    }
@@ -290,1170 +290,1170 @@
  "ocr": {
   "sentences": 4000,
   "without_score": 60,
-  "damaged": 317,
+  "damaged": 316,
   "bar": 0.75,
   "testable": true,
-  "auc": 0.6236,
+  "auc": 0.6224,
   "meets_bar": false,
-  "best_cut": 0.012345679012345678,
-  "sensitivity": 0.3155,
-  "specificity": 0.931
+  "best_cut": 0.016129032258064516,
+  "sensitivity": 0.3133,
+  "specificity": 0.9316
  },
  "cells": {
   "cells": 788,
   "gated": 613,
   "flagged": 163,
   "decade_rates": {
-   "1950": 0.1128,
-   "1960": 0.0898,
-   "1970": 0.0558,
-   "1980": 0.0469,
-   "1990": 0.0468,
-   "2000": 0.0309,
-   "2010": 0.0217,
-   "2020": 0.0147
+   "1950": 0.1137,
+   "1960": 0.0922,
+   "1970": 0.0575,
+   "1980": 0.0482,
+   "1990": 0.0474,
+   "2000": 0.0318,
+   "2010": 0.0222,
+   "2020": 0.0155
   },
   "flagged_cells": [
    {
     "word": "agency",
     "decade": 1950,
     "drawn": 236,
-    "predicted_junk": 55,
-    "tail_probability": 1.35e-07
+    "predicted_junk": 53,
+    "tail_probability": 9.85e-07
+   },
+   {
+    "word": "agency",
+    "decade": 1960,
+    "drawn": 393,
+    "predicted_junk": 54,
+    "tail_probability": 0.00215
    },
    {
     "word": "agency",
     "decade": 1970,
     "drawn": 430,
-    "predicted_junk": 58,
-    "tail_probability": 7.18e-10
+    "predicted_junk": 62,
+    "tail_probability": 3.83e-11
    },
    {
     "word": "agency",
     "decade": 1980,
     "drawn": 596,
-    "predicted_junk": 51,
-    "tail_probability": 3.67e-05
+    "predicted_junk": 57,
+    "tail_probability": 1.02e-06
    },
    {
     "word": "agency",
     "decade": 1990,
     "drawn": 811,
-    "predicted_junk": 64,
-    "tail_probability": 4.64e-05
+    "predicted_junk": 67,
+    "tail_probability": 1.12e-05
    },
    {
     "word": "agency",
     "decade": 2000,
     "drawn": 914,
-    "predicted_junk": 66,
-    "tail_probability": 4.61e-10
+    "predicted_junk": 62,
+    "tail_probability": 3.85e-08
    },
    {
     "word": "agency",
     "decade": 2010,
     "drawn": 1266,
-    "predicted_junk": 44,
-    "tail_probability": 0.002
+    "predicted_junk": 46,
+    "tail_probability": 0.00109
+   },
+   {
+    "word": "agency",
+    "decade": 2020,
+    "drawn": 1694,
+    "predicted_junk": 42,
+    "tail_probability": 0.00248
    },
    {
     "word": "held-out:02b12c17f936",
     "decade": 1960,
     "drawn": 337,
-    "predicted_junk": 48,
-    "tail_probability": 0.00105
+    "predicted_junk": 49,
+    "tail_probability": 0.00103
    },
    {
     "word": "held-out:02b12c17f936",
     "decade": 1970,
     "drawn": 464,
-    "predicted_junk": 52,
-    "tail_probability": 1.91e-06
+    "predicted_junk": 56,
+    "tail_probability": 1.8e-07
    },
    {
     "word": "held-out:02b12c17f936",
     "decade": 1980,
     "drawn": 556,
     "predicted_junk": 66,
-    "tail_probability": 9.42e-12
+    "tail_probability": 2.78e-11
    },
    {
     "word": "held-out:02b12c17f936",
     "decade": 1990,
     "drawn": 704,
-    "predicted_junk": 70,
-    "tail_probability": 4.83e-09
+    "predicted_junk": 68,
+    "tail_probability": 3.93e-08
    },
    {
     "word": "held-out:02b12c17f936",
     "decade": 2000,
     "drawn": 890,
     "predicted_junk": 72,
-    "tail_probability": 4.27e-13
+    "tail_probability": 1.42e-12
    },
    {
     "word": "held-out:02b12c17f936",
     "decade": 2010,
     "drawn": 861,
-    "predicted_junk": 59,
-    "tail_probability": 3.25e-14
+    "predicted_junk": 63,
+    "tail_probability": 6.67e-16
    },
    {
     "word": "held-out:02b12c17f936",
     "decade": 2020,
     "drawn": 1001,
-    "predicted_junk": 50,
-    "tail_probability": 2.24e-13
-   },
-   {
-    "word": "artificial intelligence",
-    "decade": 1990,
-    "drawn": 503,
-    "predicted_junk": 36,
-    "tail_probability": 0.00858
+    "predicted_junk": 53,
+    "tail_probability": 3.41e-14
    },
    {
     "word": "held-out:10c5166f4af0",
     "decade": 1990,
     "drawn": 154,
-    "predicted_junk": 23,
-    "tail_probability": 9.42e-07
+    "predicted_junk": 24,
+    "tail_probability": 3.11e-07
    },
    {
     "word": "held-out:10c5166f4af0",
     "decade": 2000,
     "drawn": 155,
     "predicted_junk": 14,
-    "tail_probability": 0.000358
+    "tail_probability": 0.000464
    },
    {
     "word": "held-out:10c5166f4af0",
     "decade": 2010,
     "drawn": 138,
     "predicted_junk": 14,
-    "tail_probability": 2.19e-06
+    "tail_probability": 2.89e-06
    },
    {
     "word": "computation",
     "decade": 1960,
     "drawn": 435,
-    "predicted_junk": 55,
-    "tail_probability": 0.00666
+    "predicted_junk": 57,
+    "tail_probability": 0.00469
    },
    {
     "word": "consciousness",
     "decade": 1980,
     "drawn": 692,
-    "predicted_junk": 53,
-    "tail_probability": 0.000418
+    "predicted_junk": 57,
+    "tail_probability": 7.73e-05
+   },
+   {
+    "word": "consciousness",
+    "decade": 1990,
+    "drawn": 844,
+    "predicted_junk": 56,
+    "tail_probability": 0.00824
    },
    {
     "word": "consciousness",
     "decade": 2000,
     "drawn": 983,
-    "predicted_junk": 49,
-    "tail_probability": 0.000972
+    "predicted_junk": 52,
+    "tail_probability": 0.000329
    },
    {
     "word": "consciousness",
     "decade": 2020,
     "drawn": 1334,
-    "predicted_junk": 35,
-    "tail_probability": 0.000947
+    "predicted_junk": 39,
+    "tail_probability": 0.000174
    },
    {
     "word": "held-out:15a9a9ab2b92",
     "decade": 1970,
     "drawn": 601,
-    "predicted_junk": 52,
-    "tail_probability": 0.00138
+    "predicted_junk": 54,
+    "tail_probability": 0.000927
    },
    {
     "word": "held-out:15a9a9ab2b92",
     "decade": 1980,
     "drawn": 1372,
-    "predicted_junk": 97,
-    "tail_probability": 6e-05
+    "predicted_junk": 99,
+    "tail_probability": 6.12e-05
    },
    {
     "word": "held-out:15a9a9ab2b92",
     "decade": 1990,
     "drawn": 2118,
-    "predicted_junk": 141,
-    "tail_probability": 2.84e-05
+    "predicted_junk": 148,
+    "tail_probability": 2.99e-06
    },
    {
     "word": "held-out:15a9a9ab2b92",
     "decade": 2000,
     "drawn": 2177,
-    "predicted_junk": 99,
-    "tail_probability": 0.000142
+    "predicted_junk": 106,
+    "tail_probability": 1.66e-05
    },
    {
     "word": "held-out:15a9a9ab2b92",
     "decade": 2010,
     "drawn": 2606,
-    "predicted_junk": 84,
-    "tail_probability": 0.000335
+    "predicted_junk": 86,
+    "tail_probability": 0.000294
    },
    {
     "word": "held-out:15a9a9ab2b92",
     "decade": 2020,
     "drawn": 3218,
-    "predicted_junk": 68,
-    "tail_probability": 0.00239
+    "predicted_junk": 70,
+    "tail_probability": 0.00361
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 1950,
     "drawn": 200,
-    "predicted_junk": 55,
-    "tail_probability": 2.5e-10
+    "predicted_junk": 58,
+    "tail_probability": 1.12e-11
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 1960,
     "drawn": 270,
-    "predicted_junk": 46,
-    "tail_probability": 2.02e-05
+    "predicted_junk": 51,
+    "tail_probability": 7.09e-07
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 1970,
     "drawn": 277,
-    "predicted_junk": 47,
-    "tail_probability": 1.23e-11
+    "predicted_junk": 46,
+    "tail_probability": 1.1e-10
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 1980,
     "drawn": 313,
-    "predicted_junk": 37,
-    "tail_probability": 3.21e-07
+    "predicted_junk": 38,
+    "tail_probability": 2.14e-07
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 1990,
     "drawn": 375,
-    "predicted_junk": 42,
-    "tail_probability": 2.25e-07
+    "predicted_junk": 41,
+    "tail_probability": 8.04e-07
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 2000,
     "drawn": 403,
     "predicted_junk": 39,
-    "tail_probability": 6.04e-10
+    "tail_probability": 1.24e-09
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 2010,
     "drawn": 396,
-    "predicted_junk": 27,
-    "tail_probability": 2.68e-07
+    "predicted_junk": 29,
+    "tail_probability": 3.59e-08
    },
    {
     "word": "held-out:19d5e41de2db",
     "decade": 2020,
     "drawn": 435,
     "predicted_junk": 23,
-    "tail_probability": 2.1e-07
+    "tail_probability": 5.16e-07
    },
    {
     "word": "emergence",
     "decade": 1980,
     "drawn": 484,
     "predicted_junk": 41,
-    "tail_probability": 0.000244
-   },
-   {
-    "word": "emergence",
-    "decade": 2000,
-    "drawn": 935,
-    "predicted_junk": 45,
-    "tail_probability": 0.00291
+    "tail_probability": 0.000407
    },
    {
     "word": "emergence",
     "decade": 2020,
     "drawn": 1579,
-    "predicted_junk": 36,
-    "tail_probability": 0.00757
+    "predicted_junk": 38,
+    "tail_probability": 0.00608
    },
    {
     "word": "held-out:1b596f30c66f",
     "decade": 1960,
     "drawn": 727,
-    "predicted_junk": 102,
-    "tail_probability": 5.65e-06
+    "predicted_junk": 109,
+    "tail_probability": 3.88e-07
    },
    {
     "word": "held-out:1b596f30c66f",
     "decade": 2020,
     "drawn": 1033,
-    "predicted_junk": 33,
-    "tail_probability": 4.13e-05
+    "predicted_junk": 34,
+    "tail_probability": 4.94e-05
    },
    {
     "word": "experience",
     "decade": 1980,
     "drawn": 4254,
-    "predicted_junk": 265,
-    "tail_probability": 3.45e-06
+    "predicted_junk": 264,
+    "tail_probability": 2.68e-05
    },
    {
     "word": "experience",
     "decade": 1990,
     "drawn": 5544,
-    "predicted_junk": 302,
-    "tail_probability": 0.00451
+    "predicted_junk": 306,
+    "tail_probability": 0.00415
    },
    {
     "word": "experience",
     "decade": 2000,
     "drawn": 6750,
-    "predicted_junk": 277,
-    "tail_probability": 2.73e-06
+    "predicted_junk": 287,
+    "tail_probability": 8.88e-07
    },
    {
     "word": "held-out:1c5d119c45e3",
     "decade": 1960,
     "drawn": 107,
-    "predicted_junk": 20,
-    "tail_probability": 0.00129
+    "predicted_junk": 21,
+    "tail_probability": 0.00071
    },
    {
     "word": "held-out:1c5d119c45e3",
     "decade": 1980,
     "drawn": 147,
-    "predicted_junk": 16,
-    "tail_probability": 0.00157
+    "predicted_junk": 17,
+    "tail_probability": 0.000766
    },
    {
     "word": "held-out:1c5d119c45e3",
     "decade": 2000,
     "drawn": 104,
-    "predicted_junk": 18,
-    "tail_probability": 3.51e-09
+    "predicted_junk": 16,
+    "tail_probability": 2e-07
    },
    {
     "word": "held-out:1c5d119c45e3",
     "decade": 2010,
     "drawn": 234,
-    "predicted_junk": 16,
-    "tail_probability": 6.45e-05
+    "predicted_junk": 19,
+    "tail_probability": 1.66e-06
    },
    {
     "word": "held-out:1c5d119c45e3",
     "decade": 2020,
     "drawn": 274,
-    "predicted_junk": 15,
-    "tail_probability": 1.7e-05
+    "predicted_junk": 16,
+    "tail_probability": 7.69e-06
    },
    {
     "word": "held-out:2c676bb34422",
     "decade": 2000,
     "drawn": 240,
     "predicted_junk": 16,
-    "tail_probability": 0.00361
+    "tail_probability": 0.00462
    },
    {
     "word": "held-out:2c676bb34422",
     "decade": 2020,
     "drawn": 742,
-    "predicted_junk": 28,
-    "tail_probability": 8.53e-06
+    "predicted_junk": 34,
+    "tail_probability": 3.93e-08
    },
    {
     "word": "held-out:34711782a046",
     "decade": 2000,
     "drawn": 1779,
-    "predicted_junk": 77,
-    "tail_probability": 0.00257
+    "predicted_junk": 81,
+    "tail_probability": 0.00105
    },
    {
     "word": "held-out:50fa17396b00",
     "decade": 1980,
     "drawn": 323,
     "predicted_junk": 27,
-    "tail_probability": 0.00302
+    "tail_probability": 0.00425
    },
    {
     "word": "having",
     "decade": 1960,
     "drawn": 1498,
-    "predicted_junk": 172,
-    "tail_probability": 0.000632
+    "predicted_junk": 176,
+    "tail_probability": 0.000613
    },
    {
     "word": "having",
     "decade": 1970,
     "drawn": 1919,
-    "predicted_junk": 140,
-    "tail_probability": 0.000978
+    "predicted_junk": 151,
+    "tail_probability": 8.42e-05
    },
    {
     "word": "having",
     "decade": 1980,
     "drawn": 2302,
-    "predicted_junk": 145,
-    "tail_probability": 0.000293
+    "predicted_junk": 155,
+    "tail_probability": 2.74e-05
    },
    {
     "word": "having",
     "decade": 2000,
     "drawn": 2328,
-    "predicted_junk": 131,
-    "tail_probability": 1.33e-10
+    "predicted_junk": 132,
+    "tail_probability": 3.55e-10
    },
    {
     "word": "having",
     "decade": 2010,
     "drawn": 2684,
-    "predicted_junk": 90,
-    "tail_probability": 5.75e-05
+    "predicted_junk": 95,
+    "tail_probability": 1.22e-05
    },
    {
     "word": "having",
     "decade": 2020,
     "drawn": 2241,
-    "predicted_junk": 68,
-    "tail_probability": 4.2e-08
+    "predicted_junk": 69,
+    "tail_probability": 1.34e-07
+   },
+   {
+    "word": "held-out:5350e5a87b0b",
+    "decade": 2010,
+    "drawn": 325,
+    "predicted_junk": 15,
+    "tail_probability": 0.0069
    },
    {
     "word": "held-out:5ff5c82d203d",
     "decade": 1990,
     "drawn": 221,
     "predicted_junk": 21,
-    "tail_probability": 0.00181
+    "tail_probability": 0.0021
    },
    {
     "word": "held-out:5ff5c82d203d",
     "decade": 2000,
     "drawn": 220,
-    "predicted_junk": 18,
-    "tail_probability": 0.000197
+    "predicted_junk": 17,
+    "tail_probability": 0.000749
    },
    {
     "word": "held-out:5ff5c82d203d",
     "decade": 2010,
     "drawn": 184,
-    "predicted_junk": 21,
-    "tail_probability": 8.55e-10
+    "predicted_junk": 19,
+    "tail_probability": 4.02e-08
    },
    {
     "word": "held-out:5ff5c82d203d",
     "decade": 2020,
     "drawn": 146,
-    "predicted_junk": 9,
-    "tail_probability": 0.000334
+    "predicted_junk": 8,
+    "tail_probability": 0.00209
    },
    {
     "word": "image",
     "decade": 1950,
     "drawn": 412,
     "predicted_junk": 71,
-    "tail_probability": 0.000209
+    "tail_probability": 0.000265
    },
    {
     "word": "image",
     "decade": 1960,
     "drawn": 928,
-    "predicted_junk": 125,
-    "tail_probability": 4.41e-06
+    "predicted_junk": 132,
+    "tail_probability": 5.14e-07
    },
    {
     "word": "image",
     "decade": 1980,
     "drawn": 2639,
-    "predicted_junk": 173,
-    "tail_probability": 1.07e-05
+    "predicted_junk": 176,
+    "tail_probability": 1.43e-05
    },
    {
     "word": "information",
     "decade": 1950,
     "drawn": 1373,
-    "predicted_junk": 222,
-    "tail_probability": 3.47e-08
+    "predicted_junk": 228,
+    "tail_probability": 4.82e-09
    },
    {
     "word": "information",
     "decade": 1960,
     "drawn": 3261,
-    "predicted_junk": 351,
-    "tail_probability": 0.000296
+    "predicted_junk": 358,
+    "tail_probability": 0.000384
    },
    {
     "word": "information",
     "decade": 1970,
     "drawn": 5196,
-    "predicted_junk": 363,
-    "tail_probability": 1.17e-05
+    "predicted_junk": 376,
+    "tail_probability": 4.83e-06
    },
    {
     "word": "information",
     "decade": 1980,
     "drawn": 7855,
-    "predicted_junk": 418,
-    "tail_probability": 0.00522
+    "predicted_junk": 437,
+    "tail_probability": 0.00132
    },
    {
     "word": "information",
     "decade": 1990,
     "drawn": 10259,
-    "predicted_junk": 552,
-    "tail_probability": 0.000556
+    "predicted_junk": 569,
+    "tail_probability": 9.76e-05
    },
    {
     "word": "information",
     "decade": 2000,
     "drawn": 11646,
-    "predicted_junk": 409,
-    "tail_probability": 0.00565
+    "predicted_junk": 426,
+    "tail_probability": 0.00199
+   },
+   {
+    "word": "information",
+    "decade": 2010,
+    "drawn": 12731,
+    "predicted_junk": 324,
+    "tail_probability": 0.00876
    },
    {
     "word": "information",
     "decade": 2020,
     "drawn": 12704,
-    "predicted_junk": 231,
-    "tail_probability": 0.000793
-   },
-   {
-    "word": "held-out:67415e178146",
-    "decade": 2020,
-    "drawn": 161,
-    "predicted_junk": 8,
-    "tail_probability": 0.00277
+    "predicted_junk": 258,
+    "tail_probability": 1.29e-05
    },
    {
     "word": "intelligence",
     "decade": 1980,
     "drawn": 1857,
-    "predicted_junk": 115,
-    "tail_probability": 0.00197
+    "predicted_junk": 117,
+    "tail_probability": 0.00237
    },
    {
     "word": "intelligence",
     "decade": 1990,
     "drawn": 1273,
-    "predicted_junk": 104,
-    "tail_probability": 5.34e-08
-   },
-   {
-    "word": "intentionality",
-    "decade": 1980,
-    "drawn": 102,
-    "predicted_junk": 11,
-    "tail_probability": 0.0085
+    "predicted_junk": 102,
+    "tail_probability": 3.15e-07
    },
    {
     "word": "interpretation",
     "decade": 2010,
     "drawn": 2588,
-    "predicted_junk": 87,
-    "tail_probability": 6.91e-05
+    "predicted_junk": 86,
+    "tail_probability": 0.000238
    },
    {
     "word": "learning",
     "decade": 1990,
     "drawn": 5719,
-    "predicted_junk": 342,
-    "tail_probability": 4.41e-06
+    "predicted_junk": 343,
+    "tail_probability": 9.29e-06
    },
    {
     "word": "meaning",
     "decade": 1970,
     "drawn": 2225,
     "predicted_junk": 171,
-    "tail_probability": 2.35e-05
+    "tail_probability": 0.000101
    },
    {
     "word": "meaning",
     "decade": 1980,
     "drawn": 2580,
-    "predicted_junk": 169,
-    "tail_probability": 1.4e-05
+    "predicted_junk": 175,
+    "tail_probability": 5.93e-06
    },
    {
     "word": "meaning",
     "decade": 1990,
     "drawn": 2984,
-    "predicted_junk": 185,
-    "tail_probability": 9.98e-05
+    "predicted_junk": 181,
+    "tail_probability": 0.000594
    },
    {
     "word": "meaning",
     "decade": 2000,
     "drawn": 3531,
-    "predicted_junk": 135,
-    "tail_probability": 0.00854
+    "predicted_junk": 144,
+    "tail_probability": 0.00186
    },
    {
     "word": "meaning",
     "decade": 2010,
     "drawn": 3628,
-    "predicted_junk": 119,
-    "tail_probability": 1.16e-05
+    "predicted_junk": 110,
+    "tail_probability": 0.000993
    },
    {
     "word": "meaning",
     "decade": 2020,
     "drawn": 4064,
     "predicted_junk": 93,
-    "tail_probability": 3.25e-05
+    "tail_probability": 0.000195
    },
    {
     "word": "medium",
     "decade": 2010,
     "drawn": 1063,
-    "predicted_junk": 40,
-    "tail_probability": 0.000757
+    "predicted_junk": 44,
+    "tail_probability": 9.54e-05
    },
    {
     "word": "medium",
     "decade": 2020,
     "drawn": 1227,
-    "predicted_junk": 33,
-    "tail_probability": 0.000869
+    "predicted_junk": 32,
+    "tail_probability": 0.00363
    },
    {
-    "word": "held-out:7b1df4aa54d0",
-    "decade": 1980,
-    "drawn": 388,
-    "predicted_junk": 30,
-    "tail_probability": 0.00572
-   },
-   {
-    "word": "held-out:7b1df4aa54d0",
-    "decade": 2000,
-    "drawn": 658,
-    "predicted_junk": 33,
-    "tail_probability": 0.00534
-   },
-   {
-    "word": "held-out:7b1df4aa54d0",
+    "word": "memory",
     "decade": 2020,
-    "drawn": 606,
-    "predicted_junk": 21,
-    "tail_probability": 0.000332
-   },
-   {
-    "word": "held-out:7b5614820786",
-    "decade": 1970,
-    "drawn": 186,
-    "predicted_junk": 20,
-    "tail_probability": 0.00397
+    "drawn": 3814,
+    "predicted_junk": 81,
+    "tail_probability": 0.00347
    },
    {
     "word": "held-out:7b5614820786",
     "decade": 2010,
     "drawn": 109,
-    "predicted_junk": 9,
-    "tail_probability": 0.00065
-   },
-   {
-    "word": "mind",
-    "decade": 1950,
-    "drawn": 741,
-    "predicted_junk": 109,
-    "tail_probability": 0.00259
+    "predicted_junk": 10,
+    "tail_probability": 0.000171
    },
    {
     "word": "mind",
     "decade": 1960,
     "drawn": 1093,
-    "predicted_junk": 153,
-    "tail_probability": 3.99e-08
+    "predicted_junk": 152,
+    "tail_probability": 3.04e-07
    },
    {
     "word": "mind",
     "decade": 1970,
     "drawn": 1655,
-    "predicted_junk": 141,
-    "tail_probability": 7.27e-07
+    "predicted_junk": 145,
+    "tail_probability": 5.31e-07
    },
    {
     "word": "mind",
     "decade": 1980,
     "drawn": 1790,
     "predicted_junk": 171,
-    "tail_probability": 6.22e-18
+    "tail_probability": 6.46e-17
    },
    {
     "word": "mind",
     "decade": 1990,
     "drawn": 2044,
-    "predicted_junk": 176,
-    "tail_probability": 2.43e-14
+    "predicted_junk": 174,
+    "tail_probability": 2.55e-13
    },
    {
     "word": "mind",
     "decade": 2000,
     "drawn": 2092,
-    "predicted_junk": 154,
-    "tail_probability": 4.75e-22
+    "predicted_junk": 158,
+    "tail_probability": 1.4e-22
    },
    {
     "word": "mind",
     "decade": 2010,
     "drawn": 2183,
-    "predicted_junk": 100,
-    "tail_probability": 1.03e-11
+    "predicted_junk": 103,
+    "tail_probability": 3.74e-12
    },
    {
     "word": "mind",
     "decade": 2020,
     "drawn": 1947,
-    "predicted_junk": 68,
-    "tail_probability": 1.74e-10
+    "predicted_junk": 74,
+    "tail_probability": 6.63e-12
    },
    {
     "word": "held-out:7d0f24edc7fd",
     "decade": 1990,
     "drawn": 132,
-    "predicted_junk": 16,
-    "tail_probability": 0.000478
+    "predicted_junk": 18,
+    "tail_probability": 5.6e-05
    },
    {
     "word": "held-out:7d0f24edc7fd",
     "decade": 2020,
     "drawn": 503,
     "predicted_junk": 16,
-    "tail_probability": 0.00368
+    "tail_probability": 0.00599
+   },
+   {
+    "word": "held-out:7dc7c59f90ed",
+    "decade": 1990,
+    "drawn": 207,
+    "predicted_junk": 19,
+    "tail_probability": 0.00483
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 1950,
     "drawn": 327,
-    "predicted_junk": 167,
-    "tail_probability": 3.33e-70
+    "predicted_junk": 173,
+    "tail_probability": 3.06e-75
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 1960,
     "drawn": 408,
-    "predicted_junk": 146,
-    "tail_probability": 5.68e-50
+    "predicted_junk": 156,
+    "tail_probability": 2.8e-56
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 1970,
     "drawn": 581,
-    "predicted_junk": 179,
-    "tail_probability": 1.25e-80
+    "predicted_junk": 183,
+    "tail_probability": 3.66e-82
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 1980,
     "drawn": 888,
-    "predicted_junk": 229,
-    "tail_probability": 5.11e-100
+    "predicted_junk": 245,
+    "tail_probability": 1.48e-111
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 1990,
     "drawn": 1253,
-    "predicted_junk": 248,
-    "tail_probability": 4.11e-82
+    "predicted_junk": 259,
+    "tail_probability": 8.13e-89
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 2000,
     "drawn": 1233,
-    "predicted_junk": 154,
-    "tail_probability": 1.28e-47
+    "predicted_junk": 167,
+    "tail_probability": 7.37e-55
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 2010,
     "drawn": 1088,
-    "predicted_junk": 93,
-    "tail_probability": 3.39e-28
+    "predicted_junk": 100,
+    "tail_probability": 6.89e-32
    },
    {
     "word": "held-out:861f9da96b43",
     "decade": 2020,
     "drawn": 792,
-    "predicted_junk": 63,
-    "tail_probability": 1.26e-26
+    "predicted_junk": 71,
+    "tail_probability": 1.26e-31
+   },
+   {
+    "word": "held-out:86a125382979",
+    "decade": 1990,
+    "drawn": 332,
+    "predicted_junk": 26,
+    "tail_probability": 0.00921
    },
    {
     "word": "held-out:912b00c7764c",
     "decade": 1970,
     "drawn": 267,
-    "predicted_junk": 31,
-    "tail_probability": 0.000106
+    "predicted_junk": 29,
+    "tail_probability": 0.000829
    },
    {
     "word": "held-out:912b00c7764c",
     "decade": 1980,
     "drawn": 363,
-    "predicted_junk": 44,
-    "tail_probability": 1.26e-08
+    "predicted_junk": 46,
+    "tail_probability": 3.22e-09
    },
    {
     "word": "held-out:912b00c7764c",
     "decade": 1990,
     "drawn": 447,
-    "predicted_junk": 34,
-    "tail_probability": 0.00428
+    "predicted_junk": 36,
+    "tail_probability": 0.00161
    },
    {
     "word": "held-out:912b00c7764c",
     "decade": 2000,
     "drawn": 511,
-    "predicted_junk": 30,
-    "tail_probability": 0.000772
+    "predicted_junk": 32,
+    "tail_probability": 0.000273
    },
    {
     "word": "held-out:ab139acf9360",
     "decade": 1960,
     "drawn": 901,
-    "predicted_junk": 122,
-    "tail_probability": 4.42e-06
+    "predicted_junk": 115,
+    "tail_probability": 0.00027
    },
    {
     "word": "held-out:ab139acf9360",
     "decade": 1970,
     "drawn": 1671,
-    "predicted_junk": 151,
-    "tail_probability": 8.54e-09
+    "predicted_junk": 153,
+    "tail_probability": 1.82e-08
    },
    {
     "word": "held-out:ab139acf9360",
     "decade": 1980,
     "drawn": 1715,
-    "predicted_junk": 163,
-    "tail_probability": 5.64e-17
+    "predicted_junk": 167,
+    "tail_probability": 2.56e-17
    },
    {
     "word": "held-out:ab139acf9360",
     "decade": 1990,
     "drawn": 1831,
-    "predicted_junk": 139,
-    "tail_probability": 3.42e-08
+    "predicted_junk": 136,
+    "tail_probability": 3.18e-07
    },
    {
     "word": "held-out:ab139acf9360",
     "decade": 2000,
     "drawn": 1653,
-    "predicted_junk": 122,
-    "tail_probability": 6.47e-18
+    "predicted_junk": 121,
+    "tail_probability": 1.07e-16
    },
    {
     "word": "held-out:ab139acf9360",
     "decade": 2010,
     "drawn": 1754,
-    "predicted_junk": 127,
-    "tail_probability": 7.54e-31
+    "predicted_junk": 125,
+    "tail_probability": 8.1e-29
    },
    {
     "word": "held-out:ab139acf9360",
     "decade": 2020,
     "drawn": 1671,
-    "predicted_junk": 88,
-    "tail_probability": 8.87e-24
+    "predicted_junk": 91,
+    "tail_probability": 5.42e-24
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 1950,
     "drawn": 490,
-    "predicted_junk": 169,
-    "tail_probability": 8.85e-42
+    "predicted_junk": 167,
+    "tail_probability": 4.24e-40
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 1960,
     "drawn": 670,
-    "predicted_junk": 279,
-    "tail_probability": 1.59e-112
+    "predicted_junk": 270,
+    "tail_probability": 2.43e-102
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 1970,
     "drawn": 558,
-    "predicted_junk": 161,
-    "tail_probability": 3.78e-68
+    "predicted_junk": 157,
+    "tail_probability": 3.76e-63
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 1980,
     "drawn": 673,
-    "predicted_junk": 142,
-    "tail_probability": 3.42e-51
+    "predicted_junk": 140,
+    "tail_probability": 1.85e-48
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 1990,
     "drawn": 611,
-    "predicted_junk": 104,
-    "tail_probability": 9.46e-30
+    "predicted_junk": 107,
+    "tail_probability": 3.41e-31
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 2000,
     "drawn": 606,
-    "predicted_junk": 101,
-    "tail_probability": 8.76e-43
+    "predicted_junk": 100,
+    "tail_probability": 4.9e-41
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 2010,
     "drawn": 547,
-    "predicted_junk": 71,
-    "tail_probability": 6.94e-33
+    "predicted_junk": 69,
+    "tail_probability": 1.28e-30
    },
    {
     "word": "held-out:b3ea1fd57831",
     "decade": 2020,
     "drawn": 543,
-    "predicted_junk": 59,
-    "tail_probability": 3.55e-32
+    "predicted_junk": 67,
+    "tail_probability": 2.12e-38
    },
    {
     "word": "platform",
     "decade": 1970,
     "drawn": 106,
-    "predicted_junk": 17,
-    "tail_probability": 8.17e-05
+    "predicted_junk": 18,
+    "tail_probability": 3.41e-05
    },
    {
     "word": "platform",
     "decade": 1980,
     "drawn": 101,
     "predicted_junk": 11,
-    "tail_probability": 0.00791
+    "tail_probability": 0.00949
    },
    {
     "word": "held-out:baa86b4dabfd",
     "decade": 1960,
     "drawn": 135,
-    "predicted_junk": 25,
-    "tail_probability": 0.000402
+    "predicted_junk": 24,
+    "tail_probability": 0.00134
+   },
+   {
+    "word": "held-out:baa86b4dabfd",
+    "decade": 1980,
+    "drawn": 246,
+    "predicted_junk": 21,
+    "tail_probability": 0.00852
    },
    {
     "word": "held-out:baa86b4dabfd",
     "decade": 1990,
     "drawn": 388,
-    "predicted_junk": 30,
-    "tail_probability": 0.00553
+    "predicted_junk": 31,
+    "tail_probability": 0.00363
    },
    {
     "word": "held-out:baa86b4dabfd",
     "decade": 2000,
     "drawn": 452,
-    "predicted_junk": 29,
-    "tail_probability": 0.000227
+    "predicted_junk": 28,
+    "tail_probability": 0.000743
    },
    {
     "word": "held-out:baa86b4dabfd",
     "decade": 2010,
     "drawn": 454,
-    "predicted_junk": 29,
-    "tail_probability": 3.85e-07
+    "predicted_junk": 30,
+    "tail_probability": 1.98e-07
    },
    {
     "word": "held-out:bafa5557897f",
     "decade": 1960,
     "drawn": 145,
-    "predicted_junk": 31,
-    "tail_probability": 4.64e-06
+    "predicted_junk": 34,
+    "tail_probability": 3.08e-07
    },
    {
     "word": "held-out:bafa5557897f",
     "decade": 1970,
     "drawn": 170,
-    "predicted_junk": 29,
-    "tail_probability": 8.23e-08
+    "predicted_junk": 30,
+    "tail_probability": 4.27e-08
    },
    {
     "word": "held-out:bafa5557897f",
     "decade": 1980,
     "drawn": 174,
-    "predicted_junk": 25,
-    "tail_probability": 7.15e-07
+    "predicted_junk": 27,
+    "tail_probability": 8.84e-08
    },
    {
     "word": "held-out:bafa5557897f",
     "decade": 1990,
     "drawn": 189,
     "predicted_junk": 29,
-    "tail_probability": 2.12e-08
+    "tail_probability": 2.78e-08
    },
    {
     "word": "held-out:bafa5557897f",
     "decade": 2000,
     "drawn": 211,
-    "predicted_junk": 21,
-    "tail_probability": 3.16e-06
+    "predicted_junk": 24,
+    "tail_probability": 8.79e-08
    },
    {
     "word": "held-out:bafa5557897f",
     "decade": 2010,
     "drawn": 251,
-    "predicted_junk": 18,
-    "tail_probability": 1.23e-05
+    "predicted_junk": 22,
+    "tail_probability": 6.97e-08
    },
    {
     "word": "held-out:bafa5557897f",
     "decade": 2020,
     "drawn": 211,
     "predicted_junk": 16,
-    "tail_probability": 1.27e-07
+    "tail_probability": 2.55e-07
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 1970,
     "drawn": 118,
     "predicted_junk": 17,
-    "tail_probability": 0.00031
+    "tail_probability": 0.000431
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 1980,
     "drawn": 192,
-    "predicted_junk": 20,
-    "tail_probability": 0.000775
+    "predicted_junk": 22,
+    "tail_probability": 0.000162
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 1990,
     "drawn": 250,
-    "predicted_junk": 34,
-    "tail_probability": 3.08e-08
+    "predicted_junk": 36,
+    "tail_probability": 3.7e-09
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 2000,
     "drawn": 244,
-    "predicted_junk": 17,
-    "tail_probability": 0.00174
+    "predicted_junk": 20,
+    "tail_probability": 0.000124
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 2010,
     "drawn": 321,
-    "predicted_junk": 22,
-    "tail_probability": 2.98e-06
+    "predicted_junk": 24,
+    "tail_probability": 3.53e-07
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 2020,
     "drawn": 373,
-    "predicted_junk": 16,
-    "tail_probability": 0.000163
+    "predicted_junk": 18,
+    "tail_probability": 2.84e-05
    },
    {
     "word": "held-out:e39a19f9b2b4",
     "decade": 1970,
     "drawn": 111,
-    "predicted_junk": 19,
-    "tail_probability": 1.25e-05
+    "predicted_junk": 21,
+    "tail_probability": 1.33e-06
    },
    {
     "word": "held-out:e39a19f9b2b4",
     "decade": 1980,
     "drawn": 113,
-    "predicted_junk": 15,
-    "tail_probability": 0.000272
+    "predicted_junk": 17,
+    "tail_probability": 3.03e-05
    },
    {
     "word": "held-out:e39a19f9b2b4",
     "decade": 2000,
     "drawn": 162,
-    "predicted_junk": 14,
-    "tail_probability": 0.000559
+    "predicted_junk": 13,
+    "tail_probability": 0.00213
+   },
+   {
+    "word": "sign",
+    "decade": 1960,
+    "drawn": 458,
+    "predicted_junk": 58,
+    "tail_probability": 0.00881
    },
    {
     "word": "sign",
     "decade": 1980,
     "drawn": 750,
-    "predicted_junk": 60,
-    "tail_probability": 5.72e-05
+    "predicted_junk": 62,
+    "tail_probability": 3.52e-05
    },
    {
     "word": "sign",
     "decade": 1990,
     "drawn": 867,
-    "predicted_junk": 62,
-    "tail_probability": 0.000799
+    "predicted_junk": 67,
+    "tail_probability": 8.47e-05
    },
    {
     "word": "symbol",
     "decade": 1970,
     "drawn": 591,
-    "predicted_junk": 57,
-    "tail_probability": 5.48e-05
+    "predicted_junk": 62,
+    "tail_probability": 4.91e-06
    },
    {
     "word": "symbol",
     "decade": 1990,
     "drawn": 662,
-    "predicted_junk": 48,
-    "tail_probability": 0.00218
-   },
-   {
-    "word": "symbol",
-    "decade": 2000,
-    "drawn": 603,
-    "predicted_junk": 34,
-    "tail_probability": 0.000734
-   },
-   {
-    "word": "symbol",
-    "decade": 2020,
-    "drawn": 551,
-    "predicted_junk": 19,
-    "tail_probability": 0.000656
+    "predicted_junk": 50,
+    "tail_probability": 0.000996
    },
    {
     "word": "held-out:ee104561c1ce",
     "decade": 1960,
     "drawn": 585,
-    "predicted_junk": 96,
-    "tail_probability": 7.96e-09
+    "predicted_junk": 106,
+    "tail_probability": 1.76e-11
    },
    {
     "word": "held-out:ee104561c1ce",
     "decade": 1980,
     "drawn": 517,
-    "predicted_junk": 40,
-    "tail_probability": 0.00162
+    "predicted_junk": 43,
+    "tail_probability": 0.000439
    },
    {
     "word": "held-out:ee104561c1ce",
     "decade": 1990,
     "drawn": 442,
-    "predicted_junk": 51,
-    "tail_probability": 4.66e-09
+    "predicted_junk": 52,
+    "tail_probability": 2.59e-09
    },
    {
     "word": "held-out:ee104561c1ce",
     "decade": 2000,
     "drawn": 279,
-    "predicted_junk": 25,
-    "tail_probability": 2.65e-06
+    "predicted_junk": 27,
+    "tail_probability": 3.96e-07
+   },
+   {
+    "word": "held-out:ee104561c1ce",
+    "decade": 2010,
+    "drawn": 256,
+    "predicted_junk": 14,
+    "tail_probability": 0.00202
    },
    {
     "word": "held-out:ee104561c1ce",
     "decade": 2020,
     "drawn": 270,
-    "predicted_junk": 15,
-    "tail_probability": 1.43e-05
+    "predicted_junk": 16,
+    "tail_probability": 6.4e-06
    },
    {
     "word": "held-out:f6604b2573e2",
     "decade": 2010,
     "drawn": 103,
     "predicted_junk": 7,
-    "tail_probability": 0.00737
+    "tail_probability": 0.00836
    },
    {
     "word": "held-out:f6604b2573e2",
     "decade": 2020,
     "drawn": 200,
-    "predicted_junk": 10,
-    "tail_probability": 0.000831
+    "predicted_junk": 9,
+    "tail_probability": 0.00425
    }
   ],
   "ungated_cells": [
@@ -1515,12 +1515,12 @@
    {
     "word": "alignment",
     "decade": 1970,
-    "count": 0,
+    "count": 2,
     "of": 63,
-    "share": 0.0,
+    "share": 0.0317,
     "interval": [
-     0.0,
-     0.0575
+     0.0087,
+     0.1086
     ]
    },
    {
@@ -1570,23 +1570,23 @@
    {
     "word": "held-out:10c5166f4af0",
     "decade": 1970,
-    "count": 8,
+    "count": 9,
     "of": 51,
-    "share": 0.1569,
+    "share": 0.1765,
     "interval": [
-     0.0817,
-     0.2801
+     0.0957,
+     0.3025
     ]
    },
    {
     "word": "held-out:10c5166f4af0",
     "decade": 1980,
-    "count": 7,
+    "count": 6,
     "of": 65,
-    "share": 0.1077,
+    "share": 0.0923,
     "interval": [
-     0.0532,
-     0.206
+     0.043,
+     0.1871
     ]
    },
    {
@@ -1603,34 +1603,34 @@
    {
     "word": "cloud",
     "decade": 1960,
-    "count": 9,
+    "count": 8,
     "of": 41,
-    "share": 0.2195,
+    "share": 0.1951,
     "interval": [
-     0.12,
-     0.3671
+     0.1023,
+     0.3401
     ]
    },
    {
     "word": "cloud",
     "decade": 1970,
-    "count": 13,
+    "count": 14,
     "of": 64,
-    "share": 0.2031,
+    "share": 0.2188,
     "interval": [
-     0.1227,
-     0.3171
+     0.135,
+     0.3343
     ]
    },
    {
     "word": "cloud",
     "decade": 1980,
-    "count": 3,
+    "count": 6,
     "of": 62,
-    "share": 0.0484,
+    "share": 0.0968,
     "interval": [
-     0.0166,
-     0.1329
+     0.0451,
+     0.1955
     ]
    },
    {
@@ -1669,12 +1669,12 @@
    {
     "word": "held-out:11f8f1ec4ec9",
     "decade": 1950,
-    "count": 2,
+    "count": 3,
     "of": 9,
-    "share": 0.2222,
+    "share": 0.3333,
     "interval": [
-     0.0632,
-     0.5474
+     0.1206,
+     0.6458
     ]
    },
    {
@@ -1691,12 +1691,12 @@
    {
     "word": "held-out:11f8f1ec4ec9",
     "decade": 1970,
-    "count": 2,
+    "count": 1,
     "of": 31,
-    "share": 0.0645,
+    "share": 0.0323,
     "interval": [
-     0.0179,
-     0.2072
+     0.0057,
+     0.1619
     ]
    },
    {
@@ -1735,12 +1735,12 @@
    {
     "word": "held-out:164ebb5df0ea",
     "decade": 1970,
-    "count": 1,
+    "count": 2,
     "of": 23,
-    "share": 0.0435,
+    "share": 0.087,
     "interval": [
-     0.0077,
-     0.2099
+     0.0242,
+     0.268
     ]
    },
    {
@@ -1757,12 +1757,12 @@
    {
     "word": "held-out:164ebb5df0ea",
     "decade": 1990,
-    "count": 1,
+    "count": 0,
     "of": 45,
-    "share": 0.0222,
+    "share": 0.0,
     "interval": [
-     0.0039,
-     0.1157
+     0.0,
+     0.0787
     ]
    },
    {
@@ -1812,12 +1812,12 @@
    {
     "word": "embedding",
     "decade": 1970,
-    "count": 7,
+    "count": 8,
     "of": 70,
-    "share": 0.1,
+    "share": 0.1143,
     "interval": [
-     0.0493,
-     0.1923
+     0.0591,
+     0.2096
     ]
    },
    {
@@ -1845,45 +1845,45 @@
    {
     "word": "embodiment",
     "decade": 1960,
-    "count": 2,
+    "count": 3,
     "of": 29,
-    "share": 0.069,
+    "share": 0.1034,
     "interval": [
-     0.0191,
-     0.2196
+     0.0358,
+     0.2639
     ]
    },
    {
     "word": "embodiment",
     "decade": 1970,
-    "count": 5,
+    "count": 4,
     "of": 55,
-    "share": 0.0909,
+    "share": 0.0727,
     "interval": [
-     0.0395,
-     0.1958
+     0.0286,
+     0.1726
     ]
    },
    {
     "word": "embodiment",
     "decade": 1980,
-    "count": 6,
+    "count": 7,
     "of": 51,
-    "share": 0.1176,
+    "share": 0.1373,
     "interval": [
-     0.0551,
-     0.2338
+     0.0681,
+     0.2572
     ]
    },
    {
     "word": "emergence",
     "decade": 1950,
-    "count": 10,
+    "count": 11,
     "of": 82,
-    "share": 0.122,
+    "share": 0.1341,
     "interval": [
-     0.0676,
-     0.2101
+     0.0766,
+     0.2245
     ]
    },
    {
@@ -1955,12 +1955,12 @@
    {
     "word": "feedback loop",
     "decade": 2000,
-    "count": 2,
+    "count": 1,
     "of": 68,
-    "share": 0.0294,
+    "share": 0.0147,
     "interval": [
-     0.0081,
-     0.101
+     0.0026,
+     0.0787
     ]
    },
    {
@@ -1977,12 +1977,12 @@
    {
     "word": "held-out:1c5d119c45e3",
     "decade": 1950,
-    "count": 11,
+    "count": 10,
     "of": 56,
-    "share": 0.1964,
+    "share": 0.1786,
     "interval": [
-     0.1134,
-     0.3184
+     0.1,
+     0.2984
     ]
    },
    {
@@ -2076,12 +2076,12 @@
    {
     "word": "held-out:34711782a046",
     "decade": 1960,
-    "count": 6,
+    "count": 7,
     "of": 52,
-    "share": 0.1154,
+    "share": 0.1346,
     "interval": [
-     0.054,
-     0.2297
+     0.0668,
+     0.2527
     ]
    },
    {
@@ -2153,23 +2153,23 @@
    {
     "word": "hallucination",
     "decade": 1970,
-    "count": 1,
+    "count": 2,
     "of": 42,
-    "share": 0.0238,
+    "share": 0.0476,
     "interval": [
-     0.0042,
-     0.1232
+     0.0132,
+     0.1579
     ]
    },
    {
     "word": "hallucination",
     "decade": 1980,
-    "count": 2,
+    "count": 3,
     "of": 40,
-    "share": 0.05,
+    "share": 0.075,
     "interval": [
-     0.0138,
-     0.165
+     0.0258,
+     0.1986
     ]
    },
    {
@@ -2241,12 +2241,12 @@
    {
     "word": "held-out:5ff5c82d203d",
     "decade": 1980,
-    "count": 6,
+    "count": 7,
     "of": 87,
-    "share": 0.069,
+    "share": 0.0805,
     "interval": [
-     0.032,
-     0.1424
+     0.0395,
+     0.1569
     ]
    },
    {
@@ -2263,12 +2263,12 @@
    {
     "word": "held-out:67415e178146",
     "decade": 1950,
-    "count": 5,
+    "count": 6,
     "of": 39,
-    "share": 0.1282,
+    "share": 0.1538,
     "interval": [
-     0.056,
-     0.2671
+     0.0725,
+     0.2973
     ]
    },
    {
@@ -2329,12 +2329,12 @@
    {
     "word": "interface",
     "decade": 1960,
-    "count": 6,
+    "count": 7,
     "of": 77,
-    "share": 0.0779,
+    "share": 0.0909,
     "interval": [
-     0.0362,
-     0.1598
+     0.0447,
+     0.176
     ]
    },
    {
@@ -2351,12 +2351,12 @@
    {
     "word": "held-out:6b293b43d2b1",
     "decade": 1960,
-    "count": 11,
+    "count": 12,
     "of": 57,
-    "share": 0.193,
+    "share": 0.2105,
     "interval": [
-     0.1113,
-     0.3134
+     0.1247,
+     0.3329
     ]
    },
    {
@@ -2384,12 +2384,12 @@
    {
     "word": "held-out:6b293b43d2b1",
     "decade": 2010,
-    "count": 4,
+    "count": 2,
     "of": 84,
-    "share": 0.0476,
+    "share": 0.0238,
     "interval": [
-     0.0187,
-     0.1161
+     0.0066,
+     0.0827
     ]
    },
    {
@@ -2527,56 +2527,56 @@
    {
     "word": "held-out:7b1df4aa54d0",
     "decade": 1950,
-    "count": 3,
+    "count": 2,
     "of": 20,
-    "share": 0.15,
+    "share": 0.1,
     "interval": [
-     0.0524,
-     0.3604
+     0.0279,
+     0.301
     ]
    },
    {
     "word": "held-out:7b1df4aa54d0",
     "decade": 1960,
-    "count": 3,
+    "count": 2,
     "of": 57,
-    "share": 0.0526,
+    "share": 0.0351,
     "interval": [
-     0.0181,
-     0.1437
+     0.0097,
+     0.1192
     ]
    },
    {
     "word": "held-out:7b5614820786",
     "decade": 2020,
-    "count": 6,
+    "count": 5,
     "of": 92,
-    "share": 0.0652,
+    "share": 0.0543,
     "interval": [
-     0.0302,
-     0.1351
+     0.0234,
+     0.121
     ]
    },
    {
     "word": "held-out:7d0f24edc7fd",
     "decade": 1950,
-    "count": 14,
+    "count": 13,
     "of": 32,
-    "share": 0.4375,
+    "share": 0.4062,
     "interval": [
-     0.2817,
-     0.6067
+     0.2552,
+     0.5774
     ]
    },
    {
     "word": "held-out:7d0f24edc7fd",
     "decade": 1960,
-    "count": 16,
+    "count": 15,
     "of": 45,
-    "share": 0.3556,
+    "share": 0.3333,
     "interval": [
-     0.2322,
-     0.5016
+     0.2136,
+     0.4793
     ]
    },
    {
@@ -2593,12 +2593,12 @@
    {
     "word": "held-out:7d0f24edc7fd",
     "decade": 1980,
-    "count": 16,
+    "count": 18,
     "of": 76,
-    "share": 0.2105,
+    "share": 0.2368,
     "interval": [
-     0.134,
-     0.315
+     0.1554,
+     0.3436
     ]
    },
    {
@@ -2659,23 +2659,23 @@
    {
     "word": "held-out:86a125382979",
     "decade": 1960,
-    "count": 5,
+    "count": 7,
     "of": 71,
-    "share": 0.0704,
+    "share": 0.0986,
     "interval": [
-     0.0305,
-     0.1545
+     0.0486,
+     0.1898
     ]
    },
    {
     "word": "held-out:9384bbe72d46",
     "decade": 1950,
-    "count": 7,
+    "count": 8,
     "of": 30,
-    "share": 0.2333,
+    "share": 0.2667,
     "interval": [
-     0.1179,
-     0.4093
+     0.1418,
+     0.4445
     ]
    },
    {
@@ -2791,12 +2791,12 @@
    {
     "word": "held-out:96da49af8e67",
     "decade": 1980,
-    "count": 3,
+    "count": 5,
     "of": 41,
-    "share": 0.0732,
+    "share": 0.122,
     "interval": [
-     0.0252,
-     0.1943
+     0.0532,
+     0.2554
     ]
    },
    {
@@ -2835,12 +2835,12 @@
    {
     "word": "platform",
     "decade": 1960,
-    "count": 21,
+    "count": 22,
     "of": 61,
-    "share": 0.3443,
+    "share": 0.3607,
     "interval": [
-     0.2375,
-     0.4695
+     0.2517,
+     0.4861
     ]
    },
    {
@@ -2989,34 +2989,34 @@
    {
     "word": "held-out:d7b1fc674098",
     "decade": 1960,
-    "count": 4,
+    "count": 5,
     "of": 68,
-    "share": 0.0588,
+    "share": 0.0735,
     "interval": [
-     0.0231,
-     0.1417
+     0.0318,
+     0.1609
     ]
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 1950,
-    "count": 9,
+    "count": 10,
     "of": 41,
-    "share": 0.2195,
+    "share": 0.2439,
     "interval": [
-     0.12,
-     0.3671
+     0.1383,
+     0.3934
     ]
    },
    {
     "word": "held-out:da17f59c700d",
     "decade": 1960,
-    "count": 3,
+    "count": 4,
     "of": 40,
-    "share": 0.075,
+    "share": 0.1,
     "interval": [
-     0.0258,
-     0.1986
+     0.0396,
+     0.2305
     ]
    },
    {
@@ -3132,12 +3132,12 @@
    {
     "word": "transformer",
     "decade": 1980,
-    "count": 0,
+    "count": 1,
     "of": 19,
-    "share": 0.0,
+    "share": 0.0526,
     "interval": [
-     0.0,
-     0.1682
+     0.0094,
+     0.2464
     ]
    },
    {
@@ -3231,23 +3231,23 @@
    {
     "word": "held-out:f151e0c23aaf",
     "decade": 2000,
-    "count": 2,
+    "count": 1,
     "of": 92,
-    "share": 0.0217,
+    "share": 0.0109,
     "interval": [
-     0.006,
-     0.0758
+     0.0019,
+     0.059
     ]
    },
    {
     "word": "user",
     "decade": 1950,
-    "count": 13,
+    "count": 12,
     "of": 94,
-    "share": 0.1383,
+    "share": 0.1277,
     "interval": [
-     0.0826,
-     0.2224
+     0.0746,
+     0.21
     ]
    },
    {
@@ -3341,12 +3341,12 @@
    {
     "word": "held-out:f6604b2573e2",
     "decade": 2000,
-    "count": 3,
+    "count": 1,
     "of": 52,
-    "share": 0.0577,
+    "share": 0.0192,
     "interval": [
-     0.0198,
-     0.1564
+     0.0034,
+     0.1012
     ]
    },
    {
