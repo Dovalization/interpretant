@@ -1,0 +1,2389 @@
+{
+ "reproduction_of_the_stage": {
+  "sensitivity": [
+   79,
+   100,
+   0.79
+  ],
+  "specificity": [
+   3750,
+   3880,
+   0.9665
+  ]
+ },
+ "nested": {
+  "sensitivity": [
+   80,
+   100,
+   0.8
+  ],
+  "specificity": [
+   3758,
+   3880,
+   0.9686
+  ],
+  "meets_bar": false
+ },
+ "chosen_by_outer_fold": {
+  "0": {
+   "variant": "bge-base average, head",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.97
+  },
+  "1": {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.97
+  },
+  "2": {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.97
+  },
+  "3": {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.975
+  },
+  "4": {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.97
+  }
+ },
+ "picked_on_all_of_l": {
+  "variant": "bge-base first token, head (the stage's)",
+  "regularisation": 3.0,
+  "class_weight": null,
+  "target": 0.97,
+  "optimistic_rates": {
+   "sensitivity": [
+    81,
+    100,
+    0.81
+   ],
+   "specificity": [
+    3765,
+    3880,
+    0.9704
+   ]
+  }
+ },
+ "optimistic_by_setting": [
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    81,
+    100,
+    0.81
+   ],
+   "specificity": [
+    3765,
+    3880,
+    0.9704
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    81,
+    100,
+    0.81
+   ],
+   "specificity": [
+    3758,
+    3880,
+    0.9686
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    80,
+    100,
+    0.8
+   ],
+   "specificity": [
+    3759,
+    3880,
+    0.9688
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    80,
+    100,
+    0.8
+   ],
+   "specificity": [
+    3777,
+    3880,
+    0.9735
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    80,
+    100,
+    0.8
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3765,
+    3880,
+    0.9704
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3776,
+    3880,
+    0.9732
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3759,
+    3880,
+    0.9688
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3760,
+    3880,
+    0.9691
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3760,
+    3880,
+    0.9691
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3759,
+    3880,
+    0.9688
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3778,
+    3880,
+    0.9737
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3803,
+    3880,
+    0.9802
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    79,
+    100,
+    0.79
+   ],
+   "specificity": [
+    3756,
+    3880,
+    0.968
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3764,
+    3880,
+    0.9701
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3779,
+    3880,
+    0.974
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3792,
+    3880,
+    0.9773
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3804,
+    3880,
+    0.9804
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3764,
+    3880,
+    0.9701
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3778,
+    3880,
+    0.9737
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3780,
+    3880,
+    0.9742
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3778,
+    3880,
+    0.9737
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3798,
+    3880,
+    0.9789
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3800,
+    3880,
+    0.9794
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    78,
+    100,
+    0.78
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3763,
+    3880,
+    0.9698
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3800,
+    3880,
+    0.9794
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3766,
+    3880,
+    0.9706
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3763,
+    3880,
+    0.9698
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3800,
+    3880,
+    0.9794
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3799,
+    3880,
+    0.9791
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3803,
+    3880,
+    0.9802
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3764,
+    3880,
+    0.9701
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3763,
+    3880,
+    0.9698
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3765,
+    3880,
+    0.9704
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3759,
+    3880,
+    0.9688
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3763,
+    3880,
+    0.9698
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    77,
+    100,
+    0.77
+   ],
+   "specificity": [
+    3778,
+    3880,
+    0.9737
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3763,
+    3880,
+    0.9698
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3779,
+    3880,
+    0.974
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3763,
+    3880,
+    0.9698
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3781,
+    3880,
+    0.9745
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3766,
+    3880,
+    0.9706
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3760,
+    3880,
+    0.9691
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3778,
+    3880,
+    0.9737
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 1.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3799,
+    3880,
+    0.9791
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 3.0,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    76,
+    100,
+    0.76
+   ],
+   "specificity": [
+    3806,
+    3880,
+    0.9809
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3780,
+    3880,
+    0.9742
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3799,
+    3880,
+    0.9791
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3767,
+    3880,
+    0.9709
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3780,
+    3880,
+    0.9742
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3780,
+    3880,
+    0.9742
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3768,
+    3880,
+    0.9711
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    75,
+    100,
+    0.75
+   ],
+   "specificity": [
+    3780,
+    3880,
+    0.9742
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3767,
+    3880,
+    0.9709
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3795,
+    3880,
+    0.9781
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3781,
+    3880,
+    0.9745
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3799,
+    3880,
+    0.9791
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3795,
+    3880,
+    0.9781
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3767,
+    3880,
+    0.9709
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3795,
+    3880,
+    0.9781
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3776,
+    3880,
+    0.9732
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.3,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3797,
+    3880,
+    0.9786
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3779,
+    3880,
+    0.974
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.3,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3795,
+    3880,
+    0.9781
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 1.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3804,
+    3880,
+    0.9804
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 3.0,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    74,
+    100,
+    0.74
+   ],
+   "specificity": [
+    3800,
+    3880,
+    0.9794
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3797,
+    3880,
+    0.9786
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3794,
+    3880,
+    0.9778
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3795,
+    3880,
+    0.9781
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3761,
+    3880,
+    0.9693
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3781,
+    3880,
+    0.9745
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3797,
+    3880,
+    0.9786
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3794,
+    3880,
+    0.9778
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.97,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3759,
+    3880,
+    0.9688
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    73,
+    100,
+    0.73
+   ],
+   "specificity": [
+    3779,
+    3880,
+    0.974
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    72,
+    100,
+    0.72
+   ],
+   "specificity": [
+    3796,
+    3880,
+    0.9784
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.1,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    72,
+    100,
+    0.72
+   ],
+   "specificity": [
+    3794,
+    3880,
+    0.9778
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3781,
+    3880,
+    0.9745
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3782,
+    3880,
+    0.9747
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3781,
+    3880,
+    0.9745
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3783,
+    3880,
+    0.975
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.1,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    71,
+    100,
+    0.71
+   ],
+   "specificity": [
+    3796,
+    3880,
+    0.9784
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3764,
+    3880,
+    0.9701
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3797,
+    3880,
+    0.9786
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3798,
+    3880,
+    0.9789
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3797,
+    3880,
+    0.9786
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3762,
+    3880,
+    0.9696
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3797,
+    3880,
+    0.9786
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3798,
+    3880,
+    0.9789
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.97,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3764,
+    3880,
+    0.9701
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.03,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    70,
+    100,
+    0.7
+   ],
+   "specificity": [
+    3799,
+    3880,
+    0.9791
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    69,
+    100,
+    0.69
+   ],
+   "specificity": [
+    3780,
+    3880,
+    0.9742
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3780,
+    3880,
+    0.9742
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3803,
+    3880,
+    0.9802
+   ]
+  },
+  {
+   "variant": "bge-base first token, head (the stage's)",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3781,
+    3880,
+    0.9745
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3803,
+    3880,
+    0.9802
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-base average, head",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3797,
+    3880,
+    0.9786
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-base first token, head and tail",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3801,
+    3880,
+    0.9796
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.975,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3779,
+    3880,
+    0.974
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.01,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3804,
+    3880,
+    0.9804
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.01,
+   "class_weight": null,
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3800,
+    3880,
+    0.9794
+   ]
+  },
+  {
+   "variant": "bge-large average, head",
+   "regularisation": 0.03,
+   "class_weight": "balanced",
+   "target": 0.98,
+   "sensitivity": [
+    68,
+    100,
+    0.68
+   ],
+   "specificity": [
+    3798,
+    3880,
+    0.9789
+   ]
+  }
+ ],
+ "unconverged": [],
+ "bar": {
+  "sensitivity": 0.7,
+  "specificity": 0.97
+ },
+ "seconds": 173
+}
