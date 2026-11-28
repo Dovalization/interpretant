@@ -212,7 +212,9 @@ def score_pass(
     done = set(load_decisions(root, pass_name)["work_id"].to_list())
     missing = {part: [w for w in works if w not in done] for part, works in records.items()}
     needed = sum(len(works) for works in records.values())
-    progress.stage(f"{pass_name}: {model}", total=sum(len(works) for works in missing.values()))
+    # The label carries no colon: the dashboard reads a progress line as "<label>: done/total"
+    label = {"screen": "screening", "confirm": "confirming"}[pass_name]
+    progress.stage(label, total=sum(len(works) for works in missing.values()))
 
     def judge(item: dict[str, Any]) -> dict[str, Any]:
         probability = ask_not_own_prose(
