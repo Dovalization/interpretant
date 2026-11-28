@@ -121,6 +121,7 @@ def write_corpus_catalog(folder: Path) -> Path:
         "run3_records:\n  path: review/run3/records.parquet\n  format: parquet\n"
         "junk_labels:\n  path: review/junk_gate/labels.json\n  format: json\n"
         "record_vectors:\n  path: record_vectors\n  format: parquet\n"
+        "record_decisions:\n  path: record_decisions\n  format: parquet\n"
         "junk_scores:\n  path: junk_gate/records.parquet\n  format: parquet\n"
         "usage_ocr_scores:\n  path: junk_gate/usage_scores.parquet\n  format: parquet\n"
         "junk_cells:\n  path: junk_gate/cells.parquet\n  format: parquet\n"

@@ -29,6 +29,7 @@ from interpretant.cli.judge_ollama import judge_ollama_command
 from interpretant.cli.measure_cleaning_sensitivity import measure_cleaning_sensitivity_command
 from interpretant.cli.measure_lemma_sensitivity import measure_lemma_sensitivity_command
 from interpretant.cli.report_corpus import report_corpus_command
+from interpretant.cli.score_records import score_records_command
 from interpretant.orchestration.commands import runs, submit
 
 console = Console()
@@ -54,6 +55,7 @@ cli.add_command(build_corpus_command)
 cli.add_command(build_sentence_view_command)
 cli.add_command(build_usages_command)
 cli.add_command(embed_records_command)
+cli.add_command(score_records_command)
 cli.add_command(build_junk_gate_command)
 cli.add_command(report_corpus_command)
 cli.add_command(compare_corpus_command)

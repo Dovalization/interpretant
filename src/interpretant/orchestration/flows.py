@@ -36,6 +36,7 @@ from interpretant.cli.judge_claude_code import run_judge_claude_code
 from interpretant.cli.judge_ollama import run_judge_ollama
 from interpretant.cli.options import default_process_count
 from interpretant.cli.report_corpus import run_report_corpus
+from interpretant.cli.score_records import DEFAULT_HOST, run_score_records
 from interpretant.orchestration.jobs import run_job
 from interpretant.orchestration.registry import JOBS
 from interpretant.orchestration.steps import (
@@ -301,6 +302,24 @@ def embed_records(*, pull: list[str] | None = None) -> None:
         JOBS["embed-records"],
         lambda catalog, progress, console: run_embed_records(
             catalog, progress=progress, console=console
+        ),
+        pull=pull,
+    )
+
+
+@flow(name="score-records", timeout_seconds=JOBS["score-records"].timeout_seconds)
+def score_records(
+    host: str = DEFAULT_HOST,
+    limit: int | None = None,
+    out: Path | None = None,
+    *,
+    pull: list[str] | None = None,
+) -> None:
+    """Score every record behind a drawn usage with the junk gate's two decision models."""
+    run_job(
+        JOBS["score-records"],
+        lambda catalog, progress, console: run_score_records(
+            catalog, host, limit, out, progress=progress, console=console
         ),
         pull=pull,
     )

@@ -64,6 +64,7 @@ class CatalogConfig(BaseModel):
     run3_records: DatasetEntry
     junk_labels: DatasetEntry
     record_vectors: DatasetEntry
+    record_decisions: DatasetEntry
     junk_scores: DatasetEntry
     usage_ocr_scores: DatasetEntry
     junk_cells: DatasetEntry

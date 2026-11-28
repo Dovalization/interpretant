@@ -52,6 +52,8 @@ JOBS: dict[str, Job] = {
         # No retries: a stopped run is finished with --resume, which skips the parts done
         Job("build-usages", 4 * HOUR, stage="build_usages"),
         Job("embed-records", 2 * HOUR, stage="embed_records"),
+        # About 6 hours for the screening model and 2 for the confirming one; a stopped run resumes
+        Job("score-records", 12 * HOUR, stage="score_records"),
         Job(
             "build-junk-gate",
             2 * HOUR,

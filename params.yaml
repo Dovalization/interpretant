@@ -137,6 +137,18 @@ junk_gate:
     folds: 5
     specificity_target: 0.97
     max_iterations: 1000
+  # The decision models behind the gate's call (score-records, build-junk-gate; the deviation of
+  # 2026-11-28), each asked the codebook's own-prose question alone, each cut-off clearing 97% of
+  # L's abstracts in 5 folds by source. d3-2b-16k is d3:2b with a context and batch of 16,384
+  # tokens, created on the runner; the variant, the keep-alive and the chunk only trade speed.
+  decision:
+    codebook: curated/judging/junk_gate/prompt.md
+    screen_model: d3-2b-16k
+    confirm_model: pplx-decider-flash:4b
+    specificity_target: 0.97
+    folds: 5
+    keep_alive: 5m
+    chunk_size: 2000
   # The cell screen: the cells with at least this many drawn usages are gated, and flagged when
   # their count of usages from records called junk has a binomial tail probability under alpha.
   screen:

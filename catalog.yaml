@@ -216,6 +216,13 @@ record_vectors:
   path: data/interim/record_vectors
   format: parquet
 
+# The junk gate's decision models' scores (the deviation of 2026-11-28): for each pass, screen
+# and confirm, numbered parts of each record's probability that it is not its own prose, and a
+# manifest of the model, codebook, question and rendering. Kept between runs, so a run resumes.
+record_decisions:
+  path: data/interim/record_decisions
+  format: parquet
+
 # Each of those records' junk score and verdict from the classifier, with its surface features.
 junk_scores:
   path: data/processed/junk_gate/records.parquet

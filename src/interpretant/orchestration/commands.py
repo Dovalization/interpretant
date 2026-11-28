@@ -32,6 +32,7 @@ from interpretant.cli.judge_api import judge_api_command
 from interpretant.cli.judge_claude_code import judge_claude_code_command
 from interpretant.cli.judge_ollama import judge_ollama_command
 from interpretant.cli.report_corpus import report_corpus_command
+from interpretant.cli.score_records import score_records_command
 from interpretant.orchestration.registry import DVC_LOCK, JOBS
 
 REPOSITORY = Path(__file__).resolve().parents[3]
@@ -48,6 +49,7 @@ JOB_COMMANDS: tuple[click.Command, ...] = (
     build_sentence_view_command,
     build_usages_command,
     embed_records_command,
+    score_records_command,
     build_junk_gate_command,
     fetch_metadata_command,
     fetch_linked_sources_command,

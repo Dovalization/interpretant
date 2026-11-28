@@ -93,6 +93,11 @@ deployments:
     <<: *runner
 
   - name: runner
+    description: "Score every record behind a drawn usage with the junk gate's two decision models on the runner's Ollama, on the runner, from the submitted commit"
+    entrypoint: src/interpretant/orchestration/flows.py:score_records
+    <<: *runner
+
+  - name: runner
     description: "Score every record behind a drawn usage for junk and screen the cells, on the runner, from the submitted commit"
     entrypoint: src/interpretant/orchestration/flows.py:build_junk_gate
     <<: *runner

@@ -97,6 +97,7 @@ def catalog_text() -> str:
         "run3_records:\n  path: data/review/run3/records.parquet\n  format: parquet\n"
         "junk_labels:\n  path: data/review/junk_gate/labels.json\n  format: json\n"
         "record_vectors:\n  path: data/record_vectors\n  format: parquet\n"
+        "record_decisions:\n  path: data/record_decisions\n  format: parquet\n"
         "junk_scores:\n  path: data/junk_gate/records.parquet\n  format: parquet\n"
         "usage_ocr_scores:\n  path: data/junk_gate/usage_scores.parquet\n  format: parquet\n"
         "junk_cells:\n  path: data/junk_gate/cells.parquet\n  format: parquet\n"

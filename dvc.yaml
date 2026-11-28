@@ -292,6 +292,53 @@ stages:
     outs:
       - ${record_vectors.path}
 
+  # The junk gate's decision models (docs/junk_gate.md, the deviation of 2026-11-28), on the
+  # runner's Ollama: the screening model scores every record behind a drawn usage, the confirming
+  # model L's and E's records and those the screening model could call junk. The scores persist
+  # between runs, so a stopped run resumes; a pass's manifest refuses scores made otherwise.
+  score_records:
+    cmd: interpretant score-records
+    deps:
+      - src/interpretant/catalog/abstracts.py
+      - src/interpretant/catalog/config.py
+      - src/interpretant/catalog/curated.py
+      - src/interpretant/catalog/junk_gate.py
+      - src/interpretant/catalog/parts.py
+      - src/interpretant/catalog/raw.py
+      - src/interpretant/catalog/record_decisions.py
+      - src/interpretant/catalog/schemas.py
+      - src/interpretant/catalog/sentence_view.py
+      - src/interpretant/catalog/staging.py
+      - src/interpretant/catalog/usages.py
+      - src/interpretant/catalog/words.py
+      - src/interpretant/cli/score_records.py
+      - src/interpretant/corpus/cleaning.py
+      - src/interpretant/corpus/language.py
+      - src/interpretant/corpus/removals.py
+      - src/interpretant/corpus/repair.py
+      - src/interpretant/corpus/sentence_view.py
+      - src/interpretant/corpus/works.py
+      - src/interpretant/pipelines/judge_ollama.py
+      - src/interpretant/pipelines/params.py
+      - src/interpretant/pipelines/progress.py
+      - src/interpretant/pipelines/score_records.py
+      - src/interpretant/review/judging.py
+      - src/interpretant/review/junk_calls.py
+      - src/interpretant/review/junk_gate.py
+      - src/interpretant/review/sampling_plans.py
+      - src/interpretant/review/usages_audit.py
+      - src/interpretant/usages/identifiers.py
+      - ${usages.path}
+      - ${abstracts.path}
+      - ${junk_labels.path}
+      - ${openalex_works.path}
+      - curated/judging/junk_gate/prompt.md
+    params:
+      - junk_gate.decision
+    outs:
+      - ${record_decisions.path}:
+          persist: true
+
   # The junk gate's classifier and screen (docs/junk_gate.md): every record behind a drawn usage
   # scored, every drawn usage's OCR score, and the cells the screen flags for the judges. The
   # labels are git-tracked; the words file and the held-out file give the reported names.
