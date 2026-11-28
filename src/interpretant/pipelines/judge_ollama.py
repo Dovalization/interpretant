@@ -46,6 +46,8 @@ SEED = 20261408
 CHAT_PATH = "/api/chat"
 DECISION_PATH = "/v1/systemone"
 RUNNING_MODELS_PATH = "/api/ps"
+# An empty generate request with keep_alive 0 unloads the model (Ollama's API)
+UNLOAD_PATH = "/api/generate"
 # A decision model calls a record junk when the probability that it is the work's own prose is
 # under this, and a marked sentence the work's own at this or more (docs/junk_gate.md)
 PROBABILITY_CUT = 0.5
@@ -296,6 +298,39 @@ def parse_decision_answer(response: dict[str, Any], text: str) -> dict[str, Any]
             "kind": probabilities,
         },
     }
+
+
+def build_own_prose_question(codebook: str) -> dict[str, Any]:
+    """The own-prose question alone, its criteria the codebook's (``build_decision_questions``)."""
+    return {"own_prose": build_decision_questions(codebook)["own_prose"]}
+
+
+def ask_not_own_prose(
+    transport: Transport, model: str, text: str, questions: dict[str, Any], keep_alive: str
+) -> float:
+    """The probability, by one request, that the text is not the work's own prose.
+
+    Raises:
+        OllamaRequestError: if the request fails.
+        InvalidAnswerError: if the answer is missing or not a probability.
+    """
+    response = transport(
+        DECISION_PATH,
+        {"model": model, "state": text, "questions": questions, "keep_alive": keep_alive},
+    )
+    answers = response.get("answers")
+    if not isinstance(answers, dict):
+        raise InvalidAnswerError("the response has no answers")
+    return 1.0 - _probability((answers.get("own_prose") or {}).get("noul"), "own_prose")
+
+
+def unload_model(transport: Transport, model: str) -> None:
+    """Unload the model now, so the next model has the graphics card to itself.
+
+    Raises:
+        OllamaRequestError: if the request fails.
+    """
+    transport(UNLOAD_PATH, {"model": model, "keep_alive": 0})
 
 
 def build_judge(judging: OllamaJudging, transport: Transport) -> Judge:

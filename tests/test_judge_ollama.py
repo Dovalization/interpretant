@@ -21,14 +21,17 @@ from interpretant.pipelines.judge_ollama import (
     JudgeKind,
     OllamaJudging,
     OllamaRequestError,
+    ask_not_own_prose,
     build_chat_request,
     build_decision_questions,
     build_decision_request,
     build_http_transport,
     build_merged_manifest,
+    build_own_prose_question,
     generate_verdicts,
     parse_chat_answer,
     parse_decision_answer,
+    unload_model,
 )
 from interpretant.pipelines.progress import SILENT
 from interpretant.review.judging import RECORD_KINDS, SCHEMAS
@@ -227,6 +230,48 @@ def test_a_decision_response_without_every_answer_is_invalid() -> None:
         parse_decision_answer(response, "Text.")
     with pytest.raises(InvalidAnswerError):
         parse_decision_answer(decision_response(1.2, 0.1, "fragment"), "Text.")
+
+
+def test_the_own_prose_question_alone_is_asked_and_its_complement_returned() -> None:
+    sent: list[tuple[str, dict[str, Any] | None]] = []
+
+    def transport(path: str, body: dict[str, Any] | None) -> dict[str, Any]:
+        sent.append((path, body))
+        return {"answers": {"own_prose": {"type": "noul", "noul": 0.25}}}
+
+    question = build_own_prose_question(CODEBOOK.read_text(encoding="utf-8"))
+    probability = ask_not_own_prose(transport, "d3:2b", "A text.", question, "2m")
+
+    assert probability == pytest.approx(0.75)
+    assert list(question) == ["own_prose"]
+    assert sent == [
+        (
+            "/v1/systemone",
+            {"model": "d3:2b", "state": "A text.", "questions": question, "keep_alive": "2m"},
+        )
+    ]
+
+
+@pytest.mark.parametrize(
+    "response", [{}, {"answers": {}}, {"answers": {"own_prose": {"noul": 1.5}}}]
+)
+def test_an_own_prose_answer_that_is_not_a_probability_is_invalid(
+    response: dict[str, Any],
+) -> None:
+    with pytest.raises(InvalidAnswerError):
+        ask_not_own_prose(lambda path, body: response, "d3:2b", "A text.", {}, "2m")
+
+
+def test_unloading_sends_an_empty_generate_request_with_keep_alive_zero() -> None:
+    sent: list[tuple[str, dict[str, Any] | None]] = []
+
+    def transport(path: str, body: dict[str, Any] | None) -> dict[str, Any]:
+        sent.append((path, body))
+        return {}
+
+    unload_model(transport, "d3:2b")
+
+    assert sent == [("/api/generate", {"model": "d3:2b", "keep_alive": 0})]
 
 
 def test_a_part_is_written_only_when_all_its_items_succeed(tmp_path: Path) -> None:
